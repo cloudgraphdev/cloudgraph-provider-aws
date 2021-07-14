@@ -1,0 +1,113 @@
+type securityGroup {
+  groupName: String!
+  groupId: String! @id
+}
+type MetaData {
+    cuid: String
+}
+type metadataOptions {
+  state: String!
+  httpTokens: String!
+  httpPutResponseHopLimit: Int
+  httpEndpoint: String! @id
+}
+type ebs {
+  attachTime: String!
+  deleteOnTermination: Boolean!
+  status: String!
+  volumeId: String! @id
+}
+type blockDevice {
+  deviceName: String! @id
+  ebs: ebs
+}
+type Tag {
+    key: String @id
+    value: String
+}
+type ec2DisplayData {
+  id: String! @id
+  arn: String!
+  region: String!
+  ami: String!
+  tenancy: String!
+  subnetId: String!
+  elasticIps: String!
+  publicDns: String!
+  privateDns: String!
+  monitoring: String!
+  privateIps: String!
+  keyPairName: String
+  cpuCoreCount: Int
+  hibernation: String!
+  ebsOptimized: String!
+  ipv4PublicIp: String!
+  instanceType: String!
+  ipv6Addresses: [String]
+  securityGroups: [securityGroup]
+  placementGroup: String!
+  instanceState: String!
+  sourceDestCheck: String!
+  availabilityZone: String!
+  cpuThreadsPerCore: Int
+  iamInstanceProfile: String
+  deletionProtection: String!
+  primaryNetworkInterface: String!
+  metadataOptions: metadataOptions
+  metadatasecurityGroupIdsOptions: [String]
+  securityGroupIds: [String]
+  ephemeralBlockDevice: [blockDevice]
+  associatePublicIpAddress: String!
+  tags: [Tag]
+}
+interface Element {
+    id: String! @id
+    name: String!
+    children: [Element]
+    metaData: MetaData
+    isProjectMember: Boolean
+    resourceType: String!
+}
+type Ec2Instance implements Element {
+  id: String! @id
+  name: String!
+  children: [Element]
+  metaData: MetaData
+  isProjectMember: Boolean
+  resourceType: String!
+  displayData: ec2DisplayData
+}
+
+type ec2 @key(fields: "arn") {
+	id: String!
+  arn: String! @id
+  region: String
+  ami: String
+  tenancy: String
+  elasticIps: String
+  publicDns: String
+  privateDns: String
+  monitoring: String
+  privateIps: String
+  keyPairName: String
+  cpuCoreCount: Int
+  hibernation: String
+  ebsOptimized: String
+  ipv4PublicIp: String
+  instanceType: String
+  ipv6Addresses: [String]
+  placementGroup: String
+  instanceState: String
+  sourceDestCheck: String
+  availabilityZone: String
+  cpuThreadsPerCore: Int
+  iamInstanceProfile: String
+  deletionProtection: String
+  primaryNetworkInterface: String
+  metadataOptions: metadataOptions
+  metadatasecurityGroupIdsOptions: [String]
+  securityGroupIds: [String]
+  ephemeralBlockDevice: [blockDevice]
+  associatePublicIpAddress: String
+  alb: [alb] @hasInverse(field: ec2Instance)
+}

@@ -1,0 +1,13 @@
+type vpc @key(fields: "arn") {
+  id: String!
+	arn: String! @id
+	ipV4Cidr: String
+	ipV6Cidr: String
+	dhcpOptionsSet: String
+	instanceTenancy: [String]
+	enableDnsSupport: String
+	enableDnsHostnames: String
+	defaultVpc: Boolean
+	state: String
+	alb: [alb] @hasInverse(field: vpc)
+}

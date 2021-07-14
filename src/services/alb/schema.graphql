@@ -1,0 +1,39 @@
+type alb @key(fields: "arn") {
+	id: String!
+	arn: String! @id
+	dnsName: String
+	scheme: String
+	type: String
+	subnets: [String]
+	hostedZone: String
+	defaultVpc: String
+	ipAddressType: String
+	idleTimeout: String
+	deletionProtection: String
+	http2: String
+	accessLogsEnabled: String
+	dropInvalidHeaderFields: String
+	createdAt: String
+	status: String
+	tags: [Tag]
+	ec2Instance: [ec2] @hasInverse(field: alb)
+	vpc: [vpc] @hasInverse(field: alb)
+	listeners: [Listener]
+}
+
+type Listener {
+	settings: ListenerSettings
+}
+
+type ListenerSettings {
+	arn: String!
+	sslPolicy: String
+	protocol: String
+	rules: [ListenerRule]
+}
+
+type ListenerRule {
+	type: String
+	order: String
+	targetGroupArn: String
+}
