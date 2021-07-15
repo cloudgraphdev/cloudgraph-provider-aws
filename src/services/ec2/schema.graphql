@@ -22,7 +22,7 @@ type blockDevice {
   ebs: ebs
 }
 type Tag {
-    key: String @id
+    key: String
     value: String
 }
 type ec2DisplayData {
