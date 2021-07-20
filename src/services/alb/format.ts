@@ -156,22 +156,6 @@ export default ({service: alb, account, region}): any => {
 			createdAt: alb[albNames.createdAt],
 			status,
       listeners: listeners.map(awsAlbListernerGraphFormat)
-		// connections: {
-    //   [alb[albNames.loadBalancerArn]]: [
-    //     ...instanceConnections,
-    //     ...azs.map(({ SubnetId }) => ({
-    //       id: SubnetId,
-    //       resourceType: resourceTypes.subnet,
-    //       relation: 'child'
-    //     })),
-    //     ...securityGroups.map((sg) => ({
-    //       id: sg,
-    //       resourceType: resourceTypes.securityGroup,
-    //       relation: 'child'
-    //     })),
-    //     { id: alb[albNames.vpc], resourceType: resourceTypes.vpc, relation: 'child' }
-    //   ]
-    // }
   }
   return albResult
 }
