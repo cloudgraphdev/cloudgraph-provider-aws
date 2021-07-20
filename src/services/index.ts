@@ -145,6 +145,25 @@ export const enums = {
 }
 
 export const getProviderIdentity = getAccountId
-export const getProviderCredentials = getCredentials
+export const getProviderCredentials = getCredentials 
+
+export default class Provider {
+  constructor(config: any) {
+    this.logger = config.logger
+    this.config = config.provider
+    this.properties = enums
+    this.serviceMap = serviceMap
+  }
+  logger: any
+  config: any
+  serviceMap: {[key: string]: any} // TODO: how to type the service map
+  properties: {services: {[key: string]: string}, regions: string[], resources: {[key: string]: string}}
+
+  getIdentity = getAccountId.bind(this)
+  getCredentials = getProviderCredentials.bind(this)
+  getSchema = getGraphqlSchema.bind(this)
+  getService = serviceFactory.bind(this)
+  getData = getProviderData.bind(this)
+}
 
 // testFunc()
