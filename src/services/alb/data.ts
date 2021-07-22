@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/node'
 
 import ELBV2 from 'aws-sdk/clients/elbv2'
-import {Opts} from 'cloud-graph-sdk'
+import CloudGraph, {Opts} from 'cloud-graph-sdk'
 
 import head from 'lodash/head'
 import groupBy from 'lodash/groupBy'
@@ -23,6 +23,7 @@ const lt = { ...awsLoggerText }
 /**
  * ALB
  */
+const logger = CloudGraph.logger
 
 export default async ({
   regions,
@@ -59,7 +60,7 @@ export default async ({
 
       return elbv2.describeLoadBalancers(args, async (err, data) => {
         if (err) {
-          opts.logger.log(err, {level: 'error'})
+          logger.debug(err)
           Sentry.captureException(new Error(err.message))
         }
 
@@ -73,7 +74,7 @@ export default async ({
 
         const { LoadBalancers: albs, NextMarker: marker } = data
 
-        opts.logger.log(lt.fetchedAlbs(albs.length))
+        logger.info(lt.fetchedAlbs(albs.length))
 
         /**
          * No Albs
@@ -137,7 +138,7 @@ export default async ({
     const getTagsForAlb = async ({ alb, elbv2, resolveTags, ResourceArns }) =>
       elbv2.describeTags({ ResourceArns }, async (err, data) => {
         if (err) {
-          opts.logger.log(err, {level: 'error'})
+          logger.debug(err)
           Sentry.captureException(new Error(err.message))
         }
 
@@ -153,7 +154,7 @@ export default async ({
 
         const tags = (head(allTags) as {Tags: []} || { Tags: [] }).Tags
 
-        opts.logger.log(lt.fetchedAlbTags(tags.length, ResourceArns))
+        logger.info(lt.fetchedAlbTags(tags.length, ResourceArns))
 
         /**
          * No tags found
@@ -210,7 +211,7 @@ export default async ({
         { LoadBalancerArn },
         async (err, data) => {
           if (err) {
-            opts.logger.log(err, {level: 'error'})
+            logger.debug(err)
             Sentry.captureException(new Error(err.message))
           }
 
@@ -224,7 +225,7 @@ export default async ({
 
           const { Attributes: attributes = [] } = data || {}
 
-          opts.logger.log(
+          logger.info(
             lt.fetchedAlbAttributes(attributes.length, LoadBalancerArn)
           )
 
@@ -290,7 +291,7 @@ export default async ({
 
       return elbv2.describeListeners(args, async (err, data) => {
         if (err) {
-          opts.logger.log(err, {level: 'error'})
+          logger.debug(err)
           Sentry.captureException(new Error(err.message))
         }
 
@@ -304,7 +305,7 @@ export default async ({
 
         const { Listeners: listeners = [], NextMarker: marker } = data || {}
 
-        opts.logger.log(lt.fetchedAlbListeners(listeners.length, LoadBalancerArn))
+        logger.info(lt.fetchedAlbListeners(listeners.length, LoadBalancerArn))
 
         /**
          * No listeners found
@@ -381,7 +382,7 @@ export default async ({
 
       return elbv2.describeTargetGroups(args, async (err, data) => {
         if (err) {
-          opts.logger.log(err, {level: 'error'})
+          logger.debug(err)
           Sentry.captureException(new Error(err.message))
         }
 
@@ -396,7 +397,7 @@ export default async ({
         const { TargetGroups: targetGroups = [], NextMarker: marker } =
           data || {}
 
-          opts.logger.log(
+          logger.info(
           lt.fetchedAlbTargetGroups(targetGroups.length, LoadBalancerArn)
         )
 
@@ -465,7 +466,7 @@ export default async ({
     }) =>
       elbv2.describeTargetHealth({ TargetGroupArn }, async (err, data) => {
         if (err) {
-          opts.logger.log(err, {level: 'error'})
+          logger.debug(err)
           Sentry.captureException(new Error(err.message))
         }
 
@@ -479,7 +480,7 @@ export default async ({
 
         const { TargetHealthDescriptions: targetHealth = [] } = data || {}
 
-        opts.logger.log(lt.fetchedAlbTargetIds(targetHealth.length, TargetGroupArn))
+        logger.info(lt.fetchedAlbTargetIds(targetHealth.length, TargetGroupArn))
 
         /**
          * No target health info found
