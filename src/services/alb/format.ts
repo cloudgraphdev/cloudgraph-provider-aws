@@ -9,11 +9,13 @@ import resourceTypes from '../../enums/resources'
 
 import t from '../../properties/translations'
 
+import {Alb, Listener} from '../../types/generated'
+
 /**
  * ALBs
  */
 
-const awsAlbListernerGraphFormat = (listener): any => {
+const awsAlbListernerGraphFormat = (listener): Listener => {
   const { DefaultActions: rules = [] }: any = listener
 
   const id = listener[albNames.listenerArn]
@@ -36,7 +38,7 @@ const awsAlbListernerGraphFormat = (listener): any => {
   }
 }
 
-export default ({service: alb, account, region}): any => {
+export default ({service: alb, account, region}): Alb => {
   const {
     tags = {},
     State: { Code: status = '' } = {},
