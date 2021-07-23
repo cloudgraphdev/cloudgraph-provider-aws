@@ -35,7 +35,7 @@ export default ({
     name === services.ec2Instance
   )
   if (ec2Instances) {
-    const dataAtRegion = ec2Instances.data['us-east-1'].filter(instance =>
+    const dataAtRegion = ec2Instances.data[region].filter(instance =>
       alb.targetIds.includes(instance.InstanceId)
     )
     for (const instance of dataAtRegion) {
