@@ -55,11 +55,19 @@ export const awsLoggerText = {
   /**
    * CloudWatch
    */
-  lookingForCloudwatch: 'Looking for CloudWatch Alarms to add to Region...',
+  lookingForCloudwatch: 'Looking for CloudWatch alarms to add to Region...',
+  fetchingCloudwatchData:
+    'Fetching CloudWatch alarms for this AWS account via the AWS SDK...',
+  doneFetchingCloudwatchData: (num: number) =>
+    `🕒 Done fetching CloudWatch alarms in ${num} 🕘`,
   addingCloudwatch: (num: number) =>
-    `Created and added ${num} CloudWatch Alarms to this region`,
+    `Created and added ${num} CloudWatch alarms to this region`,
+  foundMoreCloudwatchAlarms: (num: number) =>
+    `Found another ${num} CloudWatch alarms in this region...`,
   addingCloudwatchMetricsToElement: (num: number, namespace: string) =>
-    `Found ${num} Cloudwatch Metric Alarms to add for ${namespace}`,
+    `Found ${num} CloudWatch metric alarms to add for ${namespace}`,
+  gettingCloudwatchAlarms: 'Fetching CloudWatch alarms...',
+  gettingCloudwatchAlarmTags: 'Fetching tags for each CloudWatch alarm...',
   /**
    * Kinesis Data Streams
    */
@@ -449,7 +457,7 @@ export const awsLoggerText = {
   foundItemsToHoist: (num, type) =>
     `Found ${num} items to hoist up to the top level for ${type}`,
   removingOldChildren: `Removing old children from this subnet...`,
-  combiningAndAddingNacls: name =>
+  combiningAndAddingNacls: (name) =>
     `Deduping NACLS and adding them and their children directly to VPC: ${name}`,
   /**
    * Kubernetes
@@ -463,4 +471,4 @@ export const awsLoggerText = {
   lookingForCloud9: 'Looking for Cloud9 to add to Region...',
   addingCloud9: (num: number) =>
     `Created and added ${num} Cloud9 to this region`,
-}
+};

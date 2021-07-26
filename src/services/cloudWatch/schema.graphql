@@ -1,0 +1,30 @@
+type aws_cloudwatch @key(fields: "arn") {
+  id: String!
+  arn: String! @id
+  metric: String
+  namespace: String
+  description: String
+  actionsEnabled: String
+  actions: [String]
+  comparisonOperator: String
+  statistic: String
+  threshold: String
+  period: String
+  evaluationPeriods: Int
+  dimensions: [aws_cloudwatch_dimensions]
+  tags: [Tag]
+}
+
+type aws_cloudwatch_dimensions
+  @generate(
+    # About the need to be able to query dimensions,
+    # I think they may be useful because you can specify
+    # any number name/value pairs to use as part of the identity of a metric.
+    # Check !2 merge request example
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  name: String
+  value: String
+}
