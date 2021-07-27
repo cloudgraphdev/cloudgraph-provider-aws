@@ -79,6 +79,28 @@ export type Alb = {
   listeners?: Maybe<Array<Maybe<Listener>>>;
 };
 
+export type Aws_Cloudwatch = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  metric?: Maybe<Scalars['String']>;
+  namespace?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  actionsEnabled?: Maybe<Scalars['String']>;
+  actions?: Maybe<Array<Maybe<Scalars['String']>>>;
+  comparisonOperator?: Maybe<Scalars['String']>;
+  statistic?: Maybe<Scalars['String']>;
+  threshold?: Maybe<Scalars['String']>;
+  period?: Maybe<Scalars['String']>;
+  evaluationPeriods?: Maybe<Scalars['Int']>;
+  dimensions?: Maybe<Array<Maybe<Aws_Cloudwatch_Dimensions>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
+export type Aws_Cloudwatch_Dimensions = {
+  name?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
 export type BlockDevice = {
   deviceName: Scalars['String'];
   ebs?: Maybe<Ebs>;

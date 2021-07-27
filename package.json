@@ -7,9 +7,10 @@
   "author": "AutoCloud",
   "license": "MIT",
   "scripts": {
-    "prepublish": "yarn generate-types && tsc && yarn cpx 'src/**/*.graphql' dist",
     "build": "yarn prepublish",
-    "generate-types": "graphql-codegen --config codegen.yml"
+    "generate-types": "graphql-codegen --config codegen.yml",
+    "prepublish": "yarn generate-types && tsc && yarn cpx 'src/**/*.graphql' dist",
+    "test": "NODE_ENV=test jest"
   },
   "dependencies": {
     "@graphql-tools/load-files": "^6.3.2",
@@ -18,14 +19,18 @@
     "graphql": "^15.5.1",
     "lodash": "^4.17.21",
     "pino": "^6.11.3",
-    "typescript": "^4.3.4"
+    "typescript": "^4.3.5"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "1.21.7",
+    "@graphql-codegen/typescript": "1.23.0",
+    "@types/jest": "^26.0.24",
     "@types/lodash": "^4.14.170",
     "@types/node": "^15.12.4",
     "@types/pino": "^6.3.8",
     "cpx": "^1.5.0",
-    "@graphql-codegen/typescript": "1.23.0"
+    "dotenv": "^10.0.0",
+    "jest": "^27.0.6",
+    "ts-jest": "^27.0.4"
   }
 }
