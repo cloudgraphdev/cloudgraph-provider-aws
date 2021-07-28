@@ -12,13 +12,6 @@ import { Credentials } from '../../types'
 
 import { awsLoggerText } from '../../properties/logger'
 
-
-// import { logger } from '../../../../../middleware'
-
-// import { awsLoggerText } from '../../properties/logger'
-
-// import { commonVsdLoggerText } from '../../../../shared/visualServiceDiscovery/properties/logger'
-
 const lt = { ...awsLoggerText }
 /**
  * ALB

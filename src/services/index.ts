@@ -1,5 +1,5 @@
 import {loadFilesSync} from '@graphql-tools/load-files'
-import { Service, Opts } from 'cloud-graph-sdk'
+import CloudGraph, { Service, Opts } from 'cloud-graph-sdk'
 import STS from 'aws-sdk/clients/sts'
 import services from '../enums/services'
 import resources from '../enums/resources'
@@ -9,7 +9,6 @@ import CloudWatch from './cloudWatch'
 import EC2 from './ec2'
 import VPC from './vpc'
 import { Credentials } from '../types'
-import { getKeyByValue, getAccountId } from '../utils'
 
 const path = require('path')
 const AWS = require('aws-sdk')
@@ -25,142 +24,70 @@ export const serviceMap = {
   [services.cloudwatch]: CloudWatch,
 }
 
-/**
- * Factory function to return AWS service classes based on input service
- * @param service an AWS service that is listed within the service map (current supported services)
- * @returns Instance of an AWS service class to interact with that AWS service
- */
-export function serviceFactory(service: string): Service {
-  if (!serviceMap[service]) {
-    throw new Error(`Service ${service} does not exist for AWS provider`)
-  }
-  return new serviceMap[service](this)
-}
-
-// export function getCredentials(): Promise<Credentials> {
-//   return new Promise(resolve => {
-//     AWS.config.getCredentials((err: any) => {
-//       if (err) {
-//         this.log(err)
-//         throw new Error('Unable to find Credentials for AWS, They could be stored in env variables or .aws/credentials file')
-//       } else {
-//         resolve(AWS.config.credentials)
-//       }
-//     })
-//   })
-// }
-
-// export async function getAccountId({ credentials }): Promise<any> {
-//   try {
-//     return new Promise((resolve, reject) =>
-//       new STS({ credentials }).getCallerIdentity((err, data) => {
-//         if (err) {
-//           return reject(err)
-//         }
-//         return resolve({ accountId: data.Account })
-//       })
-//     )
-//   } catch (e) {
-//     return { accountId: '' }
-//   }
-// }
-
-export async function getProviderData({
-  regions,
-  resources,
-  credentials,
-  opts
-}: {regions: string, resources: string, credentials: Credentials, opts: Opts}): Promise<any> {
-  const result = []
-  const resourceNames = resources.split(',')
-  for (const resource of resourceNames) {
-    const serviceClass = this.getService(resource)
-    result.push({
-      name: resource,
-      data: await serviceClass.getData({ regions, credentials, opts })
-    })
-  }
-  return result
-}
-
-export function getGraphqlSchema(opts: Opts) {
-  const typesArray = loadFilesSync(path.join(__dirname), {recursive: true, extensions: ['graphql']})
-  return typesArray
-}
-// async function testFunc() {
-//   // const test = createServiceClass('alb')
-//   // console.log(await test.getData({ regions: 'us-east-1', credentials: await getCredentials()}))
-//   const result = {
-//     entities: [],
-//     connections: {}
-//   }
-//   const { accountId } = await getAccountId({ credentials: await getCredentials()})
-//   const awsData = await getProviderData({ regions: 'us-east-1', resources: 'alb,ec2Instance,vpc', credentials: await getCredentials()})
-//   for (const serviceData of awsData) {
-//     const serviceClass = serviceFactory(serviceData.name)
-//     const entities = []
-//     for (const region in serviceData.data) {
-//       const data = serviceData.data[region]
-//       const entities = []
-//       for (const serviceInstance of data) {
-//         entities.push(serviceClass.format({service: serviceInstance, region, account: accountId}))
-//         if (serviceClass.getConnections && typeof serviceClass.getConnections === 'function') {
-//           result.connections = {...result.connections, ...serviceClass.getConnections({service: serviceInstance, region, account: accountId, data: awsData})}
-//         }
-//       }
-//     }
-//     result.entities.push({name: serviceData.name, data: entities})
-//   }
-//   for (const entity of result.entities) {
-//     const { name, data } = entity
-//     const connectedData = data.map(service => {
-//       console.log(`connecting service: ${name}`)
-//       console.log(`service arn is: ${service.arn}`)
-//       const connections = result.connections[service.arn]
-//       const connectedEntity = {
-//         ...service
-//       }
-//       if (connections) {
-//         for (const connection of connections) {
-//           console.log(`searching for ${connection.resourceType} entity data to make connection between ${name} && ${connection.resourceType}`)
-//           const entityData = result.entities.find(({name}) => name === connection.resourceType)
-//           if (entityData && entityData.data) {
-//             // console.log('found entities for connection')
-//             // console.log(entityData)
-//             const entityForConnection = entityData.data.find(({id}) => connection.id === id)
-//             // console.log('found connection entity')
-//             // console.log(entityForConnection)
-//             connectedEntity[getKeyByValue(services, connection.resourceType)] = entityForConnection
-//             console.log(connectedEntity)
-//           }
-//         }
-//       }
-//       return connectedData
-//     })
-//   }
-//   // console.log(JSON.stringify(result))
-// }
-
 export const enums = {
   services,
   regions,
   resources
 }
-
-export default class Provider {
+// TODO: Create base class in SDK for this that sets up inquirer interface
+export default class Provider extends CloudGraph.Client {
   constructor(config: any) {
-    this.logger = config.logger
-    this.config = config.provider
+    super(config)
     this.properties = enums
     this.serviceMap = serviceMap
   }
-  logger: any
-  config: any
+  credentials: Credentials | undefined
   serviceMap: {[key: string]: any} // TODO: how to type the service map
   properties: {services: {[key: string]: string}, regions: string[], resources: {[key: string]: string}}
 
-  async getIdentity({credentials}) {
+  async configure(flags: any) {
+    const result: {[key: string]: any} = {}
+    const answers = await this.interface.prompt([
+      {
+        type: 'checkbox',
+        message: 'Select regions to scan',
+        loop: false,
+        name: 'regions',
+        choices: regions.map((region: string) => ({
+          name: region,
+        })),
+      },
+    ])
+    this.logger.debug(answers)
+    result.regions = answers.regions.join(',')
+    if (flags.resources) {
+      const answers = await this.interface.prompt([
+        {
+          type: 'checkbox',
+          message: 'Select services to scan',
+          loop: false,
+          name: 'resources',
+          choices: Object.values(services as {[key: string]: string}).map(
+            (service: string) => ({
+              name: service,
+            })
+          ),
+        },
+      ])
+      this.logger.debug(answers)
+      if (answers.resources.length > 0) {
+        result.resources = answers.resources.join(',')
+      } else {
+        result.resources = Object.values(
+          services
+        ).join(',')
+      }
+    } else {
+      result.resources = Object.values(
+        services
+      ).join(',')
+    }
+    return result
+  }
+
+  async getIdentity() {
     try {
+      const credentials = await this.getCredentials()
       return new Promise((resolve, reject) =>
         new STS({ credentials }).getCallerIdentity((err, data) => {
           if (err) {
@@ -170,28 +97,42 @@ export default class Provider {
         })
       )
     } catch (e) {
+      this.logger.info(e)
       return { accountId: '' }
     }
   }
 
   getCredentials(): Promise<Credentials> {
     return new Promise(resolve => {
+      if (this.credentials) {
+        resolve(this.credentials)
+      }
       AWS.config.getCredentials((err: any) => {
         if (err) {
           this.logger.debug(err)
           throw new Error('Unable to find Credentials for AWS, They could be stored in env variables or .aws/credentials file')
         } else {
+          this.credentials = AWS.config.credentials
           resolve(AWS.config.credentials)
         }
       })
     })
   }
 
+  /**
+   * getSchema is used to get the schema for provider
+   * @returns A string array of graphql sub schemas
+   */
   getSchema() {
     const typesArray = loadFilesSync(path.join(__dirname), {recursive: true, extensions: ['graphql']})
     return typesArray
   }
 
+  /**
+   * Factory function to return AWS service classes based on input service
+   * @param service an AWS service that is listed within the service map (current supported services)
+   * @returns Instance of an AWS service class to interact with that AWS service
+   */
   getService(service: string): Service {
     if (!serviceMap[service]) {
       throw new Error(`Service ${service} does not exist for AWS provider`)
@@ -199,12 +140,22 @@ export default class Provider {
     return new serviceMap[service](this)
   }
 
+  /**
+   * getData is used to fetch all provider data specificed in the config for the provider
+   * @param TODO: fill in 
+   * @returns Promise<any> All provider data
+   */
   async getData({
-    regions,
-    resources,
-    credentials,
     opts
-  }: {regions: string, resources: string, credentials: Credentials, opts: Opts}) {
+  }: {opts: Opts}) {
+    let {regions, resources} = this.config
+    if (!regions) {
+      regions = this.properties.regions.join(',')
+    }
+    if (!resources) {
+      resources = Object.values(this.properties.services).join(',')
+    }
+    const credentials = await this.getCredentials()
     const result = []
     const resourceNames = resources.split(',')
     for (const resource of resourceNames) {
