@@ -1,6 +1,5 @@
 import isEmpty from 'lodash/isEmpty'
 import {ServiceConnection} from 'cloud-graph-sdk'
-import albNames from './names'
 
 import resourceTypes from '../../enums/resources'
 import services from '../../enums/services'
@@ -17,16 +16,13 @@ export default ({
   data,
   account,
   region
-}): any => {
+}): {[key: string]: ServiceConnection[]} => {
   const {
+    LoadBalancerArn: id,
     SecurityGroups: securityGroups = [],
     AvailabilityZones: azs = [],
   }: any = alb
-  // let metaData: any = {}
-  const id = alb[albNames.loadBalancerArn]
-  // if (!isEmpty(connections)) {
-  //   metaData = { connections }
-  // }
+
   const connections: ServiceConnection[] = []
   /**
    * Find any EC2 Instances

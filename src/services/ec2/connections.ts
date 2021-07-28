@@ -218,8 +218,6 @@ export default ({
   const arn = `arn:aws:ec2:${region}:${account}:instance/${
     instance[ec2Names.instanceId]
   }`
-  console.log(id)
-  console.log(instance[ec2Names.securityGroups])
   const ec2Result = {
     [id]: connections
   }

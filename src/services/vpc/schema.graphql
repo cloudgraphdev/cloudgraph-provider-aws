@@ -1,4 +1,4 @@
-type vpc @key(fields: "arn") {
+type aws_vpc @key(fields: "arn") {
   id: String!
 	arn: String! @id
 	ipV4Cidr: String
@@ -9,5 +9,5 @@ type vpc @key(fields: "arn") {
 	enableDnsHostnames: String
 	defaultVpc: Boolean
 	state: String
-	alb: [alb] @hasInverse(field: vpc)
+	alb: [aws_alb] @hasInverse(field: vpc)
 }

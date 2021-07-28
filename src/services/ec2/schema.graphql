@@ -1,23 +1,25 @@
-type securityGroup {
+type aws_ec2_securitygroup {
   groupName: String!
   groupId: String! @id
 }
-type MetaData {
+type aws_ec2_metadata {
     cuid: String
 }
-type metadataOptions {
+type aws_ec2_metadata_options {
   state: String!
   httpTokens: String!
   httpPutResponseHopLimit: Int
   httpEndpoint: String! @id
 }
+
+# TODO: move to ebs schema
 type ebs {
   attachTime: String!
   deleteOnTermination: Boolean!
   status: String!
   volumeId: String! @id
 }
-type blockDevice {
+type aws_ec2_blockdevice {
   deviceName: String! @id
   ebs: ebs
 }
@@ -25,60 +27,8 @@ type Tag {
     key: String
     value: String
 }
-type ec2DisplayData {
-  id: String! @id
-  arn: String!
-  region: String!
-  ami: String!
-  tenancy: String!
-  subnetId: String!
-  elasticIps: String!
-  publicDns: String!
-  privateDns: String!
-  monitoring: String!
-  privateIps: String!
-  keyPairName: String
-  cpuCoreCount: Int
-  hibernation: String!
-  ebsOptimized: String!
-  ipv4PublicIp: String!
-  instanceType: String!
-  ipv6Addresses: [String]
-  securityGroups: [securityGroup]
-  placementGroup: String!
-  instanceState: String!
-  sourceDestCheck: String!
-  availabilityZone: String!
-  cpuThreadsPerCore: Int
-  iamInstanceProfile: String
-  deletionProtection: String!
-  primaryNetworkInterface: String!
-  metadataOptions: metadataOptions
-  metadatasecurityGroupIdsOptions: [String]
-  securityGroupIds: [String]
-  ephemeralBlockDevice: [blockDevice]
-  associatePublicIpAddress: String!
-  tags: [Tag]
-}
-interface Element {
-    id: String! @id
-    name: String!
-    children: [Element]
-    metaData: MetaData
-    isProjectMember: Boolean
-    resourceType: String!
-}
-type Ec2Instance implements Element {
-  id: String! @id
-  name: String!
-  children: [Element]
-  metaData: MetaData
-  isProjectMember: Boolean
-  resourceType: String!
-  displayData: ec2DisplayData
-}
 
-type ec2 @key(fields: "arn") {
+type aws_ec2 @key(fields: "arn") {
 	id: String!
   arn: String! @id
   region: String
@@ -104,10 +54,10 @@ type ec2 @key(fields: "arn") {
   iamInstanceProfile: String
   deletionProtection: String
   primaryNetworkInterface: String
-  metadataOptions: metadataOptions
+  metadataOptions: aws_ec2_metadata_options
   metadatasecurityGroupIdsOptions: [String]
   securityGroupIds: [String]
-  ephemeralBlockDevice: [blockDevice]
+  ephemeralBlockDevice: [aws_ec2_blockdevice]
   associatePublicIpAddress: String
-  alb: [alb] @hasInverse(field: ec2Instance)
+  alb: [aws_alb] @hasInverse(field: ec2Instance)
 }

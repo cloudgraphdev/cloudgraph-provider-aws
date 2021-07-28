@@ -1,39 +1,39 @@
-type alb @key(fields: "arn") {
+type aws_alb @key(fields: "arn") {
 	id: String!
 	arn: String! @id
-	dnsName: String
-	scheme: String
-	type: String
+	dnsName: String @search(by: [hash, regexp])
+	scheme: String @search(by: [hash])
+	type: String @search(by: [hash])
 	subnets: [String]
-	hostedZone: String
+	hostedZone: String @search(by: [hash])
 	defaultVpc: String
-	ipAddressType: String
-	idleTimeout: String
-	deletionProtection: String
-	http2: String
-	accessLogsEnabled: String
-	dropInvalidHeaderFields: String
-	createdAt: String
-	status: String
+	ipAddressType: String @search(by: [hash])
+	idleTimeout: String @search(by: [hash, regexp])
+	deletionProtection: String @search(by: [hash])
+	http2: String @search(by: [hash])
+	accessLogsEnabled: String @search(by: [hash])
+	dropInvalidHeaderFields: String @search(by: [hash])
+	createdAt: String @search(by: [hash, regexp])
+	status: String @search(by: [hash])
 	tags: [Tag]
-	ec2Instance: [ec2] @hasInverse(field: alb)
-	vpc: [vpc] @hasInverse(field: alb)
-	listeners: [Listener]
+	ec2Instance: [aws_ec2] @hasInverse(field: alb)
+	vpc: [aws_vpc] @hasInverse(field: alb)
+	listeners: [aws_alb_listener]
 }
 
-type Listener {
-	settings: ListenerSettings
+type aws_alb_listener {
+	settings: aws_alb_listener_settings
 }
 
-type ListenerSettings {
-	arn: String!
-	sslPolicy: String
-	protocol: String
-	rules: [ListenerRule]
+type aws_alb_listener_settings {
+	arn: String! @search
+	sslPolicy: String @search(by: [hash, regexp])
+	protocol: String @search(by: [hash, regexp])
+	rules: [aws_alb_listener_rule]
 }
 
-type ListenerRule {
-	type: String
-	order: String
-	targetGroupArn: String
+type aws_alb_listener_rule {
+	type: String @search(by: [hash, regexp])
+	order: String @search(by: [hash, regexp])
+	targetGroupArn: String @search
 }

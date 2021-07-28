@@ -1,5 +1,3 @@
-import albNames from '../alb/names'
-
 import services from '../../enums/services'
 
 import {ServiceConnection} from 'cloud-graph-sdk'
@@ -30,14 +28,16 @@ export default ({
     name === services.alb
   )
   if (albInstances) {
-    const dataAtRegion = albInstances.data['us-east-1'].filter(instance =>
-      instance[albNames.vpc] === id
+    const dataAtRegion = albInstances.data[region].filter(({VpcId: vpcId}) =>
+      vpcId === id
     )
     for (const instance of dataAtRegion) {
-      const instanceId = instance[albNames.loadBalancerArn]
+      const {
+        LoadBalancerArn: loadBalancerArn
+      } = instance
   
       connections.push({
-        id: instanceId,
+        id: loadBalancerArn,
         resourceType: services.alb,
         relation: 'child',
         field: 'alb'
