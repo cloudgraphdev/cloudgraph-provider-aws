@@ -1,0 +1,17 @@
+type aws_eip @key(fields: "arn") {
+  id: String!
+  arn: String! @id
+  tags: [Tag]
+  vpc: String
+  domain: String
+  publicIp: String
+  privateIp: String
+  instanceId: String
+  publicIpv4Pool: String
+  networkInterface: String
+  ec2InstanceAssociationId: String
+  networkInterfaceOwnerId: String
+  networkBorderGroup: String
+  customerOwnedIp: String
+  customerOwnedIpv4Pool: String
+}
