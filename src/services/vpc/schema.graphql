@@ -10,4 +10,5 @@ type aws_vpc @key(fields: "arn") {
 	defaultVpc: Boolean
 	state: String
 	alb: [aws_alb] @hasInverse(field: vpc)
+	igw: [aws_igw] @hasInverse(field: vpc)
 }

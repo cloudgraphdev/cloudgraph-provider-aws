@@ -7,6 +7,7 @@ import regions from '../enums/regions'
 import ALB from './alb'
 import CloudWatch from './cloudWatch'
 import EC2 from './ec2'
+import AwsInternetGateway from './igw'
 import VPC from './vpc'
 import EIP from './eip'
 import { Credentials } from '../types'
@@ -20,10 +21,11 @@ const AWS = require('aws-sdk')
  */
 export const serviceMap = {
   [services.alb]: ALB,
-  [services.ec2Instance]: EC2,
-  [services.vpc]: VPC,
   [services.cloudwatch]: CloudWatch,
+  [services.ec2Instance]: EC2,
   [services.eip]: EIP,
+  [services.igw]: AwsInternetGateway,
+  [services.vpc]: VPC,
 }
 
 export const enums = {
