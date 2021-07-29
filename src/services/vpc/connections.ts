@@ -1,20 +1,14 @@
 import services from '../../enums/services'
 
-import {ServiceConnection} from 'cloud-graph-sdk'
+import { ServiceConnection } from 'cloud-graph-sdk'
+import { AwsIgw } from '../igw/data'
 
 /**
  * ALBs
  */
 
-export default ({
-  service: vpc,
-  data,
-  account,
-  region
-}): any => {
-  const {
-    VpcId: id,
-  }: any = vpc
+export default ({ service: vpc, data, account, region }): any => {
+  const { VpcId: id }: any = vpc
   // let metaData: any = {}
 
   // if (!isEmpty(connections)) {
@@ -24,9 +18,7 @@ export default ({
   /**
    * Find any ALB Instances
    */
-  const albInstances = data.find(({name}) =>
-    name === services.alb
-  )
+  const albInstances = data.find(({ name }) => name === services.alb)
   if (albInstances) {
     const dataAtRegion = albInstances.data[region].filter(({VpcId: vpcId}) =>
       vpcId === id
@@ -40,7 +32,24 @@ export default ({
         id: loadBalancerArn,
         resourceType: services.alb,
         relation: 'child',
-        field: 'alb'
+        field: 'alb',
+      })
+    }
+  }
+  /**
+   * Find any IGW data
+   */
+  const igws = data.find(({ name }) => name === services.igw)
+  if (igws) {
+    const dataAtRegion: AwsIgw[] = igws.data[region].filter((igw: AwsIgw) =>
+      igw.Attachments.find(({ VpcId }) => VpcId === id)
+    )
+    for (const igw of dataAtRegion) {
+      connections.push({
+        id: igw.InternetGatewayId,
+        resourceType: services.igw,
+        relation: 'child',
+        field: 'igw',
       })
     }
   }
@@ -102,7 +111,7 @@ export default ({
   //   .map(({connection}) => connection)
   const arn = `arn:aws:ec2:${region}:${account}:vpc/${id}`
   const VpcResult = {
-    [id]: connections
+    [id]: connections,
   }
   return VpcResult
 }

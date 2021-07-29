@@ -116,7 +116,6 @@ export const awsLoggerText = {
   foundNacls: (num: number) => `Found ${num} NACLs to add to VPC`,
   foundSecurityGroups: (num: number) =>
     `Found ${num} Security Groups to add to VPC`,
-  foundIgw: (num: number) => `Found ${num} Internet Gateway to add to VPC`,
   foundVpcLambdas: (num: number) => `Found ${num} Lambdas to add to VPC`,
   gatheringRouteTableAssociations: 'Gathering route table associations',
   gatheringSubnets: 'Gathering subnets to add to VPC',
@@ -159,6 +158,14 @@ export const awsLoggerText = {
     `Fetched ${num} ALB Target Groups for ${albArn}`,
   fetchedAlbTargetIds: (num: number, albArn: string) =>
     `Fetched ${num} ALB Target Ids for ${albArn}`,
+  /**
+   * IGW
+   */
+  fetchedIgws: (num: number) => `Fetched ${num} IGWs`,
+  foundIgw: (num: number) => `Found ${num} Internet Gateway to add to VPC`,
+  fetchingIgw: 'Fetching IGW data for this AWS account via the AWS SDK...',
+  doneFetchingIgwData: (num: number) =>
+    `🕒 Done fetching IGW Data in ${num} 🕘`,
   /**
    * EIPs (not attached to instances)
    */
@@ -457,7 +464,7 @@ export const awsLoggerText = {
   foundItemsToHoist: (num, type) =>
     `Found ${num} items to hoist up to the top level for ${type}`,
   removingOldChildren: `Removing old children from this subnet...`,
-  combiningAndAddingNacls: (name) =>
+  combiningAndAddingNacls: name =>
     `Deduping NACLS and adding them and their children directly to VPC: ${name}`,
   /**
    * Kubernetes
@@ -471,4 +478,10 @@ export const awsLoggerText = {
   lookingForCloud9: 'Looking for Cloud9 to add to Region...',
   addingCloud9: (num: number) =>
     `Created and added ${num} Cloud9 to this region`,
-};
+  /**
+   * VPC
+   */
+  fetchingVpcDnsSupportData: 'Fetching Enable DNS Support config for VPCs...',
+  fetchingVpcDnsHostnamesData:
+    'Fetching Enable DNS Hostnames config for VPCs...',
+}

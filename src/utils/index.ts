@@ -37,7 +37,7 @@ export const getKeyByValue = (object, value) => {
   return Object.keys(object).find(key => object[key] === value)
 }
 
-export async function getAccountId({ credentials, opts }: {credentials: Credentials, opts: Opts}): Promise<any> {
+export async function getAccountId({ credentials, opts }: {credentials: Credentials, opts?: Opts}): Promise<any> {
   try {
     return new Promise((resolve, reject) =>
       new STS({ credentials }).getCallerIdentity((err, data) => {

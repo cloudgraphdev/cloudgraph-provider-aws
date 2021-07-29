@@ -151,6 +151,20 @@ export type Aws_Eip = {
   customerOwnedIpv4Pool?: Maybe<Scalars['String']>;
 };
 
+export type Aws_Igw = {
+  arn: Scalars['String'];
+  id: Scalars['String'];
+  owner?: Maybe<Scalars['String']>;
+  attachments?: Maybe<Array<Maybe<Aws_Igw_Attachment>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  vpc?: Maybe<Array<Maybe<Aws_Vpc>>>;
+};
+
+export type Aws_Igw_Attachment = {
+  state?: Maybe<Scalars['String']>;
+  vpcId?: Maybe<Scalars['String']>;
+};
+
 export type Aws_Vpc = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -163,6 +177,7 @@ export type Aws_Vpc = {
   defaultVpc?: Maybe<Scalars['Boolean']>;
   state?: Maybe<Scalars['String']>;
   alb?: Maybe<Array<Maybe<Aws_Alb>>>;
+  igw?: Maybe<Array<Maybe<Aws_Igw>>>;
 };
 
 export type Ebs = {

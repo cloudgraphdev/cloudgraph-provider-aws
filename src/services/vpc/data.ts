@@ -10,14 +10,16 @@ import { AWSError } from 'aws-sdk/lib/error'
 import { DescribeVpcsResult } from 'aws-sdk/clients/ec2'
 import {Opts} from 'cloud-graph-sdk'
 
+import CloudGraph from 'cloud-graph-sdk';
 import { Credentials } from '../../types'
+import { awsLoggerText } from '../../properties/logger'
 
-// import { logger } from '../../../../../middleware'
-
-// import { awsLoggerText } from '../../properties/logger'
-// import { commonVsdLoggerText } from '../../../../shared/visualServiceDiscovery/properties/logger'
-
-// const lt = { ...commonVsdLoggerText, ...awsLoggerText }
+const lt = { ...awsLoggerText }
+const logger = CloudGraph.logger;
+const endpoint =
+  (process.env.NODE_ENV === 'test' && process.env.LOCALSTACK_AWS_ENDPOINT) ||
+  undefined;
+endpoint && logger.log('IGW getData in test mode!');
 
 /**
  * VPC
@@ -57,7 +59,7 @@ export default async ({
         args,
         (err: AWSError, data: DescribeVpcsResult) => {
           if (err) {
-            // logger.error(err, err.stack)
+            logger.error(err)
             Sentry.captureException(new Error(err.message))
           }
 
@@ -70,7 +72,7 @@ export default async ({
 
           const { Vpcs: vpcs, NextToken: token } = data
 
-          // logger.info(lt.fetchedVpcs(vpcs.length))
+          logger.info(lt.fetchedVpcs(vpcs.length))
 
           /**
            * No Vpcs Found
@@ -118,7 +120,7 @@ export default async ({
     }
 
     regions.split(',').map(region => {
-      const ec2 = new EC2({ region, credentials })
+      const ec2 = new EC2({ region, credentials, endpoint })
       const regionPromise = new Promise<void>(resolveRegion =>
         listVpcData({ ec2, region, resolveRegion })
       )
@@ -133,14 +135,14 @@ export default async ({
 
     const fetchVpcAttribute = Attribute =>
       vpcData.map(({ region, VpcId }, idx) => {
-        const ec2 = new EC2({ region, credentials })
+        const ec2 = new EC2({ region, credentials, endpoint })
 
         const additionalAttrPromise = new Promise<void>(resolveAdditionalAttr =>
           ec2.describeVpcAttribute(
             { VpcId, Attribute: Attribute },
             (err, data) => {
               if (err) {
-                // logger.error(err, err.stack)
+                logger.error(err)
                 Sentry.captureException(new Error(err.message))
               }
 
@@ -169,11 +171,11 @@ export default async ({
         additionalAttrPromises.push(additionalAttrPromise)
       })
 
-    // logger.info(lt.fetchingVpcDnsSupportData)
+    logger.info(lt.fetchingVpcDnsSupportData)
     fetchVpcAttribute('enableDnsSupport')
     await Promise.all(additionalAttrPromises)
 
-    // logger.info(lt.fetchingVpcDnsHostnamesData)
+    logger.info(lt.fetchingVpcDnsHostnamesData)
     fetchVpcAttribute('enableDnsHostnames')
     await Promise.all(additionalAttrPromises)
 
