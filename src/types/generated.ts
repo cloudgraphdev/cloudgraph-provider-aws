@@ -43,6 +43,19 @@ export type Aws_Alb_Listener = {
   settings?: Maybe<Aws_Alb_Listener_Settings>;
 };
 
+export type Aws_Alb_Listener_Rule = {
+  type?: Maybe<Scalars['String']>;
+  order?: Maybe<Scalars['String']>;
+  targetGroupArn?: Maybe<Scalars['String']>;
+};
+
+export type Aws_Alb_Listener_Settings = {
+  arn: Scalars['String'];
+  sslPolicy?: Maybe<Scalars['String']>;
+  protocol?: Maybe<Scalars['String']>;
+  rules?: Maybe<Array<Maybe<Aws_Alb_Listener_Rule>>>;
+};
+
 export type Aws_Cloudwatch = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -63,24 +76,6 @@ export type Aws_Cloudwatch = {
 export type Aws_Cloudwatch_Dimensions = {
   name?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
-};
-
-export type BlockDevice = {
-  deviceName: Scalars['String'];
-  ebs?: Maybe<Ebs>;
-};
-
-export type Aws_Alb_Listener_Rule = {
-  type?: Maybe<Scalars['String']>;
-  order?: Maybe<Scalars['String']>;
-  targetGroupArn?: Maybe<Scalars['String']>;
-};
-
-export type Aws_Alb_Listener_Settings = {
-  arn: Scalars['String'];
-  sslPolicy?: Maybe<Scalars['String']>;
-  protocol?: Maybe<Scalars['String']>;
-  rules?: Maybe<Array<Maybe<Aws_Alb_Listener_Rule>>>;
 };
 
 export type Aws_Ec2 = {
@@ -136,6 +131,24 @@ export type Aws_Ec2_Metadata_Options = {
 export type Aws_Ec2_Securitygroup = {
   groupName: Scalars['String'];
   groupId: Scalars['String'];
+};
+
+export type Aws_Eip = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  vpc?: Maybe<Scalars['String']>;
+  domain?: Maybe<Scalars['String']>;
+  publicIp?: Maybe<Scalars['String']>;
+  privateIp?: Maybe<Scalars['String']>;
+  instanceId?: Maybe<Scalars['String']>;
+  publicIpv4Pool?: Maybe<Scalars['String']>;
+  networkInterface?: Maybe<Scalars['String']>;
+  ec2InstanceAssociationId?: Maybe<Scalars['String']>;
+  networkInterfaceOwnerId?: Maybe<Scalars['String']>;
+  networkBorderGroup?: Maybe<Scalars['String']>;
+  customerOwnedIp?: Maybe<Scalars['String']>;
+  customerOwnedIpv4Pool?: Maybe<Scalars['String']>;
 };
 
 export type Aws_Vpc = {

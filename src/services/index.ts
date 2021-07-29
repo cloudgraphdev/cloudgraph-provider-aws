@@ -8,6 +8,7 @@ import ALB from './alb'
 import CloudWatch from './cloudWatch'
 import EC2 from './ec2'
 import VPC from './vpc'
+import EIP from './eip'
 import { Credentials } from '../types'
 
 const path = require('path')
@@ -22,12 +23,13 @@ export const serviceMap = {
   [services.ec2Instance]: EC2,
   [services.vpc]: VPC,
   [services.cloudwatch]: CloudWatch,
+  [services.eip]: EIP,
 }
 
 export const enums = {
   services,
   regions,
-  resources
+  resources,
 }
 // TODO: Create base class in SDK for this that sets up inquirer interface
 export default class Provider extends CloudGraph.Client {
@@ -110,7 +112,9 @@ export default class Provider extends CloudGraph.Client {
       AWS.config.getCredentials((err: any) => {
         if (err) {
           this.logger.debug(err)
-          throw new Error('Unable to find Credentials for AWS, They could be stored in env variables or .aws/credentials file')
+          throw new Error(
+            'Unable to find Credentials for AWS, They could be stored in env variables or .aws/credentials file'
+          )
         } else {
           this.credentials = AWS.config.credentials
           resolve(AWS.config.credentials)
@@ -124,7 +128,10 @@ export default class Provider extends CloudGraph.Client {
    * @returns A string array of graphql sub schemas
    */
   getSchema() {
-    const typesArray = loadFilesSync(path.join(__dirname), {recursive: true, extensions: ['graphql']})
+    const typesArray = loadFilesSync(path.join(__dirname), {
+      recursive: true,
+      extensions: ['graphql'],
+    })
     return typesArray
   }
 
@@ -142,7 +149,7 @@ export default class Provider extends CloudGraph.Client {
 
   /**
    * getData is used to fetch all provider data specificed in the config for the provider
-   * @param TODO: fill in 
+   * @param TODO: fill in
    * @returns Promise<any> All provider data
    */
   async getData({
@@ -162,7 +169,7 @@ export default class Provider extends CloudGraph.Client {
       const serviceClass = this.getService(resource)
       result.push({
         name: resource,
-        data: await serviceClass.getData({ regions, credentials, opts })
+        data: await serviceClass.getData({ regions, credentials, opts }),
       })
     }
     return result
