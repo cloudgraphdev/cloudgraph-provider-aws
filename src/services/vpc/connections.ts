@@ -1,13 +1,13 @@
-import services from '../../enums/services'
-
 import { ServiceConnection } from 'cloud-graph-sdk'
+
+import services from '../../enums/services'
 import { AwsIgw } from '../igw/data'
 
 /**
  * ALBs
  */
 
-export default ({ service: vpc, data, account, region }): any => {
+export default ({ service: vpc, data, region }): any => {
   const { VpcId: id }: any = vpc
   // let metaData: any = {}
 
@@ -20,14 +20,12 @@ export default ({ service: vpc, data, account, region }): any => {
    */
   const albInstances = data.find(({ name }) => name === services.alb)
   if (albInstances) {
-    const dataAtRegion = albInstances.data[region].filter(({VpcId: vpcId}) =>
-      vpcId === id
+    const dataAtRegion = albInstances.data[region].filter(
+      ({ VpcId: vpcId }) => vpcId === id
     )
     for (const instance of dataAtRegion) {
-      const {
-        LoadBalancerArn: loadBalancerArn
-      } = instance
-  
+      const { LoadBalancerArn: loadBalancerArn } = instance
+
       connections.push({
         id: loadBalancerArn,
         resourceType: services.alb,
@@ -109,7 +107,7 @@ export default ({ service: vpc, data, account, region }): any => {
   //             name.includes(get(alb, albNames.dnsName))
   //   )
   //   .map(({connection}) => connection)
-  const arn = `arn:aws:ec2:${region}:${account}:vpc/${id}`
+  // const arn = `arn:aws:ec2:${region}:${account}:vpc/${id}`
   const VpcResult = {
     [id]: connections,
   }

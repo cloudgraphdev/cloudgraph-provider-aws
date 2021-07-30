@@ -1,21 +1,21 @@
-import get from 'lodash/get'
-import head from 'lodash/head'
-import kebabCase from 'lodash/kebabCase'
+// import get from 'lodash/get'
+// import head from 'lodash/head'
+// import kebabCase from 'lodash/kebabCase'
 
-import {
-  Vpc,
-  SubnetList,
-  NetworkAclList,
-  RouteTableList,
-  SecurityGroupList,
-  InternetGatewayList,
-} from 'aws-sdk/clients/ec2'
+// import {
+//   Vpc,
+//   SubnetList,
+//   NetworkAclList,
+//   RouteTableList,
+//   SecurityGroupList,
+//   InternetGatewayList,
+// } from 'aws-sdk/clients/ec2'
 
 import vpcNames from './names'
 
 // import { VpcResult } from './types'
 
-import resourceTypes from '../../enums/resources'
+// import resourceTypes from '../../enums/resources'
 
 // import { combineElementsTagsWithExistingGlobalTags } from '../../utils/formattingUtils'
 
@@ -68,7 +68,7 @@ export default ({
 }): any => {
   const vpcData = toCamel(rawData)
 
-  const { Tags: tags } = rawData
+  // const { Tags: tags } = rawData
 
   const id = vpcData[vpcNames.vpcId]
 
@@ -77,7 +77,7 @@ export default ({
    */
   // combineElementsTagsWithExistingGlobalTags({ tags, allTagData })
 
-  const name: string = tags[vpcNames.name] || id
+  // const name: string = tags[vpcNames.name] || id
 
   // const vpcRouteTables: RouteTable[] = routeTables.map(routeTable =>
   //   awsRouteTableConverter({

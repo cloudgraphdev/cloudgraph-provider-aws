@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/node'
 
 import ELBV2 from 'aws-sdk/clients/elbv2'
-import CloudGraph, {Opts} from 'cloud-graph-sdk'
+import CloudGraph, { Opts } from 'cloud-graph-sdk'
 
 import head from 'lodash/head'
 import groupBy from 'lodash/groupBy'
@@ -10,19 +10,19 @@ import isEmpty from 'lodash/isEmpty'
 
 import { Credentials } from '../../types'
 
-import { awsLoggerText } from '../../properties/logger'
+import awsLoggerText from '../../properties/logger'
 
 const lt = { ...awsLoggerText }
 /**
  * ALB
  */
-const logger = CloudGraph.logger
+const { logger } = CloudGraph
 
 export default async ({
   regions,
   credentials,
-  opts
-}: {
+}: // opts,
+{
   regions: string
   credentials: Credentials
   opts: Opts
@@ -145,7 +145,7 @@ export default async ({
 
         const { TagDescriptions: allTags = [] } = data || {}
 
-        const tags = (head(allTags) as {Tags: []} || { Tags: [] }).Tags
+        const tags = ((head(allTags) as { Tags: [] }) || { Tags: [] }).Tags
 
         logger.info(lt.fetchedAlbTags(tags.length, ResourceArns))
 
@@ -390,7 +390,7 @@ export default async ({
         const { TargetGroups: targetGroups = [], NextMarker: marker } =
           data || {}
 
-          logger.info(
+        logger.info(
           lt.fetchedAlbTargetGroups(targetGroups.length, LoadBalancerArn)
         )
 

@@ -4,13 +4,13 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
 import EC2 from 'aws-sdk/clients/ec2'
-import {Opts} from 'cloud-graph-sdk'
+import { Opts } from 'cloud-graph-sdk'
 
 import { Credentials } from '../../types'
 
 // import { logger } from '../../../../../middleware'
 
-// import { awsLoggerText } from '../../properties/logger'
+// import awsLoggerText from '../../properties/logger'
 // import { commonVsdLoggerText } from '../../../../shared/visualServiceDiscovery/properties/logger'
 
 // const lt = { ...commonVsdLoggerText, ...awsLoggerText }
@@ -22,8 +22,8 @@ import { Credentials } from '../../types'
 export default async ({
   regions,
   credentials,
-  opts
-}: {
+}: // opts,
+{
   regions: string
   credentials: Credentials
   opts: Opts
@@ -128,7 +128,7 @@ export default async ({
      * Step 2) Get the Key Pair names for each instance's key pair
      */
 
-    let totalKeyPairs = 0
+    // let totalKeyPairs = 0
 
     ec2Instances.map(({ region }, ec2Idx) => {
       const ec2 = new EC2({ region, credentials })
@@ -161,7 +161,7 @@ export default async ({
           ec2Instances[ec2Idx].keyPairName = pairs
             .map(({ KeyName }) => KeyName)
             .join(', ')
-          totalKeyPairs += 1
+          // totalKeyPairs += 1
           resolveKeyPair()
         })
       )

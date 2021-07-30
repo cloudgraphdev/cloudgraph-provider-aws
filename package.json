@@ -10,7 +10,9 @@
     "build": "yarn prepublish",
     "generate-types": "graphql-codegen --config codegen.yml",
     "prepublish": "yarn generate-types && tsc && yarn cpx 'src/**/*.graphql' dist",
-    "test": "NODE_ENV=test jest"
+    "test": "NODE_ENV=test jest",
+    "lint": "eslint --config .eslintrc.json --ext .js,.ts ./",
+    "lint:fix": "eslint --fix --config .eslintrc.json --ext .js,.ts ./"
   },
   "dependencies": {
     "@graphql-tools/load-files": "^6.3.2",
@@ -28,9 +30,31 @@
     "@types/lodash": "^4.14.170",
     "@types/node": "^15.12.4",
     "@types/pino": "^6.3.8",
+    "@typescript-eslint/eslint-plugin": "^4.28.5",
+    "@typescript-eslint/parser": "^4.28.5",
     "cpx": "^1.5.0",
     "dotenv": "^10.0.0",
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb-base": "14.2.1",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.4.0",
+    "husky": "4.3.0",
     "jest": "^27.0.6",
+    "lint-staged": "^11.1.1",
+    "prettier": "^2.3.2",
     "ts-jest": "^27.0.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint-staged",
+      "pre-push": "yarn test"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,graphql,json}": [
+      "yarn lint:fix",
+      "git add --force"
+    ]
   }
 }

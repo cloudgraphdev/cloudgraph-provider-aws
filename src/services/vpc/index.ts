@@ -7,7 +7,10 @@ import mutation from './mutation'
 
 export default class Vpc extends BaseService implements Service {
   format = format.bind(this)
+
   getData = getData.bind(this)
+
   getConnections = getConnections.bind(this)
+
   mutation = mutation
 }

@@ -1,4 +1,4 @@
-export const globalRegionName: string = 'aws-global'
+export const globalRegionName = 'aws-global'
 
 const regions = {
   usEast1: 'us-east-1', // Virginia

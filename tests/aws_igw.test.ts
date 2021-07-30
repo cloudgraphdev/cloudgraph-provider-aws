@@ -1,10 +1,11 @@
 // file: cloudwatch.test.ts
-require('dotenv').config()
 import CloudGraph, { ServiceConnection } from 'cloud-graph-sdk'
 import { EC2 } from 'aws-sdk'
+
 import Igw from '../src/services/igw'
 import Vpc from '../src/services/vpc'
 import services from '../src/enums/services'
+import environment from '../src/config/environment'
 
 // TODO: Probably solved by ENG-89
 const credentials = {
@@ -13,12 +14,12 @@ const credentials = {
 }
 
 // TODO: Single region for now to match free license Localstack limitation
-const account = process.env.LOCALSTACK_AWS_ACCOUNT_ID
+const account = environment.LOCALSTACK_AWS_ACCOUNT_ID
 const region = 'us-east-1'
 const igw = new EC2({
-  region: region,
+  region,
   credentials,
-  endpoint: process.env.LOCALSTACK_AWS_ENDPOINT,
+  endpoint: environment.LOCALSTACK_AWS_ENDPOINT,
 })
 const igwMockData = {
   TagSpecifications: [
@@ -38,12 +39,12 @@ const vpcMockData = {
 jest.setTimeout(30000)
 
 // TODO: Will be better implemented using a terraform integration
-let igwId,
-  vpcId,
-  igwGetDataResult,
-  formatResult,
-  initiatorTestData,
-  initiatorGetConnectionsResult
+let igwId
+let vpcId
+let igwGetDataResult
+let formatResult
+let initiatorTestData
+let initiatorGetConnectionsResult
 beforeAll(async () => {
   try {
     const vpcData = await igw.createVpc(vpcMockData).promise()
@@ -60,7 +61,7 @@ beforeAll(async () => {
       regions: region,
     })
     formatResult = igwGetDataResult[region].map(igw =>
-      igwClass.format({ igw, region, account })
+      igwClass.format({ service: igw, region, account })
     )
     initiatorTestData = [
       {
@@ -84,7 +85,7 @@ beforeAll(async () => {
       })
     )
   } catch (error) {
-    console.error(error)
+    console.error(error) // eslint-disable-line no-console
   }
   return Promise.resolve()
 })
@@ -105,7 +106,7 @@ describe('getData', () => {
             }),
           ]),
           InternetGatewayId: expect.any(String),
-          //TODO: Haven't found a way to match this as an optional property
+          // TODO: Haven't found a way to match this as an optional property
           // OwnerId: expect.any(String) || expect.any(undefined),
           Tags: expect.arrayContaining([
             expect.objectContaining({
@@ -121,7 +122,7 @@ describe('getData', () => {
 })
 
 describe('format', () => {
-  it('should return data in the correct format matching the schema type', () => {
+  it('should return data in wthe correct format matching the schema type', () => {
     expect(formatResult).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -133,7 +134,7 @@ describe('format', () => {
             }),
           ]),
           id: expect.any(String),
-          //TODO: Haven't found a way to match this as an optional property
+          // TODO: Haven't found a way to match this as an optional property
           // owner: expect.any(String),
           tags: expect.arrayContaining([
             expect.objectContaining({
@@ -150,8 +151,8 @@ describe('format', () => {
 describe('initiator(vpc)', () => {
   it('should create the connection to igw', () => {
     const vpcIgwConnections: ServiceConnection[] = initiatorGetConnectionsResult
-      .find(v => vpcId in v)[vpcId]
-      .find((c: ServiceConnection) => c.field === services.igw)
+      .find(v => vpcId in v)
+      [vpcId].find((c: ServiceConnection) => c.field === services.igw)
     expect(vpcIgwConnections).toBeTruthy()
   })
 })

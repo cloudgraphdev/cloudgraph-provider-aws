@@ -1,9 +1,11 @@
-import get from 'lodash/get'
-import head from 'lodash/head'
-import last from 'lodash/last'
-import isEmpty from 'lodash/isEmpty'
+// import get from 'lodash/get'
+// import head from 'lodash/head'
+// import last from 'lodash/last'
+// import isEmpty from 'lodash/isEmpty'
 
-import { Volume, Address, Instance } from 'aws-sdk/clients/ec2'
+// import { Volume, Address, Instance } from 'aws-sdk/clients/ec2'
+import {  Instance } from 'aws-sdk/clients/ec2'
+
 
 import {ServiceConnection} from 'cloud-graph-sdk'
 
@@ -11,7 +13,7 @@ import ec2Names from './names'
 
 import resourceTypes from '../../enums/resources'
 
-import services from '../../enums/services'
+// import services from '../../enums/services'
 
 import { toCamel } from '../../utils/index'
 
@@ -21,9 +23,9 @@ import { toCamel } from '../../utils/index'
 
 export default ({
   service: rawData,
-  data, // TODO: use aws sdk data to grab all connections (eip for sure)
-  account,
-  region
+  // data, // TODO: use aws sdk data to grab all connections (eip for sure)
+  // account,
+  // region
   // eips,
   // account,
   // instance: rawData,
@@ -39,19 +41,19 @@ export default ({
 
   const id = instance[ec2Names.instanceId]
 
-  const securityGroupIds = (instance[ec2Names.securityGroups] || []).map(
-    ({ groupId: groupId }) => groupId
-  )
+  // const securityGroupIds = (instance[ec2Names.securityGroups] || []).map(
+  //   ({ groupId }) => groupId
+  // )
 
 
   // const ipv4PublicIp = eips.map(({ PublicIp }) => PublicIp).join(', ')
 
-  const primaryNetworkInterface = get(
-    (instance[ec2Names.networkInterfaces] || []).find(
-      ({ attachment: { deviceIndex } }) => deviceIndex === 0
-    ),
-    ec2Names.networkInterfaceId
-  )
+  // const primaryNetworkInterface = get(
+  //   (instance[ec2Names.networkInterfaces] || []).find(
+  //     ({ attachment: { deviceIndex } }) => deviceIndex === 0
+  //   ),
+  //   ec2Names.networkInterfaceId
+  // )
 
   const connections: ServiceConnection[] = []
 
@@ -215,9 +217,9 @@ export default ({
 //     securityGroupsInVpc,
 //     entitySecurityGroups: securityGroupIds,
 //   })
-  const arn = `arn:aws:ec2:${region}:${account}:instance/${
-    instance[ec2Names.instanceId]
-  }`
+  // const arn = `arn:aws:ec2:${region}:${account}:instance/${
+  //   instance[ec2Names.instanceId]
+  // }`
   const ec2Result = {
     [id]: connections
   }

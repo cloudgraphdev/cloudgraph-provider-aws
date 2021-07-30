@@ -18,8 +18,8 @@ export default ({
   const {
     allocationId: id,
     associationId: ec2InstanceAssociationId,
-    customerOwnedIp: customerOwnedIp,
-    customerOwnedIpv4Pool: customerOwnedIpv4Pool,
+    customerOwnedIp,
+    customerOwnedIpv4Pool,
      domain,
     instanceId,
     networkBorderGroup,
