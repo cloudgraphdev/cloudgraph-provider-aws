@@ -10,7 +10,7 @@ import {Aws_Alb, Aws_Alb_Listener} from '../../types/generated'
 
 const awsAlbListernerGraphFormat = (listener): Aws_Alb_Listener => {
   const { 
-    ListenerArn: id,
+    ListenerArn: arn,
     DefaultActions: rules = [],
     SslPolicy: sslPolicy,
     Protocol: protocol,
@@ -18,10 +18,10 @@ const awsAlbListernerGraphFormat = (listener): Aws_Alb_Listener => {
   }: any = listener
 
   return {
+    arn,
     settings: {
-      arn: id,
       sslPolicy,
-      protocol: `${protocol}:${port} ${id}`,
+      protocol: `${protocol}:${port} ${arn}`,
       rules: rules.map(
         ({ Order: order, Type: type, TargetGroupArn: targetGroupArn }) => ({
           type,

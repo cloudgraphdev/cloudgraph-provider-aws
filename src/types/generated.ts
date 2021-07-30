@@ -40,6 +40,7 @@ export type Aws_Alb = {
 };
 
 export type Aws_Alb_Listener = {
+  arn?: Maybe<Scalars['String']>;
   settings?: Maybe<Aws_Alb_Listener_Settings>;
 };
 
@@ -50,7 +51,6 @@ export type Aws_Alb_Listener_Rule = {
 };
 
 export type Aws_Alb_Listener_Settings = {
-  arn: Scalars['String'];
   sslPolicy?: Maybe<Scalars['String']>;
   protocol?: Maybe<Scalars['String']>;
   rules?: Maybe<Array<Maybe<Aws_Alb_Listener_Rule>>>;
