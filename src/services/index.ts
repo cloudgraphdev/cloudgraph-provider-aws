@@ -1,4 +1,6 @@
-import {loadFilesSync} from '@graphql-tools/load-files'
+import AWS from 'aws-sdk'
+import path from 'path'
+import { loadFilesSync } from '@graphql-tools/load-files'
 import CloudGraph, { Service, Opts } from 'cloud-graph-sdk'
 import STS from 'aws-sdk/clients/sts'
 import services from '../enums/services'
@@ -11,9 +13,6 @@ import AwsInternetGateway from './igw'
 import VPC from './vpc'
 import EIP from './eip'
 import { Credentials } from '../types'
-
-const path = require('path')
-const AWS = require('aws-sdk')
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -40,12 +39,19 @@ export default class Provider extends CloudGraph.Client {
     this.properties = enums
     this.serviceMap = serviceMap
   }
+
   credentials: Credentials | undefined
-  serviceMap: {[key: string]: any} // TODO: how to type the service map
-  properties: {services: {[key: string]: string}, regions: string[], resources: {[key: string]: string}}
+
+  serviceMap: { [key: string]: any } // TODO: how to type the service map
+
+  properties: {
+    services: { [key: string]: string }
+    regions: string[]
+    resources: { [key: string]: string }
+  }
 
   async configure(flags: any) {
-    const result: {[key: string]: any} = {}
+    const result: { [key: string]: any } = {}
     const answers = await this.interface.prompt([
       {
         type: 'checkbox',
@@ -66,7 +72,7 @@ export default class Provider extends CloudGraph.Client {
           message: 'Select services to scan',
           loop: false,
           name: 'resources',
-          choices: Object.values(services as {[key: string]: string}).map(
+          choices: Object.values(services as { [key: string]: string }).map(
             (service: string) => ({
               name: service,
             })
@@ -77,14 +83,10 @@ export default class Provider extends CloudGraph.Client {
       if (answers.resources.length > 0) {
         result.resources = answers.resources.join(',')
       } else {
-        result.resources = Object.values(
-          services
-        ).join(',')
+        result.resources = Object.values(services).join(',')
       }
     } else {
-      result.resources = Object.values(
-        services
-      ).join(',')
+      result.resources = Object.values(services).join(',')
     }
     return result
   }
@@ -154,10 +156,8 @@ export default class Provider extends CloudGraph.Client {
    * @param TODO: fill in
    * @returns Promise<any> All provider data
    */
-  async getData({
-    opts
-  }: {opts: Opts}) {
-    let {regions, resources} = this.config
+  async getData({ opts }: { opts: Opts }) {
+    let { regions, resources } = this.config
     if (!regions) {
       regions = this.properties.regions.join(',')
     }
@@ -168,7 +168,7 @@ export default class Provider extends CloudGraph.Client {
     const result = []
     const resourceNames = resources.split(',')
     for (const resource of resourceNames) {
-      const serviceClass = this.getService(resource)
+      const serviceClass = this.getService(resource as any)
       result.push({
         name: resource,
         data: await serviceClass.getData({ regions, credentials, opts }),

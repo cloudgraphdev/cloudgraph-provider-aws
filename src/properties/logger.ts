@@ -1,10 +1,10 @@
-export const awsLoggerText = {
+export default {
   platform: 'Platform: AWS',
   requestingAccountData: 'Getting AWS Account Data',
   requestingAccountDataError:
     '❌ ERROR: There was an error getting the AWS account data using these credentials ❌ ',
   foundRoleArn: 'Found AWS Role ARN and external ID - authenticating via STS',
-  foundSecurityViolation: (name, type) =>
+  foundSecurityViolation: (name: string, type: string): string =>
     `💀 Found a security violation for ${type}: ${name} 💀`,
   startGeneration: 'Generating VSD data for AWS account...',
   regionNotFound: (name: string): string =>
@@ -15,7 +15,7 @@ export const awsLoggerText = {
    */
   fetchingIamData: 'Fetching IAM data for this AWS account via the AWS SDK...',
   doneFetchingIamData: '✅ Done fetching IAM Data ✅',
-  fetchedIamUsers: (num: number) => `Fetched ${num} IAM users`,
+  fetchedIamUsers: (num: number): string => `Fetched ${num} IAM users`,
   lookingForIam: 'Looking for IAM resources to add',
   addingIam: 'Adding IAM resources',
   lookingForIamUsers: 'Looking for IAM Users to add',
@@ -33,23 +33,24 @@ export const awsLoggerText = {
     'Fetching CloudFormation data for this AWS account via the AWS SDK...',
   doneFetchingCloudFormationData: '✅ Done fetching CloudFormation Data ✅',
   lookingForCfStacks: 'Looking for Cloudformation Stacks to add to Region...',
-  fetchedCfStacks: (num: number) => `Fetched ${num} CF Stacks`,
-  addingCfStacks: (num: number) =>
+  fetchedCfStacks: (num: number): string => `Fetched ${num} CF Stacks`,
+  addingCfStacks: (num: number): string =>
     `Created and added ${num} CloudFomation stacks to this region`,
   /**
    * CloudFront
    */
   lookingForCloudFront: 'Looking for CloudFront Distros to add to account...',
-  addingCloudFront: (num: number) =>
+  addingCloudFront: (num: number): string =>
     `Created and added ${num} CloudFront Distros to this account`,
   /**
    * Route53
    */
-  fetchedRoute53Zones: (num: number) => `Fetched ${num} Route53 Hosted Zones`,
-  fetchedRoute53ZonesRecords: (num: number, zoneId: string) =>
+  fetchedRoute53Zones: (num: number): string =>
+    `Fetched ${num} Route53 Hosted Zones`,
+  fetchedRoute53ZonesRecords: (num: number, zoneId: string): string =>
     `Fetched ${num} Route53 Hosted Zone records for ${zoneId}`,
   lookingForRoute53: 'Looking for Route53 Hosted Zones to add to account...',
-  addingRoute53: (num: number) =>
+  addingRoute53: (num: number): string =>
     `Created and added ${num} Route53 Hosted Zones to this account`,
   doneFetchingRoute53Data: '✅ Done fetching Route53 Data ✅',
   /**
@@ -58,13 +59,13 @@ export const awsLoggerText = {
   lookingForCloudwatch: 'Looking for CloudWatch alarms to add to Region...',
   fetchingCloudwatchData:
     'Fetching CloudWatch alarms for this AWS account via the AWS SDK...',
-  doneFetchingCloudwatchData: (num: number) =>
+  doneFetchingCloudwatchData: (num: number): string =>
     `🕒 Done fetching CloudWatch alarms in ${num} 🕘`,
-  addingCloudwatch: (num: number) =>
+  addingCloudwatch: (num: number): string =>
     `Created and added ${num} CloudWatch alarms to this region`,
-  foundMoreCloudwatchAlarms: (num: number) =>
+  foundMoreCloudwatchAlarms: (num: number): string =>
     `Found another ${num} CloudWatch alarms in this region...`,
-  addingCloudwatchMetricsToElement: (num: number, namespace: string) =>
+  addingCloudwatchMetricsToElement: (num: number, namespace: string): string =>
     `Found ${num} CloudWatch metric alarms to add for ${namespace}`,
   gettingCloudwatchAlarms: 'Fetching CloudWatch alarms...',
   gettingCloudwatchAlarmTags: 'Fetching tags for each CloudWatch alarm...',
@@ -73,28 +74,28 @@ export const awsLoggerText = {
    */
   lookingForKinesisDataStreams:
     'Looking for Kinesis Data Streams to add to Region...',
-  addingKinesisDataStreams: (num: number) =>
+  addingKinesisDataStreams: (num: number): string =>
     `Created and added ${num} Kinesis Data Streams to this region`,
   /**
    * Kinesis Data Firehose
    */
   lookingForKinesisDataFirehose:
     'Looking for Kinesis Data Firehose to add to Region...',
-  addingKinesisDataFirehose: (num: number) =>
+  addingKinesisDataFirehose: (num: number): string =>
     `Created and added ${num} Kinesis Data Firehose to this region`,
   /**
    * Iot Thing
    */
   lookingForIotThing: 'Looking for IoT Things to add to Region...',
-  addingIotThing: (num: number) =>
+  addingIotThing: (num: number): string =>
     `Created and added ${num} IoT Things to this region`,
   /**
    * Api Gateway
    */
   lookingForApiGateway: 'Looking for Api Gateways to add to Region...',
-  addingApiGateway: (num: number) =>
+  addingApiGateway: (num: number): string =>
     `Created and added ${num} Api Gateways to this region`,
-  fetchedApiGwDomainNames: (num: number) =>
+  fetchedApiGwDomainNames: (num: number): string =>
     `Fetched ${num} API Gateway Domain Names`,
   fetchingApiGatewayData:
     'Fetching API Gateway data for this AWS account via the AWS SDK...',
@@ -104,17 +105,19 @@ export const awsLoggerText = {
    */
   fetchingVpcData: 'Fetching VPC data for this AWS account via the AWS SDK...',
   doneFetchingVpcData: '✅ Done fetching VPC Data ✅',
-  fetchedVpcs: (num: number) => `Fetched ${num} Vpcs`,
+  fetchedVpcs: (num: number): string => `Fetched ${num} Vpcs`,
   lookingForVpc: 'Looking for VPC data to add',
-  foundVpcs: (num: number) => `Found ${num} VPCs to add to this region's data`,
+  foundVpcs: (num: number): string =>
+    `Found ${num} VPCs to add to this region's data`,
   beginVpc: '✅ Begin Vpc Formatting ✅',
-  foundAdditionalVpcData: (found: Boolean) =>
+  foundAdditionalVpcData: (found: boolean): string =>
     found
       ? 'Found supplemental VPC data to add'
       : '❌ ERROR - Missing supplemental VPC data ❌',
-  foundRouteTables: (num: number) => `Found ${num} Route Tables to add to VPC`,
-  foundNacls: (num: number) => `Found ${num} NACLs to add to VPC`,
-  foundSecurityGroups: (num: number) =>
+  foundRouteTables: (num: number): string =>
+    `Found ${num} Route Tables to add to VPC`,
+  foundNacls: (num: number): string => `Found ${num} NACLs to add to VPC`,
+  foundSecurityGroups: (num: number): string =>
     `Found ${num} Security Groups to add to VPC`,
   foundVpcLambdas: (num: number) => `Found ${num} Lambdas to add to VPC`,
   gatheringRouteTableAssociations: 'Gathering route table associations',
@@ -122,8 +125,9 @@ export const awsLoggerText = {
   creatingVpc: 'Creating VPC Element',
   addingVpc: 'Adding VPC Element to the region',
   lookingforSubnets: 'Looking for Subnets to add to VPC',
-  foundSubnets: (num: number) => `Found ${num} Subnets to add to this Vpc`,
-  foundAdditionalSubnetData: (found: Boolean) =>
+  foundSubnets: (num: number): string =>
+    `Found ${num} Subnets to add to this Vpc`,
+  foundAdditionalSubnetData: (found: boolean): string =>
     found
       ? 'Found supplemental Subnet data to add'
       : '❌ ERROR - Missing supplemental Subnet data ❌',
@@ -137,17 +141,18 @@ export const awsLoggerText = {
   lookingForVpcLambdas:
     'Looking for Lambdas with VPC networking to add to the VPC',
   lookingForLambda: 'Looking for non-vpc Lambdas to add to region',
-  lambdasCreated: (num: number) =>
+  lambdasCreated: (num: number): string =>
     `Found and created ${num} Lambdas for this region`,
   addingLambdas: 'Adding lambdas to region',
   /**
    * ALBs
    */
-  fetchedAlbs: (num: number) => `Fetched ${num} Application Load Balancers`,
+  fetchedAlbs: (num: number): string =>
+    `Fetched ${num} Application Load Balancers`,
   lookingForAlbs: 'Looking ALBs to add to VPC...',
   lookingForAlb: 'Looking for Albs...',
   doneFetchingAlbData: '✅ Done fetching ALB Data ✅',
-  albsCreated: (num: number) => `Found and created ${num} ALBs`,
+  albsCreated: (num: number): string => `Found and created ${num} ALBs`,
   fetchedAlbTags: (num: number, albArn: string) =>
     `Fetched ${num} Tags for ${albArn}`,
   fetchedAlbAttributes: (num: number, albArn: string) =>
@@ -170,8 +175,8 @@ export const awsLoggerText = {
    * EIPs (not attached to instances)
    */
   lookingForEips: 'Looking EIPs that are not attached to instances',
-  fetchedEips: (num: number) => `Fetched ${num} EIPs`,
-  eipsCreated: (num: number) => `Found and created ${num} EIPs`,
+  fetchedEips: (num: number): string => `Fetched ${num} EIPs`,
+  eipsCreated: (num: number): string => `Found and created ${num} EIPs`,
   fetchingEip: 'Fetching EIP data for this AWS account via the AWS SDK...',
   doneFetchingEipData: '✅ Done fetching EIP Data ✅',
   /**
@@ -185,8 +190,8 @@ export const awsLoggerText = {
    */
   fetchingAsgData: 'Fetching ASG data for this AWS account via the AWS SDK...',
   doneFetchingAsgData: '✅ Done fetching ASG Data ✅',
-  fetchedAsgs: (num: number) => `Fetched ${num} AutoScaling Groups`,
-  addingAsgs: (num: number) =>
+  fetchedAsgs: (num: number): string => `Fetched ${num} AutoScaling Groups`,
+  addingAsgs: (num: number): string =>
     `Found ${num} AutoScaling Groups, adding them to the VPC`,
   lookingForAsgs: 'Looking for AutoScaling Groups to add...',
   /**
@@ -194,21 +199,22 @@ export const awsLoggerText = {
    */
   fetchingEbsData: 'Fetching EBS data for this AWS account via the AWS SDK...',
   doneFetchingEbsData: '✅ Done fetching EBS Data ✅',
-  fetchedEbsVolumes: (num: number) => `Fetched ${num} EBS Volumes`,
+  fetchedEbsVolumes: (num: number): string => `Fetched ${num} EBS Volumes`,
   lookingForEbs: 'Looking for EBS volumes for EC2 instances...',
   /**
    * EC2
    */
   lookingforEc2: 'Looking for EC2 instances to add...',
-  fetchedEc2Instances: (num: number) => `Fetched ${num} EC2 Instances`,
-  fetchedEc2InstanceTags: (num: number) =>
+  fetchedEc2Instances: (num: number): string => `Fetched ${num} EC2 Instances`,
+  fetchedEc2InstanceTags: (num: number): string =>
     `Fetched ${num} Tags for EC2 Instances`,
-  creatingEc2Instance: (num: number) => `Creating EC2 Instance #${num}`,
-  addingEc2Instances: (num: number) =>
+  creatingEc2Instance: (num: number): string => `Creating EC2 Instance #${num}`,
+  addingEc2Instances: (num: number): string =>
     `Found ${num} EC2 Instances, adding them to the Subnet`,
   lookingForNetworkInterfaces:
     'Gathering Network Interfaces to add to EC2 Instance...',
-  fetchedKeyPairs: (num: number) => `Fetched ${num} Key Pairs for instances`,
+  fetchedKeyPairs: (num: number): string =>
+    `Fetched ${num} Key Pairs for instances`,
   doneFetchingEc2Data: '✅ Done fetching EC2 Instance Data ✅',
   /**
    * RDS
@@ -217,14 +223,15 @@ export const awsLoggerText = {
   doneFetchingRdsData: '✅ Done fetching RDS Data ✅',
   lookingforRdsInstances: 'Looking for RDS Instances...',
   lookingforRdsClusters: 'Looking for RDS Clusters...',
-  creatingRdsInstance: (num: number) => `Creating RDS Instance #${num}`,
-  fetchedRdsClusters: (num: number) => `Fetched ${num} Rds Clusters`,
-  fetchedRdsInstances: (num: number) => `Fetched ${num} Rds Db Instances`,
+  creatingRdsInstance: (num: number): string => `Creating RDS Instance #${num}`,
+  fetchedRdsClusters: (num: number): string => `Fetched ${num} Rds Clusters`,
+  fetchedRdsInstances: (num: number): string =>
+    `Fetched ${num} Rds Db Instances`,
   noClusterFound: '❎ DB Instance is not part of a cluster ❎ ',
   foundCluster: 'Found the cluster the instance belongs to',
-  addingRdsInstances: (num: number) =>
+  addingRdsInstances: (num: number): string =>
     `Found ${num} RDS Instances, adding them to the Subnet`,
-  addingRdsClusters: (num: number) =>
+  addingRdsClusters: (num: number): string =>
     `Found ${num} RDS Clusters, adding them to the Vpc`,
   noClusterFoundForDbInstance: ({ name }) =>
     `No cluster found for db_instance: ${name}`,
@@ -234,11 +241,11 @@ export const awsLoggerText = {
   fetchingEmrData:
     'Fetching EMR cluster data for this AWS account via the AWS SDK...',
   lookingForEmr: 'Looking for EMR Clusters to add...',
-  addingEmr: (num: number) =>
+  addingEmr: (num: number): string =>
     `Found ${num} EMR Clusters, adding them to the Region`,
   doneFetchingEmrData: '✅ Done fetching EMR Data ✅',
-  fetchedEmrClusters: (num: number) => `Fetched ${num} EMR Clusters`,
-  fetchedEmrClusterInstances: (num: number) =>
+  fetchedEmrClusters: (num: number): string => `Fetched ${num} EMR Clusters`,
+  fetchedEmrClusterInstances: (num: number): string =>
     `Fetched ${num} EMR Clusters Instances`,
   addingEmrEc2Connection: (clusterName: string, ec2InstanceName: string) =>
     `Found ec2 instance ${ec2InstanceName} to add to emr cluster ${clusterName}`,
@@ -251,13 +258,15 @@ export const awsLoggerText = {
   lookingForEfs: 'Looking for EFS data to add...',
   lookingForEfsMountTargets:
     'Looking for EFS Mount Targets to add to subnet...',
-  addingEfs: (num: number) => `Found ${num} EFS, adding them to the VPC`,
-  addingEfsMountTargets: (num: number) =>
+  addingEfs: (num: number): string =>
+    `Found ${num} EFS, adding them to the VPC`,
+  addingEfsMountTargets: (num: number): string =>
     `Found ${num} EFS Mount Targets, adding them to the subnet`,
   doneFetchingEfsData: '✅ Done fetching EFS Data ✅',
-  fetchedEfs: (num: number) => `Fetched ${num} EFS`,
-  fetchedEfsMountTargets: (num: number) => `Fetched ${num} EFS Mount Targets`,
-  fetchedEfsMountTargetSecurityGroups: (num: number) =>
+  fetchedEfs: (num: number): string => `Fetched ${num} EFS`,
+  fetchedEfsMountTargets: (num: number): string =>
+    `Fetched ${num} EFS Mount Targets`,
+  fetchedEfsMountTargetSecurityGroups: (num: number): string =>
     `Fetched ${num} EFS Mount Target Security Groups`,
   noFileSystemFoundForEfsMountPoint: ({ name }) =>
     `❌ WARNING: No EFS found for mount point ${name} ❌ `,
@@ -270,21 +279,21 @@ export const awsLoggerText = {
   foundAnotherThousand: 'Found another thousand objects in the s3 bucket...',
   fetchingS3Data: 'Fetching S3 data for this AWS account via the AWS SDK...',
   doneFetchingS3Data: '✅ Done fetching S3 Data ✅',
-  fetchedS3Buckets: (num: number) => `Fetched ${num} S3 Buckets`,
-  creatingS3Bucket: (num: number) => `Creating S3 Bucket #${num}`,
-  addingS3Buckets: (num: number) =>
+  fetchedS3Buckets: (num: number): string => `Fetched ${num} S3 Buckets`,
+  creatingS3Bucket: (num: number): string => `Creating S3 Bucket #${num}`,
+  addingS3Buckets: (num: number): string =>
     `Found ${num} S3 Buckets, adding them to the Region`,
   /**
    * DynamoDb
    */
   lookingForDynamoDb: 'Looking for DynamoDb Tables to add...',
-  addingDynamoDbTables: (num: number) =>
+  addingDynamoDbTables: (num: number): string =>
     `Found ${num} Dynamo DB tables, adding them to the Region`,
   /**
    * SNS
    */
   lookingForSns: 'Looking for SNS topics and subscriptions to add...',
-  addingSns: (num: number) =>
+  addingSns: (num: number): string =>
     `Found ${num} SNS topics, adding them to the Region`,
   /**
    * Secrets Manager
@@ -293,32 +302,34 @@ export const awsLoggerText = {
     'Fetching Secrets Manager data for this AWS account via the AWS SDK...',
   doneFetchingSecretsManager: '✅ Done fetching Secrets Manager data ✅',
   lookingForSecretsManager: 'Looking for Secrets Manager Secrets to add...',
-  addingSecretsManager: (num: number) =>
+  addingSecretsManager: (num: number): string =>
     `Found ${num} Secrets Manager Secrets, adding them to the Region`,
-  fetchedSecretsManager: (num: number) =>
+  fetchedSecretsManager: (num: number): string =>
     `Fetched ${num} Secrets Manager Secrets`,
   /**
    * SQS
    */
   lookingForSqs: 'Looking for SQS queues to add...',
-  addingSqs: (num: number) =>
+  addingSqs: (num: number): string =>
     `Found ${num} SQS Queues, adding them to the Region`,
   /**
    * SES
    */
   fetchingSesData: 'Fetching SES data for this AWS account via the AWS SDK...',
   doneFetchingSesData: '✅ Done fetching SES Data ✅',
-  fetchedSesIdentities: (num: number) => `Fetched ${num} SES Identities`,
+  fetchedSesIdentities: (num: number): string =>
+    `Fetched ${num} SES Identities`,
   lookingForSes: 'Looking for SES to add...',
-  addingSes: (num: number) => `Found ${num} SES, adding them to the Region`,
+  addingSes: (num: number): string =>
+    `Found ${num} SES, adding them to the Region`,
   /**
    * KMS
    */
 
   lookingForKms: 'Looking for KMS Keys to add...',
-  addingKms: (num: number) =>
+  addingKms: (num: number): string =>
     `Found ${num} KMS Keys, adding them to the Region`,
-  fetchedKmsKeys: (num: number) => `Fetched ${num} KMS Keys`,
+  fetchedKmsKeys: (num: number): string => `Fetched ${num} KMS Keys`,
   doneFetchingKmsData: '✅ Done fetching Kms Data ✅',
   hasMoreKmsTags: 'KMS Key has more than 50 tags, some where not fetched...',
   gettingKeyDetails: 'Fetching details for each key...',
@@ -330,7 +341,7 @@ export const awsLoggerText = {
    * EKS
    */
   lookingForEks: 'Looking for EKS Clusters to add...',
-  addingEks: (num: number) =>
+  addingEks: (num: number): string =>
     `Found ${num} EKS Clusters, adding them to the VPC`,
   canNotFindClusterForAsg:
     'ERROR: Can not find ECS/EKS cluster for ASG - it should have been added already',
@@ -340,13 +351,13 @@ export const awsLoggerText = {
   lookingForEb: 'Looking for Elastic Beanstalk Applications to add...',
   envWithNoVpcFound:
     '⚠️  Found an Elastic Beanstalk Environment with no networking configuration but with EC2 Instances that live in this VPC ⚠️',
-  addingEb: (num: number) =>
+  addingEb: (num: number): string =>
     `Found ${num} Elastic Beanstalk Applications, adding them to the VPC`,
   /**
    * ElastiCache
    */
   lookingForElastiCache: 'Looking for ElastiCache Clusters to add...',
-  addingElastiCache: (num: number) =>
+  addingElastiCache: (num: number): string =>
     `Found ${num} ElastiCache Clusters, adding them to the VPC`,
   missingReplicationGroup: (is: string) =>
     `Missing replication group for ${is} ElastiCache Cluster! Not adding ElastiCache Data`,
@@ -354,13 +365,13 @@ export const awsLoggerText = {
    * ECR
    */
   lookingForEcr: 'Looking for ECR Repositories to add...',
-  addingEcr: (num: number) =>
+  addingEcr: (num: number): string =>
     `Found ${num} ECR Repositories, adding them to the VPC`,
   /**
    * Transit Gateway
    */
   lookingForTransitGateway: 'Looking for Transit Gateways to add...',
-  addingTransitGateways: (num: number) =>
+  addingTransitGateways: (num: number): string =>
     `Found ${num} Transit Gateways, adding them to the VPC`,
   addingTransitGatewayToVpc: ({ name }) =>
     `Adding Transit Gateway ${name} to the VPC`,
@@ -370,7 +381,7 @@ export const awsLoggerText = {
    * VPN Gateway
    */
   lookingForVpnGateway: 'Looking for Vpn Gateways to add...',
-  addingVpnGatewayToVpc: (num: number) =>
+  addingVpnGatewayToVpc: (num: number): string =>
     `Adding ${num} Vpn Gateways to the VPC`,
   /**
    * Customer Gateway
@@ -384,24 +395,25 @@ export const awsLoggerText = {
    * Redshift
    */
   lookingForRedshift: 'Looking for Redshift Clusters to add...',
-  addingRedshift: (num: number) =>
+  addingRedshift: (num: number): string =>
     `Found ${num} Redshift Clusters, adding them to the Region`,
   doneFetchingRedshiftData: '✅ Done fetching Redshift Cluster Data ✅',
-  fetchedRedshiftClusters: (num: number) => `Found ${num} Redshift Clusters`,
+  fetchedRedshiftClusters: (num: number): string =>
+    `Found ${num} Redshift Clusters`,
   /**
    * ECS
    */
   lookingForEcs: 'Looking for Ecs Clusters to add...',
-  addingEcs: (num: number) =>
+  addingEcs: (num: number): string =>
     `Found ${num} Ecs Clusters, adding them to the Region`,
   doneFetchingEcsData: '✅ Done fetching Ecs Cluster Data ✅',
-  fetchedEcsClusters: (num: number) => `Found ${num} Ecs Clusters`,
-  fetchedEcsServices: (num: number) => `Found ${num} Ecs Services`,
-  fetchedEcsTaskDefinitions: (num: number) =>
+  fetchedEcsClusters: (num: number): string => `Found ${num} Ecs Clusters`,
+  fetchedEcsServices: (num: number): string => `Found ${num} Ecs Services`,
+  fetchedEcsTaskDefinitions: (num: number): string =>
     `Found ${num} Ecs Task Definitions`,
-  fetchedEcsTasks: (num: number) => `Found ${num} Ecs Tasks`,
+  fetchedEcsTasks: (num: number): string => `Found ${num} Ecs Tasks`,
   ecsVpcNotFound: 'ERROR: Vpc for ECS Cluster was not found',
-  addingEcsClusters: (num: number) =>
+  addingEcsClusters: (num: number): string =>
     `Found ${num} ECS Clusters, adding them to the the VPC`,
   addingEcsTasksToSubnet: (num: number, subnetId) =>
     `Found ${num} ECS Tasks, adding them to the the ${subnetId} Subnet`,
@@ -409,13 +421,13 @@ export const awsLoggerText = {
    * Cognito
    */
   lookingForCognito: 'Looking for Cognito to add...',
-  addingIdentityPools: (num: number) =>
+  addingIdentityPools: (num: number): string =>
     `Found ${num} Cognito Identity Pools, adding them to the Region`,
-  addingUserPools: (num: number) =>
+  addingUserPools: (num: number): string =>
     `Found ${num} Cognito User Pools, adding them to the Region`,
   doneFetchingCognitoData: '✅ Done fetching Cognito Data ✅',
-  fetchedCognito: (num: number) => `Found ${num} Cognito User Pools`,
-  fetchedCognitoIdentityPools: (num: number) =>
+  fetchedCognito: (num: number): string => `Found ${num} Cognito User Pools`,
+  fetchedCognitoIdentityPools: (num: number): string =>
     `Found ${num} Cognito Identity Pools`,
   fetchedCognitoPool: (id: string) =>
     `Fetched Cognito User Pool data for ${id}`,
@@ -431,9 +443,9 @@ export const awsLoggerText = {
     'Fetching Client Vpn Endpoints data for this AWS account via the AWS SDK...',
   doneFetchingClientVpnEndpointsData:
     '✅ Done fetching Client Vpn Endpoints Data ✅',
-  fetchedClientVpnEndpoints: (num: number) =>
+  fetchedClientVpnEndpoints: (num: number): string =>
     `Fetched ${num} Client Vpn Endpoints`,
-  addingClientVpnEndpoints: (num: number) =>
+  addingClientVpnEndpoints: (num: number): string =>
     `Found ${num} Client Vpc Endpoints adding them to the vpc`,
   /**
    * Vpn Connection
@@ -441,8 +453,9 @@ export const awsLoggerText = {
   fetchingVpnConnectionsData:
     'Fetching Vpn Connections data for this AWS account via the AWS SDK...',
   doneFetchingVpnConnectionsData: '✅ Done fetching Vpn Connections Data ✅',
-  fetchedVpnConnections: (num: number) => `Fetched ${num} Vpn Connections`,
-  addingVpnConnections: (num: number) =>
+  fetchedVpnConnections: (num: number): string =>
+    `Fetched ${num} Vpn Connections`,
+  addingVpnConnections: (num: number): string =>
     `Found ${num} Client Vpn Endpoints adding them to the region`,
   lookingForVpnConnections: 'Looking for VPN Connections to add...',
   /**
@@ -452,10 +465,10 @@ export const awsLoggerText = {
     'Fetching Classic ELB data for this AWS account via the AWS SDK...',
   doneFetchingElbData: '✅ Done fetching Classic ELB Data ✅',
   lookingForElbs: 'Looking for Classic Elbs to add...',
-  addingElbs: (num: number) =>
+  addingElbs: (num: number): string =>
     `Found ${num} Classic Elbs, adding them to the vpc`,
 
-  fetchedElbs: (num: number) => `Found ${num} Classic Elbs`,
+  fetchedElbs: (num: number): string => `Found ${num} Classic Elbs`,
   /**
    * 2D UI Creation
    */
@@ -463,7 +476,7 @@ export const awsLoggerText = {
     'Looking for resources to hoist from VPCs and Subnets to the top level...',
   foundItemsToHoist: (num, type) =>
     `Found ${num} items to hoist up to the top level for ${type}`,
-  removingOldChildren: `Removing old children from this subnet...`,
+  removingOldChildren: 'Removing old children from this subnet...',
   combiningAndAddingNacls: name =>
     `Deduping NACLS and adding them and their children directly to VPC: ${name}`,
   /**
@@ -476,7 +489,7 @@ export const awsLoggerText = {
    * Cloud9
    */
   lookingForCloud9: 'Looking for Cloud9 to add to Region...',
-  addingCloud9: (num: number) =>
+  addingCloud9: (num: number): string =>
     `Created and added ${num} Cloud9 to this region`,
   /**
    * VPC

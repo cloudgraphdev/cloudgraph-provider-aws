@@ -1,11 +1,11 @@
-import isEmpty from 'lodash/isEmpty'
-import {ServiceConnection} from 'cloud-graph-sdk'
+// import isEmpty from 'lodash/isEmpty'
+import { ServiceConnection } from 'cloud-graph-sdk'
 
+// import get from 'lodash/get'
 import resourceTypes from '../../enums/resources'
 import services from '../../enums/services'
 
 // import {awsRoute53HostedZoneConverter} from '../route53/graphFormat'
-import get from 'lodash/get'
 
 /**
  * ALBs
@@ -14,9 +14,9 @@ import get from 'lodash/get'
 export default ({
   service: alb,
   data,
-  account,
-  region
-}): {[key: string]: ServiceConnection[]} => {
+  // account,
+  region,
+}): { [key: string]: ServiceConnection[] } => {
   const {
     LoadBalancerArn: id,
     SecurityGroups: securityGroups = [],
@@ -27,44 +27,46 @@ export default ({
   /**
    * Find any EC2 Instances
    */
-  const ec2Instances = data.find(({name}) =>
-    name === services.ec2Instance
-  )
+  const ec2Instances = data.find(({ name }) => name === services.ec2Instance)
   if (ec2Instances) {
     const dataAtRegion = ec2Instances.data[region].filter(instance =>
       alb.targetIds.includes(instance.InstanceId)
     )
     for (const instance of dataAtRegion) {
       const instanceId = instance.InstanceId
-  
+
       connections.push({
         id: instanceId,
         resourceType: services.ec2Instance,
         relation: 'child',
-        field: 'ec2Instance'
+        field: 'ec2Instance',
       })
     }
   }
-  
+
   /**
    * Add subnets
    */
-  connections.push(...azs.map(({ SubnetId }) => ({
-    id: SubnetId,
-    resourceType: services.subnet,
-    relation: 'child',
-    field: 'subnets'
-  })))
+  connections.push(
+    ...azs.map(({ SubnetId }) => ({
+      id: SubnetId,
+      resourceType: services.subnet,
+      relation: 'child',
+      field: 'subnets',
+    }))
+  )
 
   /**
    * Add Security Groups
    */
-  connections.push(...securityGroups.map((sg) => ({
-    id: sg,
-    resourceType: resourceTypes.securityGroup,
-    relation: 'child',
-    field: 'securityGroups'
-  })))
+  connections.push(
+    ...securityGroups.map(sg => ({
+      id: sg,
+      resourceType: resourceTypes.securityGroup,
+      relation: 'child',
+      field: 'securityGroups',
+    }))
+  )
   /**
    * Find any Route53 data
    */
@@ -121,7 +123,7 @@ export default ({
   //   )
   //   .map(({connection}) => connection)
   const albResult = {
-    [id]: connections
+    [id]: connections,
   }
   return albResult
 }

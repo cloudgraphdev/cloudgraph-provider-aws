@@ -1,23 +1,22 @@
 import * as Sentry from '@sentry/node'
+// import CloudGraph, { Opts } from 'cloud-graph-sdk'
 import CloudGraph from 'cloud-graph-sdk'
 import groupBy from 'lodash/groupBy'
-
 import { AWSError } from 'aws-sdk/lib/error'
-import EC2 from 'aws-sdk/clients/ec2'
-import { DescribeAddressesResult } from 'aws-sdk/clients/ec2'
-import { Opts } from 'cloud-graph-sdk'
+import EC2, { DescribeAddressesResult } from 'aws-sdk/clients/ec2'
 
 import { Credentials } from '../../types'
-import { awsLoggerText } from '../../properties/logger'
+import environment from '../../config/environment'
+import awsLoggerText from '../../properties/logger'
 
 /**
  * EIP
  */
 
 const lt = { ...awsLoggerText }
-const logger = CloudGraph.logger
+const { logger } = CloudGraph
 const endpoint =
-  (process.env.NODE_ENV === 'test' && process.env.LOCALSTACK_AWS_ENDPOINT) ||
+  (environment.NODE_ENV === 'test' && environment.LOCALSTACK_AWS_ENDPOINT) ||
   undefined
 endpoint && logger.info('EIP getData in test mode!')
 

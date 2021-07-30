@@ -1,13 +1,14 @@
 import get from 'lodash/get'
-import head from 'lodash/head'
-import last from 'lodash/last'
-import isEmpty from 'lodash/isEmpty'
+// import head from 'lodash/head'
+// import last from 'lodash/last'
+// import isEmpty from 'lodash/isEmpty'
 
-import { Volume, Address, Instance } from 'aws-sdk/clients/ec2'
+// import { Volume, Address, Instance } from 'aws-sdk/clients/ec2'
+import {  Instance } from 'aws-sdk/clients/ec2'
 
 import ec2Names from './names'
 
-import resourceTypes from '../../enums/resources'
+// import resourceTypes from '../../enums/resources'
 
 
 import t from '../../properties/translations'
@@ -21,7 +22,7 @@ import { toCamel } from '../../utils/index'
 export default ({
   account,
   service: rawData,
-  region: region,
+  region,
 }: {
   account: string
   service: Instance
@@ -31,10 +32,10 @@ export default ({
 
   const id = instance[ec2Names.instanceId]
 
-  const { Tags: tags } = rawData
+  // const { Tags: tags } = rawData
 
   const securityGroupIds = (instance[ec2Names.securityGroups] || []).map(
-    ({ groupId: groupId }) => groupId
+    ({ groupId }) => groupId
   )
 
   /**

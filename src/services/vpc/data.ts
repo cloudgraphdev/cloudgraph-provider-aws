@@ -5,21 +5,20 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 import upperFirst from 'lodash/upperFirst'
 
-import EC2 from 'aws-sdk/clients/ec2'
 import { AWSError } from 'aws-sdk/lib/error'
-import { DescribeVpcsResult } from 'aws-sdk/clients/ec2'
-import {Opts} from 'cloud-graph-sdk'
+import EC2, { DescribeVpcsResult } from 'aws-sdk/clients/ec2'
+import CloudGraph, { Opts } from 'cloud-graph-sdk'
 
-import CloudGraph from 'cloud-graph-sdk';
 import { Credentials } from '../../types'
-import { awsLoggerText } from '../../properties/logger'
+import awsLoggerText from '../../properties/logger'
+import environment from '../../config/environment'
 
 const lt = { ...awsLoggerText }
-const logger = CloudGraph.logger;
+const { logger } = CloudGraph
 const endpoint =
-  (process.env.NODE_ENV === 'test' && process.env.LOCALSTACK_AWS_ENDPOINT) ||
-  undefined;
-endpoint && logger.log('IGW getData in test mode!');
+  (environment.NODE_ENV === 'test' && environment.LOCALSTACK_AWS_ENDPOINT) ||
+  undefined
+endpoint && logger.log('VPC getData in test mode!')
 
 /**
  * VPC
@@ -28,8 +27,8 @@ endpoint && logger.log('IGW getData in test mode!');
 export default async ({
   regions,
   credentials,
-  opts
-}: {
+}: // opts,
+{
   regions: string
   credentials: Credentials
   opts: Opts
@@ -98,7 +97,7 @@ export default async ({
             ...vpcs.map(vpc => {
               const result = { ...vpc, region }
 
-              let tagsInObjForm = {}
+              const tagsInObjForm = {}
 
               vpc.Tags.map(({ Key, Value }) => {
                 tagsInObjForm[Key] = Value
@@ -138,34 +137,31 @@ export default async ({
         const ec2 = new EC2({ region, credentials, endpoint })
 
         const additionalAttrPromise = new Promise<void>(resolveAdditionalAttr =>
-          ec2.describeVpcAttribute(
-            { VpcId, Attribute: Attribute },
-            (err, data) => {
-              if (err) {
-                logger.error(err)
-                Sentry.captureException(new Error(err.message))
-              }
-
-              /**
-               * No attribute
-               */
-
-              if (isEmpty(data)) {
-                return resolveAdditionalAttr()
-              }
-
-              /**
-               * Add the attribute to the VPC
-               */
-
-              vpcData[idx][upperFirst(Attribute)] = get(
-                data[upperFirst(Attribute)],
-                'Value'
-              )
-
-              resolveAdditionalAttr()
+          ec2.describeVpcAttribute({ VpcId, Attribute }, (err, data) => {
+            if (err) {
+              logger.error(err)
+              Sentry.captureException(new Error(err.message))
             }
-          )
+
+            /**
+             * No attribute
+             */
+
+            if (isEmpty(data)) {
+              return resolveAdditionalAttr()
+            }
+
+            /**
+             * Add the attribute to the VPC
+             */
+
+            vpcData[idx][upperFirst(Attribute)] = get(
+              data[upperFirst(Attribute)],
+              'Value'
+            )
+
+            resolveAdditionalAttr()
+          })
         )
 
         additionalAttrPromises.push(additionalAttrPromise)

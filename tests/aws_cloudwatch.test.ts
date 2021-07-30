@@ -1,26 +1,27 @@
 // file: cloudwatch.test.ts
-require('dotenv').config();
-import { CloudWatch } from 'aws-sdk';
-import CloudGraph from 'cloud-graph-sdk';
-import Cloudwatch from '../src/services/cloudWatch';
+import { CloudWatch } from 'aws-sdk'
+import CloudGraph from 'cloud-graph-sdk'
+
+import environment from '../src/config/environment'
+import Cloudwatch from '../src/services/cloudWatch'
 
 // TODO: Probably solved by ENG-89
 const credentials = {
   accessKeyId: 'test',
   secretAccessKey: 'test',
-};
+}
 
 // TODO: Single region for now to match free license Localstack limitation
-const regions = 'us-east-1';
+const regions = 'us-east-1'
 const cloudwatch = new CloudWatch({
   region: regions,
   credentials,
-  endpoint: process.env.LOCALSTACK_AWS_ENDPOINT,
-});
+  endpoint: environment.LOCALSTACK_AWS_ENDPOINT,
+})
 
 // TODO: Will be better implemented using a terraform integration
-let testId = 'Instance i-1234567890abcdef0 CPU Utilization';
-beforeAll((done) => {
+const testId = 'Instance i-1234567890abcdef0 CPU Utilization'
+beforeAll(done => {
   cloudwatch.putMetricAlarm(
     {
       Namespace: 'AWS/EC2',
@@ -44,16 +45,16 @@ beforeAll((done) => {
       Tags: [{ Key: 'testTag', Value: 'TestValue' }],
     },
     () => done()
-  );
-});
+  )
+})
 
 test('should be a valid request', async () => {
-  const config = { logger: CloudGraph.logger };
-  const classInstance = new Cloudwatch(config);
-  const response = await classInstance.getData({ credentials, regions });
-  console.log(response[regions][0].tags);
-});
+  const config = { logger: CloudGraph.logger }
+  const classInstance = new Cloudwatch(config)
+  const response = await classInstance.getData({ credentials, regions })
+  expect(response[regions][0].tags).toBeDefined()
+})
 
-afterAll((done) => {
-  cloudwatch.deleteAlarms({ AlarmNames: [testId] }, () => done());
-});
+afterAll(done => {
+  cloudwatch.deleteAlarms({ AlarmNames: [testId] }, () => done())
+})

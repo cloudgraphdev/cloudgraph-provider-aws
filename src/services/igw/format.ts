@@ -21,6 +21,7 @@ export default ({
     internetGatewayId: id,
     ownerId: owner,
     attachments,
+    // tags,
   } = toCamel(rawData)
 
   /**

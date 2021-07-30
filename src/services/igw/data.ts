@@ -1,45 +1,45 @@
-import * as Sentry from '@sentry/node';
-import CloudGraph from 'cloud-graph-sdk';
+import * as Sentry from '@sentry/node'
+import CloudGraph from 'cloud-graph-sdk'
 
-import EC2 from 'aws-sdk/clients/ec2';
-import {
+import EC2, {
   DescribeInternetGatewaysResult,
   InternetGateway,
-} from 'aws-sdk/clients/ec2';
+} from 'aws-sdk/clients/ec2'
+import { AWSError } from 'aws-sdk/lib/error'
 
-import groupBy from 'lodash/groupBy';
-import isEmpty from 'lodash/isEmpty';
+import groupBy from 'lodash/groupBy'
+import isEmpty from 'lodash/isEmpty'
 
-import { AWSError } from 'aws-sdk/lib/error';
-import { Credentials } from '../../types';
-import { awsLoggerText } from '../../properties/logger';
-import { Tag } from '../../types/generated';
+import { Credentials } from '../../types'
+import awsLoggerText from '../../properties/logger'
+import { Tag } from '../../types/generated'
+import environment from '../../config/environment'
 
-const lt = { ...awsLoggerText };
-const logger = CloudGraph.logger;
+const lt = { ...awsLoggerText }
+const { logger } = CloudGraph
 const endpoint =
-  (process.env.NODE_ENV === 'test' && process.env.LOCALSTACK_AWS_ENDPOINT) ||
-  undefined;
-endpoint && logger.log('IGW getData in test mode!');
+  (environment.NODE_ENV === 'test' && environment.LOCALSTACK_AWS_ENDPOINT) ||
+  undefined
+endpoint && logger.log('IGW getData in test mode!')
 /**
  * IGW
  */
 
 export interface AwsIgw extends Omit<InternetGateway, 'Tags'> {
-  Tags: Tag[];
-  region: string;
+  Tags: Tag[]
+  region: string
 }
 
 export default async ({
   credentials,
   regions,
 }: {
-  credentials: Credentials;
-  regions: string;
+  credentials: Credentials
+  regions: string
 }): Promise<{ [property: string]: AwsIgw[] }> =>
-  new Promise(async (resolve) => {
-    const igwData: AwsIgw[] = [];
-    const regionPromises = [];
+  new Promise(async resolve => {
+    const igwData: AwsIgw[] = []
+    const regionPromises = []
 
     const listIgwData = async ({
       ec2,
@@ -47,37 +47,37 @@ export default async ({
       token: NextToken = '',
       resolveRegion,
     }) => {
-      let args: any = {};
+      let args: any = {}
 
       if (NextToken) {
-        args = { ...args, NextToken };
+        args = { ...args, NextToken }
       }
 
       return ec2.describeInternetGateways(
         args,
         (err: AWSError, data: DescribeInternetGatewaysResult) => {
           if (err) {
-            logger.error(err);
-            Sentry.captureException(new Error(err.message));
+            logger.error(err)
+            Sentry.captureException(new Error(err.message))
           }
 
           /**
            * No IGW data for this region
            */
           if (isEmpty(data)) {
-            return resolveRegion();
+            return resolveRegion()
           }
 
-          const { InternetGateways: igws, NextToken: token } = data;
+          const { InternetGateways: igws, NextToken: token } = data
 
-          logger.info(lt.fetchedIgws(igws.length));
+          logger.info(lt.fetchedIgws(igws.length))
 
           /**
            * No IGWs Found
            */
 
           if (isEmpty(igws)) {
-            return resolveRegion();
+            return resolveRegion()
           }
 
           /**
@@ -85,7 +85,7 @@ export default async ({
            */
 
           if (token) {
-            listIgwData({ region, token, ec2, resolveRegion });
+            listIgwData({ region, token, ec2, resolveRegion })
           }
 
           /**
@@ -101,27 +101,27 @@ export default async ({
                 value: Value,
               })),
             }))
-          );
+          )
 
           /**
            * If this is the last page of data then return
            */
 
           if (!token) {
-            resolveRegion();
+            resolveRegion()
           }
         }
-      );
-    };
+      )
+    }
 
-    regions.split(',').map((region) => {
-      const ec2 = new EC2({ region, credentials, endpoint });
-      const regionPromise = new Promise<void>((resolveRegion) =>
+    regions.split(',').map(region => {
+      const ec2 = new EC2({ region, credentials, endpoint })
+      const regionPromise = new Promise<void>(resolveRegion =>
         listIgwData({ ec2, region, resolveRegion })
-      );
-      regionPromises.push(regionPromise);
-    });
+      )
+      regionPromises.push(regionPromise)
+    })
 
-    await Promise.all(regionPromises);
-    resolve(groupBy(igwData, 'region'));
-  });
+    await Promise.all(regionPromises)
+    resolve(groupBy(igwData, 'region'))
+  })

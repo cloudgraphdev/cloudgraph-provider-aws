@@ -3,17 +3,20 @@ import CloudGraph from 'cloud-graph-sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import CloudWatch, { MetricAlarm, TagList } from 'aws-sdk/clients/cloudwatch'
-import {
+import CloudWatch, {
+  MetricAlarm,
+  // TagList,
   DescribeAlarmsInput,
   DescribeAlarmsOutput,
   ListTagsForResourceOutput,
   MetricAlarms,
 } from 'aws-sdk/clients/cloudwatch'
+
 import { AWSError } from 'aws-sdk/lib/error'
 
+import environment from '../../config/environment'
 import { Credentials } from '../../types'
-import { awsLoggerText } from '../../properties/logger'
+import awsLoggerText from '../../properties/logger'
 import { Tag } from '../../types/generated'
 
 /**
@@ -21,9 +24,9 @@ import { Tag } from '../../types/generated'
  */
 const lt = { ...awsLoggerText }
 const MAX_ITEMS = 100
-const logger = CloudGraph.logger
+const { logger } = CloudGraph
 const endpoint =
-  (process.env.NODE_ENV === 'test' && process.env.LOCALSTACK_AWS_ENDPOINT) ||
+  (environment.NODE_ENV === 'test' && environment.LOCALSTACK_AWS_ENDPOINT) ||
   undefined
 endpoint && logger.info('Cloudwatch getData in test mode!')
 
