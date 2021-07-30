@@ -16,7 +16,16 @@ export type Tag = {
   value?: Maybe<Scalars['String']>;
 };
 
+<<<<<<< HEAD
 export type AwsAlb = {
+=======
+export type Aws_Access_Log_Settings = {
+  format?: Maybe<Scalars['String']>;
+  destinationArn?: Maybe<Scalars['String']>;
+};
+
+export type Aws_Alb = {
+>>>>>>> ca5f138 (feat(apiGateway): add apiGateway to services)
   id: Scalars['String'];
   arn: Scalars['String'];
   dnsName?: Maybe<Scalars['String']>;
@@ -56,7 +65,44 @@ export type AwsAlbListenerSettings = {
   rules?: Maybe<Array<Maybe<AwsAlbListenerRule>>>;
 };
 
+<<<<<<< HEAD
 export type AwsCloudwatch = {
+=======
+export type Aws_Api_Gateway_Resource = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  path?: Maybe<Scalars['String']>;
+};
+
+export type Aws_Api_Gateway_Rest_Api = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  policy?: Maybe<Scalars['String']>;
+  endpointType?: Maybe<Scalars['String']>;
+  apiKeySource?: Maybe<Scalars['String']>;
+  createdDate?: Maybe<Scalars['String']>;
+  minimumCompressionSize?: Maybe<Scalars['Int']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  binaryMediaTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type Aws_Api_Gateway_Stage = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  stageName?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  cacheCluster?: Maybe<Scalars['Boolean']>;
+  cacheClusterSize?: Maybe<Scalars['String']>;
+  additions?: Maybe<Array<Maybe<Aws_Access_Log_Settings>>>;
+  documentationVersion?: Maybe<Scalars['String']>;
+  clientCertificateId?: Maybe<Scalars['String']>;
+  xrayTracing?: Maybe<Scalars['Boolean']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
+export type Aws_Cloudwatch = {
+>>>>>>> ca5f138 (feat(apiGateway): add apiGateway to services)
   id: Scalars['String'];
   arn: Scalars['String'];
   metric?: Maybe<Scalars['String']>;

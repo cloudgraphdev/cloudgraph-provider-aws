@@ -1,0 +1,37 @@
+type aws_access_log_settings {
+  format: String
+  destinationArn: String
+}
+
+type aws_api_gateway_rest_api @key(fields: "arn") {
+  id: String!
+  arn: String! @id
+  description: String
+  policy: String
+  endpointType: String
+  apiKeySource: String
+  createdDate: String
+  minimumCompressionSize: Int
+  tags: [Tag]
+  binaryMediaTypes: [String]
+}
+
+type aws_api_gateway_stage @key(fields: "arn") {
+  id: String!
+  arn: String! @id
+  stageName: String
+  description: String
+  cacheCluster: Boolean
+  cacheClusterSize: String
+  additions: [aws_access_log_settings]
+  documentationVersion: String
+  clientCertificateId: String
+  xrayTracing: Boolean
+  tags: [Tag]
+}
+
+type aws_api_gateway_resource @key(fields: "arn") {
+  id: String!
+  arn: String! @id
+  path: String
+}
