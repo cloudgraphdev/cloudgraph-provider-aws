@@ -1,6 +1,7 @@
-type aws_ebs @key(fields: "arn") {
+type awsEbs @key(fields: "arn") {
   id: String!
   arn: String! @id
+  attachments: [awsEbsAttachment]
   iops: Int
   size: String
   state: String
@@ -12,4 +13,11 @@ type aws_ebs @key(fields: "arn") {
   availabilityZone: String
   multiAttachEnabled: Boolean
   tags: [Tag]
+}
+
+type awsEbsAttachment {
+  id: String
+  attachmentInformation: String
+  attachedTime: String
+  deleteOnTermination: Boolean
 }
