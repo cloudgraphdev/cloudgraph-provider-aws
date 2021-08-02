@@ -4,7 +4,7 @@ import format from './format'
 import getData from './data'
 import mutation from './mutation'
 
-// TODO: Implement connections when network interfaces are ready
+// TODO: Implement connections when EC2 is ready
 export default class EBS extends BaseService implements Service {
   format = format.bind(this)
 

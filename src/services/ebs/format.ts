@@ -1,4 +1,7 @@
-import { Aws_Ebs } from '../../types/generated'
+// import isEmpty from 'lodash/isEmpty'
+import { DescribeVolumesResult } from 'aws-sdk/clients/ec2'
+
+import { AwsEbs } from '../../types/generated'
 import { toCamel } from '../../utils'
 import t from '../../properties/translations'
 
@@ -11,39 +14,51 @@ export default ({
   account,
   region,
 }: {
-  service: any
+  service: DescribeVolumesResult & { region: string }
   account: string
   region: string
-}): Aws_Ebs => {
-  // const {
-  //   // allocationId: id,
-  //   // associationId: ec2InstanceAssociationId,
-  //   // customerOwnedIp,
-  //   // customerOwnedIpv4Pool,
-  //   // domain,
-  //   // instanceId,
-  //   // networkBorderGroup,
-  //   // networkInterface,
-  //   // networkInterfaceOwnerId,
-  //   // privateIpAddress: privateIp,
-  //   // publicIp,
-  //   // publicIpv4Pool,
-  // } = toCamel(rawData)
-  console.log('the data', rawData)
+}): AwsEbs => {
+  const {
+    attachments = [],
+    availabilityZone,
+    createTime,
+    encrypted,
+    multiAttachEnabled,
+    state,
+    size,
+    snapshotId: snapshot,
+    iops,
+    volumeType,
+    volumeId: id,
+    tags,
+  } = toCamel(rawData)
+
+  const volumeAttachments = attachments.map(attachment => {
+    const attachmentId = `${attachment.instanceId}:${attachment.device} (${attachment.state})`
+    return {
+      id: attachmentId,
+      attachmentInformation: attachmentId,
+      attachedTime: attachment.attachTime,
+      deleteOnTermination: attachment.deleteOnTermination,
+    }
+  })
+
   const ebs = {
-    id: '',
-    arn: `arn:aws:ec2:${region}:${account}:volume/`,
-    iops: 0,
-    size: '{volume[ebsNames.size]} {t.gib}',
-    state: 'volume[ebsNames.state]',
-    created: 'volume[ebsNames.created]',
-    snapshot: 'volume[ebsNames.snapshot]',
-    encrypted: false,
-    isBootDisk: false,
-    volumeType: 'volume[ebsNames.volumeType]',
-    availabilityZone: 'volume[ebsNames.availabilityZone]',
-    multiAttachEnabled: false,
-    tags: [],
+    id,
+    arn: `arn:aws:ec2:${region}:${account}:volume/${id}`,
+    attachments: volumeAttachments,
+    iops,
+    size: `${size} ${t.gib}`,
+    state,
+    created: createTime,
+    snapshot,
+    encrypted,
+    isBootDisk: false, // TODO: Linked to EC2 instance !isEmpty(attachments.find(({ device }) => device === bootId)),
+    volumeType,
+    availabilityZone,
+    multiAttachEnabled,
+    tags,
   }
+
   return ebs
 }
