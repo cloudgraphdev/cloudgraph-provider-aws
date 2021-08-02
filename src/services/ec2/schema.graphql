@@ -1,5 +1,5 @@
 type awsEc2Metadata {
-    cuid: String
+  cuid: String
 }
 type awsEc2MetadataOptions {
   state: String!
@@ -25,7 +25,7 @@ type Tag {
 }
 
 type awsEc2 @key(fields: "arn") {
-	id: String!
+  id: String!
   arn: String! @id
   region: String
   ami: String
