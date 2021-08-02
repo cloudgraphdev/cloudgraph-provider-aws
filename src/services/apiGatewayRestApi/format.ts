@@ -32,6 +32,8 @@ export default ({
     createdDate,
     minimumCompressionSize,
     binaryMediaTypes,
+    stages,
+    resources,
   } = apiGateway
 
   /**
@@ -50,5 +52,7 @@ export default ({
     minimumCompressionSize,
     binaryMediaTypes,
     tags,
+    stages,
+    resources,
   }
 }

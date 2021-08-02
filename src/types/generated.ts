@@ -85,6 +85,8 @@ export type Aws_Api_Gateway_Rest_Api = {
   minimumCompressionSize?: Maybe<Scalars['Int']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   binaryMediaTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  stages?: Maybe<Array<Maybe<Aws_Api_Gateway_Stage>>>;
+  resources?: Maybe<Array<Maybe<Aws_Api_Gateway_Resource>>>;
 };
 
 export type Aws_Api_Gateway_Stage = {
