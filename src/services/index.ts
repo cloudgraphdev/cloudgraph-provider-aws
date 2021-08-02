@@ -14,6 +14,7 @@ import EC2 from './ec2'
 import AwsInternetGateway from './igw'
 import VPC from './vpc'
 import EIP from './eip'
+import EBS from './ebs'
 import { Credentials } from '../types'
 
 /**
@@ -27,6 +28,7 @@ export const serviceMap = {
   [services.eip]: EIP,
   [services.igw]: AwsInternetGateway,
   [services.vpc]: VPC,
+  [services.ebs]: EBS,
 }
 
 export const enums = {
