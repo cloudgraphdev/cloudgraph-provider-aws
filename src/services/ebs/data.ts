@@ -84,10 +84,9 @@ const listEbsVolumes = async ({
      */
 
     ebsData.push(
-      ...volumes.map(({ Tags, ...volume }) => ({
+      ...volumes.map(volume => ({
         ...volume,
         region,
-        // Tags: convertAwsTagsToTagMap(Tags as AwsTag[]),
       }))
     )
 
