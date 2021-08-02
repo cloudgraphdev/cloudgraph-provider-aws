@@ -19,6 +19,7 @@ import Lambda from './lambda'
 // import AwsSubnet from './subnet'
 import AwsSecurityGroup from './securityGroup'
 import VPC from './vpc'
+import EBS from './ebs'
 import { Credentials } from '../types'
 
 /**
@@ -36,6 +37,7 @@ export const serviceMap = {
   [services.sg]: AwsSecurityGroup,
   // [services.subnet]: AwsSubnet, // TODO: Enable when going for ENG-222
   [services.vpc]: VPC,
+  [services.ebs]: EBS,
 }
 
 export const enums = {
