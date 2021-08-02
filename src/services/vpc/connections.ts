@@ -19,7 +19,7 @@ export default ({ service: vpc, data, region }): any => {
    * Find any ALB Instances
    */
   const albInstances = data.find(({ name }) => name === services.alb)
-  if (albInstances) {
+  if (albInstances?.data?.[region]) {
     const dataAtRegion = albInstances.data[region].filter(
       ({ VpcId: vpcId }) => vpcId === id
     )
@@ -38,7 +38,7 @@ export default ({ service: vpc, data, region }): any => {
    * Find any IGW data
    */
   const igws = data.find(({ name }) => name === services.igw)
-  if (igws) {
+  if (igws?.data?.[region]) {
     const dataAtRegion: AwsIgw[] = igws.data[region].filter((igw: AwsIgw) =>
       igw.Attachments.find(({ VpcId }) => VpcId === id)
     )

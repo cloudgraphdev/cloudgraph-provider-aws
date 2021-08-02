@@ -28,7 +28,7 @@ export default ({
    * Find any EC2 Instances
    */
   const ec2Instances = data.find(({ name }) => name === services.ec2Instance)
-  if (ec2Instances) {
+  if (ec2Instances?.data?.[region]) {
     const dataAtRegion = ec2Instances.data[region].filter(instance =>
       alb.targetIds.includes(instance.InstanceId)
     )
