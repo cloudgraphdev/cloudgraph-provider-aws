@@ -15,7 +15,12 @@ type awsEbs @key(fields: "arn") {
   tags: [Tag]
 }
 
-type awsEbsAttachment {
+type awsEbsAttachment
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   id: String
   attachmentInformation: String
   attachedTime: String
