@@ -24,6 +24,7 @@
     "typescript": "^4.3.5"
   },
   "devDependencies": {
+    "@autocloud/eslint-config": "^0.1.0",
     "@graphql-codegen/cli": "1.21.7",
     "@graphql-codegen/typescript": "1.23.0",
     "@types/jest": "^26.0.24",
@@ -34,7 +35,7 @@
     "@typescript-eslint/parser": "^4.28.5",
     "cpx": "^1.5.0",
     "dotenv": "^10.0.0",
-    "eslint": "^7.2.0",
+    "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.1",
