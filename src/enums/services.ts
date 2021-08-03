@@ -12,5 +12,7 @@ export default {
   nat: 'nat',
   sg: 'sg',
   vpc: 'vpc',
-  networkInterface: 'networkInterface',
+  networkInterface: 'network_interface',
+  vpnConnection: 'vpn_connection',
+  apiGatewayRestApi: 'api_gateway_rest_api',
 }
