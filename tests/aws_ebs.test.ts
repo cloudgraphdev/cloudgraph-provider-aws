@@ -1,4 +1,4 @@
-import CloudGraph from 'cloud-graph-sdk'
+import CloudGraph from '@cloudgraph/sdk'
 import { EC2 } from 'aws-sdk'
 
 import Ebs from '../src/services/ebs'
@@ -179,13 +179,13 @@ describe('EBS Service Test: ', () => {
             expect.objectContaining({
               id: expect.any(String),
               attachmentInformation: expect.any(String),
-              attachedTime: expect.any(Date),
+              attachedTime: expect.any(String),
               deleteOnTermination: expect.any(Boolean),
             }),
           ]),
           size: expect.any(String),
           state: expect.any(String),
-          created: expect.any(Date),
+          created: expect.any(String),
           snapshot: expect.any(String),
           encrypted: expect.any(Boolean),
           isBootDisk: expect.any(Boolean),
