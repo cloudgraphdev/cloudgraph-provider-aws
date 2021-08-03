@@ -1,4 +1,3 @@
-// import isEmpty from 'lodash/isEmpty'
 import { DescribeVolumesResult } from 'aws-sdk/clients/ec2'
 
 import { AwsEbs } from '../../types/generated'
