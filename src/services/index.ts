@@ -7,7 +7,7 @@ import services from '../enums/services'
 import resources from '../enums/resources'
 import regions from '../enums/regions'
 import ALB from './alb'
-import CloudWatch from './cloudWatch'
+import CloudWatch from './cloudwatch'
 import EC2 from './ec2'
 import AwsInternetGateway from './igw'
 import VPC from './vpc'
@@ -103,7 +103,8 @@ export default class Provider extends CloudGraph.Client {
         })
       )
     } catch (e) {
-      this.logger.info(e)
+      this.logger.error('There was an error in function getIdentity')
+      this.logger.debug(e)
       return { accountId: '' }
     }
   }
@@ -115,6 +116,7 @@ export default class Provider extends CloudGraph.Client {
       }
       AWS.config.getCredentials((err: any) => {
         if (err) {
+          this.logger.error('There was an error in function getCredentials')
           this.logger.debug(err)
           throw new Error(
             'Unable to find Credentials for AWS, They could be stored in env variables or .aws/credentials file'

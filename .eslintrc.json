@@ -45,5 +45,5 @@
       "version": "detect"
     }
   },
-  "ignorePatterns": ["node_modules/", "dist/", "*.js", "*.json", "*.d.ts", "src/types/generated.ts"]
+  "ignorePatterns": ["node_modules/", "dist/", "*.js", "*.graphql", "*.json", "*.d.ts", "src/types/generated.ts"]
 }

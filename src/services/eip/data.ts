@@ -38,12 +38,13 @@ export default async ({
           {},
           (err: AWSError, data: DescribeAddressesResult) => {
             if (err) {
-              logger.error(err)
+              logger.error('Therew as an error in Service EIP function describeAddresses')
+              logger.debug(err)
               Sentry.captureException(new Error(err.message))
             }
 
             const { Addresses: addresses = [] } = data || {}
-            logger.info(lt.fetchedEips(addresses.length))
+            logger.debug(lt.fetchedEips(addresses.length))
 
             const eipAddresses = addresses.map(address => ({
               ...address,
@@ -58,7 +59,7 @@ export default async ({
       )
     })
 
-    logger.info(lt.fetchingEip)
+    logger.debug(lt.fetchingEip)
     await Promise.all(regionPromises)
 
     resolve(groupBy(eipData, 'region'))

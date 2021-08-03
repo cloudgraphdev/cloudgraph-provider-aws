@@ -1,4 +1,4 @@
-type aws_cloudwatch @key(fields: "arn") {
+type awsCloudwatch @key(fields: "arn") {
   id: String!
   arn: String! @id
   metric: String
@@ -11,11 +11,11 @@ type aws_cloudwatch @key(fields: "arn") {
   threshold: String
   period: String
   evaluationPeriods: Int
-  dimensions: [aws_cloudwatch_dimensions]
+  dimensions: [awsCloudwatchDimensions]
   tags: [Tag]
 }
 
-type aws_cloudwatch_dimensions
+type awsCloudwatchDimensions
   @generate(
     # About the need to be able to query dimensions,
     # I think they may be useful because you can specify

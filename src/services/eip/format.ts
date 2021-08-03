@@ -1,4 +1,4 @@
-import { Aws_Eip } from '../../types/generated'
+import { AwsEip } from '../../types/generated'
 import { toCamel } from '../../utils'
 import t from '../../properties/translations'
 
@@ -14,7 +14,7 @@ export default ({
   service: any
   account: string
   region: string
-}): Aws_Eip => {
+}): AwsEip => {
   const {
     allocationId: id,
     associationId: ec2InstanceAssociationId,

@@ -3,7 +3,7 @@ import { CloudWatch } from 'aws-sdk'
 import CloudGraph from 'cloud-graph-sdk'
 
 import environment from '../src/config/environment'
-import Cloudwatch from '../src/services/cloudWatch'
+import Cloudwatch from '../src/services/cloudwatch'
 
 // TODO: Probably solved by ENG-89
 const credentials = {

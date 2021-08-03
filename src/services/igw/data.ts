@@ -25,7 +25,7 @@ endpoint && logger.log('IGW getData in test mode!')
  * IGW
  */
 
-export interface AwsIgw extends Omit<InternetGateway, 'Tags'> {
+export interface RawAwsIgw extends Omit<InternetGateway, 'Tags'> {
   Tags: Tag[]
   region: string
 }
@@ -36,9 +36,9 @@ export default async ({
 }: {
   credentials: Credentials
   regions: string
-}): Promise<{ [property: string]: AwsIgw[] }> =>
+}): Promise<{ [property: string]: RawAwsIgw[] }> =>
   new Promise(async resolve => {
-    const igwData: AwsIgw[] = []
+    const igwData: RawAwsIgw[] = []
     const regionPromises = []
 
     const listIgwData = async ({
@@ -70,7 +70,7 @@ export default async ({
 
           const { InternetGateways: igws, NextToken: token } = data
 
-          logger.info(lt.fetchedIgws(igws.length))
+          logger.debug(lt.fetchedIgws(igws.length))
 
           /**
            * No IGWs Found

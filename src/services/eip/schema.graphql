@@ -1,4 +1,4 @@
-type aws_eip @key(fields: "arn") {
+type awsEip @key(fields: "arn") {
   id: String!
   arn: String! @id
   tags: [Tag]

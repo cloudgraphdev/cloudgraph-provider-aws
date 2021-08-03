@@ -1,13 +1,13 @@
 import startCase from 'lodash/startCase'
 
 import t from '../../properties/translations'
-import { Aws_Alb, Aws_Alb_Listener } from '../../types/generated'
+import { AwsAlb, AwsAlbListener } from '../../types/generated'
 
 /**
  * ALBs
  */
 
-const awsAlbListernerGraphFormat = (listener): Aws_Alb_Listener => {
+const awsAlbListernerGraphFormat = (listener): AwsAlbListener => {
   const {
     ListenerArn: id,
     DefaultActions: rules = [],
@@ -32,7 +32,7 @@ const awsAlbListernerGraphFormat = (listener): Aws_Alb_Listener => {
   }
 }
 
-export default ({ service: alb }): Aws_Alb => {
+export default ({ service: alb }): AwsAlb => {
   // TODO: type this from aws
   const {
     LoadBalancerArn: arn,

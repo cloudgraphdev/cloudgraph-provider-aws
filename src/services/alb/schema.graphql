@@ -1,4 +1,4 @@
-type aws_alb @key(fields: "arn") {
+type awsAlb @key(fields: "arn") {
 	id: String!
 	arn: String! @id
 	dnsName: String @search(by: [hash, regexp])
@@ -16,23 +16,39 @@ type aws_alb @key(fields: "arn") {
 	createdAt: String @search(by: [hash, regexp])
 	status: String @search(by: [hash])
 	tags: [Tag]
-	ec2Instance: [aws_ec2] @hasInverse(field: alb)
-	vpc: [aws_vpc] @hasInverse(field: alb)
-	listeners: [aws_alb_listener]
+	ec2Instance: [awsEc2] @hasInverse(field: alb)
+	vpc: [awsVpc] @hasInverse(field: alb)
+	listeners: [awsAlbListener]
 }
 
-type aws_alb_listener {
+type awsAlbListener
+@generate(
+    query: { get: true, query: true, aggregate: true }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
 	arn: String @id @search(by: [hash, regexp])
-	settings: aws_alb_listener_settings
+	settings: awsAlbListenerSettings
 }
 
-type aws_alb_listener_settings {
+
+type awsAlbListenerSettings 
+@generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
 	sslPolicy: String @search(by: [hash, regexp])
 	protocol: String @search(by: [hash, regexp])
-	rules: [aws_alb_listener_rule]
+	rules: [awsAlbListenerRule]
 }
 
-type aws_alb_listener_rule {
+type awsAlbListenerRule 
+@generate(
+		query: { get: false, query: true, aggregate: false }
+		mutation: { add: false, delete: false }
+		subscription: false
+	) {
 	type: String @search(by: [hash, regexp])
 	order: String @search(by: [hash, regexp])
 	targetGroupArn: String @search

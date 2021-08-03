@@ -1,5 +1,5 @@
-export default `mutation($input: [Addec2Input!]!) {
-  addec2(input: $input, upsert: true) {
+export default `mutation($input: [AddawsEc2Input!]!) {
+  addawsEc2(input: $input, upsert: true) {
     numUids
   }
 }`

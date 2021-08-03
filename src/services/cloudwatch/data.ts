@@ -46,7 +46,8 @@ const listMetricAlarmsForRegion = async ({ cloudwatch, resolveRegion }) =>
             const { NextToken: nextToken, MetricAlarms: metricAlarms } =
               data || {}
             if (err) {
-              logger.error(err)
+              logger.error('There was an error in service cloudwatch function describeAlarms')
+              logger.debug(err)
               Sentry.captureException(new Error(err.message))
             }
             /**
@@ -59,7 +60,7 @@ const listMetricAlarmsForRegion = async ({ cloudwatch, resolveRegion }) =>
             metricAlarmsList.push(...metricAlarms)
 
             if (nextToken) {
-              logger.info(lt.foundMoreCloudwatchAlarms(metricAlarms.length))
+              logger.debug(lt.foundMoreCloudwatchAlarms(metricAlarms.length))
               listAllAlarms(nextToken)
             }
 
@@ -80,7 +81,8 @@ const getResourceTags = async (cloudwatch: CloudWatch, arn: string) =>
         { ResourceARN: arn },
         (err: AWSError, data: ListTagsForResourceOutput) => {
           if (err) {
-            logger.error(err)
+            logger.error('There was an error in service cloudwatch function listTagsForResource')
+            logger.debug(err)
             Sentry.captureException(new Error(err.message))
             return resolve([])
           }
@@ -135,7 +137,7 @@ export default async ({
       regionPromises.push(regionPromise)
     })
 
-    logger.info(lt.gettingCloudwatchAlarms)
+    logger.debug(lt.gettingCloudwatchAlarms)
     await Promise.all(regionPromises)
 
     // get all tags for each environment
@@ -149,7 +151,7 @@ export default async ({
       tagsPromises.push(tagsPromise)
     })
 
-    logger.info(lt.gettingCloudwatchAlarmTags)
+    logger.debug(lt.gettingCloudwatchAlarmTags)
     await Promise.all(tagsPromises)
 
     resolve(groupBy(cloudwatchData, 'region'))

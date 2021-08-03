@@ -1,13 +1,13 @@
-type aws_igw @key(fields: "arn"){
+type awsIgw @key(fields: "arn"){
   arn: String! @id
   id: String!
   owner: String
-  attachments: [aws_igw_attachment]
+  attachments: [awsIgwAttachment]
   tags: [Tag]
-  vpc: [aws_vpc] @hasInverse(field: igw)
+  vpc: [awsVpc] @hasInverse(field: igw)
 }
 
-type aws_igw_attachment {
+type awsIgwAttachment {
   state: String
   vpcId: String @id
 }
