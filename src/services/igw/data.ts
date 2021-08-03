@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/node'
-import CloudGraph from 'cloud-graph-sdk'
+import CloudGraph from '@cloudgraph/sdk'
 
 import EC2, {
   DescribeInternetGatewaysResult,

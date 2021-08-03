@@ -1,5 +1,5 @@
 import { EC2 } from 'aws-sdk'
-import CloudGraph from 'cloud-graph-sdk'
+import CloudGraph from '@cloudgraph/sdk'
 
 import environment from '../src/config/environment'
 import EIPService from '../src/services/eip'

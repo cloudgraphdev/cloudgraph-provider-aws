@@ -1,4 +1,4 @@
-import { Service } from 'cloud-graph-sdk';
+import { Service } from '@cloudgraph/sdk';
 import BaseService from '../base';
 import format from './format';
 import getData from './data';

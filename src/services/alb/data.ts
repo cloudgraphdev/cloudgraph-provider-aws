@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/node'
 
 import ELBV2 from 'aws-sdk/clients/elbv2'
-import CloudGraph, { Opts } from 'cloud-graph-sdk'
+import CloudGraph, { Opts } from '@cloudgraph/sdk'
 
 import head from 'lodash/head'
 import groupBy from 'lodash/groupBy'

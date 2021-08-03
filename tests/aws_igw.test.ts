@@ -1,5 +1,5 @@
 // file: cloudwatch.test.ts
-import CloudGraph, { ServiceConnection } from 'cloud-graph-sdk'
+import CloudGraph, { ServiceConnection } from '@cloudgraph/sdk'
 import { EC2 } from 'aws-sdk'
 
 import Igw from '../src/services/igw'

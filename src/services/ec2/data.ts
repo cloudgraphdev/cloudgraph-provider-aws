@@ -4,7 +4,7 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
 import EC2 from 'aws-sdk/clients/ec2'
-import { Opts } from 'cloud-graph-sdk'
+import { Opts } from '@cloudgraph/sdk'
 
 import { Credentials } from '../../types'
 
