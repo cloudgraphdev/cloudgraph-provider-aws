@@ -3,13 +3,14 @@ import * as Sentry from '@sentry/node'
 import EC2, {
   DescribeVolumesResult,
   DescribeVolumesRequest,
+  Volume,
 } from 'aws-sdk/clients/ec2'
 import { AWSError } from 'aws-sdk/lib/error'
 
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import CloudGraph from 'cloud-graph-sdk'
+import CloudGraph from '@cloudgraph/sdk'
 
 import environment from '../../config/environment'
 import { Credentials } from '../../types'
@@ -37,7 +38,7 @@ const listEbsVolumes = async ({
   ec2: EC2
   region: string
   nextToken?: string
-  ebsData: DescribeVolumesResult & { region: string }[]
+  ebsData: Volume & { region: string }[]
   resolveRegion: any
 }): Promise<void> => {
   let args: DescribeVolumesRequest = {}
@@ -78,11 +79,6 @@ const listEbsVolumes = async ({
       listEbsVolumes({ region, nextToken, ec2, ebsData, resolveRegion })
     }
 
-    /**
-     * If there are not, then add these to the volumes and convert the tags
-     * To the correct shape [{ Key1: Value1 }] -> { Key1: Value1 }
-     */
-
     ebsData.push(
       ...volumes.map(volume => ({
         ...volume,
@@ -107,10 +103,10 @@ export default async ({
   regions: string
   credentials: Credentials
 }): Promise<{
-  [region: string]: DescribeVolumesResult & { region: string }[]
+  [region: string]: Volume & { region: string }[]
 }> =>
   new Promise(async resolve => {
-    const ebsData: DescribeVolumesResult & { region: string }[] = []
+    const ebsData: Volume & { region: string }[] = []
 
     // Get all the EBS data for each region
     const regionPromises = regions.split(',').map(region => {
