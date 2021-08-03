@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/node'
-// import CloudGraph, { Opts } from 'cloud-graph-sdk'
-import CloudGraph from 'cloud-graph-sdk'
+// import CloudGraph, { Opts } from '@cloudgraph/sdk'
+import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import { AWSError } from 'aws-sdk/lib/error'
 import EC2, { DescribeAddressesResult } from 'aws-sdk/clients/ec2'

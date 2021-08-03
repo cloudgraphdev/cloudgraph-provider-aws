@@ -1,6 +1,6 @@
 // file: cloudwatch.test.ts
 import { CloudWatch } from 'aws-sdk'
-import CloudGraph from 'cloud-graph-sdk'
+import CloudGraph from '@cloudgraph/sdk'
 
 import environment from '../src/config/environment'
 import Cloudwatch from '../src/services/cloudwatch'

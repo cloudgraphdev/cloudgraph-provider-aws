@@ -1,4 +1,4 @@
-import { ServiceConnection } from 'cloud-graph-sdk'
+import { ServiceConnection } from '@cloudgraph/sdk'
 
 import services from '../../enums/services'
 import { RawAwsIgw } from '../igw/data'

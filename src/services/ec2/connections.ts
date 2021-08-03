@@ -7,7 +7,7 @@
 import {  Instance } from 'aws-sdk/clients/ec2'
 
 
-import {ServiceConnection} from 'cloud-graph-sdk'
+import {ServiceConnection} from '@cloudgraph/sdk'
 
 import ec2Names from './names'
 

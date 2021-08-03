@@ -1,7 +1,7 @@
 import camelCase from 'lodash/camelCase'
 import AWS from 'aws-sdk'
 import STS from 'aws-sdk/clients/sts'
-import { Opts } from 'cloud-graph-sdk'
+import { Opts } from '@cloudgraph/sdk'
 import { Credentials } from '../types'
 
 export const toCamel = (o: any): any => {

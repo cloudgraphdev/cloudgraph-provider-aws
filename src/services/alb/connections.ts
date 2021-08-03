@@ -1,5 +1,5 @@
 // import isEmpty from 'lodash/isEmpty'
-import { ServiceConnection } from 'cloud-graph-sdk'
+import { ServiceConnection } from '@cloudgraph/sdk'
 
 // import get from 'lodash/get'
 import resourceTypes from '../../enums/resources'

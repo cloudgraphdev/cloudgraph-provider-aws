@@ -1,4 +1,4 @@
-import {Logger} from 'cloud-graph-sdk'
+import {Logger} from '@cloudgraph/sdk'
 
 export default class BaseService {
   constructor(config: any) {

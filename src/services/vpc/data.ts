@@ -7,7 +7,7 @@ import upperFirst from 'lodash/upperFirst'
 
 import { AWSError } from 'aws-sdk/lib/error'
 import EC2, { DescribeVpcsResult } from 'aws-sdk/clients/ec2'
-import CloudGraph, { Opts } from 'cloud-graph-sdk'
+import CloudGraph, { Opts } from '@cloudgraph/sdk'
 
 import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
