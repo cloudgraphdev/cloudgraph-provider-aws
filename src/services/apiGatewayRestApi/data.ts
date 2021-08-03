@@ -12,20 +12,20 @@ import APIGW, {
   GetResourcesRequest,
   Resources,
 } from 'aws-sdk/clients/apigateway'
+import { AWSError } from 'aws-sdk/lib/error'
+import isEmpty from 'lodash/isEmpty'
+import groupBy from 'lodash/groupBy'
 import {
   apiGatewayArn,
   apiGatewayRestApiArn,
   apiGatewayStageArn,
 } from '../../utils/generateArns'
-import { AWSError } from 'aws-sdk/lib/error'
-import isEmpty from 'lodash/isEmpty'
-import groupBy from 'lodash/groupBy'
 import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { Tag } from '../../types/generated'
 
 const lt = { ...awsLoggerText }
-const logger = CloudGraph.logger
+const {logger} = CloudGraph
 const MAX_REST_API = 500
 const MAX_RESOURCES = 500
 
@@ -211,7 +211,7 @@ export default async ({
           id,
         })
         await apiGatewayData[idx].stages.map(
-          async stage =>
+          async stage => {
             (stage.tags = await getTags({
               apiGw,
               arn: apiGatewayStageArn({
@@ -219,6 +219,7 @@ export default async ({
                 name: stage.stageName,
               }),
             }))
+          }
         )
         apiGatewayData[idx].tags = await getTags({ apiGw, arn })
         resolveTags()

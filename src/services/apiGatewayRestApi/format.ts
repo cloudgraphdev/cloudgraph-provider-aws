@@ -18,7 +18,7 @@ export default ({
 }): Aws_Api_Gateway_Rest_Api => {
   const apiGateway = toCamel(rawData)
   const { tags } = rawData
-  const id = apiGateway.id
+  const {id} = apiGateway
   const arn = apiGatewayRestApiArn({
     restApiArn: apiGatewayArn({ region: apiGateway.region }),
     id,
