@@ -1,7 +1,7 @@
 import { ServiceConnection } from 'cloud-graph-sdk'
 
 import services from '../../enums/services'
-import { AwsIgw } from '../igw/data'
+import { RawAwsIgw } from '../igw/data'
 
 /**
  * ALBs
@@ -39,7 +39,7 @@ export default ({ service: vpc, data, region }): any => {
    */
   const igws = data.find(({ name }) => name === services.igw)
   if (igws?.data?.[region]) {
-    const dataAtRegion: AwsIgw[] = igws.data[region].filter((igw: AwsIgw) =>
+    const dataAtRegion: RawAwsIgw[] = igws.data[region].filter((igw: RawAwsIgw) =>
       igw.Attachments.find(({ VpcId }) => VpcId === id)
     )
     for (const igw of dataAtRegion) {

@@ -1,6 +1,6 @@
-import { Aws_Igw } from '../../types/generated'
+import { AwsIgw } from '../../types/generated'
 import { toCamel } from '../../utils'
-import { AwsIgw } from './data'
+import { RawAwsIgw } from './data'
 
 /**
  * IGW Converter
@@ -13,9 +13,9 @@ export default ({
 }: {
   // allTagData: Tags[]
   account: string
-  service: AwsIgw
+  service: RawAwsIgw
   region: string
-}): Aws_Igw => {
+}): AwsIgw => {
   const { Tags: tags } = rawData
   const {
     internetGatewayId: id,

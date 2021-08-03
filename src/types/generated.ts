@@ -16,7 +16,7 @@ export type Tag = {
   value?: Maybe<Scalars['String']>;
 };
 
-export type Aws_Alb = {
+export type AwsAlb = {
   id: Scalars['String'];
   arn: Scalars['String'];
   dnsName?: Maybe<Scalars['String']>;
@@ -34,29 +34,29 @@ export type Aws_Alb = {
   createdAt?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
-  ec2Instance?: Maybe<Array<Maybe<Aws_Ec2>>>;
-  vpc?: Maybe<Array<Maybe<Aws_Vpc>>>;
-  listeners?: Maybe<Array<Maybe<Aws_Alb_Listener>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  listeners?: Maybe<Array<Maybe<AwsAlbListener>>>;
 };
 
-export type Aws_Alb_Listener = {
+export type AwsAlbListener = {
   arn?: Maybe<Scalars['String']>;
-  settings?: Maybe<Aws_Alb_Listener_Settings>;
+  settings?: Maybe<AwsAlbListenerSettings>;
 };
 
-export type Aws_Alb_Listener_Rule = {
+export type AwsAlbListenerRule = {
   type?: Maybe<Scalars['String']>;
   order?: Maybe<Scalars['String']>;
   targetGroupArn?: Maybe<Scalars['String']>;
 };
 
-export type Aws_Alb_Listener_Settings = {
+export type AwsAlbListenerSettings = {
   sslPolicy?: Maybe<Scalars['String']>;
   protocol?: Maybe<Scalars['String']>;
-  rules?: Maybe<Array<Maybe<Aws_Alb_Listener_Rule>>>;
+  rules?: Maybe<Array<Maybe<AwsAlbListenerRule>>>;
 };
 
-export type Aws_Cloudwatch = {
+export type AwsCloudwatch = {
   id: Scalars['String'];
   arn: Scalars['String'];
   metric?: Maybe<Scalars['String']>;
@@ -69,16 +69,16 @@ export type Aws_Cloudwatch = {
   threshold?: Maybe<Scalars['String']>;
   period?: Maybe<Scalars['String']>;
   evaluationPeriods?: Maybe<Scalars['Int']>;
-  dimensions?: Maybe<Array<Maybe<Aws_Cloudwatch_Dimensions>>>;
+  dimensions?: Maybe<Array<Maybe<AwsCloudwatchDimensions>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
 };
 
-export type Aws_Cloudwatch_Dimensions = {
+export type AwsCloudwatchDimensions = {
   name?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
 };
 
-export type Aws_Ec2 = {
+export type AwsEc2 = {
   id: Scalars['String'];
   arn: Scalars['String'];
   region?: Maybe<Scalars['String']>;
@@ -104,36 +104,31 @@ export type Aws_Ec2 = {
   iamInstanceProfile?: Maybe<Scalars['String']>;
   deletionProtection?: Maybe<Scalars['String']>;
   primaryNetworkInterface?: Maybe<Scalars['String']>;
-  metadataOptions?: Maybe<Aws_Ec2_Metadata_Options>;
+  metadataOptions?: Maybe<AwsEc2MetadataOptions>;
   metadatasecurityGroupIdsOptions?: Maybe<Array<Maybe<Scalars['String']>>>;
   securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
-  ephemeralBlockDevice?: Maybe<Array<Maybe<Aws_Ec2_Blockdevice>>>;
+  ephemeralBlockDevice?: Maybe<Array<Maybe<AwsEc2Blockdevice>>>;
   associatePublicIpAddress?: Maybe<Scalars['String']>;
-  alb?: Maybe<Array<Maybe<Aws_Alb>>>;
+  alb?: Maybe<Array<Maybe<AwsAlb>>>;
 };
 
-export type Aws_Ec2_Blockdevice = {
+export type AwsEc2Blockdevice = {
   deviceName: Scalars['String'];
-  ebs?: Maybe<Ebs>;
+  ebs?: Maybe<BlockDeviceEbs>;
 };
 
-export type Aws_Ec2_Metadata = {
+export type AwsEc2Metadata = {
   cuid?: Maybe<Scalars['String']>;
 };
 
-export type Aws_Ec2_Metadata_Options = {
+export type AwsEc2MetadataOptions = {
   state: Scalars['String'];
   httpTokens: Scalars['String'];
   httpPutResponseHopLimit?: Maybe<Scalars['Int']>;
   httpEndpoint: Scalars['String'];
 };
 
-export type Aws_Ec2_Securitygroup = {
-  groupName: Scalars['String'];
-  groupId: Scalars['String'];
-};
-
-export type Aws_Eip = {
+export type AwsEip = {
   id: Scalars['String'];
   arn: Scalars['String'];
   tags?: Maybe<Array<Maybe<Tag>>>;
@@ -151,21 +146,21 @@ export type Aws_Eip = {
   customerOwnedIpv4Pool?: Maybe<Scalars['String']>;
 };
 
-export type Aws_Igw = {
+export type AwsIgw = {
   arn: Scalars['String'];
   id: Scalars['String'];
   owner?: Maybe<Scalars['String']>;
-  attachments?: Maybe<Array<Maybe<Aws_Igw_Attachment>>>;
+  attachments?: Maybe<Array<Maybe<AwsIgwAttachment>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
-  vpc?: Maybe<Array<Maybe<Aws_Vpc>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
-export type Aws_Igw_Attachment = {
+export type AwsIgwAttachment = {
   state?: Maybe<Scalars['String']>;
   vpcId?: Maybe<Scalars['String']>;
 };
 
-export type Aws_Vpc = {
+export type AwsVpc = {
   id: Scalars['String'];
   arn: Scalars['String'];
   ipV4Cidr?: Maybe<Scalars['String']>;
@@ -176,11 +171,11 @@ export type Aws_Vpc = {
   enableDnsHostnames?: Maybe<Scalars['String']>;
   defaultVpc?: Maybe<Scalars['Boolean']>;
   state?: Maybe<Scalars['String']>;
-  alb?: Maybe<Array<Maybe<Aws_Alb>>>;
-  igw?: Maybe<Array<Maybe<Aws_Igw>>>;
+  alb?: Maybe<Array<Maybe<AwsAlb>>>;
+  igw?: Maybe<Array<Maybe<AwsIgw>>>;
 };
 
-export type Ebs = {
+export type BlockDeviceEbs = {
   attachTime: Scalars['String'];
   deleteOnTermination: Scalars['Boolean'];
   status: Scalars['String'];

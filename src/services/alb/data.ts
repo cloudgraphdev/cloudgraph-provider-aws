@@ -53,6 +53,7 @@ export default async ({
 
       return elbv2.describeLoadBalancers(args, async (err, data) => {
         if (err) {
+          logger.error('There was an error in service alb function describeLoadBalancers')
           logger.debug(err)
           Sentry.captureException(new Error(err.message))
         }
@@ -67,7 +68,7 @@ export default async ({
 
         const { LoadBalancers: albs, NextMarker: marker } = data
 
-        logger.info(lt.fetchedAlbs(albs.length))
+        logger.debug(lt.fetchedAlbs(albs.length))
 
         /**
          * No Albs
@@ -131,6 +132,7 @@ export default async ({
     const getTagsForAlb = async ({ alb, elbv2, resolveTags, ResourceArns }) =>
       elbv2.describeTags({ ResourceArns }, async (err, data) => {
         if (err) {
+          logger.error('There was an error in service alb function describeTags')
           logger.debug(err)
           Sentry.captureException(new Error(err.message))
         }
@@ -147,7 +149,7 @@ export default async ({
 
         const tags = ((head(allTags) as { Tags: [] }) || { Tags: [] }).Tags
 
-        logger.info(lt.fetchedAlbTags(tags.length, ResourceArns))
+        logger.debug(lt.fetchedAlbTags(tags.length, ResourceArns))
 
         /**
          * No tags found
@@ -204,6 +206,7 @@ export default async ({
         { LoadBalancerArn },
         async (err, data) => {
           if (err) {
+            logger.error('There was an error in service alb function describeLoadBalancerAttributes')
             logger.debug(err)
             Sentry.captureException(new Error(err.message))
           }
@@ -218,7 +221,7 @@ export default async ({
 
           const { Attributes: attributes = [] } = data || {}
 
-          logger.info(
+          logger.debug(
             lt.fetchedAlbAttributes(attributes.length, LoadBalancerArn)
           )
 
@@ -284,6 +287,7 @@ export default async ({
 
       return elbv2.describeListeners(args, async (err, data) => {
         if (err) {
+          logger.error('There was an error in service alb function describeListeners')
           logger.debug(err)
           Sentry.captureException(new Error(err.message))
         }
@@ -298,7 +302,7 @@ export default async ({
 
         const { Listeners: listeners = [], NextMarker: marker } = data || {}
 
-        logger.info(lt.fetchedAlbListeners(listeners.length, LoadBalancerArn))
+        logger.debug(lt.fetchedAlbListeners(listeners.length, LoadBalancerArn))
 
         /**
          * No listeners found
@@ -375,6 +379,7 @@ export default async ({
 
       return elbv2.describeTargetGroups(args, async (err, data) => {
         if (err) {
+          logger.error('There was an error in service alb function describeTargetGroups')
           logger.debug(err)
           Sentry.captureException(new Error(err.message))
         }
@@ -390,7 +395,7 @@ export default async ({
         const { TargetGroups: targetGroups = [], NextMarker: marker } =
           data || {}
 
-        logger.info(
+        logger.debug(
           lt.fetchedAlbTargetGroups(targetGroups.length, LoadBalancerArn)
         )
 
@@ -459,6 +464,7 @@ export default async ({
     }) =>
       elbv2.describeTargetHealth({ TargetGroupArn }, async (err, data) => {
         if (err) {
+          logger.error('There was an error in service alb function describeTargetHealth')
           logger.debug(err)
           Sentry.captureException(new Error(err.message))
         }
@@ -473,7 +479,7 @@ export default async ({
 
         const { TargetHealthDescriptions: targetHealth = [] } = data || {}
 
-        logger.info(lt.fetchedAlbTargetIds(targetHealth.length, TargetGroupArn))
+        logger.debug(lt.fetchedAlbTargetIds(targetHealth.length, TargetGroupArn))
 
         /**
          * No target health info found

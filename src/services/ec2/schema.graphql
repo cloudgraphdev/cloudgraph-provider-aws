@@ -1,34 +1,30 @@
-type aws_ec2_securitygroup {
-  groupName: String!
-  groupId: String! @id
-}
-type aws_ec2_metadata {
+type awsEc2Metadata {
     cuid: String
 }
-type aws_ec2_metadata_options {
+type awsEc2MetadataOptions {
   state: String!
   httpTokens: String!
   httpPutResponseHopLimit: Int
   httpEndpoint: String! @id
 }
 
-# TODO: move to ebs schema
-type ebs {
+type blockDeviceEbs {
   attachTime: String!
   deleteOnTermination: Boolean!
   status: String!
   volumeId: String! @id
 }
-type aws_ec2_blockdevice {
+
+type awsEc2Blockdevice {
   deviceName: String! @id
-  ebs: ebs
+  ebs: blockDeviceEbs
 }
 type Tag {
-    key: String
-    value: String
+  key: String
+  value: String
 }
 
-type aws_ec2 @key(fields: "arn") {
+type awsEc2 @key(fields: "arn") {
 	id: String!
   arn: String! @id
   region: String
@@ -54,10 +50,10 @@ type aws_ec2 @key(fields: "arn") {
   iamInstanceProfile: String
   deletionProtection: String
   primaryNetworkInterface: String
-  metadataOptions: aws_ec2_metadata_options
+  metadataOptions: awsEc2MetadataOptions
   metadatasecurityGroupIdsOptions: [String]
   securityGroupIds: [String]
-  ephemeralBlockDevice: [aws_ec2_blockdevice]
+  ephemeralBlockDevice: [awsEc2Blockdevice]
   associatePublicIpAddress: String
-  alb: [aws_alb] @hasInverse(field: ec2Instance)
+  alb: [awsAlb] @hasInverse(field: ec2Instance)
 }

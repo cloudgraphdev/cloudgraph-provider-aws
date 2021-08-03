@@ -18,7 +18,7 @@ const { logger } = CloudGraph
 const endpoint =
   (environment.NODE_ENV === 'test' && environment.LOCALSTACK_AWS_ENDPOINT) ||
   undefined
-endpoint && logger.log('VPC getData in test mode!')
+endpoint && logger.info('VPC getData in test mode!')
 
 /**
  * VPC
@@ -58,7 +58,8 @@ export default async ({
         args,
         (err: AWSError, data: DescribeVpcsResult) => {
           if (err) {
-            logger.error(err)
+            logger.error('There was an error in service EC2 function describeVpcs')
+            logger.debug(err)
             Sentry.captureException(new Error(err.message))
           }
 
@@ -71,7 +72,7 @@ export default async ({
 
           const { Vpcs: vpcs, NextToken: token } = data
 
-          logger.info(lt.fetchedVpcs(vpcs.length))
+          logger.debug(lt.fetchedVpcs(vpcs.length))
 
           /**
            * No Vpcs Found
@@ -139,7 +140,8 @@ export default async ({
         const additionalAttrPromise = new Promise<void>(resolveAdditionalAttr =>
           ec2.describeVpcAttribute({ VpcId, Attribute }, (err, data) => {
             if (err) {
-              logger.error(err)
+              logger.error('There was an error in service EC2 function describeVpcAttribute')
+              logger.debug(err)
               Sentry.captureException(new Error(err.message))
             }
 
@@ -167,11 +169,11 @@ export default async ({
         additionalAttrPromises.push(additionalAttrPromise)
       })
 
-    logger.info(lt.fetchingVpcDnsSupportData)
+    logger.debug(lt.fetchingVpcDnsSupportData)
     fetchVpcAttribute('enableDnsSupport')
     await Promise.all(additionalAttrPromises)
 
-    logger.info(lt.fetchingVpcDnsHostnamesData)
+    logger.debug(lt.fetchingVpcDnsHostnamesData)
     fetchVpcAttribute('enableDnsHostnames')
     await Promise.all(additionalAttrPromises)
 
