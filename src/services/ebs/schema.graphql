@@ -21,7 +21,7 @@ type awsEbsAttachment
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-  id: String
+  id: String! @id
   attachmentInformation: String
   attachedTime: String
   deleteOnTermination: Boolean
