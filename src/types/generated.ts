@@ -96,7 +96,7 @@ export type AwsEbs = {
 };
 
 export type AwsEbsAttachment = {
-  id?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
   attachmentInformation?: Maybe<Scalars['String']>;
   attachedTime?: Maybe<Scalars['String']>;
   deleteOnTermination?: Maybe<Scalars['Boolean']>;
