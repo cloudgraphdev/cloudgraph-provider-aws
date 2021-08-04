@@ -2,6 +2,7 @@ import { Volume } from 'aws-sdk/clients/ec2'
 
 import { AwsEbs } from '../../types/generated'
 import t from '../../properties/translations'
+import format from '../../utils/format'
 
 /**
  * EBS
@@ -43,7 +44,7 @@ export default ({
   })
 
   // Format volume tags
-  const volumeTags = tags.map(tag => ({ key: tag.Key, value: tag.Value }))
+  const volumeTags = format.tags(tags as { Key: string; Value: string }[])
 
   const ebs = {
     id,
