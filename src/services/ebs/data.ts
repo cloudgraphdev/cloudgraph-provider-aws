@@ -39,7 +39,7 @@ const listEbsVolumes = async ({
   region: string
   nextToken?: string
   ebsData: Volume & { region: string }[]
-  resolveRegion: any
+  resolveRegion: () => void
 }): Promise<void> => {
   let args: DescribeVolumesRequest = {}
 
