@@ -3,7 +3,7 @@
 // import BaseService from '../base';
 // import format from './format';
 // import getData from './data';
-// import mutation from './mutation'; 
+// import mutation from './mutation';
 
 // export default class AwsSubnet extends BaseService implements Service {
 //   format = format.bind(this);
