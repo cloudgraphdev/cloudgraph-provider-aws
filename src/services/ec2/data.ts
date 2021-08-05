@@ -4,11 +4,13 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
 import EC2, {
+  DescribeIamInstanceProfileAssociationsResult,
   DescribeInstancesRequest,
   DescribeInstancesResult,
   DescribeKeyPairsResult,
   DescribeTagsRequest,
   DescribeTagsResult,
+  IamInstanceProfile,
   Instance,
   InstanceAttribute,
   TagList,
@@ -39,6 +41,7 @@ export default async ({
     DisableApiTermination?: boolean
     KeyPairName?: string
     Tags?: TagList
+    IamInstanceProfile?: IamInstanceProfile
   })[]
 }> =>
   new Promise(async resolve => {
@@ -47,6 +50,7 @@ export default async ({
       DisableApiTermination?: boolean
       KeyPairName?: string
       Tags?: TagList
+      IamInstanceProfile?: IamInstanceProfile
     })[] = []
 
     /**
@@ -333,6 +337,49 @@ export default async ({
 
     ec2Instances.map(({ InstanceId }, ec2Idx) => {
       ec2Instances[ec2Idx].Tags = allTags[InstanceId] || {}
+    })
+
+    const iamInstanceProfile = {}
+
+    const iamProfileAssociationsPromises = regions.split(',').map(region => {
+      const ec2 = new EC2({ region, credentials })
+      return new Promise<void>(resolveRegion =>
+        ec2.describeIamInstanceProfileAssociations(
+          {},
+          (
+            err: AWSError,
+            data: DescribeIamInstanceProfileAssociationsResult
+          ) => {
+            if (err) {
+              logger.error(
+                'Therew as an error in Service EIP function describeAddresses'
+              )
+              logger.debug(err)
+              Sentry.captureException(new Error(err.message))
+            }
+
+            const {
+              IamInstanceProfileAssociations: iamProfileAssociations = [],
+            } = data || {}
+
+            iamProfileAssociations.map(({ InstanceId, IamInstanceProfile }) => {
+              if (!iamInstanceProfile[InstanceId]) {
+                iamInstanceProfile[InstanceId] = {}
+              }
+              iamInstanceProfile[InstanceId] = IamInstanceProfile
+            })
+
+            resolveRegion()
+          }
+        )
+      )
+    })
+
+    await Promise.all(iamProfileAssociationsPromises)
+
+    ec2Instances.map(({ InstanceId }, ec2Idx) => {
+      ec2Instances[ec2Idx].IamInstanceProfile =
+        iamInstanceProfile[InstanceId] || {}
     })
 
     /**

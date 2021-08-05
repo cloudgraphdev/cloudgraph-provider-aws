@@ -2,7 +2,7 @@
 // import last from 'lodash/last'
 // import isEmpty from 'lodash/isEmpty'
 
-import { Instance, TagList } from 'aws-sdk/clients/ec2'
+import { IamInstanceProfile, Instance, TagList } from 'aws-sdk/clients/ec2'
 
 import t from '../../properties/translations'
 import { AwsEc2 } from '../../types/generated'
@@ -23,6 +23,7 @@ export default ({
     DisableApiTermination?: boolean
     KeyPairName?: string
     Tags?: TagList
+    IamInstanceProfile: IamInstanceProfile
   }
   region: string
 }): AwsEc2 => {
