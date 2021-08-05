@@ -1,16 +1,13 @@
-// file: cloudwatch.test.ts
+// file: igw.test.ts
 import CloudGraph, { ServiceConnection } from '@cloudgraph/sdk'
 
 import Igw from '../src/services/igw'
 import Vpc from '../src/services/vpc'
 import services from '../src/enums/services'
-import environment from '../src/config/environment'
+import { account, credentials, endpoint, region } from '../src/properties/test'
+import { initTestConfig } from '../src/utils'
 
-// TODO: Probably solved by ENG-89
-const credentials = {
-  accessKeyId: 'test',
-  secretAccessKey: 'test',
-}
+initTestConfig()
 
 // TODO: Single region for now to match free license Localstack limitation
 const account = environment.LOCALSTACK_AWS_ACCOUNT_ID
@@ -23,7 +20,6 @@ let formatResult
 let initiatorTestData
 let initiatorGetConnectionsResult
 beforeAll(async () => {
-
   try {
     const igwClass = new Igw({ logger: CloudGraph.logger })
     const vpcClass = new Vpc({ logger: CloudGraph.logger })
@@ -121,7 +117,9 @@ describe('format', () => {
 
 describe('IGWs', () => {
   it('should have the connection to a VPC', () => {
-    expect(initiatorGetConnectionsResult.length).toEqual(igwGetDataResult[region].length)
+    expect(initiatorGetConnectionsResult.length).toEqual(
+      igwGetDataResult[region].length
+    )
     const lambdaKmsConnections: ServiceConnection[] =
       initiatorGetConnectionsResult
         ?.find(l => lambdaFunctionName in l)
