@@ -12,7 +12,11 @@
     "prepublish": "yarn generate-types && tsc && yarn cpx 'src/**/*.graphql' dist",
     "test": "NODE_ENV=test jest",
     "lint": "eslint --config .eslintrc.json --ext .js,.ts ./",
-    "lint:fix": "eslint --fix --config .eslintrc.json --ext .js,.ts ./"
+    "lint:fix": "eslint --fix --config .eslintrc.json --ext .js,.ts ./",
+    "terraform": "yarn terraform:init && yarn terraform:plan && yarn terraform:apply",
+    "terraform:init": "terraform -chdir=./tests/terraform init -input=false",
+    "terraform:plan": "terraform -chdir=./tests/terraform plan -out=tfplan -input=false",
+    "terraform:apply": "terraform -chdir=./tests/terraform apply -input=false tfplan"
   },
   "dependencies": {
     "@graphql-tools/load-files": "^6.3.2",
