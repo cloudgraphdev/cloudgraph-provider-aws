@@ -26,7 +26,9 @@ export default async ({
 }: {
   regions: string
   credentials: Credentials
-}) =>
+}): Promise<{
+  [region: string]: DescribeAddressesResult & { region: string }[]
+}> =>
   new Promise(async resolve => {
     const eipData: DescribeAddressesResult & { region: string }[] = []
 
@@ -38,7 +40,9 @@ export default async ({
           {},
           (err: AWSError, data: DescribeAddressesResult) => {
             if (err) {
-              logger.error('Therew as an error in Service EIP function describeAddresses')
+              logger.error(
+                'Therew as an error in Service EIP function describeAddresses'
+              )
               logger.debug(err)
               Sentry.captureException(new Error(err.message))
             }

@@ -20,14 +20,14 @@ export default ({
     associationId: ec2InstanceAssociationId,
     customerOwnedIp,
     customerOwnedIpv4Pool,
-     domain,
+    domain,
     instanceId,
     networkBorderGroup,
-     networkInterface,
-     networkInterfaceOwnerId,
+    networkInterface,
+    networkInterfaceOwnerId,
     privateIpAddress: privateIp,
     publicIp,
-     publicIpv4Pool,
+    publicIpv4Pool,
     tags,
   } = toCamel(rawData)
   const eip = {
