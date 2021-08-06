@@ -56,4 +56,5 @@ type awsEc2 @key(fields: "arn") {
   ephemeralBlockDevice: [awsEc2Blockdevice]
   associatePublicIpAddress: String
   alb: [awsAlb] @hasInverse(field: ec2Instance)
+  securityGroups: [awsSecurityGroup] @hasInverse(field: ec2Instance)
 }
