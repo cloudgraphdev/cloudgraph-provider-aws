@@ -57,4 +57,5 @@ type awsEc2 @key(fields: "arn") {
   associatePublicIpAddress: String
   alb: [awsAlb] @hasInverse(field: ec2Instance)
   securityGroups: [awsSecurityGroup] @hasInverse(field: ec2Instance)
+  ebs: [awsEbs] @hasInverse(field: ec2Instance)
 }

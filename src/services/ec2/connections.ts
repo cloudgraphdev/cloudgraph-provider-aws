@@ -9,6 +9,7 @@ import {
   Instance,
   SecurityGroup,
   TagList,
+  Volume,
 } from 'aws-sdk/clients/ec2'
 
 import { ServiceConnection } from '@cloudgraph/sdk'
@@ -57,12 +58,37 @@ export default ({
 
     if (!isEmpty(sgsInRegion)) {
       for (const sg of sgsInRegion) {
-        const id = sg.GroupId
         connections.push({
-          id,
+          id: sg.GroupId,
           resourceType: services.sg,
           relation: 'child',
           field: 'securityGroups',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find EBS volumes
+   * related to this EC2 instance
+   */
+  const ebsVolumes: {
+    name: string
+    data: { [property: string]: (Volume & { region: string })[] }
+  } = data.find(({ name }) => name === services.ebs)
+
+  if (ebsVolumes?.data?.[region]) {
+    const volumesInRegion = ebsVolumes.data[region].filter(volume =>
+      volume.Attachments.find(({ InstanceId }) => InstanceId === id)
+    )
+
+    if (!isEmpty(volumesInRegion)) {
+      for (const v of volumesInRegion) {
+        connections.push({
+          id: v.VolumeId,
+          resourceType: services.ebs,
+          relation: 'child',
+          field: 'ebs',
         })
       }
     }
@@ -75,18 +101,6 @@ export default ({
   //     ({ attachment: { deviceIndex } }) => deviceIndex === 0
   //   ),
   //   ec2Names.networkInterfaceId
-  // )
-
-  /**
-   * Add Security Groups
-   */
-  // connections.push(
-  //   ...instance[ec2Names.securityGroups].map(({ groupId }) => ({
-  //     id: groupId,
-  //     relation: 'child',
-  //     resourceType: resourceTypes.securityGroup,
-  //     field: 'securityGroups',
-  //   }))
   // )
 
   //     children: [
