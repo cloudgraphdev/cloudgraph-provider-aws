@@ -3,8 +3,8 @@
 // import last from 'lodash/last'
 import isEmpty from 'lodash/isEmpty'
 
-// import { Volume, Address, Instance } from 'aws-sdk/clients/ec2'
 import {
+  Address,
   IamInstanceProfile,
   Instance,
   SecurityGroup,
@@ -78,8 +78,9 @@ export default ({
   } = data.find(({ name }) => name === services.ebs)
 
   if (ebsVolumes?.data?.[region]) {
-    const volumesInRegion = ebsVolumes.data[region].filter(volume =>
-      volume.Attachments.find(({ InstanceId }) => InstanceId === id)
+    const volumesInRegion = ebsVolumes.data[region].filter(
+      ({ Attachments: attachments }) =>
+        attachments.find(({ InstanceId }) => InstanceId === id)
     )
 
     if (!isEmpty(volumesInRegion)) {
@@ -94,7 +95,33 @@ export default ({
     }
   }
 
-  // const ipv4PublicIp = eips.map(({ PublicIp }) => PublicIp).join(', ')
+  /**
+   * Find Elastic IPs
+   * related to this EC2 instance
+   */
+  const eips: {
+    name: string
+    data: {
+      [property: string]: (Address & { region: string })[]
+    }
+  } = data.find(({ name }) => name === services.eip)
+
+  if (eips?.data?.[region]) {
+    const eipsInRegion = eips.data[region].filter(
+      ({ InstanceId }) => InstanceId === id
+    )
+
+    if (!isEmpty(eipsInRegion)) {
+      for (const eip of eipsInRegion) {
+        connections.push({
+          id: eip.AllocationId,
+          resourceType: services.eip,
+          relation: 'child',
+          field: 'eip',
+        })
+      }
+    }
+  }
 
   // const primaryNetworkInterface = get(
   //   (instance[ec2Names.networkInterfaces] || []).find(

@@ -15,4 +15,5 @@ type awsEip @key(fields: "arn") {
   customerOwnedIp: String
   customerOwnedIpv4Pool: String
   vpcs: [awsVpc] @hasInverse(field: eip)
+  ec2Instance: [awsEc2] @hasInverse(field: eip)
 }
