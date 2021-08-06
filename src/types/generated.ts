@@ -134,6 +134,7 @@ export type AwsEc2 = {
   ephemeralBlockDevice?: Maybe<Array<Maybe<AwsEc2Blockdevice>>>;
   associatePublicIpAddress?: Maybe<Scalars['String']>;
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
 };
 
 export type AwsEc2Blockdevice = {
@@ -243,6 +244,7 @@ export type AwsSecurityGroup = {
   inboundRuleCount?: Maybe<Scalars['Int']>;
   outboundRuleCount?: Maybe<Scalars['Int']>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
 };
 
 export type AwsSgIpPermissionList = {

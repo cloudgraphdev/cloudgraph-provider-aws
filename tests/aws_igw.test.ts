@@ -4,14 +4,10 @@ import CloudGraph, { ServiceConnection } from '@cloudgraph/sdk'
 import Igw from '../src/services/igw'
 import Vpc from '../src/services/vpc'
 import services from '../src/enums/services'
-import { account, credentials, endpoint, region } from '../src/properties/test'
+import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
 
 initTestConfig()
-
-// TODO: Single region for now to match free license Localstack limitation
-const account = environment.LOCALSTACK_AWS_ACCOUNT_ID
-const region = 'us-east-1'
 
 jest.setTimeout(30000)
 

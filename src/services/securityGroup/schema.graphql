@@ -12,6 +12,7 @@ type awsSecurityGroup @key(fields: "id") {
   inboundRuleCount: Int
   outboundRuleCount: Int
   lambda: [awsLambda] @hasInverse(field: securityGroups)
+  ec2Instance: [awsEc2] @hasInverse(field: securityGroups)
 }
 
 type awsSgIpPermissionList

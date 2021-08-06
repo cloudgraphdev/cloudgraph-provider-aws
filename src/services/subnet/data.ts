@@ -14,11 +14,11 @@ import { AWSError } from 'aws-sdk/lib/error'
 import CloudGraph from '@cloudgraph/sdk'
 import { Credentials } from '../../types'
 
-import awsLoggerText from '../../properties/logger'
+// import awsLoggerText from '../../properties/logger'
 import { Tag } from '../../types/generated'
 import { initTestEndpoint } from '../../utils'
 
-const lt = { ...awsLoggerText }
+// const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const endpoint = initTestEndpoint('Subnet')
 
