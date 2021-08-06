@@ -93,6 +93,7 @@ export type AwsEbs = {
   availabilityZone?: Maybe<Scalars['String']>;
   multiAttachEnabled?: Maybe<Scalars['Boolean']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
 };
 
 export type AwsEbsAttachment = {
@@ -135,6 +136,7 @@ export type AwsEc2 = {
   associatePublicIpAddress?: Maybe<Scalars['String']>;
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  ebs?: Maybe<Array<Maybe<AwsEbs>>>;
 };
 
 export type AwsEc2Blockdevice = {

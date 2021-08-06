@@ -13,6 +13,7 @@ type awsEbs @key(fields: "arn") {
   availabilityZone: String
   multiAttachEnabled: Boolean
   tags: [Tag]
+  ec2Instance: [awsEc2] @hasInverse(field: ebs)
 }
 
 type awsEbsAttachment
