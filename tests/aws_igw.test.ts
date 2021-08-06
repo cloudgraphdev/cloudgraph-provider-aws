@@ -1,6 +1,5 @@
 // file: cloudwatch.test.ts
 import CloudGraph, { ServiceConnection } from '@cloudgraph/sdk'
-import { EC2 } from 'aws-sdk'
 
 import Igw from '../src/services/igw'
 import Vpc from '../src/services/vpc'
@@ -16,44 +15,16 @@ const credentials = {
 // TODO: Single region for now to match free license Localstack limitation
 const account = environment.LOCALSTACK_AWS_ACCOUNT_ID
 const region = 'us-east-1'
-const igw = new EC2({
-  region,
-  credentials,
-  endpoint: environment.LOCALSTACK_AWS_ENDPOINT,
-})
-const igwMockData = {
-  TagSpecifications: [
-    {
-      ResourceType: 'vpc',
-      Tags: [{ Key: 'testTag', Value: 'YEET' }],
-    },
-  ],
-}
-const vpcMockData = {
-  CidrBlock: '10.0.0.0/16',
-  TagSpecifications: [
-    { ResourceType: 'vpc', Tags: [{ Key: 'vpc', Value: 'example' }] },
-  ],
-}
 
 jest.setTimeout(30000)
 
-// TODO: Will be better implemented using a terraform integration
-let igwId
-let vpcId
 let igwGetDataResult
 let formatResult
 let initiatorTestData
 let initiatorGetConnectionsResult
 beforeAll(async () => {
+
   try {
-    const vpcData = await igw.createVpc(vpcMockData).promise()
-    const igwData = await igw.createInternetGateway(igwMockData).promise()
-    vpcId = vpcData.Vpc.VpcId
-    igwId = igwData.InternetGateway.InternetGatewayId
-    await igw
-      .attachInternetGateway({ InternetGatewayId: igwId, VpcId: vpcId })
-      .promise()
     const igwClass = new Igw({ logger: CloudGraph.logger })
     const vpcClass = new Vpc({ logger: CloudGraph.logger })
     igwGetDataResult = await igwClass.getData({
@@ -148,16 +119,16 @@ describe('format', () => {
   })
 })
 
-describe('initiator(vpc)', () => {
-  it('should create the connection to igw', () => {
-    const vpcIgwConnections: ServiceConnection[] = initiatorGetConnectionsResult
-      .find(v => vpcId in v)
-      [vpcId].find((c: ServiceConnection) => c.field === services.igw)
-    expect(vpcIgwConnections).toBeTruthy()
+describe('IGWs', () => {
+  it('should have the connection to a VPC', () => {
+    expect(initiatorGetConnectionsResult.length).toEqual(igwGetDataResult[region].length)
+    const lambdaKmsConnections: ServiceConnection[] =
+      initiatorGetConnectionsResult
+        ?.find(l => lambdaFunctionName in l)
+        [lambdaFunctionName].find(
+          (c: ServiceConnection) =>
+            c.resourceType === services.kms && c.id === keyId
+        ) || undefined
+    expect(lambdaKmsConnections).toBeTruthy()
   })
-})
-
-afterAll(done => {
-  igw.deleteVpc({ VpcId: vpcId }, () => done())
-  igw.deleteInternetGateway({ InternetGatewayId: igwId }, () => done())
 })

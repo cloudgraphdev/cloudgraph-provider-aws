@@ -27,7 +27,7 @@ type awsAlbListener
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-	arn: String @id @search(by: [hash, regexp])
+	arn: String! @id @search(by: [hash, regexp])
 	settings: awsAlbListenerSettings
 }
 

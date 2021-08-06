@@ -11,4 +11,5 @@ type awsVpc @key(fields: "arn") {
 	state: String
 	alb: [awsAlb] @hasInverse(field: vpc)
 	igw: [awsIgw] @hasInverse(field: vpc)
+	# kms: [awsLambda] @hasInverse(field: vpc)
 }

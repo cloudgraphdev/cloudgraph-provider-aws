@@ -14,10 +14,10 @@ import CloudWatch, {
 
 import { AWSError } from 'aws-sdk/lib/error'
 
-import environment from '../../config/environment'
 import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { Tag } from '../../types/generated'
+import { initTestEndpoint } from '../../utils'
 
 /**
  * Cloudwatch
@@ -25,10 +25,7 @@ import { Tag } from '../../types/generated'
 const lt = { ...awsLoggerText }
 const MAX_ITEMS = 100
 const { logger } = CloudGraph
-const endpoint =
-  (environment.NODE_ENV === 'test' && environment.LOCALSTACK_AWS_ENDPOINT) ||
-  undefined
-endpoint && logger.info('Cloudwatch getData in test mode!')
+const endpoint = initTestEndpoint('Cloudwatch')
 
 const listMetricAlarmsForRegion = async ({ cloudwatch, resolveRegion }) =>
   new Promise<MetricAlarms>(resolve => {

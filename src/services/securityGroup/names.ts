@@ -1,0 +1,15 @@
+export default {
+  name: 'Name',
+  groupId: 'groupId',
+  groupName: 'groupName',
+  ipPermissions: 'ipPermissions',
+  ipPermissionsEgress: 'ipPermissionsEgress',
+  ipProtocol: 'ipProtocol',
+  fromPort: 'fromPort',
+  toPort: 'toPort',
+  ipRanges: 'ipRanges',
+  ipv6Ranges: 'ipv6Ranges',
+  ownerId: 'ownerId',
+  prefixListIds: 'prefixListIds',
+  userIdGroupPairs: 'userIdGroupPairs',
+}

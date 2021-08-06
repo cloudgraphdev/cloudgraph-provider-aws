@@ -1,0 +1,28 @@
+type awsSecurityGroup @key(fields: "id") {
+  id: String! @id
+  name: String!
+  vpcId: String
+  arn: String
+  description: String
+  tags: [Tag]
+  owner: String
+  default: Boolean
+  inboundRules: [awsSgIpPermissionList]
+  outboundRules: [awsSgIpPermissionList]
+  inboundRuleCount: Int
+  outboundRuleCount: Int
+  lambda: [awsLambda] @hasInverse(field: securityGroups)
+}
+
+type awsSgIpPermissionList
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: ID
+  protocol: String
+  portRange: String
+  destination: String
+  description: String
+}

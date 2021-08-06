@@ -9,5 +9,5 @@ type awsIgw @key(fields: "arn"){
 
 type awsIgwAttachment {
   state: String
-  vpcId: String @id
+  vpcId: String! @id
 }

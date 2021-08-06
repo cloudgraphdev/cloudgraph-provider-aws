@@ -2,21 +2,15 @@
 import { CloudWatch } from 'aws-sdk'
 import CloudGraph from '@cloudgraph/sdk'
 
-import environment from '../src/config/environment'
 import Cloudwatch from '../src/services/cloudwatch'
+import { credentials, endpoint, region } from '../src/properties/test'
+import { initTestConfig } from '../src/utils'
 
-// TODO: Probably solved by ENG-89
-const credentials = {
-  accessKeyId: 'test',
-  secretAccessKey: 'test',
-}
-
-// TODO: Single region for now to match free license Localstack limitation
-const regions = 'us-east-1'
+initTestConfig()
 const cloudwatch = new CloudWatch({
-  region: regions,
+  region,
   credentials,
-  endpoint: environment.LOCALSTACK_AWS_ENDPOINT,
+  endpoint,
 })
 
 // TODO: Will be better implemented using a terraform integration
@@ -51,8 +45,8 @@ beforeAll(done => {
 test('should be a valid request', async () => {
   const config = { logger: CloudGraph.logger }
   const classInstance = new Cloudwatch(config)
-  const response = await classInstance.getData({ credentials, regions })
-  expect(response[regions][0].tags).toBeDefined()
+  const response = await classInstance.getData({ credentials, regions: region })
+  expect(response[region][0].tags).toBeDefined()
 })
 
 afterAll(done => {
