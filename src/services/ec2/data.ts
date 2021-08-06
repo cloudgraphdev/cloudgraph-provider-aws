@@ -21,9 +21,11 @@ import CloudGraph from '@cloudgraph/sdk'
 
 import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
+const endpoint = initTestEndpoint('EC2')
 
 /**
  * EC2
@@ -129,7 +131,7 @@ export default async ({
     }
 
     const regionPromises = regions.split(',').map(region => {
-      const ec2 = new EC2({ region, credentials })
+      const ec2 = new EC2({ region, credentials, endpoint })
 
       const regionPromise = new Promise<void>(resolveRegion =>
         listEc2Instances({ ec2, region, resolveRegion })
@@ -144,7 +146,7 @@ export default async ({
      */
 
     const keyPairPromises = ec2Instances.map(({ region }, ec2Idx) => {
-      const ec2 = new EC2({ region, credentials })
+      const ec2 = new EC2({ region, credentials, endpoint })
 
       const keyPairPromise = new Promise<void>(resolveKeyPair =>
         ec2.describeKeyPairs(
@@ -194,7 +196,7 @@ export default async ({
 
     const deletionProtectionPromises = ec2Instances.map(
       ({ region, InstanceId }, ec2Idx) => {
-        const ec2 = new EC2({ region, credentials })
+        const ec2 = new EC2({ region, credentials, endpoint })
 
         const deletionProtectionPromise = new Promise<void>(
           resolveDeletionProtection =>
@@ -318,7 +320,7 @@ export default async ({
     }
 
     const tagsPromises = regions.split(',').map(region => {
-      const ec2 = new EC2({ region, credentials })
+      const ec2 = new EC2({ region, credentials, endpoint })
       const tagPromise = new Promise<void>(resolveTags =>
         listAllTagsforAllInstances({
           region,
@@ -342,7 +344,7 @@ export default async ({
     const iamInstanceProfile = {}
 
     const iamProfileAssociationsPromises = regions.split(',').map(region => {
-      const ec2 = new EC2({ region, credentials })
+      const ec2 = new EC2({ region, credentials, endpoint })
       return new Promise<void>(resolveRegion =>
         ec2.describeIamInstanceProfileAssociations(
           {},

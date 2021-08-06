@@ -137,6 +137,7 @@ export type AwsEc2 = {
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
+  eip?: Maybe<Array<Maybe<AwsEip>>>;
 };
 
 export type AwsEc2Blockdevice = {
@@ -171,6 +172,7 @@ export type AwsEip = {
   networkBorderGroup?: Maybe<Scalars['String']>;
   customerOwnedIp?: Maybe<Scalars['String']>;
   customerOwnedIpv4Pool?: Maybe<Scalars['String']>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
 };
 
 export type AwsIgw = {
