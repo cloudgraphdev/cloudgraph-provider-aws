@@ -1,0 +1,57 @@
+type awsEip @key(fields: "arn") {
+  id: String!
+  arn: String! @id
+  dnsName: String
+  hostedZone: String
+  createdAt: String
+  type: String
+  status: String
+  scheme: String
+  vpc: String
+  sourceSecurityGroup: awsEipSourceSecurityGroup
+  securityGroups: [String]
+  subnets: [String]
+  accessLogs: String
+  vpcId: String
+  crossZoneLoadBalancing: String
+  idleTimeout: String
+  instances: awsEipInstances
+  subnets: [String]
+  instances: awsEipInstances
+  healthCheck: awsEipHealthCheck
+  tags: [Tag]
+}
+
+type awsEipSourceSecurityGroup
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  groupName: String! @id
+  ownerAlias: String
+}
+
+type awsEipHealthCheck
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  target: String! @id
+  interval: String
+  timeout: String
+  healthyThreshold: String
+  unhealthyThreshold: String
+}
+
+type awsEipInstances
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  connectionDraining: String
+  connectionDrainingTimeout: String
+  instanceData: String
+}
