@@ -16,16 +16,12 @@ export type Tag = {
   value?: Maybe<Scalars['String']>;
 };
 
-<<<<<<< HEAD
-export type AwsAlb = {
-=======
-export type Aws_Access_Log_Settings = {
+export type AwsAccessLogSettings = {
   format?: Maybe<Scalars['String']>;
   destinationArn?: Maybe<Scalars['String']>;
 };
 
-export type Aws_Alb = {
->>>>>>> ca5f138 (feat(apiGateway): add apiGateway to services)
+export type AwsAlb = {
   id: Scalars['String'];
   arn: Scalars['String'];
   dnsName?: Maybe<Scalars['String']>;
@@ -65,16 +61,13 @@ export type AwsAlbListenerSettings = {
   rules?: Maybe<Array<Maybe<AwsAlbListenerRule>>>;
 };
 
-<<<<<<< HEAD
-export type AwsCloudwatch = {
-=======
-export type Aws_Api_Gateway_Resource = {
+export type AwsApiGatewayResource = {
   id: Scalars['String'];
   arn: Scalars['String'];
   path?: Maybe<Scalars['String']>;
 };
 
-export type Aws_Api_Gateway_Rest_Api = {
+export type AwsApiGatewayRestApi = {
   id: Scalars['String'];
   arn: Scalars['String'];
   description?: Maybe<Scalars['String']>;
@@ -85,26 +78,25 @@ export type Aws_Api_Gateway_Rest_Api = {
   minimumCompressionSize?: Maybe<Scalars['Int']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   binaryMediaTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
-  stages?: Maybe<Array<Maybe<Aws_Api_Gateway_Stage>>>;
-  resources?: Maybe<Array<Maybe<Aws_Api_Gateway_Resource>>>;
+  stages?: Maybe<Array<Maybe<AwsApiGatewayStage>>>;
+  resources?: Maybe<Array<Maybe<AwsApiGatewayResource>>>;
 };
 
-export type Aws_Api_Gateway_Stage = {
+export type AwsApiGatewayStage = {
   id: Scalars['String'];
   arn: Scalars['String'];
   stageName?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   cacheCluster?: Maybe<Scalars['Boolean']>;
   cacheClusterSize?: Maybe<Scalars['String']>;
-  additions?: Maybe<Array<Maybe<Aws_Access_Log_Settings>>>;
+  additions?: Maybe<Array<Maybe<AwsAccessLogSettings>>>;
   documentationVersion?: Maybe<Scalars['String']>;
   clientCertificateId?: Maybe<Scalars['String']>;
   xrayTracing?: Maybe<Scalars['Boolean']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
 };
 
-export type Aws_Cloudwatch = {
->>>>>>> ca5f138 (feat(apiGateway): add apiGateway to services)
+export type AwsCloudwatch = {
   id: Scalars['String'];
   arn: Scalars['String'];
   metric?: Maybe<Scalars['String']>;

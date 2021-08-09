@@ -1,9 +1,9 @@
-type aws_access_log_settings {
+type awsAccessLogSettings {
   format: String
   destinationArn: String
 }
 
-type aws_api_gateway_rest_api @key(fields: "arn") {
+type awsApiGatewayRestApi @key(fields: "arn") {
   id: String!
   arn: String! @id
   description: String
@@ -14,25 +14,25 @@ type aws_api_gateway_rest_api @key(fields: "arn") {
   minimumCompressionSize: Int
   tags: [Tag]
   binaryMediaTypes: [String]
-  stages: [aws_api_gateway_stage]
-  resources: [aws_api_gateway_resource]
+  stages: [awsApiGatewayStage]
+  resources: [awsApiGatewayResource]
 }
 
-type aws_api_gateway_stage @key(fields: "arn") {
+type awsApiGatewayStage @key(fields: "arn") {
   id: String!
   arn: String! @id
   stageName: String
   description: String
   cacheCluster: Boolean
   cacheClusterSize: String
-  additions: [aws_access_log_settings]
+  additions: [awsAccessLogSettings]
   documentationVersion: String
   clientCertificateId: String
   xrayTracing: Boolean
   tags: [Tag]
 }
 
-type aws_api_gateway_resource @key(fields: "arn") {
+type awsApiGatewayResource @key(fields: "arn") {
   id: String!
   arn: String! @id
   path: String
