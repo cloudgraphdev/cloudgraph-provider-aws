@@ -1,5 +1,5 @@
-export default `mutation($input: [AddawsApiGatewayInput!]!) {
-  addaws_apigateway(input: $input, upsert: true) {
+export default `mutation($input: [AddawsApiGatewayRestApiInput!]!) {
+  addawsApiGatewayRestApi(input: $input, upsert: true) {
     numUids
   }
 }`
