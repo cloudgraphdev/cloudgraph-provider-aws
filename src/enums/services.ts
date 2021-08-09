@@ -4,6 +4,7 @@ export default {
   ebs: 'ebs',
   ec2Instance: 'ec2Instance',
   eip: 'eip',
+  elb: 'elb',
   igw: 'igw',
   kms: 'kms',
   lambda: 'lambda',

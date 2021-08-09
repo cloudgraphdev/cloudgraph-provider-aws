@@ -153,21 +153,55 @@ export type AwsEc2MetadataOptions = {
 };
 
 export type AwsEip = {
-  id: Scalars['String'];
+  accessLogs?: Maybe<Scalars['String']>;
   arn: Scalars['String'];
-  tags?: Maybe<Array<Maybe<Tag>>>;
-  vpc?: Maybe<Scalars['String']>;
-  domain?: Maybe<Scalars['String']>;
-  publicIp?: Maybe<Scalars['String']>;
-  privateIp?: Maybe<Scalars['String']>;
-  instanceId?: Maybe<Scalars['String']>;
-  publicIpv4Pool?: Maybe<Scalars['String']>;
-  networkInterface?: Maybe<Scalars['String']>;
-  ec2InstanceAssociationId?: Maybe<Scalars['String']>;
-  networkInterfaceOwnerId?: Maybe<Scalars['String']>;
-  networkBorderGroup?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['String']>;
+  crossZoneLoadBalancing?: Maybe<Scalars['String']>;
   customerOwnedIp?: Maybe<Scalars['String']>;
   customerOwnedIpv4Pool?: Maybe<Scalars['String']>;
+  dnsName?: Maybe<Scalars['String']>;
+  domain?: Maybe<Scalars['String']>;
+  ec2InstanceAssociationId?: Maybe<Scalars['String']>;
+  healthCheck?: Maybe<AwsEipHealthCheck>;
+  hostedZone?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  idleTimeout?: Maybe<Scalars['String']>;
+  instanceId?: Maybe<Scalars['String']>;
+  instances?: Maybe<AwsEipInstances>;
+  networkBorderGroup?: Maybe<Scalars['String']>;
+  networkInterface?: Maybe<Scalars['String']>;
+  networkInterfaceOwnerId?: Maybe<Scalars['String']>;
+  privateIp?: Maybe<Scalars['String']>;
+  publicIp?: Maybe<Scalars['String']>;
+  publicIpv4Pool?: Maybe<Scalars['String']>;
+  scheme?: Maybe<Scalars['String']>;
+  securityGroups?: Maybe<Array<Maybe<Scalars['String']>>>;
+  sourceSecurityGroup?: Maybe<AwsEipSourceSecurityGroup>;
+  status?: Maybe<Scalars['String']>;
+  subnets?: Maybe<Array<Maybe<Scalars['String']>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  type?: Maybe<Scalars['String']>;
+  vpc?: Maybe<Scalars['String']>;
+  vpcId?: Maybe<Scalars['String']>;
+};
+
+export type AwsEipHealthCheck = {
+  target: Scalars['String'];
+  interval?: Maybe<Scalars['String']>;
+  timeout?: Maybe<Scalars['String']>;
+  healthyThreshold?: Maybe<Scalars['String']>;
+  unhealthyThreshold?: Maybe<Scalars['String']>;
+};
+
+export type AwsEipInstances = {
+  connectionDraining?: Maybe<Scalars['String']>;
+  connectionDrainingTimeout?: Maybe<Scalars['String']>;
+  instanceData?: Maybe<Scalars['String']>;
+};
+
+export type AwsEipSourceSecurityGroup = {
+  groupName: Scalars['String'];
+  ownerAlias?: Maybe<Scalars['String']>;
 };
 
 export type AwsIgw = {

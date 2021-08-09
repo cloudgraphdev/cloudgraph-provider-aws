@@ -22,6 +22,7 @@ import AwsSecurityGroup from './securityGroup'
 import VPC from './vpc'
 import EBS from './ebs'
 import NetworkInterface from './networkInterface'
+import ELB from './elb'
 import { Credentials } from '../types'
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -40,6 +41,7 @@ export const serviceMap = {
   [services.vpc]: VPC,
   [services.ebs]: EBS,
   [services.networkInterface]: NetworkInterface,
+  [services.elb]: ELB,
   tag: AwsTag,
 }
 
