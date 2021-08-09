@@ -140,7 +140,7 @@ const getTags = async ({ apiGw, arn }): Promise<Tag[]> =>
         }
         const { tags = {} } = data || {}
         
-        resolve(Object.entries(tags).map(([key, value]) => ({key, value} as Tag)))
+        resolve(Object.entries(tags).map(([k, v]) => ({key: k, value: v} as Tag)))
       })
     } catch (error) {
       resolve([])
