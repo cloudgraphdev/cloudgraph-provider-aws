@@ -1,4 +1,4 @@
-type awsEip @key(fields: "arn") {
+type awsElb @key(fields: "arn") {
   id: String!
   arn: String! @id
   dnsName: String
@@ -8,21 +8,21 @@ type awsEip @key(fields: "arn") {
   status: String
   scheme: String
   vpc: String
-  sourceSecurityGroup: awsEipSourceSecurityGroup
+  sourceSecurityGroup: awsElbSourceSecurityGroup
   securityGroups: [String]
   subnets: [String]
   accessLogs: String
   vpcId: String
   crossZoneLoadBalancing: String
   idleTimeout: String
-  instances: awsEipInstances
+  instances: awsElbInstances
   subnets: [String]
-  instances: awsEipInstances
-  healthCheck: awsEipHealthCheck
+  instances: awsElbInstances
+  healthCheck: awsElbHealthCheck
   tags: [Tag]
 }
 
-type awsEipSourceSecurityGroup
+type awsElbSourceSecurityGroup
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
@@ -32,7 +32,7 @@ type awsEipSourceSecurityGroup
   ownerAlias: String
 }
 
-type awsEipHealthCheck
+type awsElbHealthCheck
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
@@ -45,7 +45,7 @@ type awsEipHealthCheck
   unhealthyThreshold: String
 }
 
-type awsEipInstances
+type awsElbInstances
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }

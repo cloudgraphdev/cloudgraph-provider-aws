@@ -1,11 +1,18 @@
 import * as Sentry from '@sentry/node'
-// import CloudGraph, { Opts } from '@cloudgraph/sdk'
+
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
 import { AWSError } from 'aws-sdk/lib/error'
-import ELB, { TagDescription } from 'aws-sdk/clients/elb'
+import ELB, {
+  DescribeAccessPointsOutput,
+  DescribeLoadBalancerAttributesOutput,
+  DescribeTagsOutput,
+  LoadBalancerAttributes,
+  LoadBalancerDescription,
+  TagList,
+} from 'aws-sdk/clients/elb'
 
 import { Credentials } from '../../types'
 import environment from '../../config/environment'
@@ -18,13 +25,16 @@ const endpoint =
   undefined
 endpoint && logger.info('ELB getData in test mode!')
 
-const getElbTags = async (elb: ELB, elbNames: string[]) =>
-  new Promise<TagDescription[]>(resolve => {
+const getElbTags = async (
+  elb: ELB,
+  elbNames: string[]
+): Promise<{ LoadBalancerName: string; Tags: TagList }[]> =>
+  new Promise<{ LoadBalancerName: string; Tags: TagList }[]>(resolve => {
     elb.describeTags(
       {
         LoadBalancerNames: elbNames,
       },
-      (err: AWSError, data: any) => {
+      (err: AWSError, data: DescribeTagsOutput) => {
         if (err) {
           logger.debug(err.message)
           Sentry.captureException(new Error(err.message))
@@ -33,8 +43,8 @@ const getElbTags = async (elb: ELB, elbNames: string[]) =>
         if (!isEmpty(data)) {
           const { TagDescriptions: tagDescriptions = [] } = data
           const elbTags = tagDescriptions.map(tagDescription => ({
-            loadBalancerName: tagDescription.LoadBalancerName,
-            tags: tagDescription.Tags,
+            LoadBalancerName: tagDescription.LoadBalancerName,
+            Tags: tagDescription.Tags,
           }))
           resolve(elbTags)
         }
@@ -44,31 +54,38 @@ const getElbTags = async (elb: ELB, elbNames: string[]) =>
     )
   })
 
-const listElbData = async (elb: ELB) =>
-  new Promise<any[]>(resolve => {
-    elb.describeLoadBalancers((err, data) => {
-      if (err) {
-        logger.error(err)
-        Sentry.captureException(new Error(err.message))
-      }
+const listElbData = async (elb: ELB): Promise<LoadBalancerDescription[]> =>
+  new Promise<LoadBalancerDescription[]>(resolve => {
+    elb.describeLoadBalancers(
+      (err: AWSError, data: DescribeAccessPointsOutput) => {
+        if (err) {
+          logger.error(err)
+          Sentry.captureException(new Error(err.message))
+        }
+        if (!isEmpty(data)) {
+          const { LoadBalancerDescriptions: loadBalancerDescriptions = [] } =
+            data
+          logger.info(lt.fetchedElbs(loadBalancerDescriptions.length))
+          resolve(loadBalancerDescriptions)
+        }
 
-      if (!isEmpty(data)) {
-        const { LoadBalancerDescriptions: loadBalancerDescriptions = [] } = data
-        logger.info(lt.fetchedElbs(loadBalancerDescriptions.length))
-        resolve(loadBalancerDescriptions)
+        resolve([])
       }
-
-      resolve([])
-    })
+    )
   })
 
-const listElbAttributes = async (elb: ELB, elbName: string) =>
-  new Promise<any>(resolve => {
+const listElbAttributes = async (
+  elb: ELB,
+  elbName: string
+): Promise<(LoadBalancerAttributes & { LoadBalancerName: string }) | unknown> =>
+  new Promise<
+    (LoadBalancerAttributes & { LoadBalancerName: string }) | unknown
+  >(resolve => {
     elb.describeLoadBalancerAttributes(
       {
         LoadBalancerName: elbName,
       },
-      (err, data) => {
+      (err: AWSError, data: DescribeLoadBalancerAttributesOutput) => {
         if (err) {
           logger.error(err)
           Sentry.captureException(new Error(err.message))
@@ -78,7 +95,7 @@ const listElbAttributes = async (elb: ELB, elbName: string) =>
           const { LoadBalancerAttributes: loadBalancerAttributes = {} } = data
           resolve({
             ...loadBalancerAttributes,
-            loadBalancerName: elbName,
+            LoadBalancerName: elbName,
           })
         }
 
@@ -97,16 +114,23 @@ export default async ({
 }: {
   regions: string
   credentials: Credentials
-}) =>
+}): Promise<{
+  [region: string]: (LoadBalancerDescription & {
+    Tags?: TagList
+    Attributes?: LoadBalancerAttributes
+  })[]
+}> =>
   new Promise(async resolve => {
-    let elbData: any & { region: string }[] = []
+    let elbData: (LoadBalancerDescription & {
+      Tags?: TagList
+      Attributes?: LoadBalancerAttributes
+    })[] = []
 
     const regionPromises = regions.split(',').map(region => {
       const elbInstance = new ELB({ region, credentials, endpoint })
       return new Promise<void>(async resolveElbData => {
         // Get Load Balancer Data
         elbData = await listElbData(elbInstance)
-
         const elbNames: string[] = elbData.map(elb => elb.LoadBalancerName)
 
         if (!isEmpty(elbNames)) {
@@ -123,7 +147,7 @@ export default async ({
 
               return {
                 ...elb,
-                tags: elbsTags?.Tags || {},
+                Tags: elbsTags?.Tags,
               }
             })
           }
@@ -138,13 +162,16 @@ export default async ({
         if (!isEmpty(elbAttributes)) {
           elbData = elbData.map(elb => {
             const elbsAttributes = elbAttributes.find(
-              (attributes: any) =>
-                attributes.loadBalancerName === elb.loadBalancerName
+              (
+                attributes: LoadBalancerAttributes & {
+                  LoadBalancerName: string
+                }
+              ) => attributes.LoadBalancerName === elb.LoadBalancerName
             )
 
             return {
               ...elb,
-              attributes: elbsAttributes,
+              Attributes: elbsAttributes,
             }
           })
         }
