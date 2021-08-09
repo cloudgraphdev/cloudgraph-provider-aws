@@ -61,6 +61,11 @@ export type AwsAlbListenerSettings = {
   rules?: Maybe<Array<Maybe<AwsAlbListenerRule>>>;
 };
 
+export type AwsApiGatewayEndpointConfiguration = {
+  types?: Maybe<Array<Maybe<Scalars['String']>>>;
+  vpcEndpointIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
 export type AwsApiGatewayResource = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -72,7 +77,7 @@ export type AwsApiGatewayRestApi = {
   arn: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   policy?: Maybe<Scalars['String']>;
-  endpointType?: Maybe<Scalars['String']>;
+  endpointConfiguration?: Maybe<AwsApiGatewayEndpointConfiguration>;
   apiKeySource?: Maybe<Scalars['String']>;
   createdDate?: Maybe<Scalars['String']>;
   minimumCompressionSize?: Maybe<Scalars['Int']>;

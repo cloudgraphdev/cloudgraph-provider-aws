@@ -3,12 +3,17 @@ type awsAccessLogSettings {
   destinationArn: String
 }
 
+type awsApiGatewayEndpointConfiguration {
+  types: [String]
+  vpcEndpointIds: [String]
+}
+
 type awsApiGatewayRestApi @key(fields: "arn") {
   id: String!
   arn: String! @id
   description: String
   policy: String
-  endpointType: String
+  endpointConfiguration: awsApiGatewayEndpointConfiguration
   apiKeySource: String
   createdDate: String
   minimumCompressionSize: Int

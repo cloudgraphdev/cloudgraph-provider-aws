@@ -32,7 +32,7 @@ const MAX_RESOURCES = 500
 /**
  * API Gateway
  */
-
+ 
 const getRestApisForRegion = async apiGw =>
   new Promise<ListOfRestApi>(resolve => {
     const restApiList: ListOfRestApi = []
@@ -129,20 +129,21 @@ const getResources = async ({ apiGw, restApiId }) =>
     listAllResources()
   })
 
-const getTags = async ({ apiGw, arn }): Promise<Tag> =>
+const getTags = async ({ apiGw, arn }): Promise<Tag[]> =>
   new Promise(resolve => {
     try {
       apiGw.getTags({ resourceArn: arn }, (err: AWSError, data: Tags) => {
         if (err) {
           logger.error(err)
           Sentry.captureException(new Error(err.message))
-          return resolve({})
+          return resolve([])
         }
         const { tags = {} } = data || {}
-        resolve(tags)
+        
+        resolve(Object.entries(tags).map(([key, value]) => ({key, value} as Tag)))
       })
     } catch (error) {
-      resolve({})
+      resolve([])
     }
   })
 

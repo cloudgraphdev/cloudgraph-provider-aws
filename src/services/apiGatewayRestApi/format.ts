@@ -1,5 +1,10 @@
-import { AwsApiGatewayRestApi } from '../../types/generated'
-import { toCamel } from '../../utils'
+import { RestApi } from 'aws-sdk/clients/apigateway'
+import { 
+  AwsApiGatewayStage, 
+  AwsApiGatewayResource, 
+  AwsApiGatewayRestApi, 
+  Tag,
+} from '../../types/generated'
 import {
   apiGatewayArn,
   apiGatewayRestApiArn,
@@ -9,39 +14,38 @@ import {
  * APIGateway
  */
 export default ({
-  service: rawData,
+  service,
 }: 
 {
-  service: any
+  service: RestApi & { stages: AwsApiGatewayStage[], resources: AwsApiGatewayResource[], region: string, tags?: Tag[] }
 }): AwsApiGatewayRestApi => {
-  const apiGateway = toCamel(rawData)
-  const { tags } = rawData
-  const {id} = apiGateway
-  const arn = apiGatewayRestApiArn({
-    restApiArn: apiGatewayArn({ region: apiGateway.region }),
-    id,
-  })
   const {
+    id,
     name,
     description,
     policy,
-    endpointType,
+    endpointConfiguration,
     apiKeySource,
     createdDate,
     minimumCompressionSize,
     binaryMediaTypes,
+    tags,
     stages,
     resources,
-  } = apiGateway
+  } = service
+  const arn = apiGatewayRestApiArn({
+    restApiArn: apiGatewayArn({ region: service.region }),
+    id,
+  })
 
   return {
     id: name,
     arn,
     description,
     policy,
-    endpointType,
+    endpointConfiguration,
     apiKeySource,
-    createdDate,
+    createdDate: createdDate.toISOString(),
     minimumCompressionSize,
     binaryMediaTypes,
     tags,
