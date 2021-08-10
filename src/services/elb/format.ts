@@ -35,7 +35,7 @@ export default ({
     Scheme: scheme,
     VPCId: vpc,
     Subnets: subnets,
-    SecurityGroups: securityGroups,
+    SecurityGroups: securityGroups = [],
     SourceSecurityGroup: { OwnerAlias: ownerAlias, GroupName: groupName },
     HealthCheck: {
       Target: target,
@@ -89,7 +89,7 @@ export default ({
       ownerAlias,
       groupName,
     },
-    securityGroups,
+    securityGroupsIds: securityGroups,
     subnets,
     accessLogs: accesslog?.Enabled ? t.enabled : t.disabled,
     crossZoneLoadBalancing: crossZoneLoadBalancing?.Enabled

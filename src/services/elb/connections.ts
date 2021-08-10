@@ -22,7 +22,7 @@ export default ({
 }: // allTagData,
 {
   account: string
-  data: any
+  data: { name: string; data: { [property: string]: any[] } }[]
   service: LoadBalancerDescription & {
     Tags?: TagList
     Attributes?: LoadBalancerAttributes
@@ -41,9 +41,7 @@ export default ({
     name: string
     data: { [property: string]: SecurityGroup[] }
   } = data.find(({ name }) => name === services.sg)
-  const sgIds = loadbalancerSecurityGroups.map(
-    SecurityGroupId => SecurityGroupId
-  )
+  const sgIds = loadbalancerSecurityGroups.map(sgId => sgId)
 
   if (securityGroups?.data?.[region]) {
     const sgsInRegion: SecurityGroup[] = securityGroups.data[region].filter(
@@ -61,6 +59,12 @@ export default ({
       }
     }
   }
+
+  /**
+   * Find Subnets
+   * related to this ELB loadbalancer
+   */
+  // TODO: Implement when subnet service is ready
 
   const elbResult = {
     [`arn:aws:elasticloadbalancing:${region}:${account}:loadbalancer/${id}`]:

@@ -9,7 +9,7 @@ type awsElb @key(fields: "arn") {
   scheme: String
   vpc: String
   sourceSecurityGroup: awsElbSourceSecurityGroup
-  securityGroups: [String]
+  securityGroupsIds: [String]
   subnets: [String]
   accessLogs: String
   crossZoneLoadBalancing: String
@@ -18,6 +18,8 @@ type awsElb @key(fields: "arn") {
   healthCheck: awsElbHealthCheck
   listeners: [awsElbListener]
   tags: [Tag]
+  securityGroups: [awsSecurityGroup] @hasInverse(field: elb)
+  # subnets: [awsSubnet] @hasInverse(field: elb) TODO: Enable when subnet service is complete
 }
 
 type awsElbSourceSecurityGroup
@@ -49,6 +51,7 @@ type awsElbInstances
     mutation: { add: false, delete: false }
     subscription: false
   ) {
+  id: ID
   connectionDraining: String
   connectionDrainingTimeout: String
   instancesIds: [String]

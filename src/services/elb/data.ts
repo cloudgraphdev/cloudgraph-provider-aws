@@ -15,15 +15,12 @@ import ELB, {
 } from 'aws-sdk/clients/elb'
 
 import { Credentials } from '../../types'
-import environment from '../../config/environment'
 import awsLoggerText from '../../properties/logger'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint =
-  (environment.NODE_ENV === 'test' && environment.LOCALSTACK_AWS_ENDPOINT) ||
-  undefined
-endpoint && logger.info('ELB getData in test mode!')
+const endpoint = initTestEndpoint('ELB')
 
 const getElbTags = async (
   elb: ELB,
@@ -54,8 +51,12 @@ const getElbTags = async (
     )
   })
 
-const listElbData = async (elb: ELB): Promise<LoadBalancerDescription[]> =>
-  new Promise<LoadBalancerDescription[]>(resolve => {
+const listElbData = async (
+  elb: ELB,
+  region: string
+): Promise<LoadBalancerDescription[]> =>
+  new Promise<(LoadBalancerDescription & { region: string })[]>(resolve => {
+    let loadBalancerData: (LoadBalancerDescription & { region: string })[] = []
     elb.describeLoadBalancers(
       (err: AWSError, data: DescribeAccessPointsOutput) => {
         if (err) {
@@ -65,11 +66,15 @@ const listElbData = async (elb: ELB): Promise<LoadBalancerDescription[]> =>
         if (!isEmpty(data)) {
           const { LoadBalancerDescriptions: loadBalancerDescriptions = [] } =
             data
-          logger.info(lt.fetchedElbs(loadBalancerDescriptions.length))
-          resolve(loadBalancerDescriptions)
+          logger.debug(lt.fetchedElbs(loadBalancerDescriptions.length))
+          loadBalancerData = loadBalancerDescriptions.map(lbDescription => ({
+            ...lbDescription,
+            region,
+          }))
+          resolve(loadBalancerData)
         }
 
-        resolve([])
+        resolve(loadBalancerData)
       }
     )
   })
@@ -130,7 +135,7 @@ export default async ({
       const elbInstance = new ELB({ region, credentials, endpoint })
       return new Promise<void>(async resolveElbData => {
         // Get Load Balancer Data
-        elbData = await listElbData(elbInstance)
+        elbData = await listElbData(elbInstance, region)
         const elbNames: string[] = elbData.map(elb => elb.LoadBalancerName)
 
         if (!isEmpty(elbNames)) {
