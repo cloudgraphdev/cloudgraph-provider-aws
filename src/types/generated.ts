@@ -78,6 +78,30 @@ export type AwsCloudwatchDimensions = {
   value?: Maybe<Scalars['String']>;
 };
 
+export type AwsEbs = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  attachments?: Maybe<Array<Maybe<AwsEbsAttachment>>>;
+  iops?: Maybe<Scalars['Int']>;
+  size?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  created?: Maybe<Scalars['String']>;
+  snapshot?: Maybe<Scalars['String']>;
+  encrypted?: Maybe<Scalars['Boolean']>;
+  isBootDisk?: Maybe<Scalars['Boolean']>;
+  volumeType?: Maybe<Scalars['String']>;
+  availabilityZone?: Maybe<Scalars['String']>;
+  multiAttachEnabled?: Maybe<Scalars['Boolean']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
+export type AwsEbsAttachment = {
+  id: Scalars['String'];
+  attachmentInformation?: Maybe<Scalars['String']>;
+  attachedTime?: Maybe<Scalars['String']>;
+  deleteOnTermination?: Maybe<Scalars['Boolean']>;
+};
+
 export type AwsEc2 = {
   id: Scalars['String'];
   arn: Scalars['String'];

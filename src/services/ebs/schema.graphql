@@ -1,0 +1,28 @@
+type awsEbs @key(fields: "arn") {
+  id: String!
+  arn: String! @id
+  attachments: [awsEbsAttachment]
+  iops: Int
+  size: String
+  state: String
+  created: String
+  snapshot: String
+  encrypted: Boolean
+  isBootDisk: Boolean
+  volumeType: String
+  availabilityZone: String
+  multiAttachEnabled: Boolean
+  tags: [Tag]
+}
+
+type awsEbsAttachment
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  attachmentInformation: String
+  attachedTime: String
+  deleteOnTermination: Boolean
+}
