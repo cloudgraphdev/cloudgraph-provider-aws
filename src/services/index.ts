@@ -112,22 +112,108 @@ export default class Provider extends CloudGraph.Client {
   }
 
   getCredentials(): Promise<Credentials> {
-    return new Promise(resolve => {
+    this.logger.info('Searching for AWS credentials...')
+    return new Promise(async resolve => {
       if (this.credentials) {
-        resolve(this.credentials)
+        return resolve(this.credentials)
       }
-      AWS.config.getCredentials((err: any) => {
-        if (err) {
-          this.logger.error('There was an error in function getCredentials')
-          this.logger.debug(err)
-          throw new Error(
-            'Unable to find Credentials for AWS, They could be stored in env variables or .aws/credentials file'
-          )
-        } else {
-          this.credentials = AWS.config.credentials
-          resolve(AWS.config.credentials)
+      switch (true) {
+        case this.config.profile &&
+          this.config.profile !== 'default' &&
+          this.config.role &&
+          this.config.role !== '': {
+          const sts = new AWS.STS()
+          await new Promise<void>(resolve => {
+            sts.assumeRole(
+              {
+                RoleArn: this.config.role,
+                RoleSessionName: 'CloudGraph',
+              },
+              (err, data) => {
+                if (err) {
+                  this.logger.error(
+                    `No credentials found for profile: ${this.config.profile} role: ${this.config.role}`
+                  )
+                  this.logger.debug(err)
+                  resolve()
+                } else {
+                  // successful response
+                  const {
+                    AccessKeyId: accessKeyId,
+                    SecretAccessKey: secretAccessKey,
+                    SessionToken: sessionToken,
+                  } = data.Credentials
+                  const creds = {
+                    accessKeyId,
+                    secretAccessKey,
+                    sessionToken,
+                  }
+                  AWS.config.update(creds)
+                  this.credentials = creds
+                  resolve()
+                }
+              }
+            )
+          })
+          break
         }
-      })
+        case this.config.profile && this.config.profile !== 'default': {
+          try {
+            // TODO: how to catch the error from SharedIniFileCredentials when profile doent exist
+            const credentials = new AWS.SharedIniFileCredentials({
+              profile: this.config.profile,
+              callback: (err: any) => {
+                if (err) {
+                  this.logger.error(
+                    `No credentails found for profile ${this.config.profile}`
+                  )
+                }
+              },
+            })
+            if (credentials) {
+              AWS.config.credentials = credentials
+              this.credentials = AWS.config.credentials
+            }
+            break
+          } catch (error: any) {
+            break
+          }
+        }
+        default: {
+          await new Promise<void>(resolve =>
+            AWS.config.getCredentials((err: any) => {
+              if (err) {
+                resolve()
+              } else {
+                this.credentials = AWS.config.credentials
+                resolve()
+              }
+            })
+          )
+        }
+      }
+      if (!this.credentials) {
+        this.logger.info('No AWS Credentials found, please enter them manually')
+        const answers = await this.interface.prompt([
+          {
+            type: 'input',
+            message: 'Please input a valid accessKeyId',
+            name: 'accessKeyId',
+          },
+          {
+            type: 'input',
+            message: 'Please input a valid secretAccessKey',
+            name: 'secretAccessKey',
+          },
+        ])
+        if (answers?.accessKeyId && answers?.secretAccessKey) {
+          this.credentials = answers
+        } else {
+          this.logger.error('Cannot scan AWS without credentials')
+          throw new Error()
+        }
+      }
+      resolve(this.credentials)
     })
   }
 
