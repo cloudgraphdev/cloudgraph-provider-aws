@@ -1,0 +1,14 @@
+type awsSubnet @key(fields: "id"){
+  arn: String!
+  autoAssignPublicIpv4Address: String
+  autoAssignPublicIpv6Address: String
+  availabilityZone: String
+  availableIpV4Addresses: Int
+  defaultForAz: Boolean
+  id: String! @id
+  ipV4Cidr: String
+  ipV6Cidr: String
+  state: String
+  tags: [Tag]
+  # lambda: [awsLambda] @hasInverse(field: subnets)
+}

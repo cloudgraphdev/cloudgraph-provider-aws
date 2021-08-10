@@ -1,5 +1,5 @@
 // file: cloudwatch.test.ts
-import CloudGraph from '@cloudgraph/sdk'
+import CloudGraph, { ServiceConnection } from '@cloudgraph/sdk'
 
 import Igw from '../src/services/igw'
 import Vpc from '../src/services/vpc'
@@ -122,5 +122,13 @@ describe('format', () => {
 describe('IGWs', () => {
   it('should have the connection to a VPC', () => {
     expect(initiatorGetConnectionsResult.length).toEqual(igwGetDataResult[region].length)
+    const lambdaKmsConnections: ServiceConnection[] =
+      initiatorGetConnectionsResult
+        ?.find(l => lambdaFunctionName in l)
+        [lambdaFunctionName].find(
+          (c: ServiceConnection) =>
+            c.resourceType === services.kms && c.id === keyId
+        ) || undefined
+    expect(lambdaKmsConnections).toBeTruthy()
   })
 })

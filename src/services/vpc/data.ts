@@ -11,14 +11,11 @@ import CloudGraph, { Opts } from '@cloudgraph/sdk'
 
 import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import environment from '../../config/environment'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint =
-  (environment.NODE_ENV === 'test' && environment.LOCALSTACK_AWS_ENDPOINT) ||
-  undefined
-endpoint && logger.info('VPC getData in test mode!')
+const endpoint = initTestEndpoint('VPC')
 
 /**
  * VPC

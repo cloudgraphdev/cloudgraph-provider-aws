@@ -119,9 +119,11 @@ export default {
   foundNacls: (num: number): string => `Found ${num} NACLs to add to VPC`,
   foundSecurityGroups: (num: number): string =>
     `Found ${num} Security Groups to add to VPC`,
+  fetchedSecurityGroups: (num: number) => `Fetched ${num} Security Groups`,
   foundVpcLambdas: (num: number) => `Found ${num} Lambdas to add to VPC`,
   gatheringRouteTableAssociations: 'Gathering route table associations',
   gatheringSubnets: 'Gathering subnets to add to VPC',
+  fetchedSubnets: (num: number) => `Fetched ${num} Subnets`,
   creatingVpc: 'Creating VPC Element',
   addingVpc: 'Adding VPC Element to the region',
   lookingforSubnets: 'Looking for Subnets to add to VPC',
@@ -138,12 +140,20 @@ export default {
   /**
    * Lambda
    */
-  lookingForVpcLambdas:
-    'Looking for Lambdas with VPC networking to add to the VPC',
+   lookingForVpcLambdas:
+   'Looking for Lambdas with VPC networking to add to the VPC',
   lookingForLambda: 'Looking for non-vpc Lambdas to add to region',
-  lambdasCreated: (num: number): string =>
+  fetchingLambdaData:
+    'Fetching Lambdas for this AWS account via the AWS SDK...',
+  doneFetchingLambdaData: (num: number) =>
+    `🕒 Done fetching Lambdas in ${num} 🕘`,
+  lambdasCreated: (num: number) =>
     `Found and created ${num} Lambdas for this region`,
   addingLambdas: 'Adding lambdas to region',
+  foundMoreLambdas: (num: number) =>
+    `Found another ${num} Lambdas in this region...`,
+  fetchedLambdas: (num: number) => `Fetched ${num} Lambdas`,
+  gettingLambdaTags: 'Fetching tags for each Lambda...',
   /**
    * ALBs
    */

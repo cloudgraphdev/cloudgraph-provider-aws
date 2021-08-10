@@ -1,0 +1,31 @@
+type awsLambda @key(fields: "id") {
+  arn: String!
+  description: String
+  handler: String
+  id: String! @id
+  kmsKeyArn: String
+  lastModified: String
+  memorySize: Int
+  reservedConcurrentExecutions: Int
+  role: String
+  runtime: String
+  sourceCodeSize: String
+  timeout: String
+  tracingConfig: String
+  version: String
+  environmentVariables: [awsLambaEnvironmentVariable]
+  tags: [Tag]
+  kms: [awsKms] @hasInverse(field: lambda)
+  securityGroups: [awsSecurityGroup] @hasInverse(field: lambda)
+  # subnets: [awsSubnet] @hasInverse(field: lambda)
+}
+
+type awsLambaEnvironmentVariable
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  key: String! @id
+  value: String
+}

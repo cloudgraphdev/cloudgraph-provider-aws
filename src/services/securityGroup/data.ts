@@ -1,79 +1,88 @@
 import * as Sentry from '@sentry/node'
-import CloudGraph from '@cloudgraph/sdk'
-
-import EC2, {
-  DescribeInternetGatewaysResult,
-  InternetGateway,
-} from 'aws-sdk/clients/ec2'
-import { AWSError } from 'aws-sdk/lib/error'
 
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
+import { Request } from 'aws-sdk'
+import EC2, {
+  SecurityGroup,
+  DescribeSecurityGroupsResult,
+  DescribeSecurityGroupsRequest,
+} from 'aws-sdk/clients/ec2'
+import { AWSError } from 'aws-sdk/lib/error'
+
+import CloudGraph from '@cloudgraph/sdk'
 import { Credentials } from '../../types'
+
 import awsLoggerText from '../../properties/logger'
 import { Tag } from '../../types/generated'
 import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('IGW')
+const endpoint = initTestEndpoint('Security Groups')
+
 /**
- * IGW
+ * Security Groups
  */
 
-export interface RawAwsIgw extends Omit<InternetGateway, 'Tags'> {
+export interface AwsSecurityGroup extends Omit<SecurityGroup, 'Tags'> {
   Tags: Tag[]
   region: string
 }
 
 export default async ({
-  credentials,
   regions,
+  credentials,
 }: {
-  credentials: Credentials
   regions: string
-}): Promise<{ [property: string]: RawAwsIgw[] }> =>
+  credentials: Credentials
+}): Promise<{ [property: string]: AwsSecurityGroup[] }> =>
   new Promise(async resolve => {
-    const igwData: RawAwsIgw[] = []
+    const sgData: AwsSecurityGroup[] = []
     const regionPromises = []
 
-    const listIgwData = async ({
+    const listSgData = async ({
       ec2,
       region,
       token: NextToken = '',
       resolveRegion,
-    }) => {
-      let args: any = {}
+    }: {
+      ec2: EC2
+      region: string
+      token?: string
+      resolveRegion: () => void
+    }): Promise<Request<EC2.Types.DescribeSecurityGroupsResult, AWSError>> => {
+      let args: DescribeSecurityGroupsRequest = {}
 
       if (NextToken) {
         args = { ...args, NextToken }
       }
 
-      return ec2.describeInternetGateways(
+      return ec2.describeSecurityGroups(
         args,
-        (err: AWSError, data: DescribeInternetGatewaysResult) => {
+        (err: AWSError, data: DescribeSecurityGroupsResult) => {
           if (err) {
             logger.error(err)
             Sentry.captureException(new Error(err.message))
           }
 
           /**
-           * No IGW data for this region
+           * No SG data for this region
            */
           if (isEmpty(data)) {
             return resolveRegion()
           }
 
-          const { InternetGateways: igws, NextToken: token } = data
+          const { SecurityGroups: sgs, NextToken: token } = data
 
-          logger.debug(lt.fetchedIgws(igws.length))
+          logger.debug(lt.fetchedSecurityGroups(sgs.length))
 
           /**
-           * No IGWs Found
+           * No SGs Found
            */
 
-          if (isEmpty(igws)) {
+          if (isEmpty(sgs)) {
             return resolveRegion()
           }
 
@@ -82,16 +91,16 @@ export default async ({
            */
 
           if (token) {
-            listIgwData({ region, token, ec2, resolveRegion })
+            listSgData({ region, token, ec2, resolveRegion })
           }
 
           /**
-           * Add the found IGWs to the igwData
+           * Add the found SGs to the sgData
            */
 
-          igwData.push(
-            ...igws.map(({ Tags, ...igw }) => ({
-              ...igw,
+          sgData.push(
+            ...sgs.map(({ Tags, ...sg }) => ({
+              ...sg,
               region,
               Tags: Tags.map(({ Key, Value }) => ({
                 key: Key,
@@ -113,12 +122,13 @@ export default async ({
 
     regions.split(',').map(region => {
       const ec2 = new EC2({ region, credentials, endpoint })
+
       const regionPromise = new Promise<void>(resolveRegion =>
-        listIgwData({ ec2, region, resolveRegion })
+        listSgData({ ec2, region, resolveRegion })
       )
       regionPromises.push(regionPromise)
     })
 
     await Promise.all(regionPromises)
-    resolve(groupBy(igwData, 'region'))
+    resolve(groupBy(sgData, 'region'))
   })
