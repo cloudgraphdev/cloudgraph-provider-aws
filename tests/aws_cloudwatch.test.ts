@@ -1,5 +1,6 @@
 // file: cloudwatch.test.ts
 import CloudGraph from '@cloudgraph/sdk'
+
 import Cloudwatch from '../src/services/cloudwatch'
 import { credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'

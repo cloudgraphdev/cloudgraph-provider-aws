@@ -14,12 +14,12 @@ import { AWSError } from 'aws-sdk/lib/error'
 import CloudGraph from '@cloudgraph/sdk'
 import { Credentials, TagMap, AwsTag } from '../../types'
 
-// import awsLoggerText from '../../properties/logger'
+import awsLoggerText from '../../properties/logger'
 // import { Tag } from '../../types/generated'
 import { initTestEndpoint } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 
-// const lt = { ...awsLoggerText }
+const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const endpoint = initTestEndpoint('Subnet')
 
@@ -78,7 +78,7 @@ export default ({
 
           const { Subnets: subnets, NextToken: token } = data
 
-          // logger.debug(lt.fetchedSubnets(subnets.length))
+          logger.debug(lt.fetchedSubnets(subnets.length))
 
           /**
            * No subnets Found
