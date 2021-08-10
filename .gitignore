@@ -3,3 +3,6 @@ dist
 .vscode
 .yalc
 yalc.lock
+.terraform*
+*.tfstate*
+tfplan
