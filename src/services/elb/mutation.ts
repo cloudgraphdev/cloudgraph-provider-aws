@@ -1,5 +1,5 @@
-export default `mutation($input: [AddawsEipInput!]!) {
-  addawsEip(input: $input, upsert: true) {
+export default `mutation($input: [AddawsElbInput!]!) {
+  addawsElb(input: $input, upsert: true) {
     numUids
   }
-}`;
+}`

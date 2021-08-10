@@ -1,4 +1,4 @@
-type awsIgw @key(fields: "arn"){
+type awsIgw @key(fields: "arn") {
   arn: String! @id
   id: String!
   owner: String

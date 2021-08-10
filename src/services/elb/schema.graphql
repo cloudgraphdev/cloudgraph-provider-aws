@@ -12,13 +12,11 @@ type awsElb @key(fields: "arn") {
   securityGroups: [String]
   subnets: [String]
   accessLogs: String
-  vpcId: String
   crossZoneLoadBalancing: String
   idleTimeout: String
   instances: awsElbInstances
-  subnets: [String]
-  instances: awsElbInstances
   healthCheck: awsElbHealthCheck
+  listeners: [awsElbListener]
   tags: [Tag]
 }
 
@@ -41,8 +39,8 @@ type awsElbHealthCheck
   target: String! @id
   interval: String
   timeout: String
-  healthyThreshold: String
-  unhealthyThreshold: String
+  healthyThreshold: Int
+  unhealthyThreshold: Int
 }
 
 type awsElbInstances
@@ -53,5 +51,19 @@ type awsElbInstances
   ) {
   connectionDraining: String
   connectionDrainingTimeout: String
-  instanceData: String
+  instancesIds: [String]
+}
+
+type awsElbListener
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  name: String
+  loadBalancerPort: Int
+  loadBalancerProtocol: String
+  instancePort: Int
+  instanceProtocol: String
 }
