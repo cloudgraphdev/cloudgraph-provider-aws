@@ -40,7 +40,7 @@ export type AwsAlb = {
 };
 
 export type AwsAlbListener = {
-  arn?: Maybe<Scalars['String']>;
+  arn: Scalars['String'];
   settings?: Maybe<AwsAlbListenerSettings>;
 };
 
@@ -181,7 +181,90 @@ export type AwsIgw = {
 
 export type AwsIgwAttachment = {
   state?: Maybe<Scalars['String']>;
+  vpcId: Scalars['String'];
+};
+
+export type AwsKms = {
+  arn: Scalars['String'];
+  id: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  enableKeyRotation?: Maybe<Scalars['String']>;
+  usage?: Maybe<Scalars['String']>;
+  policy?: Maybe<Scalars['String']>;
+  enabled?: Maybe<Scalars['String']>;
+  keyState?: Maybe<Scalars['String']>;
+  customerMasterKeySpec?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  creationDate?: Maybe<Scalars['String']>;
+  keyManager?: Maybe<Scalars['String']>;
+  origin?: Maybe<Scalars['String']>;
+  deletionDate?: Maybe<Scalars['String']>;
+  validTo?: Maybe<Scalars['String']>;
+  lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+};
+
+export type AwsLambaEnvironmentVariable = {
+  key: Scalars['String'];
+  value?: Maybe<Scalars['String']>;
+};
+
+export type AwsLambda = {
+  arn: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  handler?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  kmsKeyArn?: Maybe<Scalars['String']>;
+  lastModified?: Maybe<Scalars['String']>;
+  memorySize?: Maybe<Scalars['Int']>;
+  reservedConcurrentExecutions?: Maybe<Scalars['Int']>;
+  role?: Maybe<Scalars['String']>;
+  runtime?: Maybe<Scalars['String']>;
+  sourceCodeSize?: Maybe<Scalars['String']>;
+  timeout?: Maybe<Scalars['String']>;
+  tracingConfig?: Maybe<Scalars['String']>;
+  version?: Maybe<Scalars['String']>;
+  environmentVariables?: Maybe<Array<Maybe<AwsLambaEnvironmentVariable>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+};
+
+export type AwsSecurityGroup = {
+  id: Scalars['String'];
+  name: Scalars['String'];
   vpcId?: Maybe<Scalars['String']>;
+  arn?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  owner?: Maybe<Scalars['String']>;
+  default?: Maybe<Scalars['Boolean']>;
+  inboundRules?: Maybe<Array<Maybe<AwsSgIpPermissionList>>>;
+  outboundRules?: Maybe<Array<Maybe<AwsSgIpPermissionList>>>;
+  inboundRuleCount?: Maybe<Scalars['Int']>;
+  outboundRuleCount?: Maybe<Scalars['Int']>;
+  lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+};
+
+export type AwsSgIpPermissionList = {
+  id?: Maybe<Scalars['ID']>;
+  protocol?: Maybe<Scalars['String']>;
+  portRange?: Maybe<Scalars['String']>;
+  destination?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+};
+
+export type AwsSubnet = {
+  arn: Scalars['String'];
+  autoAssignPublicIpv4Address?: Maybe<Scalars['String']>;
+  autoAssignPublicIpv6Address?: Maybe<Scalars['String']>;
+  availabilityZone?: Maybe<Scalars['String']>;
+  availableIpV4Addresses?: Maybe<Scalars['Int']>;
+  defaultForAz?: Maybe<Scalars['Boolean']>;
+  id: Scalars['String'];
+  ipV4Cidr?: Maybe<Scalars['String']>;
+  ipV6Cidr?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
 };
 
 export type AwsVpc = {

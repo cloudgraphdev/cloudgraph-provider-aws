@@ -9,11 +9,15 @@ import services from '../enums/services'
 import resources from '../enums/resources'
 import regions from '../enums/regions'
 import ALB from './alb'
+import AwsInternetGateway from './igw'
 import CloudWatch from './cloudwatch'
 import EC2 from './ec2'
-import AwsInternetGateway from './igw'
-import VPC from './vpc'
 import EIP from './eip'
+import AwsKms from './kms'
+import Lambda from './lambda'
+// import AwsSubnet from './subnet'
+import AwsSecurityGroup from './securityGroup'
+import VPC from './vpc'
 import EBS from './ebs'
 import { Credentials } from '../types'
 
@@ -27,6 +31,10 @@ export const serviceMap = {
   [services.ec2Instance]: EC2,
   [services.eip]: EIP,
   [services.igw]: AwsInternetGateway,
+  [services.kms]: AwsKms,
+  [services.lambda]: Lambda,
+  [services.sg]: AwsSecurityGroup,
+  // [services.subnet]: AwsSubnet, // TODO: Enable when going for ENG-222
   [services.vpc]: VPC,
   [services.ebs]: EBS,
 }
@@ -137,7 +145,7 @@ export default class Provider extends CloudGraph.Client {
    * getSchema is used to get the schema for provider
    * @returns A string of graphql sub schemas
    */
-  getSchema() {
+  getSchema(): string {
     const typesArray = loadFilesSync(path.join(__dirname), {
       recursive: true,
       extensions: ['graphql'],
@@ -162,7 +170,11 @@ export default class Provider extends CloudGraph.Client {
    * @param TODO: fill in
    * @returns Promise<any> All provider data
    */
-  async getData({ opts }: { opts: Opts }) {
+  async getData({
+    opts,
+  }: {
+    opts: Opts
+  }): Promise<Array<{ name: string; data: any[] }>> {
     let { regions, resources } = this.config
     if (!regions) {
       regions = this.properties.regions.join(',')

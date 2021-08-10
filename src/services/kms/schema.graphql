@@ -1,0 +1,18 @@
+type awsKms @key(fields: "id"){
+  arn: String!
+  id: String! @id
+  description: String
+  enableKeyRotation: String
+  usage: String
+  policy: String
+  enabled: String
+  keyState: String
+  customerMasterKeySpec: String
+  tags: [Tag]
+  creationDate: String
+  keyManager: String
+  origin: String
+  deletionDate: String
+  validTo: String
+  lambda: [awsLambda] @hasInverse(field: kms)
+}
