@@ -1,9 +1,11 @@
 type awsAccessLogSettings {
+  id: ID!
   format: String
   destinationArn: String
 }
 
 type awsApiGatewayEndpointConfiguration {
+  id: ID!
   types: [String]
   vpcEndpointIds: [String]
 }
