@@ -41,10 +41,7 @@ export default ({
    */
   // combineElementsTagsWithExistingGlobalTags({ tags, allTagData })
 
-  let reservedConcurrentExecutions: any = rawReservedConcurrentExecutions
-  if (reservedConcurrentExecutions === -1) {
-    reservedConcurrentExecutions = t.noLimits
-  }
+  const reservedConcurrentExecutions: any = rawReservedConcurrentExecutions
 
   if (!isEmpty(Environment)) {
     if (Environment.Variables) {

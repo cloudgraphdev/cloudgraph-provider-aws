@@ -1,5 +1,5 @@
-export default `mutation($input: [AddawsLamdbaInput!]!) {
-  addawsLamdba(input: $input, upsert: true) {
+export default `mutation($input: [AddawsLambdaInput!]!) {
+  addawsLambda(input: $input, upsert: true) {
     numUids
   }
 }`;
