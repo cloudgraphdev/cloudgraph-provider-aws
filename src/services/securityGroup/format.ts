@@ -71,26 +71,49 @@ export default ({
        * For each possible target, get the info so we can create a unique rule for it
        */
 
-      ;(rule.ipRanges || []).map(({ cidrIp, description = '' }) => {
-        allRules.push({ [direction]: cidrIp, description })
-      })
-      ;(rule.ipv6Ranges || []).map(({ cidrIpv6, description = '' }) => {
-        allRules.push({ [direction]: cidrIpv6, description })
-      })
-      ;(rule.prefixListIds || []).map(({ prefixListId, description = '' }) => {
-        allRules.push({ [direction]: prefixListId, description })
-      })
+      ;(rule.ipRanges || []).map(
+        ({ cidrIp, description: ipRangesDescription = '' }) => {
+          allRules.push({
+            [direction]: cidrIp,
+            description: ipRangesDescription,
+          })
+        }
+      )
+      ;(rule.ipv6Ranges || []).map(
+        ({ cidrIpv6, description: ipv6RangesDescription = '' }) => {
+          allRules.push({
+            [direction]: cidrIpv6,
+            description: ipv6RangesDescription,
+          })
+        }
+      )
+      ;(rule.prefixListIds || []).map(
+        ({ prefixListId, description: prefixListIdsDescription = '' }) => {
+          allRules.push({
+            [direction]: prefixListId,
+            description: prefixListIdsDescription,
+          })
+        }
+      )
       ;(rule.userIdGroupPairs || []).map(
-        ({ groupId, description = '', ...rest }) => {
+        ({
+          groupId,
+          description: descriptionUserIdGroupPairs = '',
+          ...rest
+        }) => {
           allRules.push({
             [direction]: groupId,
-            description,
+            description: descriptionUserIdGroupPairs,
             ...rest,
           })
         }
       )
 
-      return allRules.flatMap(rule => ({ protocol, portRange, ...rule }))
+      return allRules.flatMap(allRulesRule => ({
+        protocol,
+        portRange,
+        ...allRulesRule,
+      }))
     })
   )
 
