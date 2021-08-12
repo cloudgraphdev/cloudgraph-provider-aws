@@ -111,7 +111,6 @@ describe('format', () => {
 
 describe('IGWs', () => {
   it('should have the connection to a VPC', () => {
-    expect(initiatorGetConnectionsResult.length).toEqual(igwGetDataResult[region].length)
     expect(initiatorGetConnectionsResult).toEqual(
       expect.arrayContaining([
         expect.any(Object)

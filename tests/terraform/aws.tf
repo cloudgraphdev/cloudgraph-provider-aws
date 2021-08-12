@@ -151,3 +151,18 @@ resource "aws_lambda_function" "lambda_function" {
   image_uri     = "lambda/alpine"
   kms_key_arn   = aws_kms_key.lambda_kms_key.arn
 }
+
+resource "aws_ebs_volume" "ebs_volume" {
+  availability_zone = "us-east-1a"
+  size              = 40
+
+  tags = {
+    Name = "HelloWorld"
+  }
+}
+
+resource "aws_volume_attachment" "ebs_att" {
+  device_name = "/dev/sdh"
+  volume_id   = aws_ebs_volume.ebs_volume.id
+  instance_id = aws_instance.instance.id
+}
