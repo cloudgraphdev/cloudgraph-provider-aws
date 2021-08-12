@@ -54,7 +54,7 @@ const getElbTags = async (
 const listElbData = async (
   elb: ELB,
   region: string
-): Promise<LoadBalancerDescription[]> =>
+): Promise<(LoadBalancerDescription & { region: string })[]> =>
   new Promise<(LoadBalancerDescription & { region: string })[]>(resolve => {
     let loadBalancerData: (LoadBalancerDescription & { region: string })[] = []
     elb.describeLoadBalancers(
@@ -112,6 +112,11 @@ const listElbAttributes = async (
 /**
  * ELB
  */
+export interface RawAwsElb extends LoadBalancerDescription {
+  Attributes?: LoadBalancerAttributes
+  Tags?: TagList
+  region: string
+}
 
 export default async ({
   regions,
@@ -120,16 +125,10 @@ export default async ({
   regions: string
   credentials: Credentials
 }): Promise<{
-  [region: string]: (LoadBalancerDescription & {
-    Tags?: TagList
-    Attributes?: LoadBalancerAttributes
-  })[]
+  [region: string]: RawAwsElb[]
 }> =>
   new Promise(async resolve => {
-    let elbData: (LoadBalancerDescription & {
-      Tags?: TagList
-      Attributes?: LoadBalancerAttributes
-    })[] = []
+    let elbData: RawAwsElb[] = []
 
     const regionPromises = regions.split(',').map(region => {
       const elbInstance = new ELB({ region, credentials, endpoint })

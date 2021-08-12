@@ -7,7 +7,7 @@ type awsElb @key(fields: "arn") {
   type: String
   status: String
   scheme: String
-  vpc: String
+  vpcId: String
   sourceSecurityGroup: awsElbSourceSecurityGroup
   securityGroupsIds: [String]
   subnets: [String]
@@ -19,6 +19,7 @@ type awsElb @key(fields: "arn") {
   listeners: [awsElbListener]
   tags: [Tag]
   securityGroups: [awsSecurityGroup] @hasInverse(field: elb)
+  vpc: [awsVpc] @hasInverse(field: elb)
   # subnets: [awsSubnet] @hasInverse(field: elb) TODO: Enable when subnet service is complete
 }
 
@@ -54,7 +55,6 @@ type awsElbInstances
   id: ID
   connectionDraining: String
   connectionDrainingTimeout: String
-  instancesIds: [String]
 }
 
 type awsElbListener

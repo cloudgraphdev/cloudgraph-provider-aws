@@ -30,8 +30,11 @@ export default ({
   region: string
 }): { [key: string]: ServiceConnection[] } => {
   const connections: ServiceConnection[] = []
-  const { LoadBalancerName: id, SecurityGroups: loadbalancerSecurityGroups } =
-    loadbalancer
+  const {
+    LoadBalancerName: id,
+    SecurityGroups: loadbalancerSecurityGroups,
+    VPCId: vpcId,
+  } = loadbalancer
 
   /**
    * Find Security Groups VPC Security Groups
@@ -57,6 +60,30 @@ export default ({
           field: 'securityGroups',
         })
       }
+    }
+  }
+
+  /**
+   * Find VPCs
+   * related to this ELB loadbalancer
+   */
+  const vpcs: {
+    name: string
+    data: { [property: string]: any[] }
+  } = data.find(({ name }) => name === services.vpc)
+
+  if (vpcs?.data?.[region]) {
+    const vpc = vpcs.data[region].find(
+      ({ VpcId }: SecurityGroup) => VpcId === vpcId
+    )
+
+    if (vpc) {
+      connections.push({
+        id: vpc.VpcId,
+        resourceType: services.vpc,
+        relation: 'child',
+        field: 'vpc',
+      })
     }
   }
 

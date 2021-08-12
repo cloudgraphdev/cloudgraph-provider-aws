@@ -1,15 +1,10 @@
 import { kebabCase } from 'lodash'
 
-import {
-  LoadBalancerAttributes,
-  LoadBalancerDescription,
-  TagList,
-} from 'aws-sdk/clients/elb'
-
 import { AwsElb } from '../../types/generated'
 import t from '../../properties/translations'
 import format from '../../utils/format'
 import resources from '../../enums/resources'
+import { RawAwsElb } from './data'
 
 /**
  * ELB
@@ -20,10 +15,7 @@ export default ({
   account,
   region,
 }: {
-  service: LoadBalancerDescription & {
-    Tags?: TagList
-    Attributes?: LoadBalancerAttributes
-  }
+  service: RawAwsElb
   account: string
   region: string
 }): AwsElb => {
@@ -33,7 +25,7 @@ export default ({
     DNSName: dnsName,
     CreatedTime: createdAt,
     Scheme: scheme,
-    VPCId: vpc,
+    VPCId: vpcId,
     Subnets: subnets,
     SecurityGroups: securityGroups = [],
     SourceSecurityGroup: { OwnerAlias: ownerAlias, GroupName: groupName },
@@ -51,29 +43,42 @@ export default ({
       ConnectionDraining: connectionDraining,
     },
     ListenerDescriptions: listenerDescriptions,
-    Instances: instances = [],
     Tags: tags,
   } = rawData
 
   // Format ELB Listeners
-  const listeners = listenerDescriptions.map(({ Listener }) => {
-    return {
-      id: `${loadBalancerName}-${Listener?.Protocol}-${
+  const listeners = listenerDescriptions
+    .filter(
+      ({ Listener }) =>
+        Listener?.Protocol &&
+        Listener?.LoadBalancerPort &&
+        Listener?.InstanceProtocol &&
         Listener?.LoadBalancerPort
-      }-${kebabCase(resources.elbListener)}`,
-      name: `${Listener?.Protocol}-${Listener?.LoadBalancerPort} ${t.listener}`,
-      loadBalancerPort: Listener?.LoadBalancerPort,
-      loadBalancerProtocol: Listener?.Protocol,
-      instancePort: Listener?.InstancePort,
-      instanceProtocol: Listener?.InstanceProtocol,
-    }
-  })
+    )
+    .map(
+      ({
+        Listener: {
+          Protocol,
+          LoadBalancerPort,
+          InstanceProtocol,
+          InstancePort,
+        },
+      }) => {
+        return {
+          id: `${loadBalancerName}-${Protocol}-${LoadBalancerPort}-${kebabCase(
+            resources.elbListener
+          )}`,
+          name: `${Protocol}-${LoadBalancerPort} ${t.listener}`,
+          loadBalancerPort: LoadBalancerPort,
+          loadBalancerProtocol: Protocol,
+          instancePort: InstancePort,
+          instanceProtocol: InstanceProtocol,
+        }
+      }
+    )
 
   // Format ELB Tags
   const elbTags = format.tags(tags as { Key: string; Value: string }[])
-
-  // Format Instances Ids
-  const instancesIds = instances.map(({ InstanceId }) => InstanceId)
 
   const elb = {
     id: dnsName,
@@ -84,7 +89,7 @@ export default ({
     type: t.classic,
     // status: `${inServiceCount}/${instanceData.length} ${t.inServiceText}`, TODO: Can't be calculated without EC2 instances data
     scheme,
-    vpc,
+    vpcId,
     sourceSecurityGroup: {
       ownerAlias,
       groupName,
@@ -101,7 +106,6 @@ export default ({
       connectionDrainingTimeout: `${connectionDraining?.Timeout || 0} ${
         t.seconds
       }`,
-      instancesIds,
     },
     healthCheck: {
       target,

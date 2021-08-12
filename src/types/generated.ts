@@ -179,31 +179,42 @@ export type AwsElb = {
   type?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
   scheme?: Maybe<Scalars['String']>;
-  vpc?: Maybe<Scalars['String']>;
+  vpcId?: Maybe<Scalars['String']>;
   sourceSecurityGroup?: Maybe<AwsElbSourceSecurityGroup>;
-  securityGroups?: Maybe<Array<Maybe<Scalars['String']>>>;
+  securityGroupsIds?: Maybe<Array<Maybe<Scalars['String']>>>;
   subnets?: Maybe<Array<Maybe<Scalars['String']>>>;
   accessLogs?: Maybe<Scalars['String']>;
-  vpcId?: Maybe<Scalars['String']>;
   crossZoneLoadBalancing?: Maybe<Scalars['String']>;
   idleTimeout?: Maybe<Scalars['String']>;
   instances?: Maybe<AwsElbInstances>;
   healthCheck?: Maybe<AwsElbHealthCheck>;
+  listeners?: Maybe<Array<Maybe<AwsElbListener>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
 export type AwsElbHealthCheck = {
   target: Scalars['String'];
   interval?: Maybe<Scalars['String']>;
   timeout?: Maybe<Scalars['String']>;
-  healthyThreshold?: Maybe<Scalars['String']>;
-  unhealthyThreshold?: Maybe<Scalars['String']>;
+  healthyThreshold?: Maybe<Scalars['Int']>;
+  unhealthyThreshold?: Maybe<Scalars['Int']>;
 };
 
 export type AwsElbInstances = {
+  id?: Maybe<Scalars['ID']>;
   connectionDraining?: Maybe<Scalars['String']>;
   connectionDrainingTimeout?: Maybe<Scalars['String']>;
-  instanceData?: Maybe<Scalars['String']>;
+};
+
+export type AwsElbListener = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  loadBalancerPort?: Maybe<Scalars['Int']>;
+  loadBalancerProtocol?: Maybe<Scalars['String']>;
+  instancePort?: Maybe<Scalars['Int']>;
+  instanceProtocol?: Maybe<Scalars['String']>;
 };
 
 export type AwsElbSourceSecurityGroup = {
@@ -308,6 +319,7 @@ export type AwsSecurityGroup = {
   inboundRuleCount?: Maybe<Scalars['Int']>;
   outboundRuleCount?: Maybe<Scalars['Int']>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  elb?: Maybe<Array<Maybe<AwsElb>>>;
 };
 
 export type AwsSgRule = {
@@ -363,6 +375,7 @@ export type AwsVpc = {
   state?: Maybe<Scalars['String']>;
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
   igw?: Maybe<Array<Maybe<AwsIgw>>>;
+  elb?: Maybe<Array<Maybe<AwsElb>>>;
 };
 
 export type BlockDeviceEbs = {
