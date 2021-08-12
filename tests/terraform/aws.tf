@@ -122,6 +122,10 @@ resource "aws_internet_gateway" "igw" {
 resource "aws_kms_key" "lambda_kms_key" {
   description             = "KMS key 1"
   deletion_window_in_days = 10
+
+  tags = {
+    Name = "Main"
+  }
 }
 
 resource "aws_iam_role" "lambda_iam_role" {
