@@ -1,46 +1,19 @@
 // file: aws_lambda.test.ts
 import CloudGraph from '@cloudgraph/sdk'
 
-import Lambda, { CreateFunctionRequest } from 'aws-sdk/clients/lambda'
 import LambdaClass from '../src/services/lambda'
 import AwsLambdaFunction from '../src/services/lambda/index'
-import { account, credentials, endpoint, region } from '../src/properties/test'
+import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
 
 initTestConfig()
-const lambda = new Lambda({
-  region,
-  credentials,
-  endpoint,
-})
-const lambdaFunctionMock: CreateFunctionRequest = {
-  Code: {},
-  Description: 'OK',
-  FunctionName: 'YEET',
-  Handler: 'index.handler',
-  MemorySize: 128,
-  Role: 'YEET',
-  Runtime: 'nodejs14.x',
-  Tags: {
-    TagValue: 'ExampleUser',
-    TagKey: 'CreatedBy',
-  },
-  Timeout: 3,
-  VpcConfig: { SecurityGroupIds: [] },
-}
 
-// TODO: Will be better implemented using a terraform integration
-let lambdaFunctionName: string
 let getDataResult
 let formatResult
 beforeAll(
   async () =>
     new Promise<void>(async resolve => {
       try {
-        const lambdaFunctionData = await lambda
-          .createFunction(lambdaFunctionMock)
-          .promise()
-        lambdaFunctionName = lambdaFunctionData.FunctionName
         const lambdaClass = new LambdaClass({ logger: CloudGraph.logger })
         getDataResult = await lambdaClass.getData({
           credentials,
@@ -85,7 +58,7 @@ describe('getData', () => {
           PackageType: expect.any(String),
           RevisionId: expect.any(String),
           Role: expect.any(String),
-          Runtime: expect.any(String),
+          // Runtime: expect.any(String),
           // SigningProfileVersionArn: expect.any(String),
           // SigningJobArn: expect.any(String),
           State: expect.any(String),
@@ -125,9 +98,9 @@ describe('format', () => {
         // kmsKeyArn: expect.any(String),
         lastModified: expect.any(String),
         memorySize: expect.any(Number),
-        reservedConcurrentExecutions: expect.any(String),
+        reservedConcurrentExecutions: expect.any(Number),
         role: expect.any(String),
-        runtime: expect.any(String),
+        // runtime: expect.any(String),
         sourceCodeSize: expect.any(String),
         timeout: expect.any(Number),
         tracingConfig: expect.any(String),
@@ -138,12 +111,3 @@ describe('format', () => {
     )
   })
 })
-
-afterAll(
-  async () =>
-    new Promise<void>(async resolve => {
-      lambda.deleteFunction({ FunctionName: lambdaFunctionName }, () =>
-        resolve()
-      )
-    })
-)
