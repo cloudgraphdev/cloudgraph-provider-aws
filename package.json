@@ -9,6 +9,7 @@
   "scripts": {
     "build": "yarn prepublish",
     "generate-types": "graphql-codegen --config codegen.yml",
+    "prepare": "npx husky install && shx rm -rf .git/hooks && shx ln -s ../.husky .git/hooks",
     "prepublish": "yarn generate-types && tsc && yarn cpx 'src/**/*.graphql' dist",
     "test": "NODE_ENV=test jest",
     "lint": "eslint --config .eslintrc.json --ext .js,.ts ./",
@@ -44,17 +45,12 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.4.0",
-    "husky": "4.3.0",
+    "husky": "^7.0.0",
     "jest": "^27.0.6",
     "lint-staged": "^11.1.1",
     "prettier": "^2.3.2",
+    "shx": "^0.3.3",
     "ts-jest": "^27.0.4"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn lint-staged",
-      "pre-push": "yarn test"
-    }
   },
   "lint-staged": {
     "*.{ts,graphql,json}": [
