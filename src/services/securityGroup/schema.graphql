@@ -7,22 +7,24 @@ type awsSecurityGroup @key(fields: "id") {
   tags: [Tag]
   owner: String
   default: Boolean
-  inboundRules: [awsSgIpPermissionList]
-  outboundRules: [awsSgIpPermissionList]
+  inboundRules: [awsSgRule]
+  outboundRules: [awsSgRule]
   inboundRuleCount: Int
   outboundRuleCount: Int
   lambda: [awsLambda] @hasInverse(field: securityGroups)
 }
 
-type awsSgIpPermissionList
+type awsSgRule
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
   id: ID
-  protocol: String
-  portRange: String
-  destination: String
   description: String
+  destination: String
+  portRange: String
+  protocol: String
+  source: String
+  userId: String
 }

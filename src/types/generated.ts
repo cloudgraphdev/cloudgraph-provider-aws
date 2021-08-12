@@ -238,19 +238,21 @@ export type AwsSecurityGroup = {
   tags?: Maybe<Array<Maybe<Tag>>>;
   owner?: Maybe<Scalars['String']>;
   default?: Maybe<Scalars['Boolean']>;
-  inboundRules?: Maybe<Array<Maybe<AwsSgIpPermissionList>>>;
-  outboundRules?: Maybe<Array<Maybe<AwsSgIpPermissionList>>>;
+  inboundRules?: Maybe<Array<Maybe<AwsSgRule>>>;
+  outboundRules?: Maybe<Array<Maybe<AwsSgRule>>>;
   inboundRuleCount?: Maybe<Scalars['Int']>;
   outboundRuleCount?: Maybe<Scalars['Int']>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
 };
 
-export type AwsSgIpPermissionList = {
+export type AwsSgRule = {
   id?: Maybe<Scalars['ID']>;
-  protocol?: Maybe<Scalars['String']>;
-  portRange?: Maybe<Scalars['String']>;
-  destination?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  destination?: Maybe<Scalars['String']>;
+  portRange?: Maybe<Scalars['String']>;
+  protocol?: Maybe<Scalars['String']>;
+  source?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
 };
 
 export type AwsSubnet = {
