@@ -101,7 +101,7 @@ export default {
     'Fetching API Gateway data for this AWS account via the AWS SDK...',
   doneFetchingApiGatewayData: '✅ Done fetching API Gateway Data ✅',
   gettingApiGatewayTags:
-    'Fetching tags for each Api Gateway domain name, rest api and stage...',
+    'Fetching tags for each Api Gateway rest api and stage...',
   /**
    * Vpc
    */

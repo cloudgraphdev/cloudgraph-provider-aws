@@ -23,11 +23,13 @@ import {
 import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { Tag } from '../../types/generated'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const {logger} = CloudGraph
 const MAX_REST_API = 500
 const MAX_RESOURCES = 500
+const endpoint = initTestEndpoint('API Gateway Rest API')
 
 /**
  * API Gateway
@@ -139,7 +141,6 @@ const getTags = async ({ apiGw, arn }): Promise<Tag[]> =>
           return resolve([])
         }
         const { tags = {} } = data || {}
-        
         resolve(Object.entries(tags).map(([k, v]) => ({key: k, value: v} as Tag)))
       })
     } catch (error) {
@@ -161,7 +162,7 @@ export default async ({
     const tagsPromises = []
 
     regions.split(',').map(region => {
-      const apiGw = new APIGW({ region, credentials })
+      const apiGw = new APIGW({ region, credentials, endpoint })
       const regionPromise = new Promise<void>(async resolveRegion => {
         const restApiList = await getRestApisForRegion(apiGw)
         if (!isEmpty(restApiList)) {
@@ -181,7 +182,7 @@ export default async ({
     logger.info(lt.fetchedApiGatewayRestApis(apiGatewayData.length))
 
     apiGatewayData.map(({ id: restApiId, region }, idx) => {
-      const apiGw = new APIGW({ region, credentials })
+      const apiGw = new APIGW({ region, credentials, endpoint })
       const additionalPromise = new Promise<void>(async resolveAdditional => {
         apiGatewayData[idx].stages = await getStages({ apiGw, restApiId })
         apiGatewayData[idx].resources = await getResources({ apiGw, restApiId })
@@ -203,9 +204,9 @@ export default async ({
 
     await Promise.all(additionalPromises)
 
-    // get all tags for each domain name, rest api, stage
+    // get all tags for each rest api, stage
     apiGatewayData.map(({ id, region }, idx) => {
-      const apiGw = new APIGW({ region, credentials })
+      const apiGw = new APIGW({ region, credentials, endpoint })
       const tagsPromise = new Promise<void>(async resolveTags => {
         const arn = apiGatewayRestApiArn({
           restApiArn: apiGatewayArn({ region }),

@@ -1,11 +1,11 @@
 type awsAccessLogSettings {
-  id: ID!
+  id: ID
   format: String
   destinationArn: String
 }
 
 type awsApiGatewayEndpointConfiguration {
-  id: ID!
+  id: ID
   types: [String]
   vpcEndpointIds: [String]
 }

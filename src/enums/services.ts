@@ -14,5 +14,5 @@ export default {
   vpc: 'vpc',
   networkInterface: 'network_interface',
   vpnConnection: 'vpn_connection',
-  apiGatewayRestApi: 'api_gateway_rest_api',
+  apiGatewayRestApi: 'apiGatewayRestApi',
 }

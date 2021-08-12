@@ -17,6 +17,7 @@ export type Tag = {
 };
 
 export type AwsAccessLogSettings = {
+  id?: Maybe<Scalars['ID']>;
   format?: Maybe<Scalars['String']>;
   destinationArn?: Maybe<Scalars['String']>;
 };
@@ -62,6 +63,7 @@ export type AwsAlbListenerSettings = {
 };
 
 export type AwsApiGatewayEndpointConfiguration = {
+  id?: Maybe<Scalars['ID']>;
   types?: Maybe<Array<Maybe<Scalars['String']>>>;
   vpcEndpointIds?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
