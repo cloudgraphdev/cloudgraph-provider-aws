@@ -150,6 +150,11 @@ resource "aws_lambda_function" "lambda_function" {
   package_type  = "Image"
   image_uri     = "lambda/alpine"
   kms_key_arn   = aws_kms_key.lambda_kms_key.arn
+
+  vpc_config {
+    subnet_ids         = [aws_subnet.subnet.id]
+    security_group_ids = [aws_security_group.sg.id]
+  }
 }
 
 resource "aws_ebs_volume" "ebs_volume" {
