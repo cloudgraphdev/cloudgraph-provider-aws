@@ -305,7 +305,9 @@ export default async ({
             if (!allTags[ResourceId]) {
               allTags[ResourceId] = {}
             }
-            allTags[ResourceId] = [...allTags[ResourceId], { Key, Value }]
+            allTags[ResourceId] = !isEmpty(allTags[ResourceId])
+              ? [...allTags[ResourceId], { Key, Value }]
+              : [{ Key, Value }]
           })
 
           /**
@@ -338,7 +340,7 @@ export default async ({
      */
 
     ec2Instances.map(({ InstanceId }, ec2Idx) => {
-      ec2Instances[ec2Idx].Tags = allTags[InstanceId] || {}
+      ec2Instances[ec2Idx].Tags = allTags[InstanceId] || []
     })
 
     const iamInstanceProfile = {}

@@ -1,6 +1,3 @@
-// import get from 'lodash/get'
-// import head from 'lodash/head'
-// import last from 'lodash/last'
 import isEmpty from 'lodash/isEmpty'
 
 import {
@@ -24,11 +21,9 @@ export default ({
   service: instance,
   data,
   region,
-  account,
-}: // allTagData,
-{
+}: {
   account: string
-  data: any
+  data: { name: string; data: { [property: string]: any[] } }[]
   service: Instance & {
     region: string
     DisableApiTermination?: boolean
@@ -37,9 +32,13 @@ export default ({
     IamInstanceProfile: IamInstanceProfile
   }
   region: string
-}): any => {
+}): { [key: string]: ServiceConnection[] } => {
   const connections: ServiceConnection[] = []
-  const { InstanceId: id, SecurityGroups: instanceSecurityGroups } = instance
+  const {
+    InstanceId: id,
+    SecurityGroups: instanceSecurityGroups,
+    NetworkInterfaces: networkInterfaces = [],
+  } = instance
 
   /**
    * Find Security Groups VPC Security Groups
@@ -123,114 +122,47 @@ export default ({
     }
   }
 
-  // const primaryNetworkInterface = get(
-  //   (instance[ec2Names.networkInterfaces] || []).find(
-  //     ({ attachment: { deviceIndex } }) => deviceIndex === 0
-  //   ),
-  //   ec2Names.networkInterfaceId
-  // )
-
-  //     children: [
-  //       ...(!isEmpty(nodes) ? nodes : []),
-  //       ...eips.map(eip => awsEipConverter({ eip, allTagData })),
-  //       ...networkInterfaces.map(networkInterface =>
-  //         awsNetworkInterfaceConverter({
-  //           allTagData,
-  //           networkInterface,
-  //           securityGroupsInVpc,
-  //         })
-  //       ),
-  //       ...ebsVolumes.map(volume =>
-  //         awsEbsVolumeConverter({
-  //           volume,
-  //           bootId: instance[ec2Names.rootDeviceName],
-  //           allTagData,
-  //         })
-  //       ),
-  //     ],
-  //   })
+  /**
+   * Find Network interfaces
+   * related to this EC2 instance
+   */
+  if (!isEmpty(networkInterfaces)) {
+    for (const networkInterface of networkInterfaces) {
+      connections.push({
+        id: networkInterface.NetworkInterfaceId,
+        resourceType: 'networkInterface',
+        relation: 'child',
+        field: 'networkInterface',
+      })
+    }
+  }
 
   /**
-   * Check to see if this instance is part of an EKS cluster and if so
-   * Add the cluster ID to the metaData
+   * Find Subnets
+   * related to this EC2 loadbalancer
    */
-  //   let eksClusterName = ''
-
-  //   const eksCluster = Object.keys(get(ec2Result, `displayData.tags`, {})).some(
-  //     key => {
-  //       const isMatch = key.includes(ec2Names.clusterTag)
-
-  //       if (isMatch) {
-  //         // i.e. "kubernetes.io/cluster/eks-infra".split("/") -> [ 'kubernetes.io', 'cluster', 'eks-infra' ] -> 'eks-infra'
-  //         eksClusterName = last(key.split('/'))
-  //       }
-  //       return isMatch
-  //     }
-  //   )
-  //   if (eksCrawled && eksCluster) {
-  //     ec2Result.metaData = {
-  //       ...ec2Result.metaData,
-  //       vpcLevelParent: eksClusterId(eksClusterName),
-  //       vpcLevelParentType: resourceTypes.eksCluster,
-  //     }
-  //   }
+  // TODO: Implement when subnet service is ready
 
   /**
-   * Check to see if this instance is part of an elastic beanstalk env and if so add the beanstalk ID to the metaData
+   * Find EKS
+   * related to this EC2 loadbalancer
    */
-
-  //   const beanstalkEnv = get(
-  //     ec2Result,
-  //     `displayData.tags.${ec2Names.environmentIdTag}`
-  //   )
-
-  //   if (beanstalkCrawled && beanstalkEnv) {
-  //     ec2Result.metaData = {
-  //       ...ec2Result.metaData,
-  //       vpcLevelParent: beanstalkEnvId(beanstalkEnv),
-  //       vpcLevelParentType: resourceTypes.elasticBeanstalkEnvironment,
-  //     }
-  //   }
+  // TODO: Implement when eks service is ready
 
   /**
-   * Check to see if this instance is part of an ECS cluster and if so
-   * Add the cluster ID to the metaData
+   * Find ECS
+   * related to this EC2 loadbalancer
    */
-  //   const isEcsClusterInstance = get(
-  //     ec2Result,
-  //     `displayData.tags.Name`,
-  //     ''
-  //   ).includes(ec2Names.ecsClusterIdentifier)
-
-  //   if (ecsCrawled && isEcsClusterInstance) {
-  //     ec2Result.metaData = {
-  //       ...ec2Result.metaData,
-  //       vpcLevelParent: ecsClusterId(
-  //         head(
-  //           get(ec2Result, `displayData.tags.Name`, '')
-  //             .split(ec2Names.ecsClusterIdentifier)
-  //             .filter(e => e)
-  //         )
-  //       ),
-  //       vpcLevelParentType: resourceTypes.ecsCluster,
-  //     }
-  //   }
+  // TODO: Implement when ecs service is ready
 
   /**
-   * Add the ec2 instance to the list of members of whatever security groups it uses
+   * Find Elastic Beanstalk
+   * related to this EC2 loadbalancer
    */
+  // TODO: Implement when eb service is ready
 
-  //   checkForAndAddEntityToSecurityGroupMembers({
-  //     entityToAdd: ec2Result,
-  //     resourceType: resourceTypes.ec2Instance,
-  //     securityGroupsInVpc,
-  //     entitySecurityGroups: securityGroupIds,
-  //   })
-  // const arn = `arn:aws:ec2:${region}:${account}:instance/${
-  //   instance[ec2Names.instanceId]
-  // }`
   const ec2Result = {
-    [`arn:aws:ec2:${region}:${account}:instance/${id}`]: connections,
+    [id]: connections,
   }
   return ec2Result
 }

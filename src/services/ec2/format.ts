@@ -1,12 +1,8 @@
-// import head from 'lodash/head'
-// import last from 'lodash/last'
-// import isEmpty from 'lodash/isEmpty'
-
 import { IamInstanceProfile, Instance, TagList } from 'aws-sdk/clients/ec2'
 
 import t from '../../properties/translations'
 import { AwsEc2 } from '../../types/generated'
-import format from '../../utils/format'
+// import format from '../../utils/format'
 
 /**
  * EC2
@@ -30,42 +26,28 @@ export default ({
   const {
     InstanceId: id,
     ImageId: ami,
-    Placement: { Tenancy: tenancy },
     PublicDnsName: publicDns,
     PrivateDnsName: privateDns,
-    Monitoring: { State: monitoring },
+    Monitoring: monitoring,
     PrivateIpAddress: privateIps,
     NetworkInterfaces: networkInterfaces = [],
-    CpuOptions: { CoreCount: cpuCoreCount, ThreadsPerCore: cpuThreadsPerCore },
-    HibernationOptions: { Configured: hibernation },
+    CpuOptions: cpuOptions,
+    HibernationOptions: hibernationOptions,
     EbsOptimized: ebsOptimized,
     InstanceType: instanceType,
-    State: { Name: instanceState },
+    State: instanceState,
     SourceDestCheck: sourceDestCheck,
-    Placement: {
-      AvailabilityZone: availabilityZone,
-      GroupName: placementGroup,
-    },
-    MetadataOptions: {
-      State: state,
-      HttpTokens: httpTokens,
-      HttpEndpoint: httpEndpoint,
-      HttpPutResponseHopLimit: httpPutResponseHopLimit,
-    },
-    SecurityGroups: securityGroups,
-    BlockDeviceMappings: blockDeviceMappings,
+    Placement: placement,
+    MetadataOptions: metadata,
+    SecurityGroups: securityGroups = [],
+    BlockDeviceMappings: blockDeviceMappings = [],
     DisableApiTermination: deletionProtection,
-    Tags: tags = [],
+    // Tags: tags = [],
     KeyPairName: keyPairName,
+    IamInstanceProfile: iamInstanceProfile,
   } = rawData
 
-  const securityGroupIds = (securityGroups || []).map(({ GroupId }) => GroupId)
-
-  /**
-   * Add these tags to the list of global tags so we can filter by tag on the front end
-   */
-
-  // combineElementsTagsWithExistingGlobalTags({ tags, allTagData })
+  const securityGroupIds = securityGroups.map(({ GroupId }) => GroupId)
 
   // const ipv4PublicIp = eips.map(({ PublicIp }) => PublicIp).join(', ')
 
@@ -74,52 +56,53 @@ export default ({
       ({ Attachment: { DeviceIndex } }) => DeviceIndex === 0
     )
 
-  // const ipv6Addresses = networkInterfaces.map(
-  //   ({ Ipv6Addresses }) => Ipv6Addresses
-  // )
+  const ipv6Addresses = networkInterfaces
+    .map(({ Ipv6Addresses }) => Ipv6Addresses)
+    .reduce((current, acc) => [...acc, ...current], [])
+    .map(({ Ipv6Address }) => Ipv6Address)
 
   const ephemeralBlockDevice = blockDeviceMappings
     .filter(({ Ebs: { DeleteOnTermination } }) => DeleteOnTermination)
     .map(({ DeviceName }) => ({ deviceName: DeviceName }))
 
   // Instance tags
-  const instanceTags = format.tags(tags as { Key: string; Value: string }[])
+  const instanceTags = []
 
   const ec2 = {
     arn: `arn:aws:ec2:${region}:${account}:instance/${id}`,
     id,
     region,
     ami,
-    tenancy,
-    // elasticIps: eips.map(({ AllocationId }) => AllocationId).join(', '),
+    tenancy: placement?.Tenancy || '',
+    // elasticIps: eips.map(({ AllocationId }) => AllocationId).join(', '),  TODO: Can't be calculated without EIP data
     publicDns,
     privateDns,
-    monitoring,
+    monitoring: monitoring?.State || '',
     privateIps,
-    keyPairName,
-    cpuCoreCount,
-    hibernation: hibernation ? t.yes : t.no,
+    keyPairName: keyPairName || '',
+    cpuCoreCount: cpuOptions?.CoreCount || 0,
+    hibernation: hibernationOptions?.Configured ? t.yes : t.no,
     ebsOptimized: ebsOptimized ? t.yes : t.no,
-    // ipv4PublicIp,
+    // ipv4PublicIp,  TODO: Can't be calculated without EIP data
     instanceType,
-    ipv6Addresses: [],
-    placementGroup,
-    instanceState,
+    ipv6Addresses,
+    placementGroup: placement?.GroupName || '',
+    instanceState: instanceState?.Name || '',
     sourceDestCheck: sourceDestCheck ? t.yes : t.no,
-    availabilityZone,
-    cpuThreadsPerCore,
-    // iamInstanceProfile: get(instance[ec2Names.iamInstanceProf], ec2Names.arn),
+    availabilityZone: placement?.AvailabilityZone || '',
+    cpuThreadsPerCore: cpuOptions?.ThreadsPerCore || 0,
+    iamInstanceProfile: iamInstanceProfile?.Arn || '',
     deletionProtection: deletionProtection ? t.yes : t.no,
     primaryNetworkInterface: networkInterfaceId,
     metadataOptions: {
-      state,
-      httpTokens,
-      httpPutResponseHopLimit,
-      httpEndpoint,
+      state: metadata?.State || '',
+      httpTokens: metadata?.HttpTokens || '',
+      httpPutResponseHopLimit: metadata?.HttpPutResponseHopLimit || 0,
+      httpEndpoint: metadata?.HttpEndpoint || '',
     },
     securityGroupIds,
     ephemeralBlockDevice,
-    // associatePublicIpAddress: !isEmpty(ipv4PublicIp) ? t.yes : t.no,
+    // associatePublicIpAddress: !isEmpty(ipv4PublicIp) ? t.yes : t.no, TODO: Can't be calculated without EIP data
     tags: instanceTags,
   }
   return ec2

@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 import AWS from 'aws-sdk'
 import path from 'path'
 import { loadFilesSync } from '@graphql-tools/load-files'

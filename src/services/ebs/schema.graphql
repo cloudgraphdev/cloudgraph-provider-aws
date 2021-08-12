@@ -27,10 +27,3 @@ type awsEbsAttachment
   attachedTime: String
   deleteOnTermination: Boolean
 }
-
-type awsEbsAttachment {
-  id: String
-  attachmentInformation: String
-  attachedTime: String
-  deleteOnTermination: Boolean
-}

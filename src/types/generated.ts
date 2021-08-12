@@ -93,6 +93,7 @@ export type AwsEbs = {
   availabilityZone?: Maybe<Scalars['String']>;
   multiAttachEnabled?: Maybe<Scalars['Boolean']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
 };
 
 export type AwsEbsAttachment = {
@@ -134,6 +135,9 @@ export type AwsEc2 = {
   ephemeralBlockDevice?: Maybe<Array<Maybe<AwsEc2Blockdevice>>>;
   associatePublicIpAddress?: Maybe<Scalars['String']>;
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  ebs?: Maybe<Array<Maybe<AwsEbs>>>;
+  eip?: Maybe<Array<Maybe<AwsEip>>>;
 };
 
 export type AwsEc2Blockdevice = {
@@ -169,6 +173,7 @@ export type AwsEip = {
   customerOwnedIp?: Maybe<Scalars['String']>;
   customerOwnedIpv4Pool?: Maybe<Scalars['String']>;
   vpcs?: Maybe<Array<Maybe<AwsVpc>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
 };
 
 export type AwsElb = {
@@ -322,6 +327,7 @@ export type AwsSecurityGroup = {
   outboundRuleCount?: Maybe<Scalars['Int']>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
 };
 
 export type AwsSgRule = {
