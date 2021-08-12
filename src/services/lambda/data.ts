@@ -165,7 +165,7 @@ export default async ({
 
     // get all tags for each Lambda
     lambdaData.map(({ FunctionArn: arn, region }, idx) => {
-      const lambda = new Lambda({ region, credentials })
+      const lambda = new Lambda({ region, credentials, endpoint })
       const tagsPromise = new Promise<void>(async resolveTags => {
         const envTags: Tag[] = await getResourceTags(lambda, arn)
         lambdaData[idx].tags = envTags

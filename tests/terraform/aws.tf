@@ -46,11 +46,6 @@ resource "aws_instance" "instance" {
   ami           = "ami-005e54dee72cc1d00" # us-west-2
   instance_type = "t2.micro"
 
-  network_interface {
-    network_interface_id = aws_network_interface.network_interface.id
-    device_index         = 0
-  }
-
   credit_specification {
     cpu_credits = "unlimited"
   }
@@ -111,12 +106,6 @@ resource "aws_subnet" "subnet" {
   }
 }
 
-resource "aws_network_interface" "network_interface" {
-  subnet_id       = aws_subnet.subnet.id
-  private_ips     = ["10.0.0.50"]
-  security_groups = [aws_security_group.sg.id]
-}
-
 resource "aws_eip" "eip" {
   instance = aws_instance.instance.id
   vpc      = true
@@ -128,4 +117,37 @@ resource "aws_internet_gateway" "igw" {
   tags = {
     Name = "main"
   }
+}
+
+resource "aws_kms_key" "lambda_kms_key" {
+  description             = "KMS key 1"
+  deletion_window_in_days = 10
+}
+
+resource "aws_iam_role" "lambda_iam_role" {
+  name = "lambda_iam_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_lambda_function" "lambda_function" {
+  function_name = "lambda_function_name"
+  role          = aws_iam_role.lambda_iam_role.arn
+  package_type  = "Image"
+  image_uri     = "lambda/alpine"
+  kms_key_arn   = aws_kms_key.lambda_kms_key.arn
 }
