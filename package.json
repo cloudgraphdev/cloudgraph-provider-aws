@@ -19,6 +19,7 @@
     "terraform:apply": "terraform -chdir=./tests/terraform apply -input=false tfplan"
   },
   "dependencies": {
+    "@cloudgraph/sdk": "^0.1.0",
     "@graphql-tools/load-files": "^6.3.2",
     "@sentry/node": "^6.7.2",
     "aws-sdk": "^2.931.0",
