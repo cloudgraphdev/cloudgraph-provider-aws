@@ -21,6 +21,7 @@ import AwsTag from './tag'
 import AwsSecurityGroup from './securityGroup'
 import VPC from './vpc'
 import EBS from './ebs'
+import NetworkInterface from './networkInterface'
 import { Credentials } from '../types'
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -38,7 +39,8 @@ export const serviceMap = {
   // [services.subnet]: AwsSubnet, // TODO: Enable when going for ENG-222
   [services.vpc]: VPC,
   [services.ebs]: EBS,
-  tag: AwsTag
+  [services.networkInterface]: NetworkInterface,
+  tag: AwsTag,
 }
 
 export const enums = {
@@ -282,15 +284,17 @@ export default class Provider extends CloudGraph.Client {
     }
     // Handle global tag entities
     const tagRegion = 'aws-global'
-    const tags = {name: 'tag', data: {[tagRegion]: []}}
-    for (const {data: entityData} of result) {
+    const tags = { name: 'tag', data: { [tagRegion]: [] } }
+    for (const { data: entityData } of result) {
       for (const region of Object.keys(entityData)) {
         const dataAtRegion = entityData[region]
         dataAtRegion.forEach(singleEntity => {
           if (!isEmpty(singleEntity.Tags)) {
             for (const [key, value] of Object.entries(singleEntity.Tags)) {
-              if (!tags.data[tagRegion].find(({id}) => id === `${key}:${value}`)) {
-                tags.data[tagRegion].push({id: `${key}:${value}`, key, value})
+              if (
+                !tags.data[tagRegion].find(({ id }) => id === `${key}:${value}`)
+              ) {
+                tags.data[tagRegion].push({ id: `${key}:${value}`, key, value })
               }
             }
           }

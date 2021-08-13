@@ -1,0 +1,27 @@
+type awsNetworkInterface @key(fields: "arn") {
+  id: String!
+  arn: String! @id
+  subnetId: String
+  macAddress: String
+  description: String
+  availabilityZone: String
+  status: String
+  vpcId: String
+  interfaceType: String
+  securityGroups: [String]
+  privateDnsName: String
+  privateIps: [String]
+  attachment: awsNetworkInterfaceAttachment
+  tags: [Tag]
+}
+
+type awsNetworkInterfaceAttachment
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  deleteOnTermination: Boolean
+  status: String
+}

@@ -10,4 +10,5 @@ export default {
   sg: 'sg',
   subnet: 'subnet',
   vpc: 'vpc',
+  networkInterface: 'network_interface',
 }
