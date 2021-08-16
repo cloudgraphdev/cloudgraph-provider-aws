@@ -114,7 +114,7 @@ const listElbAttributes = async (
  */
 export interface RawAwsElb extends LoadBalancerDescription {
   Attributes?: LoadBalancerAttributes
-  Tags?: TagList
+  Tags?: { [key: string]: any }
   region: string
 }
 
@@ -151,7 +151,9 @@ export default async ({
 
               return {
                 ...elb,
-                Tags: elbsTags?.Tags,
+                Tags: (elbsTags?.Tags || [])
+                  .map(({ Key, Value }) => ({ [Key]: Value }))
+                  .reduce((acc, curr) => ({ ...acc, ...curr }), {}),
               }
             })
           }

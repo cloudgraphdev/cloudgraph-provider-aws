@@ -18,9 +18,7 @@ export default ({
   service: loadbalancer,
   data,
   region,
-  account,
-}: // allTagData,
-{
+}: {
   account: string
   data: { name: string; data: { [property: string]: any[] } }[]
   service: LoadBalancerDescription & {
@@ -94,8 +92,7 @@ export default ({
   // TODO: Implement when subnet service is ready
 
   const elbResult = {
-    [`arn:aws:elasticloadbalancing:${region}:${account}:loadbalancer/${id}`]:
-      connections,
+    [id]: connections,
   }
   return elbResult
 }

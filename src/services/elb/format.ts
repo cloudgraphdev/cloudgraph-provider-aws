@@ -2,7 +2,7 @@ import { kebabCase } from 'lodash'
 
 import { AwsElb } from '../../types/generated'
 import t from '../../properties/translations'
-import format from '../../utils/format'
+import { formatTagsFromMap } from '../../utils/format'
 import resources from '../../enums/resources'
 import { RawAwsElb } from './data'
 
@@ -43,7 +43,7 @@ export default ({
       ConnectionDraining: connectionDraining,
     },
     ListenerDescriptions: listenerDescriptions,
-    Tags: tags,
+    Tags: tags = {},
   } = rawData
 
   // Format ELB Listeners
@@ -78,10 +78,10 @@ export default ({
     )
 
   // Format ELB Tags
-  const elbTags = format.tags(tags as { Key: string; Value: string }[])
+  const elbTags = formatTagsFromMap(tags)
 
   const elb = {
-    id: dnsName,
+    id: loadBalancerName,
     arn: `arn:aws:elasticloadbalancing:${region}:${account}:loadbalancer/${loadBalancerName}`,
     dnsName,
     createdAt: createdAt.toISOString(),

@@ -360,6 +360,7 @@ export type AwsTag = {
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
   igw?: Maybe<Array<Maybe<AwsIgw>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  elb?: Maybe<Array<Maybe<AwsElb>>>;
 };
 
 export type AwsVpc = {
