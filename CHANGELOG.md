@@ -1,3 +1,11 @@
+# [0.2.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.1.0...0.2.0) (2021-08-16)
+
+
+### Features
+
+* **LICENSE:** update license to MPL v2.0 ([c1f7842](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c1f784211629255b8f136ef464573e89a9d67500))
+* **LICENSE:** update License to MPL v2.0 ([73a93c1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/73a93c124cb75acdf9d6e7146542590aad60bb92))
+
 # [0.1.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.0.1...0.1.0) (2021-08-12)
 
 
