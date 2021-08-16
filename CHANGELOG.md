@@ -1,3 +1,16 @@
+## [0.2.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.2.0...0.2.1) (2021-08-16)
+
+
+### Bug Fixes
+
+* **tests:** add tags to kms key in tf config ([48d7eee](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/48d7eee1a927fb908cceed5d9825adb3e725fad9))
+* **tests:** igw merge corrections ([cd497b0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/cd497b0eb58a835b0d715edd70cabb05603165fd))
+* **tests:** remove ebs mocks, add tf infra ([ed8e32c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/ed8e32c1c0187eab7dbbad4b53933f22641a4f64))
+* **tests:** remove lambda mocks ([f3fb691](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/f3fb691f816ded7deb4a7e3f5fcab864a49c4191))
+* **tests:** remove mocks for kms, added tf infra ([007b37e](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/007b37e4cded8a02df6dff6abd9b5f77debe92be))
+* **tests:** remove sg mocks, add tf infra ([97d1ed8](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/97d1ed88f73147a00b2f21f62a8521f58f6117ec))
+* **tests:** scope jest tests dir ([0568ab6](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/0568ab6b5abc1b9c8620d6c91f60bf7ad7c2a5f4))
+
 # [0.2.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.1.0...0.2.0) (2021-08-16)
 
 
