@@ -24,7 +24,7 @@ default:
 
 workflow:
   rules:
-    - if: $CI_COMMIT_BRANCH
+    - if: '$CI_PIPELINE_SOURCE == "push"'
 
 variables:
   NPM_TOKEN: ${NPM_TOKEN}

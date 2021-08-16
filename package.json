@@ -11,7 +11,7 @@
   "main": "dist/services/index.js",
   "types": "dist/services/index.d.ts",
   "author": "AutoCloud",
-  "license": "MIT",
+  "license": "MPL-2.0",
   "scripts": {
     "build": "yarn prepublish",
     "generate-types": "graphql-codegen --config codegen.yml",
