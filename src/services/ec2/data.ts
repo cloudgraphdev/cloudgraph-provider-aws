@@ -340,7 +340,9 @@ export default async ({
      */
 
     ec2Instances.map(({ InstanceId }, ec2Idx) => {
-      ec2Instances[ec2Idx].Tags = allTags[InstanceId] || []
+      ec2Instances[ec2Idx].Tags = (allTags[InstanceId] || [])
+        .map(({ Key, Value }) => ({ [Key]: Value }))
+        .reduce((acc, curr) => ({ ...acc, ...curr }), {})
     })
 
     const iamInstanceProfile = {}

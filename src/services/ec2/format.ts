@@ -2,7 +2,7 @@ import { IamInstanceProfile, Instance, TagList } from 'aws-sdk/clients/ec2'
 
 import t from '../../properties/translations'
 import { AwsEc2 } from '../../types/generated'
-// import format from '../../utils/format'
+import { formatTagsFromMap } from '../../utils/format'
 
 /**
  * EC2
@@ -42,7 +42,7 @@ export default ({
     SecurityGroups: securityGroups = [],
     BlockDeviceMappings: blockDeviceMappings = [],
     DisableApiTermination: deletionProtection,
-    // Tags: tags = [],
+    Tags: tags = {},
     KeyPairName: keyPairName,
     IamInstanceProfile: iamInstanceProfile,
   } = rawData
@@ -66,7 +66,7 @@ export default ({
     .map(({ DeviceName }) => ({ deviceName: DeviceName }))
 
   // Instance tags
-  const instanceTags = []
+  const instanceTags = formatTagsFromMap(tags)
 
   const ec2 = {
     arn: `arn:aws:ec2:${region}:${account}:instance/${id}`,
