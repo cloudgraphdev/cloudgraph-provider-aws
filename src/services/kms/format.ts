@@ -15,7 +15,7 @@ export default ({
 }): AwsKmsType => {
   const {
     Arn: arn,
-    tags,
+    Tags: tags,
     Description: description,
     KeyId: id,
     policy,

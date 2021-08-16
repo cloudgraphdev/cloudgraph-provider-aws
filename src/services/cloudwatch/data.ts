@@ -106,7 +106,7 @@ export default async ({
 }) =>
   new Promise(async resolve => {
     const cloudwatchData: Array<
-      MetricAlarm & { tags?: Tag[]; region: string }
+      MetricAlarm & { Tags?: Tag[]; region: string }
     > = []
     const regionPromises = []
     const tagsPromises = []
@@ -142,7 +142,7 @@ export default async ({
       const cloudwatch = new CloudWatch({ region, credentials, endpoint })
       const tagsPromise = new Promise<void>(async resolveTags => {
         const envTags = await getResourceTags(cloudwatch, AlarmArn)
-        cloudwatchData[idx].tags = envTags
+        cloudwatchData[idx].Tags = envTags
         resolveTags()
       })
       tagsPromises.push(tagsPromise)

@@ -39,7 +39,7 @@ export default ({ service: alb }): AwsAlb => {
     DNSName: dnsName,
     Scheme: scheme,
     Type: type,
-    tags = {},
+    Tags: tags = {},
     State: { Code: status = '' } = {},
     CanonicalHostedZoneId: hostedZone,
     IpAddressType: ipAddressType,

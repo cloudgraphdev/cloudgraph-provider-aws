@@ -11,9 +11,9 @@ export default ({
   service: rawData,
 }: {
   // allTagData
-  service: MetricAlarm & { tags?: Tag[]; region: string }
+  service: MetricAlarm & { Tags?: Tag[]; region: string }
 }): AwsCloudwatch => {
-  const { tags } = rawData
+  const { Tags: tags } = rawData
   const {
     alarmDescription: description,
     actionsEnabled,

@@ -25,7 +25,7 @@ const { logger } = CloudGraph
 const endpoint = initTestEndpoint('Lambda')
 
 export interface AwsLambdaFunction extends FunctionConfiguration {
-  tags?: Tag[]
+  Tags?: Tag[]
   region: string
   reservedConcurrentExecutions: ReservedConcurrentExecutions
 }
@@ -115,8 +115,8 @@ const getResourceTags = async (lambda: Lambda, arn: string): Promise<Tag[]> =>
             Sentry.captureException(new Error(err.message))
             resolve([])
           }
-          const { Tags: tags = {} } = data || {}
-          resolve(Object.entries(tags).map(([key, value]) => ({ key, value })))
+          const { Tags = {} } = data || {}
+          resolve(Object.entries(Tags).map(([key, value]) => ({ key, value })))
         }
       )
     } catch (error) {
@@ -168,7 +168,7 @@ export default async ({
       const lambda = new Lambda({ region, credentials, endpoint })
       const tagsPromise = new Promise<void>(async resolveTags => {
         const envTags: Tag[] = await getResourceTags(lambda, arn)
-        lambdaData[idx].tags = envTags
+        lambdaData[idx].Tags = envTags
         resolveTags()
       })
       tagsPromises.push(tagsPromise)

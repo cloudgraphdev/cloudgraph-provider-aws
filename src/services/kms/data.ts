@@ -24,7 +24,7 @@ export type AwsKms = KeyListEntry &
   KeyMetadata & {
     region: string
     policy: string
-    tags: Tag[]
+    Tags: Tag[]
     enableKeyRotation: boolean
   }
 
@@ -162,7 +162,7 @@ export default async ({
             ...keyData,
             region,
             policy: '',
-            tags: [],
+            Tags: [],
             enableKeyRotation: null,
           })
 
@@ -285,7 +285,7 @@ export default async ({
            * Add the tags to the key
            */
 
-          const { Tags: tags, Truncated: truncated } = data || {}
+          const { Tags, Truncated: truncated } = data || {}
 
           /**
            * Limited to 50 tags currently - re write this if we want more later
@@ -295,8 +295,8 @@ export default async ({
             logger.error(lt.hasMoreKmsTags)
           }
 
-          if (!isEmpty(tags)) {
-            kmsData[idx].tags = tags.map(({ TagKey, TagValue }) => ({
+          if (!isEmpty(Tags)) {
+            kmsData[idx].Tags = Tags.map(({ TagKey, TagValue }) => ({
               key: TagKey,
               value: TagValue,
             }))

@@ -13,12 +13,11 @@ export default ({
   service: rawData,
   account,
   region,
-}: // allTagData,
+}:
 {
   service: AwsSecurityGroup
   account: string
   region: string
-  // allTagData: Array<Tags>
 }): AwsSgType => {
   const {
     Tags: tags,

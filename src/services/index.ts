@@ -5,6 +5,7 @@ import { mergeTypeDefs } from '@graphql-tools/merge'
 import { print } from 'graphql'
 import CloudGraph, { Service, Opts } from '@cloudgraph/sdk'
 import STS from 'aws-sdk/clients/sts'
+import { isEmpty } from 'lodash'
 import services from '../enums/services'
 import resources from '../enums/resources'
 import regions from '../enums/regions'
@@ -15,12 +16,13 @@ import EC2 from './ec2'
 import EIP from './eip'
 import AwsKms from './kms'
 import Lambda from './lambda'
+import AwsTag from './tag'
 // import AwsSubnet from './subnet'
 import AwsSecurityGroup from './securityGroup'
 import VPC from './vpc'
 import EBS from './ebs'
 import { Credentials } from '../types'
-
+import { toCamel } from '../utils'
 /**
  * serviceMap is an object that contains all currently supported services for AWS
  * serviceMap is used by the serviceFactory to produce instances of service classes
@@ -37,6 +39,7 @@ export const serviceMap = {
   // [services.subnet]: AwsSubnet, // TODO: Enable when going for ENG-222
   [services.vpc]: VPC,
   [services.ebs]: EBS,
+  tag: AwsTag
 }
 
 export const enums = {
@@ -278,8 +281,35 @@ export default class Provider extends CloudGraph.Client {
         data: await serviceClass.getData({ regions, credentials, opts }),
       })
     }
+    // Handle global tag entities
+    const tagRegion = 'aws-global'
+    const tags = {name: 'tag', data: {[tagRegion]: []}}
+    for (const {data: entityData} of result) {
+      for (const region of Object.keys(entityData)) {
+        const dataAtRegion = entityData[region]
+        dataAtRegion.forEach(singleEntity => {
+          if (!isEmpty(singleEntity.Tags)) {
+            // console.log(`Found tags for service ${name}: ${JSON.stringify(singleEntity.Tags)}`)
+            for (const {key, value} of toCamel(singleEntity.Tags)) {
+              if (!tags.data[tagRegion].find(({id}) => id === `${key}:${value}`)) {
+                // console.log(`Pushing tag: ${key}:${value} into list`)
+                tags.data[tagRegion].push({id: `${key}:${value}`, key, value})
+              }
+            }
+          }
+        })
+      }
+    }
+    result.push(tags)
     return result
   }
 }
+
+// grab tags at the end
+// 1. create schema for tags {id: key:value @id, key: ... @id, value: ... @id}
+// 1. loop through the result and collect all tags
+// 2. push {name: tag, data: {awsGlobal: [{key, value}]} } to result
+// 3. push into result.entities {name: tag, data: [{key, value}]}
+// 4. getConnections take each tag, look in each service for if that tag exists there, form connection
 
 // testFunc()

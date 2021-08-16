@@ -93,7 +93,7 @@ export default async ({
           ...albs.map(alb => ({
             ...alb,
             region,
-            tags: {},
+            Tags: {},
             listeners: [],
             targetIds: [],
             attributes: {},
@@ -169,7 +169,7 @@ export default async ({
           result[Key] = Value
         })
 
-        alb.tags = result
+        alb.Tags = result
 
         resolveTags()
       })

@@ -269,6 +269,14 @@ export type AwsSubnet = {
   tags?: Maybe<Array<Maybe<Tag>>>;
 };
 
+export type AwsTag = {
+  id: Scalars['String'];
+  key: Scalars['String'];
+  value: Scalars['String'];
+  cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
+};
+
 export type AwsVpc = {
   id: Scalars['String'];
   arn: Scalars['String'];

@@ -17,7 +17,7 @@ export default ({
   const lambda = toCamel(rawData)
   const {
     Environment = {},
-    tags = [],
+    Tags: tags = [],
     reservedConcurrentExecutions: rawReservedConcurrentExecutions,
   } = rawData
   const {
