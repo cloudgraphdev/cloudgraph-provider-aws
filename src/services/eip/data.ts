@@ -5,7 +5,7 @@ import groupBy from 'lodash/groupBy'
 import { AWSError } from 'aws-sdk/lib/error'
 import EC2, { Address, DescribeAddressesResult } from 'aws-sdk/clients/ec2'
 
-import { Credentials, AwsTag } from '../../types'
+import { Credentials, AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint } from '../../utils'
@@ -13,8 +13,9 @@ import { initTestEndpoint } from '../../utils'
 /**
  * EIP
  */
-export interface RawAwsEip extends Address {
+export interface RawAwsEip extends Omit<Address, 'Tags'> {
   region: string
+  Tags: TagMap
 }
 
 const lt = { ...awsLoggerText }
@@ -29,7 +30,7 @@ export default async ({
   credentials: Credentials
 }): Promise<{ [property: string]: RawAwsEip[] }> =>
   new Promise(async resolve => {
-    const eipData: (Address & { region: string })[] = []
+    const eipData: RawAwsEip[] = []
 
     // Get all the EIP data for each region
     const regionPromises = regions.split(',').map(region => {

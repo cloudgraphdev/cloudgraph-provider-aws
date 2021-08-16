@@ -63,12 +63,6 @@ describe('Network Interface Service Test: ', () => {
             DeleteOnTermination: expect.any(Boolean),
             AttachTime: expect.any(Date),
           }),
-          Groups: expect.arrayContaining([
-            expect.objectContaining({
-              GroupName: expect.any(String),
-              GroupId: expect.any(String),
-            }),
-          ]),
           RequesterManaged: expect.any(Boolean),
           SourceDestCheck: expect.any(Boolean),
           PrivateIpAddresses: expect.arrayContaining([

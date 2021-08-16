@@ -11,4 +11,5 @@ type awsTag @key(fields: "id") {
   eip: [awsEip]
   ebs: [awsEbs]
   igw: [awsIgw]
+  networkInterface: [awsNetworkInterface]
 }

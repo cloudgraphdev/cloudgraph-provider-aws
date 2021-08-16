@@ -247,7 +247,8 @@ export type AwsNetworkInterface = {
 };
 
 export type AwsNetworkInterfaceAttachment = {
-  id: Scalars['String'];
+  id?: Maybe<Scalars['ID']>;
+  attachmentId?: Maybe<Scalars['String']>;
   deleteOnTermination?: Maybe<Scalars['Boolean']>;
   status?: Maybe<Scalars['String']>;
 };
@@ -305,6 +306,7 @@ export type AwsTag = {
   eip?: Maybe<Array<Maybe<AwsEip>>>;
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
   igw?: Maybe<Array<Maybe<AwsIgw>>>;
+  networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
 };
 
 export type AwsVpc = {

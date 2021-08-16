@@ -1,5 +1,5 @@
 import { AwsNetworkInterface } from '../../types/generated'
-import format from '../../utils/format'
+import { formatTagsFromMap } from '../../utils/format'
 import { RawNetworkInterface } from './data'
 
 /**
@@ -25,14 +25,10 @@ export default ({
     Status: status,
     VpcId: vpcId,
     InterfaceType: interfaceType = '',
-    Attachment: {
-      AttachmentId: attachementId = '',
-      Status: attachmentStatus = '',
-      DeleteOnTermination: deleteOnTermination = false,
-    },
+    Attachment: attachment = {},
     Groups: groups = [],
     PrivateIpAddresses: privateIpAddresses = [],
-    TagSet: tags = [],
+    Tags: tags = {},
   } = rawData
 
   const securityGroups = groups.map(({ GroupId }) => GroupId)
@@ -42,9 +38,7 @@ export default ({
   )
 
   // Format tags
-  const networkInterfacesTags = format.tags(
-    tags as { Key: string; Value: string }[]
-  )
+  const networkInterfacesTags = formatTagsFromMap(tags)
 
   const networkInterface = {
     id,
@@ -60,9 +54,9 @@ export default ({
     securityGroups,
     privateDnsName,
     attachment: {
-      id: attachementId,
-      status: attachmentStatus,
-      deleteOnTermination,
+      attachmentId: attachment?.AttachmentId || '',
+      status: attachment?.Status || '',
+      deleteOnTermination: attachment?.DeleteOnTermination || false,
     },
     tags: networkInterfacesTags,
   }

@@ -21,7 +21,8 @@ type awsNetworkInterfaceAttachment
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-  id: String! @id
+  id: ID
+  attachmentId: String
   deleteOnTermination: Boolean
   status: String
 }

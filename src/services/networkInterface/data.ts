@@ -18,8 +18,9 @@ import { initTestEndpoint } from '../../utils'
  * Network Interface
  */
 
-export interface RawNetworkInterface extends NetworkInterface {
+export interface RawNetworkInterface extends Omit<NetworkInterface, 'TagSet'> {
   region: string
+  Tags?: { [key: string]: any }
 }
 
 const lt = { ...awsLoggerText }
@@ -87,8 +88,11 @@ const listNetworkInterfaces = async ({
       }
 
       networkInterfacesData.push(
-        ...networkInterfaces.map(networkInterface => ({
+        ...networkInterfaces.map(({ TagSet, ...networkInterface }) => ({
           ...networkInterface,
+          Tags: (TagSet || [])
+            .map(({ Key, Value }) => ({ [Key]: Value }))
+            .reduce((acc, curr) => ({ ...acc, ...curr }), {}),
           region,
         }))
       )
