@@ -2,15 +2,10 @@
 import CloudGraph from '@cloudgraph/sdk'
 
 import Cloudwatch from '../src/services/cloudwatch'
-import { credentials, endpoint, region } from '../src/properties/test'
+import { credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
 
 initTestConfig()
-const cloudwatch = new CloudWatch({
-  region,
-  credentials,
-  endpoint,
-})
 
 test('should be a valid request', async () => {
   const config = { logger: CloudGraph.logger }

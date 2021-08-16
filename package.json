@@ -17,7 +17,7 @@
     "generate-types": "graphql-codegen --config codegen.yml",
     "prepare": "npx husky install && shx rm -rf .git/hooks && shx ln -s ../.husky .git/hooks",
     "prepublish": "yarn generate-types && tsc && yarn cpx 'src/**/*.graphql' dist",
-    "test": "NODE_ENV=test jest",
+    "test": "NODE_ENV=test jest ./tests",
     "lint": "eslint --config .eslintrc.json --ext .js,.ts ./",
     "lint:fix": "eslint --fix --config .eslintrc.json --ext .js,.ts ./",
     "terraform": "yarn terraform:init && yarn terraform:plan && yarn terraform:apply",
