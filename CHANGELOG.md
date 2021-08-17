@@ -1,3 +1,10 @@
+## [0.2.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.2.2...0.2.3) (2021-08-17)
+
+
+### Bug Fixes
+
+* **deps:** add missing dep dotenv ([002280f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/002280f1bde9aa2e57417eb3432315e2c5f07c4d))
+
 ## [0.2.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.2.1...0.2.2) (2021-08-17)
 
 
