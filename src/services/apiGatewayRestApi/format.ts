@@ -1,24 +1,18 @@
-import { RestApi } from 'aws-sdk/clients/apigateway'
+import { AwsApiGatewayRestApi } from './data'
 import { 
-  AwsApiGatewayStage, 
-  AwsApiGatewayResource, 
-  AwsApiGatewayRestApi, 
-  Tag,
+  AwsApiGatewayRestApi as AwsAGRestApiType, 
 } from '../../types/generated'
 import {
   apiGatewayArn,
   apiGatewayRestApiArn,
 } from '../../utils/generateArns'
 
-/**
- * APIGateway
- */
 export default ({
   service,
 }: 
 {
-  service: RestApi & { stages: AwsApiGatewayStage[], resources: AwsApiGatewayResource[], region: string, tags?: Tag[] }
-}): AwsApiGatewayRestApi => {
+  service: AwsApiGatewayRestApi
+}): AwsAGRestApiType => {
   const {
     id,
     name,
@@ -30,8 +24,6 @@ export default ({
     minimumCompressionSize,
     binaryMediaTypes,
     tags,
-    stages,
-    resources,
   } = service
   const arn = apiGatewayRestApiArn({
     restApiArn: apiGatewayArn({ region: service.region }),
@@ -49,7 +41,5 @@ export default ({
     minimumCompressionSize,
     binaryMediaTypes,
     tags,
-    stages,
-    resources,
   }
 }

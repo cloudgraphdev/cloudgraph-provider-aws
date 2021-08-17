@@ -15,4 +15,6 @@ export default {
   networkInterface: 'network_interface',
   vpnConnection: 'vpn_connection',
   apiGatewayRestApi: 'apiGatewayRestApi',
+  apiGatewayResource: 'apiGatewayResource',
+  apiGatewayStage: 'apiGatewayStage',
 }

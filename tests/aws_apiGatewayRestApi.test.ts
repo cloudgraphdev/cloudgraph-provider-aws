@@ -1,6 +1,9 @@
 import CloudGraph from '@cloudgraph/sdk'
 
 import APIGatewayRestApi from '../src/services/apiGatewayRestApi'
+import APIGatewayResource from '../src/services/apiGatewayResource'
+import APIGatewayStage from '../src/services/apiGatewayStage'
+import services from '../src/enums/services'
 import { credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
 
@@ -9,23 +12,47 @@ initTestConfig()
 describe('APIGatewayRestApi Service Test: ', () => {
   let getDataResult
   let formatResult
+  let initiatorTestData
+  let initiatorGetConnectionsResult
+
   beforeAll(
-    async () =>
-      new Promise<void>(async resolve => {
-        try {
-          const classInstance = new APIGatewayRestApi({ logger: CloudGraph.logger })
-          getDataResult = await classInstance.getData({
-            credentials,
-            regions: region,
+    async () => {
+      try {
+        const classInstance = new APIGatewayRestApi({ logger: CloudGraph.logger })
+        const apiGWResource = new APIGatewayResource({ logger: CloudGraph.logger })
+        const apiGWStage    = new APIGatewayStage({ logger: CloudGraph.logger })
+        getDataResult = await classInstance.getData({
+          credentials,
+          regions: region,
+        })
+        formatResult = getDataResult[region].map((item: APIGatewayRestApi) =>
+          classInstance.format({ service: item })
+        )
+        initiatorTestData = [
+          {
+            name: services.apiGatewayRestApi,
+            data: getDataResult,
+          },
+          {
+            name: services.apiGatewayResource,
+            data: await apiGWResource.getData({credentials, regions: region}),
+          },
+          {
+            name: services.apiGatewayStage,
+            data: await apiGWStage.getData({credentials, regions: region}),
+          },
+        ]
+        initiatorGetConnectionsResult = initiatorTestData[0].data[region].map(restApi =>
+          classInstance.getConnections({
+            service: restApi,
+            data: initiatorTestData,
+            region,
           })
-          formatResult = getDataResult[region].map((item: APIGatewayRestApi) =>
-            classInstance.format({ service: item })
-          )
-        } catch (error) {
-          console.error(error) // eslint-disable-line no-console
-        }
-        resolve()
-      })
+        )
+      } catch (error) {
+        console.error(error) // eslint-disable-line no-console
+      }
+    }
   )
 
   describe('format', () => {
@@ -44,20 +71,34 @@ describe('APIGatewayRestApi Service Test: ', () => {
           minimumCompressionSize: expect.any(Number),
           binaryMediaTypes: expect.any(Array),
           //tags:
-          stages: expect.arrayContaining([
-            expect.objectContaining({
-              deploymentId: expect.any(String),
-              stageName: expect.any(String)
-            })
-          ]),
-          resources: expect.arrayContaining([
-            expect.objectContaining({
-              id: expect.any(String),
-              path: expect.any(String)
-            })
-          ])
         })])
       )
+    })
+  })
+
+  describe('connections', () => {
+    let connections
+
+    beforeAll(() => {
+      connections = Object.values(initiatorGetConnectionsResult[0]).flat()
+    })
+    
+    it('should have a connection to an API gateway resource', () => {     
+      expect(connections).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            resourceType: services.apiGatewayResource
+          })
+      ]))
+    })
+
+    it('should have a connection to an API gateway stage', () => {
+      expect(connections).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            resourceType: services.apiGatewayStage
+          })
+      ]))
     })
   })
 })

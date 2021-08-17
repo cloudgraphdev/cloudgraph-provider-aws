@@ -1,9 +1,3 @@
-type awsAccessLogSettings {
-  id: ID
-  format: String
-  destinationArn: String
-}
-
 type awsApiGatewayEndpointConfiguration {
   id: ID
   types: [String]
@@ -21,26 +15,6 @@ type awsApiGatewayRestApi @key(fields: "arn") {
   minimumCompressionSize: Int
   tags: [Tag]
   binaryMediaTypes: [String]
-  stages: [awsApiGatewayStage]
-  resources: [awsApiGatewayResource]
-}
-
-type awsApiGatewayStage @key(fields: "arn") {
-  id: String!
-  arn: String! @id
-  stageName: String
-  description: String
-  cacheCluster: Boolean
-  cacheClusterSize: String
-  additions: [awsAccessLogSettings]
-  documentationVersion: String
-  clientCertificateId: String
-  xrayTracing: Boolean
-  tags: [Tag]
-}
-
-type awsApiGatewayResource @key(fields: "arn") {
-  id: String!
-  arn: String! @id
-  path: String
+  stages: [awsApiGatewayStage] @hasInverse(field: restApi)
+  resources: [awsApiGatewayResource] @hasInverse(field: restApi)
 }

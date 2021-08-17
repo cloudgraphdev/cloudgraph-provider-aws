@@ -68,10 +68,19 @@ export type AwsApiGatewayEndpointConfiguration = {
   vpcEndpointIds?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
+export type AwsApiGatewayMethod = {
+  arn: Scalars['String'];
+  httpMethod?: Maybe<Scalars['String']>;
+  authorization?: Maybe<Scalars['String']>;
+  apiKeyRequired?: Maybe<Scalars['Boolean']>;
+};
+
 export type AwsApiGatewayResource = {
   id: Scalars['String'];
   arn: Scalars['String'];
+  restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
   path?: Maybe<Scalars['String']>;
+  methods?: Maybe<Array<Maybe<AwsApiGatewayMethod>>>;
 };
 
 export type AwsApiGatewayRestApi = {
@@ -92,15 +101,22 @@ export type AwsApiGatewayRestApi = {
 export type AwsApiGatewayStage = {
   id: Scalars['String'];
   arn: Scalars['String'];
-  stageName?: Maybe<Scalars['String']>;
+  restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
+  name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   cacheCluster?: Maybe<Scalars['Boolean']>;
   cacheClusterSize?: Maybe<Scalars['String']>;
-  additions?: Maybe<Array<Maybe<AwsAccessLogSettings>>>;
+  accessLogSettings?: Maybe<AwsAccessLogSettings>;
   documentationVersion?: Maybe<Scalars['String']>;
   clientCertificateId?: Maybe<Scalars['String']>;
   xrayTracing?: Maybe<Scalars['Boolean']>;
+  variables?: Maybe<Array<Maybe<AwsApiGatewayStageVariable>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
+export type AwsApiGatewayStageVariable = {
+  key: Scalars['String'];
+  value?: Maybe<Scalars['String']>;
 };
 
 export type AwsCloudwatch = {

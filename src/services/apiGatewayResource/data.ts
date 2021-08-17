@@ -1,31 +1,29 @@
 import * as Sentry from '@sentry/node'
 import CloudGraph from '@cloudgraph/sdk'
 import APIGW, {
-  RestApi,
   RestApis,
   ListOfRestApi,
   GetRestApisRequest,
-  Tags,
+  ListOfResource,
+  GetResourcesRequest,
+  Resources,
+  Resource,
 } from 'aws-sdk/clients/apigateway'
 import { AWSError } from 'aws-sdk/lib/error'
 import isEmpty from 'lodash/isEmpty'
 import groupBy from 'lodash/groupBy'
-import {
-  apiGatewayArn,
-  apiGatewayRestApiArn,
-} from '../../utils/generateArns'
 import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { Tag } from '../../types/generated'
 import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const {logger} = CloudGraph
 const MAX_REST_API = 500
-const endpoint = initTestEndpoint('API Gateway Rest API')
+const MAX_RESOURCES = 500
+const endpoint = initTestEndpoint('API Gateway Resource')
 
-export interface AwsApiGatewayRestApi extends Omit<RestApi, 'tags'> {
-  tags: Tag[]
+export interface AwsApiGatewayResource extends Resource {
+  restApiId: string
   region: string
 }
  
@@ -61,21 +59,46 @@ const getRestApisForRegion = async apiGw =>
     listAllRestApis()
   })
 
-const getTags = async ({ apiGw, arn }): Promise<Tag[]> =>
-  new Promise(resolve => {
-    try {
-      apiGw.getTags({ resourceArn: arn }, (err: AWSError, data: Tags) => {
-        if (err) {
-          logger.error(err)
-          Sentry.captureException(new Error(err.message))
-          return resolve([])
-        }
-        const { tags = {} } = data || {}
-        resolve(Object.entries(tags).map(([k, v]) => ({key: k, value: v} as Tag)))
-      })
-    } catch (error) {
-      resolve([])
+const getResources = async ({ apiGw, restApiId }) =>
+  new Promise<ListOfResource>(resolve => {
+    const resourceList: ListOfResource = []
+    const getResourcesOpts: GetResourcesRequest = {
+      restApiId,
     }
+    const listAllResources = (token?: string) => {
+      getResourcesOpts.limit = MAX_RESOURCES
+      getResourcesOpts.embed = ['methods']
+      if (token) {
+        getResourcesOpts.position = token
+      }
+      try {
+        apiGw.getResources(
+          getResourcesOpts,
+          (err: AWSError, data: Resources) => {
+            const { position, items = [] } = data || {}
+            if (err) {
+              logger.error(err)
+              Sentry.captureException(new Error(err.message))
+            }
+            /**
+             * No rest APIs for this region
+             */
+            if (!isEmpty(data)) {
+              resourceList.push(...items)
+            }
+
+            if (position) {
+              listAllResources(position)
+            }
+
+            resolve(resourceList)
+          }
+        )
+      } catch (error) {
+        resolve([])
+      }
+    }
+    listAllResources()
   })
 
 export default async ({
@@ -84,11 +107,12 @@ export default async ({
 }: {
   regions: string
   credentials: Credentials
-}): Promise<{ [property: string]: AwsApiGatewayRestApi[] }> =>
+}): Promise<{ [property: string]: AwsApiGatewayResource[] }> =>
   new Promise(async resolve => {
     const apiGatewayData = []
+    const apiGatewayResources = []
     const regionPromises = []
-    const tagsPromises = []
+    const additionalPromises = []
 
     regions.split(',').map(region => {
       const apiGw = new APIGW({ region, credentials, endpoint })
@@ -97,7 +121,7 @@ export default async ({
         if (!isEmpty(restApiList)) {
           apiGatewayData.push(
             ...restApiList.map(restApi => ({
-              ...restApi,
+              restApiId: restApi.id,
               region,
             }))
           )
@@ -110,22 +134,22 @@ export default async ({
     await Promise.all(regionPromises)
     logger.info(lt.fetchedApiGatewayRestApis(apiGatewayData.length))
 
-    // get all tags for each rest api
-    apiGatewayData.map(({ id, region }, idx) => {
+    apiGatewayData.map(({ restApiId, region }) => {
       const apiGw = new APIGW({ region, credentials, endpoint })
-      const tagsPromise = new Promise<void>(async resolveTags => {
-        const arn = apiGatewayRestApiArn({
-          restApiArn: apiGatewayArn({ region }),
-          id,
-        })
-        apiGatewayData[idx].tags = await getTags({ apiGw, arn })
-        resolveTags()
+      const additionalPromise = new Promise<void>(async resolveAdditional => {
+        const resources = await getResources({ apiGw, restApiId })
+        apiGatewayResources.push(...resources.map(resource => ({
+          ...resource,
+          restApiId,
+          region,
+        })))
+
+        resolveAdditional()
       })
-      tagsPromises.push(tagsPromise)
+      additionalPromises.push(additionalPromise)
     })
 
-    logger.info(lt.gettingApiGatewayTags)
-    await Promise.all(tagsPromises)
+    await Promise.all(additionalPromises)
 
-    resolve(groupBy(apiGatewayData, 'region'))
+    resolve(groupBy(apiGatewayResources, 'region'))
   })
