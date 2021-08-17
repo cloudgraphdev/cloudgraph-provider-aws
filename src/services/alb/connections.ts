@@ -52,14 +52,15 @@ export default ({
   /**
    * Add subnets
    */
-  connections.push(
-    ...azs.map(({ SubnetId }) => ({
-      id: SubnetId,
-      resourceType: services.subnet,
-      relation: 'child',
-      field: 'subnets',
-    }))
-  )
+  // TODO: Implement when Subnet service is fully ready
+  // connections.push(
+  //   ...azs.map(({ SubnetId }) => ({
+  //     id: SubnetId,
+  //     resourceType: services.subnet,
+  //     relation: 'child',
+  //     field: 'subnets',
+  //   }))
+  // )
 
   /**
    * Add Security Groups

@@ -7,7 +7,7 @@ import {
   // NatGateway,
   // NetworkAcl, // TODO: Uncomment when adding NACL
   SecurityGroup,
-  Subnet,
+  // Subnet,
   Vpc,
 } from 'aws-sdk/clients/ec2'
 // import { Cluster } from 'aws-sdk/clients/eks' // TODO: Uncomment when adding EKS
@@ -41,11 +41,12 @@ export default ({
   const ec2InstancesIdsRunningInVpc =
     ec2sRunningInVpc?.map(ec2 => ec2.InstanceId) || []
   const sgs = data.find(({ name }) => name === services.sg)
-  const subnets = data.find(({ name }) => name === services.subnet)
   const sgIds =
     sgs?.data?.[region]?.map(({ GroupId }: SecurityGroup) => GroupId) || []
-  const subnetIds =
-    subnets?.data?.[region]?.map(({ SubnetId }: Subnet) => SubnetId) || []
+  // TODO: Implement when Subnet service is fully ready
+  // const subnets = data.find(({ name }) => name === services.subnet)
+  // const subnetIds =
+  //   subnets?.data?.[region]?.map(({ SubnetId }: Subnet) => SubnetId) || []
 
   /**
    * Find any ALB Instances
@@ -147,12 +148,18 @@ export default ({
   if (lambdas?.data?.[region]) {
     const dataAtRegion: FunctionConfiguration[] = lambdas.data[region].filter(
       ({
-        VpcConfig: { VpcId, SecurityGroupIds, SubnetIds } = {},
+        // VpcConfig: { VpcId, SecurityGroupIds, SubnetIds } = {},
+        VpcConfig: { VpcId, SecurityGroupIds } = {},
       }: FunctionConfiguration) => {
+        // TODO: Implement when Subnet service is fully ready
+        // return (
+        //   VpcId === id ||
+        //   intersectStringArrays(sgIds, SecurityGroupIds).length > 0 ||
+        //   intersectStringArrays(subnetIds, SubnetIds).length > 0
+        // )
         return (
           VpcId === id ||
-          intersectStringArrays(sgIds, SecurityGroupIds).length > 0 ||
-          intersectStringArrays(subnetIds, SubnetIds).length > 0
+          intersectStringArrays(sgIds, SecurityGroupIds).length > 0
         )
       }
     )

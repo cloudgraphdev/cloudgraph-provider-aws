@@ -1,10 +1,16 @@
 import CloudGraph from '@cloudgraph/sdk'
 import EC2Service from '../src/services/ec2'
+import SGService from '../src/services/securityGroup'
+import EBSService from '../src/services/ebs'
+import EIPService from '../src/services/eip'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
+import services from '../src/enums/services'
 
 let ec2GetDataResult
 let formatResult
+let ec2Connections
+let instanceId
 
 describe('EC2 Service Test: ', () => {
   initTestConfig()
@@ -14,15 +20,68 @@ describe('EC2 Service Test: ', () => {
         ec2GetDataResult = {}
         formatResult = {}
         try {
-          const classInstance = new EC2Service({ logger: CloudGraph.logger })
-          ec2GetDataResult = await classInstance.getData({
+          const ec2Service = new EC2Service({ logger: CloudGraph.logger })
+          const sgService = new SGService({ logger: CloudGraph.logger })
+          const ebsService = new EBSService({ logger: CloudGraph.logger })
+          const eipService = new EIPService({ logger: CloudGraph.logger })
+
+          // Get EC2 data
+          ec2GetDataResult = await ec2Service.getData({
             credentials,
             regions: region,
           })
 
+          // Format EC2 data
           formatResult = ec2GetDataResult[region].map(elbData =>
-            classInstance.format({ service: elbData, region, account })
+            ec2Service.format({ service: elbData, region, account })
           )
+
+          // Get SG data
+          const sgData = await sgService.getData({
+            credentials,
+            regions: region,
+          })
+
+          // Get EBS data
+          const ebsData = await ebsService.getData({
+            credentials,
+            regions: region,
+          })
+
+          // Get EIP data
+          const eipData = await eipService.getData({
+            credentials,
+            regions: region,
+          })
+
+          const [instance] = ec2GetDataResult[region]
+          instanceId = instance.InstanceId
+
+          ec2Connections = ec2Service.getConnections({
+            service: instance,
+            data: [
+              {
+                name: services.sg,
+                data: sgData,
+                account,
+                region,
+              },
+              {
+                name: services.ebs,
+                data: ebsData,
+                account,
+                region,
+              },
+              {
+                name: services.eip,
+                data: eipData,
+                account,
+                region,
+              },
+            ],
+            account,
+            region,
+          })
         } catch (error) {
           console.error(error) // eslint-disable-line no-console
         }
@@ -100,21 +159,42 @@ describe('EC2 Service Test: ', () => {
     )
   })
 
-  it.todo('getConnections(sg): should create the connection to security groups')
+  it('getConnections(sg): should verify the connection to security groups', async () => {
+    const sgConnections = ec2Connections[instanceId]?.filter(
+      connection => connection.resourceType === services.sg
+    )
 
-  it.todo('getConnections(ebs): should create the connection to ebs')
+    expect(sgConnections).toBeDefined()
+    expect(sgConnections.length).toBe(1)
+  })
 
-  it.todo('getConnections(eip): should create the connection to eip')
+  it('getConnections(ebs): should verify the connection to ebs', async () => {
+    const ebsConnections = ec2Connections[instanceId]?.filter(
+      connection => connection.resourceType === services.ebs
+    )
 
-  it.todo('getConnections(subnet): should create the connection to subnet')
+    expect(ebsConnections).toBeDefined()
+    expect(ebsConnections.length).toBe(2)
+  })
+
+  it('getConnections(eip): should verify the connection to eip', async () => {
+    const eipConnections = ec2Connections[instanceId]?.filter(
+      connection => connection.resourceType === services.eip
+    )
+
+    expect(eipConnections).toBeDefined()
+    expect(eipConnections.length).toBe(1)
+  })
+
+  it.todo('getConnections(subnet): should verify the connection to subnet')
 
   it.todo(
-    'getConnections(networkInterface): should create the connection to networkInterface'
+    'getConnections(networkInterface): should verify the connection to networkInterface'
   )
 
-  it.todo('getConnections(eks): should create the connection to eks')
+  it.todo('getConnections(eks): should verify the connection to eks')
 
-  it.todo('getConnections(eb): should create the connection to eb')
+  it.todo('getConnections(eb): should verify the connection to eb')
 
-  it.todo('getConnections(ecs): should create the connection to ecs')
+  it.todo('getConnections(ecs): should verify the connection to ecs')
 })

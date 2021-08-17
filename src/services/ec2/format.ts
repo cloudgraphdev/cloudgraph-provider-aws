@@ -1,8 +1,7 @@
-import { IamInstanceProfile, Instance, TagList } from 'aws-sdk/clients/ec2'
-
 import t from '../../properties/translations'
 import { AwsEc2 } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
+import { RawAwsEC2 } from './data'
 
 /**
  * EC2
@@ -14,13 +13,7 @@ export default ({
   region,
 }: {
   account: string
-  service: Instance & {
-    region: string
-    DisableApiTermination?: boolean
-    KeyPairName?: string
-    Tags?: TagList
-    IamInstanceProfile: IamInstanceProfile
-  }
+  service: RawAwsEC2
   region: string
 }): AwsEc2 => {
   const {

@@ -36,8 +36,8 @@ export default ({
   const connections: ServiceConnection[] = []
   const {
     InstanceId: id,
-    SecurityGroups: instanceSecurityGroups,
-    NetworkInterfaces: networkInterfaces = [],
+    SecurityGroups: instanceSecurityGroups = [],
+    NetworkInterfaces: instanceNetworkInterfaces = [],
   } = instance
 
   /**
@@ -126,14 +126,41 @@ export default ({
    * Find Network interfaces
    * related to this EC2 instance
    */
-  if (!isEmpty(networkInterfaces)) {
-    for (const networkInterface of networkInterfaces) {
-      connections.push({
-        id: networkInterface.NetworkInterfaceId,
-        resourceType: 'networkInterface',
-        relation: 'child',
-        field: 'networkInterface',
-      })
+  const networkInterfaces: {
+    name: string
+    data: {
+      [property: string]: (Address & { region: string })[]
+    }
+  } = data.find(({ name }) => name === services.networkInterface)
+  const networkInterfacesIds = instanceNetworkInterfaces.map(
+    ({ NetworkInterfaceId }) => NetworkInterfaceId
+  )
+
+  if (
+    networkInterfaces?.data?.[region] ||
+    instanceNetworkInterfaces.length > 0
+  ) {
+    // Check for matching network interfaces in existing data
+    const networkInterfacesInRegion = (
+      networkInterfaces?.data[region] || []
+    ).filter(({ NetworkInterfaceId }) =>
+      networkInterfacesIds.includes(NetworkInterfaceId)
+    )
+
+    const attachedNetworkInterfaces =
+      networkInterfacesInRegion.length > 0
+        ? networkInterfacesInRegion
+        : instanceNetworkInterfaces
+
+    if (!isEmpty(attachedNetworkInterfaces)) {
+      for (const networkInterface of instanceNetworkInterfaces) {
+        connections.push({
+          id: networkInterface.NetworkInterfaceId,
+          resourceType: services.networkInterface,
+          relation: 'child',
+          field: 'networkInterfaces',
+        })
+      }
     }
   }
 

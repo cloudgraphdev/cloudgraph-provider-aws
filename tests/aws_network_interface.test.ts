@@ -93,7 +93,7 @@ describe('Network Interface Service Test: ', () => {
           interfaceType: expect.any(String),
           privateDnsName: expect.any(String),
           attachment: expect.objectContaining({
-            id: expect.any(String),
+            attachmentId: expect.any(String),
             status: expect.any(String),
             deleteOnTermination: expect.any(Boolean),
           }),

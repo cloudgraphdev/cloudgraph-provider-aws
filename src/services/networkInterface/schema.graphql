@@ -13,6 +13,7 @@ type awsNetworkInterface @key(fields: "arn") {
   privateIps: [String]
   attachment: awsNetworkInterfaceAttachment
   tags: [Tag]
+  ec2Instance: [awsEc2] @hasInverse(field: networkInterfaces)
 }
 
 type awsNetworkInterfaceAttachment

@@ -13,19 +13,26 @@ import EC2, {
   IamInstanceProfile,
   Instance,
   InstanceAttribute,
-  TagList,
 } from 'aws-sdk/clients/ec2'
 import { AWSError } from 'aws-sdk/lib/error'
 
 import CloudGraph from '@cloudgraph/sdk'
 
-import { Credentials } from '../../types'
+import { Credentials, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const endpoint = initTestEndpoint('EC2')
+
+export interface RawAwsEC2 extends Omit<Instance, 'Tags'> {
+  region: string
+  DisableApiTermination?: boolean
+  KeyPairName?: string
+  Tags?: TagMap
+  IamInstanceProfile?: IamInstanceProfile
+}
 
 /**
  * EC2
@@ -38,22 +45,10 @@ export default async ({
   regions: string
   credentials: Credentials
 }): Promise<{
-  [region: string]: (Instance & {
-    region: string
-    DisableApiTermination?: boolean
-    KeyPairName?: string
-    Tags?: TagList
-    IamInstanceProfile?: IamInstanceProfile
-  })[]
+  [region: string]: RawAwsEC2[]
 }> =>
   new Promise(async resolve => {
-    const ec2Instances: (Instance & {
-      region: string
-      DisableApiTermination?: boolean
-      KeyPairName?: string
-      Tags?: TagList
-      IamInstanceProfile?: IamInstanceProfile
-    })[] = []
+    const ec2Instances: RawAwsEC2[] = []
 
     /**
      * Step 1) for all regions, list the EC2 Instances
@@ -116,7 +111,10 @@ export default async ({
           }
 
           ec2Instances.push(
-            ...instances.map(instance => ({ ...instance, region }))
+            ...instances.map(({ Tags, ...instance }) => ({
+              ...instance,
+              region,
+            }))
           )
 
           /**
