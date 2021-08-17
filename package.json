@@ -23,7 +23,8 @@
     "terraform": "yarn terraform:init && yarn terraform:plan && yarn terraform:apply",
     "terraform:init": "terraform -chdir=./tests/terraform init -input=false",
     "terraform:plan": "terraform -chdir=./tests/terraform plan -out=tfplan -input=false",
-    "terraform:apply": "terraform -chdir=./tests/terraform apply -input=false tfplan"
+    "terraform:apply": "terraform -chdir=./tests/terraform apply -input=false tfplan",
+    "terraform:cleanup": "rimraf ./tests/terraform/{.terraform,.terraform.lock.hcl,tfplan} ./tests/terraform/*.{tfstate,tfplan,backup}"
   },
   "dependencies": {
     "@cloudgraph/sdk": "^0.1.0",
