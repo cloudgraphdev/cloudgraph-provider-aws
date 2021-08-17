@@ -97,11 +97,17 @@ export default {
     `Created and added ${num} Api Gateways to this region`,
   fetchedApiGatewayRestApis: (num: number) =>
     `Fetched ${num} Api Gateway Rest Apis`,
+  fetchedApiGatewayResources: (num: number) =>
+    `Fetched ${num} Api Gateway Resources`,
+  fetchedApiGatewayStages: (num: number) =>
+    `Fetched ${num} Api Gateway Stages`,
   fetchingApiGatewayData:
     'Fetching API Gateway data for this AWS account via the AWS SDK...',
   doneFetchingApiGatewayData: '✅ Done fetching API Gateway Data ✅',
   gettingApiGatewayTags:
-    'Fetching tags for each Api Gateway rest api and stage...',
+    'Fetching tags for each Api Gateway Rest Api...',
+  gettingApiGatewayStageTags:
+    'Fetching tags for each Api Gateway Stage...',
   /**
    * Vpc
    */

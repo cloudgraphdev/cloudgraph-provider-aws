@@ -137,7 +137,7 @@ export default async ({
     })
 
     await Promise.all(regionPromises)
-    logger.info(lt.fetchedApiGatewayRestApis(apiGatewayData.length))
+    logger.info(lt.fetchedApiGatewayStages(apiGatewayData.length))
 
     apiGatewayData.map(({ restApiId, region }) => {
       const apiGw = new APIGW({ region, credentials, endpoint })
@@ -177,7 +177,7 @@ export default async ({
       tagsPromises.push(tagsPromise)
     })
 
-    logger.info(lt.gettingApiGatewayTags)
+    logger.info(lt.gettingApiGatewayStageTags)
     await Promise.all(tagsPromises)
 
     resolve(groupBy(apiGatewayStages, 'region'))

@@ -132,7 +132,7 @@ export default async ({
     })
 
     await Promise.all(regionPromises)
-    logger.info(lt.fetchedApiGatewayRestApis(apiGatewayData.length))
+    logger.info(lt.fetchedApiGatewayResources(apiGatewayData.length))
 
     apiGatewayData.map(({ restApiId, region }) => {
       const apiGw = new APIGW({ region, credentials, endpoint })
