@@ -22,7 +22,6 @@ import AwsSecurityGroup from './securityGroup'
 import VPC from './vpc'
 import EBS from './ebs'
 import { Credentials } from '../types'
-import { toCamel } from '../utils'
 /**
  * serviceMap is an object that contains all currently supported services for AWS
  * serviceMap is used by the serviceFactory to produce instances of service classes

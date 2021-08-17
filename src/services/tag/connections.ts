@@ -2,7 +2,6 @@ import { ServiceConnection } from '@cloudgraph/sdk'
 import { isEmpty } from 'lodash'
 import services from '../../enums/services'
 import regions from '../../enums/regions'
-import { toCamel } from '../../utils'
 
 const findServiceInstancesWithTag = (tag, service) => {
   const { id } = tag
@@ -139,7 +138,7 @@ export default ({
             id,
             resourceType: services.sg,
             relation: 'child',
-            field: 'sg',
+            field: 'securityGroups',
           })
         }
       }
@@ -186,6 +185,27 @@ export default ({
         }
       }
     }
+
+    /**
+     * Find related IGW
+     */
+     const igws: { name: string; data: { [property: string]: any[] } } =
+     data.find(({ name }) => name === services.igw)
+   if (igws?.data?.[region]) {
+     const dataAtRegion = findServiceInstancesWithTag(tag, igws.data[region])
+     if (!isEmpty(dataAtRegion)) {
+       for (const instance of dataAtRegion) {
+         const { InternetGatewayId: id } = instance
+
+         connections.push({
+           id,
+           resourceType: services.igw,
+           relation: 'child',
+           field: 'igw',
+         })
+       }
+     }
+   }
   }
 
   const tagResult = {

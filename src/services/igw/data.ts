@@ -12,7 +12,6 @@ import isEmpty from 'lodash/isEmpty'
 
 import { Credentials, AwsTag, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { Tag } from '../../types/generated'
 import { initTestEndpoint } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 

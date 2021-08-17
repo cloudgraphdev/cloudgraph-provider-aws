@@ -220,7 +220,7 @@ export type AwsLambda = {
   role?: Maybe<Scalars['String']>;
   runtime?: Maybe<Scalars['String']>;
   sourceCodeSize?: Maybe<Scalars['String']>;
-  timeout?: Maybe<Scalars['String']>;
+  timeout?: Maybe<Scalars['Int']>;
   tracingConfig?: Maybe<Scalars['String']>;
   version?: Maybe<Scalars['String']>;
   environmentVariables?: Maybe<Array<Maybe<AwsLambaEnvironmentVariable>>>;
@@ -281,6 +281,7 @@ export type AwsTag = {
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   eip?: Maybe<Array<Maybe<AwsEip>>>;
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
+  igw?: Maybe<Array<Maybe<AwsIgw>>>;
 };
 
 export type AwsVpc = {

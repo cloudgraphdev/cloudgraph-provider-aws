@@ -10,4 +10,5 @@ type awsTag @key(fields: "id") {
   securityGroups: [awsSecurityGroup]
   eip: [awsEip]
   ebs: [awsEbs]
+  igw: [awsIgw]
 }

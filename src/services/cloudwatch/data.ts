@@ -16,7 +16,6 @@ import { AWSError } from 'aws-sdk/lib/error'
 
 import { Credentials, TagMap, AwsTag } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { Tag } from '../../types/generated'
 import { initTestEndpoint } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 

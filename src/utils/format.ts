@@ -13,7 +13,6 @@ export const formatTags = (awsTags: { Key: string; Value: string }[]): Tag[] =>
  * Function to convert aws formatted tags to TagMap
  */
  export const convertAwsTagsToTagMap = (tags: AwsTag[] = []): TagMap => {
-   console.log(JSON.stringify(tags))
   const tagsMap = {}
   for (const tag of tags) {
     const {Key, Value} = tag

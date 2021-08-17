@@ -1,7 +1,7 @@
 import { MetricAlarm } from 'aws-sdk/clients/cloudwatch'
 import t from '../../properties/translations'
 import { TagMap } from '../../types'
-import { AwsCloudwatch, Tag } from '../../types/generated'
+import { AwsCloudwatch } from '../../types/generated'
 import { toCamel } from '../../utils'
 import { formatTagsFromMap } from '../../utils/format'
 
