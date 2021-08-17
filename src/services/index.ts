@@ -288,10 +288,8 @@ export default class Provider extends CloudGraph.Client {
         const dataAtRegion = entityData[region]
         dataAtRegion.forEach(singleEntity => {
           if (!isEmpty(singleEntity.Tags)) {
-            // console.log(`Found tags for service ${name}: ${JSON.stringify(singleEntity.Tags)}`)
             for (const [key, value] of Object.entries(singleEntity.Tags)) {
               if (!tags.data[tagRegion].find(({id}) => id === `${key}:${value}`)) {
-                // console.log(`Pushing tag: ${key}:${value} into list`)
                 tags.data[tagRegion].push({id: `${key}:${value}`, key, value})
               }
             }
