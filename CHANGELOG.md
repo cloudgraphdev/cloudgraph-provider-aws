@@ -1,3 +1,10 @@
+## [0.2.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.2.1...0.2.2) (2021-08-17)
+
+
+### Bug Fixes
+
+* **deps:** add missing dep @graphql-tools/merge ([26c1566](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/26c1566856600e4ba9e6909d3d199a7bd6adf03a))
+
 ## [0.2.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.2.0...0.2.1) (2021-08-16)
 
 
