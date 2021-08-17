@@ -98,5 +98,5 @@ describe('EBS Service Test: ', () => {
   })
 
   // TODO: Implement when EC2 service is ready
-  it.todo('initiator(ec2): should create the connection to ebs')
+  it.todo('initiator(ec2): should verify the connection to ec2')
 })
