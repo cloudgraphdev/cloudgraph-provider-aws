@@ -10,10 +10,11 @@ import { AWSError } from 'aws-sdk/lib/error'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import { Credentials } from '../../types'
+import { Credentials, AwsTag, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { Tag } from '../../types/generated'
 import { initTestEndpoint } from '../../utils'
+import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
@@ -23,7 +24,7 @@ const endpoint = initTestEndpoint('IGW')
  */
 
 export interface RawAwsIgw extends Omit<InternetGateway, 'Tags'> {
-  Tags: Tag[]
+  Tags: TagMap
   region: string
 }
 
@@ -93,10 +94,7 @@ export default async ({
             ...igws.map(({ Tags, ...igw }) => ({
               ...igw,
               region,
-              Tags: Tags.map(({ Key, Value }) => ({
-                key: Key,
-                value: Value,
-              })),
+              Tags: convertAwsTagsToTagMap(Tags as AwsTag[])
             }))
           )
 

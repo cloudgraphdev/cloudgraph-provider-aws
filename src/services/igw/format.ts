@@ -1,5 +1,6 @@
 import { AwsIgw } from '../../types/generated'
 import { toCamel } from '../../utils'
+import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsIgw } from './data'
 
 /**
@@ -16,7 +17,7 @@ export default ({
   service: RawAwsIgw
   region: string
 }): AwsIgw => {
-  const { Tags: tags } = rawData
+  const { Tags } = rawData
   const {
     internetGatewayId: id,
     ownerId: owner,
@@ -34,6 +35,6 @@ export default ({
     attachments,
     id,
     owner,
-    tags,
+    tags: formatTagsFromMap(Tags),
   }
 }

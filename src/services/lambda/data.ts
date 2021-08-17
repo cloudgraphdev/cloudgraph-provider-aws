@@ -15,8 +15,7 @@ import { AWSError } from 'aws-sdk/lib/error'
 import CloudGraph from '@cloudgraph/sdk'
 import awsLoggerText from '../../properties/logger'
 
-import { Credentials } from '../../types'
-import { Tag } from '../../types/generated'
+import { Credentials, TagMap } from '../../types'
 import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
@@ -25,7 +24,7 @@ const { logger } = CloudGraph
 const endpoint = initTestEndpoint('Lambda')
 
 export interface AwsLambdaFunction extends FunctionConfiguration {
-  Tags?: Tag[]
+  Tags?: TagMap
   region: string
   reservedConcurrentExecutions: ReservedConcurrentExecutions
 }
@@ -104,7 +103,7 @@ const getFunctionConcurrency = async (
     }
   })
 
-const getResourceTags = async (lambda: Lambda, arn: string): Promise<Tag[]> =>
+const getResourceTags = async (lambda: Lambda, arn: string): Promise<TagMap> =>
   new Promise(resolve => {
     try {
       lambda.listTags(
@@ -113,14 +112,14 @@ const getResourceTags = async (lambda: Lambda, arn: string): Promise<Tag[]> =>
           if (err) {
             logger.error(err)
             Sentry.captureException(new Error(err.message))
-            resolve([])
+            resolve({})
           }
           const { Tags = {} } = data || {}
-          resolve(Object.entries(Tags).map(([key, value]) => ({ key, value })))
+          resolve(Tags)
         }
       )
     } catch (error) {
-      resolve([])
+      resolve({})
     }
   })
 
@@ -167,7 +166,7 @@ export default async ({
     lambdaData.map(({ FunctionArn: arn, region }, idx) => {
       const lambda = new Lambda({ region, credentials, endpoint })
       const tagsPromise = new Promise<void>(async resolveTags => {
-        const envTags: Tag[] = await getResourceTags(lambda, arn)
+        const envTags: TagMap = await getResourceTags(lambda, arn)
         lambdaData[idx].Tags = envTags
         resolveTags()
       })

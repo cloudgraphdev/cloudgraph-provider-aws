@@ -2,6 +2,7 @@ import t from '../../properties/translations'
 import { AwsSecurityGroup } from './data'
 import { AwsSecurityGroup as AwsSgType } from '../../types/generated'
 import { toCamel } from '../../utils'
+import { formatTagsFromMap } from '../../utils/format'
 
 /**
  * Security Group
@@ -20,7 +21,7 @@ export default ({
   region: string
 }): AwsSgType => {
   const {
-    Tags: tags,
+    Tags,
     GroupId: id,
     OwnerId: owner,
     GroupName: name,
@@ -125,7 +126,7 @@ export default ({
     vpcId,
     arn: `arn:aws:ec2:${region}:${account}:security-group/${id}`,
     description,
-    tags,
+    tags: formatTagsFromMap(Tags),
     owner,
     default: name === t.default,
     inboundRules,

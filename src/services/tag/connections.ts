@@ -7,8 +7,8 @@ import { toCamel } from '../../utils'
 const findServiceInstancesWithTag = (tag, service) => {
   const { id } = tag
   return service.filter(({ Tags }) => {
-    for (const serviceTag of toCamel(Tags)) {
-      if (id === `${serviceTag.key}:${serviceTag.value}`) {
+    for (const [key, value] of Object.entries(Tags)) {
+      if (id === `${key}:${value}`) {
         return true
       }
     }
@@ -28,6 +28,29 @@ export default ({
   // console.log(`Searching for connections for tag ${JSON.stringify(tag)}`)
   const connections: ServiceConnection[] = []
   for (const region of regions) {
+     /**
+     * Find related ALBs
+     */
+      const albs: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.alb)
+    if (albs?.data?.[region]) {
+      const dataAtRegion: any = findServiceInstancesWithTag(
+        tag,
+        albs.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const alb of dataAtRegion) {
+          const { LoadBalancerArn: id } = alb
+          connections.push({
+            id,
+            resourceType: services.alb,
+            relation: 'child',
+            field: 'alb',
+          })
+        }
+      }
+    }
+
     /**
      * Find related KMS keys
      */

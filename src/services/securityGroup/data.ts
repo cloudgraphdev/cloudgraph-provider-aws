@@ -12,11 +12,11 @@ import EC2, {
 import { AWSError } from 'aws-sdk/lib/error'
 
 import CloudGraph from '@cloudgraph/sdk'
-import { Credentials } from '../../types'
+import { Credentials, TagMap, AwsTag } from '../../types'
 
 import awsLoggerText from '../../properties/logger'
-import { Tag } from '../../types/generated'
 import { initTestEndpoint } from '../../utils'
+import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
@@ -27,7 +27,7 @@ const endpoint = initTestEndpoint('Security Groups')
  */
 
 export interface AwsSecurityGroup extends Omit<SecurityGroup, 'Tags'> {
-  Tags: Tag[]
+  Tags: TagMap
   region: string
 }
 
@@ -102,10 +102,7 @@ export default async ({
             ...sgs.map(({ Tags, ...sg }) => ({
               ...sg,
               region,
-              Tags: Tags.map(({ Key, Value }) => ({
-                key: Key,
-                value: Value,
-              })),
+              Tags: convertAwsTagsToTagMap(Tags as AwsTag[])
             }))
           )
 

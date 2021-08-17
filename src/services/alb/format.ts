@@ -2,6 +2,7 @@ import startCase from 'lodash/startCase'
 
 import t from '../../properties/translations'
 import { AwsAlb, AwsAlbListener } from '../../types/generated'
+import { formatTagsFromMap } from '../../utils/format'
 
 /**
  * ALBs
@@ -39,7 +40,7 @@ export default ({ service: alb }): AwsAlb => {
     DNSName: dnsName,
     Scheme: scheme,
     Type: type,
-    Tags: tags = {},
+    Tags = {},
     State: { Code: status = '' } = {},
     CanonicalHostedZoneId: hostedZone,
     IpAddressType: ipAddressType,
@@ -80,7 +81,7 @@ export default ({ service: alb }): AwsAlb => {
     http2: http2 === t.true ? t.yes : t.no,
     accessLogsEnabled: accessLogsEnabled === t.true ? t.yes : t.no,
     dropInvalidHeaderFields: dropInvalidHeaderFields === t.true ? t.yes : t.no,
-    tags,
+    tags: formatTagsFromMap(Tags),
     createdAt,
     status,
     listeners: listeners.map(awsAlbListernerGraphFormat),

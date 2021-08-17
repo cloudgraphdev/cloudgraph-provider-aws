@@ -275,6 +275,12 @@ export type AwsTag = {
   value: Scalars['String'];
   cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
+  alb?: Maybe<Array<Maybe<AwsAlb>>>;
+  lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  ec2?: Maybe<Array<Maybe<AwsEc2>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  eip?: Maybe<Array<Maybe<AwsEip>>>;
+  ebs?: Maybe<Array<Maybe<AwsEbs>>>;
 };
 
 export type AwsVpc = {

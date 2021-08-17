@@ -9,11 +9,11 @@ import { AWSError } from 'aws-sdk/lib/error'
 
 
 import CloudGraph from '@cloudgraph/sdk'
-import { Credentials } from '../../types'
+import { Credentials, TagMap, AwsTag } from '../../types'
 
 import awsLoggerText from '../../properties/logger'
-import { Tag } from '../../types/generated'
 import { initTestEndpoint } from '../../utils'
+import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const lt = { ...awsLoggerText }
 const {logger} = CloudGraph
@@ -25,7 +25,7 @@ const endpoint = initTestEndpoint('Subnet')
 
 export interface AwsSubnet extends Omit<Subnet,'Tags'>{
   region: string
-  tags: Tag[]
+  tags: TagMap
 }
 
 export default ({
@@ -100,7 +100,7 @@ export default ({
             ...subnets.map(({ Tags, ...subnet }) => ({
               ...subnet,
               region,
-              tags: Tags.map(({ Key, Value }) => ({ key: Key, value: Value })),
+              tags: convertAwsTagsToTagMap(Tags as AwsTag[]),
             }))
           )
 
