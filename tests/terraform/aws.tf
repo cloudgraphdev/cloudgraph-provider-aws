@@ -124,6 +124,15 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
+resource "aws_kms_key" "lambda_kms_key" {
+  description             = "KMS key 1"
+  deletion_window_in_days = 10
+
+  tags = {
+    Name = "Main"
+  }
+}
+
 resource "aws_api_gateway_rest_api" "example" {
   body = jsonencode({
     openapi = "3.0.1"
@@ -166,6 +175,39 @@ resource "aws_api_gateway_deployment" "example" {
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+resource "aws_iam_role" "lambda_iam_role" {
+  name = "lambda_iam_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_lambda_function" "lambda_function" {
+  function_name = "lambda_function_name"
+  role          = aws_iam_role.lambda_iam_role.arn
+  package_type  = "Image"
+  image_uri     = "lambda/alpine"
+  kms_key_arn   = aws_kms_key.lambda_kms_key.arn
+
+  vpc_config {
+    subnet_ids         = [aws_subnet.subnet.id]
+    security_group_ids = [aws_security_group.sg.id]
   }
 }
 
@@ -233,4 +275,19 @@ resource "aws_api_gateway_rest_api_policy" "api_gateway_rest_api_policy" {
   ]
 }
 EOF
+}
+
+resource "aws_ebs_volume" "ebs_volume" {
+  availability_zone = "us-east-1a"
+  size              = 40
+
+  tags = {
+    Name = "HelloWorld"
+  }
+}
+
+resource "aws_volume_attachment" "ebs_att" {
+  device_name = "/dev/sdh"
+  volume_id   = aws_ebs_volume.ebs_volume.id
+  instance_id = aws_instance.instance.id
 }
