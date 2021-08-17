@@ -1,3 +1,10 @@
+## [0.2.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.2.3...0.2.4) (2021-08-17)
+
+
+### Bug Fixes
+
+* Included cleanup script for terraform files ([4ea390d](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/4ea390ddc8dee692b07027028c75c3587c2f8faf))
+
 ## [0.2.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.2.2...0.2.3) (2021-08-17)
 
 
