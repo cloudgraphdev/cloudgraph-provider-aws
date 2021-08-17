@@ -57,9 +57,9 @@ export default ({
     )
     if (!isEmpty(stagesInRegion)) {
       for (const stage of stagesInRegion) {
-        const {  } = stage
+        const { stageName } = stage
         connections.push({
-          id,
+          id: stageName,
           resourceType: services.apiGatewayStage,
           relation: 'child',
           field: 'stages',
