@@ -1,3 +1,15 @@
+# [0.3.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.2.4...0.3.0) (2021-08-18)
+
+
+### Bug Fixes
+
+* **build:** update build script to wipe the dist folder before recreating ([2021599](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/2021599c3669d171759a0eb0e8359e22a4a2f1d7))
+
+
+### Features
+
+* **tags:** Begin work on tags service ([b9d0010](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b9d00102e79413368411507d3a6f70d180194cd1))
+
 ## [0.2.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.2.3...0.2.4) (2021-08-17)
 
 
