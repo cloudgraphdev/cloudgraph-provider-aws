@@ -1,6 +1,7 @@
 import t from '../../properties/translations'
 import { AwsKms } from './data'
 import { AwsKms as AwsKmsType } from '../../types/generated';
+import { formatTagsFromMap } from '../../utils/format'
 
 /**
  * KMS
@@ -15,7 +16,7 @@ export default ({
 }): AwsKmsType => {
   const {
     Arn: arn,
-    tags,
+    Tags,
     Description: description,
     KeyId: id,
     policy,
@@ -50,7 +51,7 @@ export default ({
     enabled: enabled ? t.yes : t.no,
     keyState,
     customerMasterKeySpec,
-    tags,
+    tags: formatTagsFromMap(Tags),
     creationDate: creationDate ? creationDate.toString(): undefined,
     keyManager,
     origin,

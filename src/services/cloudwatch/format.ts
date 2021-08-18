@@ -1,7 +1,9 @@
 import { MetricAlarm } from 'aws-sdk/clients/cloudwatch'
 import t from '../../properties/translations'
-import { AwsCloudwatch, Tag } from '../../types/generated'
+import { TagMap } from '../../types'
+import { AwsCloudwatch } from '../../types/generated'
 import { toCamel } from '../../utils'
+import { formatTagsFromMap } from '../../utils/format'
 
 /**
  * CloudWatch
@@ -11,9 +13,10 @@ export default ({
   service: rawData,
 }: {
   // allTagData
-  service: MetricAlarm & { tags?: Tag[]; region: string }
+  service: MetricAlarm & { Tags?: TagMap; region: string }
 }): AwsCloudwatch => {
-  const { tags } = rawData
+  const { Tags } = rawData
+  const tags = formatTagsFromMap(Tags)
   const {
     alarmDescription: description,
     actionsEnabled,

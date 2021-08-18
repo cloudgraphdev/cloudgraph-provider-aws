@@ -1,5 +1,6 @@
 import { AwsEip } from '../../types/generated'
 import { toCamel } from '../../utils'
+import { formatTagsFromMap } from '../../utils/format'
 import t from '../../properties/translations'
 
 /**
@@ -15,6 +16,7 @@ export default ({
   account: string
   region: string
 }): AwsEip => {
+  const { Tags } = rawData
   const {
     allocationId: id,
     associationId: ec2InstanceAssociationId,
@@ -28,8 +30,10 @@ export default ({
     privateIpAddress: privateIp,
     publicIp,
      publicIpv4Pool,
-    tags,
   } = toCamel(rawData)
+
+  const tags = formatTagsFromMap(Tags)
+
   const eip = {
     id,
     arn: `arn:aws:ec2:${region}:${account}:eip-allocation/${id}`,
@@ -45,7 +49,7 @@ export default ({
     privateIp,
     publicIp,
     publicIpv4Pool,
-    tags,
+    tags
   }
   return eip
 }

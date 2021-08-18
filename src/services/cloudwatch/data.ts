@@ -14,10 +14,10 @@ import CloudWatch, {
 
 import { AWSError } from 'aws-sdk/lib/error'
 
-import { Credentials } from '../../types'
+import { Credentials, TagMap, AwsTag } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { Tag } from '../../types/generated'
 import { initTestEndpoint } from '../../utils'
+import { convertAwsTagsToTagMap } from '../../utils/format'
 
 /**
  * Cloudwatch
@@ -72,7 +72,7 @@ const listMetricAlarmsForRegion = async ({ cloudwatch, resolveRegion }) =>
   })
 
 const getResourceTags = async (cloudwatch: CloudWatch, arn: string) =>
-  new Promise<Tag[]>(resolve => {
+  new Promise<TagMap>(resolve => {
     try {
       cloudwatch.listTagsForResource(
         { ResourceARN: arn },
@@ -81,19 +81,14 @@ const getResourceTags = async (cloudwatch: CloudWatch, arn: string) =>
             logger.error('There was an error in service cloudwatch function listTagsForResource')
             logger.debug(err)
             Sentry.captureException(new Error(err.message))
-            return resolve([])
+            return resolve({})
           }
           const { Tags = [] } = data || {}
-          const tags =
-            Tags.map(({ Key, Value }) => ({
-              key: Key,
-              value: Value,
-            })) || []
-          resolve(tags)
+          resolve(convertAwsTagsToTagMap(Tags as AwsTag[]))
         }
       )
     } catch (error) {
-      resolve([])
+      resolve({})
     }
   })
 
@@ -106,7 +101,7 @@ export default async ({
 }) =>
   new Promise(async resolve => {
     const cloudwatchData: Array<
-      MetricAlarm & { tags?: Tag[]; region: string }
+      MetricAlarm & { Tags?: TagMap; region: string }
     > = []
     const regionPromises = []
     const tagsPromises = []
@@ -142,7 +137,7 @@ export default async ({
       const cloudwatch = new CloudWatch({ region, credentials, endpoint })
       const tagsPromise = new Promise<void>(async resolveTags => {
         const envTags = await getResourceTags(cloudwatch, AlarmArn)
-        cloudwatchData[idx].tags = envTags
+        cloudwatchData[idx].Tags = envTags
         resolveTags()
       })
       tagsPromises.push(tagsPromise)

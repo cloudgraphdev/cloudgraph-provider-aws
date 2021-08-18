@@ -5,7 +5,8 @@ import groupBy from 'lodash/groupBy'
 import { AWSError } from 'aws-sdk/lib/error'
 import EC2, { DescribeAddressesResult } from 'aws-sdk/clients/ec2'
 
-import { Credentials } from '../../types'
+import { Credentials, AwsTag } from '../../types'
+import { convertAwsTagsToTagMap } from '../../utils/format'
 import environment from '../../config/environment'
 import awsLoggerText from '../../properties/logger'
 
@@ -46,8 +47,9 @@ export default async ({
             const { Addresses: addresses = [] } = data || {}
             logger.debug(lt.fetchedEips(addresses.length))
 
-            const eipAddresses = addresses.map(address => ({
-              ...address,
+            const eipAddresses = addresses.map(({ Tags, ...eip }) => ({
+              ...eip,
+              Tags: convertAwsTagsToTagMap(Tags as AwsTag[]),
               region,
             }))
 

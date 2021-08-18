@@ -10,7 +10,7 @@ type awsLambda @key(fields: "id") {
   role: String
   runtime: String
   sourceCodeSize: String
-  timeout: String
+  timeout: Int
   tracingConfig: String
   version: String
   environmentVariables: [awsLambaEnvironmentVariable]

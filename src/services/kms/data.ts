@@ -7,9 +7,8 @@ import isEmpty from 'lodash/isEmpty'
 import { AWSError, Request } from 'aws-sdk'
 import KMS, { KeyListEntry, KeyMetadata, ListKeysRequest, ListKeysResponse } from 'aws-sdk/clients/kms'
 
-import { Credentials } from '../../types'
+import { Credentials, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { Tag } from '../../types/generated'
 import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
@@ -24,7 +23,7 @@ export type AwsKms = KeyListEntry &
   KeyMetadata & {
     region: string
     policy: string
-    tags: Tag[]
+    Tags: TagMap
     enableKeyRotation: boolean
   }
 
@@ -162,7 +161,7 @@ export default async ({
             ...keyData,
             region,
             policy: '',
-            tags: [],
+            Tags: {},
             enableKeyRotation: null,
           })
 
@@ -285,7 +284,7 @@ export default async ({
            * Add the tags to the key
            */
 
-          const { Tags: tags, Truncated: truncated } = data || {}
+          const { Tags, Truncated: truncated } = data || {}
 
           /**
            * Limited to 50 tags currently - re write this if we want more later
@@ -295,11 +294,13 @@ export default async ({
             logger.error(lt.hasMoreKmsTags)
           }
 
-          if (!isEmpty(tags)) {
-            kmsData[idx].tags = tags.map(({ TagKey, TagValue }) => ({
-              key: TagKey,
-              value: TagValue,
-            }))
+          if (!isEmpty(Tags)) {
+            const tagsMap = {}
+            for (const tag of Tags) {
+              const {TagKey, TagValue} = tag
+              tagsMap[TagKey] = TagValue
+            }
+            kmsData[idx].Tags = tagsMap
           }
 
           resolveTags()

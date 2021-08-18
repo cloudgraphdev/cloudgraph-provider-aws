@@ -11,6 +11,7 @@ import isEmpty from 'lodash/isEmpty'
 import { Credentials } from '../../types'
 
 import awsLoggerText from '../../properties/logger'
+import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const lt = { ...awsLoggerText }
 /**
@@ -93,7 +94,7 @@ export default async ({
           ...albs.map(alb => ({
             ...alb,
             region,
-            tags: {},
+            Tags: {},
             listeners: [],
             targetIds: [],
             attributes: {},
@@ -142,7 +143,7 @@ export default async ({
          */
 
         if (isEmpty(data)) {
-          return resolveTags()
+          return resolveTags({})
         }
 
         const { TagDescriptions: allTags = [] } = data || {}
@@ -156,7 +157,7 @@ export default async ({
          */
 
         if (isEmpty(tags)) {
-          return resolveTags()
+          return resolveTags({})
         }
 
         /**
@@ -169,7 +170,7 @@ export default async ({
           result[Key] = Value
         })
 
-        alb.tags = result
+        alb.Tags = convertAwsTagsToTagMap(tags)
 
         resolveTags()
       })

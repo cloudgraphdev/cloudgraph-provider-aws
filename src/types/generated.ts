@@ -220,7 +220,7 @@ export type AwsLambda = {
   role?: Maybe<Scalars['String']>;
   runtime?: Maybe<Scalars['String']>;
   sourceCodeSize?: Maybe<Scalars['String']>;
-  timeout?: Maybe<Scalars['String']>;
+  timeout?: Maybe<Scalars['Int']>;
   tracingConfig?: Maybe<Scalars['String']>;
   version?: Maybe<Scalars['String']>;
   environmentVariables?: Maybe<Array<Maybe<AwsLambaEnvironmentVariable>>>;
@@ -267,6 +267,21 @@ export type AwsSubnet = {
   ipV6Cidr?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
+export type AwsTag = {
+  id: Scalars['String'];
+  key: Scalars['String'];
+  value: Scalars['String'];
+  cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
+  alb?: Maybe<Array<Maybe<AwsAlb>>>;
+  lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  ec2?: Maybe<Array<Maybe<AwsEc2>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  eip?: Maybe<Array<Maybe<AwsEip>>>;
+  ebs?: Maybe<Array<Maybe<AwsEbs>>>;
+  igw?: Maybe<Array<Maybe<AwsIgw>>>;
 };
 
 export type AwsVpc = {

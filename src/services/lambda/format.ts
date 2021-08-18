@@ -3,6 +3,7 @@ import t from '../../properties/translations'
 import { AwsLambda } from '../../types/generated'
 import { AwsLambdaFunction } from './data'
 import { toCamel } from '../../utils'
+import { formatTagsFromMap } from '../../utils/format'
 
 /**
  * Lambda
@@ -17,7 +18,7 @@ export default ({
   const lambda = toCamel(rawData)
   const {
     Environment = {},
-    tags = [],
+    Tags = {},
     reservedConcurrentExecutions: rawReservedConcurrentExecutions,
   } = rawData
   const {
@@ -78,6 +79,6 @@ export default ({
     tracingConfig,
     version,
     environmentVariables,
-    tags,
+    tags: formatTagsFromMap(Tags),
   }
 }

@@ -1,6 +1,6 @@
 # Created by Husky v4.3.0 (https://github.com/typicode/husky#readme)
-#   At: 8/12/2021, 11:48:23 AM
-#   From: /Users/ckoning/Projects/autocloud/cloudgraph/providers/cloudgraph-provider-aws/node_modules/husky (https://github.com/typicode/husky#readme)
+#   At: 8/16/2021, 7:39:21 PM
+#   From: /Users/tylerdunkel/autocloud/cloudgraph-provider-aws/node_modules/husky (https://github.com/typicode/husky#readme)
 
 debug () {
   if [ "$HUSKY_DEBUG" = "true" ] || [ "$HUSKY_DEBUG" = "1" ]; then
