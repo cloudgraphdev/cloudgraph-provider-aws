@@ -1,3 +1,10 @@
+# [0.6.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.5.0...0.6.0) (2021-08-19)
+
+
+### Features
+
+* **vpc:** update & complete vpc service ([a31d880](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a31d880c84cb440e29a766cefa1069114e3c5628))
+
 # [0.5.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.4.0...0.5.0) (2021-08-19)
 
 
