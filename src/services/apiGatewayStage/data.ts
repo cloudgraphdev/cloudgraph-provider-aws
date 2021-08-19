@@ -18,7 +18,7 @@ import {
   apiGatewayRestApiArn,
   apiGatewayStageArn,
 } from '../../utils/generateArns'
-import { Credentials } from '../../types'
+import { Credentials, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { Tag } from '../../types/generated'
 import { initTestEndpoint } from '../../utils'
@@ -30,7 +30,7 @@ const endpoint = initTestEndpoint('API Gateway Stage')
 
 export interface AwsApiGatewayStage extends Omit<Stage, 'tags'> {
   restApiId: string
-  tags: Tag[]
+  tags: TagMap
   region: string
 }
  

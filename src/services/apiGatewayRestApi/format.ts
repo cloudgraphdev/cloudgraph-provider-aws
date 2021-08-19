@@ -6,6 +6,7 @@ import {
   apiGatewayArn,
   apiGatewayRestApiArn,
 } from '../../utils/generateArns'
+import { formatTagsFromMap } from '../../utils/format'
 
 export default ({
   service,
@@ -40,6 +41,6 @@ export default ({
     createdDate: createdDate.toISOString(),
     minimumCompressionSize,
     binaryMediaTypes,
-    tags,
+    tags: formatTagsFromMap(tags),
   }
 }

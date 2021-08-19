@@ -14,7 +14,7 @@ import {
   apiGatewayArn,
   apiGatewayRestApiArn,
 } from '../../utils/generateArns'
-import { Credentials } from '../../types'
+import { Credentials, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { Tag } from '../../types/generated'
 import { initTestEndpoint } from '../../utils'
@@ -25,7 +25,7 @@ const MAX_REST_API = 500
 const endpoint = initTestEndpoint('API Gateway Rest API')
 
 export interface AwsApiGatewayRestApi extends Omit<RestApi, 'tags'> {
-  tags: Tag[]
+  tags: TagMap
   region: string
 }
  

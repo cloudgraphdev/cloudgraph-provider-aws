@@ -6,6 +6,7 @@ import {
   apiGatewayArn,
   apiGatewayStageArn,
 } from '../../utils/generateArns'
+import { formatTagsFromMap } from '../../utils/format'
 
 export default ({
   service,
@@ -23,7 +24,7 @@ export default ({
     clientCertificateId,
     tracingEnabled,
     variables: vars = {},
-    tags: stageTags = {},
+    tags,
   } = service
 
   const arn = apiGatewayStageArn({
@@ -33,9 +34,6 @@ export default ({
 
   const variables = Object.entries(vars)
   .map(([k, v]) => ({key: k, value: v}))
-
-  const tags = Object.entries(stageTags)
-  .map(([k, v]: [string, string]) => ({key: k, value: v}))
 
   return {
     id: arn,
@@ -49,6 +47,6 @@ export default ({
     clientCertificateId,
     xrayTracing: tracingEnabled,
     variables,
-    tags,
+    tags: formatTagsFromMap(tags),
   }
 }
