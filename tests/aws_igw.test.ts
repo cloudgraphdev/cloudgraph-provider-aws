@@ -1,27 +1,33 @@
-import CloudGraph from '@cloudgraph/sdk'
+import CloudGraph, { ServiceConnection } from '@cloudgraph/sdk'
 
 import Igw from '../src/services/igw'
 import Vpc from '../src/services/vpc'
 import services from '../src/enums/services'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
+import { AwsIgw } from '../src/types/generated'
+import { RawAwsIgw } from '../src/services/igw/data'
 
 initTestConfig()
 
-let igwGetDataResult
-let formatResult
-let initiatorTestData
-let initiatorGetConnectionsResult
+let getDataResult: RawAwsIgw[]
+let formatResult: AwsIgw[]
+let initiatorTestData: Array<{
+  name: string
+  data: { [property: string]: any[] }
+}>
+let initiatorGetConnectionsResult: Array<{
+  [property: string]: ServiceConnection[]
+}>
 beforeAll(async () => {
-
   try {
     const igwClass = new Igw({ logger: CloudGraph.logger })
     const vpcClass = new Vpc({ logger: CloudGraph.logger })
-    igwGetDataResult = await igwClass.getData({
+    getDataResult = await igwClass.getData({
       credentials,
       regions: region,
     })
-    formatResult = igwGetDataResult[region].map(igw =>
+    formatResult = getDataResult[region].map(igw =>
       igwClass.format({ service: igw, region, account })
     )
     initiatorTestData = [
@@ -34,7 +40,7 @@ beforeAll(async () => {
       },
       {
         name: services.igw,
-        data: igwGetDataResult,
+        data: getDataResult,
       },
     ]
     initiatorGetConnectionsResult = initiatorTestData[0].data[region].map(vpc =>
@@ -53,11 +59,11 @@ beforeAll(async () => {
 
 describe('getData', () => {
   it('should return a truthy value ', () => {
-    expect(igwGetDataResult).toBeTruthy()
+    expect(getDataResult).toBeTruthy()
   })
 
   it('should return data from a region in the correct format', async () => {
-    expect(igwGetDataResult[region]).toEqual(
+    expect(getDataResult[region]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           Attachments: expect.arrayContaining([
@@ -69,12 +75,12 @@ describe('getData', () => {
           InternetGatewayId: expect.any(String),
           // TODO: Haven't found a way to match this as an optional property
           // OwnerId: expect.any(String) || expect.any(undefined),
-          Tags: expect.arrayContaining([
-            expect.objectContaining({
-              key: expect.any(String),
-              value: expect.any(String),
-            }),
-          ]),
+          // Tags: expect.arrayContaining([
+          //   expect.objectContaining({
+          //     key: expect.any(String),
+          //     value: expect.any(String),
+          //   }),
+          // ]),
           region: expect.any(String),
         }),
       ])
@@ -109,12 +115,22 @@ describe('format', () => {
   })
 })
 
-describe('IGWs', () => {
-  it('should have the connection to a VPC', () => {
+describe('initiator(vpc)', () => {
+  it('hould create the connection to igw', () => {
+    const vpcIgwConnections: ServiceConnection[] = []
+    initiatorGetConnectionsResult.map(
+      (vpc: { [property: string]: ServiceConnection[] }) => {
+        const connections: ServiceConnection[] = vpc[Object.keys(vpc)[0]]
+        vpcIgwConnections.push(
+          ...connections.filter(c => c.resourceType === services.igw)
+        )
+      }
+    )
     expect(initiatorGetConnectionsResult).toEqual(
-      expect.arrayContaining([
-        expect.any(Object)
-      ])
+      expect.arrayContaining([expect.any(Object)])
+    )
+    expect(getDataResult[region].length).toStrictEqual(
+      vpcIgwConnections.length
     )
   })
 })

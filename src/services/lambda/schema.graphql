@@ -18,6 +18,7 @@ type awsLambda @key(fields: "id") {
   kms: [awsKms] @hasInverse(field: lambda)
   securityGroups: [awsSecurityGroup] @hasInverse(field: lambda)
   # subnets: [awsSubnet] @hasInverse(field: lambda)
+  vpc: [awsVpc] @hasInverse(field: lambda)
 }
 
 type awsLambaEnvironmentVariable

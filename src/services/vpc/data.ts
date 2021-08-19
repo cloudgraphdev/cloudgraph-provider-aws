@@ -5,13 +5,19 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 import upperFirst from 'lodash/upperFirst'
 
+import { Request } from 'aws-sdk'
 import { AWSError } from 'aws-sdk/lib/error'
-import EC2, { DescribeVpcsResult } from 'aws-sdk/clients/ec2'
-import CloudGraph, { Opts } from '@cloudgraph/sdk'
+import EC2, {
+  DescribeVpcsRequest,
+  DescribeVpcsResult,
+  Vpc,
+} from 'aws-sdk/clients/ec2'
+import CloudGraph from '@cloudgraph/sdk'
 
-import { Credentials } from '../../types'
+import { AwsTag, Credentials, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint } from '../../utils'
+import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
@@ -20,18 +26,22 @@ const endpoint = initTestEndpoint('VPC')
 /**
  * VPC
  */
+export interface RawAwsVpc extends Omit<Vpc, 'Tags'> {
+  enableDnsHostnames?: boolean
+  enableDnsSupport?: boolean
+  region: string
+  Tags: TagMap
+}
 
 export default async ({
   regions,
   credentials,
-}: // opts,
-{
+}: {
   regions: string
   credentials: Credentials
-  opts: Opts
-}) =>
+}): Promise<{ [property: string]: RawAwsVpc[] }> =>
   new Promise(async resolve => {
-    const vpcData = []
+    const vpcData: RawAwsVpc[] = []
     const regionPromises = []
     const additionalAttrPromises = []
 
@@ -44,8 +54,13 @@ export default async ({
       region,
       token: NextToken = '',
       resolveRegion,
-    }) => {
-      let args: any = {}
+    }: {
+      ec2: EC2
+      region: string
+      token?: string
+      resolveRegion: () => void
+    }): Promise<Request<DescribeVpcsResult, AWSError>> => {
+      let args: DescribeVpcsRequest = {}
 
       if (NextToken) {
         args = { ...args, NextToken }
@@ -55,7 +70,9 @@ export default async ({
         args,
         (err: AWSError, data: DescribeVpcsResult) => {
           if (err) {
-            logger.error('There was an error in service EC2 function describeVpcs')
+            logger.error(
+              'There was an error in service EC2 function describeVpcs'
+            )
             logger.debug(err)
             Sentry.captureException(new Error(err.message))
           }
@@ -93,15 +110,11 @@ export default async ({
 
           vpcData.push(
             ...vpcs.map(vpc => {
-              const result = { ...vpc, region }
-
-              const tagsInObjForm = {}
-
-              vpc.Tags.map(({ Key, Value }) => {
-                tagsInObjForm[Key] = Value
-              })
-
-              return { ...result, Tags: tagsInObjForm }
+              return {
+                ...vpc,
+                region,
+                Tags: convertAwsTagsToTagMap(vpc.Tags as AwsTag[]),
+              }
             })
           )
 
@@ -130,14 +143,16 @@ export default async ({
      * Step 2) For each VPC get Enable DNS Support/Hostnames configuration
      */
 
-    const fetchVpcAttribute = Attribute =>
-      vpcData.map(({ region, VpcId }, idx) => {
+    const fetchVpcAttribute = (Attribute): void[] =>
+      vpcData.map(({ region, VpcId }, idx): void => {
         const ec2 = new EC2({ region, credentials, endpoint })
 
         const additionalAttrPromise = new Promise<void>(resolveAdditionalAttr =>
           ec2.describeVpcAttribute({ VpcId, Attribute }, (err, data) => {
             if (err) {
-              logger.error('There was an error in service EC2 function describeVpcAttribute')
+              logger.error(
+                'There was an error in service EC2 function describeVpcAttribute'
+              )
               logger.debug(err)
               Sentry.captureException(new Error(err.message))
             }

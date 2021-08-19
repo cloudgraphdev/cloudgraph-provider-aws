@@ -13,14 +13,17 @@ import { initTestEndpoint } from '../../utils'
 /**
  * EIP
  */
-export interface RawAwsEip extends Omit<Address, 'Tags'> {
-  region: string
-  Tags: TagMap
-}
-
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const endpoint = initTestEndpoint('EIP')
+
+/**
+ * EIP
+ */
+export interface RawAwsEip extends Omit<Address, 'Tags'> {
+  region: string
+  Tags?: TagMap
+}
 
 export default async ({
   regions,

@@ -1,7 +1,7 @@
-import { AwsEip } from '../../types/generated'
 import t from '../../properties/translations'
-import { formatTagsFromMap } from '../../utils/format'
+import { AwsEip } from '../../types/generated'
 import { RawAwsEip } from './data'
+import { formatTagsFromMap } from '../../utils/format'
 
 /**
  * EIP
@@ -35,7 +35,7 @@ export default ({
   // Format Tags
   const eipTags = formatTagsFromMap(tags)
 
-  const eip = {
+  return {
     id,
     arn: `arn:aws:ec2:${region}:${account}:eip-allocation/${id}`,
     vpc: domain === 'vpc' ? t.yes : t.no,
@@ -52,5 +52,4 @@ export default ({
     publicIpv4Pool,
     tags: eipTags,
   }
-  return eip
 }

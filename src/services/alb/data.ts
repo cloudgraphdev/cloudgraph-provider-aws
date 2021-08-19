@@ -1,6 +1,21 @@
 import * as Sentry from '@sentry/node'
 
-import ELBV2 from 'aws-sdk/clients/elbv2'
+import { AWSError, Request } from 'aws-sdk'
+import ELBV2, {
+  DescribeListenersInput,
+  DescribeListenersOutput,
+  DescribeLoadBalancerAttributesOutput,
+  DescribeLoadBalancersInput,
+  DescribeLoadBalancersOutput,
+  DescribeTagsOutput,
+  DescribeTargetGroupsInput,
+  DescribeTargetGroupsOutput,
+  DescribeTargetHealthOutput,
+  Listeners,
+  LoadBalancer,
+  LoadBalancerAttributeValue,
+  TargetGroups,
+} from 'aws-sdk/clients/elbv2'
 import CloudGraph, { Opts } from '@cloudgraph/sdk'
 
 import head from 'lodash/head'
@@ -8,16 +23,27 @@ import groupBy from 'lodash/groupBy'
 
 import isEmpty from 'lodash/isEmpty'
 
-import { Credentials } from '../../types'
+import { Credentials, TagMap } from '../../types'
 
 import awsLoggerText from '../../properties/logger'
 import { convertAwsTagsToTagMap } from '../../utils/format'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 /**
  * ALB
  */
 const { logger } = CloudGraph
+const endpoint = initTestEndpoint('ALB')
+
+export type RawAwsAlb = LoadBalancer & {
+  listeners: Listeners
+  targetIds: Array<string>
+  attributes: { [property: string]: LoadBalancerAttributeValue }
+  targetGroups: TargetGroups
+  region: string
+  Tags: TagMap
+}
 
 export default async ({
   regions,
@@ -27,9 +53,9 @@ export default async ({
   regions: string
   credentials: Credentials
   opts: Opts
-}) =>
+}): Promise<{ [property: string]: RawAwsAlb[] }> =>
   new Promise(async resolve => {
-    const albData = []
+    const albData: RawAwsAlb[] = []
     const tagPromises = []
     const regionPromises = []
     const listenerPromises = []
@@ -45,8 +71,13 @@ export default async ({
       marker: Marker = '',
       elbv2,
       resolveRegion,
-    }) => {
-      let args: any = {}
+    }: {
+      region: string
+      marker?: string
+      elbv2: ELBV2
+      resolveRegion: () => void
+    }): Promise<Request<DescribeLoadBalancersOutput, AWSError>> => {
+      let args: DescribeLoadBalancersInput = {}
 
       if (Marker) {
         args = { ...args, Marker }
@@ -54,7 +85,9 @@ export default async ({
 
       return elbv2.describeLoadBalancers(args, async (err, data) => {
         if (err) {
-          logger.error('There was an error in service alb function describeLoadBalancers')
+          logger.error(
+            'There was an error in service alb function describeLoadBalancers'
+          )
           logger.debug(err)
           Sentry.captureException(new Error(err.message))
         }
@@ -117,7 +150,7 @@ export default async ({
         new Promise<void>(resolveRegion =>
           describeAlbs({
             region,
-            elbv2: new ELBV2({ region, credentials }),
+            elbv2: new ELBV2({ region, credentials, endpoint }),
             resolveRegion,
           })
         )
@@ -130,10 +163,22 @@ export default async ({
      * Step 2, get all the listeners for each alb
      */
 
-    const getTagsForAlb = async ({ alb, elbv2, resolveTags, ResourceArns }) =>
+    const getTagsForAlb = async ({
+      alb,
+      elbv2,
+      resolveTags,
+      ResourceArns,
+    }: {
+      alb: RawAwsAlb
+      elbv2: ELBV2
+      resolveTags: () => void
+      ResourceArns: string[]
+    }): Promise<Request<DescribeTagsOutput, AWSError>> =>
       elbv2.describeTags({ ResourceArns }, async (err, data) => {
         if (err) {
-          logger.error('There was an error in service alb function describeTags')
+          logger.error(
+            'There was an error in service alb function describeTags'
+          )
           logger.debug(err)
           Sentry.captureException(new Error(err.message))
         }
@@ -143,21 +188,21 @@ export default async ({
          */
 
         if (isEmpty(data)) {
-          return resolveTags({})
+          return resolveTags()
         }
 
         const { TagDescriptions: allTags = [] } = data || {}
 
         const tags = ((head(allTags) as { Tags: [] }) || { Tags: [] }).Tags
 
-        logger.debug(lt.fetchedAlbTags(tags.length, ResourceArns))
+        logger.debug(lt.fetchedAlbTags(tags.length, ResourceArns.toString()))
 
         /**
          * No tags found
          */
 
         if (isEmpty(tags)) {
-          return resolveTags({})
+          return resolveTags()
         }
 
         /**
@@ -177,7 +222,7 @@ export default async ({
 
     albData.map(alb => {
       const { LoadBalancerArn: arn, region } = alb
-      const elbv2 = new ELBV2({ region, credentials })
+      const elbv2 = new ELBV2({ region, credentials, endpoint })
 
       tagPromises.push(
         new Promise<void>(resolveTags => {
@@ -202,12 +247,19 @@ export default async ({
       elbv2,
       resolveAttributes,
       LoadBalancerArn,
-    }) =>
+    }: {
+      alb: RawAwsAlb
+      elbv2: ELBV2
+      resolveAttributes: () => void
+      LoadBalancerArn: string
+    }): Promise<Request<DescribeLoadBalancerAttributesOutput, AWSError>> =>
       elbv2.describeLoadBalancerAttributes(
         { LoadBalancerArn },
         async (err, data) => {
           if (err) {
-            logger.error('There was an error in service alb function describeLoadBalancerAttributes')
+            logger.error(
+              'There was an error in service alb function describeLoadBalancerAttributes'
+            )
             logger.debug(err)
             Sentry.captureException(new Error(err.message))
           }
@@ -251,7 +303,7 @@ export default async ({
 
     albData.map(alb => {
       const { LoadBalancerArn, region } = alb
-      const elbv2 = new ELBV2({ region, credentials })
+      const elbv2 = new ELBV2({ region, credentials, endpoint })
       tagPromises.push(
         new Promise<void>(resolveAttributes => {
           getAttributesForAlb({
@@ -276,8 +328,14 @@ export default async ({
       marker: Marker = '',
       LoadBalancerArn,
       resolveListeners,
-    }) => {
-      let args: any = { LoadBalancerArn }
+    }: {
+      alb: RawAwsAlb
+      elbv2: ELBV2
+      marker?: string
+      LoadBalancerArn: string
+      resolveListeners: () => void
+    }): Promise<Request<DescribeListenersOutput, AWSError>> => {
+      let args: DescribeListenersInput = { LoadBalancerArn }
 
       if (Marker) {
         args = {
@@ -288,7 +346,9 @@ export default async ({
 
       return elbv2.describeListeners(args, async (err, data) => {
         if (err) {
-          logger.error('There was an error in service alb function describeListeners')
+          logger.error(
+            'There was an error in service alb function describeListeners'
+          )
           logger.debug(err)
           Sentry.captureException(new Error(err.message))
         }
@@ -344,7 +404,7 @@ export default async ({
 
     albData.map(alb => {
       const { LoadBalancerArn, region } = alb
-      const elbv2 = new ELBV2({ region, credentials })
+      const elbv2 = new ELBV2({ region, credentials, endpoint })
       const listenerPromise = new Promise<void>(resolveListeners => {
         describeListenersForAlb({
           alb,
@@ -368,8 +428,14 @@ export default async ({
       marker: Marker = '',
       LoadBalancerArn,
       resolveTargetGroups,
-    }) => {
-      let args: any = { LoadBalancerArn }
+    }: {
+      alb: RawAwsAlb
+      elbv2: ELBV2
+      marker?: string
+      LoadBalancerArn: string
+      resolveTargetGroups: () => void
+    }): Promise<Request<DescribeTargetGroupsOutput, AWSError>> => {
+      let args: DescribeTargetGroupsInput = { LoadBalancerArn }
 
       if (Marker) {
         args = {
@@ -380,7 +446,9 @@ export default async ({
 
       return elbv2.describeTargetGroups(args, async (err, data) => {
         if (err) {
-          logger.error('There was an error in service alb function describeTargetGroups')
+          logger.error(
+            'There was an error in service alb function describeTargetGroups'
+          )
           logger.debug(err)
           Sentry.captureException(new Error(err.message))
         }
@@ -439,7 +507,7 @@ export default async ({
 
     albData.map(alb => {
       const { LoadBalancerArn, region } = alb
-      const elbv2 = new ELBV2({ region, credentials })
+      const elbv2 = new ELBV2({ region, credentials, endpoint })
       const targetGroupPromise = new Promise<void>(resolveTargetGroups => {
         describeTargetGroupsForAlb({
           alb,
@@ -462,10 +530,17 @@ export default async ({
       elbv2,
       TargetGroupArn,
       resolveTargetHealth,
-    }) =>
+    }: {
+      alb: RawAwsAlb
+      elbv2: ELBV2
+      TargetGroupArn: string
+      resolveTargetHealth: () => void
+    }): Promise<Request<DescribeTargetHealthOutput, AWSError>> =>
       elbv2.describeTargetHealth({ TargetGroupArn }, async (err, data) => {
         if (err) {
-          logger.error('There was an error in service alb function describeTargetHealth')
+          logger.error(
+            'There was an error in service alb function describeTargetHealth'
+          )
           logger.debug(err)
           Sentry.captureException(new Error(err.message))
         }
@@ -480,7 +555,9 @@ export default async ({
 
         const { TargetHealthDescriptions: targetHealth = [] } = data || {}
 
-        logger.debug(lt.fetchedAlbTargetIds(targetHealth.length, TargetGroupArn))
+        logger.debug(
+          lt.fetchedAlbTargetIds(targetHealth.length, TargetGroupArn)
+        )
 
         /**
          * No target health info found
@@ -503,7 +580,7 @@ export default async ({
 
     albData.map(alb => {
       const { region, targetGroups = [] } = alb
-      const elbv2 = new ELBV2({ region, credentials })
+      const elbv2 = new ELBV2({ region, credentials, endpoint })
       targetGroups.map(({ TargetGroupArn }) => {
         targetHealthPromises.push(
           new Promise<void>(resolveTargetHealth => {

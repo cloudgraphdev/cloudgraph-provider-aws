@@ -14,8 +14,7 @@ export default ({
   service: rawData,
   account,
   region,
-}:
-{
+}: {
   service: AwsSecurityGroup
   account: string
   region: string
@@ -31,11 +30,6 @@ export default ({
 
   const { ipPermissions: ingress, ipPermissionsEgress: egress } =
     toCamel(rawData)
-
-  /**
-   * Add these tags to the list of global tags so we can filter by tag on the front end
-   */
-  // combineElementsTagsWithExistingGlobalTags({ tags, allTagData })
 
   const [obr, ibr] = [
     { data: egress, direction: t.destination },

@@ -2,43 +2,33 @@ import { MetricAlarm } from 'aws-sdk/clients/cloudwatch'
 import t from '../../properties/translations'
 import { TagMap } from '../../types'
 import { AwsCloudwatch } from '../../types/generated'
-import { toCamel } from '../../utils'
 import { formatTagsFromMap } from '../../utils/format'
 
 /**
  * CloudWatch
  */
 export default ({
-  // allTagData,
-  service: rawData,
+  service,
 }: {
-  // allTagData
   service: MetricAlarm & { Tags?: TagMap; region: string }
 }): AwsCloudwatch => {
-  const { Tags } = rawData
-  const tags = formatTagsFromMap(Tags)
   const {
-    alarmDescription: description,
-    actionsEnabled,
-    alarmActions: actions,
-    alarmArn: arn,
-    alarmName: name,
-    comparisonOperator,
-    dimensions = [],
-    evaluationPeriods,
-    metricName: metric,
-    namespace,
-    period,
-    statistic,
-    threshold,
-    unit = '',
-  } = toCamel(rawData)
-
-  /**
-   * Add these tags to the list of global tags so we can filter by tag on the front end
-   */
-  // combineElementsTagsWithExistingGlobalTags({ tags, allTagData })
-
+    AlarmDescription: description,
+    ActionsEnabled: actionsEnabled,
+    AlarmActions: actions,
+    AlarmArn: arn,
+    AlarmName: name,
+    ComparisonOperator: comparisonOperator,
+    Dimensions: dimensions = [],
+    EvaluationPeriods: evaluationPeriods,
+    MetricName: metric,
+    Namespace: namespace,
+    Period: period,
+    Statistic: statistic,
+    Threshold: threshold,
+    Unit: unit = '',
+    Tags,
+  } = service
   return {
     id: name,
     arn,
@@ -52,7 +42,10 @@ export default ({
     threshold: `${threshold} ${unit}`,
     period: `${period} ${t.seconds}`,
     evaluationPeriods,
-    dimensions,
-    tags,
+    dimensions: dimensions.map(({ Name, Value }) => ({
+      name: Name,
+      value: Value,
+    })),
+    tags: formatTagsFromMap(Tags),
   }
 }

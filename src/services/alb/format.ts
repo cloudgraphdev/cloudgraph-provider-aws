@@ -1,8 +1,10 @@
+import { Listener } from 'aws-sdk/clients/elbv2'
 import startCase from 'lodash/startCase'
 
 import t from '../../properties/translations'
 import { AwsAlb, AwsAlbListener } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
+import { RawAwsAlb } from './data'
 
 /**
  * ALBs
@@ -15,7 +17,7 @@ const awsAlbListernerGraphFormat = (listener): AwsAlbListener => {
     SslPolicy: sslPolicy,
     Protocol: protocol,
     Port: port,
-  }: any = listener
+  }: Listener = listener
 
   return {
     arn: id,
@@ -25,7 +27,7 @@ const awsAlbListernerGraphFormat = (listener): AwsAlbListener => {
       rules: rules.map(
         ({ Order: order, Type: type, TargetGroupArn: targetGroupArn }) => ({
           type,
-          order,
+          order: order?.toString(),
           targetGroupArn,
         })
       ),
@@ -33,7 +35,7 @@ const awsAlbListernerGraphFormat = (listener): AwsAlbListener => {
   }
 }
 
-export default ({ service: alb }): AwsAlb => {
+export default ({ service: alb }: { service: RawAwsAlb }): AwsAlb => {
   // TODO: type this from aws
   const {
     LoadBalancerArn: arn,
@@ -57,9 +59,7 @@ export default ({ service: alb }): AwsAlb => {
   }: // attributes = {},
   // SecurityGroups: securityGroups = [],
   // AvailabilityZones: azs = [],
-  any = alb
-
-  // combineElementsTagsWithExistingGlobalTags({ tags, allTagData })
+  RawAwsAlb = alb
 
   // let metaData: any = {}
 
@@ -82,7 +82,7 @@ export default ({ service: alb }): AwsAlb => {
     accessLogsEnabled: accessLogsEnabled === t.true ? t.yes : t.no,
     dropInvalidHeaderFields: dropInvalidHeaderFields === t.true ? t.yes : t.no,
     tags: formatTagsFromMap(Tags),
-    createdAt,
+    createdAt: createdAt.toISOString(),
     status,
     listeners: listeners.map(awsAlbListernerGraphFormat),
   }

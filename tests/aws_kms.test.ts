@@ -3,16 +3,22 @@ import CloudGraph, { ServiceConnection } from '@cloudgraph/sdk'
 import services from '../src/enums/services'
 import KmsClass from '../src/services/kms'
 import LambdaClass from '../src/services/lambda'
-import { AwsKms } from '../src/services/kms/data'
+import { AwsKms as RawAwsKms } from '../src/services/kms/data'
 import { account, credentials, region } from '../src/properties/test'
+import { AwsKms } from '../src/types/generated'
 import { initTestConfig } from '../src/utils'
 
 initTestConfig()
 
-let getDataResult
-let formatResult
-let initiatorTestData
-let initiatorGetConnectionsResult: ServiceConnection[]
+let getDataResult: RawAwsKms[]
+let formatResult: AwsKms[]
+let initiatorTestData: Array<{
+  name: string
+  data: { [property: string]: any[] }
+}>
+let initiatorGetConnectionsResult: Array<{
+  [property: string]: ServiceConnection[]
+}>
 beforeAll(
   async () =>
     new Promise<void>(async resolve => {
@@ -125,10 +131,17 @@ describe('format', () => {
 
 describe('initiator(lambda)', () => {
   it('should create the connection to kms', () => {
-    expect(initiatorGetConnectionsResult[0]).toEqual(
-      expect.objectContaining({
-        lambda_function_name: expect.any(Array)
-      })
+    const lambdaKmsConnections: ServiceConnection[] = []
+    initiatorGetConnectionsResult.map(
+      (lambda: { [property: string]: ServiceConnection[] }) => {
+        const connections: ServiceConnection[] = lambda[Object.keys(lambda)[0]]
+        lambdaKmsConnections.push(
+          ...connections.filter(c => c.resourceType === services.kms)
+        )
+      }
+    )
+    expect(initiatorGetConnectionsResult).toEqual(
+      expect.arrayContaining([expect.any(Object)])
     )
   })
 })

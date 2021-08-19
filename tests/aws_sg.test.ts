@@ -12,8 +12,13 @@ initTestConfig()
 
 let getDataResult
 let formatResult
-let initiatorTestData
-let initiatorGetConnectionsResult: ServiceConnection[]
+let initiatorTestData: Array<{
+  name: string
+  data: { [property: string]: any[] }
+}>
+let initiatorGetConnectionsResult: Array<{
+  [property: string]: ServiceConnection[]
+}>
 beforeAll(
   async () =>
     new Promise<void>(async resolve => {
@@ -198,11 +203,19 @@ describe('format', () => {
 })
 
 describe('initiator(lambda)', () => {
-  it('should create the connection to sg', () => {
-    expect(initiatorGetConnectionsResult[0]).toEqual(
-      expect.objectContaining({
-        lambda_function_name: expect.any(Array)
-      })
+  it('should create connections to sg', () => {
+    const lambdaSgConnections: ServiceConnection[] = []
+    initiatorGetConnectionsResult.map(
+      (lambda: { [property: string]: ServiceConnection[] }) => {
+        const connections: ServiceConnection[] = lambda[Object.keys(lambda)[0]]
+        lambdaSgConnections.push(
+          ...connections.filter(c => c.resourceType === services.sg)
+        )
+      }
     )
+    expect(initiatorGetConnectionsResult).toEqual(
+      expect.arrayContaining([expect.any(Object)])
+    )
+    // TODO: Think how to handle many(sg) to one(lambda) connections
   })
 })
