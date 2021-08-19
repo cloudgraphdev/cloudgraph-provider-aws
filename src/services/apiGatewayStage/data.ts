@@ -88,20 +88,20 @@ const getStages = async ({ apiGw, restApiId }) =>
     }
   })
 
-const getTags = async ({ apiGw, arn }): Promise<Tag[]> =>
+const getTags = async ({ apiGw, arn }): Promise<TagMap> =>
   new Promise(resolve => {
     try {
       apiGw.getTags({ resourceArn: arn }, (err: AWSError, data: Tags) => {
         if (err) {
           logger.error(err)
           Sentry.captureException(new Error(err.message))
-          return resolve([])
+          return resolve({})
         }
         const { tags = {} } = data || {}
-        resolve(Object.entries(tags).map(([k, v]) => ({key: k, value: v} as Tag)))
+        resolve(tags)
       })
     } catch (error) {
-      resolve([])
+      resolve({})
     }
   })
 
