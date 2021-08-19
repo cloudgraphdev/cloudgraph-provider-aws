@@ -137,7 +137,6 @@ export default async ({
     })
 
     await Promise.all(regionPromises)
-    logger.info(lt.fetchedApiGatewayStages(apiGatewayData.length))
 
     apiGatewayData.map(({ restApiId, region }) => {
       const apiGw = new APIGW({ region, credentials, endpoint })
@@ -155,6 +154,7 @@ export default async ({
     })
 
     await Promise.all(additionalPromises)
+    logger.info(lt.fetchedApiGatewayStages(apiGatewayStages.length))
 
     // get all tags for each stage
     apiGatewayStages.map(stage => {
