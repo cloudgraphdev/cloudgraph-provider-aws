@@ -1,11 +1,10 @@
 import CloudGraph from '@cloudgraph/sdk'
+
 import ALBService from '../src/services/alb'
 import SGService from '../src/services/securityGroup'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
 import services from '../src/enums/services'
-
-initTestConfig()
 
 let albGetDataResult
 let formatResult
@@ -14,6 +13,7 @@ let loadBalancerId
 
 // TODO: Test when Localstack PRO is enabled
 describe.skip('ALB Service Test: ', () => {
+  initTestConfig()
   beforeAll(async () => {
     albGetDataResult = {}
     formatResult = {}

@@ -1,4 +1,3 @@
-// file: aws_lambda.test.ts
 import CloudGraph, { ServiceConnection } from '@cloudgraph/sdk'
 
 import LambdaClass from '../src/services/lambda'
@@ -10,8 +9,6 @@ import { RawAwsLambdaFunction } from '../src/services/lambda/data'
 import { AwsLambda } from '../src/types/generated'
 import services from '../src/enums/services'
 
-initTestConfig()
-
 let getDataResult: RawAwsLambdaFunction[]
 let formatResult: AwsLambda[]
 let initiatorTestData: Array<{
@@ -21,62 +18,65 @@ let initiatorTestData: Array<{
 let initiatorGetConnectionsResult: Array<{
   [property: string]: ServiceConnection[]
 }>
-beforeAll(
-  async () =>
-    new Promise<void>(async resolve => {
-      try {
-        const lambdaClass = new LambdaClass({ logger: CloudGraph.logger })
-        const vpcClass = new VpcClass({ logger: CloudGraph.logger })
-        const sgClass = new SecurityGroupClass({ logger: CloudGraph.logger })
-        getDataResult = await lambdaClass.getData({
-          credentials,
-          regions: region,
-        })
-        formatResult = getDataResult[region].map((item: RawAwsLambdaFunction) =>
-          lambdaClass.format({ service: item, region, account })
-        )
-        initiatorTestData = [
-          {
-            name: services.vpc,
-            data: await vpcClass.getData({
-              credentials,
-              regions: region,
-            }),
-          },
-          {
-            name: services.sg,
-            data: await sgClass.getData({
-              credentials,
-              regions: region,
-            }),
-          },
-          {
-            name: services.lambda,
-            data: getDataResult,
-          },
-        ]
-        initiatorGetConnectionsResult = initiatorTestData[0].data[region].map(
-          vpc =>
-            vpcClass.getConnections({
-              service: vpc,
-              data: initiatorTestData,
-              account,
-              region,
-            })
-        )
-      } catch (error) {
-        console.error(error) // eslint-disable-line no-console
-      }
-      resolve()
-    })
-)
+describe('Lambda Service Test: ', () => {
+  initTestConfig()
 
-describe('getData', () => {
+  beforeAll(
+    async () =>
+      new Promise<void>(async resolve => {
+        try {
+          const lambdaClass = new LambdaClass({ logger: CloudGraph.logger })
+          const vpcClass = new VpcClass({ logger: CloudGraph.logger })
+          const sgClass = new SecurityGroupClass({ logger: CloudGraph.logger })
+          getDataResult = await lambdaClass.getData({
+            credentials,
+            regions: region,
+          })
+          formatResult = getDataResult[region].map(
+            (item: RawAwsLambdaFunction) =>
+              lambdaClass.format({ service: item, region, account })
+          )
+          initiatorTestData = [
+            {
+              name: services.vpc,
+              data: await vpcClass.getData({
+                credentials,
+                regions: region,
+              }),
+            },
+            {
+              name: services.sg,
+              data: await sgClass.getData({
+                credentials,
+                regions: region,
+              }),
+            },
+            {
+              name: services.lambda,
+              data: getDataResult,
+            },
+          ]
+          initiatorGetConnectionsResult = initiatorTestData[0].data[region].map(
+            vpc =>
+              vpcClass.getConnections({
+                service: vpc,
+                data: initiatorTestData,
+                account,
+                region,
+              })
+          )
+        } catch (error) {
+          console.error(error) // eslint-disable-line no-console
+        }
+        resolve()
+      })
+  )
+
   it('should return a truthy value ', () => {
     expect(getDataResult).toBeTruthy()
   })
 
-  it('should return data from a region in the correct format', () => {
+  it('getData: should return data from a region in the correct format', () => {
     expect(getDataResult[region]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -128,10 +128,8 @@ describe('getData', () => {
       ])
     )
   })
-})
 
-describe('format', () => {
-  it('should return data in wthe correct format matching the schema type', () => {
+  it('format: should return data in wthe correct format matching the schema type', () => {
     expect(formatResult).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -154,10 +152,8 @@ describe('format', () => {
       ])
     )
   })
-})
 
-describe('initiator(vpc)', () => {
-  it('should create connections to lambda', () => {
+  it('initiator(vpc): should create connections to vpc', () => {
     const vpcLambdaConnections: ServiceConnection[] = []
     initiatorGetConnectionsResult.map(
       (vpc: { [property: string]: ServiceConnection[] }) => {

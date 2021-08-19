@@ -1,4 +1,3 @@
-// file: aws_sg.test.ts
 import CloudGraph, { ServiceConnection } from '@cloudgraph/sdk'
 
 import services from '../src/enums/services'
@@ -7,8 +6,6 @@ import LambdaClass from '../src/services/lambda'
 import { AwsSecurityGroup } from '../src/services/securityGroup/data'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
-
-initTestConfig()
 
 let getDataResult
 let formatResult
@@ -19,54 +16,55 @@ let initiatorTestData: Array<{
 let initiatorGetConnectionsResult: Array<{
   [property: string]: ServiceConnection[]
 }>
-beforeAll(
-  async () =>
-    new Promise<void>(async resolve => {
-      try {
-        const sgClass = new SgClass({ logger: CloudGraph.logger })
-        const lambdaClass = new LambdaClass({ logger: CloudGraph.logger })
-        getDataResult = await sgClass.getData({
-          credentials,
-          regions: region,
-        })
-        formatResult = getDataResult[region].map((item: AwsSecurityGroup) =>
-          sgClass.format({ service: item, region, account })
-        )
-        initiatorTestData = [
-          {
-            name: services.lambda,
-            data: await lambdaClass.getData({
-              credentials,
-              regions: region,
-            }),
-          },
-          {
-            name: services.sg,
-            data: getDataResult,
-          },
-        ]
-        initiatorGetConnectionsResult = initiatorTestData[0].data[region].map(
-          item =>
-            lambdaClass.getConnections({
-              service: item,
-              data: initiatorTestData,
-              account,
-              region,
-            })
-        )
-      } catch (error) {
-        console.error(error) // eslint-disable-line no-console
-      }
-      resolve()
-    })
-)
+describe('SG Service Test: ', () => {
+  initTestConfig()
+  beforeAll(
+    async () =>
+      new Promise<void>(async resolve => {
+        try {
+          const sgClass = new SgClass({ logger: CloudGraph.logger })
+          const lambdaClass = new LambdaClass({ logger: CloudGraph.logger })
+          getDataResult = await sgClass.getData({
+            credentials,
+            regions: region,
+          })
+          formatResult = getDataResult[region].map((item: AwsSecurityGroup) =>
+            sgClass.format({ service: item, region, account })
+          )
+          initiatorTestData = [
+            {
+              name: services.lambda,
+              data: await lambdaClass.getData({
+                credentials,
+                regions: region,
+              }),
+            },
+            {
+              name: services.sg,
+              data: getDataResult,
+            },
+          ]
+          initiatorGetConnectionsResult = initiatorTestData[0].data[region].map(
+            item =>
+              lambdaClass.getConnections({
+                service: item,
+                data: initiatorTestData,
+                account,
+                region,
+              })
+          )
+        } catch (error) {
+          console.error(error) // eslint-disable-line no-console
+        }
+        resolve()
+      })
+  )
 
-describe('getData', () => {
   it('should return a truthy value ', () => {
     expect(getDataResult).toBeTruthy()
   })
 
-  it('should return data from a region in the correct format', () => {
+  it('getData: should return data from a region in the correct format', () => {
     expect(getDataResult[region]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -157,10 +155,8 @@ describe('getData', () => {
       ])
     )
   })
-})
 
-describe('format', () => {
-  it('should return data in wthe correct format matching the schema type', () => {
+  it('format: should return data in wthe correct format matching the schema type', () => {
     expect(formatResult).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -200,10 +196,8 @@ describe('format', () => {
       ])
     )
   })
-})
 
-describe('initiator(lambda)', () => {
-  it('should create connections to sg', () => {
+  it('initiator(lambda): should create connections to sg', () => {
     const lambdaSgConnections: ServiceConnection[] = []
     initiatorGetConnectionsResult.map(
       (lambda: { [property: string]: ServiceConnection[] }) => {

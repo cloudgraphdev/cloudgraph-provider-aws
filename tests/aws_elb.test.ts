@@ -3,14 +3,13 @@ import ELBService from '../src/services/elb'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
 
-initTestConfig()
-
 let elbGetDataResult
 let formatResult
 let elbConnections
 
 // TODO: Test when Localstack PRO is enabled
 describe.skip('ELB Service Test: ', () => {
+  initTestConfig()
   beforeAll(async () => {
     elbGetDataResult = {}
     formatResult = {}

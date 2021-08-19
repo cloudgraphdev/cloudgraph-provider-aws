@@ -3,12 +3,11 @@ import Ebs from '../src/services/ebs'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
 
-initTestConfig()
-
 let ebsGetDataResult
 let formatResult
 
 describe('EBS Service Test: ', () => {
+  initTestConfig()
   beforeAll(async () => {
     ebsGetDataResult = {}
     formatResult = {}

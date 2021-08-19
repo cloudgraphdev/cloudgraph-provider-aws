@@ -22,8 +22,13 @@ describe('Network Interface Service Test: ', () => {
         regions: region,
       })
 
-      formatResult = networkInterfaceGetDataResult[region].map(ebsData =>
-        classInstance.format({ service: ebsData, region, account })
+      formatResult = networkInterfaceGetDataResult[region].map(
+        networkInterfaceData =>
+          classInstance.format({
+            service: networkInterfaceData,
+            region,
+            account,
+          })
       )
     } catch (error) {
       console.error(error) // eslint-disable-line no-console

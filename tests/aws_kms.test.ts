@@ -1,5 +1,5 @@
-// file: kms.test.ts
 import CloudGraph, { ServiceConnection } from '@cloudgraph/sdk'
+
 import services from '../src/enums/services'
 import KmsClass from '../src/services/kms'
 import LambdaClass from '../src/services/lambda'
@@ -7,8 +7,6 @@ import { AwsKms as RawAwsKms } from '../src/services/kms/data'
 import { account, credentials, region } from '../src/properties/test'
 import { AwsKms } from '../src/types/generated'
 import { initTestConfig } from '../src/utils'
-
-initTestConfig()
 
 let getDataResult: RawAwsKms[]
 let formatResult: AwsKms[]
@@ -19,54 +17,56 @@ let initiatorTestData: Array<{
 let initiatorGetConnectionsResult: Array<{
   [property: string]: ServiceConnection[]
 }>
-beforeAll(
-  async () =>
-    new Promise<void>(async resolve => {
-      try {
-        const kmsClass = new KmsClass({ logger: CloudGraph.logger })
-        const lambdaClass = new LambdaClass({ logger: CloudGraph.logger })
-        getDataResult = await kmsClass.getData({
-          credentials,
-          regions: region,
-        })
-        formatResult = getDataResult[region].map((item: AwsKms) =>
-          kmsClass.format({ service: item, region, account })
-        )
-        initiatorTestData = [
-          {
-            name: services.lambda,
-            data: await lambdaClass.getData({
-              credentials,
-              regions: region,
-            }),
-          },
-          {
-            name: services.kms,
-            data: getDataResult,
-          },
-        ]
-        initiatorGetConnectionsResult = initiatorTestData[0].data[region].map(
-          item =>
-            lambdaClass.getConnections({
-              service: item,
-              data: initiatorTestData,
-              account,
-              region,
-            })
-        )
-      } catch (error) {
-        console.error(error) // eslint-disable-line no-console
-      }
-      resolve()
-    })
-)
+describe('KMS Service Test: ', () => {
+  initTestConfig()
 
-describe('getData', () => {
+  beforeAll(
+    async () =>
+      new Promise<void>(async resolve => {
+        try {
+          const kmsClass = new KmsClass({ logger: CloudGraph.logger })
+          const lambdaClass = new LambdaClass({ logger: CloudGraph.logger })
+          getDataResult = await kmsClass.getData({
+            credentials,
+            regions: region,
+          })
+          formatResult = getDataResult[region].map((item: AwsKms) =>
+            kmsClass.format({ service: item, region, account })
+          )
+          initiatorTestData = [
+            {
+              name: services.lambda,
+              data: await lambdaClass.getData({
+                credentials,
+                regions: region,
+              }),
+            },
+            {
+              name: services.kms,
+              data: getDataResult,
+            },
+          ]
+          initiatorGetConnectionsResult = initiatorTestData[0].data[region].map(
+            item =>
+              lambdaClass.getConnections({
+                service: item,
+                data: initiatorTestData,
+                account,
+                region,
+              })
+          )
+        } catch (error) {
+          console.error(error) // eslint-disable-line no-console
+        }
+        resolve()
+      })
+  )
+
   it('should return a truthy value ', () => {
     expect(getDataResult).toBeTruthy()
   })
 
-  it('should return data from a region in the correct format', () => {
+  it('getData: should return data from a region in the correct format', () => {
     expect(getDataResult[region]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -93,10 +93,8 @@ describe('getData', () => {
       ])
     )
   })
-})
 
-describe('format', () => {
-  it('should return data in the correct format matching the schema type', () => {
+  it('format: should return data in the correct format matching the schema type', () => {
     expect(formatResult).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -124,10 +122,8 @@ describe('format', () => {
       ])
     )
   })
-})
 
-describe('initiator(lambda)', () => {
-  it('should create the connection to kms', () => {
+  it('initiator(lambda): should create the connection to lambda', () => {
     const lambdaKmsConnections: ServiceConnection[] = []
     initiatorGetConnectionsResult.map(
       (lambda: { [property: string]: ServiceConnection[] }) => {
@@ -141,7 +137,7 @@ describe('initiator(lambda)', () => {
       expect.arrayContaining([expect.any(Object)])
     )
   })
-})
 
-// TODO: Implement when Elasticache service is ready
-it.todo('initiator(elasticache): should create the connection to kms')
+  // TODO: Implement when Elasticache service is ready
+  it.todo('initiator(elasticache): should create the connection to kms')
+})
