@@ -23,7 +23,7 @@ const MAX_ITEMS = 50
 const { logger } = CloudGraph
 const endpoint = initTestEndpoint('Lambda')
 
-export interface AwsLambdaFunction extends FunctionConfiguration {
+export interface RawAwsLambdaFunction extends FunctionConfiguration {
   Tags?: TagMap
   region: string
   reservedConcurrentExecutions: ReservedConcurrentExecutions
@@ -129,9 +129,9 @@ export default async ({
 }: {
   regions: string
   credentials: Credentials
-}): Promise<{ [property: string]: AwsLambdaFunction[] }> =>
+}): Promise<{ [property: string]: RawAwsLambdaFunction[] }> =>
   new Promise(async resolve => {
-    const lambdaData: AwsLambdaFunction[] = []
+    const lambdaData: RawAwsLambdaFunction[] = []
     const regionPromises = []
     const tagsPromises = []
 

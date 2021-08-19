@@ -168,6 +168,7 @@ export type AwsEip = {
   networkBorderGroup?: Maybe<Scalars['String']>;
   customerOwnedIp?: Maybe<Scalars['String']>;
   customerOwnedIpv4Pool?: Maybe<Scalars['String']>;
+  vpcs?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
 export type AwsElb = {
@@ -279,6 +280,7 @@ export type AwsLambda = {
   tags?: Maybe<Array<Maybe<Tag>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
 export type AwsNetworkInterface = {
@@ -350,33 +352,37 @@ export type AwsTag = {
   id: Scalars['String'];
   key: Scalars['String'];
   value: Scalars['String'];
-  cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
-  kms?: Maybe<Array<Maybe<AwsKms>>>;
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
-  lambda?: Maybe<Array<Maybe<AwsLambda>>>;
-  ec2?: Maybe<Array<Maybe<AwsEc2>>>;
-  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
-  eip?: Maybe<Array<Maybe<AwsEip>>>;
+  cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
-  igw?: Maybe<Array<Maybe<AwsIgw>>>;
-  networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  ec2?: Maybe<Array<Maybe<AwsEc2>>>;
+  eip?: Maybe<Array<Maybe<AwsEip>>>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
+  igw?: Maybe<Array<Maybe<AwsIgw>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
+  lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
 export type AwsVpc = {
-  id: Scalars['String'];
   arn: Scalars['String'];
+  defaultVpc?: Maybe<Scalars['Boolean']>;
+  dhcpOptionsSet?: Maybe<Scalars['String']>;
+  enableDnsHostnames?: Maybe<Scalars['Boolean']>;
+  enableDnsSupport?: Maybe<Scalars['Boolean']>;
+  id: Scalars['String'];
+  instanceTenancy?: Maybe<Scalars['String']>;
   ipV4Cidr?: Maybe<Scalars['String']>;
   ipV6Cidr?: Maybe<Scalars['String']>;
-  dhcpOptionsSet?: Maybe<Scalars['String']>;
-  instanceTenancy?: Maybe<Array<Maybe<Scalars['String']>>>;
-  enableDnsSupport?: Maybe<Scalars['String']>;
-  enableDnsHostnames?: Maybe<Scalars['String']>;
-  defaultVpc?: Maybe<Scalars['Boolean']>;
   state?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
-  igw?: Maybe<Array<Maybe<AwsIgw>>>;
+  eip?: Maybe<Array<Maybe<AwsEip>>>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
+  igw?: Maybe<Array<Maybe<AwsIgw>>>;
+  lambda?: Maybe<Array<Maybe<AwsLambda>>>;
 };
 
 export type BlockDeviceEbs = {

@@ -1,4 +1,6 @@
 import { ServiceConnection } from '@cloudgraph/sdk'
+import { MetricAlarm } from 'aws-sdk/clients/cloudwatch'
+import { Vpc } from 'aws-sdk/clients/ec2'
 import { isEmpty } from 'lodash'
 import services from '../../enums/services'
 import regions from '../../enums/regions'
@@ -45,6 +47,29 @@ export default ({
             resourceType: services.alb,
             relation: 'child',
             field: 'alb',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related Cloudwatch
+     */
+    const cws: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.cloudwatch)
+    if (cws?.data?.[region]) {
+      const dataAtRegion: any = findServiceInstancesWithTag(
+        tag,
+        cws.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const cw of dataAtRegion) {
+          const { AlarmArn: id }: MetricAlarm = cw
+          connections.push({
+            id,
+            resourceType: services.cloudwatch,
+            relation: 'child',
+            field: 'cloudwatch',
           })
         }
       }
@@ -228,6 +253,27 @@ export default ({
             resourceType: services.networkInterface,
             relation: 'child',
             field: 'networkInterface',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related VPCs
+     */
+    const vpcs: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.vpc)
+    if (vpcs?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(tag, vpcs.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { VpcId: id }: Vpc = instance
+
+          connections.push({
+            id,
+            resourceType: services.vpc,
+            relation: 'child',
+            field: 'vpc',
           })
         }
       }

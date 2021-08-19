@@ -1,46 +1,35 @@
 import isEmpty from 'lodash/isEmpty'
 import t from '../../properties/translations'
 import { AwsLambda } from '../../types/generated'
-import { AwsLambdaFunction } from './data'
-import { toCamel } from '../../utils'
 import { formatTagsFromMap } from '../../utils/format'
+import { RawAwsLambdaFunction } from './data'
 
 /**
  * Lambda
  */
-
 export default ({
   service: rawData,
-}: // allTagData,
-{
-  service: AwsLambdaFunction
+}: {
+  service: RawAwsLambdaFunction
 }): AwsLambda => {
-  const lambda = toCamel(rawData)
   const {
+    CodeSize: codeSize,
+    Description: description,
     Environment = {},
+    FunctionArn: arn,
+    Handler: handler,
+    KMSKeyArn: kmsKeyArn,
+    LastModified: lastModified,
+    MemorySize: memorySize,
+    Runtime: runtime,
     Tags = {},
+    Timeout: timeout,
+    TracingConfig: tracing = [],
+    Version: version,
     reservedConcurrentExecutions: rawReservedConcurrentExecutions,
   } = rawData
-  const {
-    codeSize,
-    description,
-    functionArn: arn,
-    handler,
-    kmsKeyArn,
-    lastModified,
-    memorySize,
-    runtime,
-    timeout,
-    tracingConfig: tracing = [],
-    version,
-  } = lambda
   const environmentVariables = []
   const secretNames = [t.pass, t.secret, t.private, t.cert]
-
-  /**
-   * Add these tags to the list of global tags so we can filter by tag on the front end
-   */
-  // combineElementsTagsWithExistingGlobalTags({ tags, allTagData })
 
   const reservedConcurrentExecutions: any = rawReservedConcurrentExecutions
 
@@ -54,7 +43,7 @@ export default ({
           }
         })
 
-        environmentVariables.push({key, value: desiredValue})
+        environmentVariables.push({ key, value: desiredValue })
       })
     }
   }
@@ -74,7 +63,7 @@ export default ({
     reservedConcurrentExecutions,
     role: handler,
     runtime,
-    sourceCodeSize: `${parseInt(codeSize, 10) * 0.001} Kb`,
+    sourceCodeSize: `${codeSize * 0.001} Kb`,
     timeout,
     tracingConfig,
     version,

@@ -52,12 +52,12 @@ describe('EBS Service Test: ', () => {
               DeleteOnTermination: expect.any(Boolean),
             }),
           ]),
-          Tags: expect.arrayContaining([
-            expect.objectContaining({
-              Key: expect.any(String),
-              Value: expect.any(String),
-            }),
-          ]),
+          // Tags: expect.arrayContaining([
+          //   expect.objectContaining({
+          //     Key: expect.any(String),
+          //     Value: expect.any(String),
+          //   }),
+          // ]),
           region: expect.any(String),
         }),
       ])

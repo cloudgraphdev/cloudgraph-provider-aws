@@ -11,18 +11,18 @@ import resources from '../enums/resources'
 import regions from '../enums/regions'
 import ALB from './alb'
 import AwsInternetGateway from './igw'
+import AwsKms from './kms'
+import AwsSecurityGroup from './securityGroup'
+// import AwsSubnet from './subnet'
+import AwsTag from './tag'
 import CloudWatch from './cloudwatch'
+import EBS from './ebs'
 import EC2 from './ec2'
 import EIP from './eip'
-import AwsKms from './kms'
-import Lambda from './lambda'
-import AwsTag from './tag'
-// import AwsSubnet from './subnet'
-import AwsSecurityGroup from './securityGroup'
-import VPC from './vpc'
-import EBS from './ebs'
-import NetworkInterface from './networkInterface'
 import ELB from './elb'
+import Lambda from './lambda'
+import NetworkInterface from './networkInterface'
+import VPC from './vpc'
 import { Credentials } from '../types'
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -31,17 +31,17 @@ import { Credentials } from '../types'
 export const serviceMap = {
   [services.alb]: ALB,
   [services.cloudwatch]: CloudWatch,
+  [services.ebs]: EBS,
   [services.ec2Instance]: EC2,
   [services.eip]: EIP,
+  [services.elb]: ELB,
   [services.igw]: AwsInternetGateway,
   [services.kms]: AwsKms,
   [services.lambda]: Lambda,
+  [services.networkInterface]: NetworkInterface,
   [services.sg]: AwsSecurityGroup,
   // [services.subnet]: AwsSubnet, // TODO: Enable when going for ENG-222
   [services.vpc]: VPC,
-  [services.ebs]: EBS,
-  [services.networkInterface]: NetworkInterface,
-  [services.elb]: ELB,
   tag: AwsTag,
 }
 
