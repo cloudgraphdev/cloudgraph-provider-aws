@@ -1,3 +1,18 @@
+# [0.5.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.4.0...0.5.0) (2021-08-19)
+
+
+### Features
+
+* **elb:** Added ELB to allowed services ([82105b6](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/82105b632d7a7bc83a554e0151495082fc136c7c))
+* **elb:** Added SG connection ([0118f6b](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/0118f6b87abcc4d75297b202b75a3523e95efc81))
+* **elb:** Added TODO unit tests boilerplate ([2cdfd78](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/2cdfd7812162bb12c48d8044b6911a06dc94f401))
+* **elb:** Added VPC connection ([7fcfa75](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/7fcfa7548d21ca5b67138f50adec250c5ff89b23))
+* **elb:** Created ELB service ([66037f6](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/66037f6768781a43cde9afd0fecdd80d396ab00c))
+* **elb:** Fixed schema and types ([f0351b0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/f0351b020d45f1968b0abd919e92a1ad3ff0b358))
+* **elb:** Formatted ELB data ([ec435a4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/ec435a4abce24491b7511d456c2fb7426c3659d6))
+* **elb:** Ignore generated files ([74f454a](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/74f454a34211ef22eb6a0c4c919832116754a603))
+* **elb:** Updated format tags util ([d6c7b88](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d6c7b88e4f32fe122e2cd33616907c8ff8851e6a))
+
 # [0.4.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.3.0...0.4.0) (2021-08-19)
 
 
