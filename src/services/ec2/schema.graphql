@@ -1,24 +1,37 @@
-type awsEc2Metadata {
-  cuid: String
-}
-type awsEc2MetadataOptions {
+type awsEc2MetadataOptions
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   state: String!
   httpTokens: String!
   httpPutResponseHopLimit: Int
   httpEndpoint: String! @id
 }
 
-type blockDeviceEbs {
+type blockDeviceEbs
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   attachTime: String!
   deleteOnTermination: Boolean!
   status: String!
   volumeId: String! @id
 }
 
-type awsEc2Blockdevice {
+type awsEc2Blockdevice
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   deviceName: String! @id
   ebs: blockDeviceEbs
 }
+
 type Tag {
   key: String
   value: String
@@ -55,5 +68,10 @@ type awsEc2 @key(fields: "arn") {
   securityGroupIds: [String]
   ephemeralBlockDevice: [awsEc2Blockdevice]
   associatePublicIpAddress: String
+  tags: [Tag]
   alb: [awsAlb] @hasInverse(field: ec2Instance)
+  securityGroups: [awsSecurityGroup] @hasInverse(field: ec2Instance)
+  ebs: [awsEbs] @hasInverse(field: ec2Instance)
+  eip: [awsEip] @hasInverse(field: ec2Instance)
+  networkInterfaces: [awsNetworkInterface] @hasInverse(field: ec2Instance)
 }

@@ -11,7 +11,6 @@ export default {
   lambda: 'lambda',
   nat: 'nat',
   sg: 'sg',
-  subnet: 'subnet',
   vpc: 'vpc',
-  networkInterface: 'network_interface',
+  networkInterface: 'networkInterface',
 }

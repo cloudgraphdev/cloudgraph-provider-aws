@@ -93,6 +93,7 @@ export type AwsEbs = {
   availabilityZone?: Maybe<Scalars['String']>;
   multiAttachEnabled?: Maybe<Scalars['Boolean']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
 };
 
 export type AwsEbsAttachment = {
@@ -133,16 +134,17 @@ export type AwsEc2 = {
   securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
   ephemeralBlockDevice?: Maybe<Array<Maybe<AwsEc2Blockdevice>>>;
   associatePublicIpAddress?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  ebs?: Maybe<Array<Maybe<AwsEbs>>>;
+  eip?: Maybe<Array<Maybe<AwsEip>>>;
+  networkInterfaces?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
 };
 
 export type AwsEc2Blockdevice = {
   deviceName: Scalars['String'];
   ebs?: Maybe<BlockDeviceEbs>;
-};
-
-export type AwsEc2Metadata = {
-  cuid?: Maybe<Scalars['String']>;
 };
 
 export type AwsEc2MetadataOptions = {
@@ -169,6 +171,7 @@ export type AwsEip = {
   customerOwnedIp?: Maybe<Scalars['String']>;
   customerOwnedIpv4Pool?: Maybe<Scalars['String']>;
   vpcs?: Maybe<Array<Maybe<AwsVpc>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
 };
 
 export type AwsElb = {
@@ -298,6 +301,7 @@ export type AwsNetworkInterface = {
   privateIps?: Maybe<Array<Maybe<Scalars['String']>>>;
   attachment?: Maybe<AwsNetworkInterfaceAttachment>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
 };
 
 export type AwsNetworkInterfaceAttachment = {
@@ -322,6 +326,7 @@ export type AwsSecurityGroup = {
   outboundRuleCount?: Maybe<Scalars['Int']>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
 };
 
 export type AwsSgRule = {
@@ -364,6 +369,7 @@ export type AwsTag = {
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
 };
 
 export type AwsVpc = {

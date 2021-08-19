@@ -129,8 +129,6 @@ describe('initiator(vpc)', () => {
     expect(initiatorGetConnectionsResult).toEqual(
       expect.arrayContaining([expect.any(Object)])
     )
-    expect(getDataResult[region].length).toStrictEqual(
-      vpcIgwConnections.length
-    )
+    expect(getDataResult[region].length).toStrictEqual(vpcIgwConnections.length)
   })
 })

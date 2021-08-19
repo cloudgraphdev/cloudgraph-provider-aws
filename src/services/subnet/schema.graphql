@@ -1,4 +1,4 @@
-type awsSubnet @key(fields: "id"){
+type awsSubnet @key(fields: "id") {
   arn: String!
   autoAssignPublicIpv4Address: String
   autoAssignPublicIpv6Address: String
