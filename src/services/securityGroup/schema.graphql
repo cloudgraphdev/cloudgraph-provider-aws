@@ -12,6 +12,7 @@ type awsSecurityGroup @key(fields: "id") {
   inboundRuleCount: Int
   outboundRuleCount: Int
   lambda: [awsLambda] @hasInverse(field: securityGroups)
+  elb: [awsElb] @hasInverse(field: securityGroups)
 }
 
 type awsSgRule

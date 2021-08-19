@@ -170,6 +170,58 @@ export type AwsEip = {
   customerOwnedIpv4Pool?: Maybe<Scalars['String']>;
 };
 
+export type AwsElb = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  dnsName?: Maybe<Scalars['String']>;
+  hostedZone?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  scheme?: Maybe<Scalars['String']>;
+  vpcId?: Maybe<Scalars['String']>;
+  sourceSecurityGroup?: Maybe<AwsElbSourceSecurityGroup>;
+  securityGroupsIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  subnets?: Maybe<Array<Maybe<Scalars['String']>>>;
+  accessLogs?: Maybe<Scalars['String']>;
+  crossZoneLoadBalancing?: Maybe<Scalars['String']>;
+  idleTimeout?: Maybe<Scalars['String']>;
+  instances?: Maybe<AwsElbInstances>;
+  healthCheck?: Maybe<AwsElbHealthCheck>;
+  listeners?: Maybe<Array<Maybe<AwsElbListener>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+};
+
+export type AwsElbHealthCheck = {
+  target: Scalars['String'];
+  interval?: Maybe<Scalars['String']>;
+  timeout?: Maybe<Scalars['String']>;
+  healthyThreshold?: Maybe<Scalars['Int']>;
+  unhealthyThreshold?: Maybe<Scalars['Int']>;
+};
+
+export type AwsElbInstances = {
+  id?: Maybe<Scalars['ID']>;
+  connectionDraining?: Maybe<Scalars['String']>;
+  connectionDrainingTimeout?: Maybe<Scalars['String']>;
+};
+
+export type AwsElbListener = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  loadBalancerPort?: Maybe<Scalars['Int']>;
+  loadBalancerProtocol?: Maybe<Scalars['String']>;
+  instancePort?: Maybe<Scalars['Int']>;
+  instanceProtocol?: Maybe<Scalars['String']>;
+};
+
+export type AwsElbSourceSecurityGroup = {
+  groupName: Scalars['String'];
+  ownerAlias?: Maybe<Scalars['String']>;
+};
+
 export type AwsIgw = {
   arn: Scalars['String'];
   id: Scalars['String'];
@@ -267,6 +319,7 @@ export type AwsSecurityGroup = {
   inboundRuleCount?: Maybe<Scalars['Int']>;
   outboundRuleCount?: Maybe<Scalars['Int']>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  elb?: Maybe<Array<Maybe<AwsElb>>>;
 };
 
 export type AwsSgRule = {
@@ -307,6 +360,7 @@ export type AwsTag = {
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
   igw?: Maybe<Array<Maybe<AwsIgw>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  elb?: Maybe<Array<Maybe<AwsElb>>>;
 };
 
 export type AwsVpc = {
@@ -322,6 +376,7 @@ export type AwsVpc = {
   state?: Maybe<Scalars['String']>;
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
   igw?: Maybe<Array<Maybe<AwsIgw>>>;
+  elb?: Maybe<Array<Maybe<AwsElb>>>;
 };
 
 export type BlockDeviceEbs = {

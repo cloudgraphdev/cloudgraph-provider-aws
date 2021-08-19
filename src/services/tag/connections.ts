@@ -232,6 +232,27 @@ export default ({
         }
       }
     }
+    /**
+
+     * Find related ELB
+     */
+    const elbs: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.elb)
+    if (elbs?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(tag, elbs.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { LoadBalancerName: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.elb,
+            relation: 'child',
+            field: 'elb',
+          })
+        }
+      }
+    }
   }
 
   const tagResult = {
