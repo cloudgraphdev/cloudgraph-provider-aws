@@ -1,3 +1,22 @@
+# [0.7.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.6.0...0.7.0) (2021-08-19)
+
+
+### Features
+
+* **ec2:** Added tests for EC2 connections ([b3cdab4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b3cdab493aee8dbc3fe52d2e517965f04a0a1b89))
+* **ec2:** Added TODO unit tests boilerplate ([cd3c37c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/cd3c37c3c8eea5d7244f58baf918615559a254f4))
+* **ec2:** Adding types to getData method ([b41f16b](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b41f16bd57d93f7bcaf62b187ccedbe67781744e))
+* **ec2:** Cleaned up format EC2 file ([051d7c3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/051d7c3e06410e2a4bc0252d96c71cc2eda46c4a))
+* **ec2:** Fetch missing data from aws-sdk ([c68d5c6](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c68d5c628046580491a8e31debd969356cfcd78a))
+* **ec2:** Linked connections to EBS ([bd0ec49](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/bd0ec4972d494fc0a8730d9edc6df61c4c10400d))
+* **ec2:** Linked connections to EIP ([b2991fc](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b2991fc9acc1dad9700d689519c677e12b23ccac))
+* **ec2:** Linked connections to SG ([590b4be](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/590b4bea1ee129007e2ab4f7c8ea7137f9923a27))
+* **ec2:** Updated format tags util ([d781e1d](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d781e1dd146f3918d09577671144e0d63631fa48))
+* **kms,lambda,sg:** add kms, lambda and sg to services ([b54caf3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b54caf320b4c98c43bb6b09b095a15025b756d22))
+* **kms,lambda,sg:** add kms, lambda and sg to services ([2f56554](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/2f56554425f2b3b9647d75561452e833c25516a3))
+* **kms,lambda,sg:** add kms, lambda and sg to services ([670689f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/670689f1aff6c143793c3227b06e28bf2d19c51d))
+* **terraform:** add terraform/localstack integration, add README, update tests ([127b0eb](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/127b0eb7c25a1cfa7024393ee38d46aaabbf61ea))
+
 # [0.6.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.5.0...0.6.0) (2021-08-19)
 
 
