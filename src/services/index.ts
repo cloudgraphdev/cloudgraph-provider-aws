@@ -1,9 +1,9 @@
-import CloudGraph, { Service, Opts } from '@cloudgraph/sdk'
+import CloudGraph, { Service, Opts, ProviderData } from '@cloudgraph/sdk'
 import { loadFilesSync } from '@graphql-tools/load-files'
 import { mergeTypeDefs } from '@graphql-tools/merge'
 import AWS from 'aws-sdk'
-import STS from 'aws-sdk/clients/sts'
 import { print } from 'graphql'
+import STS from 'aws-sdk/clients/sts'
 import { isEmpty } from 'lodash'
 import path from 'path'
 
@@ -68,17 +68,17 @@ export default class Provider extends CloudGraph.Client {
     this.serviceMap = serviceMap
   }
 
-  credentials: Credentials | undefined
+  private credentials: Credentials | undefined
 
-  serviceMap: { [key: string]: any } // TODO: how to type the service map
+  private serviceMap: { [key: string]: any } // TODO: how to type the service map
 
-  properties: {
+  private properties: {
     services: { [key: string]: string }
     regions: string[]
     resources: { [key: string]: string }
   }
 
-  async configure(flags: any) {
+  async configure(flags: any): Promise<{[key: string]: any}> {
     const result: { [key: string]: any } = {}
     const answers = await this.interface.prompt([
       {
@@ -119,7 +119,7 @@ export default class Provider extends CloudGraph.Client {
     return result
   }
 
-  async getIdentity() {
+  async getIdentity(): Promise<{accountId: string}> {
     try {
       const credentials = await this.getCredentials()
       return new Promise((resolve, reject) =>
@@ -137,7 +137,7 @@ export default class Provider extends CloudGraph.Client {
     }
   }
 
-  getCredentials(): Promise<Credentials> {
+  private getCredentials(): Promise<Credentials> {
     this.logger.info('Searching for AWS credentials...')
     return new Promise(async resolve => {
       if (this.credentials) {
@@ -260,7 +260,7 @@ export default class Provider extends CloudGraph.Client {
    * @param service an AWS service that is listed within the service map (current supported services)
    * @returns Instance of an AWS service class to interact with that AWS service
    */
-  getService(service: string): Service {
+  private getService(service: string): Service {
     if (!serviceMap[service]) {
       throw new Error(`Service ${service} does not exist for AWS provider`)
     }
@@ -269,40 +269,40 @@ export default class Provider extends CloudGraph.Client {
 
   /**
    * getData is used to fetch all provider data specificed in the config for the provider
-   * @param TODO: fill in
+   * @param opts: A set of optional values to configure how getData works
    * @returns Promise<any> All provider data
    */
-  async getData({
-    opts,
-  }: {
-    opts: Opts
-  }): Promise<Array<{ name: string; data: any[] }>> {
-    let { regions, resources } = this.config
-
-    if (!regions) {
-      regions = this.properties.regions.join(',')
+  async getData({ opts }: { opts: Opts }): Promise<ProviderData> {
+    let { regions: configuredRegions, resources: configuredResources } =
+      this.config
+    if (!configuredRegions) {
+      configuredRegions = this.properties.regions.join(',')
     } else {
-      regions = [...new Set(regions.split(','))].join(',')
+      configuredRegions = [...new Set(configuredRegions.split(','))].join(',')
     }
-
-    if (!resources) {
-      resources = Object.values(this.properties.services).join(',')
+    if (!configuredResources) {
+      configuredResources = Object.values(this.properties.services).join(',')
     }
     const credentials = await this.getCredentials()
-    const result = []
-    const resourceNames = [...new Set(resources.split(','))]
+    const rawData = []
+    const resourceNames: string[] = [...new Set<string>(configuredResources.split(','))]
 
+    // Get Raw data for services
     for (const resource of resourceNames) {
-      const serviceClass = this.getService(resource as any)
-      result.push({
+      const serviceClass = this.getService(resource)
+      rawData.push({
         name: resource,
-        data: await serviceClass.getData({ regions, credentials, opts }),
+        data: await serviceClass.getData({
+          regions: configuredRegions,
+          credentials,
+          opts,
+        }),
       })
     }
     // Handle global tag entities
     const tagRegion = 'aws-global'
     const tags = { name: 'tag', data: { [tagRegion]: [] } }
-    for (const { data: entityData } of result) {
+    for (const { data: entityData } of rawData) {
       for (const region of Object.keys(entityData)) {
         const dataAtRegion = entityData[region]
         dataAtRegion.forEach(singleEntity => {
@@ -318,16 +318,52 @@ export default class Provider extends CloudGraph.Client {
         })
       }
     }
-    result.push(tags)
+    rawData.push(tags)
+
+    /**
+     * Loop through the aws sdk data to format entities and build connections
+     * 1. Format data with provider service format function
+     * 2. build connections for data with provider service connections function
+     * 3. spread new connections over result.connections
+     * 4. push the array of formatted entities into result.entites
+     */
+    const result: ProviderData = {
+      entities: [],
+      connections: {},
+    }
+    const { accountId } = await this.getIdentity()
+    for (const serviceData of rawData) {
+      const serviceClass = this.getService(serviceData.name)
+      const entities: any[] = []
+      for (const region of Object.keys(serviceData.data)) {
+        const data = serviceData.data[region]
+        data.forEach((service: any) => {
+          entities.push(
+            serviceClass.format({
+              service,
+              region,
+              account: accountId,
+            })
+          )
+          if (typeof serviceClass.getConnections === 'function') {
+            result.connections = {
+              ...result.connections,
+              ...serviceClass.getConnections({
+                service,
+                region,
+                account: accountId,
+                data: rawData,
+              }),
+            }
+          }
+        })
+        result.entities.push({
+          name: serviceData.name,
+          mutation: serviceClass.mutation,
+          data: entities,
+        })
+      }
+    }
     return result
   }
 }
-
-// grab tags at the end
-// 1. create schema for tags {id: key:value @id, key: ... @id, value: ... @id}
-// 1. loop through the result and collect all tags
-// 2. push {name: tag, data: {awsGlobal: [{key, value}]} } to result
-// 3. push into result.entities {name: tag, data: [{key, value}]}
-// 4. getConnections take each tag, look in each service for if that tag exists there, form connection
-
-// testFunc()
