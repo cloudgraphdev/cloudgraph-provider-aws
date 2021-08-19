@@ -1,3 +1,11 @@
+# [0.4.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.3.0...0.4.0) (2021-08-19)
+
+
+### Features
+
+* **networkInterface:** Updated format tags util ([e137582](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/e1375821c78b1349bc06c91a24e08d10a0936dfb))
+* Added network interface service ([787870d](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/787870d91c9382ee13cb113a7abeece5fdc7d058))
+
 # [0.3.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.2.4...0.3.0) (2021-08-18)
 
 
