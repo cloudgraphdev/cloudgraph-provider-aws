@@ -229,6 +229,30 @@ export type AwsLambda = {
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
 };
 
+export type AwsNetworkInterface = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  subnetId?: Maybe<Scalars['String']>;
+  macAddress?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  availabilityZone?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  vpcId?: Maybe<Scalars['String']>;
+  interfaceType?: Maybe<Scalars['String']>;
+  securityGroups?: Maybe<Array<Maybe<Scalars['String']>>>;
+  privateDnsName?: Maybe<Scalars['String']>;
+  privateIps?: Maybe<Array<Maybe<Scalars['String']>>>;
+  attachment?: Maybe<AwsNetworkInterfaceAttachment>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
+export type AwsNetworkInterfaceAttachment = {
+  id?: Maybe<Scalars['ID']>;
+  attachmentId?: Maybe<Scalars['String']>;
+  deleteOnTermination?: Maybe<Scalars['Boolean']>;
+  status?: Maybe<Scalars['String']>;
+};
+
 export type AwsSecurityGroup = {
   id: Scalars['String'];
   name: Scalars['String'];
@@ -282,6 +306,7 @@ export type AwsTag = {
   eip?: Maybe<Array<Maybe<AwsEip>>>;
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
   igw?: Maybe<Array<Maybe<AwsIgw>>>;
+  networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
 };
 
 export type AwsVpc = {

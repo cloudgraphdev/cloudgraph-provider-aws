@@ -14,7 +14,7 @@ export default ({
   account,
   region,
 }: {
-  service: Omit<Volume, 'Tags'> & { Tags: TagMap, region: string }
+  service: Omit<Volume, 'Tags'> & { Tags: TagMap; region: string }
   account: string
   region: string
 }): AwsEbs => {

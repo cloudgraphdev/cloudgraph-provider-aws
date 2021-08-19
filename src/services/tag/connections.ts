@@ -27,10 +27,10 @@ export default ({
   // console.log(`Searching for connections for tag ${JSON.stringify(tag)}`)
   const connections: ServiceConnection[] = []
   for (const region of regions) {
-     /**
+    /**
      * Find related ALBs
      */
-      const albs: { name: string; data: { [property: string]: any[] } } =
+    const albs: { name: string; data: { [property: string]: any[] } } =
       data.find(({ name }) => name === services.alb)
     if (albs?.data?.[region]) {
       const dataAtRegion: any = findServiceInstancesWithTag(
@@ -189,23 +189,49 @@ export default ({
     /**
      * Find related IGW
      */
-     const igws: { name: string; data: { [property: string]: any[] } } =
-     data.find(({ name }) => name === services.igw)
-   if (igws?.data?.[region]) {
-     const dataAtRegion = findServiceInstancesWithTag(tag, igws.data[region])
-     if (!isEmpty(dataAtRegion)) {
-       for (const instance of dataAtRegion) {
-         const { InternetGatewayId: id } = instance
+    const igws: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.igw)
+    if (igws?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(tag, igws.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { InternetGatewayId: id } = instance
 
-         connections.push({
-           id,
-           resourceType: services.igw,
-           relation: 'child',
-           field: 'igw',
-         })
-       }
-     }
-   }
+          connections.push({
+            id,
+            resourceType: services.igw,
+            relation: 'child',
+            field: 'igw',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related Network Interface
+     */
+    const networkInterfaces: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.networkInterface)
+    if (networkInterfaces?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        networkInterfaces.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { NetworkInterfaceId: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.networkInterface,
+            relation: 'child',
+            field: 'networkInterface',
+          })
+        }
+      }
+    }
   }
 
   const tagResult = {

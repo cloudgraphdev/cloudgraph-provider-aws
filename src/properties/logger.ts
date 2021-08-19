@@ -140,8 +140,8 @@ export default {
   /**
    * Lambda
    */
-   lookingForVpcLambdas:
-   'Looking for Lambdas with VPC networking to add to the VPC',
+  lookingForVpcLambdas:
+    'Looking for Lambdas with VPC networking to add to the VPC',
   lookingForLambda: 'Looking for non-vpc Lambdas to add to region',
   fetchingLambdaData:
     'Fetching Lambdas for this AWS account via the AWS SDK...',
@@ -221,8 +221,9 @@ export default {
   creatingEc2Instance: (num: number): string => `Creating EC2 Instance #${num}`,
   addingEc2Instances: (num: number): string =>
     `Found ${num} EC2 Instances, adding them to the Subnet`,
-  lookingForNetworkInterfaces:
-    'Gathering Network Interfaces to add to EC2 Instance...',
+  fetchedNetworkInterfaces: (num: number): string =>
+    `Fetched ${num} Network Interfaces`,
+  lookingForNetworkInterfaces: 'Gathering Network Interfaces to add...',
   fetchedKeyPairs: (num: number): string =>
     `Fetched ${num} Key Pairs for instances`,
   doneFetchingEc2Data: '✅ Done fetching EC2 Instance Data ✅',

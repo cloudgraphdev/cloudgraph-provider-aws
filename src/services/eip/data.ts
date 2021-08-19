@@ -3,23 +3,24 @@ import * as Sentry from '@sentry/node'
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import { AWSError } from 'aws-sdk/lib/error'
-import EC2, { DescribeAddressesResult } from 'aws-sdk/clients/ec2'
+import EC2, { Address, DescribeAddressesResult } from 'aws-sdk/clients/ec2'
 
-import { Credentials, AwsTag } from '../../types'
+import { Credentials, AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import environment from '../../config/environment'
 import awsLoggerText from '../../properties/logger'
+import { initTestEndpoint } from '../../utils'
 
 /**
  * EIP
  */
+export interface RawAwsEip extends Omit<Address, 'Tags'> {
+  region: string
+  Tags: TagMap
+}
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint =
-  (environment.NODE_ENV === 'test' && environment.LOCALSTACK_AWS_ENDPOINT) ||
-  undefined
-endpoint && logger.info('EIP getData in test mode!')
+const endpoint = initTestEndpoint('EIP')
 
 export default async ({
   regions,
@@ -27,11 +28,11 @@ export default async ({
 }: {
   regions: string
   credentials: Credentials
-}) =>
+}): Promise<{ [property: string]: RawAwsEip[] }> =>
   new Promise(async resolve => {
-    const eipData: DescribeAddressesResult & { region: string }[] = []
+    const eipData: RawAwsEip[] = []
 
-    // Get all the EIB data for each region
+    // Get all the EIP data for each region
     const regionPromises = regions.split(',').map(region => {
       const ec2 = new EC2({ region, credentials, endpoint })
       return new Promise<void>(resolveRegion =>
@@ -39,7 +40,9 @@ export default async ({
           {},
           (err: AWSError, data: DescribeAddressesResult) => {
             if (err) {
-              logger.error('Therew as an error in Service EIP function describeAddresses')
+              logger.error(
+                'Therew as an error in Service EIP function describeAddresses'
+              )
               logger.debug(err)
               Sentry.captureException(new Error(err.message))
             }
