@@ -1,19 +1,17 @@
-import AWS from 'aws-sdk'
-import path from 'path'
+import CloudGraph, { Service, Opts } from '@cloudgraph/sdk'
 import { loadFilesSync } from '@graphql-tools/load-files'
 import { mergeTypeDefs } from '@graphql-tools/merge'
-import { print } from 'graphql'
-import CloudGraph, { Service, Opts } from '@cloudgraph/sdk'
+import AWS from 'aws-sdk'
 import STS from 'aws-sdk/clients/sts'
+import { print } from 'graphql'
 import { isEmpty } from 'lodash'
-import services from '../enums/services'
-import resources from '../enums/resources'
-import regions from '../enums/regions'
+import path from 'path'
+
+// import AwsSubnet from './subnet'
 import ALB from './alb'
 import AwsInternetGateway from './igw'
 import AwsKms from './kms'
 import AwsSecurityGroup from './securityGroup'
-// import AwsSubnet from './subnet'
 import AwsTag from './tag'
 import CloudWatch from './cloudwatch'
 import EBS from './ebs'
@@ -21,11 +19,16 @@ import EC2 from './ec2'
 import EIP from './eip'
 import ELB from './elb'
 import Lambda from './lambda'
+import NATGateway from './natGateway'
 import NetworkInterface from './networkInterface'
 import VPC from './vpc'
 import APIGatewayRestApi from './apiGatewayRestApi'
 import APIGatewayResource from './apiGatewayResource'
 import APIGatewayStage from './apiGatewayStage'
+
+import regions from '../enums/regions'
+import resources from '../enums/resources'
+import services from '../enums/services'
 import { Credentials } from '../types'
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -33,6 +36,9 @@ import { Credentials } from '../types'
  */
 export const serviceMap = {
   [services.alb]: ALB,
+  [services.apiGatewayResource]: APIGatewayResource,
+  [services.apiGatewayRestApi]: APIGatewayRestApi,
+  [services.apiGatewayStage]: APIGatewayStage,
   [services.cloudwatch]: CloudWatch,
   [services.ebs]: EBS,
   [services.ec2Instance]: EC2,
@@ -41,14 +47,12 @@ export const serviceMap = {
   [services.igw]: AwsInternetGateway,
   [services.kms]: AwsKms,
   [services.lambda]: Lambda,
+  [services.nat]: NATGateway,
   [services.networkInterface]: NetworkInterface,
   [services.sg]: AwsSecurityGroup,
   // [services.subnet]: AwsSubnet, // TODO: Enable when going for ENG-222
   [services.vpc]: VPC,
   tag: AwsTag,
-  [services.apiGatewayRestApi]: APIGatewayRestApi,
-  [services.apiGatewayResource]: APIGatewayResource,
-  [services.apiGatewayStage]: APIGatewayStage,
 }
 
 export const enums = {

@@ -4,7 +4,8 @@ import {
   Address,
   Instance,
   InternetGateway,
-  // NatGateway,
+  NatGateway,
+  NetworkInterface,
   // NetworkAcl, // TODO: Uncomment when adding NACL
   SecurityGroup,
   // Subnet,
@@ -66,11 +67,11 @@ export default ({
     }
   }
   /**
-   * Find any ECS data
+   * Find any ECS related data
    */
   // TODO: Add this when adding the ECS
   /**
-   * Find any EIP data
+   * Find any EIP related data
    */
   const eips = data.find(({ name }) => name === services.eip)
   if (eips?.data?.[region]) {
@@ -88,7 +89,7 @@ export default ({
     }
   }
   /**
-   * Find any EKS data
+   * Find any EKS related data
    */
   // TODO: Uncomment and check if arn is the correct id when adding EKS
   // const eksS = data.find(({ name }) => name === services.eks)
@@ -106,7 +107,7 @@ export default ({
   //   }
   // }
   /**
-   * Find any ELB data
+   * Find any ELB related data
    */
   // TODO: Uncomment and check if LoadBalancerName is the id when adding ELB
   // const elbs = data.find(({ name }) => name === services.elb)
@@ -124,7 +125,7 @@ export default ({
   //   }
   // }
   /**
-   * Find any IGW data
+   * Find any IGW related data
    */
   const igws = data.find(({ name }) => name === services.igw)
   if (igws?.data?.[region]) {
@@ -142,7 +143,7 @@ export default ({
     }
   }
   /**
-   * Find any Lambda data
+   * Find any Lambda related data
    */
   const lambdas = data.find(({ name }) => name === services.lambda)
   if (lambdas?.data?.[region]) {
@@ -173,7 +174,7 @@ export default ({
     }
   }
   /**
-   * Find any NACL data
+   * Find any NACL related data
    */
   // TODO: Uncomment and check this for correctness after NACL is added
   // const nacls = data.find(({ name }) => name === services.nacl)
@@ -191,25 +192,45 @@ export default ({
   //   }
   // }
   /**
-   * Find any NAT data // TODO: Enable when NAT is available
+   * Find any NAT related data
    */
-  // const nats = data.find(({ name }) => name === services.nat)
-  // if (nats?.data?.[region]) {
-  //   const dataAtRegion: NatGateway[] = nats.data[region].filter(
-  //     ({ VpcId, SubnetId }: NatGateway) =>
-  //       VpcId === id || subnetIds.includes(SubnetId)
-  //   )
-  //   for (const nat of dataAtRegion) {
-  //     connections.push({
-  //       id: nat.NatGatewayId,
-  //       resourceType: services.nat,
-  //       relation: 'child',
-  //       field: 'nat',
-  //     })
-  //   }
-  // }
+  const nats = data.find(({ name }) => name === services.nat)
+  if (nats?.data?.[region]) {
+    const dataAtRegion: NatGateway[] = nats.data[region].filter(
+      // TODO: Implement when Subnet service is fully ready
+      ({ VpcId/* , SubnetId */}: NatGateway) =>
+        VpcId === id // || subnetIds.includes(SubnetId)
+    )
+    for (const nat of dataAtRegion) {
+      connections.push({
+        id: nat.NatGatewayId,
+        resourceType: services.nat,
+        relation: 'child',
+        field: 'natGateway',
+      })
+    }
+  }
   /**
-   * Find any RDS data
+   * Find any Network Interface related data
+   */
+   const netInterfaces = data.find(({ name }) => name === services.networkInterface)
+   if (netInterfaces?.data?.[region]) {
+     const dataAtRegion: NetworkInterface[] = netInterfaces.data[region].filter(
+       // TODO: Implement when Subnet service is fully ready
+       ({ VpcId/* , SubnetId */}: NetworkInterface) =>
+         VpcId === id // || subnetIds.includes(SubnetId)
+     )
+     for (const net of dataAtRegion) {
+       connections.push({
+         id: net.NetworkInterfaceId,
+         resourceType: services.networkInterface,
+         relation: 'child',
+         field: 'networkInterface',
+       })
+     }
+   }
+  /**
+   * Find any RDS related data
    */
   // TODO: Uncomment and check this for correctness after RDS and SG are added
   // const rdsS = data.find(({ name }) => name === services.rds)

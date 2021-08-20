@@ -1,5 +1,8 @@
 export default {
   alb: 'alb',
+  apiGatewayResource: 'apiGatewayResource',
+  apiGatewayRestApi: 'apiGatewayRestApi',
+  apiGatewayStage: 'apiGatewayStage',
   cloudwatch: 'cloudwatch',
   ebs: 'ebs',
   ec2Instance: 'ec2Instance',
@@ -10,10 +13,7 @@ export default {
   kms: 'kms',
   lambda: 'lambda',
   nat: 'nat',
+  networkInterface: 'networkInterface',
   sg: 'sg',
   vpc: 'vpc',
-  networkInterface: 'networkInterface',
-  apiGatewayRestApi: 'apiGatewayRestApi',
-  apiGatewayResource: 'apiGatewayResource',
-  apiGatewayStage: 'apiGatewayStage',
 }

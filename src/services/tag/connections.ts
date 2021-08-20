@@ -1,6 +1,6 @@
 import { ServiceConnection } from '@cloudgraph/sdk'
 import { MetricAlarm } from 'aws-sdk/clients/cloudwatch'
-import { Vpc } from 'aws-sdk/clients/ec2'
+import { NatGateway, Vpc } from 'aws-sdk/clients/ec2'
 import { isEmpty } from 'lodash'
 import services from '../../enums/services'
 import regions from '../../enums/regions'
@@ -299,6 +299,26 @@ export default ({
         }
       }
     }
+    /**
+     * Find related NAT GWs
+     */
+     const natgws: { name: string; data: { [property: string]: any[] } } =
+     data.find(({ name }) => name === services.nat)
+   if (natgws?.data?.[region]) {
+     const dataAtRegion = findServiceInstancesWithTag(tag, natgws.data[region])
+     if (!isEmpty(dataAtRegion)) {
+       for (const instance of dataAtRegion) {
+         const { NatGatewayId: id }: NatGateway = instance
+
+         connections.push({
+           id,
+           resourceType: services.nat,
+           relation: 'child',
+           field: 'natGateway',
+         })
+       }
+     }
+   }
   }
 
   const tagResult = {

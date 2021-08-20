@@ -349,6 +349,16 @@ export type AwsLambda = {
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
+export type AwsNatGateway = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  state?: Maybe<Scalars['String']>;
+  createTime?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+};
+
 export type AwsNetworkInterface = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -365,6 +375,8 @@ export type AwsNetworkInterface = {
   attachment?: Maybe<AwsNetworkInterfaceAttachment>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
+  natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
 export type AwsNetworkInterfaceAttachment = {
@@ -429,6 +441,7 @@ export type AwsTag = {
   igw?: Maybe<Array<Maybe<AwsIgw>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
@@ -452,6 +465,8 @@ export type AwsVpc = {
   elb?: Maybe<Array<Maybe<AwsElb>>>;
   igw?: Maybe<Array<Maybe<AwsIgw>>>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
+  networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
 };
 
 export type BlockDeviceEbs = {

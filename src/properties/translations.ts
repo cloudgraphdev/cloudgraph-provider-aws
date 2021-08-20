@@ -42,7 +42,7 @@ export default {
   inServiceText: 'instances are in service',
   secretPlaceholder: '****** SECRET HIDDEN ******',
   objectsCanBePublic: 'Objects can be public',
-  bucketSizeDisclaimer: (num: number) =>
+  bucketSizeDisclaimer: (num: number): string =>
     `(limited to the first ${num} objects)`,
   accountFor: (org: string): string => `AWS Account for ${org}`,
 }

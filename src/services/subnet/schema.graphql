@@ -11,4 +11,5 @@ type awsSubnet @key(fields: "id") {
   state: String
   tags: [Tag]
   # lambda: [awsLambda] @hasInverse(field: subnets)
+  # natGateway: [awsNatGateway] @hasInverse(field: subnet)
 }
