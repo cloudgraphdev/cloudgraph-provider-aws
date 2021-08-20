@@ -23,6 +23,9 @@ import ELB from './elb'
 import Lambda from './lambda'
 import NetworkInterface from './networkInterface'
 import VPC from './vpc'
+import APIGatewayRestApi from './apiGatewayRestApi'
+import APIGatewayResource from './apiGatewayResource'
+import APIGatewayStage from './apiGatewayStage'
 import { Credentials } from '../types'
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -43,6 +46,9 @@ export const serviceMap = {
   // [services.subnet]: AwsSubnet, // TODO: Enable when going for ENG-222
   [services.vpc]: VPC,
   tag: AwsTag,
+  [services.apiGatewayRestApi]: APIGatewayRestApi,
+  [services.apiGatewayResource]: APIGatewayResource,
+  [services.apiGatewayStage]: APIGatewayStage,
 }
 
 export const enums = {

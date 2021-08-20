@@ -13,4 +13,7 @@ export default {
   sg: 'sg',
   vpc: 'vpc',
   networkInterface: 'networkInterface',
+  apiGatewayRestApi: 'apiGatewayRestApi',
+  apiGatewayResource: 'apiGatewayResource',
+  apiGatewayStage: 'apiGatewayStage',
 }

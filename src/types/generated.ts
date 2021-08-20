@@ -16,6 +16,12 @@ export type Tag = {
   value?: Maybe<Scalars['String']>;
 };
 
+export type AwsAccessLogSettings = {
+  id?: Maybe<Scalars['ID']>;
+  format?: Maybe<Scalars['String']>;
+  destinationArn?: Maybe<Scalars['String']>;
+};
+
 export type AwsAlb = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -54,6 +60,63 @@ export type AwsAlbListenerSettings = {
   sslPolicy?: Maybe<Scalars['String']>;
   protocol?: Maybe<Scalars['String']>;
   rules?: Maybe<Array<Maybe<AwsAlbListenerRule>>>;
+};
+
+export type AwsApiGatewayEndpointConfiguration = {
+  id?: Maybe<Scalars['ID']>;
+  types?: Maybe<Array<Maybe<Scalars['String']>>>;
+  vpcEndpointIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsApiGatewayMethod = {
+  arn: Scalars['String'];
+  httpMethod?: Maybe<Scalars['String']>;
+  authorization?: Maybe<Scalars['String']>;
+  apiKeyRequired?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsApiGatewayResource = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
+  path?: Maybe<Scalars['String']>;
+  methods?: Maybe<Array<Maybe<AwsApiGatewayMethod>>>;
+};
+
+export type AwsApiGatewayRestApi = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  policy?: Maybe<Scalars['String']>;
+  endpointConfiguration?: Maybe<AwsApiGatewayEndpointConfiguration>;
+  apiKeySource?: Maybe<Scalars['String']>;
+  createdDate?: Maybe<Scalars['String']>;
+  minimumCompressionSize?: Maybe<Scalars['Int']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  binaryMediaTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  stages?: Maybe<Array<Maybe<AwsApiGatewayStage>>>;
+  resources?: Maybe<Array<Maybe<AwsApiGatewayResource>>>;
+};
+
+export type AwsApiGatewayStage = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  cacheCluster?: Maybe<Scalars['Boolean']>;
+  cacheClusterSize?: Maybe<Scalars['String']>;
+  accessLogSettings?: Maybe<AwsAccessLogSettings>;
+  documentationVersion?: Maybe<Scalars['String']>;
+  clientCertificateId?: Maybe<Scalars['String']>;
+  xrayTracing?: Maybe<Scalars['Boolean']>;
+  variables?: Maybe<Array<Maybe<AwsApiGatewayStageVariable>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
+export type AwsApiGatewayStageVariable = {
+  key: Scalars['String'];
+  value?: Maybe<Scalars['String']>;
 };
 
 export type AwsCloudwatch = {

@@ -95,11 +95,19 @@ export default {
   lookingForApiGateway: 'Looking for Api Gateways to add to Region...',
   addingApiGateway: (num: number): string =>
     `Created and added ${num} Api Gateways to this region`,
-  fetchedApiGwDomainNames: (num: number): string =>
-    `Fetched ${num} API Gateway Domain Names`,
+  fetchedApiGatewayRestApis: (num: number) =>
+    `Fetched ${num} Api Gateway Rest Apis`,
+  fetchedApiGatewayResources: (num: number) =>
+    `Fetched ${num} Api Gateway Resources`,
+  fetchedApiGatewayStages: (num: number) =>
+    `Fetched ${num} Api Gateway Stages`,
   fetchingApiGatewayData:
     'Fetching API Gateway data for this AWS account via the AWS SDK...',
   doneFetchingApiGatewayData: '✅ Done fetching API Gateway Data ✅',
+  gettingApiGatewayTags:
+    'Fetching tags for each Api Gateway Rest Api...',
+  gettingApiGatewayStageTags:
+    'Fetching tags for each Api Gateway Stage...',
   /**
    * Vpc
    */

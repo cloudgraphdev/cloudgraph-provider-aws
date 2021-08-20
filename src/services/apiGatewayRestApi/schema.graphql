@@ -1,0 +1,20 @@
+type awsApiGatewayEndpointConfiguration {
+  id: ID
+  types: [String]
+  vpcEndpointIds: [String]
+}
+
+type awsApiGatewayRestApi @key(fields: "arn") {
+  id: String!
+  arn: String! @id
+  description: String
+  policy: String
+  endpointConfiguration: awsApiGatewayEndpointConfiguration
+  apiKeySource: String
+  createdDate: String
+  minimumCompressionSize: Int
+  tags: [Tag]
+  binaryMediaTypes: [String]
+  stages: [awsApiGatewayStage] @hasInverse(field: restApi)
+  resources: [awsApiGatewayResource] @hasInverse(field: restApi)
+}

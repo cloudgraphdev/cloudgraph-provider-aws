@@ -1,0 +1,14 @@
+type awsApiGatewayMethod @key(fields: "arn") {
+  arn: String! @id
+  httpMethod: String
+  authorization: String
+  apiKeyRequired: Boolean
+}
+
+type awsApiGatewayResource @key(fields: "arn") {
+  id: String!
+  arn: String! @id
+  restApi: [awsApiGatewayRestApi] @hasInverse(field: resources)
+  path: String
+  methods: [awsApiGatewayMethod]
+}
