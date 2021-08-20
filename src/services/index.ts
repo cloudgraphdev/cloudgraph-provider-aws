@@ -46,7 +46,6 @@ export const serviceMap = {
   // [services.subnet]: AwsSubnet, // TODO: Enable when going for ENG-222
   [services.vpc]: VPC,
   tag: AwsTag,
-  [services.ebs]: EBS,
   [services.apiGatewayRestApi]: APIGatewayRestApi,
   [services.apiGatewayResource]: APIGatewayResource,
   [services.apiGatewayStage]: APIGatewayStage,
