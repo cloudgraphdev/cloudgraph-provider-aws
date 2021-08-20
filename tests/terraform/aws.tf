@@ -132,6 +132,7 @@ resource "aws_network_interface" "network_interface" {
 }
 
 resource "aws_eip" "eip" {
+  instance = aws_instance.instance.id
   vpc      = true
 }
 
