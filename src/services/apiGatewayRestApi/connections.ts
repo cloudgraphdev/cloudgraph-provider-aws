@@ -4,6 +4,10 @@ import { isEmpty } from 'lodash'
 import { AwsApiGatewayResource } from '../apiGatewayResource/data'
 import { RestApi } from 'aws-sdk/clients/apigateway'
 import { AwsApiGatewayStage } from '../apiGatewayStage/data'
+import {
+  apiGatewayArn,
+  apiGatewayStageArn,
+} from '../../utils/generateArns'
 
 import services from '../../enums/services'
 
@@ -57,9 +61,13 @@ export default ({
     )
     if (!isEmpty(stagesInRegion)) {
       for (const stage of stagesInRegion) {
-        const { stageName } = stage
+        const { stageName: name, region } = stage
+        const arn = apiGatewayStageArn({
+          restApiArn: apiGatewayArn({ region: region }),
+          name,
+        })
         connections.push({
-          id: stageName,
+          id: arn,
           resourceType: services.apiGatewayStage,
           relation: 'child',
           field: 'stages',

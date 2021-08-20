@@ -16,7 +16,6 @@ export default ({
 }): AwsAGRestApiType => {
   const {
     id,
-    name,
     description,
     policy,
     endpointConfiguration,
@@ -32,7 +31,7 @@ export default ({
   })
 
   return {
-    id: name,
+    id,
     arn,
     description,
     policy,
