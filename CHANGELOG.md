@@ -1,3 +1,10 @@
+# [0.9.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.8.0...0.9.0) (2021-08-20)
+
+
+### Features
+
+* **natGateway:** add natGateway to services ([c8dc27c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c8dc27cf14d3d42b758c4897ebda6ad8c32eddbc))
+
 # [0.8.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.7.0...0.8.0) (2021-08-20)
 
 
