@@ -1,46 +1,44 @@
-import * as Sentry from '@sentry/node'
-import CloudGraph from '@cloudgraph/sdk'
-
 import { Request } from 'aws-sdk'
 import EC2, {
-  DescribeInternetGatewaysRequest,
-  DescribeInternetGatewaysResult,
-  InternetGateway,
+  DescribeNatGatewaysRequest,
+  DescribeNatGatewaysResult,
+  NatGateway,
 } from 'aws-sdk/clients/ec2'
 import { AWSError } from 'aws-sdk/lib/error'
 
+import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import { Credentials, AwsTag, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint } from '../../utils'
+import { AwsTag, Credentials, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('IGW')
-/**
- * IGW
- */
+const endpoint = initTestEndpoint('NAT Gateway')
 
-export interface RawAwsIgw extends Omit<InternetGateway, 'Tags'> {
-  Tags: TagMap
+/**
+ * NAT Gateway
+ */
+export interface RawAwsNATGateway extends Omit<NatGateway, 'Tags'> {
   region: string
+  Tags: TagMap
 }
 
 export default async ({
-  credentials,
   regions,
+  credentials,
 }: {
-  credentials: Credentials
   regions: string
-}): Promise<{ [property: string]: RawAwsIgw[] }> =>
+  credentials: Credentials
+}): Promise<{ [property: string]: RawAwsNATGateway[] }> =>
   new Promise(async resolve => {
-    const igwData: RawAwsIgw[] = []
+    const natGatewayData: RawAwsNATGateway[] = []
     const regionPromises = []
 
-    const listIgwData = async ({
+    const listNatGatewayData = async ({
       ec2,
       region,
       token: NextToken = '',
@@ -50,37 +48,36 @@ export default async ({
       region: string
       token?: string
       resolveRegion: () => void
-    }): Promise<Request<DescribeInternetGatewaysResult, AWSError>> => {
-      let args: DescribeInternetGatewaysRequest = {}
+    }): Promise<Request<DescribeNatGatewaysResult, AWSError>> => {
+      let args: DescribeNatGatewaysRequest = {}
 
       if (NextToken) {
         args = { ...args, NextToken }
       }
 
-      return ec2.describeInternetGateways(
+      return ec2.describeNatGateways(
         args,
-        (err: AWSError, data: DescribeInternetGatewaysResult) => {
+        (err: AWSError, data: DescribeNatGatewaysResult) => {
           if (err) {
             logger.error(err)
-            Sentry.captureException(new Error(err.message))
           }
 
           /**
-           * No IGW data for this region
+           * No Nat Gateway data for this region
            */
           if (isEmpty(data)) {
             return resolveRegion()
           }
 
-          const { InternetGateways: igws, NextToken: token } = data
+          const { NatGateways: natGateways, NextToken: token } = data
 
-          logger.debug(lt.fetchedIgws(igws.length))
+          logger.info(lt.fetchedNatGateways(natGateways.length))
 
           /**
-           * No IGWs Found
+           * No Nat Gateways Found
            */
 
-          if (isEmpty(igws)) {
+          if (isEmpty(natGateways)) {
             return resolveRegion()
           }
 
@@ -89,18 +86,18 @@ export default async ({
            */
 
           if (token) {
-            listIgwData({ region, token, ec2, resolveRegion })
+            listNatGatewayData({ region, token, ec2, resolveRegion })
           }
 
           /**
-           * Add the found IGWs to the igwData
+           * Add the found Nat Gateways to the natGatewayData
            */
 
-          igwData.push(
-            ...igws.map(({ Tags, ...igw }) => ({
-              ...igw,
+          natGatewayData.push(
+            ...natGateways.map(({ Tags, ...nat }) => ({
+              ...nat,
               region,
-              Tags: convertAwsTagsToTagMap(Tags as AwsTag[])
+              Tags: convertAwsTagsToTagMap(Tags as AwsTag[]),
             }))
           )
 
@@ -118,11 +115,11 @@ export default async ({
     regions.split(',').map(region => {
       const ec2 = new EC2({ region, credentials, endpoint })
       const regionPromise = new Promise<void>(resolveRegion =>
-        listIgwData({ ec2, region, resolveRegion })
+        listNatGatewayData({ ec2, region, resolveRegion })
       )
       regionPromises.push(regionPromise)
     })
 
     await Promise.all(regionPromises)
-    resolve(groupBy(igwData, 'region'))
+    resolve(groupBy(natGatewayData, 'region'))
   })

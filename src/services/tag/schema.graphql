@@ -11,6 +11,7 @@ type awsTag @key(fields: "id") {
   igw: [awsIgw]
   kms: [awsKms]
   lambda: [awsLambda]
+  natGateway: [awsNatGateway]
   networkInterface: [awsNetworkInterface]
   securityGroups: [awsSecurityGroup]
   vpc: [awsVpc]

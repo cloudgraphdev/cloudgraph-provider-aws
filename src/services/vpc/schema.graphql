@@ -13,8 +13,10 @@ type awsVpc @key(fields: "id"){
   alb: [awsAlb] @hasInverse(field: vpc)
   # ecs: [awsEcs] @hasInverse(field: vpc) TODO: Uncomment when ECS is added
   eip: [awsEip] @hasInverse(field: vpcs)
-  # eks: [awsEks] @hasInverse(field: vpc) TODO: Uncomment when EKS is added
+  # eks: [awsEks] @hasInverse(field: vpc) TODO: Uncomment when EKS is addedigw: [awsIgw] @hasInverse(field: vpc)
   elb: [awsElb] @hasInverse(field: vpc)
   igw: [awsIgw] @hasInverse(field: vpc)
   lambda: [awsLambda] @hasInverse(field: vpc)
+  natGateway: [awsNatGateway] @hasInverse(field: vpc)
+  networkInterface: [awsNetworkInterface] @hasInverse(field: vpc)
 }

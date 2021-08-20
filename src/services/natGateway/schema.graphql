@@ -1,0 +1,10 @@
+type awsNatGateway @key(fields: "id") {
+  id: String! @id
+	arn: String!
+	state: String
+  createTime: String
+	tags: [Tag]
+  networkInterface: [awsNetworkInterface] @hasInverse(field: natGateway)
+  # subnet: [awsSubnet] @hasInverse(field: natGateway)
+  vpc: [awsVpc] @hasInverse(field: natGateway)
+}

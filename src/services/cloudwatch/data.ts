@@ -27,11 +27,22 @@ const MAX_ITEMS = 100
 const { logger } = CloudGraph
 const endpoint = initTestEndpoint('Cloudwatch')
 
-const listMetricAlarmsForRegion = async ({ cloudwatch, resolveRegion }) =>
+export interface RawAwsCloudwatch extends MetricAlarm {
+  region: string
+  Tags?: TagMap
+}
+
+const listMetricAlarmsForRegion = async ({
+  cloudwatch,
+  resolveRegion,
+}: {
+  cloudwatch: CloudWatch
+  resolveRegion: () => void
+}): Promise<MetricAlarm[]> =>
   new Promise<MetricAlarms>(resolve => {
     const metricAlarmsList: MetricAlarms = []
     const listMetricAlarmsOpts: DescribeAlarmsInput = {}
-    const listAllAlarms = (token?: string) => {
+    const listAllAlarms = (token?: string): void => {
       listMetricAlarmsOpts.MaxRecords = MAX_ITEMS
       if (token) {
         listMetricAlarmsOpts.NextToken = token
@@ -43,7 +54,9 @@ const listMetricAlarmsForRegion = async ({ cloudwatch, resolveRegion }) =>
             const { NextToken: nextToken, MetricAlarms: metricAlarms } =
               data || {}
             if (err) {
-              logger.error('There was an error in service cloudwatch function describeAlarms')
+              logger.error(
+                'There was an error in service cloudwatch function describeAlarms'
+              )
               logger.debug(err)
               Sentry.captureException(new Error(err.message))
             }
@@ -78,7 +91,9 @@ const getResourceTags = async (cloudwatch: CloudWatch, arn: string) =>
         { ResourceARN: arn },
         (err: AWSError, data: ListTagsForResourceOutput) => {
           if (err) {
-            logger.error('There was an error in service cloudwatch function listTagsForResource')
+            logger.error(
+              'There was an error in service cloudwatch function listTagsForResource'
+            )
             logger.debug(err)
             Sentry.captureException(new Error(err.message))
             return resolve({})
@@ -98,7 +113,7 @@ export default async ({
 }: {
   regions: string
   credentials: Credentials
-}) =>
+}): Promise<{[property: string]: RawAwsCloudwatch[]}> =>
   new Promise(async resolve => {
     const cloudwatchData: Array<
       MetricAlarm & { Tags?: TagMap; region: string }

@@ -8,22 +8,25 @@ provider "aws" {
   skip_requesting_account_id  = true
 
   endpoints {
-    ec2            = "http://localhost:4566"
-    ecs            = "http://localhost:4566"
-    efs            = "http://localhost:4566"
-    kms            = "http://localhost:4566"
     apigateway     = "http://localhost:4566"
+    autoscaling    = "http://localhost:4566"
+    cloud9         = "http://localhost:4566"
     cloudformation = "http://localhost:4566"
     cloudwatch     = "http://localhost:4566"
     cloudwatchlogs = "http://localhost:4566"
     dynamodb       = "http://localhost:4566"
+    ec2            = "http://localhost:4566"
+    ecs            = "http://localhost:4566"
+    efs            = "http://localhost:4566"
     es             = "http://localhost:4566"
     firehose       = "http://localhost:4566"
     iam            = "http://localhost:4566"
+    iot            = "http://localhost:4566"
     kinesis        = "http://localhost:4566"
+    kms            = "http://localhost:4566"
     lambda         = "http://localhost:4566"
-    route53        = "http://localhost:4566"
     redshift       = "http://localhost:4566"
+    route53        = "http://localhost:4566"
     s3             = "http://localhost:4566"
     secretsmanager = "http://localhost:4566"
     ses            = "http://localhost:4566"
@@ -32,9 +35,6 @@ provider "aws" {
     ssm            = "http://localhost:4566"
     stepfunctions  = "http://localhost:4566"
     sts            = "http://localhost:4566"
-    iot            = "http://localhost:4566"
-    cloud9         = "http://localhost:4566"
-    autoscaling    = "http://localhost:4566"
   }
 }
 
@@ -50,6 +50,8 @@ resource "aws_instance" "instance" {
   credit_specification {
     cpu_credits = "unlimited"
   }
+
+  depends_on = [aws_network_interface.network_interface]
 }
 
 resource "aws_network_interface_sg_attachment" "sg_attachment" {
@@ -78,6 +80,8 @@ resource "aws_security_group" "sg" {
   tags = {
     Name = "allow_tls"
   }
+
+  depends_on = [aws_vpc.vpc]
 }
 
 resource "aws_sns_topic" "sns_topic" {
@@ -101,15 +105,30 @@ resource "aws_cloudwatch_metric_alarm" "metric_alarm" {
     InstanceId = "i-1234567890abcdef0"
   }
   tags                      = { Key = "testTag", Value = "TestValue" }
+
+  depends_on = [aws_sns_topic.sns_topic]
 }
 
+data "aws_availability_zones" "available" {}
+
 resource "aws_subnet" "subnet" {
+  availability_zone = data.aws_availability_zones.available.names[0]
   vpc_id     = aws_vpc.vpc.id
   cidr_block = "10.0.1.0/24"
 
   tags = {
     Name = "Main"
   }
+
+  depends_on = [aws_vpc.vpc]
+}
+
+resource "aws_network_interface" "network_interface" {
+  subnet_id       = aws_subnet.subnet.id
+  private_ips     = ["10.0.0.50"]
+  security_groups = [aws_security_group.sg.id]
+
+  depends_on = [aws_security_group.sg, aws_subnet.subnet]
 }
 
 resource "aws_eip" "eip" {
@@ -120,8 +139,10 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "main"
+    Name = "Main"
   }
+
+  depends_on = [aws_vpc.vpc]
 }
 
 resource "aws_kms_key" "lambda_kms_key" {
@@ -291,3 +312,73 @@ resource "aws_volume_attachment" "ebs_att" {
   volume_id   = aws_ebs_volume.ebs_volume.id
   instance_id = aws_instance.instance.id
 }
+
+# NAT GW SG
+resource "aws_security_group" "natgw" {
+  name = "natgwSecurityGroup"
+  description = "natgwSecurityGroup"
+  vpc_id = aws_vpc.vpc.id
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+  }
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+  }
+  tags = {
+    "Name" = "natgwSecurityGroup"
+  }
+
+  depends_on = [aws_vpc.vpc]
+}
+
+resource "aws_subnet" "nat_gateway" {
+  availability_zone = data.aws_availability_zones.available.names[0]
+  cidr_block = "10.0.2.0/24"
+  vpc_id = aws_vpc.vpc.id
+  tags = {
+    "Name" = "DummySubnetNAT"
+  }
+  depends_on = [aws_vpc.vpc]
+}
+
+resource "aws_internet_gateway" "nat_gateway" {
+  vpc_id = aws_vpc.vpc.id
+  tags = {
+    "Name" = "DummyGateway"
+  }
+
+  depends_on = [aws_vpc.vpc]
+}
+
+resource "aws_eip" "nat_gateway" {
+  vpc = true
+}
+
+resource "aws_nat_gateway" "nat_gateway" {
+  allocation_id = aws_eip.nat_gateway.id
+  subnet_id = aws_subnet.nat_gateway.id
+  tags = {
+    "Name" = "DummyNatGateway"
+  }
+
+  depends_on = [aws_subnet.nat_gateway, aws_eip.nat_gateway]
+}
+
+# resource "aws_route_table" "nat_gateway" {
+#   vpc_id = aws_vpc.vpc.id
+#   route {
+#     cidr_block = "0.0.0.0/0"
+#     gateway_id = aws_internet_gateway.nat_gateway.id
+#   }
+# }
+
+# resource "aws_route_table_association" "nat_gateway" {
+#   subnet_id = aws_subnet.nat_gateway.id
+#   route_table_id = aws_route_table.nat_gateway.id
+# }
