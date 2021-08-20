@@ -1,3 +1,32 @@
+# [0.8.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.7.0...0.8.0) (2021-08-20)
+
+
+### Bug Fixes
+
+* **apiGateway:** add get/format test, add test infra ([27b61b0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/27b61b038bc26997eba19b57f6d217c5dd35ea32))
+* **apiGateway:** add new type, improve typing on format ([679a2c1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/679a2c1c4658d164f85af5e42b6c20fe526072a7))
+* **apiGateway:** add resource edges, update name ([5d0d6b1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/5d0d6b1a0335f1232bb7155a17ce355fa506d799))
+* **apiGateway:** add resources/stages as top level services, add tests ([86e7337](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/86e73379bae0ec40227d9ada0242abef1f6e5f30))
+* **apiGateway:** add service enum, add to serviceMap ([6654ccb](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/6654ccb1ada452e1a29a7c2c18bf83819afde83e))
+* **apiGateway:** conform tag formats ([3f9ab7c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/3f9ab7c1ba6a03520559aa08233faa260b7945c2))
+* **apiGateway:** conform tag formats ([7c919cc](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/7c919cc1d9815162362d68b25a114b2bfce5e558))
+* **apiGateway:** expose graphql ID on schema ([3aa0804](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/3aa080442fdd065b5dbbe19e1b70929e99535ef5))
+* **apiGateway:** lint changes ([ce1514e](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/ce1514eb485df2e624d28f90636b818d11e3920e))
+* **apiGateway:** logger statements ([315436d](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/315436d304010d0873f8c8ce892384cb8018af02))
+* **apiGateway:** merge conflicts ([1115a89](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/1115a893aa9d27878e76610a07e019d372d80de2))
+* **apiGateway:** moved fetched logger statements ([2a7f11f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/2a7f11fd1d5213a4d3e04bc63f1e77cf79a25e30))
+* **apiGateway:** mutation naming ([cdbf24f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/cdbf24f77bc36ce700bdc46b2609345eec331568))
+* **apiGateway:** mutation naming ([de4bad1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/de4bad16b1159afbe1b8849f260d5bc737a3df61))
+* **apiGateway:** tf config ([b7047ee](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b7047ee0279cb40108a9db5317355287584ee120))
+* **apiGateway:** update type names ([4116c93](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/4116c93b1cc42baa58ad7a117dbbbb9a437c3e74))
+* **apiGateway:** use arn for stage connection, use rest api id in format ([fac7701](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/fac7701620f9fd219f76ac8b898a7fe627ed6b83))
+* **apiGateway:** use stage name in connection id ([f41226c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/f41226cc17a39f4db6a4d1c4c5fb1c4512827af0))
+
+
+### Features
+
+* **apiGateway:** add apiGateway to services ([165512f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/165512f1e7f5f0d5259ca4bfe90a80dd66812417))
+
 # [0.7.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.6.0...0.7.0) (2021-08-19)
 
 
