@@ -98,9 +98,4 @@ describe('EBS Service Test: ', () => {
       )
     })
   })
-
-  describe('connections', () => {
-    // TODO: Implement when EC2 service is ready
-    test.todo('should verify the connection to ec2')
-  })
 })

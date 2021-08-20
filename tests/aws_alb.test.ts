@@ -140,7 +140,14 @@ describe.skip('ALB Service Test: ', () => {
     })
 
     // TODO: Implement when EC2 service is ready
-    test.todo('should verify the connection to ec2')
+    test('should verify the connection to ec2', () => {
+      const ec2Connections = albConnections[loadBalancerId]?.filter(
+        connection => connection.resourceType === services.ec2Instance
+      )
+
+      expect(ec2Connections).toBeDefined()
+      expect(ec2Connections.length).toBe(1)
+    })
 
     // TODO: Implement when Subnet service is ready
     test.todo('should verify the connection to subnet')

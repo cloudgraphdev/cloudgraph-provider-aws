@@ -227,7 +227,7 @@ export type AwsEip = {
   privateIp?: Maybe<Scalars['String']>;
   instanceId?: Maybe<Scalars['String']>;
   publicIpv4Pool?: Maybe<Scalars['String']>;
-  networkInterface?: Maybe<Scalars['String']>;
+  networkInterfaceId?: Maybe<Scalars['String']>;
   ec2InstanceAssociationId?: Maybe<Scalars['String']>;
   networkInterfaceOwnerId?: Maybe<Scalars['String']>;
   networkBorderGroup?: Maybe<Scalars['String']>;
@@ -235,6 +235,7 @@ export type AwsEip = {
   customerOwnedIpv4Pool?: Maybe<Scalars['String']>;
   vpcs?: Maybe<Array<Maybe<AwsVpc>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
+  networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
 };
 
 export type AwsElb = {
@@ -377,6 +378,7 @@ export type AwsNetworkInterface = {
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  eip?: Maybe<Array<Maybe<AwsEip>>>;
 };
 
 export type AwsNetworkInterfaceAttachment = {

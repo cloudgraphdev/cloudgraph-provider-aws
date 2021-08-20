@@ -190,9 +190,16 @@ describe('EC2 Service Test: ', () => {
       expect(eipConnections.length).toBe(1)
     })
 
-    test.todo('should verify the connection to subnet')
+    test('should verify the connection to networkInterface', () => {
+      const eipConnections = ec2Connections[instanceId]?.filter(
+        connection => connection.resourceType === services.networkInterface
+      )
 
-    test.todo('should verify the connection to networkInterface')
+      expect(eipConnections).toBeDefined()
+      expect(eipConnections.length).toBe(1)
+    })
+
+    test.todo('should verify the connection to subnet')
 
     test.todo('should verify the connection to eks')
 
