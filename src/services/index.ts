@@ -278,15 +278,20 @@ export default class Provider extends CloudGraph.Client {
     opts: Opts
   }): Promise<Array<{ name: string; data: any[] }>> {
     let { regions, resources } = this.config
+
     if (!regions) {
       regions = this.properties.regions.join(',')
+    } else {
+      regions = [...new Set(regions.split(','))].join(',')
     }
+
     if (!resources) {
       resources = Object.values(this.properties.services).join(',')
     }
     const credentials = await this.getCredentials()
     const result = []
-    const resourceNames = resources.split(',')
+    const resourceNames = [...new Set(resources.split(','))]
+
     for (const resource of resourceNames) {
       const serviceClass = this.getService(resource as any)
       result.push({
