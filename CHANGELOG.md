@@ -1,3 +1,10 @@
+## [0.9.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.9.0...0.9.1) (2021-08-22)
+
+
+### Bug Fixes
+
+* **config:** remove undefined EKS service ([4b97f74](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/4b97f7467e3ffa17bd07105f48b3f362db7c23a7))
+
 # [0.9.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.8.0...0.9.0) (2021-08-20)
 
 
