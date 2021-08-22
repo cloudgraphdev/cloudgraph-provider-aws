@@ -7,7 +7,6 @@ export default {
   ebs: 'ebs',
   ec2Instance: 'ec2Instance',
   eip: 'eip',
-  eks: 'eks',
   elb: 'elb',
   igw: 'igw',
   kms: 'kms',
