@@ -1,18 +1,18 @@
 type awsKms @key(fields: "id"){
-  arn: String!
-  id: String! @id
-  description: String
-  enableKeyRotation: String
-  usage: String
-  policy: String
-  enabled: String
-  keyState: String
-  customerMasterKeySpec: String
+  arn: String! @id @search(by: [hash, regexp])
+  id: String! @id @search(by: [hash])
+  description: String @search(by: [hash, regexp, fulltext])
+  enableKeyRotation: String @search(by: [hash, regexp])
+  usage: String @search(by: [hash, regexp])
+  policy: String @search(by: [hash, regexp])
+  enabled: String @search(by: [hash, regexp])
+  keyState: String @search(by: [hash, regexp])
+  customerMasterKeySpec: String @search(by: [hash, regexp])
   tags: [Tag]
-  creationDate: String
-  keyManager: String
-  origin: String
-  deletionDate: String
-  validTo: String
+  creationDate: String @search(by: [hash, regexp])
+  keyManager: String @search(by: [hash, regexp])
+  origin: String @search(by: [hash, regexp])
+  deletionDate: String @search(by: [hash, regexp])
+  validTo: String @search(by: [hash, regexp])
   lambda: [awsLambda] @hasInverse(field: kms)
 }

@@ -1,16 +1,16 @@
 type awsNetworkInterface @key(fields: "arn") {
-  id: String!
-  arn: String! @id
-  subnetId: String
-  macAddress: String
-  description: String
-  availabilityZone: String
-  status: String
-  vpcId: String
-  interfaceType: String
-  securityGroups: [String]
-  privateDnsName: String
-  privateIps: [String]
+  id: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  subnetId: String @search(by: [hash])
+  macAddress: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp, fulltext])
+  availabilityZone: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
+  vpcId: String @search(by: [hash])
+  interfaceType: String @search(by: [hash, regexp])
+  securityGroups: [String] @search(by: [hash])
+  privateDnsName: String @search(by: [hash, regexp])
+  privateIps: [String] @search(by: [hash, regexp])
   attachment: awsNetworkInterfaceAttachment
   tags: [Tag]
   ec2Instance: [awsEc2] @hasInverse(field: networkInterfaces)

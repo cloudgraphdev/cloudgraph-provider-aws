@@ -1,7 +1,12 @@
-type awsAccessLogSettings {
+type awsAccessLogSettings 
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   id: ID
-  format: String
-  destinationArn: String
+  format: String @search(by: [hash])
+  destinationArn: String @search(by: [hash, regexp])
 }
 
 type awsApiGatewayStageVariable
@@ -10,22 +15,22 @@ type awsApiGatewayStageVariable
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-  key: String! @id
-  value: String
+  key: String! @id @search(by: [hash])
+  value: String @search(by: [hash])
 }
 
 type awsApiGatewayStage @key(fields: "arn") {
-  id: String!
-  arn: String! @id
-  restApi: [awsApiGatewayRestApi] @hasInverse(field: stages)
-  name: String
-  description: String
-  cacheCluster: Boolean
-  cacheClusterSize: String
+  id: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp, fulltext])
+  cacheCluster: Boolean @search
+  cacheClusterSize: String @search(by: [hash])
   accessLogSettings: awsAccessLogSettings
-  documentationVersion: String
-  clientCertificateId: String
-  xrayTracing: Boolean
+  documentationVersion: String @search(by: [hash, regexp])
+  clientCertificateId: String @search(by: [hash])
+  xrayTracing: Boolean @search
   variables: [awsApiGatewayStageVariable]
   tags: [Tag]
+  restApi: [awsApiGatewayRestApi] @hasInverse(field: stages)
 }

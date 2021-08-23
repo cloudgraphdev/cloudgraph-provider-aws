@@ -1,14 +1,14 @@
 type awsVpc @key(fields: "id"){
   arn: String! @id
-  defaultVpc: Boolean
-  dhcpOptionsSet: String
-  enableDnsHostnames: Boolean
-  enableDnsSupport: Boolean
-  id: String! @id
-  instanceTenancy: String
-  ipV4Cidr: String
-  ipV6Cidr: String
-  state: String
+  defaultVpc: Boolean @search
+  dhcpOptionsSet: String @search(by: [hash, regexp])
+  enableDnsHostnames: Boolean @search
+  enableDnsSupport: Boolean @search
+  id: String! @id @search(by: [hash])
+  instanceTenancy: String @search(by: [hash, regexp])
+  ipV4Cidr: String @search(by: [hash, regexp])
+  ipV6Cidr: String @search(by: [hash, regexp])
+  state: String @search(by: [hash, regexp])
   tags: [Tag]
   alb: [awsAlb] @hasInverse(field: vpc)
   # ecs: [awsEcs] @hasInverse(field: vpc) TODO: Uncomment when ECS is added

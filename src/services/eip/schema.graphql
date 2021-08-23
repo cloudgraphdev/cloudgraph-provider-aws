@@ -1,19 +1,19 @@
 type awsEip @key(fields: "arn") {
-  id: String!
-  arn: String! @id
+  id: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
   tags: [Tag]
-  vpc: String
-  domain: String
-  publicIp: String
-  privateIp: String
-  instanceId: String
-  publicIpv4Pool: String
-  networkInterface: String
-  ec2InstanceAssociationId: String
-  networkInterfaceOwnerId: String
-  networkBorderGroup: String
-  customerOwnedIp: String
-  customerOwnedIpv4Pool: String
+  vpc: String @search(by: [hash])
+  domain: String @search(by: [hash, regexp])
+  publicIp: String @search(by: [hash, regexp])
+  privateIp: String @search(by: [hash, regexp])
+  instanceId: String @search(by: [hash])
+  publicIpv4Pool: String @search(by: [hash, regexp])
+  networkInterface: String @search(by: [hash, regexp])
+  ec2InstanceAssociationId: String @search(by: [hash])
+  networkInterfaceOwnerId: String @search(by: [hash])
+  networkBorderGroup: String @search(by: [hash, regexp])
+  customerOwnedIp: String @search(by: [hash])
+  customerOwnedIpv4Pool: String @search(by: [hash, regexp])
   vpcs: [awsVpc] @hasInverse(field: eip)
   ec2Instance: [awsEc2] @hasInverse(field: eip)
 }

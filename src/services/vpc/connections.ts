@@ -166,7 +166,7 @@ export default ({
     )
     for (const lambda of dataAtRegion) {
       connections.push({
-        id: lambda.FunctionName,
+        id: lambda.FunctionArn,
         resourceType: services.lambda,
         relation: 'child',
         field: 'lambda',

@@ -2,11 +2,11 @@ type awsAlb @key(fields: "arn") {
   id: String!
   arn: String! @id
   dnsName: String @search(by: [hash, regexp])
-  scheme: String @search(by: [hash])
-  type: String @search(by: [hash])
-  subnets: [String]
+  scheme: String @search(by: [hash, regexp])
+  type: String @search(by: [hash, regexp])
+  subnets: [String] @search(by: [hash])
   hostedZone: String @search(by: [hash])
-  defaultVpc: String
+  defaultVpc: String @search(by: [hash])
   ipAddressType: String @search(by: [hash])
   idleTimeout: String @search(by: [hash, regexp])
   deletionProtection: String @search(by: [hash])
@@ -23,7 +23,7 @@ type awsAlb @key(fields: "arn") {
 
 type awsAlbListener
   @generate(
-    query: { get: true, query: true, aggregate: true }
+    query: { get: true, query: true, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
@@ -33,7 +33,7 @@ type awsAlbListener
 
 type awsAlbListenerSettings
   @generate(
-    query: { get: false, query: true, aggregate: false }
+    query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
@@ -44,7 +44,7 @@ type awsAlbListenerSettings
 
 type awsAlbListenerRule
   @generate(
-    query: { get: false, query: true, aggregate: false }
+    query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
