@@ -388,9 +388,9 @@ export type AwsNetworkInterfaceAttachment = {
 
 export type AwsSecurityGroup = {
   id: Scalars['String'];
+  arn: Scalars['String'];
   name: Scalars['String'];
   vpcId?: Maybe<Scalars['String']>;
-  arn?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   owner?: Maybe<Scalars['String']>;

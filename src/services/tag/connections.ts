@@ -131,7 +131,7 @@ export default ({
       )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
-          const { functionArn: id } = instance
+          const { FunctionArn: id } = instance
 
           connections.push({
             id,
