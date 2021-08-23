@@ -2,12 +2,14 @@
   "name": "@cloudgraph/cg-provider-aws",
   "version": "0.10.0",
   "description": "cloud-graph provider plugin for AWS used to fetch AWS cloud data.",
-  "homepage": "https://cloudgraph.dev",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "tag": "latest",
     "access": "public"
   },
+  "homepage": "https://www.cloudgraph.dev/",
+  "repository": "github:cloudgraphdev/cloudgraph-provider-aws",
+  "bugs": "https://github.com/cloudgraphdev/cloudgraph-provider-aws/issues",
   "main": "dist/services/index.js",
   "types": "dist/services/index.d.ts",
   "author": "AutoCloud",
