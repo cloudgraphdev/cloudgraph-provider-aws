@@ -1,3 +1,10 @@
+# [0.11.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.10.1...0.11.0) (2021-08-23)
+
+
+### Features
+
+* **interface:** Update the Client interface for the provider to simplify the need to export functionality ([65e1abe](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/65e1abe9e2746cc0b9396c2577abf62dfd71066b))
+
 ## [0.10.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.10.0...0.10.1) (2021-08-23)
 
 
