@@ -1,5 +1,5 @@
 type awsTag @key(fields: "id") {
-  id: String! @id
+  id: String! @id @search(by: [hash])
   key: String! @search(by: [hash, regexp])
   value: String! @search(by: [hash, regexp])
   alb: [awsAlb]

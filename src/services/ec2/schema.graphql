@@ -32,42 +32,48 @@ type awsEc2Blockdevice
   ebs: blockDeviceEbs
 }
 
-type Tag {
+# TODO: would this cause a collision with other providers? should we rename to like awsRawTag?
+type Tag 
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   key: String
   value: String
 }
 
 type awsEc2 @key(fields: "arn") {
-  id: String!
-  arn: String! @id
-  region: String
-  ami: String
-  tenancy: String
-  elasticIps: String
-  publicDns: String
-  privateDns: String
-  monitoring: String
-  privateIps: String
-  keyPairName: String
-  cpuCoreCount: Int
-  hibernation: String
-  ebsOptimized: String
-  ipv4PublicIp: String
-  instanceType: String
-  ipv6Addresses: [String]
-  placementGroup: String
-  instanceState: String
-  sourceDestCheck: String
-  availabilityZone: String
-  cpuThreadsPerCore: Int
-  iamInstanceProfile: String
-  deletionProtection: String
-  primaryNetworkInterface: String
+  id: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
+  ami: String @search(by: [hash, regexp])
+  tenancy: String @search(by: [hash, regexp])
+  elasticIps: String @search(by: [hash, regexp])
+  publicDns: String @search(by: [hash, regexp])
+  privateDns: String @search(by: [hash, regexp])
+  monitoring: String @search(by: [hash, regexp])
+  privateIps: String @search(by: [hash, regexp])
+  keyPairName: String @search(by: [hash, regexp])
+  cpuCoreCount: Int @search
+  hibernation: String @search(by: [hash, regexp])
+  ebsOptimized: String @search(by: [hash, regexp])
+  ipv4PublicIp: String @search(by: [hash, regexp])
+  instanceType: String @search(by: [hash, regexp])
+  ipv6Addresses: [String] @search(by: [hash, regexp])
+  placementGroup: String @search(by: [hash, regexp])
+  instanceState: String @search(by: [hash, regexp])
+  sourceDestCheck: String @search(by: [hash, regexp])
+  availabilityZone: String @search(by: [hash, regexp])
+  cpuThreadsPerCore: Int @search
+  iamInstanceProfile: String @search(by: [hash, regexp])
+  deletionProtection: String @search(by: [hash, regexp])
+  primaryNetworkInterface: String @search(by: [hash, regexp])
   metadataOptions: awsEc2MetadataOptions
-  metadatasecurityGroupIdsOptions: [String]
-  securityGroupIds: [String]
+  metadatasecurityGroupIdsOptions: [String] @search(by: [hash])
+  securityGroupIds: [String] @search(by: [hash])
   ephemeralBlockDevice: [awsEc2Blockdevice]
-  associatePublicIpAddress: String
+  associatePublicIpAddress: String @search(by: [hash, regexp])
   tags: [Tag]
   alb: [awsAlb] @hasInverse(field: ec2Instance)
   securityGroups: [awsSecurityGroup] @hasInverse(field: ec2Instance)

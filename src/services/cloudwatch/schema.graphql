@@ -1,16 +1,16 @@
 type awsCloudwatch @key(fields: "arn") {
-  id: String!
-  arn: String! @id
-  metric: String
-  namespace: String
-  description: String
-  actionsEnabled: String
-  actions: [String]
-  comparisonOperator: String
-  statistic: String
-  threshold: String
-  period: String
-  evaluationPeriods: Int
+  id: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  metric: String @search(by: [hash])
+  namespace: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp, fulltext])
+  actionsEnabled: String @search(by: [hash, regexp])
+  actions: [String] @search(by: [hash, regexp])
+  comparisonOperator: String @search(by: [hash, regexp])
+  statistic: String @search(by: [hash])
+  threshold: String @search(by: [hash, regexp])
+  period: String @search(by: [hash, regexp])
+  evaluationPeriods: Int @search
   dimensions: [awsCloudwatchDimensions]
   tags: [Tag]
 }
@@ -25,6 +25,6 @@ type awsCloudwatchDimensions
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-  name: String
-  value: String
+  name: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
 }

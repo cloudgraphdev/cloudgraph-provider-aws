@@ -1,7 +1,7 @@
 type awsIgw @key(fields: "arn") {
-  arn: String! @id
-  id: String!
-  owner: String
+  arn: String! @id @search(by: [hash, regexp])
+  id: String! @search(by: [hash])
+  owner: String @search(by: [hash, regexp])
   attachments: [awsIgwAttachment]
   tags: [Tag]
   vpc: [awsVpc] @hasInverse(field: igw)

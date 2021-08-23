@@ -101,7 +101,6 @@ export type AwsApiGatewayRestApi = {
 export type AwsApiGatewayStage = {
   id: Scalars['String'];
   arn: Scalars['String'];
-  restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
   name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   cacheCluster?: Maybe<Scalars['Boolean']>;
@@ -112,6 +111,7 @@ export type AwsApiGatewayStage = {
   xrayTracing?: Maybe<Scalars['Boolean']>;
   variables?: Maybe<Array<Maybe<AwsApiGatewayStageVariable>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
 };
 
 export type AwsApiGatewayStageVariable = {
@@ -328,10 +328,10 @@ export type AwsLambaEnvironmentVariable = {
 };
 
 export type AwsLambda = {
+  id: Scalars['String'];
   arn: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   handler?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   kmsKeyArn?: Maybe<Scalars['String']>;
   lastModified?: Maybe<Scalars['String']>;
   memorySize?: Maybe<Scalars['Int']>;
@@ -415,13 +415,13 @@ export type AwsSgRule = {
 };
 
 export type AwsSubnet = {
+  id: Scalars['String'];
   arn: Scalars['String'];
   autoAssignPublicIpv4Address?: Maybe<Scalars['String']>;
   autoAssignPublicIpv6Address?: Maybe<Scalars['String']>;
   availabilityZone?: Maybe<Scalars['String']>;
   availableIpV4Addresses?: Maybe<Scalars['Int']>;
   defaultForAz?: Maybe<Scalars['Boolean']>;
-  id: Scalars['String'];
   ipV4Cidr?: Maybe<Scalars['String']>;
   ipV6Cidr?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
