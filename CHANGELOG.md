@@ -1,3 +1,17 @@
+# [0.10.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.9.2...0.10.0) (2021-08-23)
+
+
+### Bug Fixes
+
+* **search:** fix for lambda connections on vpc and tag. update search for kms and sg ([75e572d](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/75e572ddff3daf61fbc4b45b129f7f67ba0827bb))
+* **search:** update sg schema to have arn be required ([28d880a](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/28d880a8a360687f5ff12acbd4a2dd3114694220))
+
+
+### Features
+
+* **search:** update all schemas to handle searching ([d99e788](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d99e7889c0dc4b056cfe57770bbeb9ce65b7f9c5))
+* **search:** update all schemas to handle searching ([eb78471](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/eb78471f05772f1313ec6667f30013a514061bce))
+
 ## [0.9.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.9.1...0.9.2) (2021-08-23)
 
 
