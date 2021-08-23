@@ -1,3 +1,10 @@
+## [0.9.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.9.1...0.9.2) (2021-08-23)
+
+
+### Bug Fixes
+
+* Removed duplicated resources and regions from cloud-graphrc file ([c073ce8](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c073ce86e2457b782a1ba8a280a11006c0db6acd))
+
 ## [0.9.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.9.0...0.9.1) (2021-08-22)
 
 
