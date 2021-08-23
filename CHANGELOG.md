@@ -1,3 +1,11 @@
+## [0.10.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.10.0...0.10.1) (2021-08-23)
+
+
+### Bug Fixes
+
+* **package.json:** add Github repository references ([b2ca4f5](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b2ca4f5e3e21b093b30f205f467b96e063ac8ff5))
+* add Github repository references ([2c94f4a](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/2c94f4afb15b94bd0ae53cf3bbd3276cb2c17834))
+
 # [0.10.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.9.2...0.10.0) (2021-08-23)
 
 
