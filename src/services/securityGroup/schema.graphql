@@ -1,8 +1,8 @@
 type awsSecurityGroup @key(fields: "id") {
   id: String! @id @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
   name: String! @search(by: [hash, regexp])
   vpcId: String @search(by: [hash])
-  arn: String @id @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp, fulltext])
   tags: [Tag]
   owner: String @search(by: [hash, regexp])
