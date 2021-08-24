@@ -1,3 +1,14 @@
+## [0.11.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.11.1...0.11.2) (2021-08-24)
+
+
+### Bug Fixes
+
+* Adding missing connections ([0e32e49](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/0e32e491034b7f53c89788faba309a6a3615a755))
+* Completed ALB tests ([29e79e0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/29e79e0514e081612fb16e753bc9761ec02e5778))
+* Completed Cloudwatch tests ([18d5c10](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/18d5c10194b9771dcc0ad6115abc661c95b862c9))
+* Completed EIP tests ([4fbd109](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/4fbd109884022695b61ec68a429845fde9bf01dc))
+* Renamed it to test keyword ([2d6304f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/2d6304f43809cc86256c587fe94d4f7f2bef47f6))
+
 ## [0.11.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.11.0...0.11.1) (2021-08-24)
 
 
