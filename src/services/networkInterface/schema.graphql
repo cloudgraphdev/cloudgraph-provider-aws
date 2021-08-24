@@ -16,6 +16,7 @@ type awsNetworkInterface @key(fields: "arn") {
   ec2Instance: [awsEc2] @hasInverse(field: networkInterfaces)
   natGateway: [awsNatGateway] @hasInverse(field: networkInterface)
   vpc: [awsVpc] @hasInverse(field: networkInterface)
+  eip: [awsEip] @hasInverse(field: networkInterface)
 }
 
 type awsNetworkInterfaceAttachment

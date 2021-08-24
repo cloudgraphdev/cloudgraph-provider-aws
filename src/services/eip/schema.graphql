@@ -8,7 +8,7 @@ type awsEip @key(fields: "arn") {
   privateIp: String @search(by: [hash, regexp])
   instanceId: String @search(by: [hash])
   publicIpv4Pool: String @search(by: [hash, regexp])
-  networkInterface: String @search(by: [hash, regexp])
+  networkInterfaceId: String @search(by: [hash, regexp])
   ec2InstanceAssociationId: String @search(by: [hash])
   networkInterfaceOwnerId: String @search(by: [hash])
   networkBorderGroup: String @search(by: [hash, regexp])
@@ -16,4 +16,5 @@ type awsEip @key(fields: "arn") {
   customerOwnedIpv4Pool: String @search(by: [hash, regexp])
   vpcs: [awsVpc] @hasInverse(field: eip)
   ec2Instance: [awsEc2] @hasInverse(field: eip)
+  networkInterface: [awsNetworkInterface] @hasInverse(field: eip)
 }

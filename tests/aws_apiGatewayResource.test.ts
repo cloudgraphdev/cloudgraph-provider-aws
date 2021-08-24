@@ -4,16 +4,17 @@ import ApiGatewayResource from '../src/services/apiGatewayResource'
 import { credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
 
-initTestConfig()
-
 describe('APIGatewayResource Service Test: ', () => {
   let getDataResult
   let formatResult
+  initTestConfig()
   beforeAll(
     async () =>
       new Promise<void>(async resolve => {
         try {
-          const classInstance = new ApiGatewayResource({ logger: CloudGraph.logger })
+          const classInstance = new ApiGatewayResource({
+            logger: CloudGraph.logger,
+          })
           getDataResult = await classInstance.getData({
             credentials,
             regions: region,
@@ -29,21 +30,23 @@ describe('APIGatewayResource Service Test: ', () => {
   )
 
   describe('format', () => {
-    it('should return data in the correct format matching the schema type', () => {
+    test('should return data in the correct format matching the schema type', () => {
       expect(formatResult).toEqual(
-        expect.arrayContaining([expect.objectContaining({
-          id: expect.any(String),
-          arn: expect.any(String),
-          path: expect.any(String),
-          methods: expect.arrayContaining([
-            expect.objectContaining({
-              arn: expect.any(String),
-              httpMethod: expect.any(String),
-              authorization: expect.any(String),
-              apiKeyRequired: expect.any(Boolean),
-            })
-          ])
-        })])
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(String),
+            arn: expect.any(String),
+            path: expect.any(String),
+            methods: expect.arrayContaining([
+              expect.objectContaining({
+                arn: expect.any(String),
+                httpMethod: expect.any(String),
+                authorization: expect.any(String),
+                apiKeyRequired: expect.any(Boolean),
+              }),
+            ]),
+          }),
+        ])
       )
     })
   })
