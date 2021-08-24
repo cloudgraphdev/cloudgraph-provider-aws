@@ -1,3 +1,10 @@
+## [0.11.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.11.0...0.11.1) (2021-08-24)
+
+
+### Bug Fixes
+
+* **regions:** update regions prompt with default ([805613f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/805613f78542f236569a080dad889294091bc79c))
+
 # [0.11.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.10.1...0.11.0) (2021-08-23)
 
 
