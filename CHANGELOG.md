@@ -1,3 +1,10 @@
+## [0.11.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.11.2...0.11.3) (2021-08-24)
+
+
+### Bug Fixes
+
+* **creds:** Update logging to inform user what creds are being used ([4e70245](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/4e70245ae2d76dc1e45b9361c5e869887f6981fd))
+
 ## [0.11.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.11.1...0.11.2) (2021-08-24)
 
 
