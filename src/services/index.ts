@@ -89,6 +89,7 @@ export default class Provider extends CloudGraph.Client {
         choices: regions.map((region: string) => ({
           name: region,
         })),
+        default: ['us-east-1']
       },
     ])
     this.logger.debug(answers)
