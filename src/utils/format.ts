@@ -20,3 +20,8 @@ export const formatTagsFromMap = (tags: TagMap): Tag[] => {
   }
   return result
 }
+
+export const obfuscateSensitiveString = (s: string): string => {
+  const stars = '*'.repeat(Math.min(30, s.length - 6))
+  return s.slice(0, 3) + stars + s.slice(stars.length + 3, s.length)
+}

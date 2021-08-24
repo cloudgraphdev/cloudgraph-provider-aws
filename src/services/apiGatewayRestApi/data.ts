@@ -108,7 +108,7 @@ export default async ({
     })
 
     await Promise.all(regionPromises)
-    logger.info(lt.fetchedApiGatewayRestApis(apiGatewayData.length))
+    logger.debug(lt.fetchedApiGatewayRestApis(apiGatewayData.length))
 
     // get all tags for each rest api
     apiGatewayData.map(({ id, region }, idx) => {
@@ -124,7 +124,7 @@ export default async ({
       tagsPromises.push(tagsPromise)
     })
 
-    logger.info(lt.gettingApiGatewayTags)
+    logger.debug(lt.gettingApiGatewayTags)
     await Promise.all(tagsPromises)
 
     resolve(groupBy(apiGatewayData, 'region'))
