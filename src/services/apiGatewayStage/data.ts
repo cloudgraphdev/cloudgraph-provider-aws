@@ -154,7 +154,7 @@ export default async ({
     })
 
     await Promise.all(additionalPromises)
-    logger.info(lt.fetchedApiGatewayStages(apiGatewayStages.length))
+    logger.debug(lt.fetchedApiGatewayStages(apiGatewayStages.length))
 
     // get all tags for each stage
     apiGatewayStages.map(stage => {
@@ -177,7 +177,7 @@ export default async ({
       tagsPromises.push(tagsPromise)
     })
 
-    logger.info(lt.gettingApiGatewayStageTags)
+    logger.debug(lt.gettingApiGatewayStageTags)
     await Promise.all(tagsPromises)
 
     resolve(groupBy(apiGatewayStages, 'region'))

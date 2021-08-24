@@ -34,11 +34,12 @@
     "@graphql-tools/merge": "^8.0.1",
     "@sentry/node": "^6.7.2",
     "aws-sdk": "^2.931.0",
+    "chalk": "^4.1.2",
+    "dotenv": "^10.0.0",
     "graphql": "^15.5.1",
     "lodash": "^4.17.21",
     "pino": "^6.11.3",
-    "typescript": "^4.3.5",
-    "dotenv": "^10.0.0"
+    "typescript": "^4.3.5"
   },
   "devDependencies": {
     "@autocloud/eslint-config": "^0.1.0",

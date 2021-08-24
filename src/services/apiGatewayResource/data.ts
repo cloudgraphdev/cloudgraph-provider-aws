@@ -149,7 +149,7 @@ export default async ({
     })
 
     await Promise.all(additionalPromises)
-    logger.info(lt.fetchedApiGatewayResources(apiGatewayResources.length))
+    logger.debug(lt.fetchedApiGatewayResources(apiGatewayResources.length))
 
     resolve(groupBy(apiGatewayResources, 'region'))
   })

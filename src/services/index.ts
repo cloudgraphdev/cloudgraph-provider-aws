@@ -2,6 +2,7 @@ import CloudGraph, { Service, Opts, ProviderData } from '@cloudgraph/sdk'
 import { loadFilesSync } from '@graphql-tools/load-files'
 import { mergeTypeDefs } from '@graphql-tools/merge'
 import AWS from 'aws-sdk'
+import chalk from 'chalk'
 import { print } from 'graphql'
 import STS from 'aws-sdk/clients/sts'
 import { isEmpty } from 'lodash'
@@ -30,6 +31,7 @@ import regions from '../enums/regions'
 import resources from '../enums/resources'
 import services from '../enums/services'
 import { Credentials } from '../types'
+import { obfuscateSensitiveString } from '../utils/format'
 /**
  * serviceMap is an object that contains all currently supported services for AWS
  * serviceMap is used by the serviceFactory to produce instances of service classes
@@ -78,7 +80,7 @@ export default class Provider extends CloudGraph.Client {
     resources: { [key: string]: string }
   }
 
-  async configure(flags: any): Promise<{[key: string]: any}> {
+  async configure(flags: any): Promise<{ [key: string]: any }> {
     const result: { [key: string]: any } = {}
     const answers = await this.interface.prompt([
       {
@@ -89,7 +91,7 @@ export default class Provider extends CloudGraph.Client {
         choices: regions.map((region: string) => ({
           name: region,
         })),
-        default: ['us-east-1']
+        default: ['us-east-1'],
       },
     ])
     this.logger.debug(answers)
@@ -120,7 +122,7 @@ export default class Provider extends CloudGraph.Client {
     return result
   }
 
-  async getIdentity(): Promise<{accountId: string}> {
+  async getIdentity(): Promise<{ accountId: string }> {
     try {
       const credentials = await this.getCredentials()
       return new Promise((resolve, reject) =>
@@ -139,11 +141,11 @@ export default class Provider extends CloudGraph.Client {
   }
 
   private getCredentials(): Promise<Credentials> {
-    this.logger.info('Searching for AWS credentials...')
     return new Promise(async resolve => {
       if (this.credentials) {
         return resolve(this.credentials)
       }
+      this.logger.info('Searching for AWS credentials...')
       switch (true) {
         case this.config.profile &&
           this.config.profile !== 'default' &&
@@ -240,6 +242,20 @@ export default class Provider extends CloudGraph.Client {
           throw new Error()
         }
       }
+      this.logger.success('Found and using the following AWS credentials')
+      this.logger.success(
+        `profile: ${chalk.underline.green(this.config.profile ?? 'default')}`
+      )
+      this.logger.success(
+        `accessKeyId: ${chalk.underline.green(
+          obfuscateSensitiveString(this.credentials.accessKeyId)
+        )}`
+      )
+      this.logger.success(
+        `secretAccessKey: ${chalk.underline.green(
+          obfuscateSensitiveString(this.credentials.secretAccessKey)
+        )}`
+      )
       resolve(this.credentials)
     })
   }
@@ -286,7 +302,9 @@ export default class Provider extends CloudGraph.Client {
     }
     const credentials = await this.getCredentials()
     const rawData = []
-    const resourceNames: string[] = [...new Set<string>(configuredResources.split(','))]
+    const resourceNames: string[] = [
+      ...new Set<string>(configuredResources.split(',')),
+    ]
 
     // Get Raw data for services
     for (const resource of resourceNames) {

@@ -71,7 +71,7 @@ export default async ({
 
           const { NatGateways: natGateways, NextToken: token } = data
 
-          logger.info(lt.fetchedNatGateways(natGateways.length))
+          logger.debug(lt.fetchedNatGateways(natGateways.length))
 
           /**
            * No Nat Gateways Found
