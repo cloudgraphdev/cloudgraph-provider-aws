@@ -1,3 +1,10 @@
+## [0.11.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.11.3...0.11.4) (2021-08-25)
+
+
+### Bug Fixes
+
+* **apiGateway:** generate stage arn with rest api id ([a9aa960](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a9aa960dc243b65178918888127b95ed097a191f))
+
 ## [0.11.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.11.2...0.11.3) (2021-08-24)
 
 
