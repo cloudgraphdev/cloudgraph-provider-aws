@@ -4,6 +4,7 @@ import {
 } from '../../types/generated'
 import {
   apiGatewayArn,
+  apiGatewayRestApiArn,
   apiGatewayStageArn,
 } from '../../utils/generateArns'
 import { formatTagsFromMap } from '../../utils/format'
@@ -24,11 +25,16 @@ export default ({
     clientCertificateId,
     tracingEnabled,
     variables: vars = {},
+    restApiId,
     tags,
+    region,
   } = service
 
   const arn = apiGatewayStageArn({
-    restApiArn: apiGatewayArn({ region: service.region }),
+    restApiArn: apiGatewayRestApiArn({
+      restApiArn: apiGatewayArn({ region }),
+      id: restApiId,
+    }),
     name,
   })
 
