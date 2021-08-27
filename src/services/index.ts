@@ -20,6 +20,7 @@ import AwsSecurityGroup from './securityGroup'
 import VPC from './vpc'
 import EBS from './ebs'
 import { Credentials } from '../types'
+import SQS from './sqs'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -37,6 +38,7 @@ export const serviceMap = {
   // [services.subnet]: AwsSubnet, // TODO: Enable when going for ENG-222
   [services.vpc]: VPC,
   [services.ebs]: EBS,
+  [services.sqs]: SQS,
 }
 
 export const enums = {
@@ -252,7 +254,7 @@ export default class Provider extends CloudGraph.Client {
   }
 
   /**
-   * getData is used to fetch all provider data specificed in the config for the provider
+   * getData is used to fetch all provider data specified in the config for the provider
    * @param TODO: fill in
    * @returns Promise<any> All provider data
    */

@@ -1,0 +1,15 @@
+type awsSqs @key(fields: "arn"){
+  arn: String! @id
+  queueUrl: String!
+  queueType: String!
+  approximateNumberOfMessages: Int
+  approximateNumberOfMessagesNotVisible: Int
+  approximateNumberOfMessagesDelayed: Int
+  visibilityTimeout: String
+  maximumMessageSize: Int
+  messageRetentionPeriod: String
+  delaySeconds: String
+  policy: String
+  receiveMessageWaitTimeSeconds: String
+  tags: [Tag]
+}

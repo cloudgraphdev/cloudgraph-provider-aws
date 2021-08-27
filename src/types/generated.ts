@@ -255,6 +255,22 @@ export type AwsSgRule = {
   userId?: Maybe<Scalars['String']>;
 };
 
+export type AwsSqs = {
+  arn: Scalars['String'];
+  queueUrl: Scalars['String'];
+  queueType: Scalars['String'];
+  approximateNumberOfMessages?: Maybe<Scalars['Int']>;
+  approximateNumberOfMessagesNotVisible?: Maybe<Scalars['Int']>;
+  approximateNumberOfMessagesDelayed?: Maybe<Scalars['Int']>;
+  visibilityTimeout?: Maybe<Scalars['String']>;
+  maximumMessageSize?: Maybe<Scalars['Int']>;
+  messageRetentionPeriod?: Maybe<Scalars['String']>;
+  delaySeconds?: Maybe<Scalars['String']>;
+  policy?: Maybe<Scalars['String']>;
+  receiveMessageWaitTimeSeconds?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
 export type AwsSubnet = {
   arn: Scalars['String'];
   autoAssignPublicIpv4Address?: Maybe<Scalars['String']>;
