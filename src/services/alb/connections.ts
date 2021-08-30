@@ -4,6 +4,7 @@ import { ServiceConnection } from '@cloudgraph/sdk'
 // import get from 'lodash/get'
 import resourceTypes from '../../enums/resources'
 import services from '../../enums/services'
+import { RawAwsAlb } from './data'
 
 // import {awsRoute53HostedZoneConverter} from '../route53/graphFormat'
 
@@ -16,12 +17,16 @@ export default ({
   data,
   // account,
   region,
+}: {
+  service: RawAwsAlb
+  data: Array<{ name: string; data: { [property: string]: any[] } }>
+  region: string
 }): { [key: string]: ServiceConnection[] } => {
   const {
     LoadBalancerArn: id,
     SecurityGroups: securityGroups = [],
     AvailabilityZones: azs = [],
-  }: any = alb
+  }: RawAwsAlb = alb
 
   const connections: ServiceConnection[] = []
   /**
@@ -47,14 +52,15 @@ export default ({
   /**
    * Add subnets
    */
-  connections.push(
-    ...azs.map(({ SubnetId }) => ({
-      id: SubnetId,
-      resourceType: services.subnet,
-      relation: 'child',
-      field: 'subnets',
-    }))
-  )
+  // TODO: Implement when Subnet service is fully ready
+  // connections.push(
+  //   ...azs.map(({ SubnetId }) => ({
+  //     id: SubnetId,
+  //     resourceType: services.subnet,
+  //     relation: 'child',
+  //     field: 'subnets',
+  //   }))
+  // )
 
   /**
    * Add Security Groups

@@ -1,15 +1,22 @@
-type awsVpc @key(fields: "arn") {
-  id: String!
-	arn: String! @id
-	ipV4Cidr: String
-	ipV6Cidr: String
-	dhcpOptionsSet: String
-	instanceTenancy: [String]
-	enableDnsSupport: String
-	enableDnsHostnames: String
-	defaultVpc: Boolean
-	state: String
-	alb: [awsAlb] @hasInverse(field: vpc)
-	igw: [awsIgw] @hasInverse(field: vpc)
-	# kms: [awsLambda] @hasInverse(field: vpc)
+type awsVpc @key(fields: "id"){
+  arn: String! @id
+  defaultVpc: Boolean @search
+  dhcpOptionsSet: String @search(by: [hash, regexp])
+  enableDnsHostnames: Boolean @search
+  enableDnsSupport: Boolean @search
+  id: String! @id @search(by: [hash])
+  instanceTenancy: String @search(by: [hash, regexp])
+  ipV4Cidr: String @search(by: [hash, regexp])
+  ipV6Cidr: String @search(by: [hash, regexp])
+  state: String @search(by: [hash, regexp])
+  tags: [Tag]
+  alb: [awsAlb] @hasInverse(field: vpc)
+  # ecs: [awsEcs] @hasInverse(field: vpc) TODO: Uncomment when ECS is added
+  eip: [awsEip] @hasInverse(field: vpcs)
+  # eks: [awsEks] @hasInverse(field: vpc) TODO: Uncomment when EKS is addedigw: [awsIgw] @hasInverse(field: vpc)
+  elb: [awsElb] @hasInverse(field: vpc)
+  igw: [awsIgw] @hasInverse(field: vpc)
+  lambda: [awsLambda] @hasInverse(field: vpc)
+  natGateway: [awsNatGateway] @hasInverse(field: vpc)
+  networkInterface: [awsNetworkInterface] @hasInverse(field: vpc)
 }

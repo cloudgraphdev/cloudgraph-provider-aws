@@ -1,44 +1,63 @@
-import AWS from 'aws-sdk'
-import path from 'path'
+import CloudGraph, { Service, Opts, ProviderData } from '@cloudgraph/sdk'
 import { loadFilesSync } from '@graphql-tools/load-files'
 import { mergeTypeDefs } from '@graphql-tools/merge'
+import AWS from 'aws-sdk'
+import chalk from 'chalk'
 import { print } from 'graphql'
-import CloudGraph, { Service, Opts } from '@cloudgraph/sdk'
 import STS from 'aws-sdk/clients/sts'
-import services from '../enums/services'
-import resources from '../enums/resources'
-import regions from '../enums/regions'
+import { isEmpty } from 'lodash'
+import path from 'path'
+
+// import AwsSubnet from './subnet'
 import ALB from './alb'
 import AwsInternetGateway from './igw'
+import AwsKms from './kms'
+import AwsSecurityGroup from './securityGroup'
+import AwsTag from './tag'
 import CloudWatch from './cloudwatch'
+import EBS from './ebs'
 import EC2 from './ec2'
 import EIP from './eip'
-import AwsKms from './kms'
+import ELB from './elb'
 import Lambda from './lambda'
-// import AwsSubnet from './subnet'
-import AwsSecurityGroup from './securityGroup'
+import NATGateway from './natGateway'
+import NetworkInterface from './networkInterface'
 import VPC from './vpc'
-import EBS from './ebs'
-import { Credentials } from '../types'
 import SQS from './sqs'
+import APIGatewayRestApi from './apiGatewayRestApi'
+import APIGatewayResource from './apiGatewayResource'
+import APIGatewayStage from './apiGatewayStage'
 
+import regions from '../enums/regions'
+import resources from '../enums/resources'
+import services from '../enums/services'
+import { Credentials } from '../types'
+import { obfuscateSensitiveString } from '../utils/format'
 /**
  * serviceMap is an object that contains all currently supported services for AWS
  * serviceMap is used by the serviceFactory to produce instances of service classes
  */
 export const serviceMap = {
   [services.alb]: ALB,
+  [services.apiGatewayResource]: APIGatewayResource,
+  [services.apiGatewayRestApi]: APIGatewayRestApi,
+  [services.apiGatewayStage]: APIGatewayStage,
   [services.cloudwatch]: CloudWatch,
+  [services.ebs]: EBS,
   [services.ec2Instance]: EC2,
   [services.eip]: EIP,
+  [services.elb]: ELB,
   [services.igw]: AwsInternetGateway,
   [services.kms]: AwsKms,
   [services.lambda]: Lambda,
+  [services.nat]: NATGateway,
+  [services.networkInterface]: NetworkInterface,
   [services.sg]: AwsSecurityGroup,
   // [services.subnet]: AwsSubnet, // TODO: Enable when going for ENG-222
   [services.vpc]: VPC,
   [services.ebs]: EBS,
   [services.sqs]: SQS,
+  tag: AwsTag,
 }
 
 export const enums = {
@@ -54,17 +73,17 @@ export default class Provider extends CloudGraph.Client {
     this.serviceMap = serviceMap
   }
 
-  credentials: Credentials | undefined
+  private credentials: Credentials | undefined
 
-  serviceMap: { [key: string]: any } // TODO: how to type the service map
+  private serviceMap: { [key: string]: any } // TODO: how to type the service map
 
-  properties: {
+  private properties: {
     services: { [key: string]: string }
     regions: string[]
     resources: { [key: string]: string }
   }
 
-  async configure(flags: any) {
+  async configure(flags: any): Promise<{ [key: string]: any }> {
     const result: { [key: string]: any } = {}
     const answers = await this.interface.prompt([
       {
@@ -75,6 +94,7 @@ export default class Provider extends CloudGraph.Client {
         choices: regions.map((region: string) => ({
           name: region,
         })),
+        default: ['us-east-1'],
       },
     ])
     this.logger.debug(answers)
@@ -105,7 +125,7 @@ export default class Provider extends CloudGraph.Client {
     return result
   }
 
-  async getIdentity() {
+  async getIdentity(): Promise<{ accountId: string }> {
     try {
       const credentials = await this.getCredentials()
       return new Promise((resolve, reject) =>
@@ -123,12 +143,12 @@ export default class Provider extends CloudGraph.Client {
     }
   }
 
-  getCredentials(): Promise<Credentials> {
-    this.logger.info('Searching for AWS credentials...')
+  private getCredentials(): Promise<Credentials> {
     return new Promise(async resolve => {
       if (this.credentials) {
         return resolve(this.credentials)
       }
+      this.logger.info('Searching for AWS credentials...')
       switch (true) {
         case this.config.profile &&
           this.config.profile !== 'default' &&
@@ -225,6 +245,20 @@ export default class Provider extends CloudGraph.Client {
           throw new Error()
         }
       }
+      this.logger.success('Found and using the following AWS credentials')
+      this.logger.success(
+        `profile: ${chalk.underline.green(this.config.profile ?? 'default')}`
+      )
+      this.logger.success(
+        `accessKeyId: ${chalk.underline.green(
+          obfuscateSensitiveString(this.credentials.accessKeyId)
+        )}`
+      )
+      this.logger.success(
+        `secretAccessKey: ${chalk.underline.green(
+          obfuscateSensitiveString(this.credentials.secretAccessKey)
+        )}`
+      )
       resolve(this.credentials)
     })
   }
@@ -246,7 +280,7 @@ export default class Provider extends CloudGraph.Client {
    * @param service an AWS service that is listed within the service map (current supported services)
    * @returns Instance of an AWS service class to interact with that AWS service
    */
-  getService(service: string): Service {
+  private getService(service: string): Service {
     if (!serviceMap[service]) {
       throw new Error(`Service ${service} does not exist for AWS provider`)
     }
@@ -258,30 +292,100 @@ export default class Provider extends CloudGraph.Client {
    * @param TODO: fill in
    * @returns Promise<any> All provider data
    */
-  async getData({
-    opts,
-  }: {
-    opts: Opts
-  }): Promise<Array<{ name: string; data: any[] }>> {
-    let { regions, resources } = this.config
-    if (!regions) {
-      regions = this.properties.regions.join(',')
+  async getData({ opts }: { opts: Opts }): Promise<ProviderData> {
+    let { regions: configuredRegions, resources: configuredResources } =
+      this.config
+    if (!configuredRegions) {
+      configuredRegions = this.properties.regions.join(',')
+    } else {
+      configuredRegions = [...new Set(configuredRegions.split(','))].join(',')
     }
-    if (!resources) {
-      resources = Object.values(this.properties.services).join(',')
+    if (!configuredResources) {
+      configuredResources = Object.values(this.properties.services).join(',')
     }
     const credentials = await this.getCredentials()
-    const result = []
-    const resourceNames = resources.split(',')
+    const rawData = []
+    const resourceNames: string[] = [
+      ...new Set<string>(configuredResources.split(',')),
+    ]
+
+    // Get Raw data for services
     for (const resource of resourceNames) {
-      const serviceClass = this.getService(resource as any)
-      result.push({
+      const serviceClass = this.getService(resource)
+      rawData.push({
         name: resource,
-        data: await serviceClass.getData({ regions, credentials, opts }),
+        data: await serviceClass.getData({
+          regions: configuredRegions,
+          credentials,
+          opts,
+        }),
       })
+    }
+    // Handle global tag entities
+    const tagRegion = 'aws-global'
+    const tags = { name: 'tag', data: { [tagRegion]: [] } }
+    for (const { data: entityData } of rawData) {
+      for (const region of Object.keys(entityData)) {
+        const dataAtRegion = entityData[region]
+        dataAtRegion.forEach(singleEntity => {
+          if (!isEmpty(singleEntity.Tags)) {
+            for (const [key, value] of Object.entries(singleEntity.Tags)) {
+              if (
+                !tags.data[tagRegion].find(({ id }) => id === `${key}:${value}`)
+              ) {
+                tags.data[tagRegion].push({ id: `${key}:${value}`, key, value })
+              }
+            }
+          }
+        })
+      }
+    }
+    rawData.push(tags)
+
+    /**
+     * Loop through the aws sdk data to format entities and build connections
+     * 1. Format data with provider service format function
+     * 2. build connections for data with provider service connections function
+     * 3. spread new connections over result.connections
+     * 4. push the array of formatted entities into result.entites
+     */
+    const result: ProviderData = {
+      entities: [],
+      connections: {},
+    }
+    const { accountId } = await this.getIdentity()
+    for (const serviceData of rawData) {
+      const serviceClass = this.getService(serviceData.name)
+      const entities: any[] = []
+      for (const region of Object.keys(serviceData.data)) {
+        const data = serviceData.data[region]
+        data.forEach((service: any) => {
+          entities.push(
+            serviceClass.format({
+              service,
+              region,
+              account: accountId,
+            })
+          )
+          if (typeof serviceClass.getConnections === 'function') {
+            result.connections = {
+              ...result.connections,
+              ...serviceClass.getConnections({
+                service,
+                region,
+                account: accountId,
+                data: rawData,
+              }),
+            }
+          }
+        })
+        result.entities.push({
+          name: serviceData.name,
+          mutation: serviceClass.mutation,
+          data: entities,
+        })
+      }
     }
     return result
   }
 }
-
-// testFunc()

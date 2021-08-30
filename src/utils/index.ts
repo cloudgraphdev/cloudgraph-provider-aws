@@ -43,6 +43,16 @@ export const getKeyByValue = (object, value) => {
   return Object.keys(object).find(key => object[key] === value)
 }
 
+export const intersectStringArrays = (
+  a: Array<string>,
+  b: Array<string>
+): Array<string> => {
+  const setA = new Set(a)
+  const setB = new Set(b)
+  const intersection = new Set([...setA].filter(x => setB.has(x)))
+  return Array.from(intersection)
+}
+
 export async function getAccountId({
   credentials,
 }: // opts,
@@ -81,8 +91,8 @@ export function getCredentials(opts: Opts): Promise<Credentials> {
 
 export function initTestEndpoint(service?: string): string | undefined {
   const endpoint =
-  (environment.NODE_ENV === 'test' && environment.LOCALSTACK_AWS_ENDPOINT) ||
-  undefined
+    (environment.NODE_ENV === 'test' && environment.LOCALSTACK_AWS_ENDPOINT) ||
+    undefined
   service && endpoint && logger.info(`${service} getData in test mode!`)
   return endpoint
 }

@@ -1,0 +1,32 @@
+type awsNetworkInterface @key(fields: "arn") {
+  id: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  subnetId: String @search(by: [hash])
+  macAddress: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp, fulltext])
+  availabilityZone: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
+  vpcId: String @search(by: [hash])
+  interfaceType: String @search(by: [hash, regexp])
+  securityGroups: [String] @search(by: [hash])
+  privateDnsName: String @search(by: [hash, regexp])
+  privateIps: [String] @search(by: [hash, regexp])
+  attachment: awsNetworkInterfaceAttachment
+  tags: [Tag]
+  ec2Instance: [awsEc2] @hasInverse(field: networkInterfaces)
+  natGateway: [awsNatGateway] @hasInverse(field: networkInterface)
+  vpc: [awsVpc] @hasInverse(field: networkInterface)
+  eip: [awsEip] @hasInverse(field: networkInterface)
+}
+
+type awsNetworkInterfaceAttachment
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: ID
+  attachmentId: String
+  deleteOnTermination: Boolean
+  status: String
+}

@@ -1,8 +1,9 @@
 import { Volume } from 'aws-sdk/clients/ec2'
 
 import { AwsEbs } from '../../types/generated'
+import { TagMap } from '../../types'
 import t from '../../properties/translations'
-import format from '../../utils/format'
+import { formatTagsFromMap } from '../../utils/format'
 
 /**
  * EBS
@@ -13,7 +14,7 @@ export default ({
   account,
   region,
 }: {
-  service: Volume & { region: string }
+  service: Omit<Volume, 'Tags'> & { Tags: TagMap; region: string }
   account: string
   region: string
 }): AwsEbs => {
@@ -44,7 +45,7 @@ export default ({
   })
 
   // Format volume tags
-  const volumeTags = format.tags(tags as { Key: string; Value: string }[])
+  const volumeTags = formatTagsFromMap(tags)
 
   const ebs = {
     id,

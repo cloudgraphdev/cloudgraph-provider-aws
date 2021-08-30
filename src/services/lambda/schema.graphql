@@ -1,23 +1,24 @@
 type awsLambda @key(fields: "id") {
-  arn: String!
-  description: String
-  handler: String
-  id: String! @id
-  kmsKeyArn: String
-  lastModified: String
-  memorySize: Int
-  reservedConcurrentExecutions: Int
-  role: String
-  runtime: String
-  sourceCodeSize: String
-  timeout: String
-  tracingConfig: String
-  version: String
+  id: String! @id @search(by: [hash])
+  arn: String! @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp, fulltext])
+  handler: String @search(by: [hash, regexp])
+  kmsKeyArn: String @search(by: [hash, regexp])
+  lastModified: String @search(by: [hash, regexp])
+  memorySize: Int @search
+  reservedConcurrentExecutions: Int @search
+  role: String @search(by: [hash, regexp])
+  runtime: String @search(by: [hash, regexp])
+  sourceCodeSize: String @search(by: [hash, regexp])
+  timeout: Int @search
+  tracingConfig: String @search(by: [hash, regexp])
+  version: String @search(by: [hash, regexp])
   environmentVariables: [awsLambaEnvironmentVariable]
   tags: [Tag]
   kms: [awsKms] @hasInverse(field: lambda)
   securityGroups: [awsSecurityGroup] @hasInverse(field: lambda)
   # subnets: [awsSubnet] @hasInverse(field: lambda)
+  vpc: [awsVpc] @hasInverse(field: lambda)
 }
 
 type awsLambaEnvironmentVariable

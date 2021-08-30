@@ -15,8 +15,7 @@ import { AWSError } from 'aws-sdk/lib/error'
 import CloudGraph from '@cloudgraph/sdk'
 import awsLoggerText from '../../properties/logger'
 
-import { Credentials } from '../../types'
-import { Tag } from '../../types/generated'
+import { Credentials, TagMap } from '../../types'
 import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
@@ -24,8 +23,8 @@ const MAX_ITEMS = 50
 const { logger } = CloudGraph
 const endpoint = initTestEndpoint('Lambda')
 
-export interface AwsLambdaFunction extends FunctionConfiguration {
-  tags?: Tag[]
+export interface RawAwsLambdaFunction extends FunctionConfiguration {
+  Tags?: TagMap
   region: string
   reservedConcurrentExecutions: ReservedConcurrentExecutions
 }
@@ -104,7 +103,7 @@ const getFunctionConcurrency = async (
     }
   })
 
-const getResourceTags = async (lambda: Lambda, arn: string): Promise<Tag[]> =>
+const getResourceTags = async (lambda: Lambda, arn: string): Promise<TagMap> =>
   new Promise(resolve => {
     try {
       lambda.listTags(
@@ -113,14 +112,14 @@ const getResourceTags = async (lambda: Lambda, arn: string): Promise<Tag[]> =>
           if (err) {
             logger.error(err)
             Sentry.captureException(new Error(err.message))
-            resolve([])
+            resolve({})
           }
-          const { Tags: tags = {} } = data || {}
-          resolve(Object.entries(tags).map(([key, value]) => ({ key, value })))
+          const { Tags = {} } = data || {}
+          resolve(Tags)
         }
       )
     } catch (error) {
-      resolve([])
+      resolve({})
     }
   })
 
@@ -130,9 +129,9 @@ export default async ({
 }: {
   regions: string
   credentials: Credentials
-}): Promise<{ [property: string]: AwsLambdaFunction[] }> =>
+}): Promise<{ [property: string]: RawAwsLambdaFunction[] }> =>
   new Promise(async resolve => {
-    const lambdaData: AwsLambdaFunction[] = []
+    const lambdaData: RawAwsLambdaFunction[] = []
     const regionPromises = []
     const tagsPromises = []
 
@@ -167,8 +166,8 @@ export default async ({
     lambdaData.map(({ FunctionArn: arn, region }, idx) => {
       const lambda = new Lambda({ region, credentials, endpoint })
       const tagsPromise = new Promise<void>(async resolveTags => {
-        const envTags: Tag[] = await getResourceTags(lambda, arn)
-        lambdaData[idx].tags = envTags
+        const envTags: TagMap = await getResourceTags(lambda, arn)
+        lambdaData[idx].Tags = envTags
         resolveTags()
       })
       tagsPromises.push(tagsPromise)

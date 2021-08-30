@@ -1,7 +1,9 @@
 import * as Sentry from '@sentry/node'
 import CloudGraph from '@cloudgraph/sdk'
 
+import { Request } from 'aws-sdk'
 import EC2, {
+  DescribeInternetGatewaysRequest,
   DescribeInternetGatewaysResult,
   InternetGateway,
 } from 'aws-sdk/clients/ec2'
@@ -10,10 +12,10 @@ import { AWSError } from 'aws-sdk/lib/error'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import { Credentials } from '../../types'
+import { Credentials, AwsTag, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { Tag } from '../../types/generated'
 import { initTestEndpoint } from '../../utils'
+import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
@@ -23,7 +25,7 @@ const endpoint = initTestEndpoint('IGW')
  */
 
 export interface RawAwsIgw extends Omit<InternetGateway, 'Tags'> {
-  Tags: Tag[]
+  Tags: TagMap
   region: string
 }
 
@@ -43,8 +45,13 @@ export default async ({
       region,
       token: NextToken = '',
       resolveRegion,
-    }) => {
-      let args: any = {}
+    }: {
+      ec2: EC2
+      region: string
+      token?: string
+      resolveRegion: () => void
+    }): Promise<Request<DescribeInternetGatewaysResult, AWSError>> => {
+      let args: DescribeInternetGatewaysRequest = {}
 
       if (NextToken) {
         args = { ...args, NextToken }
@@ -93,10 +100,7 @@ export default async ({
             ...igws.map(({ Tags, ...igw }) => ({
               ...igw,
               region,
-              Tags: Tags.map(({ Key, Value }) => ({
-                key: Key,
-                value: Value,
-              })),
+              Tags: convertAwsTagsToTagMap(Tags as AwsTag[])
             }))
           )
 

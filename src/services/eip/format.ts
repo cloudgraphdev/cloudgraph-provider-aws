@@ -1,6 +1,7 @@
-import { AwsEip } from '../../types/generated'
-import { toCamel } from '../../utils'
 import t from '../../properties/translations'
+import { AwsEip } from '../../types/generated'
+import { RawAwsEip } from './data'
+import { formatTagsFromMap } from '../../utils/format'
 
 /**
  * EIP
@@ -11,26 +12,30 @@ export default ({
   account,
   region,
 }: {
-  service: any
+  service: RawAwsEip
   account: string
   region: string
 }): AwsEip => {
   const {
-    allocationId: id,
-    associationId: ec2InstanceAssociationId,
-    customerOwnedIp,
-    customerOwnedIpv4Pool,
-     domain,
-    instanceId,
-    networkBorderGroup,
-     networkInterface,
-     networkInterfaceOwnerId,
-    privateIpAddress: privateIp,
-    publicIp,
-     publicIpv4Pool,
-    tags,
-  } = toCamel(rawData)
-  const eip = {
+    AllocationId: id,
+    AssociationId: ec2InstanceAssociationId,
+    CustomerOwnedIp: customerOwnedIp,
+    CustomerOwnedIpv4Pool: customerOwnedIpv4Pool,
+    Domain: domain,
+    InstanceId: instanceId,
+    NetworkBorderGroup: networkBorderGroup,
+    NetworkInterfaceId: networkInterfaceId,
+    NetworkInterfaceOwnerId: networkInterfaceOwnerId,
+    PrivateIpAddress: privateIp,
+    PublicIp: publicIp,
+    PublicIpv4Pool: publicIpv4Pool,
+    Tags: tags = {},
+  } = rawData
+
+  // Format Tags
+  const eipTags = formatTagsFromMap(tags)
+
+  return {
     id,
     arn: `arn:aws:ec2:${region}:${account}:eip-allocation/${id}`,
     vpc: domain === 'vpc' ? t.yes : t.no,
@@ -40,12 +45,11 @@ export default ({
     ec2InstanceAssociationId,
     instanceId,
     networkBorderGroup,
-    networkInterface,
+    networkInterfaceId,
     networkInterfaceOwnerId,
     privateIp,
     publicIp,
     publicIpv4Pool,
-    tags,
+    tags: eipTags,
   }
-  return eip
 }

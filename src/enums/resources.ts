@@ -30,7 +30,7 @@ export default {
   eksCluster: 'aws_eks_cluster',
   routeTable: 'aws_route_table',
   albListener: 'aws_lb_listener',
-  elbListner: 'aws_elb_listener', // Not a real TF resource, used to for classic ELBs
+  elbListener: 'aws_elb_listener', // Not a real TF resource, used to for classic ELBs
   ec2Instance: 'aws_instance',
   iamPolicies: 'aws_iam_polocies', // Not a real TF resource, used to organize all the policies
   route53Zone: 'aws_route53_zone',

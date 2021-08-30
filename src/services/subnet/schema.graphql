@@ -1,14 +1,15 @@
-type awsSubnet @key(fields: "id"){
-  arn: String!
-  autoAssignPublicIpv4Address: String
-  autoAssignPublicIpv6Address: String
-  availabilityZone: String
-  availableIpV4Addresses: Int
-  defaultForAz: Boolean
-  id: String! @id
-  ipV4Cidr: String
-  ipV6Cidr: String
-  state: String
+type awsSubnet @key(fields: "id") {
+  id: String! @id @search(by: [hash])
+  arn: String! @search(by: [hash, regexp])
+  autoAssignPublicIpv4Address: String @search(by: [hash, regexp])
+  autoAssignPublicIpv6Address: String @search(by: [hash, regexp])
+  availabilityZone: String @search(by: [hash, regexp])
+  availableIpV4Addresses: Int @search
+  defaultForAz: Boolean @search
+  ipV4Cidr: String @search(by: [hash, regexp])
+  ipV6Cidr: String @search(by: [hash, regexp])
+  state: String @search(by: [hash, regexp])
   tags: [Tag]
   # lambda: [awsLambda] @hasInverse(field: subnets)
+  # natGateway: [awsNatGateway] @hasInverse(field: subnet)
 }

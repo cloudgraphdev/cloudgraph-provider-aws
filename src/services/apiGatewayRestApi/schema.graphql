@@ -1,0 +1,20 @@
+type awsApiGatewayEndpointConfiguration {
+  id: ID
+  types: [String] @search(by: [hash])
+  vpcEndpointIds: [String] @search(by: [hash])
+}
+
+type awsApiGatewayRestApi @key(fields: "arn") {
+  id: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp, fulltext])
+  policy: String @search(by: [hash, regexp])
+  endpointConfiguration: awsApiGatewayEndpointConfiguration
+  apiKeySource: String @search(by: [hash])
+  createdDate: String @search(by: [hash])
+  minimumCompressionSize: Int @search
+  tags: [Tag]
+  binaryMediaTypes: [String] @search(by: [hash, regexp])
+  stages: [awsApiGatewayStage] @hasInverse(field: restApi)
+  resources: [awsApiGatewayResource] @hasInverse(field: restApi)
+}

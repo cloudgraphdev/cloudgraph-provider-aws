@@ -1,0 +1,19 @@
+type awsTag @key(fields: "id") {
+  id: String! @id @search(by: [hash])
+  key: String! @search(by: [hash, regexp])
+  value: String! @search(by: [hash, regexp])
+  alb: [awsAlb]
+  cloudwatch: [awsCloudwatch]
+  ebs: [awsEbs]
+  ec2: [awsEc2]
+  eip: [awsEip]
+  elb: [awsElb]
+  igw: [awsIgw]
+  kms: [awsKms]
+  lambda: [awsLambda]
+  natGateway: [awsNatGateway]
+  networkInterface: [awsNetworkInterface]
+  securityGroups: [awsSecurityGroup]
+  vpc: [awsVpc]
+  ec2Instance: [awsEc2]
+}

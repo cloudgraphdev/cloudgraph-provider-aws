@@ -4,28 +4,32 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
 import { Request } from 'aws-sdk'
-import EC2, { Subnet , DescribeSubnetsResult, DescribeSubnetsRequest } from 'aws-sdk/clients/ec2'
+import EC2, {
+  Subnet,
+  DescribeSubnetsResult,
+  DescribeSubnetsRequest,
+} from 'aws-sdk/clients/ec2'
 import { AWSError } from 'aws-sdk/lib/error'
 
-
 import CloudGraph from '@cloudgraph/sdk'
-import { Credentials } from '../../types'
+import { Credentials, TagMap, AwsTag } from '../../types'
 
 import awsLoggerText from '../../properties/logger'
-import { Tag } from '../../types/generated'
+// import { Tag } from '../../types/generated'
 import { initTestEndpoint } from '../../utils'
+import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const lt = { ...awsLoggerText }
-const {logger} = CloudGraph
+const { logger } = CloudGraph
 const endpoint = initTestEndpoint('Subnet')
 
 /**
  * Subnets
  */
 
-export interface AwsSubnet extends Omit<Subnet,'Tags'>{
+export interface AwsSubnet extends Omit<Subnet, 'Tags'> {
   region: string
-  tags: Tag[]
+  tags: TagMap
 }
 
 export default ({
@@ -34,7 +38,7 @@ export default ({
 }: {
   regions: string
   credentials: Credentials
-}):  Promise<{ [property: string]: AwsSubnet[] }> =>
+}): Promise<{ [property: string]: AwsSubnet[] }> =>
   new Promise(async resolve => {
     const subnetData: AwsSubnet[] = []
     const regionPromises = []
@@ -100,7 +104,7 @@ export default ({
             ...subnets.map(({ Tags, ...subnet }) => ({
               ...subnet,
               region,
-              tags: Tags.map(({ Key, Value }) => ({ key: Key, value: Value })),
+              tags: convertAwsTagsToTagMap(Tags as AwsTag[]),
             }))
           )
 

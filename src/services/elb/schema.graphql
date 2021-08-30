@@ -1,0 +1,72 @@
+type awsElb @key(fields: "arn") {
+  id: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  dnsName: String @search(by: [hash, regexp])
+  hostedZone: String @search(by: [hash, regexp])
+  createdAt: String @search(by: [hash, regexp])
+  type: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
+  scheme: String @search(by: [hash, regexp])
+  vpcId: String @search(by: [hash])
+  sourceSecurityGroup: awsElbSourceSecurityGroup
+  securityGroupsIds: [String] @search(by: [hash])
+  subnets: [String] @search(by: [hash])
+  accessLogs: String @search(by: [hash, regexp])
+  crossZoneLoadBalancing: String @search(by: [hash, regexp])
+  idleTimeout: String @search(by: [hash, regexp])
+  instances: awsElbInstances
+  healthCheck: awsElbHealthCheck
+  listeners: [awsElbListener]
+  tags: [Tag]
+  securityGroups: [awsSecurityGroup] @hasInverse(field: elb)
+  vpc: [awsVpc] @hasInverse(field: elb)
+  # subnets: [awsSubnet] @hasInverse(field: elb) TODO: Enable when subnet service is complete
+}
+
+type awsElbSourceSecurityGroup
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  groupName: String! @id
+  ownerAlias: String
+}
+
+type awsElbHealthCheck
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  target: String! @id
+  interval: String
+  timeout: String
+  healthyThreshold: Int
+  unhealthyThreshold: Int
+}
+
+type awsElbInstances
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: ID
+  connectionDraining: String
+  connectionDrainingTimeout: String
+}
+
+type awsElbListener
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  name: String
+  loadBalancerPort: Int
+  loadBalancerProtocol: String
+  instancePort: Int
+  instanceProtocol: String
+}

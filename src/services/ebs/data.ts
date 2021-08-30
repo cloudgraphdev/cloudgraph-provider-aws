@@ -13,7 +13,9 @@ import isEmpty from 'lodash/isEmpty'
 import CloudGraph from '@cloudgraph/sdk'
 
 import environment from '../../config/environment'
-import { Credentials } from '../../types'
+import { Credentials, AwsTag } from '../../types'
+
+import { convertAwsTagsToTagMap } from '../../utils/format'
 
 import awsLoggerText from '../../properties/logger'
 
@@ -80,9 +82,10 @@ const listEbsVolumes = async ({
     }
 
     ebsData.push(
-      ...volumes.map(volume => ({
+      ...volumes.map(({ Tags, ...volume }) => ({
         ...volume,
         region,
+        Tags: convertAwsTagsToTagMap(Tags as AwsTag[]),
       }))
     )
 

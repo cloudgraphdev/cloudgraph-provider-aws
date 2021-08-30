@@ -16,6 +16,12 @@ export type Tag = {
   value?: Maybe<Scalars['String']>;
 };
 
+export type AwsAccessLogSettings = {
+  id?: Maybe<Scalars['ID']>;
+  format?: Maybe<Scalars['String']>;
+  destinationArn?: Maybe<Scalars['String']>;
+};
+
 export type AwsAlb = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -56,6 +62,63 @@ export type AwsAlbListenerSettings = {
   rules?: Maybe<Array<Maybe<AwsAlbListenerRule>>>;
 };
 
+export type AwsApiGatewayEndpointConfiguration = {
+  id?: Maybe<Scalars['ID']>;
+  types?: Maybe<Array<Maybe<Scalars['String']>>>;
+  vpcEndpointIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsApiGatewayMethod = {
+  arn: Scalars['String'];
+  httpMethod?: Maybe<Scalars['String']>;
+  authorization?: Maybe<Scalars['String']>;
+  apiKeyRequired?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsApiGatewayResource = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
+  path?: Maybe<Scalars['String']>;
+  methods?: Maybe<Array<Maybe<AwsApiGatewayMethod>>>;
+};
+
+export type AwsApiGatewayRestApi = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  policy?: Maybe<Scalars['String']>;
+  endpointConfiguration?: Maybe<AwsApiGatewayEndpointConfiguration>;
+  apiKeySource?: Maybe<Scalars['String']>;
+  createdDate?: Maybe<Scalars['String']>;
+  minimumCompressionSize?: Maybe<Scalars['Int']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  binaryMediaTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  stages?: Maybe<Array<Maybe<AwsApiGatewayStage>>>;
+  resources?: Maybe<Array<Maybe<AwsApiGatewayResource>>>;
+};
+
+export type AwsApiGatewayStage = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  cacheCluster?: Maybe<Scalars['Boolean']>;
+  cacheClusterSize?: Maybe<Scalars['String']>;
+  accessLogSettings?: Maybe<AwsAccessLogSettings>;
+  documentationVersion?: Maybe<Scalars['String']>;
+  clientCertificateId?: Maybe<Scalars['String']>;
+  xrayTracing?: Maybe<Scalars['Boolean']>;
+  variables?: Maybe<Array<Maybe<AwsApiGatewayStageVariable>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
+};
+
+export type AwsApiGatewayStageVariable = {
+  key: Scalars['String'];
+  value?: Maybe<Scalars['String']>;
+};
+
 export type AwsCloudwatch = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -93,6 +156,7 @@ export type AwsEbs = {
   availabilityZone?: Maybe<Scalars['String']>;
   multiAttachEnabled?: Maybe<Scalars['Boolean']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
 };
 
 export type AwsEbsAttachment = {
@@ -133,16 +197,17 @@ export type AwsEc2 = {
   securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
   ephemeralBlockDevice?: Maybe<Array<Maybe<AwsEc2Blockdevice>>>;
   associatePublicIpAddress?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  ebs?: Maybe<Array<Maybe<AwsEbs>>>;
+  eip?: Maybe<Array<Maybe<AwsEip>>>;
+  networkInterfaces?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
 };
 
 export type AwsEc2Blockdevice = {
   deviceName: Scalars['String'];
   ebs?: Maybe<BlockDeviceEbs>;
-};
-
-export type AwsEc2Metadata = {
-  cuid?: Maybe<Scalars['String']>;
 };
 
 export type AwsEc2MetadataOptions = {
@@ -162,12 +227,67 @@ export type AwsEip = {
   privateIp?: Maybe<Scalars['String']>;
   instanceId?: Maybe<Scalars['String']>;
   publicIpv4Pool?: Maybe<Scalars['String']>;
-  networkInterface?: Maybe<Scalars['String']>;
+  networkInterfaceId?: Maybe<Scalars['String']>;
   ec2InstanceAssociationId?: Maybe<Scalars['String']>;
   networkInterfaceOwnerId?: Maybe<Scalars['String']>;
   networkBorderGroup?: Maybe<Scalars['String']>;
   customerOwnedIp?: Maybe<Scalars['String']>;
   customerOwnedIpv4Pool?: Maybe<Scalars['String']>;
+  vpcs?: Maybe<Array<Maybe<AwsVpc>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
+  networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+};
+
+export type AwsElb = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  dnsName?: Maybe<Scalars['String']>;
+  hostedZone?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  scheme?: Maybe<Scalars['String']>;
+  vpcId?: Maybe<Scalars['String']>;
+  sourceSecurityGroup?: Maybe<AwsElbSourceSecurityGroup>;
+  securityGroupsIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  subnets?: Maybe<Array<Maybe<Scalars['String']>>>;
+  accessLogs?: Maybe<Scalars['String']>;
+  crossZoneLoadBalancing?: Maybe<Scalars['String']>;
+  idleTimeout?: Maybe<Scalars['String']>;
+  instances?: Maybe<AwsElbInstances>;
+  healthCheck?: Maybe<AwsElbHealthCheck>;
+  listeners?: Maybe<Array<Maybe<AwsElbListener>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+};
+
+export type AwsElbHealthCheck = {
+  target: Scalars['String'];
+  interval?: Maybe<Scalars['String']>;
+  timeout?: Maybe<Scalars['String']>;
+  healthyThreshold?: Maybe<Scalars['Int']>;
+  unhealthyThreshold?: Maybe<Scalars['Int']>;
+};
+
+export type AwsElbInstances = {
+  id?: Maybe<Scalars['ID']>;
+  connectionDraining?: Maybe<Scalars['String']>;
+  connectionDrainingTimeout?: Maybe<Scalars['String']>;
+};
+
+export type AwsElbListener = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  loadBalancerPort?: Maybe<Scalars['Int']>;
+  loadBalancerProtocol?: Maybe<Scalars['String']>;
+  instancePort?: Maybe<Scalars['Int']>;
+  instanceProtocol?: Maybe<Scalars['String']>;
+};
+
+export type AwsElbSourceSecurityGroup = {
+  groupName: Scalars['String'];
+  ownerAlias?: Maybe<Scalars['String']>;
 };
 
 export type AwsIgw = {
@@ -209,10 +329,10 @@ export type AwsLambaEnvironmentVariable = {
 };
 
 export type AwsLambda = {
+  id: Scalars['String'];
   arn: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   handler?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   kmsKeyArn?: Maybe<Scalars['String']>;
   lastModified?: Maybe<Scalars['String']>;
   memorySize?: Maybe<Scalars['Int']>;
@@ -220,20 +340,59 @@ export type AwsLambda = {
   role?: Maybe<Scalars['String']>;
   runtime?: Maybe<Scalars['String']>;
   sourceCodeSize?: Maybe<Scalars['String']>;
-  timeout?: Maybe<Scalars['String']>;
+  timeout?: Maybe<Scalars['Int']>;
   tracingConfig?: Maybe<Scalars['String']>;
   version?: Maybe<Scalars['String']>;
   environmentVariables?: Maybe<Array<Maybe<AwsLambaEnvironmentVariable>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+};
+
+export type AwsNatGateway = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  state?: Maybe<Scalars['String']>;
+  createTime?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+};
+
+export type AwsNetworkInterface = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  subnetId?: Maybe<Scalars['String']>;
+  macAddress?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  availabilityZone?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  vpcId?: Maybe<Scalars['String']>;
+  interfaceType?: Maybe<Scalars['String']>;
+  securityGroups?: Maybe<Array<Maybe<Scalars['String']>>>;
+  privateDnsName?: Maybe<Scalars['String']>;
+  privateIps?: Maybe<Array<Maybe<Scalars['String']>>>;
+  attachment?: Maybe<AwsNetworkInterfaceAttachment>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
+  natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  eip?: Maybe<Array<Maybe<AwsEip>>>;
+};
+
+export type AwsNetworkInterfaceAttachment = {
+  id?: Maybe<Scalars['ID']>;
+  attachmentId?: Maybe<Scalars['String']>;
+  deleteOnTermination?: Maybe<Scalars['Boolean']>;
+  status?: Maybe<Scalars['String']>;
 };
 
 export type AwsSecurityGroup = {
   id: Scalars['String'];
+  arn: Scalars['String'];
   name: Scalars['String'];
   vpcId?: Maybe<Scalars['String']>;
-  arn?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   owner?: Maybe<Scalars['String']>;
@@ -243,6 +402,8 @@ export type AwsSecurityGroup = {
   inboundRuleCount?: Maybe<Scalars['Int']>;
   outboundRuleCount?: Maybe<Scalars['Int']>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  elb?: Maybe<Array<Maybe<AwsElb>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
 };
 
 export type AwsSgRule = {
@@ -272,32 +433,58 @@ export type AwsSqs = {
 };
 
 export type AwsSubnet = {
+  id: Scalars['String'];
   arn: Scalars['String'];
   autoAssignPublicIpv4Address?: Maybe<Scalars['String']>;
   autoAssignPublicIpv6Address?: Maybe<Scalars['String']>;
   availabilityZone?: Maybe<Scalars['String']>;
   availableIpV4Addresses?: Maybe<Scalars['Int']>;
   defaultForAz?: Maybe<Scalars['Boolean']>;
-  id: Scalars['String'];
   ipV4Cidr?: Maybe<Scalars['String']>;
   ipV6Cidr?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
 };
 
-export type AwsVpc = {
+export type AwsTag = {
   id: Scalars['String'];
+  key: Scalars['String'];
+  value: Scalars['String'];
+  alb?: Maybe<Array<Maybe<AwsAlb>>>;
+  cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
+  ebs?: Maybe<Array<Maybe<AwsEbs>>>;
+  ec2?: Maybe<Array<Maybe<AwsEc2>>>;
+  eip?: Maybe<Array<Maybe<AwsEip>>>;
+  elb?: Maybe<Array<Maybe<AwsElb>>>;
+  igw?: Maybe<Array<Maybe<AwsIgw>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
+  lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
+  networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
+};
+
+export type AwsVpc = {
   arn: Scalars['String'];
+  defaultVpc?: Maybe<Scalars['Boolean']>;
+  dhcpOptionsSet?: Maybe<Scalars['String']>;
+  enableDnsHostnames?: Maybe<Scalars['Boolean']>;
+  enableDnsSupport?: Maybe<Scalars['Boolean']>;
+  id: Scalars['String'];
+  instanceTenancy?: Maybe<Scalars['String']>;
   ipV4Cidr?: Maybe<Scalars['String']>;
   ipV6Cidr?: Maybe<Scalars['String']>;
-  dhcpOptionsSet?: Maybe<Scalars['String']>;
-  instanceTenancy?: Maybe<Array<Maybe<Scalars['String']>>>;
-  enableDnsSupport?: Maybe<Scalars['String']>;
-  enableDnsHostnames?: Maybe<Scalars['String']>;
-  defaultVpc?: Maybe<Scalars['Boolean']>;
   state?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
+  eip?: Maybe<Array<Maybe<AwsEip>>>;
+  elb?: Maybe<Array<Maybe<AwsElb>>>;
   igw?: Maybe<Array<Maybe<AwsIgw>>>;
+  lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
+  networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
 };
 
 export type BlockDeviceEbs = {

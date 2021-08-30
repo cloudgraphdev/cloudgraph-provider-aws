@@ -9,12 +9,10 @@
 
 // export default ({
 //   service: rawData,
-//   // allTagData,
 //   // account,
 //   // region,
 // }: {
 //   service: AwsSubnet
-//   // allTagData: Tags[]
 //   // account: string
 //   // region: string
 // }): AwsSubnetType => {
@@ -31,10 +29,6 @@
 //     SubnetId: id,
 //     tags,
 //   } = rawData
-//   /**
-//    * Add these tags to the list of global tags so we can filter by tag on the front end
-//    */
-//   // combineElementsTagsWithExistingGlobalTags({ tags, allTagData })
 
 //   return {
 //     id,

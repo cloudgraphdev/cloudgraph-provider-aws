@@ -14,10 +14,10 @@ import CloudWatch, {
 
 import { AWSError } from 'aws-sdk/lib/error'
 
-import { Credentials } from '../../types'
+import { Credentials, TagMap, AwsTag } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { Tag } from '../../types/generated'
 import { initTestEndpoint } from '../../utils'
+import { convertAwsTagsToTagMap } from '../../utils/format'
 
 /**
  * Cloudwatch
@@ -27,11 +27,22 @@ const MAX_ITEMS = 100
 const { logger } = CloudGraph
 const endpoint = initTestEndpoint('Cloudwatch')
 
-const listMetricAlarmsForRegion = async ({ cloudwatch, resolveRegion }) =>
+export interface RawAwsCloudwatch extends MetricAlarm {
+  region: string
+  Tags?: TagMap
+}
+
+const listMetricAlarmsForRegion = async ({
+  cloudwatch,
+  resolveRegion,
+}: {
+  cloudwatch: CloudWatch
+  resolveRegion: () => void
+}): Promise<MetricAlarm[]> =>
   new Promise<MetricAlarms>(resolve => {
     const metricAlarmsList: MetricAlarms = []
     const listMetricAlarmsOpts: DescribeAlarmsInput = {}
-    const listAllAlarms = (token?: string) => {
+    const listAllAlarms = (token?: string): void => {
       listMetricAlarmsOpts.MaxRecords = MAX_ITEMS
       if (token) {
         listMetricAlarmsOpts.NextToken = token
@@ -43,7 +54,9 @@ const listMetricAlarmsForRegion = async ({ cloudwatch, resolveRegion }) =>
             const { NextToken: nextToken, MetricAlarms: metricAlarms } =
               data || {}
             if (err) {
-              logger.error('There was an error in service cloudwatch function describeAlarms')
+              logger.error(
+                'There was an error in service cloudwatch function describeAlarms'
+              )
               logger.debug(err)
               Sentry.captureException(new Error(err.message))
             }
@@ -72,28 +85,25 @@ const listMetricAlarmsForRegion = async ({ cloudwatch, resolveRegion }) =>
   })
 
 const getResourceTags = async (cloudwatch: CloudWatch, arn: string) =>
-  new Promise<Tag[]>(resolve => {
+  new Promise<TagMap>(resolve => {
     try {
       cloudwatch.listTagsForResource(
         { ResourceARN: arn },
         (err: AWSError, data: ListTagsForResourceOutput) => {
           if (err) {
-            logger.error('There was an error in service cloudwatch function listTagsForResource')
+            logger.error(
+              'There was an error in service cloudwatch function listTagsForResource'
+            )
             logger.debug(err)
             Sentry.captureException(new Error(err.message))
-            return resolve([])
+            return resolve({})
           }
           const { Tags = [] } = data || {}
-          const tags =
-            Tags.map(({ Key, Value }) => ({
-              key: Key,
-              value: Value,
-            })) || []
-          resolve(tags)
+          resolve(convertAwsTagsToTagMap(Tags as AwsTag[]))
         }
       )
     } catch (error) {
-      resolve([])
+      resolve({})
     }
   })
 
@@ -103,10 +113,10 @@ export default async ({
 }: {
   regions: string
   credentials: Credentials
-}) =>
+}): Promise<{[property: string]: RawAwsCloudwatch[]}> =>
   new Promise(async resolve => {
     const cloudwatchData: Array<
-      MetricAlarm & { tags?: Tag[]; region: string }
+      MetricAlarm & { Tags?: TagMap; region: string }
     > = []
     const regionPromises = []
     const tagsPromises = []
@@ -142,7 +152,7 @@ export default async ({
       const cloudwatch = new CloudWatch({ region, credentials, endpoint })
       const tagsPromise = new Promise<void>(async resolveTags => {
         const envTags = await getResourceTags(cloudwatch, AlarmArn)
-        cloudwatchData[idx].tags = envTags
+        cloudwatchData[idx].Tags = envTags
         resolveTags()
       })
       tagsPromises.push(tagsPromise)

@@ -1,18 +1,19 @@
 type awsEbs @key(fields: "arn") {
-  id: String!
-  arn: String! @id
+  id: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
   attachments: [awsEbsAttachment]
-  iops: Int
-  size: String
-  state: String
-  created: String
-  snapshot: String
-  encrypted: Boolean
-  isBootDisk: Boolean
-  volumeType: String
-  availabilityZone: String
-  multiAttachEnabled: Boolean
+  iops: Int @search
+  size: String @search(by: [hash, regexp])
+  state: String @search(by: [hash, regexp])
+  created: String @search(by: [hash, regexp])
+  snapshot: String @search(by: [hash, regexp])
+  encrypted: Boolean @search
+  isBootDisk: Boolean @search
+  volumeType: String @search(by: [hash, regexp])
+  availabilityZone: String @search(by: [hash, regexp])
+  multiAttachEnabled: Boolean @search
   tags: [Tag]
+  ec2Instance: [awsEc2] @hasInverse(field: ebs)
 }
 
 type awsEbsAttachment

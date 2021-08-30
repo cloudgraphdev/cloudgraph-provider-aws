@@ -1,55 +1,54 @@
 type awsAlb @key(fields: "arn") {
-	id: String!
-	arn: String! @id
-	dnsName: String @search(by: [hash, regexp])
-	scheme: String @search(by: [hash])
-	type: String @search(by: [hash])
-	subnets: [String]
-	hostedZone: String @search(by: [hash])
-	defaultVpc: String
-	ipAddressType: String @search(by: [hash])
-	idleTimeout: String @search(by: [hash, regexp])
-	deletionProtection: String @search(by: [hash])
-	http2: String @search(by: [hash])
-	accessLogsEnabled: String @search(by: [hash])
-	dropInvalidHeaderFields: String @search(by: [hash])
-	createdAt: String @search(by: [hash, regexp])
-	status: String @search(by: [hash])
-	tags: [Tag]
-	ec2Instance: [awsEc2] @hasInverse(field: alb)
-	vpc: [awsVpc] @hasInverse(field: alb)
-	listeners: [awsAlbListener]
+  id: String!
+  arn: String! @id
+  dnsName: String @search(by: [hash, regexp])
+  scheme: String @search(by: [hash, regexp])
+  type: String @search(by: [hash, regexp])
+  subnets: [String] @search(by: [hash])
+  hostedZone: String @search(by: [hash])
+  defaultVpc: String @search(by: [hash])
+  ipAddressType: String @search(by: [hash])
+  idleTimeout: String @search(by: [hash, regexp])
+  deletionProtection: String @search(by: [hash])
+  http2: String @search(by: [hash])
+  accessLogsEnabled: String @search(by: [hash])
+  dropInvalidHeaderFields: String @search(by: [hash])
+  createdAt: String @search(by: [hash, regexp])
+  status: String @search(by: [hash])
+  tags: [Tag]
+  ec2Instance: [awsEc2] @hasInverse(field: alb)
+  vpc: [awsVpc] @hasInverse(field: alb)
+  listeners: [awsAlbListener]
 }
 
 type awsAlbListener
-@generate(
-    query: { get: true, query: true, aggregate: true }
+  @generate(
+    query: { get: true, query: true, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-	arn: String! @id @search(by: [hash, regexp])
-	settings: awsAlbListenerSettings
+  arn: String! @id @search(by: [hash, regexp])
+  settings: awsAlbListenerSettings
 }
 
-
-type awsAlbListenerSettings 
-@generate(
-    query: { get: false, query: true, aggregate: false }
+type awsAlbListenerSettings
+  @generate(
+    query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-	sslPolicy: String @search(by: [hash, regexp])
-	protocol: String @search(by: [hash, regexp])
-	rules: [awsAlbListenerRule]
+  sslPolicy: String @search(by: [hash, regexp])
+  protocol: String @search(by: [hash, regexp])
+  rules: [awsAlbListenerRule]
 }
 
-type awsAlbListenerRule 
-@generate(
-		query: { get: false, query: true, aggregate: false }
-		mutation: { add: false, delete: false }
-		subscription: false
-	) {
-	type: String @search(by: [hash, regexp])
-	order: String @search(by: [hash, regexp])
-	targetGroupArn: String @search
+type awsAlbListenerRule
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  type: String @search(by: [hash, regexp])
+  order: String @search(by: [hash, regexp])
+  targetGroupArn: String @search
 }

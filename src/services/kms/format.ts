@@ -1,21 +1,16 @@
 import t from '../../properties/translations'
 import { AwsKms } from './data'
-import { AwsKms as AwsKmsType } from '../../types/generated';
+import { AwsKms as AwsKmsType } from '../../types/generated'
+import { formatTagsFromMap } from '../../utils/format'
 
 /**
  * KMS
  */
 
-export default ({
-  service: key,
-}: // allTagData,
-{
-  service: AwsKms
-  // allTagData: Tags[]
-}): AwsKmsType => {
+export default ({ service: key }: { service: AwsKms }): AwsKmsType => {
   const {
     Arn: arn,
-    tags,
+    Tags,
     Description: description,
     KeyId: id,
     policy,
@@ -31,15 +26,6 @@ export default ({
     ValidTo: validTo,
   } = key
 
-  /**
-   * Add these tags to the list of global tags so we can filter by tag on the front end
-   */
-
-  // combineElementsTagsWithExistingGlobalTags({
-  //   tags,
-  //   allTagData,
-  // })
-
   return {
     arn,
     id,
@@ -50,11 +36,11 @@ export default ({
     enabled: enabled ? t.yes : t.no,
     keyState,
     customerMasterKeySpec,
-    tags,
-    creationDate: creationDate ? creationDate.toString(): undefined,
+    tags: formatTagsFromMap(Tags),
+    creationDate: creationDate ? creationDate.toString() : undefined,
     keyManager,
     origin,
-    deletionDate: deletionDate ? deletionDate.toString(): undefined,
-    validTo: validTo? validTo.toString() : undefined,
+    deletionDate: deletionDate ? deletionDate.toString() : undefined,
+    validTo: validTo ? validTo.toString() : undefined,
   }
 }

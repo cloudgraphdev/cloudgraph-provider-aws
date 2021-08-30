@@ -1,17 +1,19 @@
 type awsSecurityGroup @key(fields: "id") {
-  id: String! @id
-  name: String!
-  vpcId: String
-  arn: String
-  description: String
+  id: String! @id @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  name: String! @search(by: [hash, regexp])
+  vpcId: String @search(by: [hash])
+  description: String @search(by: [hash, regexp, fulltext])
   tags: [Tag]
-  owner: String
-  default: Boolean
+  owner: String @search(by: [hash, regexp])
+  default: Boolean @search
   inboundRules: [awsSgRule]
   outboundRules: [awsSgRule]
-  inboundRuleCount: Int
-  outboundRuleCount: Int
+  inboundRuleCount: Int @search
+  outboundRuleCount: Int @search
   lambda: [awsLambda] @hasInverse(field: securityGroups)
+  elb: [awsElb] @hasInverse(field: securityGroups)
+  ec2Instance: [awsEc2] @hasInverse(field: securityGroups)
 }
 
 type awsSgRule

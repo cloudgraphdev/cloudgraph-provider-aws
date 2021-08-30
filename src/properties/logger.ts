@@ -95,11 +95,19 @@ export default {
   lookingForApiGateway: 'Looking for Api Gateways to add to Region...',
   addingApiGateway: (num: number): string =>
     `Created and added ${num} Api Gateways to this region`,
-  fetchedApiGwDomainNames: (num: number): string =>
-    `Fetched ${num} API Gateway Domain Names`,
+  fetchedApiGatewayRestApis: (num: number) =>
+    `Fetched ${num} Api Gateway Rest Apis`,
+  fetchedApiGatewayResources: (num: number) =>
+    `Fetched ${num} Api Gateway Resources`,
+  fetchedApiGatewayStages: (num: number) =>
+    `Fetched ${num} Api Gateway Stages`,
   fetchingApiGatewayData:
     'Fetching API Gateway data for this AWS account via the AWS SDK...',
   doneFetchingApiGatewayData: '✅ Done fetching API Gateway Data ✅',
+  gettingApiGatewayTags:
+    'Fetching tags for each Api Gateway Rest Api...',
+  gettingApiGatewayStageTags:
+    'Fetching tags for each Api Gateway Stage...',
   /**
    * Vpc
    */
@@ -117,13 +125,14 @@ export default {
   foundRouteTables: (num: number): string =>
     `Found ${num} Route Tables to add to VPC`,
   foundNacls: (num: number): string => `Found ${num} NACLs to add to VPC`,
+  fetchedNatGateways: (num: number): string => `Fetched ${num} NAT Gateways`,
   foundSecurityGroups: (num: number): string =>
     `Found ${num} Security Groups to add to VPC`,
-  fetchedSecurityGroups: (num: number) => `Fetched ${num} Security Groups`,
-  foundVpcLambdas: (num: number) => `Found ${num} Lambdas to add to VPC`,
+  fetchedSecurityGroups: (num: number): string => `Fetched ${num} Security Groups`,
+  foundVpcLambdas: (num: number): string => `Found ${num} Lambdas to add to VPC`,
   gatheringRouteTableAssociations: 'Gathering route table associations',
   gatheringSubnets: 'Gathering subnets to add to VPC',
-  fetchedSubnets: (num: number) => `Fetched ${num} Subnets`,
+  fetchedSubnets: (num: number): string => `Fetched ${num} Subnets`,
   creatingVpc: 'Creating VPC Element',
   addingVpc: 'Adding VPC Element to the region',
   lookingforSubnets: 'Looking for Subnets to add to VPC',
@@ -135,24 +144,24 @@ export default {
       : '❌ ERROR - Missing supplemental Subnet data ❌',
   creatingSubnet: 'Creating Subnet',
   addingSubnet: 'Adding Subnet -> NACL -> AZ',
-  addingRouteTablesToSubnet: (num, name) =>
+  addingRouteTablesToSubnet: (num, name): string =>
     `Adding ${num} Route Tables to subnet ${name}`,
   /**
    * Lambda
    */
-   lookingForVpcLambdas:
-   'Looking for Lambdas with VPC networking to add to the VPC',
+  lookingForVpcLambdas:
+    'Looking for Lambdas with VPC networking to add to the VPC',
   lookingForLambda: 'Looking for non-vpc Lambdas to add to region',
   fetchingLambdaData:
     'Fetching Lambdas for this AWS account via the AWS SDK...',
-  doneFetchingLambdaData: (num: number) =>
+  doneFetchingLambdaData: (num: number): string =>
     `🕒 Done fetching Lambdas in ${num} 🕘`,
-  lambdasCreated: (num: number) =>
+  lambdasCreated: (num: number): string =>
     `Found and created ${num} Lambdas for this region`,
   addingLambdas: 'Adding lambdas to region',
-  foundMoreLambdas: (num: number) =>
+  foundMoreLambdas: (num: number): string =>
     `Found another ${num} Lambdas in this region...`,
-  fetchedLambdas: (num: number) => `Fetched ${num} Lambdas`,
+  fetchedLambdas: (num: number): string => `Fetched ${num} Lambdas`,
   gettingLambdaTags: 'Fetching tags for each Lambda...',
   /**
    * ALBs
@@ -163,23 +172,23 @@ export default {
   lookingForAlb: 'Looking for Albs...',
   doneFetchingAlbData: '✅ Done fetching ALB Data ✅',
   albsCreated: (num: number): string => `Found and created ${num} ALBs`,
-  fetchedAlbTags: (num: number, albArn: string) =>
+  fetchedAlbTags: (num: number, albArn: string): string =>
     `Fetched ${num} Tags for ${albArn}`,
-  fetchedAlbAttributes: (num: number, albArn: string) =>
+  fetchedAlbAttributes: (num: number, albArn: string): string =>
     `Fetched ${num} Attributes for ${albArn}`,
-  fetchedAlbListeners: (num: number, albArn: string) =>
+  fetchedAlbListeners: (num: number, albArn: string): string =>
     `Fetched ${num} ALB Listeners for ${albArn}`,
-  fetchedAlbTargetGroups: (num: number, albArn: string) =>
+  fetchedAlbTargetGroups: (num: number, albArn: string): string =>
     `Fetched ${num} ALB Target Groups for ${albArn}`,
-  fetchedAlbTargetIds: (num: number, albArn: string) =>
+  fetchedAlbTargetIds: (num: number, albArn: string): string =>
     `Fetched ${num} ALB Target Ids for ${albArn}`,
   /**
    * IGW
    */
-  fetchedIgws: (num: number) => `Fetched ${num} IGWs`,
-  foundIgw: (num: number) => `Found ${num} Internet Gateway to add to VPC`,
+  fetchedIgws: (num: number): string => `Fetched ${num} IGWs`,
+  foundIgw: (num: number): string => `Found ${num} Internet Gateway to add to VPC`,
   fetchingIgw: 'Fetching IGW data for this AWS account via the AWS SDK...',
-  doneFetchingIgwData: (num: number) =>
+  doneFetchingIgwData: (num: number): string =>
     `🕒 Done fetching IGW Data in ${num} 🕘`,
   /**
    * EIPs (not attached to instances)
@@ -221,8 +230,9 @@ export default {
   creatingEc2Instance: (num: number): string => `Creating EC2 Instance #${num}`,
   addingEc2Instances: (num: number): string =>
     `Found ${num} EC2 Instances, adding them to the Subnet`,
-  lookingForNetworkInterfaces:
-    'Gathering Network Interfaces to add to EC2 Instance...',
+  fetchedNetworkInterfaces: (num: number): string =>
+    `Fetched ${num} Network Interfaces`,
+  lookingForNetworkInterfaces: 'Gathering Network Interfaces to add...',
   fetchedKeyPairs: (num: number): string =>
     `Fetched ${num} Key Pairs for instances`,
   doneFetchingEc2Data: '✅ Done fetching EC2 Instance Data ✅',
@@ -243,7 +253,7 @@ export default {
     `Found ${num} RDS Instances, adding them to the Subnet`,
   addingRdsClusters: (num: number): string =>
     `Found ${num} RDS Clusters, adding them to the Vpc`,
-  noClusterFoundForDbInstance: ({ name }) =>
+  noClusterFoundForDbInstance: ({ name }): string =>
     `No cluster found for db_instance: ${name}`,
   /**
    * EMR
@@ -257,9 +267,9 @@ export default {
   fetchedEmrClusters: (num: number): string => `Fetched ${num} EMR Clusters`,
   fetchedEmrClusterInstances: (num: number): string =>
     `Fetched ${num} EMR Clusters Instances`,
-  addingEmrEc2Connection: (clusterName: string, ec2InstanceName: string) =>
+  addingEmrEc2Connection: (clusterName: string, ec2InstanceName: string): string =>
     `Found ec2 instance ${ec2InstanceName} to add to emr cluster ${clusterName}`,
-  noEmrClusterParentFoundForEc2Instance: ({ name }) =>
+  noEmrClusterParentFoundForEc2Instance: ({ name }): string =>
     `❌ WARNING: No EMR Cluster found for EC2 Instance ${name} ❌ `,
   /**
    * EFS
@@ -278,7 +288,7 @@ export default {
     `Fetched ${num} EFS Mount Targets`,
   fetchedEfsMountTargetSecurityGroups: (num: number): string =>
     `Fetched ${num} EFS Mount Target Security Groups`,
-  noFileSystemFoundForEfsMountPoint: ({ name }) =>
+  noFileSystemFoundForEfsMountPoint: ({ name }): string =>
     `❌ WARNING: No EFS found for mount point ${name} ❌ `,
   /**
    * S3
@@ -369,7 +379,7 @@ export default {
   lookingForElastiCache: 'Looking for ElastiCache Clusters to add...',
   addingElastiCache: (num: number): string =>
     `Found ${num} ElastiCache Clusters, adding them to the VPC`,
-  missingReplicationGroup: (is: string) =>
+  missingReplicationGroup: (is: string): string =>
     `Missing replication group for ${is} ElastiCache Cluster! Not adding ElastiCache Data`,
   /**
    * ECR
@@ -383,9 +393,9 @@ export default {
   lookingForTransitGateway: 'Looking for Transit Gateways to add...',
   addingTransitGateways: (num: number): string =>
     `Found ${num} Transit Gateways, adding them to the VPC`,
-  addingTransitGatewayToVpc: ({ name }) =>
+  addingTransitGatewayToVpc: ({ name }): string =>
     `Adding Transit Gateway ${name} to the VPC`,
-  addingTransitGatewayToRegion: ({ name }) =>
+  addingTransitGatewayToRegion: ({ name }): string =>
     `Transit Gateway not attached to a VPC, adding Transit Gateway ${name} to the region level`,
   /**
    * VPN Gateway
@@ -397,9 +407,9 @@ export default {
    * Customer Gateway
    */
   lookingForCustomerGateways: 'Looking for Customer Gateways to add...',
-  addingCustomerGatewaysToVpc: ({ name }) =>
+  addingCustomerGatewaysToVpc: ({ name }): string =>
     `Adding the ${name} Customer Gateways to the VPC`,
-  addingCustomerGatewayToRegion: ({ name }) =>
+  addingCustomerGatewayToRegion: ({ name }): string =>
     `Customer Gateway not attached to a VPC, adding Customer Gateway ${name} to the region level`,
   /**
    * Redshift
@@ -425,7 +435,7 @@ export default {
   ecsVpcNotFound: 'ERROR: Vpc for ECS Cluster was not found',
   addingEcsClusters: (num: number): string =>
     `Found ${num} ECS Clusters, adding them to the the VPC`,
-  addingEcsTasksToSubnet: (num: number, subnetId) =>
+  addingEcsTasksToSubnet: (num: number, subnetId): string =>
     `Found ${num} ECS Tasks, adding them to the the ${subnetId} Subnet`,
   /**
    * Cognito
@@ -439,9 +449,9 @@ export default {
   fetchedCognito: (num: number): string => `Found ${num} Cognito User Pools`,
   fetchedCognitoIdentityPools: (num: number): string =>
     `Found ${num} Cognito Identity Pools`,
-  fetchedCognitoPool: (id: string) =>
+  fetchedCognitoPool: (id: string): string =>
     `Fetched Cognito User Pool data for ${id}`,
-  fetchedCognitoIdentityPool: (id: string) =>
+  fetchedCognitoIdentityPool: (id: string): string =>
     `Fetched Cognito Identity Pool data for ${id}`,
   lookingForIdentityPools:
     'Looking for Cognito Identity Pools to add to region',
@@ -484,10 +494,10 @@ export default {
    */
   beginHostingFromVpc:
     'Looking for resources to hoist from VPCs and Subnets to the top level...',
-  foundItemsToHoist: (num, type) =>
+  foundItemsToHoist: (num, type): string =>
     `Found ${num} items to hoist up to the top level for ${type}`,
   removingOldChildren: 'Removing old children from this subnet...',
-  combiningAndAddingNacls: name =>
+  combiningAndAddingNacls: (name): string =>
     `Deduping NACLS and adding them and their children directly to VPC: ${name}`,
   /**
    * Kubernetes

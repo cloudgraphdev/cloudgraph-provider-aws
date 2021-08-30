@@ -1,227 +1,195 @@
-// import get from 'lodash/get'
-// import head from 'lodash/head'
-// import last from 'lodash/last'
-// import isEmpty from 'lodash/isEmpty'
+import isEmpty from 'lodash/isEmpty'
 
-// import { Volume, Address, Instance } from 'aws-sdk/clients/ec2'
-import {  Instance } from 'aws-sdk/clients/ec2'
+import {
+  Address,
+  IamInstanceProfile,
+  Instance,
+  SecurityGroup,
+  TagList,
+  Volume,
+} from 'aws-sdk/clients/ec2'
 
+import { ServiceConnection } from '@cloudgraph/sdk'
 
-import {ServiceConnection} from '@cloudgraph/sdk'
-
-import ec2Names from './names'
-
-import resourceTypes from '../../enums/resources'
-
-// import services from '../../enums/services'
-
-import { toCamel } from '../../utils/index'
+import services from '../../enums/services'
 
 /**
  * EC2
  */
 
 export default ({
-  service: rawData,
-  // data, // TODO: use aws sdk data to grab all connections (eip for sure)
-  // account,
-  // region
-  // eips,
-  // account,
-  // instance: rawData,
-  // regionName: region,
-  // allTagData,
+  service: instance,
+  data,
+  region,
 }: {
   account: string
-  data: any
-  service: Instance
+  data: { name: string; data: { [property: string]: any[] } }[]
+  service: Instance & {
+    region: string
+    DisableApiTermination?: boolean
+    KeyPairName?: string
+    Tags?: TagList
+    IamInstanceProfile: IamInstanceProfile
+  }
   region: string
-}): any => {
-  const instance = toCamel(rawData)
-
-  const id = instance[ec2Names.instanceId]
-
-  // const securityGroupIds = (instance[ec2Names.securityGroups] || []).map(
-  //   ({ groupId }) => groupId
-  // )
-
-
-  // const ipv4PublicIp = eips.map(({ PublicIp }) => PublicIp).join(', ')
-
-  // const primaryNetworkInterface = get(
-  //   (instance[ec2Names.networkInterfaces] || []).find(
-  //     ({ attachment: { deviceIndex } }) => deviceIndex === 0
-  //   ),
-  //   ec2Names.networkInterfaceId
-  // )
-
+}): { [key: string]: ServiceConnection[] } => {
   const connections: ServiceConnection[] = []
+  const {
+    InstanceId: id,
+    SecurityGroups: instanceSecurityGroups = [],
+    NetworkInterfaces: instanceNetworkInterfaces = [],
+  } = instance
 
   /**
-   * Add Security Groups
+   * Find Security Groups VPC Security Groups
+   * related to this EC2 instance
    */
-  connections.push(...instance[ec2Names.securityGroups].map(({ groupId }) => ({
-    id: groupId,
-    relation: 'child',
-    resourceType: resourceTypes.securityGroup,
-    field: 'securityGroups'
-  })))
-//   const ec2Result = generateElement({
-//     id: ec2InstanceId(id),
-//     name: tags[ec2Names.vpcName] || id,
-//     resourceType: resourceTypes.ec2Instance,
-//     displayData: {
-//       arn: `arn:aws:ec2:${region}:${account}:instance/${
-//         instance[ec2Names.instanceId]
-//       }`,
-//       id,
-//       region: instance[ec2Names.region],
-//       ami: instance[ec2Names.imageId],
-//       tenancy: get(instance[ec2Names.placement], ec2Names.tenancy),
-//       subnetId: instance[ec2Names.subnetId],
-//       elasticIps: eips.map(({ AllocationId }) => AllocationId).join(', '),
-//       publicDns: instance[ec2Names.publicDnsName],
-//       privateDns: instance[ec2Names.privateDnsName],
-//       monitoring: get(instance[ec2Names.monitoring], ec2Names.state),
-//       privateIps: instance[ec2Names.privateIpAddress],
-//       keyPairName: instance[ec2Names.keyPairName],
-//       cpuCoreCount: get(instance[ec2Names.cpuOptions], ec2Names.coreCount),
-//       hibernation: get(
-//         instance[ec2Names.hibernationOptions],
-//         ec2Names.configured
-//       )
-//         ? t.yes
-//         : t.no,
-//       ebsOptimized: instance[ec2Names.ebsOptimized] ? t.yes : t.no,
-//       ipv4PublicIp,
-//       instanceType: instance[ec2Names.instanceType],
-//       ipv6Addresses: (instance[ec2Names.networkInterfaces] || []).flatMap(
-//         ({ ipv6Addresses }) => ipv6Addresses
-//       ),
-//       securityGroups: instance[ec2Names.securityGroups],
-//       placementGroup: get(instance[ec2Names.placement], ec2Names.groupName),
-//       instanceState: get(instance[ec2Names.state], ec2Names.name),
-//       sourceDestCheck: instance[ec2Names.sourceDestCheck] ? t.yes : t.no,
-//       availabilityZone: get(
-//         instance[ec2Names.placement],
-//         ec2Names.availabilityZone
-//       ),
-//       cpuThreadsPerCore: get(
-//         instance[ec2Names.cpuOptions],
-//         ec2Names.threadsPerCore
-//       ),
-//       iamInstanceProfile: get(instance[ec2Names.iamInstanceProf], ec2Names.arn),
-//       deletionProtection: instance[ec2Names.deletionProtection] ? t.yes : t.no,
-//       primaryNetworkInterface,
-//       metadataOptions: instance[ec2Names.metadataOptions],
-//       securityGroupIds,
-//       ephemeralBlockDevice: (
-//         instance[ec2Names.blockDeviceMappings] || []
-//       ).filter(({ ebs: { deleteOnTermination } }) => deleteOnTermination),
-//       associatePublicIpAddress: !isEmpty(ipv4PublicIp) ? t.yes : t.no,
-//       tags,
-//     },
-//     children: [
-//       ...(!isEmpty(nodes) ? nodes : []),
-//       ...eips.map(eip => awsEipConverter({ eip, allTagData })),
-//       ...networkInterfaces.map(networkInterface =>
-//         awsNetworkInterfaceConverter({
-//           allTagData,
-//           networkInterface,
-//           securityGroupsInVpc,
-//         })
-//       ),
-//       ...ebsVolumes.map(volume =>
-//         awsEbsVolumeConverter({
-//           volume,
-//           bootId: instance[ec2Names.rootDeviceName],
-//           allTagData,
-//         })
-//       ),
-//     ],
-//   })
+  const securityGroups: {
+    name: string
+    data: { [property: string]: SecurityGroup[] }
+  } = data.find(({ name }) => name === services.sg)
+  const sgIds = instanceSecurityGroups.map(({ GroupId }) => GroupId)
+
+  if (securityGroups?.data?.[region]) {
+    const sgsInRegion: SecurityGroup[] = securityGroups.data[region].filter(
+      ({ GroupId }: SecurityGroup) => sgIds.includes(GroupId)
+    )
+
+    if (!isEmpty(sgsInRegion)) {
+      for (const sg of sgsInRegion) {
+        connections.push({
+          id: sg.GroupId,
+          resourceType: services.sg,
+          relation: 'child',
+          field: 'securityGroups',
+        })
+      }
+    }
+  }
 
   /**
-   * Check to see if this instance is part of an EKS cluster and if so
-   * Add the cluster ID to the metaData
+   * Find EBS volumes
+   * related to this EC2 instance
    */
-//   let eksClusterName = ''
+  const ebsVolumes: {
+    name: string
+    data: { [property: string]: (Volume & { region: string })[] }
+  } = data.find(({ name }) => name === services.ebs)
 
-//   const eksCluster = Object.keys(get(ec2Result, `displayData.tags`, {})).some(
-//     key => {
-//       const isMatch = key.includes(ec2Names.clusterTag)
+  if (ebsVolumes?.data?.[region]) {
+    const volumesInRegion = ebsVolumes.data[region].filter(
+      ({ Attachments: attachments }) =>
+        attachments.find(({ InstanceId }) => InstanceId === id)
+    )
 
-//       if (isMatch) {
-//         // i.e. "kubernetes.io/cluster/eks-infra".split("/") -> [ 'kubernetes.io', 'cluster', 'eks-infra' ] -> 'eks-infra'
-//         eksClusterName = last(key.split('/'))
-//       }
-//       return isMatch
-//     }
-//   )
-//   if (eksCrawled && eksCluster) {
-//     ec2Result.metaData = {
-//       ...ec2Result.metaData,
-//       vpcLevelParent: eksClusterId(eksClusterName),
-//       vpcLevelParentType: resourceTypes.eksCluster,
-//     }
-//   }
+    if (!isEmpty(volumesInRegion)) {
+      for (const v of volumesInRegion) {
+        connections.push({
+          id: v.VolumeId,
+          resourceType: services.ebs,
+          relation: 'child',
+          field: 'ebs',
+        })
+      }
+    }
+  }
 
   /**
-   * Check to see if this instance is part of an elastic beanstalk env and if so add the beanstalk ID to the metaData
+   * Find Elastic IPs
+   * related to this EC2 instance
    */
+  const eips: {
+    name: string
+    data: {
+      [property: string]: (Address & { region: string })[]
+    }
+  } = data.find(({ name }) => name === services.eip)
 
-//   const beanstalkEnv = get(
-//     ec2Result,
-//     `displayData.tags.${ec2Names.environmentIdTag}`
-//   )
+  if (eips?.data?.[region]) {
+    const eipsInRegion = eips.data[region].filter(
+      ({ InstanceId }) => InstanceId === id
+    )
 
-//   if (beanstalkCrawled && beanstalkEnv) {
-//     ec2Result.metaData = {
-//       ...ec2Result.metaData,
-//       vpcLevelParent: beanstalkEnvId(beanstalkEnv),
-//       vpcLevelParentType: resourceTypes.elasticBeanstalkEnvironment,
-//     }
-//   }
+    if (!isEmpty(eipsInRegion)) {
+      for (const eip of eipsInRegion) {
+        connections.push({
+          id: eip.AllocationId,
+          resourceType: services.eip,
+          relation: 'child',
+          field: 'eip',
+        })
+      }
+    }
+  }
 
   /**
-   * Check to see if this instance is part of an ECS cluster and if so
-   * Add the cluster ID to the metaData
+   * Find Network interfaces
+   * related to this EC2 instance
    */
-//   const isEcsClusterInstance = get(
-//     ec2Result,
-//     `displayData.tags.Name`,
-//     ''
-//   ).includes(ec2Names.ecsClusterIdentifier)
+  const networkInterfaces: {
+    name: string
+    data: {
+      [property: string]: (Address & { region: string })[]
+    }
+  } = data.find(({ name }) => name === services.networkInterface)
+  const networkInterfacesIds = instanceNetworkInterfaces.map(
+    ({ NetworkInterfaceId }) => NetworkInterfaceId
+  )
 
-//   if (ecsCrawled && isEcsClusterInstance) {
-//     ec2Result.metaData = {
-//       ...ec2Result.metaData,
-//       vpcLevelParent: ecsClusterId(
-//         head(
-//           get(ec2Result, `displayData.tags.Name`, '')
-//             .split(ec2Names.ecsClusterIdentifier)
-//             .filter(e => e)
-//         )
-//       ),
-//       vpcLevelParentType: resourceTypes.ecsCluster,
-//     }
-//   }
+  if (
+    networkInterfaces?.data?.[region] ||
+    instanceNetworkInterfaces.length > 0
+  ) {
+    // Check for matching network interfaces in existing data
+    const networkInterfacesInRegion = (
+      networkInterfaces?.data[region] || []
+    ).filter(({ NetworkInterfaceId }) =>
+      networkInterfacesIds.includes(NetworkInterfaceId)
+    )
+
+    const attachedNetworkInterfaces =
+      networkInterfacesInRegion.length > 0
+        ? networkInterfacesInRegion
+        : instanceNetworkInterfaces
+
+    if (!isEmpty(attachedNetworkInterfaces)) {
+      for (const networkInterface of instanceNetworkInterfaces) {
+        connections.push({
+          id: networkInterface.NetworkInterfaceId,
+          resourceType: services.networkInterface,
+          relation: 'child',
+          field: 'networkInterfaces',
+        })
+      }
+    }
+  }
 
   /**
-   * Add the ec2 instance to the list of members of whatever security groups it uses
+   * Find Subnets
+   * related to this EC2 loadbalancer
    */
+  // TODO: Implement when subnet service is ready
 
-//   checkForAndAddEntityToSecurityGroupMembers({
-//     entityToAdd: ec2Result,
-//     resourceType: resourceTypes.ec2Instance,
-//     securityGroupsInVpc,
-//     entitySecurityGroups: securityGroupIds,
-//   })
-  // const arn = `arn:aws:ec2:${region}:${account}:instance/${
-  //   instance[ec2Names.instanceId]
-  // }`
+  /**
+   * Find EKS
+   * related to this EC2 loadbalancer
+   */
+  // TODO: Implement when eks service is ready
+
+  /**
+   * Find ECS
+   * related to this EC2 loadbalancer
+   */
+  // TODO: Implement when ecs service is ready
+
+  /**
+   * Find Elastic Beanstalk
+   * related to this EC2 loadbalancer
+   */
+  // TODO: Implement when eb service is ready
+
   const ec2Result = {
-    [id]: connections
+    [id]: connections,
   }
   return ec2Result
 }
