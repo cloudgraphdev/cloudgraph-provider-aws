@@ -1,3 +1,10 @@
+# [0.12.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.11.4...0.12.0) (2021-08-31)
+
+
+### Features
+
+* **versioning:** update package.json to include cloudGraph key for versioning. Update sdk version ([36a2521](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/36a2521050b978c3cc16542b0922b21d86f92adf))
+
 ## [0.11.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.11.3...0.11.4) (2021-08-25)
 
 
