@@ -7,6 +7,7 @@ import { Opts } from '@cloudgraph/sdk'
 import { isEmpty } from 'lodash'
 import { Credentials } from '../../types'
 import { Tag } from '../../types/generated'
+import { formatTagsFromMap } from '../../utils/format'
 
 export type AwsSqs = {
     region: string
@@ -55,16 +56,10 @@ const getQueueAttributes = async (
 const getQueueTags = async (
   sqs: SQS,
   queueUrl: string
-): Promise<any[]> => {
+): Promise<Tag[]> => {
   try {
     const tags = await sqs.listQueueTags({ QueueUrl: queueUrl }).promise()
-    const tagArray = Object.keys(tags.Tags)
-      .map(key => {
-          return {
-            key,
-            value: tags.Tags[key],
-          }
-      })
+    const tagArray = formatTagsFromMap(tags.Tags)
     return tagArray
   } catch (err) {
     Sentry.captureException(new Error(err.message))

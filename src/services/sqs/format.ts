@@ -32,6 +32,7 @@ export default ({
   } = key.sqsAttributes
 
   return {
+    id: arn,
     arn,
     queueUrl,
     queueType: arn.includes('.fifo') ? t.fifo : t.standard,

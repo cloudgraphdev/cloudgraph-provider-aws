@@ -417,6 +417,7 @@ export type AwsSgRule = {
 };
 
 export type AwsSqs = {
+  id: Scalars['String'];
   arn: Scalars['String'];
   queueUrl: Scalars['String'];
   queueType: Scalars['String'];

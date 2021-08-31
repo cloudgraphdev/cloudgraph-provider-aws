@@ -55,7 +55,6 @@ export const serviceMap = {
   [services.sg]: AwsSecurityGroup,
   // [services.subnet]: AwsSubnet, // TODO: Enable when going for ENG-222
   [services.vpc]: VPC,
-  [services.ebs]: EBS,
   [services.sqs]: SQS,
   tag: AwsTag,
 }
