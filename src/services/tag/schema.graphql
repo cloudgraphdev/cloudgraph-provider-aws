@@ -16,4 +16,5 @@ type awsTag @key(fields: "id") {
   securityGroups: [awsSecurityGroup]
   vpc: [awsVpc]
   ec2Instance: [awsEc2]
+  sqs: [awsSqs]
 }

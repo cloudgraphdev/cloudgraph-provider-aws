@@ -11,7 +11,7 @@ export type AwsSqs = {
     region: string
     queueUrl: string
     sqsAttributes: QueueAttributeMap
-    tags: TagMap
+    Tags: TagMap
   }
 
 const listSqsQueueUrlsForRegion = async (sqs: SQS): Promise<string[]> => {
@@ -92,7 +92,7 @@ export default async ({
       // get all tags for each queue
       const tags: TagMap = await getQueueTags(sqs, queueUrl)
       if (!isEmpty(tags)) {
-        sqsData.tags = tags
+        sqsData.Tags = tags
       }
 
       sqsList.push(sqsData)

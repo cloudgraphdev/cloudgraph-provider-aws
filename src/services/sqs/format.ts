@@ -16,7 +16,7 @@ export default ({
 }): AwsSqsType => {
   const {
     queueUrl,
-    tags,
+    Tags,
   } = key
 
   const {
@@ -48,6 +48,6 @@ export default ({
     delaySeconds: `${delaySeconds} ${t.seconds}`,
     policy,
     receiveMessageWaitTimeSeconds: getTime(receiveMessageWaitTimeSeconds),
-    tags: formatTagsFromMap(tags),
+    tags: formatTagsFromMap(Tags),
   }
 }

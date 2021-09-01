@@ -465,6 +465,7 @@ export type AwsTag = {
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
+  sqs?: Maybe<Array<Maybe<AwsSqs>>>;
 };
 
 export type AwsVpc = {
