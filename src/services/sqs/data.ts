@@ -2,18 +2,16 @@ import * as Sentry from '@sentry/node'
 
 import groupBy from 'lodash/groupBy'
 
-import SQS, { QueueAttributeMap } from 'aws-sdk/clients/sqs'
+import SQS, { QueueAttributeMap, TagMap } from 'aws-sdk/clients/sqs'
 import { Opts } from '@cloudgraph/sdk'
 import { isEmpty } from 'lodash'
 import { Credentials } from '../../types'
-import { Tag } from '../../types/generated'
-import { formatTagsFromMap } from '../../utils/format'
 
 export type AwsSqs = {
     region: string
     queueUrl: string
     sqsAttributes: QueueAttributeMap
-    tags: Tag[]
+    tags: TagMap
   }
 
 const listSqsQueueUrlsForRegion = async (sqs: SQS): Promise<string[]> => {
@@ -56,11 +54,10 @@ const getQueueAttributes = async (
 const getQueueTags = async (
   sqs: SQS,
   queueUrl: string
-): Promise<Tag[]> => {
+): Promise<TagMap> => {
   try {
     const tags = await sqs.listQueueTags({ QueueUrl: queueUrl }).promise()
-    const tagArray = formatTagsFromMap(tags.Tags)
-    return tagArray
+    return tags.Tags
   } catch (err) {
     Sentry.captureException(new Error(err.message))
   }
@@ -93,7 +90,7 @@ export default async ({
         sqsAttributes,
       }
       // get all tags for each queue
-      const tags = await getQueueTags(sqs, queueUrl)
+      const tags: TagMap = await getQueueTags(sqs, queueUrl)
       if (!isEmpty(tags)) {
         sqsData.tags = tags
       }

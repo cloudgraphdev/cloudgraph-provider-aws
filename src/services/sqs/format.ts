@@ -2,6 +2,7 @@ import { AwsSqs } from './data'
 import { AwsSqs as AwsSqsType } from '../../types/generated'
 import t from '../../properties/translations'
 import getTime from '../../utils/dateutils'
+import { formatTagsFromMap } from '../../utils/format'
 
 /**
  * SQS
@@ -47,6 +48,6 @@ export default ({
     delaySeconds: `${delaySeconds} ${t.seconds}`,
     policy,
     receiveMessageWaitTimeSeconds: getTime(receiveMessageWaitTimeSeconds),
-    tags,
+    tags: formatTagsFromMap(tags),
   }
 }
