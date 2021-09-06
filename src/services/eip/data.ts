@@ -27,12 +27,15 @@ export interface RawAwsEip extends Omit<Address, 'Tags'> {
 export default async ({
   regions,
   credentials,
+  opts
 }: {
   regions: string
   credentials: Credentials
+  opts?: Opts
 }): Promise<{ [property: string]: RawAwsEip[] }> =>
   new Promise(async resolve => {
     const eipData: RawAwsEip[] = []
+    const endpoint = initTestEndpoint('EIP', opts)
 
     // Get all the EIP data for each region
     const regionPromises = regions.split(',').map(region => {

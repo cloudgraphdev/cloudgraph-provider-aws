@@ -103,9 +103,11 @@ const getResourceTags = async (cloudwatch: CloudWatch, arn: string) =>
 export default async ({
   regions,
   credentials,
+  opts
 }: {
   regions: string
   credentials: Credentials
+  opts?: Opts
 }): Promise<{[property: string]: RawAwsCloudwatch[]}> =>
   new Promise(async resolve => {
     const cloudwatchData: Array<
@@ -113,6 +115,7 @@ export default async ({
     > = []
     const regionPromises = []
     const tagsPromises = []
+    const endpoint = initTestEndpoint('Cloudwatch', opts)
 
     // get all metrics for all regions
     regions.split(',').map(region => {

@@ -117,14 +117,17 @@ export interface RawAwsElb extends LoadBalancerDescription {
 export default async ({
   regions,
   credentials,
+  opts
 }: {
   regions: string
   credentials: Credentials
+  opts?: Opts
 }): Promise<{
   [region: string]: RawAwsElb[]
 }> =>
   new Promise(async resolve => {
     let elbData: RawAwsElb[] = []
+    const endpoint = initTestEndpoint('ELB', opts)
 
     const regionPromises = regions.split(',').map(region => {
       const elbInstance = new ELB({ region, credentials, endpoint })

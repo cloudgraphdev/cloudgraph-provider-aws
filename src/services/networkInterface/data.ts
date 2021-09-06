@@ -110,14 +110,17 @@ const listNetworkInterfaces = async ({
 export default async ({
   regions,
   credentials,
+  opts
 }: {
   regions: string
   credentials: Credentials
+  opts?: Opts
 }): Promise<{
   [region: string]: RawNetworkInterface[]
 }> =>
   new Promise(async resolve => {
     const networkInterfacesData: RawNetworkInterface[] = []
+    const endpoint = initTestEndpoint('Network Interface', opts)
 
     // Get all the network interfaces for each region
     const regionPromises = regions.split(',').map(region => {

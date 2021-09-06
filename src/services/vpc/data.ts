@@ -10,7 +10,7 @@ import EC2, {
   DescribeVpcsResult,
   Vpc,
 } from 'aws-sdk/clients/ec2'
-import CloudGraph from '@cloudgraph/sdk'
+import CloudGraph, { Opts } from '@cloudgraph/sdk'
 
 import { AwsTag, Credentials, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
@@ -35,12 +35,15 @@ export interface RawAwsVpc extends Omit<Vpc, 'Tags'> {
 export default async ({
   regions,
   credentials,
+  opts,
 }: {
   regions: string
   credentials: Credentials
+  opts?: Opts
 }): Promise<{ [property: string]: RawAwsVpc[] }> =>
   new Promise(async resolve => {
     const vpcData: RawAwsVpc[] = []
+    const endpoint = initTestEndpoint('VPC', opts)
     const regionPromises = []
     const additionalAttrPromises = []
 

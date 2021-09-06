@@ -146,15 +146,18 @@ export const getDomainNamesForRegion = async (
 export default async ({
   regions,
   credentials,
+  opts
 }: {
   regions: string
   credentials: Credentials
+  opts?: Opts
 }): Promise<{ [property: string]: AwsApiGatewayRestApi[] }> =>
   new Promise(async resolve => {
     const apiGatewayData = []
     let domainNamesData: (DomainName & { restApiData?: string[] })[] = []
     const regionPromises = []
     const tagsPromises = []
+    const endpoint = initTestEndpoint('API Gateway Rest API', opts)
 
     regions.split(',').map(region => {
       const apiGw = new APIGW({ region, credentials, endpoint, ...customRetrySettings })

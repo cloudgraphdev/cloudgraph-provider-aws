@@ -9,7 +9,7 @@ import EC2, {
 } from 'aws-sdk/clients/ec2'
 import { AWSError } from 'aws-sdk/lib/error'
 
-import CloudGraph from '@cloudgraph/sdk'
+import CloudGraph, { Opts } from '@cloudgraph/sdk'
 import { Credentials, TagMap, AwsTag } from '../../types'
 
 import awsLoggerText from '../../properties/logger'
@@ -33,13 +33,16 @@ export interface AwsSecurityGroup extends Omit<SecurityGroup, 'Tags'> {
 export default async ({
   regions,
   credentials,
+  opts
 }: {
   regions: string
   credentials: Credentials
+  opts?: Opts
 }): Promise<{ [property: string]: AwsSecurityGroup[] }> =>
   new Promise(async resolve => {
     const sgData: AwsSecurityGroup[] = []
     const regionPromises = []
+    const endpoint = initTestEndpoint('Security Groups', opts)
 
     const listSgData = async ({
       ec2,

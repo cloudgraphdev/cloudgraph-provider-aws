@@ -14,7 +14,7 @@ import EC2, {
 } from 'aws-sdk/clients/ec2'
 import { AWSError } from 'aws-sdk/lib/error'
 
-import CloudGraph from '@cloudgraph/sdk'
+import CloudGraph, { Opts } from '@cloudgraph/sdk'
 
 import { Credentials, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
@@ -40,14 +40,17 @@ export interface RawAwsEC2 extends Omit<Instance, 'Tags'> {
 export default async ({
   regions,
   credentials,
+  opts
 }: {
   regions: string
   credentials: Credentials
+  opts?: Opts
 }): Promise<{
   [region: string]: RawAwsEC2[]
 }> =>
   new Promise(async resolve => {
     const ec2Instances: RawAwsEC2[] = []
+    const endpoint = initTestEndpoint('EC2', opts)
 
     /**
      * Step 1) for all regions, list the EC2 Instances

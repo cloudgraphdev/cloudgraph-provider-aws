@@ -11,7 +11,7 @@ import Lambda, {
   ReservedConcurrentExecutions,
 } from 'aws-sdk/clients/lambda'
 import { AWSError } from 'aws-sdk/lib/error'
-import CloudGraph from '@cloudgraph/sdk'
+import CloudGraph, { Opts } from '@cloudgraph/sdk'
 import awsLoggerText from '../../properties/logger'
 
 import { Credentials, TagMap } from '../../types'
@@ -123,14 +123,17 @@ const getResourceTags = async (lambda: Lambda, arn: string): Promise<TagMap> =>
 export default async ({
   regions,
   credentials,
+  opts
 }: {
   regions: string
   credentials: Credentials
+  opts?: Opts
 }): Promise<{ [property: string]: RawAwsLambdaFunction[] }> =>
   new Promise(async resolve => {
     const lambdaData: RawAwsLambdaFunction[] = []
     const regionPromises = []
     const tagsPromises = []
+    const endpoint = initTestEndpoint('Lambda', opts)
 
     // get all Lambdas for all regions
     regions.split(',').map(region => {

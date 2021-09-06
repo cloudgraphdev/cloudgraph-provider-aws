@@ -8,13 +8,14 @@ import { AWSError } from 'aws-sdk/lib/error'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import CloudGraph from '@cloudgraph/sdk'
+import CloudGraph, { Opts } from '@cloudgraph/sdk'
 
 import { Credentials, AwsTag } from '../../types'
 
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import awsLoggerText from '../../properties/logger'
+import { initTestEndpoint } from '../../utils'
 
 /**
  * EBS
@@ -96,14 +97,17 @@ const listEbsVolumes = async ({
 export default async ({
   regions,
   credentials,
+  opts
 }: {
   regions: string
-  credentials: Credentials
+  credentials: Credentials,
+  opts?: Opts
 }): Promise<{
   [region: string]: Volume & { region: string }[]
 }> =>
   new Promise(async resolve => {
     const ebsData: Volume & { region: string }[] = []
+    const endpoint = initTestEndpoint('EBS', opts)
 
     // Get all the EBS data for each region
     const regionPromises = regions.split(',').map(region => {

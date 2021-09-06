@@ -98,8 +98,6 @@ export function getCredentials(opts: Opts): Promise<Credentials> {
   })
 }
 
-/* Method to inject to set aws global config settings,
-   logger utility or to use a particular aws config profile */
 export const setAwsRetryOptions = (opts: {
   baseDelay?: number
   global?: boolean
@@ -115,27 +113,37 @@ export const setAwsRetryOptions = (opts: {
     configObj = undefined,
     ...rest
   } = opts
-  // logger.log = logger.debug
   const config: ConfigurationOptions & APIVersions = {
+  // logger.log = logger.debug
     maxRetries,
     // logger,
-    retryDelayOptions: {
       base,
+    retryDelayOptions: {
     },
     ...rest,
   }
-  if (profile && configObj) {
     configObj.profile = profile
+  if (profile && configObj) {
   }
   global && AWS.config.update(config)
   return config
 }
-
-export function initTestEndpoint(service?: string): string | undefined {
-  const endpoint =
-    (environment.NODE_ENV === 'test' && environment.LOCALSTACK_AWS_ENDPOINT) ||
-    undefined
-  service && endpoint && logger.info(`${service} getData in test mode!`)
+export function initTestEndpoint(
+  service?: string,
+  opts?: Opts
+): string | undefined {
+  const devOrTestMode = !!(environment.NODE_ENV === 'test' || opts?.devMode)
+  // TODO: Find a way to parametrize the localstackEndpoint when running the cli
+  const localstackEndpoint =
+    environment.LOCALSTACK_AWS_ENDPOINT || 'http://localhost:4566'
+  devOrTestMode &&
+    logger.debug(`environment.LOCALSTACK_AWS_ENDPOINT? ${localstackEndpoint}`)
+  const endpoint = devOrTestMode ? localstackEndpoint : undefined
+  devOrTestMode &&
+    service &&
+    endpoint &&
+    logger.info(`${service} getData in test mode!`)
+  devOrTestMode && logger.debug(`endpoint ${endpoint}`)
   return endpoint
 }
 

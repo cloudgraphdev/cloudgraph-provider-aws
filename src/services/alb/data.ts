@@ -49,11 +49,11 @@ export type RawAwsAlb = LoadBalancer & {
 export default async ({
   regions,
   credentials,
-}: // opts,
-{
+  opts,
+}: {
   regions: string
   credentials: Credentials
-  opts: Opts
+  opts?: Opts
 }): Promise<{ [property: string]: RawAwsAlb[] }> =>
   new Promise(async resolve => {
     const albData: RawAwsAlb[] = []
@@ -62,6 +62,7 @@ export default async ({
     const listenerPromises = []
     const targetGroupPromises = []
     const targetHealthPromises = []
+    const endpoint = initTestEndpoint('ALB', opts)
 
     /**
      * Step 1) for all regions, list all the albs

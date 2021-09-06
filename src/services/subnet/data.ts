@@ -9,7 +9,7 @@ import EC2, {
 } from 'aws-sdk/clients/ec2'
 import { AWSError } from 'aws-sdk/lib/error'
 
-import CloudGraph from '@cloudgraph/sdk'
+import CloudGraph, { Opts } from '@cloudgraph/sdk'
 import { Credentials, TagMap, AwsTag } from '../../types'
 
 import awsLoggerText from '../../properties/logger'
@@ -19,7 +19,6 @@ import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('Subnet')
 
 /**
  * Subnets
@@ -33,13 +32,16 @@ export interface AwsSubnet extends Omit<Subnet, 'Tags'> {
 export default ({
   regions,
   credentials,
+  opts
 }: {
   regions: string
   credentials: Credentials
+  opts?: Opts
 }): Promise<{ [property: string]: AwsSubnet[] }> =>
   new Promise(async resolve => {
     const subnetData: AwsSubnet[] = []
     const regionPromises = []
+    const endpoint = initTestEndpoint('Subnet', opts)
 
     const listSubnetData = async ({
       ec2,

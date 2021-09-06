@@ -30,9 +30,11 @@ export type AwsKms = KeyListEntry &
 export default async ({
   regions,
   credentials,
+  opts
 }: {
   regions: string
   credentials: Credentials
+  opts?: Opts
 }): Promise<{ [property: string]: AwsKms[] }> =>
   new Promise(async resolve => {
     const kmsIds = []
@@ -42,6 +44,7 @@ export default async ({
     const regionPromises = []
     const policyPromises = []
     const tagPromises = []
+    const endpoint = initTestEndpoint('KMS', opts)
 
     /**
      * Step 1) for all regions, list the kms keys

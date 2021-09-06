@@ -32,13 +32,16 @@ export interface RawAwsIgw extends Omit<InternetGateway, 'Tags'> {
 export default async ({
   credentials,
   regions,
+  opts
 }: {
   credentials: Credentials
   regions: string
+  opts?: Opts
 }): Promise<{ [property: string]: RawAwsIgw[] }> =>
   new Promise(async resolve => {
     const igwData: RawAwsIgw[] = []
     const regionPromises = []
+    const endpoint = initTestEndpoint('IGW', opts)
 
     const listIgwData = async ({
       ec2,

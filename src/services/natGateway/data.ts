@@ -6,7 +6,7 @@ import EC2, {
 } from 'aws-sdk/clients/ec2'
 import { AWSError } from 'aws-sdk/lib/error'
 
-import CloudGraph from '@cloudgraph/sdk'
+import CloudGraph, { Opts } from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
@@ -31,13 +31,16 @@ export interface RawAwsNATGateway extends Omit<NatGateway, 'Tags'> {
 export default async ({
   regions,
   credentials,
+  opts
 }: {
   regions: string
   credentials: Credentials
+  opts?: Opts
 }): Promise<{ [property: string]: RawAwsNATGateway[] }> =>
   new Promise(async resolve => {
     const natGatewayData: RawAwsNATGateway[] = []
     const regionPromises = []
+    const endpoint = initTestEndpoint('Nat Gateway', opts)
 
     const listNatGatewayData = async ({
       ec2,

@@ -104,15 +104,18 @@ const getResources = async ({ apiGw, restApiId }) =>
 export default async ({
   regions,
   credentials,
+  opts
 }: {
   regions: string
   credentials: Credentials
+  opts?: Opts
 }): Promise<{ [property: string]: AwsApiGatewayResource[] }> =>
   new Promise(async resolve => {
     const apiGatewayData = []
     const apiGatewayResources = []
     const regionPromises = []
     const additionalPromises = []
+    const endpoint = initTestEndpoint('API Gateway Resource', opts)
 
     regions.split(',').map(region => {
       const apiGw = new APIGW({ region, credentials, endpoint, ...customRetrySettings })

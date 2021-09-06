@@ -14,8 +14,10 @@ import services from '../enums/services'
 import serviceMap from '../enums/serviceMap'
 import { Credentials } from '../types'
 import { obfuscateSensitiveString } from '../utils/format'
+import { credentials as testCredentials, region as testRegion } from '../properties/test'
 // import { setAwsRetryOptions } from '../utils'
 import { sortResourcesDependencies } from '../utils'
+
 
 const DEFAULT_REGION = 'us-east-1'
 const DEFAULT_RESOURCES = Object.values(services).join(',')
@@ -333,17 +335,15 @@ export default class Provider extends CloudGraph.Client {
    * @returns Promise<any> All provider data
    */
   async getData({ opts }: { opts: Opts }): Promise<ProviderData> {
+    const { logger } = CloudGraph
     let { regions: configuredRegions, resources: configuredResources } =
       this.config
-    if (!configuredRegions) {
-      configuredRegions = this.properties.regions.join(',')
-    } else {
-      configuredRegions = [...new Set(configuredRegions.split(','))].join(',')
-    }
+    let credentials: Credentials
+
     if (!configuredResources) {
       configuredResources = Object.values(this.properties.services).join(',')
     }
-    const credentials = await this.getCredentials()
+
     const rawData = []
     const resourceNames: string[] = sortResourcesDependencies([
       ...new Set<string>(configuredResources.split(',')),
@@ -353,6 +353,19 @@ export default class Provider extends CloudGraph.Client {
 
     // Leaving this here in case we need to test another service or to inject a logging function
     // setAwsRetryOptions({ global: true, configObj: this.config })
+
+    if (opts.devMode) {
+      logger.debug('Creds in devMode')
+      credentials = testCredentials
+      configuredRegions = testRegion
+    } else {
+      credentials = await this.getCredentials()
+      if (!configuredRegions) {
+        configuredRegions = this.properties.regions.join(',')
+      } else {
+        configuredRegions = [...new Set(configuredRegions.split(','))].join(',')
+      }
+    }
 
     // Get Raw data for services
     try {

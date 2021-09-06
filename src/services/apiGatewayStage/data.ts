@@ -106,9 +106,11 @@ const getTags = async ({ apiGw, arn }): Promise<TagMap> =>
 export default async ({
   regions,
   credentials,
+  opts
 }: {
   regions: string
   credentials: Credentials
+  opts?: Opts
 }): Promise<{ [property: string]: AwsApiGatewayStage[] }> =>
   new Promise(async resolve => {
     const apiGatewayData = []
@@ -116,6 +118,7 @@ export default async ({
     const regionPromises = []
     const additionalPromises = []
     const tagsPromises = []
+    const endpoint = initTestEndpoint('API Gateway Stage', opts)
 
     regions.split(',').map(region => {
       const apiGw = new APIGW({ region, credentials, endpoint, ...customRetrySettings })
