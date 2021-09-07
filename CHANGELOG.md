@@ -1,3 +1,10 @@
+## [0.12.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.12.0...0.12.1) (2021-09-07)
+
+
+### Bug Fixes
+
+* **client:** Fix in getData that caused duplicate data when more than one region had data ([b2bb5fc](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b2bb5fc7466e2ed3f4641bffcf0c0e84b7548f6c))
+
 # [0.12.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.11.4...0.12.0) (2021-08-31)
 
 
