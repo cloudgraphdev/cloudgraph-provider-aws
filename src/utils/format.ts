@@ -14,9 +14,10 @@ export const convertAwsTagsToTagMap = (tags: AwsTag[] = []): TagMap => {
 }
 
 export const formatTagsFromMap = (tags: TagMap): Tag[] => {
-  const result = []
+  const result: Tag[] = []
   for (const [key, value] of Object.entries(tags)) {
-    result.push({ key, value })
+    // We need an id here to enfore uniqueness for Dgraph, otherwise we get duplicate tags
+    result.push({ id: `${key}:${value}`, key, value })
   }
   return result
 }

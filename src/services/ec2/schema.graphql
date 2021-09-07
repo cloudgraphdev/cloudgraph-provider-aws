@@ -32,17 +32,6 @@ type awsEc2Blockdevice
   ebs: blockDeviceEbs
 }
 
-# TODO: would this cause a collision with other providers? should we rename to like awsRawTag?
-type Tag 
-  @generate(
-    query: { get: false, query: false, aggregate: false }
-    mutation: { add: false, delete: false }
-    subscription: false
-  ) {
-  key: String
-  value: String
-}
-
 type awsEc2 @key(fields: "arn") {
   id: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])

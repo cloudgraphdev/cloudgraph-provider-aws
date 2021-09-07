@@ -12,6 +12,7 @@ export type Scalars = {
 };
 
 export type Tag = {
+  id: Scalars['String'];
   key?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
 };
@@ -454,7 +455,6 @@ export type AwsTag = {
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
   cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
-  ec2?: Maybe<Array<Maybe<AwsEc2>>>;
   eip?: Maybe<Array<Maybe<AwsEip>>>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
   igw?: Maybe<Array<Maybe<AwsIgw>>>;
