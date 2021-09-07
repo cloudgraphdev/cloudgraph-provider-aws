@@ -288,7 +288,7 @@ export default class Provider extends CloudGraph.Client {
 
   /**
    * getData is used to fetch all provider data specified in the config for the provider
-   * @param TODO: fill in
+   * @param opts: A set of optional values to configure how getData works
    * @returns Promise<any> All provider data
    */
   async getData({ opts }: { opts: Opts }): Promise<ProviderData> {
