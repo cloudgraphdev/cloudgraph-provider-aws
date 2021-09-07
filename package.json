@@ -1,6 +1,6 @@
 {
   "name": "@cloudgraph/cg-provider-aws",
-  "version": "0.11.4",
+  "version": "0.12.0",
   "description": "cloud-graph provider plugin for AWS used to fetch AWS cloud data.",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
@@ -14,6 +14,9 @@
   "types": "dist/services/index.d.ts",
   "author": "AutoCloud",
   "license": "MPL-2.0",
+  "cloudGraph": {
+    "version": ">0.2"
+  },
   "scripts": {
     "build": "yarn prepublish",
     "generate-types": "graphql-codegen --config codegen.yml",
@@ -29,7 +32,7 @@
     "terraform:cleanup": "rimraf ./tests/terraform/{.terraform,.terraform.lock.hcl,tfplan} ./tests/terraform/*.{tfstate,tfplan,backup}"
   },
   "dependencies": {
-    "@cloudgraph/sdk": "^0.3.0",
+    "@cloudgraph/sdk": "^0.3.3",
     "@graphql-tools/load-files": "^6.3.2",
     "@graphql-tools/merge": "^8.0.1",
     "@sentry/node": "^6.7.2",
