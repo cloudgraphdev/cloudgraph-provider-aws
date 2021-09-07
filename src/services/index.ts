@@ -376,12 +376,12 @@ export default class Provider extends CloudGraph.Client {
             }
           }
         })
-        result.entities.push({
-          name: serviceData.name,
-          mutation: serviceClass.mutation,
-          data: entities,
-        })
       }
+      result.entities.push({
+        name: serviceData.name,
+        mutation: serviceClass.mutation,
+        data: entities,
+      })
     }
     return result
   }
