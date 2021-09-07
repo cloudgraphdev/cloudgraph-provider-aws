@@ -12,6 +12,7 @@ export type Scalars = {
 };
 
 export type Tag = {
+  id: Scalars['String'];
   key?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
 };
@@ -416,6 +417,23 @@ export type AwsSgRule = {
   userId?: Maybe<Scalars['String']>;
 };
 
+export type AwsSqs = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  queueUrl: Scalars['String'];
+  queueType: Scalars['String'];
+  approximateNumberOfMessages?: Maybe<Scalars['Int']>;
+  approximateNumberOfMessagesNotVisible?: Maybe<Scalars['Int']>;
+  approximateNumberOfMessagesDelayed?: Maybe<Scalars['Int']>;
+  visibilityTimeout?: Maybe<Scalars['String']>;
+  maximumMessageSize?: Maybe<Scalars['Int']>;
+  messageRetentionPeriod?: Maybe<Scalars['String']>;
+  delaySeconds?: Maybe<Scalars['String']>;
+  policy?: Maybe<Scalars['String']>;
+  receiveMessageWaitTimeSeconds?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
 export type AwsSubnet = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -437,7 +455,6 @@ export type AwsTag = {
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
   cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
-  ec2?: Maybe<Array<Maybe<AwsEc2>>>;
   eip?: Maybe<Array<Maybe<AwsEip>>>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
   igw?: Maybe<Array<Maybe<AwsIgw>>>;
@@ -448,6 +465,7 @@ export type AwsTag = {
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
+  sqs?: Maybe<Array<Maybe<AwsSqs>>>;
 };
 
 export type AwsVpc = {

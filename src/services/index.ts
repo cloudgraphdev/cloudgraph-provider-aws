@@ -23,6 +23,7 @@ import Lambda from './lambda'
 import NATGateway from './natGateway'
 import NetworkInterface from './networkInterface'
 import VPC from './vpc'
+import SQS from './sqs'
 import APIGatewayRestApi from './apiGatewayRestApi'
 import APIGatewayResource from './apiGatewayResource'
 import APIGatewayStage from './apiGatewayStage'
@@ -54,6 +55,7 @@ export const serviceMap = {
   [services.sg]: AwsSecurityGroup,
   // [services.subnet]: AwsSubnet, // TODO: Enable when going for ENG-222
   [services.vpc]: VPC,
+  [services.sqs]: SQS,
   tag: AwsTag,
 }
 
@@ -285,7 +287,7 @@ export default class Provider extends CloudGraph.Client {
   }
 
   /**
-   * getData is used to fetch all provider data specificed in the config for the provider
+   * getData is used to fetch all provider data specified in the config for the provider
    * @param opts: A set of optional values to configure how getData works
    * @returns Promise<any> All provider data
    */
