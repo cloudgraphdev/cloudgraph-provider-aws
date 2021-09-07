@@ -14,6 +14,7 @@ import AwsInternetGateway from './igw'
 import AwsKms from './kms'
 import AwsSecurityGroup from './securityGroup'
 import AwsTag from './tag'
+import ASG from './asg'
 import CloudWatch from './cloudwatch'
 import EBS from './ebs'
 import EC2 from './ec2'
@@ -41,6 +42,7 @@ export const serviceMap = {
   [services.apiGatewayResource]: APIGatewayResource,
   [services.apiGatewayRestApi]: APIGatewayRestApi,
   [services.apiGatewayStage]: APIGatewayStage,
+  [services.asg]: ASG,
   [services.cloudwatch]: CloudWatch,
   [services.ebs]: EBS,
   [services.ec2Instance]: EC2,

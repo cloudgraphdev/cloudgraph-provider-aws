@@ -119,6 +119,46 @@ export type AwsApiGatewayStageVariable = {
   value?: Maybe<Scalars['String']>;
 };
 
+export type AwsAsg = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  launchConfigurationName?: Maybe<Scalars['String']>;
+  launchTemplateId?: Maybe<Scalars['String']>;
+  launchTemplateName?: Maybe<Scalars['String']>;
+  launchTemplateVersion?: Maybe<Scalars['String']>;
+  mixedInstancesPolicy?: Maybe<AwsMixedInstancesPolicy>;
+  minSize?: Maybe<Scalars['Int']>;
+  maxSize?: Maybe<Scalars['Int']>;
+  desiredCapacity?: Maybe<Scalars['Int']>;
+  predictedCapacity?: Maybe<Scalars['Int']>;
+  cooldown?: Maybe<Scalars['Int']>;
+  availabilityZones?: Maybe<Array<Maybe<Scalars['String']>>>;
+  loadBalancerNames?: Maybe<Array<Maybe<Scalars['String']>>>;
+  targetGroupARNs?: Maybe<Array<Maybe<Scalars['String']>>>;
+  healthCheckType?: Maybe<Scalars['String']>;
+  healthCheckGracePeriod?: Maybe<Scalars['Int']>;
+  ec2InstanceIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  suspendedProcesses?: Maybe<Array<Maybe<AwsSuspendedProcess>>>;
+  placementGroup?: Maybe<Scalars['String']>;
+  vpcZoneIdentifier?: Maybe<Scalars['String']>;
+  enabledMetrics?: Maybe<Array<Maybe<AwsEnabledMetrics>>>;
+  status?: Maybe<Scalars['String']>;
+  terminationPolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
+  newInstancesProtectedFromScaleIn?: Maybe<Scalars['String']>;
+  serviceLinkedRoleARN?: Maybe<Scalars['String']>;
+  maxInstanceLifetime?: Maybe<Scalars['Int']>;
+  capacityRebalanceEnabled?: Maybe<Scalars['String']>;
+  warmPoolConfigMaxGroupPreparedCapacity?: Maybe<Scalars['Int']>;
+  warmPoolConfigMinSize?: Maybe<Scalars['Int']>;
+  warmPoolConfigPoolState?: Maybe<Scalars['String']>;
+  warmPoolConfigStatus?: Maybe<Scalars['String']>;
+  warmPoolSize?: Maybe<Scalars['Int']>;
+  context?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
 export type AwsCloudwatch = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -290,6 +330,11 @@ export type AwsElbSourceSecurityGroup = {
   ownerAlias?: Maybe<Scalars['String']>;
 };
 
+export type AwsEnabledMetrics = {
+  metric?: Maybe<Scalars['String']>;
+  granularity?: Maybe<Scalars['String']>;
+};
+
 export type AwsIgw = {
   arn: Scalars['String'];
   id: Scalars['String'];
@@ -348,6 +393,27 @@ export type AwsLambda = {
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+};
+
+export type AwsLaunchTemplateOverrides = {
+  instanceType?: Maybe<Scalars['String']>;
+  weightedCapacity?: Maybe<Scalars['String']>;
+  launchTemplateId?: Maybe<Scalars['String']>;
+  launchTemplateName?: Maybe<Scalars['String']>;
+  launchTemplateVersion?: Maybe<Scalars['String']>;
+};
+
+export type AwsMixedInstancesPolicy = {
+  launchTemplateId?: Maybe<Scalars['String']>;
+  launchTemplateName?: Maybe<Scalars['String']>;
+  launchTemplateVersion?: Maybe<Scalars['String']>;
+  launchTemplateOverrides?: Maybe<Array<Maybe<AwsLaunchTemplateOverrides>>>;
+  instDistrOnDemandAllocationStrategy?: Maybe<Scalars['String']>;
+  instDistrOnDemandBaseCapacity?: Maybe<Scalars['Int']>;
+  instDistrOnDemandPercentageAboveBaseCapacity?: Maybe<Scalars['Int']>;
+  instDistrSpotAllocationStrategy?: Maybe<Scalars['String']>;
+  instDistrSpotInstancePools?: Maybe<Scalars['Int']>;
+  instDistrSpotMaxPrice?: Maybe<Scalars['String']>;
 };
 
 export type AwsNatGateway = {
@@ -430,11 +496,17 @@ export type AwsSubnet = {
   tags?: Maybe<Array<Maybe<Tag>>>;
 };
 
+export type AwsSuspendedProcess = {
+  processName?: Maybe<Scalars['String']>;
+  suspensionReason?: Maybe<Scalars['String']>;
+};
+
 export type AwsTag = {
   id: Scalars['String'];
   key: Scalars['String'];
   value: Scalars['String'];
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
+  asg?: Maybe<Array<Maybe<AwsAsg>>>;
   cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
   ec2?: Maybe<Array<Maybe<AwsEc2>>>;
