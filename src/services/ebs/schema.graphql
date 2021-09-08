@@ -14,6 +14,7 @@ type awsEbs @key(fields: "arn") {
   multiAttachEnabled: Boolean @search
   tags: [Tag]
   ec2Instance: [awsEc2] @hasInverse(field: ebs)
+  asg: [awsAsg] @hasInverse(field: ebs)
 }
 
 type awsEbsAttachment

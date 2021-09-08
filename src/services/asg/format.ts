@@ -41,6 +41,7 @@ export default ({
     WarmPoolConfiguration: warmPoolConfiguration,
     WarmPoolSize: warmPoolSize,
     Context: context,
+    LaunchConfiguration: launchConfiguration,
   } = rawData
 
   const ec2InstanceIds = instances.map(({ InstanceId }) => InstanceId)
@@ -78,6 +79,18 @@ export default ({
     }
   }) || [];
   
+  const blockDeviceMappingList = launchConfiguration?.BlockDeviceMappings?.map(({
+    VirtualName: virtualName,
+    DeviceName: deviceName,
+    NoDevice: noDevice,
+  })=> {
+    return {
+      virtualName,
+      deviceName,
+      noDevice: noDevice? t.yes : t.no,
+    }
+  }) || []
+
   const asg = {
     id: arn,
     arn,
@@ -109,7 +122,6 @@ export default ({
     targetGroupARNs,
     healthCheckType,
     healthCheckGracePeriod,
-    // TODO do we need instance[] here?
     ec2InstanceIds,
     suspendedProcesses: suspendedProcessList,
     placementGroup: placementGroup || '',
@@ -128,7 +140,30 @@ export default ({
     warmPoolSize: warmPoolSize || 0,
     context: context || '',
     tags: formatTagsFromMap(tags),
+    launchConfiguration: {
+      launchConfigurationName: launchConfiguration?.LaunchConfigurationName || '',
+      launchConfigurationARN: launchConfiguration?.LaunchConfigurationARN || '',
+      imageId: launchConfiguration?.ImageId || '',
+      keyName: launchConfiguration?.KeyName || '',
+      securityGroups: launchConfiguration?.SecurityGroups || [],
+      classicLinkVPCId: launchConfiguration?.ClassicLinkVPCId || '',
+      classicLinkVPCSecurityGroups: launchConfiguration?.ClassicLinkVPCSecurityGroups || [],
+      userData: launchConfiguration?.UserData || '',
+      instanceType: launchConfiguration?.InstanceType || '',
+      kernelId: launchConfiguration?.KernelId || '',
+      ramdiskId: launchConfiguration?.RamdiskId || '',
+      blockDeviceMappings: blockDeviceMappingList,
+      instanceMonitoring: launchConfiguration?.InstanceMonitoring?.Enabled ? t.yes : t.no,
+      spotPrice: launchConfiguration?.SpotPrice || '',
+      iamInstanceProfile: launchConfiguration?.IamInstanceProfile || '',
+      ebsOptimized: launchConfiguration?.EbsOptimized ? t.yes : t.no,
+      associatePublicIpAddress: launchConfiguration?.AssociatePublicIpAddress ? t.yes : t.no,
+      placementTenancy: launchConfiguration?.PlacementTenancy || '',
+      metadataOptHttpTokens: launchConfiguration?.MetadataOptions?.HttpTokens || '',
+      metadataOptHttpPutResponseHopLimit: launchConfiguration?.MetadataOptions?.HttpPutResponseHopLimit || 0,
+      metadataOptHttpEndpoint: launchConfiguration?.MetadataOptions?.HttpEndpoint || '',
+    }
   }
-  
+
   return asg
 }

@@ -158,7 +158,10 @@ export type AwsAsg = {
   warmPoolSize?: Maybe<Scalars['Int']>;
   context?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  launchConfiguration?: Maybe<AwsLaunchConfiguration>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  ebs?: Maybe<Array<Maybe<AwsEbs>>>;
 };
 
 export type AwsCloudwatch = {
@@ -199,6 +202,7 @@ export type AwsEbs = {
   multiAttachEnabled?: Maybe<Scalars['Boolean']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
+  asg?: Maybe<Array<Maybe<AwsAsg>>>;
 };
 
 export type AwsEbsAttachment = {
@@ -398,12 +402,42 @@ export type AwsLambda = {
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
+export type AwsLaunchConfiguration = {
+  launchConfigurationName?: Maybe<Scalars['String']>;
+  launchConfigurationARN?: Maybe<Scalars['String']>;
+  imageId?: Maybe<Scalars['String']>;
+  keyName?: Maybe<Scalars['String']>;
+  securityGroups?: Maybe<Array<Maybe<Scalars['String']>>>;
+  classicLinkVPCId?: Maybe<Scalars['String']>;
+  classicLinkVPCSecurityGroups?: Maybe<Array<Maybe<Scalars['String']>>>;
+  userData?: Maybe<Scalars['String']>;
+  instanceType?: Maybe<Scalars['String']>;
+  kernelId?: Maybe<Scalars['String']>;
+  ramdiskId?: Maybe<Scalars['String']>;
+  blockDeviceMappings?: Maybe<Array<Maybe<AwsLcBlockDeviceMapping>>>;
+  instanceMonitoring?: Maybe<Scalars['String']>;
+  spotPrice?: Maybe<Scalars['String']>;
+  iamInstanceProfile?: Maybe<Scalars['String']>;
+  ebsOptimized?: Maybe<Scalars['String']>;
+  associatePublicIpAddress?: Maybe<Scalars['String']>;
+  placementTenancy?: Maybe<Scalars['String']>;
+  metadataOptHttpTokens?: Maybe<Scalars['String']>;
+  metadataOptHttpPutResponseHopLimit?: Maybe<Scalars['Int']>;
+  metadataOptHttpEndpoint?: Maybe<Scalars['String']>;
+};
+
 export type AwsLaunchTemplateOverrides = {
   instanceType?: Maybe<Scalars['String']>;
   weightedCapacity?: Maybe<Scalars['String']>;
   launchTemplateId?: Maybe<Scalars['String']>;
   launchTemplateName?: Maybe<Scalars['String']>;
   launchTemplateVersion?: Maybe<Scalars['String']>;
+};
+
+export type AwsLcBlockDeviceMapping = {
+  virtualName?: Maybe<Scalars['String']>;
+  deviceName?: Maybe<Scalars['String']>;
+  noDevice?: Maybe<Scalars['String']>;
 };
 
 export type AwsMixedInstancesPolicy = {
@@ -473,6 +507,7 @@ export type AwsSecurityGroup = {
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
+  asg?: Maybe<Array<Maybe<AwsAsg>>>;
 };
 
 export type AwsSgRule = {

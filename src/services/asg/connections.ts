@@ -1,10 +1,13 @@
 import {
   AutoScalingGroup,
+  LaunchConfiguration,
   TagDescriptionList,
 } from 'aws-sdk/clients/autoscaling';
 
 import { ServiceConnection } from '@cloudgraph/sdk';
 
+import { SecurityGroup, Volume } from 'aws-sdk/clients/ec2';
+import { isEmpty } from 'lodash';
 import services from '../../enums/services';
 
 /**
@@ -19,8 +22,8 @@ export default ({
   data: { name: string; data: { [property: string]: any[] } }[]
   service: AutoScalingGroup & {
     region: string
-    ec2InstanceIds: string[]
     Tags?: TagDescriptionList
+    LaunchConfiguration?: LaunchConfiguration
   }
   region: string
 }): { [key: string]: ServiceConnection[] } => {
@@ -31,6 +34,9 @@ export default ({
     Instances: instances = [],
   } = asg
 
+  const {
+    SecurityGroups: sgIds = [],
+  } = asg.LaunchConfiguration
 
   /**
    * Find EC2 Instances
@@ -40,19 +46,73 @@ export default ({
   const ec2Instances = data.find(({ name }) => name === services.ec2Instance)
   const ec2InstanceIds = instances.map(({ InstanceId }) => InstanceId)
   if (ec2Instances?.data?.[region]) {
-    const ec2InstanceAtRegion = ec2Instances.data[region].filter(instance =>
+    const ec2InstanceInRegion = ec2Instances.data[region].filter(instance =>
       ec2InstanceIds.includes(instance.InstanceId)
     )
 
-    for (const ec2instance of ec2InstanceAtRegion) {
-      const ec2InstanceId = ec2instance.InstanceId
+    if (!isEmpty(ec2InstanceInRegion)) {
+      for (const ec2instance of ec2InstanceInRegion) {
+        const ec2InstanceId = ec2instance.InstanceId
 
-      connections.push({
-        id: ec2InstanceId,
-        resourceType: services.ec2Instance,
-        relation: 'child',
-        field: 'ec2Instance',
-      })
+        connections.push({
+          id: ec2InstanceId,
+          resourceType: services.ec2Instance,
+          relation: 'child',
+          field: 'ec2Instance',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find Security Groups VPC Security Groups
+   * related to this EC2 instance
+   */
+  const securityGroups: {
+    name: string
+    data: { [property: string]: SecurityGroup[] }
+  } = data.find(({ name }) => name === services.sg)
+
+  if (securityGroups?.data?.[region]) {
+    const sgsInRegion: SecurityGroup[] = securityGroups.data[region].filter(
+      ({ GroupId }: SecurityGroup) => sgIds.includes(GroupId)
+    )
+
+    if (!isEmpty(sgsInRegion)) {
+      for (const sg of sgsInRegion) {
+        connections.push({
+          id: sg.GroupId,
+          resourceType: services.sg,
+          relation: 'child',
+          field: 'securityGroups',
+        })
+      }
+    }
+  }
+  
+  /**
+   * Find EBS volumes
+   * related to this EC2 instance
+   */
+  const ebsVolumes: {
+    name: string
+    data: { [property: string]: (Volume & { region: string })[] }
+  } = data.find(({ name }) => name === services.ebs)
+  if (ebsVolumes?.data?.[region]) {
+    const volumesInRegion = ebsVolumes.data[region].filter(
+      ({ Attachments: attachments }) =>
+        attachments.find(({ InstanceId }) => ec2InstanceIds.includes(InstanceId))
+    )
+
+    if (!isEmpty(volumesInRegion)) {
+      for (const v of volumesInRegion) {
+        connections.push({
+          id: v.VolumeId,
+          resourceType: services.ebs,
+          relation: 'child',
+          field: 'ebs',
+        })
+      }
     }
   }
 

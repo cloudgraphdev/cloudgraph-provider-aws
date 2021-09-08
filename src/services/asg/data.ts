@@ -18,6 +18,7 @@ const { logger } = CloudGraph
 export interface RawAwsAsg extends Omit<AutoScalingGroup, 'Tags'> {
   region: string
   Tags?: TagMap
+  LaunchConfiguration?: LaunchConfiguration
 }
 
 const listAsgData = async (asg: ASG): Promise<AutoScalingGroup[]> => {

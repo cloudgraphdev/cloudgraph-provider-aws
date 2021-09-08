@@ -1,10 +1,12 @@
 import CloudGraph, { ServiceConnection } from '@cloudgraph/sdk'
 
 import EC2Service from '../src/services/ec2'
+import SGService from '../src/services/securityGroup'
+import EBSService from '../src/services/ebs'
 import AsgClass from '../src/services/asg'
 import { RawAwsAsg } from '../src/services/asg/data'
 import { initTestConfig } from "../src/utils"
-import { credentials, region } from '../src/properties/test'
+import { account, credentials, region } from '../src/properties/test'
 import services from '../src/enums/services'
 
 describe('ASG Service Test: ', () => {
@@ -21,6 +23,8 @@ describe('ASG Service Test: ', () => {
         try {
           const asgClass = new AsgClass({ logger: CloudGraph.logger })
           const ec2Class = new EC2Service({ logger: CloudGraph.logger })
+          const sgService = new SGService({ logger: CloudGraph.logger })
+          const ebsService = new EBSService({ logger: CloudGraph.logger })
 
           getDataResult = await asgClass.getData({
             credentials,
@@ -35,6 +39,18 @@ describe('ASG Service Test: ', () => {
             regions: region,
           })
 
+          // Get SG data
+          const sgData = await sgService.getData({
+            credentials,
+            regions: region,
+          })
+
+          // Get EBS data
+          const ebsData = await ebsService.getData({
+            credentials,
+            regions: region,
+          })
+
           const [asg] = getDataResult[region]
           asgId = asg.AutoScalingGroupARN
 
@@ -44,11 +60,26 @@ describe('ASG Service Test: ', () => {
               {
                 name: services.ec2Instance,
                 data: ec2InstanceData,
+                account,
                 region,
-              }
+              },
+              {
+                name: services.sg,
+                data: sgData,
+                account,
+                region,
+              },
+              {
+                name: services.ebs,
+                data: ebsData,
+                account,
+                region,
+              },
             ],
             region,
           })
+
+
         } catch (error) {
           console.error(error) // eslint-disable-line no-console
         }
@@ -101,6 +132,24 @@ describe('ASG Service Test: ', () => {
 
       expect(ec2InstanceConnections).toBeDefined()
       expect(ec2InstanceConnections.length).toBe(1)
+    })
+
+    test('should verify the connection to security groups', async () => {
+      const securityGroupConnections = asgConnections[asgId].filter(
+        connection => connection.resourceType === services.sg
+      )
+
+      expect(securityGroupConnections).toBeDefined()
+      expect(securityGroupConnections.length).toBe(1)
+    })
+
+    test('should verify the connection to ebs', async () => {
+      const ebsConnections = asgConnections[asgId].filter(
+        connection => connection.resourceType === services.sg
+      )
+
+      expect(ebsConnections).toBeDefined()
+      expect(ebsConnections.length).toBe(1)
     })
   })
 })

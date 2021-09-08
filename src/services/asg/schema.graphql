@@ -49,6 +49,46 @@ type awsEnabledMetrics
     granularity: String @search(by: [hash, regexp])
   }
 
+type  awsLcBlockDeviceMapping
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    virtualName: String @search(by: [hash, regexp])
+    deviceName: String @search(by: [hash, regexp])
+    noDevice: String @search(by: [hash, regexp])
+  }
+
+type awsLaunchConfiguration
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    launchConfigurationName: String @search(by: [hash, regexp])
+    launchConfigurationARN: String @search(by: [hash, regexp])
+    imageId: String @search(by: [hash, regexp])
+    keyName: String @search(by: [hash, regexp])
+    securityGroups: [String] @search(by: [hash])
+    classicLinkVPCId: String @search(by: [hash, regexp])
+    classicLinkVPCSecurityGroups: [String] @search(by: [hash])
+    userData: String @search(by: [hash, regexp])
+    instanceType: String @search(by: [hash, regexp])
+    kernelId: String @search(by: [hash, regexp])
+    ramdiskId: String @search(by: [hash, regexp])
+    blockDeviceMappings: [awsLcBlockDeviceMapping]
+    instanceMonitoring: String @search(by: [hash, regexp])
+    spotPrice: String @search(by: [hash, regexp])
+    iamInstanceProfile: String @search(by: [hash, regexp])
+    ebsOptimized: String @search(by: [hash, regexp])
+    associatePublicIpAddress: String @search(by: [hash, regexp])
+    placementTenancy: String @search(by: [hash, regexp])
+    metadataOptHttpTokens: String @search(by: [hash, regexp])
+    metadataOptHttpPutResponseHopLimit: Int @search
+    metadataOptHttpEndpoint: String @search(by: [hash, regexp])
+  }
+
 type awsAsg @key(fields: "arn") {
   id: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
@@ -87,5 +127,8 @@ type awsAsg @key(fields: "arn") {
   warmPoolSize: Int @search
   context: String @search(by: [hash, regexp])
   tags: [Tag]
-  ec2Instance: [awsEc2] @hasInverse(field: "asg")
+  launchConfiguration: awsLaunchConfiguration
+  ec2Instance: [awsEc2] @hasInverse(field: asg)
+  securityGroups: [awsSecurityGroup] @hasInverse(field: asg)
+  ebs: [awsEbs] @hasInverse(field: asg)
 }
