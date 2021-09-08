@@ -7,6 +7,8 @@ Use the CloudGraph AWS Provider to scan and normalize cloud infrastructure using
 - [Install](#install)
 - [Authentication](#authentication)
 - [Configuration](#configuration)
+- [Supported Services](#supported-services)
+- [Query Examples](#query-examples)
 <!-- tocstop -->
 
 # Install
