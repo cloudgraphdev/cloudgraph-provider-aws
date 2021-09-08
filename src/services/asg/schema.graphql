@@ -87,4 +87,5 @@ type awsAsg @key(fields: "arn") {
   warmPoolSize: Int @search
   context: String @search(by: [hash, regexp])
   tags: [Tag]
+  ec2Instance: [awsEc2] @hasInverse(field: "asg")
 }

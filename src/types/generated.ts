@@ -122,8 +122,8 @@ export type AwsApiGatewayStageVariable = {
 export type AwsAsg = {
   id: Scalars['String'];
   arn: Scalars['String'];
-  region?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  region?: Maybe<Scalars['String']>;
   launchConfigurationName?: Maybe<Scalars['String']>;
   launchTemplateId?: Maybe<Scalars['String']>;
   launchTemplateName?: Maybe<Scalars['String']>;
@@ -157,6 +157,7 @@ export type AwsAsg = {
   warmPoolSize?: Maybe<Scalars['Int']>;
   context?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
 };
 
 export type AwsCloudwatch = {
@@ -243,6 +244,7 @@ export type AwsEc2 = {
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
   eip?: Maybe<Array<Maybe<AwsEip>>>;
   networkInterfaces?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  asg?: Maybe<Array<Maybe<AwsAsg>>>;
 };
 
 export type AwsEc2Blockdevice = {
