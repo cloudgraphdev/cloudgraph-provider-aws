@@ -16,4 +16,5 @@ export default {
   networkInterface: 'networkInterface',
   sg: 'sg',
   vpc: 'vpc',
+  sqs: 'sqs',
 }

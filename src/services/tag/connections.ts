@@ -196,6 +196,32 @@ export default ({
     }
 
     /**
+     * Find related SQS
+     */
+     const sqsQueues: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.sqs)
+    if (sqsQueues?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        sqsQueues.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { sqsAttributes: { QueueArn: id } } = instance
+
+          connections.push({
+            id,
+            resourceType: services.sqs,
+            relation: 'child',
+            field: 'sqs',
+          })
+        }
+      }
+    }
+
+    /**
      * Find related EIP
      */
     const eips: { name: string; data: { [property: string]: any[] } } =

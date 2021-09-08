@@ -1,3 +1,25 @@
+# [0.13.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.12.1...0.13.0) (2021-09-07)
+
+
+### Bug Fixes
+
+* **sqs:** Update sqs to connect to top level tags and have correct field ([0592e5e](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/0592e5e8af9db836b85bc7c111bff58c2f806682))
+* **sqs:** update to use logger and fix comment change ([590e8b3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/590e8b317a1369596072caa762be6aae74c29bbc))
+* **tags:** Add an id field to tags to enforce uniqueness. ([2d2d97c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/2d2d97c7af03c1b629aae5a6a282c73516720211))
+
+
+### Features
+
+* **sqs:** code updates ([d0f2e49](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d0f2e4965c11e4f7cad91dd7e75d4d4ee41e3b77))
+* **sqs:** move formating tags to format.ts ([3dd8c93](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/3dd8c93d1eaaae5979324353bd99f3bd6ade4f54))
+
+## [0.12.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.12.0...0.12.1) (2021-09-07)
+
+
+### Bug Fixes
+
+* **client:** Fix in getData that caused duplicate data when more than one region had data ([b2bb5fc](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b2bb5fc7466e2ed3f4641bffcf0c0e84b7548f6c))
+
 # [0.12.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.11.4...0.12.0) (2021-08-31)
 
 
