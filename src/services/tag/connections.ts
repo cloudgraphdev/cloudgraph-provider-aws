@@ -52,6 +52,32 @@ export default ({
       }
     }
 
+
+    /**
+     * Find related ASG
+     */
+    const asgQueues: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.asg)
+    if (asgQueues?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        asgQueues.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const asg of dataAtRegion) {
+          const { AutoScalingGroupARN: id } = asg
+          connections.push({
+            id,
+            resourceType: services.asg,
+            relation: 'child',
+            field: 'asg',
+          })
+        }
+      }
+    }
+
     /**
      * Find related Cloudwatch
      */
@@ -328,23 +354,23 @@ export default ({
     /**
      * Find related NAT GWs
      */
-     const natgws: { name: string; data: { [property: string]: any[] } } =
-     data.find(({ name }) => name === services.nat)
-   if (natgws?.data?.[region]) {
-     const dataAtRegion = findServiceInstancesWithTag(tag, natgws.data[region])
-     if (!isEmpty(dataAtRegion)) {
-       for (const instance of dataAtRegion) {
-         const { NatGatewayId: id }: NatGateway = instance
+    const natgws: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.nat)
+    if (natgws?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(tag, natgws.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { NatGatewayId: id }: NatGateway = instance
 
-         connections.push({
-           id,
-           resourceType: services.nat,
-           relation: 'child',
-           field: 'natGateway',
-         })
-       }
-     }
-   }
+          connections.push({
+            id,
+            resourceType: services.nat,
+            relation: 'child',
+            field: 'natGateway',
+          })
+        }
+      }
+    }
   }
 
   const tagResult = {

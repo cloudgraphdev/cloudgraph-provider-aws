@@ -69,4 +69,5 @@ type awsEc2 @key(fields: "arn") {
   ebs: [awsEbs] @hasInverse(field: ec2Instance)
   eip: [awsEip] @hasInverse(field: ec2Instance)
   networkInterfaces: [awsNetworkInterface] @hasInverse(field: ec2Instance)
+  asg: [awsAsg] @hasInverse(field: ec2Instance)
 }

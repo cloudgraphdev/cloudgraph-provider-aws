@@ -3,6 +3,7 @@ type awsTag @key(fields: "id") {
   key: String! @search(by: [hash, regexp])
   value: String! @search(by: [hash, regexp])
   alb: [awsAlb]
+  asg: [awsAsg]
   cloudwatch: [awsCloudwatch]
   ebs: [awsEbs]
   eip: [awsEip]
