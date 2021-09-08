@@ -1,3 +1,12 @@
+# [0.14.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.13.0...0.14.0) (2021-09-08)
+
+
+### Features
+
+* **asg:** add asg ([f9f656a](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/f9f656abd409623653a034cf99a6b5e417ea43ed))
+* **asg:** add inverse fields to schema ([2d9913f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/2d9913fcb29fb43dbedc6c447968e02da6bca40a))
+* **asg:** add security group and EBS connections ([ccb18f9](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/ccb18f9aa232d3899c8f2a6e87769194eaa2b97e))
+
 # [0.13.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.12.1...0.13.0) (2021-09-07)
 
 
