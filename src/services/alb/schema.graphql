@@ -18,6 +18,7 @@ type awsAlb @key(fields: "arn") {
   tags: [Tag]
   ec2Instance: [awsEc2] @hasInverse(field: alb)
   vpc: [awsVpc] @hasInverse(field: alb)
+  route53Record: [awsRoute53Record] @hasInverse(field: alb)
   listeners: [awsAlbListener]
 }
 

@@ -22,7 +22,7 @@ import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 const lt = { ...awsLoggerText }
-const {logger} = CloudGraph
+const { logger } = CloudGraph
 const MAX_REST_API = 500
 const serviceName = 'API Gateway Stage'
 const endpoint = initTestEndpoint(serviceName)
@@ -32,7 +32,7 @@ export interface AwsApiGatewayStage extends Omit<Stage, 'tags'> {
   tags: TagMap
   region: string
 }
- 
+
 const getRestApisForRegion = async apiGw =>
   new Promise<ListOfRestApi>(resolve => {
     const restApiList: ListOfRestApi = []
@@ -138,11 +138,13 @@ export default async ({
       const apiGw = new APIGW({ region, credentials, endpoint })
       const additionalPromise = new Promise<void>(async resolveAdditional => {
         const stages = await getStages({ apiGw, restApiId })
-        apiGatewayStages.push(...stages.map(stage => ({
-          ...stage,
-          restApiId,
-          region,
-        })))
+        apiGatewayStages.push(
+          ...stages.map(stage => ({
+            ...stage,
+            restApiId,
+            region,
+          }))
+        )
 
         resolveAdditional()
       })
