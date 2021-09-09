@@ -1,3 +1,10 @@
+## [0.14.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.14.0...0.14.1) (2021-09-09)
+
+
+### Bug Fixes
+
+* Prevent error when listing autoscaling groups ([a79f117](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a79f117625df16052966dbed518a43c4c40a222d))
+
 # [0.14.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.13.0...0.14.0) (2021-09-08)
 
 
