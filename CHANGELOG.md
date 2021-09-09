@@ -1,3 +1,10 @@
+# [0.15.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.14.1...0.15.0) (2021-09-09)
+
+
+### Features
+
+* **README:** Update readme with more details and add contributing file ([b063f8e](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b063f8ea35302ed63110e7d0e1200e30d35bf895))
+
 ## [0.14.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.14.0...0.14.1) (2021-09-09)
 
 
