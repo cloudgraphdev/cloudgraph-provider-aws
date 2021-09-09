@@ -1,6 +1,9 @@
 import * as Sentry from '@sentry/node'
 
-import ASG, { AutoScalingGroup, LaunchConfiguration } from 'aws-sdk/clients/autoscaling'
+import ASG, {
+  AutoScalingGroup,
+  LaunchConfiguration,
+} from 'aws-sdk/clients/autoscaling'
 import { groupBy, isEmpty } from 'lodash'
 
 import CloudGraph from '@cloudgraph/sdk'
@@ -28,9 +31,11 @@ const listAsgData = async (asg: ASG): Promise<AutoScalingGroup[]> => {
     let autoScalingGroups = await asg.describeAutoScalingGroups().promise()
     fullResources.push(...autoScalingGroups.AutoScalingGroups)
     let nextToken = autoScalingGroups.NextToken
-    
+
     while (nextToken) {
-      autoScalingGroups = await asg.describeAutoScalingGroups({NextToken: nextToken}).promise()
+      autoScalingGroups = await asg
+        .describeAutoScalingGroups({ NextToken: nextToken })
+        .promise()
       fullResources.push(...autoScalingGroups.AutoScalingGroups)
       nextToken = autoScalingGroups.NextToken
     }
@@ -40,19 +45,25 @@ const listAsgData = async (asg: ASG): Promise<AutoScalingGroup[]> => {
     logger.error(err)
     Sentry.captureException(new Error(err.message))
   }
-  return null;
+  return null
 }
 
-const listLaunchConfigData = async (asg: ASG): Promise<LaunchConfiguration[]> => {
+const listLaunchConfigData = async (
+  asg: ASG
+): Promise<LaunchConfiguration[]> => {
   try {
     const fullResources: LaunchConfiguration[] = []
 
-    let launchConfigurations = await asg.describeLaunchConfigurations().promise()
+    let launchConfigurations = await asg
+      .describeLaunchConfigurations()
+      .promise()
     fullResources.push(...launchConfigurations.LaunchConfigurations)
     let nextToken = launchConfigurations.NextToken
 
     while (nextToken) {
-      launchConfigurations = await asg.describeLaunchConfigurations({NextToken: nextToken}).promise()
+      launchConfigurations = await asg
+        .describeLaunchConfigurations({ NextToken: nextToken })
+        .promise()
       fullResources.push(...launchConfigurations.LaunchConfigurations)
       nextToken = launchConfigurations.NextToken
     }
@@ -64,7 +75,7 @@ const listLaunchConfigData = async (asg: ASG): Promise<LaunchConfiguration[]> =>
     logger.error(err)
     Sentry.captureException(new Error(err.message))
   }
-  return null;
+  return null
 }
 
 export default async ({
@@ -77,7 +88,7 @@ export default async ({
   [region: string]: RawAwsAsg[]
 }> => {
   const asgData = []
-  let launchConfigData;
+  let launchConfigData
 
   for (const region of regions.split(',')) {
     const asg = new ASG({ region, credentials })
@@ -87,13 +98,15 @@ export default async ({
      */
     const autoScalingGroups = await listAsgData(asg)
 
-    asgData.push(
-      ...autoScalingGroups.map((autoScalingGroup: AutoScalingGroup) => ({
-        ...autoScalingGroup,
-        region,
-        LaunchConfiguration: {},
-      }))
-    )
+    if (!isEmpty(autoScalingGroups)) {
+      asgData.push(
+        ...autoScalingGroups.map((autoScalingGroup: AutoScalingGroup) => ({
+          ...autoScalingGroup,
+          region,
+          LaunchConfiguration: {},
+        }))
+      )
+    }
 
     /**
      * Step 2) Get all the Launch Configuration data for each region
