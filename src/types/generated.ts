@@ -509,6 +509,12 @@ export type AwsNetworkInterfaceAttachment = {
   status?: Maybe<Scalars['String']>;
 };
 
+export type AwsRoute = {
+  id?: Maybe<Scalars['ID']>;
+  target: Scalars['String'];
+  destination?: Maybe<Scalars['String']>;
+};
+
 export type AwsRoute53Alias = {
   zoneId: Scalars['String'];
   name?: Maybe<Scalars['String']>;
@@ -537,6 +543,17 @@ export type AwsRoute53Record = {
   route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
+};
+
+export type AwsRouteTable = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  vpcId?: Maybe<Scalars['String']>;
+  routes?: Maybe<Array<Maybe<AwsRoute>>>;
+  mainRouteTable?: Maybe<Scalars['Boolean']>;
+  explicitlyAssociatedWithSubnets?: Maybe<Scalars['Int']>;
+  subnetAssociations?: Maybe<Array<Maybe<Scalars['String']>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
 };
 
 export type AwsSecurityGroup = {

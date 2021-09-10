@@ -31,6 +31,7 @@ import APIGatewayResource from './apiGatewayResource'
 import APIGatewayStage from './apiGatewayStage'
 import Route53HostedZone from './route53HostedZone'
 import Route53Record from './route53Record'
+import RouteTable from './routeTable'
 
 import regions from '../enums/regions'
 import resources from '../enums/resources'
@@ -67,6 +68,7 @@ export const serviceMap = {
   [services.sqs]: SQS,
   [services.route53HostedZone]: Route53HostedZone,
   [services.route53Record]: Route53Record,
+  [services.routeTable]: RouteTable,
   tag: AwsTag,
 }
 
@@ -93,9 +95,16 @@ export default class Provider extends CloudGraph.Client {
     resources: { [key: string]: string }
   }
 
-  logSelectedRegionsAndResources(regionsToLog: string, resourcesToLog: string): void {
-    this.logger.info(`Regions configured: ${chalk.green(regionsToLog.replace(/,/g, ', '))}`)
-    this.logger.info(`Resources configured: ${chalk.green(resourcesToLog.replace(/,/g, ', '))}`)
+  logSelectedRegionsAndResources(
+    regionsToLog: string,
+    resourcesToLog: string
+  ): void {
+    this.logger.info(
+      `Regions configured: ${chalk.green(regionsToLog.replace(/,/g, ', '))}`
+    )
+    this.logger.info(
+      `Resources configured: ${chalk.green(resourcesToLog.replace(/,/g, ', '))}`
+    )
   }
 
   async configure(flags: any): Promise<{ [key: string]: any }> {
@@ -113,12 +122,16 @@ export default class Provider extends CloudGraph.Client {
     ])
     this.logger.debug(`Regions selected: ${regionsAnswer}`)
     if (!regionsAnswer.length) {
-      this.logger.info(`No Regions selected, using default region: ${chalk.green(DEFAULT_REGION)}`)
+      this.logger.info(
+        `No Regions selected, using default region: ${chalk.green(
+          DEFAULT_REGION
+        )}`
+      )
       result.regions = DEFAULT_REGION
     } else {
       result.regions = regionsAnswer.join(',')
     }
-    
+
     // Prompt for resources if flag set
     if (flags.resources) {
       const { resources: resourcesAnswer } = await this.interface.prompt([
@@ -143,8 +156,12 @@ export default class Provider extends CloudGraph.Client {
     } else {
       result.resources = DEFAULT_RESOURCES
     }
-    const confettiBall = String.fromCodePoint(0x1F38A) // confetti ball emoji
-    this.logger.success(`${confettiBall} ${chalk.green('AWS')} configuration successfully completed ${confettiBall}`)
+    const confettiBall = String.fromCodePoint(0x1f38a) // confetti ball emoji
+    this.logger.success(
+      `${confettiBall} ${chalk.green(
+        'AWS'
+      )} configuration successfully completed ${confettiBall}`
+    )
     this.logSelectedRegionsAndResources(result.regions, result.resources)
     return result
   }
