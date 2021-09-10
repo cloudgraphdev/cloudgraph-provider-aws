@@ -27,6 +27,7 @@ type awsLambaEnvironmentVariable
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-  key: String! @id
+  id: ID
+  key: String!
   value: String
 }

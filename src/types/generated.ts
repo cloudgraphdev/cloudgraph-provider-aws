@@ -376,6 +376,7 @@ export type AwsKms = {
 };
 
 export type AwsLambaEnvironmentVariable = {
+  id?: Maybe<Scalars['ID']>;
   key: Scalars['String'];
   value?: Maybe<Scalars['String']>;
 };
