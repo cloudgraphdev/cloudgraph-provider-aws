@@ -10,6 +10,7 @@ export default {
   eip: 'eip',
   elb: 'elb',
   igw: 'igw',
+  kinesisStream: 'kinesisStream',
   kms: 'kms',
   lambda: 'lambda',
   nat: 'nat',

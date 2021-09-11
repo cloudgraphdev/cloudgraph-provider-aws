@@ -356,6 +356,19 @@ export type AwsIgwAttachment = {
   vpcId: Scalars['String'];
 };
 
+export type AwsKinesisStream = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  streamName: Scalars['String'];
+  streamStatus: Scalars['String'];
+  shards: Array<Maybe<AwsShards>>;
+  retentionPeriodHours: Scalars['Int'];
+  enhancedMonitoring: Array<AwsShardLevelMetrics>;
+  encryptionType?: Maybe<Scalars['String']>;
+  keyId?: Maybe<Scalars['String']>;
+  region: Scalars['String'];
+};
+
 export type AwsKms = {
   arn: Scalars['String'];
   id: Scalars['String'];
@@ -518,6 +531,20 @@ export type AwsSgRule = {
   protocol?: Maybe<Scalars['String']>;
   source?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
+};
+
+export type AwsShardLevelMetrics = {
+  shardLevelMetrics?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsShards = {
+  shardId: Scalars['String'];
+  parentShardId?: Maybe<Scalars['String']>;
+  adjacentParentShardId?: Maybe<Scalars['String']>;
+  hashKeyRangeStarting: Scalars['String'];
+  hashKeyRangeEnding: Scalars['String'];
+  sequenceNumberRangeStaring: Scalars['String'];
+  sequenceNumberRangeEnding?: Maybe<Scalars['String']>;
 };
 
 export type AwsSqs = {

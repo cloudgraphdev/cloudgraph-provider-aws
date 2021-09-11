@@ -11,6 +11,7 @@ import path from 'path'
 // import AwsSubnet from './subnet'
 import ALB from './alb'
 import AwsInternetGateway from './igw'
+import AwsKinesisStream from './kinesisStream'
 import AwsKms from './kms'
 import AwsSecurityGroup from './securityGroup'
 import AwsTag from './tag'
@@ -50,6 +51,7 @@ export const serviceMap = {
   [services.eip]: EIP,
   [services.elb]: ELB,
   [services.igw]: AwsInternetGateway,
+  [services.kinesisStream]: AwsKinesisStream,
   [services.kms]: AwsKms,
   [services.lambda]: Lambda,
   [services.nat]: NATGateway,
