@@ -1,3 +1,11 @@
+# [0.16.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.15.1...0.16.0) (2021-09-13)
+
+
+### Features
+
+* **kinesis:** add kinesis ([d5e9b30](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d5e9b307c9ab2509db17bd6405d7fed552897f4e))
+* **kinesis:** update warning log ([42e859a](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/42e859a9f22d3518772437447f678b1a14803d32))
+
 ## [0.15.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.15.0...0.15.1) (2021-09-13)
 
 
