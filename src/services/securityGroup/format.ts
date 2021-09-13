@@ -1,3 +1,4 @@
+import cuid from 'cuid'
 import t from '../../properties/translations'
 import { AwsSecurityGroup } from './data'
 import { AwsSecurityGroup as AwsSgType } from '../../types/generated'
@@ -51,6 +52,7 @@ export default ({
       }
 
       const allRules: Array<{
+        id: string // We need this id here to ensure no duplicate data is entered
         description: string
         source?: string
         destination?: string
@@ -68,6 +70,7 @@ export default ({
       ;(rule.ipRanges || []).map(
         ({ cidrIp, description: ipRangesDescription = '' }) => {
           allRules.push({
+            id: cuid(),
             [direction]: cidrIp,
             description: ipRangesDescription,
           })
@@ -76,6 +79,7 @@ export default ({
       ;(rule.ipv6Ranges || []).map(
         ({ cidrIpv6, description: ipv6RangesDescription = '' }) => {
           allRules.push({
+            id: cuid(),
             [direction]: cidrIpv6,
             description: ipv6RangesDescription,
           })
@@ -84,6 +88,7 @@ export default ({
       ;(rule.prefixListIds || []).map(
         ({ prefixListId, description: prefixListIdsDescription = '' }) => {
           allRules.push({
+            id: cuid(),
             [direction]: prefixListId,
             description: prefixListIdsDescription,
           })
@@ -98,6 +103,7 @@ export default ({
           description: descriptionUserIdGroupPairs = '',
         }) => {
           allRules.push({
+            id: cuid(),
             [direction]: groupId,
             description: descriptionUserIdGroupPairs,
             groupName,
