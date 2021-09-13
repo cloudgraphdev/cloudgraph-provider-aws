@@ -3,6 +3,17 @@
 
 ### Bug Fixes
 
+* **logs:** update provider data logs to standardize them ([0713184](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/071318430211a871623a21902ab475c06fd507a9))
+* **schema:** fix serveral schemas and format functions to avoid duplication. Need to use an id outside dgraph that is generated in the code ([8501203](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/8501203526196a3ab77e1615c3d945f0b44c337e))
+* **sg:** update SG rules to allow peeringStatus and groupName. No longer just pass anything left from the rule as it could break schema ([6087350](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/6087350e4831512f7abe3a70c042cd6cbcc046e5))
+* **sg:** use a cuid generated in code for the rules so we dont get duplicates in rules ([68c0ea5](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/68c0ea55ad82c26c7f3450f1aec214574688ce9c))
+* Solved issue with duplicated XID Lambda env variables ([7b1c2a2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/7b1c2a26770d0a8e764ba67ed422b042635e5464))
+
+## [0.15.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.15.0...0.15.1) (2021-09-13)
+
+
+### Bug Fixes
+
 * Solved issue with duplicated XID Lambda env variables ([7b1c2a2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/7b1c2a26770d0a8e764ba67ed422b042635e5464))
 
 # [0.15.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.14.1...0.15.0) (2021-09-09)
