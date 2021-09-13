@@ -518,6 +518,8 @@ export type AwsSgRule = {
   protocol?: Maybe<Scalars['String']>;
   source?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
+  groupName?: Maybe<Scalars['String']>;
+  peeringStatus?: Maybe<Scalars['String']>;
 };
 
 export type AwsSqs = {

@@ -51,9 +51,9 @@ export default ({
       }
 
       const allRules: Array<{
-        [property: string]: string
         description: string
-        descriptionDescription?: string
+        source?: string
+        destination?: string
         groupId?: string
         groupName?: string
         peeringStatus?: string
@@ -92,13 +92,17 @@ export default ({
       ;(rule.userIdGroupPairs || []).map(
         ({
           groupId,
+          userId = '',
+          groupName = '',
+          peeringStatus = '',
           description: descriptionUserIdGroupPairs = '',
-          ...rest
         }) => {
           allRules.push({
             [direction]: groupId,
             description: descriptionUserIdGroupPairs,
-            ...rest,
+            groupName,
+            peeringStatus,
+            userId,
           })
         }
       )

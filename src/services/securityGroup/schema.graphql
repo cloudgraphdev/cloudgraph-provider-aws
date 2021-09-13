@@ -30,4 +30,6 @@ type awsSgRule
   protocol: String
   source: String
   userId: String
+  groupName: String
+  peeringStatus: String
 }
