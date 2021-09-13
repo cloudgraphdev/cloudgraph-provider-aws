@@ -1,3 +1,4 @@
+import cuid from 'cuid'
 import t from '../../properties/translations'
 import { AwsAsg } from '../../types/generated';
 import { formatTagsFromMap } from '../../utils/format';
@@ -52,6 +53,7 @@ export default ({
     LaunchTemplateSpecification: launchTemplateSpecification,
   }) => {
     return {
+      id: cuid(),
       instanceType,
       weightedCapacity,
       launchTemplateId: launchTemplateSpecification?.LaunchTemplateId || '',

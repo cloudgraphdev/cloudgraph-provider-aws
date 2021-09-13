@@ -1,4 +1,5 @@
 import { MetricAlarm } from 'aws-sdk/clients/cloudwatch'
+import cuid from 'cuid'
 import t from '../../properties/translations'
 import { TagMap } from '../../types'
 import { AwsCloudwatch } from '../../types/generated'
@@ -43,6 +44,7 @@ export default ({
     period: `${period} ${t.seconds}`,
     evaluationPeriods,
     dimensions: dimensions.map(({ Name, Value }) => ({
+      id: cuid(),
       name: Name,
       value: Value,
     })),

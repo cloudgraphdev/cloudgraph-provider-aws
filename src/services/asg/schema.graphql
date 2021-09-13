@@ -22,6 +22,7 @@ type awsLaunchTemplateOverrides
     mutation: { add: false, delete: false }
     subscription: false
   ) {
+    id: String! @id
     instanceType: String
     weightedCapacity: String
     launchTemplateId: String @search(by: [hash, regexp])
@@ -35,7 +36,7 @@ type awsSuspendedProcess
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    processName: String @search(by: [hash, regexp])
+    processName: String! @id @search(by: [hash, regexp])
     suspensionReason: String @search(by: [hash, regexp])
   }
 
@@ -45,7 +46,7 @@ type awsEnabledMetrics
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    metric: String @search(by: [hash, regexp])
+    metric: String! @id @search(by: [hash, regexp])
     granularity: String @search(by: [hash, regexp])
   }
 

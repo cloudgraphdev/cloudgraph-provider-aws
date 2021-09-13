@@ -182,6 +182,7 @@ export type AwsCloudwatch = {
 };
 
 export type AwsCloudwatchDimensions = {
+  id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
 };
@@ -338,7 +339,7 @@ export type AwsElbSourceSecurityGroup = {
 };
 
 export type AwsEnabledMetrics = {
-  metric?: Maybe<Scalars['String']>;
+  metric: Scalars['String'];
   granularity?: Maybe<Scalars['String']>;
 };
 
@@ -427,6 +428,7 @@ export type AwsLaunchConfiguration = {
 };
 
 export type AwsLaunchTemplateOverrides = {
+  id: Scalars['String'];
   instanceType?: Maybe<Scalars['String']>;
   weightedCapacity?: Maybe<Scalars['String']>;
   launchTemplateId?: Maybe<Scalars['String']>;
@@ -564,7 +566,7 @@ export type AwsSubnet = {
 };
 
 export type AwsSuspendedProcess = {
-  processName?: Maybe<Scalars['String']>;
+  processName: Scalars['String'];
   suspensionReason?: Maybe<Scalars['String']>;
 };
 
