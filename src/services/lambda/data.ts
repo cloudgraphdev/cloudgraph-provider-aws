@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/node'
 import isEmpty from 'lodash/isEmpty'
 import groupBy from 'lodash/groupBy'
 import Lambda, {
@@ -50,8 +49,10 @@ const listFunctionsForRegion = async ({
           (err: AWSError, data: ListFunctionsResponse) => {
             const { NextMarker, Functions = [] } = data || {}
             if (err) {
-              logger.error(err)
-              Sentry.captureException(new Error(err.message))
+              logger.warn(
+                'There was an error getting data for service lambda: unable to listFunctions'
+              )
+              logger.debug(err)
             }
             /**
              * No Lambdas for this region
@@ -92,8 +93,10 @@ const getFunctionConcurrency = async (
           const { ReservedConcurrentExecutions: reservedConcurrentExecutions } =
             data || {}
           if (err) {
-            logger.error(err)
-            Sentry.captureException(new Error(err.message))
+            logger.warn(
+              'There was an error getting data for service lambda: unable to getFunctionConcurrency'
+            )
+            logger.debug(err)
           }
           resolve(reservedConcurrentExecutions || -1)
         }
@@ -110,8 +113,10 @@ const getResourceTags = async (lambda: Lambda, arn: string): Promise<TagMap> =>
         { Resource: arn },
         (err: AWSError, data: ListTagsResponse) => {
           if (err) {
-            logger.error(err)
-            Sentry.captureException(new Error(err.message))
+            logger.warn(
+              'There was an error getting data for service lambda: unable to listTags'
+            )
+            logger.debug(err)
             resolve({})
           }
           const { Tags = {} } = data || {}

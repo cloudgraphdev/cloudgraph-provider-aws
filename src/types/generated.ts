@@ -182,6 +182,7 @@ export type AwsCloudwatch = {
 };
 
 export type AwsCloudwatchDimensions = {
+  id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
 };
@@ -338,7 +339,7 @@ export type AwsElbSourceSecurityGroup = {
 };
 
 export type AwsEnabledMetrics = {
-  metric?: Maybe<Scalars['String']>;
+  metric: Scalars['String'];
   granularity?: Maybe<Scalars['String']>;
 };
 
@@ -428,6 +429,7 @@ export type AwsLaunchConfiguration = {
 };
 
 export type AwsLaunchTemplateOverrides = {
+  id: Scalars['String'];
   instanceType?: Maybe<Scalars['String']>;
   weightedCapacity?: Maybe<Scalars['String']>;
   launchTemplateId?: Maybe<Scalars['String']>;
@@ -501,8 +503,8 @@ export type AwsSecurityGroup = {
   tags?: Maybe<Array<Maybe<Tag>>>;
   owner?: Maybe<Scalars['String']>;
   default?: Maybe<Scalars['Boolean']>;
-  inboundRules?: Maybe<Array<Maybe<AwsSgRule>>>;
-  outboundRules?: Maybe<Array<Maybe<AwsSgRule>>>;
+  inboundRules?: Maybe<Array<Maybe<AwsSgInboundRule>>>;
+  outboundRules?: Maybe<Array<Maybe<AwsSgOutboundRule>>>;
   inboundRuleCount?: Maybe<Scalars['Int']>;
   outboundRuleCount?: Maybe<Scalars['Int']>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
@@ -511,14 +513,26 @@ export type AwsSecurityGroup = {
   asg?: Maybe<Array<Maybe<AwsAsg>>>;
 };
 
-export type AwsSgRule = {
-  id?: Maybe<Scalars['ID']>;
+export type AwsSgInboundRule = {
+  id: Scalars['String'];
   description?: Maybe<Scalars['String']>;
-  destination?: Maybe<Scalars['String']>;
   portRange?: Maybe<Scalars['String']>;
   protocol?: Maybe<Scalars['String']>;
   source?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
+  groupName?: Maybe<Scalars['String']>;
+  peeringStatus?: Maybe<Scalars['String']>;
+};
+
+export type AwsSgOutboundRule = {
+  id: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  destination?: Maybe<Scalars['String']>;
+  portRange?: Maybe<Scalars['String']>;
+  protocol?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
+  groupName?: Maybe<Scalars['String']>;
+  peeringStatus?: Maybe<Scalars['String']>;
 };
 
 export type AwsSqs = {
@@ -553,7 +567,7 @@ export type AwsSubnet = {
 };
 
 export type AwsSuspendedProcess = {
-  processName?: Maybe<Scalars['String']>;
+  processName: Scalars['String'];
   suspensionReason?: Maybe<Scalars['String']>;
 };
 

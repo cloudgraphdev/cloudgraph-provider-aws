@@ -1,5 +1,3 @@
-import * as Sentry from '@sentry/node'
-
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
@@ -75,8 +73,10 @@ export default async ({
         args,
         (err: AWSError, data: DescribeInstancesResult) => {
           if (err) {
-            logger.error(err)
-            Sentry.captureException(new Error(err.message))
+            logger.warn(
+              'There was an error getting data for service ec2: unable to describeInstances'
+            )
+            logger.debug(err)
           }
 
           /**
@@ -151,8 +151,10 @@ export default async ({
           {},
           (err: AWSError, data: DescribeKeyPairsResult) => {
             if (err) {
-              logger.error(err)
-              Sentry.captureException(new Error(err.message))
+              logger.warn(
+                'There was an error getting data for service ec2: unable to describeKeyPairs'
+              )
+              logger.debug(err)
             }
 
             /**
@@ -202,8 +204,10 @@ export default async ({
               { InstanceId, Attribute: 'disableApiTermination' },
               (err: AWSError, data: InstanceAttribute) => {
                 if (err) {
-                  logger.error(err)
-                  Sentry.captureException(new Error(err.message))
+                  logger.warn(
+                    'There was an error getting data for service ec2: unable to describeInstanceAttribute'
+                  )
+                  logger.debug(err)
                 }
 
                 /**
@@ -259,8 +263,10 @@ export default async ({
         args,
         (err: AWSError, data: DescribeTagsResult) => {
           if (err) {
-            logger.error(err)
-            Sentry.captureException(new Error(err.message))
+            logger.warn(
+              'There was an error getting data for service ec2: unable to describeTags'
+            )
+            logger.debug(err)
           }
 
           /**
@@ -355,11 +361,10 @@ export default async ({
             data: DescribeIamInstanceProfileAssociationsResult
           ) => {
             if (err) {
-              logger.error(
-                'Therew as an error in Service EIP function describeAddresses'
+              logger.warn(
+                'There was an error getting data for service ec2: unable to describeIamInstanceProfileAssoiations'
               )
               logger.debug(err)
-              Sentry.captureException(new Error(err.message))
             }
 
             const {

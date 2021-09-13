@@ -60,8 +60,10 @@ const listElbData = async (
     elb.describeLoadBalancers(
       (err: AWSError, data: DescribeAccessPointsOutput) => {
         if (err) {
-          logger.error(err)
-          Sentry.captureException(new Error(err.message))
+          logger.warn(
+            'There was an error getting data for service elb: unable to describeLoadBalancers'
+          )
+          logger.debug(err)
         }
         if (!isEmpty(data)) {
           const { LoadBalancerDescriptions: loadBalancerDescriptions = [] } =
@@ -92,8 +94,10 @@ const listElbAttributes = async (
       },
       (err: AWSError, data: DescribeLoadBalancerAttributesOutput) => {
         if (err) {
-          logger.error(err)
-          Sentry.captureException(new Error(err.message))
+          logger.warn(
+            'There was an error getting data for service elb: unable to describeLoadBalancerAttributes'
+          )
+          logger.debug(err)
         }
 
         if (!isEmpty(data)) {

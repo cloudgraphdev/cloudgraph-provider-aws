@@ -25,6 +25,7 @@ type awsCloudwatchDimensions
     mutation: { add: false, delete: false }
     subscription: false
   ) {
+  id: String! @id
   name: String @search(by: [hash, regexp])
   value: String @search(by: [hash, regexp])
 }

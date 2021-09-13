@@ -1,5 +1,3 @@
-import * as Sentry from '@sentry/node'
-
 import get from 'lodash/get'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
@@ -70,11 +68,10 @@ export default async ({
         args,
         (err: AWSError, data: DescribeVpcsResult) => {
           if (err) {
-            logger.error(
-              'There was an error in service EC2 function describeVpcs'
+            logger.warn(
+              'There was an error getting data for service vpc: unable to describeVpcs'
             )
             logger.debug(err)
-            Sentry.captureException(new Error(err.message))
           }
 
           /**
@@ -150,11 +147,10 @@ export default async ({
         const additionalAttrPromise = new Promise<void>(resolveAdditionalAttr =>
           ec2.describeVpcAttribute({ VpcId, Attribute }, (err, data) => {
             if (err) {
-              logger.error(
-                'There was an error in service EC2 function describeVpcAttribute'
+              logger.warn(
+                'There was an error getting data for service vpc: unable to describeVpcAttribute'
               )
               logger.debug(err)
-              Sentry.captureException(new Error(err.message))
             }
 
             /**

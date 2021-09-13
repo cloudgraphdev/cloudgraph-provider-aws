@@ -1,5 +1,3 @@
-import * as Sentry from '@sentry/node'
-
 import groupBy from 'lodash/groupBy'
 
 import SQS, { QueueAttributeMap, TagMap } from 'aws-sdk/clients/sqs'
@@ -32,7 +30,10 @@ const listSqsQueueUrlsForRegion = async (sqs: SQS): Promise<string[]> => {
 
     return allQueueUrls
   } catch (err) {
-    logger.debug(err.message)
+    logger.warn(
+      'There was an error getting data for service sqs: unable to listQueues'
+    )
+    logger.debug(err)
   }
   return []
 }
@@ -48,7 +49,10 @@ const getQueueAttributes = async (
     }).promise()
     return attributes.Attributes
   } catch (err) {
-    logger.debug(err.message)
+    logger.warn(
+      'There was an error getting data for service sqs: unable to getQueueAttributes'
+    )
+    logger.debug(err)
   }
   return null
 }
@@ -61,7 +65,10 @@ const getQueueTags = async (
     const tags = await sqs.listQueueTags({ QueueUrl: queueUrl }).promise()
     return tags.Tags
   } catch (err) {
-    logger.debug(err.message)
+    logger.warn(
+      'There was an error getting data for service sqs: unable to listQueueTags'
+    )
+    logger.debug(err)
   }
   return null
 }

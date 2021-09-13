@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/node'
 import CloudGraph from '@cloudgraph/sdk'
 import APIGW, {
   RestApi,
@@ -42,8 +41,8 @@ const getRestApisForRegion = async apiGw =>
         apiGw.getRestApis(getRestApisOpts, (err: AWSError, data: RestApis) => {
           const { position, items = [] } = data || {}
           if (err) {
-            logger.error(err)
-            Sentry.captureException(new Error(err.message))
+            logger.warn('There was a problem getting data for service apiGateway: unable to getRestApis')
+            logger.debug(err)
           }
 
           restApiList.push(...items)
@@ -66,8 +65,8 @@ const getTags = async ({ apiGw, arn }): Promise<TagMap> =>
     try {
       apiGw.getTags({ resourceArn: arn }, (err: AWSError, data: Tags) => {
         if (err) {
-          logger.error(err)
-          Sentry.captureException(new Error(err.message))
+          logger.warn('There was a problem getting data for service apiGateway: unable to getTags')
+          logger.debug(err)
           return resolve({})
         }
         const { tags = {} } = data || {}

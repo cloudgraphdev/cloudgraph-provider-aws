@@ -1,11 +1,9 @@
-import * as Sentry from '@sentry/node'
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
 import CloudWatch, {
   MetricAlarm,
-  // TagList,
   DescribeAlarmsInput,
   DescribeAlarmsOutput,
   ListTagsForResourceOutput,
@@ -54,11 +52,10 @@ const listMetricAlarmsForRegion = async ({
             const { NextToken: nextToken, MetricAlarms: metricAlarms } =
               data || {}
             if (err) {
-              logger.error(
-                'There was an error in service cloudwatch function describeAlarms'
+              logger.warn(
+                'There was an error getting data for service cloudwatch: unable to describeAlarms'
               )
               logger.debug(err)
-              Sentry.captureException(new Error(err.message))
             }
             /**
              * No metrics for this region
@@ -91,11 +88,10 @@ const getResourceTags = async (cloudwatch: CloudWatch, arn: string) =>
         { ResourceARN: arn },
         (err: AWSError, data: ListTagsForResourceOutput) => {
           if (err) {
-            logger.error(
-              'There was an error in service cloudwatch function listTagsForResource'
+            logger.warn(
+              'There was an error getting data for service cloudwatch: unable to listTagsForResource'
             )
             logger.debug(err)
-            Sentry.captureException(new Error(err.message))
             return resolve({})
           }
           const { Tags = [] } = data || {}

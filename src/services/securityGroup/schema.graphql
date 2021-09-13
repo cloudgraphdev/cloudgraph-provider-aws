@@ -7,8 +7,8 @@ type awsSecurityGroup @key(fields: "id") {
   tags: [Tag]
   owner: String @search(by: [hash, regexp])
   default: Boolean @search
-  inboundRules: [awsSgRule]
-  outboundRules: [awsSgRule]
+  inboundRules: [awsSgInboundRule]
+  outboundRules: [awsSgOutboundRule]
   inboundRuleCount: Int @search
   outboundRuleCount: Int @search
   lambda: [awsLambda] @hasInverse(field: securityGroups)
@@ -17,17 +17,34 @@ type awsSecurityGroup @key(fields: "id") {
   asg: [awsAsg] @hasInverse(field: securityGroups)
 }
 
-type awsSgRule
+type awsSgOutboundRule
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-  id: ID
+  id: String! @id
   description: String
   destination: String
   portRange: String
   protocol: String
+  userId: String
+  groupName: String
+  peeringStatus: String
+}
+
+type awsSgInboundRule
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  description: String
+  portRange: String
+  protocol: String
   source: String
   userId: String
+  groupName: String
+  peeringStatus: String
 }

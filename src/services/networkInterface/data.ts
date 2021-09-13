@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/node'
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
@@ -50,8 +49,10 @@ const listNetworkInterfaces = async ({
     args,
     (err: AWSError, data: DescribeNetworkInterfacesResult) => {
       if (err) {
-        logger.error(err)
-        Sentry.captureException(new Error(err.message))
+        logger.warn(
+          'There was an error getting data for service networkInterface: unable to describeNetworkInterfaces'
+        )
+        logger.debug(err)
       }
 
       /**

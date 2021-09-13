@@ -51,8 +51,10 @@ const listEbsVolumes = async ({
 
   ec2.describeVolumes(args, (err: AWSError, data: DescribeVolumesResult) => {
     if (err) {
-      logger.error(err)
-      Sentry.captureException(new Error(err.message))
+      logger.warn(
+        'There was an error getting data for service ebs: unable to describeVolumes'
+      )
+      logger.debug(err)
     }
 
     /**
