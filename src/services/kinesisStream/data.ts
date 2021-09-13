@@ -36,7 +36,8 @@ const listShards = async (kinesis: Kinesis, dataStreamName: string): Promise<Sha
 
     return fullResources
   } catch (err) {
-    logger.error(err)
+    logger.warn('There was an error getting data for kinesisStream: unable to listShards')
+    logger.debug(err)
   }
   return [];
 }
@@ -56,7 +57,8 @@ const listStreamsData = async (kinesis: Kinesis): Promise<StreamDescription[]> =
     logger.debug(lt.fetchedKinesisStream(fullResources.length))
     return fullResources
   } catch (err) {
-    logger.error(err)
+    logger.warn('There was an error getting data for kinesisStream: unable to listStreamsData')
+    logger.debug(err)
   }
   return null;
 }
