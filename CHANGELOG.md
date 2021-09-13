@@ -1,3 +1,10 @@
+## [0.15.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.15.0...0.15.1) (2021-09-13)
+
+
+### Bug Fixes
+
+* Solved issue with duplicated XID Lambda env variables ([7b1c2a2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/7b1c2a26770d0a8e764ba67ed422b042635e5464))
+
 # [0.15.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.14.1...0.15.0) (2021-09-09)
 
 
