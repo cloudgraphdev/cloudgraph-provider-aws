@@ -1,5 +1,3 @@
-import * as Sentry from '@sentry/node'
-
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
@@ -64,8 +62,10 @@ export default ({
         args,
         (err: AWSError, data: DescribeSubnetsResult) => {
           if (err) {
-            logger.error(err)
-            Sentry.captureException(new Error(err.message))
+            logger.warn(
+              'There was an error getting data for service subnet: unable to describeSubnets'
+            )
+            logger.debug(err)
           }
 
           /**

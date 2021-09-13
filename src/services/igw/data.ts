@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/node'
 import CloudGraph from '@cloudgraph/sdk'
 
 import { Request } from 'aws-sdk'
@@ -61,8 +60,10 @@ export default async ({
         args,
         (err: AWSError, data: DescribeInternetGatewaysResult) => {
           if (err) {
-            logger.error(err)
-            Sentry.captureException(new Error(err.message))
+            logger.warn(
+              'There was an error getting data for service igw: unable to describeInternetGateways'
+            )
+            logger.debug(err)
           }
 
           /**

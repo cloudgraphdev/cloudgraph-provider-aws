@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/node'
 import CloudGraph from '@cloudgraph/sdk'
 import APIGW, {
   RestApis,
@@ -40,8 +39,8 @@ const getRestApisForRegion = async apiGw =>
         apiGw.getRestApis(getRestApisOpts, (err: AWSError, data: RestApis) => {
           const { position, items = [] } = data || {}
           if (err) {
-            logger.error(err)
-            Sentry.captureException(new Error(err.message))
+            logger.warn('There was a problem getting data for service apiGateway: unable to getRestApis')
+            logger.debug(err)
           }
 
           restApiList.push(...items)
@@ -77,8 +76,8 @@ const getResources = async ({ apiGw, restApiId }) =>
           (err: AWSError, data: Resources) => {
             const { position, items = [] } = data || {}
             if (err) {
-              logger.error(err)
-              Sentry.captureException(new Error(err.message))
+              logger.warn('There was a problem getting data for service apiGateway: unable to getResources')
+              logger.debug(err)
             }
             /**
              * No rest APIs for this region

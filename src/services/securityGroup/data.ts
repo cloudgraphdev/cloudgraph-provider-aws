@@ -1,5 +1,3 @@
-import * as Sentry from '@sentry/node'
-
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
@@ -63,8 +61,10 @@ export default async ({
         args,
         (err: AWSError, data: DescribeSecurityGroupsResult) => {
           if (err) {
-            logger.error(err)
-            Sentry.captureException(new Error(err.message))
+            logger.warn(
+              'There was an error getting data for service securityGroups: unable to describeSecurityGroups'
+            )
+            logger.debug(err)
           }
 
           /**

@@ -1,5 +1,3 @@
-import * as Sentry from '@sentry/node'
-
 import { AWSError, Request } from 'aws-sdk'
 import ELBV2, {
   DescribeListenersInput,
@@ -85,11 +83,10 @@ export default async ({
 
       return elbv2.describeLoadBalancers(args, async (err, data) => {
         if (err) {
-          logger.error(
-            'There was an error in service alb function describeLoadBalancers'
+          logger.warn(
+            'There was an error in service alb: unable to describeLoadBalancers for alb'
           )
           logger.debug(err)
-          Sentry.captureException(new Error(err.message))
         }
 
         /**
@@ -176,11 +173,10 @@ export default async ({
     }): Promise<Request<DescribeTagsOutput, AWSError>> =>
       elbv2.describeTags({ ResourceArns }, async (err, data) => {
         if (err) {
-          logger.error(
-            'There was an error in service alb function describeTags'
+          logger.warn(
+            'There was an error in service alb: unable to describeTags for alb'
           )
           logger.debug(err)
-          Sentry.captureException(new Error(err.message))
         }
 
         /**
@@ -257,11 +253,10 @@ export default async ({
         { LoadBalancerArn },
         async (err, data) => {
           if (err) {
-            logger.error(
-              'There was an error in service alb function describeLoadBalancerAttributes'
+            logger.warn(
+              'There was an error in service alb: unable to describeLoadBalancerAttributes'
             )
             logger.debug(err)
-            Sentry.captureException(new Error(err.message))
           }
 
           /**
@@ -346,11 +341,10 @@ export default async ({
 
       return elbv2.describeListeners(args, async (err, data) => {
         if (err) {
-          logger.error(
-            'There was an error in service alb function describeListeners'
+          logger.warn(
+            'There was an error in service alb: unable to describeListeners'
           )
           logger.debug(err)
-          Sentry.captureException(new Error(err.message))
         }
 
         /**
@@ -446,11 +440,10 @@ export default async ({
 
       return elbv2.describeTargetGroups(args, async (err, data) => {
         if (err) {
-          logger.error(
-            'There was an error in service alb function describeTargetGroups'
+          logger.warn(
+            'There was an error in service alb: unable to describeTargetGroups'
           )
           logger.debug(err)
-          Sentry.captureException(new Error(err.message))
         }
 
         /**
@@ -538,11 +531,10 @@ export default async ({
     }): Promise<Request<DescribeTargetHealthOutput, AWSError>> =>
       elbv2.describeTargetHealth({ TargetGroupArn }, async (err, data) => {
         if (err) {
-          logger.error(
-            'There was an error in service alb function describeTargetHealth'
+          logger.warn(
+            'There was an error in service alb: unable to describeTargetHealth'
           )
           logger.debug(err)
-          Sentry.captureException(new Error(err.message))
         }
 
         /**

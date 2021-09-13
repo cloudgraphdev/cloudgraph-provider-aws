@@ -59,7 +59,10 @@ export default async ({
         args,
         (err: AWSError, data: DescribeNatGatewaysResult) => {
           if (err) {
-            logger.error(err)
+            logger.warn(
+              'There was an error getting data for service natGateway: unable to describeNatGateways'
+            )
+            logger.debug(err)
           }
 
           /**

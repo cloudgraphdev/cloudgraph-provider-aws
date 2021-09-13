@@ -1,5 +1,3 @@
-import * as Sentry from '@sentry/node'
-// import CloudGraph, { Opts } from '@cloudgraph/sdk'
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import { AWSError } from 'aws-sdk/lib/error'
@@ -43,11 +41,10 @@ export default async ({
           {},
           (err: AWSError, data: DescribeAddressesResult) => {
             if (err) {
-              logger.error(
-                'Therew as an error in Service EIP function describeAddresses'
+              logger.warn(
+                'There was an error getting data for service eip: unable to describeAddresses'
               )
               logger.debug(err)
-              Sentry.captureException(new Error(err.message))
             }
 
             const { Addresses: addresses = [] } = data || {}

@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/node'
 import CloudGraph from '@cloudgraph/sdk'
 
 import groupBy from 'lodash/groupBy'
@@ -66,8 +65,8 @@ export default async ({
 
       return kms.listKeys(args, (err, data) => {
         if (err) {
-          logger.error(err)
-          Sentry.captureException(new Error(err.message))
+          logger.warn('There was a problem getting data for service kms: unable to listKeys')
+          logger.debug(err)
         }
 
         /**
@@ -139,8 +138,8 @@ export default async ({
       const keyPromise = new Promise<void>(resolveKey =>
         kms.describeKey({ KeyId }, (err, data) => {
           if (err) {
-            logger.error(err)
-            Sentry.captureException(new Error(err.message))
+            logger.warn('There was a problem getting data for service kms: unable to describeKey')
+            logger.debug(err)
           }
 
           /**
@@ -186,8 +185,8 @@ export default async ({
       const rotationStatusPromise = new Promise<void>(resolveRotationStatus =>
         kms.getKeyRotationStatus({ KeyId }, (err, data) => {
           if (err) {
-            logger.error(err)
-            Sentry.captureException(new Error(err.message))
+            logger.warn('There was a problem getting data for service kms: unable to getKeyRotationStatus')
+            logger.debug(err)
           }
 
           /**
@@ -227,8 +226,8 @@ export default async ({
       const policyPromise = new Promise<void>(resolvePolicy =>
         kms.getKeyPolicy({ KeyId, PolicyName: 'default' }, (err, data) => {
           if (err) {
-            logger.error(err)
-            Sentry.captureException(new Error(err.message))
+            logger.warn('There was a problem getting data for service kms: unable to getKeyPolicy')
+            logger.debug(err)
           }
 
           /**
@@ -268,8 +267,8 @@ export default async ({
       const tagsPromise = new Promise<void>(resolveTags =>
         kms.listResourceTags({ KeyId }, (err, data) => {
           if (err) {
-            logger.error(err)
-            Sentry.captureException(new Error(err.message))
+            logger.warn('There was a problem getting data for service kms: unable to listResourceTags')
+            logger.debug(err)
           }
 
           /**
@@ -291,7 +290,7 @@ export default async ({
            * Note that these tags have a strange shape of TagKey && TagValue
            */
           if (truncated) {
-            logger.error(lt.hasMoreKmsTags)
+            logger.debug(lt.hasMoreKmsTags)
           }
 
           if (!isEmpty(Tags)) {
