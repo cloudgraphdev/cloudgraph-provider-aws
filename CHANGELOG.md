@@ -1,3 +1,10 @@
+## [0.16.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.16.1...0.16.2) (2021-09-14)
+
+
+### Bug Fixes
+
+* **logging:** improve ux for aws configuration by logging out what resources/regions are configured ([2bdd84a](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/2bdd84ad73fbf06cce2c6b8335f6b499b5ca17c2))
+
 ## [0.16.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.16.0...0.16.1) (2021-09-14)
 
 
