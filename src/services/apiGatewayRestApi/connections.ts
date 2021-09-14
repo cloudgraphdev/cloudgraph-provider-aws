@@ -1,12 +1,13 @@
 import { ServiceConnection } from '@cloudgraph/sdk'
 import { isEmpty } from 'lodash'
+import { RestApi } from 'aws-sdk/clients/apigateway'
 
 import { AwsApiGatewayResource } from '../apiGatewayResource/data'
-import { RestApi } from 'aws-sdk/clients/apigateway'
 import { AwsApiGatewayStage } from '../apiGatewayStage/data'
 import {
-  apiGatewayArn,
+  apiGatewayRestApiArn,
   apiGatewayStageArn,
+  apiGatewayArn
 } from '../../utils/generateArns'
 
 import services from '../../enums/services'
@@ -61,9 +62,12 @@ export default ({
     )
     if (!isEmpty(stagesInRegion)) {
       for (const stage of stagesInRegion) {
-        const { stageName: name, region } = stage
+        const { stageName: name, region: stageRegion, restApiId } = stage
         const arn = apiGatewayStageArn({
-          restApiArn: apiGatewayArn({ region: region }),
+          restApiArn: apiGatewayRestApiArn({
+            restApiArn: apiGatewayArn({ region: stageRegion }),
+            id: restApiId,
+          }),
           name,
         })
         connections.push({
