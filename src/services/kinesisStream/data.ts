@@ -4,11 +4,12 @@ import CloudGraph from '@cloudgraph/sdk'
 import { groupBy } from 'lodash'
 import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('Kinesis')
+const serviceName = 'Kinesis'
+const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsKinesisStream extends StreamDescription {
   region: string
@@ -44,10 +45,7 @@ const listShards = async (
 
     return fullResources
   } catch (err) {
-    logger.warn(
-      'There was an error getting data for kinesisStream: unable to listShards'
-    )
-    logger.debug(err)
+    generateAwsErrorLog(serviceName, 'kinesis:listShards', err)
   }
   return []
 }
@@ -71,10 +69,7 @@ const listStreamsData = async (
     logger.debug(lt.fetchedKinesisStream(fullResources.length))
     return fullResources
   } catch (err) {
-    logger.warn(
-      'There was an error getting data for kinesisStream: unable to listStreamsData'
-    )
-    logger.debug(err)
+    generateAwsErrorLog(serviceName, 'kinesis:describeStream', err)
   }
   return null
 }

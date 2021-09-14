@@ -1,20 +1,20 @@
 import groupBy from 'lodash/groupBy'
 
 import SQS, { QueueAttributeMap, TagMap } from 'aws-sdk/clients/sqs'
-import CloudGraph, { Opts } from '@cloudgraph/sdk'
+import { Opts } from '@cloudgraph/sdk'
 import { isEmpty } from 'lodash'
 import { Credentials } from '../../types'
-import { generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 export type AwsSqs = {
-    region: string
-    queueUrl: string
-    sqsAttributes: QueueAttributeMap
-    Tags: TagMap
-  }
+  region: string
+  queueUrl: string
+  sqsAttributes: QueueAttributeMap
+  Tags: TagMap
+}
 
-const { logger } = CloudGraph
 const serviceName = 'SQS'
+const endpoint = initTestEndpoint(serviceName)
 
 const listSqsQueueUrlsForRegion = async (sqs: SQS): Promise<string[]> => {
   const allQueueUrls = []
@@ -25,7 +25,9 @@ const listSqsQueueUrlsForRegion = async (sqs: SQS): Promise<string[]> => {
     let nextToken = listQueuesOutput.NextToken
 
     while (nextToken) {
-      listQueuesOutput = await sqs.listQueues({NextToken: nextToken}).promise()
+      listQueuesOutput = await sqs
+        .listQueues({ NextToken: nextToken })
+        .promise()
       allQueueUrls.push(...listQueuesOutput.QueueUrls)
       nextToken = listQueuesOutput.NextToken
     }
@@ -42,10 +44,12 @@ const getQueueAttributes = async (
   queueUrl: string
 ): Promise<QueueAttributeMap> => {
   try {
-    const attributes = await sqs.getQueueAttributes({
-      QueueUrl: queueUrl,
-      AttributeNames: ['All'],
-    }).promise()
+    const attributes = await sqs
+      .getQueueAttributes({
+        QueueUrl: queueUrl,
+        AttributeNames: ['All'],
+      })
+      .promise()
     return attributes.Attributes
   } catch (err) {
     generateAwsErrorLog(serviceName, 'sqs:getQueueAttributes', err)
@@ -53,10 +57,7 @@ const getQueueAttributes = async (
   return null
 }
 
-const getQueueTags = async (
-  sqs: SQS,
-  queueUrl: string
-): Promise<TagMap> => {
+const getQueueTags = async (sqs: SQS, queueUrl: string): Promise<TagMap> => {
   try {
     const tags = await sqs.listQueueTags({ QueueUrl: queueUrl }).promise()
     return tags.Tags
@@ -74,18 +75,20 @@ export default async ({
   regions: string
   credentials: Credentials
   opts: Opts
-}): Promise<{ [property: string]: AwsSqs[] }>=> {
+}): Promise<{ [property: string]: AwsSqs[] }> => {
   const sqsList = []
-  
+
   // get all SQS queueUrls for all regions
   for (const region of regions.split(',')) {
-    const sqs = new SQS({ region, credentials })
+    const sqs = new SQS({ region, credentials, endpoint })
     const queueUrls = await listSqsQueueUrlsForRegion(sqs)
-  
-    for (const queueUrl of queueUrls) {
 
+    for (const queueUrl of queueUrls) {
       // get all attributes for each queue using the url
-      const sqsAttributes: QueueAttributeMap = await getQueueAttributes(sqs, queueUrl)
+      const sqsAttributes: QueueAttributeMap = await getQueueAttributes(
+        sqs,
+        queueUrl
+      )
       const sqsData: any = {
         queueUrl,
         region,
