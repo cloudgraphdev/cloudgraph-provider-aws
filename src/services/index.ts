@@ -35,6 +35,9 @@ import resources from '../enums/resources'
 import services from '../enums/services'
 import { Credentials } from '../types'
 import { obfuscateSensitiveString } from '../utils/format'
+
+const DEFAULT_REGION = 'us-east-1'
+const DEFAULT_RESOURCES = Object.values(services).join(',')
 /**
  * serviceMap is an object that contains all currently supported services for AWS
  * serviceMap is used by the serviceFactory to produce instances of service classes
@@ -86,9 +89,14 @@ export default class Provider extends CloudGraph.Client {
     resources: { [key: string]: string }
   }
 
+  logSelectedRegionsAndResources(regionsToLog: string, resourcesToLog: string): void {
+    this.logger.info(`Regions configured: ${chalk.green(regionsToLog.replace(/,/g, ', '))}`)
+    this.logger.info(`Resources configured: ${chalk.green(resourcesToLog.replace(/,/g, ', '))}`)
+  }
+
   async configure(flags: any): Promise<{ [key: string]: any }> {
     const result: { [key: string]: any } = {}
-    const answers = await this.interface.prompt([
+    const { regions: regionsAnswer } = await this.interface.prompt([
       {
         type: 'checkbox',
         message: 'Select regions to scan',
@@ -97,13 +105,19 @@ export default class Provider extends CloudGraph.Client {
         choices: regions.map((region: string) => ({
           name: region,
         })),
-        default: ['us-east-1'],
       },
     ])
-    this.logger.debug(answers)
-    result.regions = answers.regions.join(',')
+    this.logger.debug(`Regions selected: ${regionsAnswer}`)
+    if (!regionsAnswer.length) {
+      this.logger.info(`No Regions selected, using default region: ${chalk.green(DEFAULT_REGION)}`)
+      result.regions = DEFAULT_REGION
+    } else {
+      result.regions = regionsAnswer.join(',')
+    }
+    
+    // Prompt for resources if flag set
     if (flags.resources) {
-      const answers = await this.interface.prompt([
+      const { resources: resourcesAnswer } = await this.interface.prompt([
         {
           type: 'checkbox',
           message: 'Select services to scan',
@@ -116,15 +130,18 @@ export default class Provider extends CloudGraph.Client {
           ),
         },
       ])
-      this.logger.debug(answers)
-      if (answers.resources.length > 0) {
-        result.resources = answers.resources.join(',')
+      this.logger.debug(resourcesAnswer)
+      if (resourcesAnswer.length > 0) {
+        result.resources = resourcesAnswer.join(',')
       } else {
-        result.resources = Object.values(services).join(',')
+        result.resources = DEFAULT_RESOURCES
       }
     } else {
-      result.resources = Object.values(services).join(',')
+      result.resources = DEFAULT_RESOURCES
     }
+    const confettiBall = String.fromCodePoint(0x1F38A) // confetti ball emoji
+    this.logger.success(`${confettiBall} ${chalk.green('AWS')} configuration successfully completed ${confettiBall}`)
+    this.logSelectedRegionsAndResources(result.regions, result.resources)
     return result
   }
 
@@ -311,6 +328,8 @@ export default class Provider extends CloudGraph.Client {
     const resourceNames: string[] = [
       ...new Set<string>(configuredResources.split(',')),
     ]
+
+    this.logSelectedRegionsAndResources(configuredRegions, configuredResources)
 
     // Get Raw data for services
     for (const resource of resourceNames) {
