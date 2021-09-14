@@ -1,3 +1,10 @@
+## [0.16.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.16.0...0.16.1) (2021-09-14)
+
+
+### Bug Fixes
+
+* **service:** Fix API Gateway Stage <=> API Gateway Rest api connection ([6bc7e9e](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/6bc7e9e57a7c67f21cf5966a0696144042bd6714))
+
 # [0.16.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.15.1...0.16.0) (2021-09-13)
 
 
