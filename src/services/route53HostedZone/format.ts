@@ -1,6 +1,6 @@
-import last from 'lodash/last'
-
 import { AwsRoute53HostedZone } from '../../types/generated'
+import { route53HostedZoneArn } from '../../utils/generateArns'
+import { getHostedZoneId } from '../../utils/ids'
 import { RawAwsRoute53HostedZone } from './data'
 
 /**
@@ -17,7 +17,6 @@ export default ({
   const {
     Id,
     Name: name,
-    VPCs: vpcs = [],
     Config: { Comment: comment = '' } = {},
     DelegationSet: {
       NameServers: nameServers = [],
@@ -25,23 +24,14 @@ export default ({
     } = {},
   } = rawData
 
-  // i.e. "Id": "/hostedzone/Z0340076V9U7PUPIWZTE"
-  const id = last(Id.split('/'))
-
-  // Associated VPCs
-  const associatedVPCs = vpcs.map(({ VPCId: vpcId, VPCRegion: vpcRegion }) => ({
-    vpcId,
-    vpcRegion,
-  }))
+  const id = getHostedZoneId(Id)
 
   const hostedZone = {
     id,
-    arn: `arn:aws:route53:::hostedzone/${id}`,
-    zoneId: id,
+    arn: route53HostedZoneArn({ id }),
     name,
     comment,
     delegationSetId,
-    vpcs: associatedVPCs,
     nameServers,
   }
   return hostedZone

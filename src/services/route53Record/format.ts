@@ -1,8 +1,7 @@
-import { kebabCase, last } from 'lodash'
-
 import { AwsRoute53Record } from '../../types/generated'
-import resources from '../../enums/resources'
 import { RawAwsRoute53Record } from './data'
+import { getHostedZoneId, getRecordId } from '../../utils/ids'
+import { route53RecordArn } from '../../utils/generateArns'
 
 /**
  * Route53 Record
@@ -24,19 +23,15 @@ export default ({
     ResourceRecords: records = [],
   } = rawData
 
-  // i.e. "Id": "/hostedzone/Z0340076V9U7PUPIWZTE"
-  const hostedZoneId = last(Id.split('/'))
-
-  const id = `${hostedZoneId}_${name}-${type}-${kebabCase(
-    resources.route53ZRecord
-  )}`
+  const hostedZoneId = getHostedZoneId(Id)
+  const id = getRecordId({ hostedZoneId, name, type })
 
   // Resource records
   const resourceRecords = records.map(({ Value }) => Value)
 
   const record = {
     id,
-    arn: `arn:aws:route53:::hostedzone/${hostedZoneId}/recordset/${id}`,
+    arn: route53RecordArn({ hostedZoneId, id }),
     zoneId: hostedZoneId,
     type,
     ttl,

@@ -1,5 +1,3 @@
-import * as Sentry from '@sentry/node'
-
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
@@ -16,11 +14,12 @@ import Route53, {
 
 import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint } from '../../utils'
+import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('Route53 Records')
+const serviceName = 'Route53 Hosted Zones'
+const endpoint = initTestEndpoint(serviceName)
 
 const listHostedZones = async (
   route53: Route53,
@@ -36,8 +35,7 @@ const listHostedZones = async (
         listZonesOpts,
         async (err: AWSError, data: ListHostedZonesResponse) => {
           if (err) {
-            logger.error(err)
-            Sentry.captureException(new Error(err.message))
+            generateAwsErrorLog(serviceName, 'route53:listHostedZones', err)
           }
 
           /**
@@ -119,8 +117,7 @@ export default async ({
           { Id },
           (err: AWSError, data: GetHostedZoneResponse) => {
             if (err) {
-              logger.error(err)
-              Sentry.captureException(new Error(err.message))
+              generateAwsErrorLog(serviceName, 'route53:getHostedZone', err)
             }
 
             /**

@@ -1,22 +1,20 @@
 import isEmpty from 'lodash/isEmpty'
-import kebabCase from 'lodash/kebabCase'
-import last from 'lodash/last'
 import flatMap from 'lodash/flatMap'
 
 import { ServiceConnection } from '@cloudgraph/sdk'
 
 import services from '../../enums/services'
 import { RawAwsRoute53Record } from './data'
-import resources from '../../enums/resources'
 import { RawAwsAlb } from '../alb/data'
 import { RawAwsElb } from '../elb/data'
+import { getHostedZoneId, getRecordId } from '../../utils/ids'
 
 /**
  * Route53 Record
  */
 
 export default ({
-  service: hostedZone,
+  service: record,
   data,
 }: {
   account: string
@@ -30,12 +28,9 @@ export default ({
     Name: name,
     Type: type,
     AliasTarget: alias,
-  } = hostedZone
-  const hostedZoneId = last(Id.split('/'))
-
-  const id = `${hostedZoneId}_${name}-${type}-${kebabCase(
-    resources.route53ZRecord
-  )}`
+  } = record
+  const hostedZoneId = getHostedZoneId(Id)
+  const id = getRecordId({ hostedZoneId, name, type })
 
   /**
    * Find ELBs
@@ -95,8 +90,8 @@ export default ({
     }
   }
 
-  const hostedZoneResult = {
+  const recordResult = {
     [id]: connections,
   }
-  return hostedZoneResult
+  return recordResult
 }

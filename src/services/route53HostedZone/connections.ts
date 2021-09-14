@@ -1,14 +1,12 @@
 import isEmpty from 'lodash/isEmpty'
-import kebabCase from 'lodash/kebabCase'
-import last from 'lodash/last'
 import flatMap from 'lodash/flatMap'
 
 import { ServiceConnection } from '@cloudgraph/sdk'
 
 import services from '../../enums/services'
+import { getHostedZoneId, getRecordId } from '../../utils/ids'
 import { RawAwsRoute53HostedZone } from './data'
 import { RawAwsRoute53Record } from '../route53Record/data'
-import resources from '../../enums/resources'
 import { RawAwsVpc } from '../vpc/data'
 
 /**
@@ -27,7 +25,7 @@ export default ({
   const connections: ServiceConnection[] = []
   const { Id, VPCs = [] } = hostedZone
 
-  const id = last(Id.split('/'))
+  const id = getHostedZoneId(Id)
 
   /**
    * Find Records
@@ -44,10 +42,12 @@ export default ({
 
     if (!isEmpty(recordsFound)) {
       for (const record of recordsFound) {
-        const hostedZoneId = last(record.HostedZoneId.split('/'))
-        const recordId = `${hostedZoneId}_${record.Name}-${
-          record.Type
-        }-${kebabCase(resources.route53ZRecord)}`
+        const hostedZoneId = getHostedZoneId(record.HostedZoneId)
+        const recordId = getRecordId({
+          hostedZoneId,
+          name: record.Name,
+          type: record.Type,
+        })
         connections.push({
           id: recordId,
           resourceType: services.route53Record,

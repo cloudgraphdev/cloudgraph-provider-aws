@@ -13,11 +13,10 @@ type awsRoute53Record @key(fields: "arn") {
 
 type awsRoute53Alias
   @generate(
-    query: { get: false, query: true, aggregate: false }
+    query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-  id: ID
   zoneId: String!
   name: String
   evaluateTargetHealth: Boolean

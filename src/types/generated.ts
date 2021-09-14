@@ -510,7 +510,6 @@ export type AwsNetworkInterfaceAttachment = {
 };
 
 export type AwsRoute53Alias = {
-  id?: Maybe<Scalars['ID']>;
   zoneId: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   evaluateTargetHealth?: Maybe<Scalars['Boolean']>;
@@ -519,11 +518,9 @@ export type AwsRoute53Alias = {
 export type AwsRoute53HostedZone = {
   id: Scalars['String'];
   arn: Scalars['String'];
-  zoneId?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   comment?: Maybe<Scalars['String']>;
   delegationSetId?: Maybe<Scalars['String']>;
-  vpcs?: Maybe<Array<Maybe<AwsRoute53VpcData>>>;
   nameServers?: Maybe<Array<Maybe<Scalars['String']>>>;
   route53Record?: Maybe<Array<Maybe<AwsRoute53Record>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
@@ -540,11 +537,6 @@ export type AwsRoute53Record = {
   route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
-};
-
-export type AwsRoute53VpcData = {
-  vpcId: Scalars['String'];
-  vpcRegion?: Maybe<Scalars['String']>;
 };
 
 export type AwsSecurityGroup = {

@@ -1,9 +1,9 @@
-CloudGraph AWS Provider
-===========
+# CloudGraph AWS Provider
 
 Use the CloudGraph AWS Provider to scan and normalize cloud infrastructure using the [AWS SDK ](https://github.com/aws/aws-sdk-js)
 
 <!-- toc -->
+
 - [Install](#install)
 - [Authentication](#authentication)
 - [Configuration](#configuration)
@@ -14,6 +14,7 @@ Use the CloudGraph AWS Provider to scan and normalize cloud infrastructure using
 # Install
 
 Install the aws provider in CloudGraph
+
 ```
 cg init aws
 ```
@@ -21,12 +22,15 @@ cg init aws
 # Authentication
 
 Authenticate the CloudGraph AWS Provider any of the following ways:
+
 - Credentials from env variables: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`
 - Credentials found in the `credentials` under `~/.aws` (any profile, defaults to `default`)
 - RoleArn found in CloudGraph's `cloud-graphrc.json` file under `aws.role` (TODO: Update this once multiple accounts flow is done)
+
 # Configuration
 
 CloudGraph creates a configuration file at:
+
 - UNIX: `~/.config/cloudgraph/.cloud-graphrc.json`
 - Windows: `%LOCALAPPDATA%\cloudgraph/.cloud-graphrc.json`
 
@@ -47,7 +51,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 # Supported Services
 
 | Service            | Relations                                                |
-|--------------------|----------------------------------------------------------|
+| ------------------ | -------------------------------------------------------- |
 | alb                | ec2, vpc                                                 |
 | apiGatewayRestApi  | apiGatewaystage, apiGatewayResource                      |
 | apiGatewayStage    | apiGatewayRestApi                                        |
@@ -67,6 +71,8 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | securityGroup      | asg, lambda, ec2, elb                                    |
 | sqs                |                                                          |
 | vpc                | alb, eip, elb, igw, lambda, natGateway, networkInterface |
+| route53HostedZone  | route53Record, vpc                                       |
+| route53Record      | route53HostedZone, elb, alb                              |
 
 # Query Examples
 

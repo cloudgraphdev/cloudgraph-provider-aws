@@ -54,11 +54,9 @@ describe('Route53 Record Service Test: ', () => {
       // const [route53Record] = getDataResult.global
       // const { HostedZoneId: Id, Name: name, Type: type } = route53Record
 
-      // const hostedZoneId = last(Id.split('/'))
+      // const hostedZoneId = getHostedZoneId(Id)
 
-      // recordId = `${hostedZoneId}_${name}-${type}-${kebabCase(
-      //   resources.route53ZRecord
-      // )}`
+      // recordId = getRecordId({ hostedZoneId, name, type })
 
       // route53Connections = recordService.getConnections({
       //   service: getDataResult,

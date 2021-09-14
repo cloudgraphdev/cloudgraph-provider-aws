@@ -1,5 +1,4 @@
 import CloudGraph from '@cloudgraph/sdk'
-import last from 'lodash/last'
 
 import Route53HostedZoneService from '../src/services/route53HostedZone'
 import VPCService from '../src/services/vpc'
@@ -7,6 +6,7 @@ import Route53RecordService from '../src/services/route53Record'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
 import services from '../src/enums/services'
+import { getHostedZoneId } from '../src/utils/ids'
 
 describe('Route53 Hosted Zone Service Test: ', () => {
   let getDataResult
@@ -51,7 +51,7 @@ describe('Route53 Hosted Zone Service Test: ', () => {
       )
       const { Id } = route53HostedZone
 
-      hostedZoneId = last(Id.split('/'))
+      hostedZoneId = getHostedZoneId(Id)
 
       route53Connections = hostedZoneService.getConnections({
         service: route53HostedZone,
@@ -112,11 +112,9 @@ describe('Route53 Hosted Zone Service Test: ', () => {
           expect.objectContaining({
             id: expect.any(String),
             arn: expect.any(String),
-            zoneId: expect.any(String),
             name: expect.any(String),
             comment: expect.any(String),
             delegationSetId: expect.any(String),
-            vpcs: expect.arrayContaining<String>([]),
             nameServers: expect.arrayContaining<String>([]),
           }),
         ])

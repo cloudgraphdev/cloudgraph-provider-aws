@@ -1,22 +1,10 @@
 type awsRoute53HostedZone @key(fields: "arn") {
   id: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
-  zoneId: String
   name: String
   comment: String
   delegationSetId: String
-  vpcs: [awsRoute53VpcData]
   nameServers: [String]
   route53Record: [awsRoute53Record] @hasInverse(field: route53HostedZone)
   vpc: [awsVpc] @hasInverse(field: route53HostedZone)
-}
-
-type awsRoute53VpcData
-  @generate(
-    query: { get: false, query: true, aggregate: false }
-    mutation: { add: false, delete: false }
-    subscription: false
-  ) {
-  vpcId: String! @id
-  vpcRegion: String
 }
