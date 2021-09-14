@@ -51,7 +51,7 @@ const listHostedZones = async (
            */
 
           if (isEmpty(data)) {
-            resolveList()
+            return resolveList()
           }
 
           const {
@@ -196,7 +196,7 @@ export default async ({
     const hostedZonesData: RawAwsRoute53HostedZone[] = []
     const recordData: RawAwsRoute53Record[] = []
 
-    const route53 = new Route53({ credentials, endpoint })
+    const route53 = new Route53({ region: 'us-east-1', credentials, endpoint })
 
     /**
      * Step 1) for all regions, list all the hosted zones

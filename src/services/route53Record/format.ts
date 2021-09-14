@@ -1,4 +1,4 @@
-import { isEmpty, kebabCase, last } from 'lodash'
+import { kebabCase, last } from 'lodash'
 
 import { AwsRoute53Record } from '../../types/generated'
 import resources from '../../enums/resources'
@@ -43,7 +43,7 @@ export default ({
     alias: {
       name: alias?.DNSName || '',
       zoneId: alias?.HostedZoneId || '',
-      evaluateTargetHealth: alias?.EvaluateTargetHealth,
+      evaluateTargetHealth: !!alias?.EvaluateTargetHealth,
     },
     records: resourceRecords,
   }

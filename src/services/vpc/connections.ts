@@ -59,7 +59,7 @@ export default ({
     )
     for (const instance of dataAtRegion) {
       connections.push({
-        id: instance.LoadBalancerArn,
+        id: instance.LoadBalancerName,
         resourceType: services.alb,
         relation: 'child',
         field: 'alb',
@@ -198,8 +198,7 @@ export default ({
   if (nats?.data?.[region]) {
     const dataAtRegion: NatGateway[] = nats.data[region].filter(
       // TODO: Implement when Subnet service is fully ready
-      ({ VpcId/* , SubnetId */}: NatGateway) =>
-        VpcId === id // || subnetIds.includes(SubnetId)
+      ({ VpcId /* , SubnetId */ }: NatGateway) => VpcId === id // || subnetIds.includes(SubnetId)
     )
     for (const nat of dataAtRegion) {
       connections.push({
@@ -213,22 +212,23 @@ export default ({
   /**
    * Find any Network Interface related data
    */
-   const netInterfaces = data.find(({ name }) => name === services.networkInterface)
-   if (netInterfaces?.data?.[region]) {
-     const dataAtRegion: NetworkInterface[] = netInterfaces.data[region].filter(
-       // TODO: Implement when Subnet service is fully ready
-       ({ VpcId/* , SubnetId */}: NetworkInterface) =>
-         VpcId === id // || subnetIds.includes(SubnetId)
-     )
-     for (const net of dataAtRegion) {
-       connections.push({
-         id: net.NetworkInterfaceId,
-         resourceType: services.networkInterface,
-         relation: 'child',
-         field: 'networkInterface',
-       })
-     }
-   }
+  const netInterfaces = data.find(
+    ({ name }) => name === services.networkInterface
+  )
+  if (netInterfaces?.data?.[region]) {
+    const dataAtRegion: NetworkInterface[] = netInterfaces.data[region].filter(
+      // TODO: Implement when Subnet service is fully ready
+      ({ VpcId /* , SubnetId */ }: NetworkInterface) => VpcId === id // || subnetIds.includes(SubnetId)
+    )
+    for (const net of dataAtRegion) {
+      connections.push({
+        id: net.NetworkInterfaceId,
+        resourceType: services.networkInterface,
+        relation: 'child',
+        field: 'networkInterface',
+      })
+    }
+  }
   /**
    * Find any RDS related data
    */

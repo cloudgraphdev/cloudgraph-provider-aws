@@ -20,7 +20,7 @@ import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('Route53 Hosted Zones')
+const endpoint = initTestEndpoint('Route53 Records')
 
 const listHostedZones = async (
   route53: Route53,
@@ -45,7 +45,7 @@ const listHostedZones = async (
            */
 
           if (isEmpty(data)) {
-            resolveList()
+            return resolveList()
           }
 
           const {
@@ -103,7 +103,7 @@ export default async ({
     const zoneIds: { Id: string }[] = []
     const hostedZonesData: RawAwsRoute53HostedZone[] = []
 
-    const route53 = new Route53({ credentials, endpoint })
+    const route53 = new Route53({ region: 'us-east-1', credentials, endpoint })
 
     /**
      * Step 1) for all regions, list all the hosted zones

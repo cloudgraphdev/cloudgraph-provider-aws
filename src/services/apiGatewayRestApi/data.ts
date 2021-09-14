@@ -9,16 +9,13 @@ import APIGW, {
 import { AWSError } from 'aws-sdk/lib/error'
 import isEmpty from 'lodash/isEmpty'
 import groupBy from 'lodash/groupBy'
-import {
-  apiGatewayArn,
-  apiGatewayRestApiArn,
-} from '../../utils/generateArns'
+import { apiGatewayArn, apiGatewayRestApiArn } from '../../utils/generateArns'
 import { Credentials, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 const lt = { ...awsLoggerText }
-const {logger} = CloudGraph
+const { logger } = CloudGraph
 const MAX_REST_API = 500
 const serviceName = 'API Gateway Rest API'
 const endpoint = initTestEndpoint(serviceName)
@@ -27,7 +24,7 @@ export interface AwsApiGatewayRestApi extends Omit<RestApi, 'tags'> {
   tags: TagMap
   region: string
 }
- 
+
 const getRestApisForRegion = async apiGw =>
   new Promise<ListOfRestApi>(resolve => {
     const restApiList: ListOfRestApi = []
