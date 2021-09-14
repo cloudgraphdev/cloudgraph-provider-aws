@@ -1,13 +1,14 @@
-
 import { Kinesis } from 'aws-sdk'
 import { Shard, StreamDescription } from 'aws-sdk/clients/kinesis'
 import CloudGraph from '@cloudgraph/sdk'
 import { groupBy } from 'lodash'
 import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
+const endpoint = initTestEndpoint('Kinesis')
 
 export interface RawAwsKinesisStream extends StreamDescription {
   region: string
@@ -17,37 +18,50 @@ export interface RawAwsKinesisStream extends StreamDescription {
  * Kinesis Stream
  */
 
-const listShards = async (kinesis: Kinesis, dataStreamName: string): Promise<Shard[]> => {
+const listShards = async (
+  kinesis: Kinesis,
+  dataStreamName: string
+): Promise<Shard[]> => {
   try {
     const fullResources = []
 
-    let shardsData = await kinesis.listShards({StreamName: dataStreamName}).promise()
+    let shardsData = await kinesis
+      .listShards({ StreamName: dataStreamName })
+      .promise()
     fullResources.push(...shardsData.Shards)
     let nextToken = shardsData.NextToken
 
     while (nextToken) {
-      shardsData = await kinesis.listShards({
-        StreamName: dataStreamName,
-        NextToken: nextToken
-      }).promise()
+      shardsData = await kinesis
+        .listShards({
+          StreamName: dataStreamName,
+          NextToken: nextToken,
+        })
+        .promise()
       fullResources.push(...shardsData.Shards)
       nextToken = shardsData.NextToken
     }
 
     return fullResources
   } catch (err) {
-    logger.warn('There was an error getting data for kinesisStream: unable to listShards')
+    logger.warn(
+      'There was an error getting data for kinesisStream: unable to listShards'
+    )
     logger.debug(err)
   }
-  return [];
+  return []
 }
 
-const listStreamsData = async (kinesis: Kinesis): Promise<StreamDescription[]> => {
+const listStreamsData = async (
+  kinesis: Kinesis
+): Promise<StreamDescription[]> => {
   try {
     const fullResources = []
     const dataStreamNames = await kinesis.listStreams().promise()
     for (const dataStreamName of dataStreamNames.StreamNames) {
-      const dataStreams = await kinesis.describeStream({StreamName: dataStreamName}).promise()
+      const dataStreams = await kinesis
+        .describeStream({ StreamName: dataStreamName })
+        .promise()
       const shards = await listShards(kinesis, dataStreamName)
       dataStreams.StreamDescription.Shards = shards
 
@@ -57,10 +71,12 @@ const listStreamsData = async (kinesis: Kinesis): Promise<StreamDescription[]> =
     logger.debug(lt.fetchedKinesisStream(fullResources.length))
     return fullResources
   } catch (err) {
-    logger.warn('There was an error getting data for kinesisStream: unable to listStreamsData')
+    logger.warn(
+      'There was an error getting data for kinesisStream: unable to listStreamsData'
+    )
     logger.debug(err)
   }
-  return null;
+  return null
 }
 
 export default async ({
@@ -75,14 +91,14 @@ export default async ({
   const streamDescriptionsData = []
 
   for (const region of regions.split(',')) {
-    const kinesis = new Kinesis({ region, credentials })
-    
+    const kinesis = new Kinesis({ region, credentials, endpoint })
+
     const streamDescriptions = await listStreamsData(kinesis)
 
     streamDescriptionsData.push(
       ...streamDescriptions.map((streamDescription: StreamDescription) => ({
         ...streamDescription,
-        region
+        region,
       }))
     )
   }
