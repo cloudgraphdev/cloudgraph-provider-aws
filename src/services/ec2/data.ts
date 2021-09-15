@@ -18,11 +18,12 @@ import CloudGraph from '@cloudgraph/sdk'
 
 import { Credentials, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('EC2')
+const serviceName = 'EC2'
+const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsEC2 extends Omit<Instance, 'Tags'> {
   region: string
@@ -73,10 +74,7 @@ export default async ({
         args,
         (err: AWSError, data: DescribeInstancesResult) => {
           if (err) {
-            logger.warn(
-              'There was an error getting data for service ec2: unable to describeInstances'
-            )
-            logger.debug(err)
+            generateAwsErrorLog(serviceName, 'ec2:describeInstances', err)
           }
 
           /**
@@ -151,10 +149,7 @@ export default async ({
           {},
           (err: AWSError, data: DescribeKeyPairsResult) => {
             if (err) {
-              logger.warn(
-                'There was an error getting data for service ec2: unable to describeKeyPairs'
-              )
-              logger.debug(err)
+              generateAwsErrorLog(serviceName, 'ec2:describeKeyPairs', err)
             }
 
             /**
@@ -204,10 +199,7 @@ export default async ({
               { InstanceId, Attribute: 'disableApiTermination' },
               (err: AWSError, data: InstanceAttribute) => {
                 if (err) {
-                  logger.warn(
-                    'There was an error getting data for service ec2: unable to describeInstanceAttribute'
-                  )
-                  logger.debug(err)
+                  generateAwsErrorLog(serviceName, 'ec2:desrcibeInstanceAttributes', err)
                 }
 
                 /**
@@ -263,10 +255,7 @@ export default async ({
         args,
         (err: AWSError, data: DescribeTagsResult) => {
           if (err) {
-            logger.warn(
-              'There was an error getting data for service ec2: unable to describeTags'
-            )
-            logger.debug(err)
+            generateAwsErrorLog(serviceName, 'ec2:describeTags', err)
           }
 
           /**
@@ -361,21 +350,18 @@ export default async ({
             data: DescribeIamInstanceProfileAssociationsResult
           ) => {
             if (err) {
-              logger.warn(
-                'There was an error getting data for service ec2: unable to describeIamInstanceProfileAssoiations'
-              )
-              logger.debug(err)
+              generateAwsErrorLog(serviceName, 'ec2:describeIamInstanceProfileAssociations', err)
             }
 
             const {
               IamInstanceProfileAssociations: iamProfileAssociations = [],
             } = data || {}
 
-            iamProfileAssociations.map(({ InstanceId, IamInstanceProfile }) => {
+            iamProfileAssociations.map(({ InstanceId, IamInstanceProfile: curr }) => {
               if (!iamInstanceProfile[InstanceId]) {
                 iamInstanceProfile[InstanceId] = {}
               }
-              iamInstanceProfile[InstanceId] = IamInstanceProfile
+              iamInstanceProfile[InstanceId] = curr
             })
 
             resolveRegion()

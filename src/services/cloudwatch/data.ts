@@ -14,7 +14,7 @@ import { AWSError } from 'aws-sdk/lib/error'
 
 import { Credentials, TagMap, AwsTag } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 
 /**
@@ -23,7 +23,8 @@ import { convertAwsTagsToTagMap } from '../../utils/format'
 const lt = { ...awsLoggerText }
 const MAX_ITEMS = 100
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('Cloudwatch')
+const serviceName = 'Cloudwatch'
+const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsCloudwatch extends MetricAlarm {
   region: string
@@ -52,10 +53,7 @@ const listMetricAlarmsForRegion = async ({
             const { NextToken: nextToken, MetricAlarms: metricAlarms } =
               data || {}
             if (err) {
-              logger.warn(
-                'There was an error getting data for service cloudwatch: unable to describeAlarms'
-              )
-              logger.debug(err)
+              generateAwsErrorLog(serviceName, 'cloudwatch:describeAlarms', err)
             }
             /**
              * No metrics for this region
@@ -88,10 +86,7 @@ const getResourceTags = async (cloudwatch: CloudWatch, arn: string) =>
         { ResourceARN: arn },
         (err: AWSError, data: ListTagsForResourceOutput) => {
           if (err) {
-            logger.warn(
-              'There was an error getting data for service cloudwatch: unable to listTagsForResource'
-            )
-            logger.debug(err)
+            generateAwsErrorLog(serviceName, 'cloudwatch:listTagsForResource', err)
             return resolve({})
           }
           const { Tags = [] } = data || {}

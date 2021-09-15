@@ -15,12 +15,13 @@ import CloudGraph from '@cloudgraph/sdk'
 import awsLoggerText from '../../properties/logger'
 
 import { Credentials, TagMap } from '../../types'
-import { initTestEndpoint } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const MAX_ITEMS = 50
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('Lambda')
+const serviceName = 'Lambda'
+const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsLambdaFunction extends FunctionConfiguration {
   Tags?: TagMap
@@ -49,10 +50,7 @@ const listFunctionsForRegion = async ({
           (err: AWSError, data: ListFunctionsResponse) => {
             const { NextMarker, Functions = [] } = data || {}
             if (err) {
-              logger.warn(
-                'There was an error getting data for service lambda: unable to listFunctions'
-              )
-              logger.debug(err)
+              generateAwsErrorLog(serviceName, 'lambda:listFunctions', err)
             }
             /**
              * No Lambdas for this region
@@ -93,10 +91,7 @@ const getFunctionConcurrency = async (
           const { ReservedConcurrentExecutions: reservedConcurrentExecutions } =
             data || {}
           if (err) {
-            logger.warn(
-              'There was an error getting data for service lambda: unable to getFunctionConcurrency'
-            )
-            logger.debug(err)
+            generateAwsErrorLog(serviceName, 'lambda:getFunctionConcurrency', err)
           }
           resolve(reservedConcurrentExecutions || -1)
         }
@@ -113,10 +108,7 @@ const getResourceTags = async (lambda: Lambda, arn: string): Promise<TagMap> =>
         { Resource: arn },
         (err: AWSError, data: ListTagsResponse) => {
           if (err) {
-            logger.warn(
-              'There was an error getting data for service lambda: unable to listTags'
-            )
-            logger.debug(err)
+            generateAwsErrorLog(serviceName, 'lambda:listTags', err)
             resolve({})
           }
           const { Tags = {} } = data || {}

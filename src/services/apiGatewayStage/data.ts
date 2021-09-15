@@ -19,12 +19,13 @@ import {
 } from '../../utils/generateArns'
 import { Credentials, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const {logger} = CloudGraph
 const MAX_REST_API = 500
-const endpoint = initTestEndpoint('API Gateway Stage')
+const serviceName = 'API Gateway Stage'
+const endpoint = initTestEndpoint(serviceName)
 
 export interface AwsApiGatewayStage extends Omit<Stage, 'tags'> {
   restApiId: string
@@ -45,8 +46,7 @@ const getRestApisForRegion = async apiGw =>
         apiGw.getRestApis(getRestApisOpts, (err: AWSError, data: RestApis) => {
           const { position, items = [] } = data || {}
           if (err) {
-            logger.warn('There was a problem getting data for service apiGateway: unable to getRestApis')
-            logger.debug(err)
+            generateAwsErrorLog(serviceName, 'apiGw:getRestApis', err)
           }
 
           restApiList.push(...items)
@@ -75,8 +75,7 @@ const getStages = async ({ apiGw, restApiId }) =>
         (err: AWSError, data: Stages) => {
           const { item = [] } = data || {}
           if (err) {
-            logger.warn('There was a problem getting data for service apiGateway: unable to getStages')
-            logger.debug(err)
+            generateAwsErrorLog(serviceName, 'apiGw:getStages', err)
           }
           resolve(item)
         }
@@ -91,8 +90,7 @@ const getTags = async ({ apiGw, arn }): Promise<TagMap> =>
     try {
       apiGw.getTags({ resourceArn: arn }, (err: AWSError, data: Tags) => {
         if (err) {
-          logger.warn('There was a problem getting data for service apiGateway: unable to getTags')
-          logger.debug(err)
+          generateAwsErrorLog(serviceName, 'apiGw:getTags', err)
           return resolve({})
         }
         const { tags = {} } = data || {}

@@ -11,7 +11,7 @@ import { AWSError } from 'aws-sdk/lib/error'
 
 import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 /**
  * Network Interface
@@ -24,7 +24,8 @@ export interface RawNetworkInterface extends Omit<NetworkInterface, 'TagSet'> {
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('Network Interface')
+const serviceName = 'Network Interface'
+const endpoint = initTestEndpoint(serviceName)
 
 const listNetworkInterfaces = async ({
   ec2,
@@ -49,10 +50,7 @@ const listNetworkInterfaces = async ({
     args,
     (err: AWSError, data: DescribeNetworkInterfacesResult) => {
       if (err) {
-        logger.warn(
-          'There was an error getting data for service networkInterface: unable to describeNetworkInterfaces'
-        )
-        logger.debug(err)
+        generateAwsErrorLog(serviceName, 'ec2:describeNetworkInterfaces', err)
       }
 
       /**

@@ -25,14 +25,15 @@ import { Credentials, TagMap } from '../../types'
 
 import awsLoggerText from '../../properties/logger'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { initTestEndpoint } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 const lt = { ...awsLoggerText }
 /**
  * ALB
  */
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('ALB')
+const serviceName = 'ALB'
+const endpoint = initTestEndpoint(serviceName)
 
 export type RawAwsAlb = LoadBalancer & {
   listeners: Listeners
@@ -83,10 +84,7 @@ export default async ({
 
       return elbv2.describeLoadBalancers(args, async (err, data) => {
         if (err) {
-          logger.warn(
-            'There was an error in service alb: unable to describeLoadBalancers for alb'
-          )
-          logger.debug(err)
+          generateAwsErrorLog(serviceName, 'elbv2:describeLoadBalancers', err)
         }
 
         /**
@@ -173,10 +171,7 @@ export default async ({
     }): Promise<Request<DescribeTagsOutput, AWSError>> =>
       elbv2.describeTags({ ResourceArns }, async (err, data) => {
         if (err) {
-          logger.warn(
-            'There was an error in service alb: unable to describeTags for alb'
-          )
-          logger.debug(err)
+          generateAwsErrorLog(serviceName, 'elbv2:describeTags', err)
         }
 
         /**
@@ -253,10 +248,7 @@ export default async ({
         { LoadBalancerArn },
         async (err, data) => {
           if (err) {
-            logger.warn(
-              'There was an error in service alb: unable to describeLoadBalancerAttributes'
-            )
-            logger.debug(err)
+            generateAwsErrorLog(serviceName, 'elbv2:describeLoadBalancerAttributes', err)
           }
 
           /**
@@ -341,10 +333,7 @@ export default async ({
 
       return elbv2.describeListeners(args, async (err, data) => {
         if (err) {
-          logger.warn(
-            'There was an error in service alb: unable to describeListeners'
-          )
-          logger.debug(err)
+          generateAwsErrorLog(serviceName, 'elbv2:describeListeners', err)
         }
 
         /**
@@ -440,10 +429,7 @@ export default async ({
 
       return elbv2.describeTargetGroups(args, async (err, data) => {
         if (err) {
-          logger.warn(
-            'There was an error in service alb: unable to describeTargetGroups'
-          )
-          logger.debug(err)
+          generateAwsErrorLog(serviceName, 'elbv2:describeTargetGroups', err)
         }
 
         /**
@@ -531,10 +517,7 @@ export default async ({
     }): Promise<Request<DescribeTargetHealthOutput, AWSError>> =>
       elbv2.describeTargetHealth({ TargetGroupArn }, async (err, data) => {
         if (err) {
-          logger.warn(
-            'There was an error in service alb: unable to describeTargetHealth'
-          )
-          logger.debug(err)
+          generateAwsErrorLog(serviceName, 'elbv2:describeTargetHealth', err)
         }
 
         /**

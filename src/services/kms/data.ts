@@ -8,11 +8,12 @@ import KMS, { KeyListEntry, KeyMetadata, ListKeysRequest, ListKeysResponse } fro
 
 import { Credentials, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('KMS')
+const serviceName = 'KMS'
+const endpoint = initTestEndpoint(serviceName)
 /**
 /**
  * KMS
@@ -58,15 +59,13 @@ export default async ({
       resolveRegion: () => void
     }): Promise<Request<ListKeysResponse, AWSError>> => {
       let args: ListKeysRequest = {}
-
       if (Marker) {
         args = { ...args, Marker }
       }
 
       return kms.listKeys(args, (err, data) => {
         if (err) {
-          logger.warn('There was a problem getting data for service kms: unable to listKeys')
-          logger.debug(err)
+          generateAwsErrorLog(serviceName, 'kms:listKeys', err)
         }
 
         /**
@@ -138,8 +137,8 @@ export default async ({
       const keyPromise = new Promise<void>(resolveKey =>
         kms.describeKey({ KeyId }, (err, data) => {
           if (err) {
-            logger.warn('There was a problem getting data for service kms: unable to describeKey')
-            logger.debug(err)
+            generateAwsErrorLog(serviceName, 'kms:describeKey', err)
+            return resolveKey()
           }
 
           /**
@@ -185,8 +184,8 @@ export default async ({
       const rotationStatusPromise = new Promise<void>(resolveRotationStatus =>
         kms.getKeyRotationStatus({ KeyId }, (err, data) => {
           if (err) {
-            logger.warn('There was a problem getting data for service kms: unable to getKeyRotationStatus')
-            logger.debug(err)
+            generateAwsErrorLog(serviceName, 'kms:getKeyRotationStatus', err)
+            return resolveRotationStatus()
           }
 
           /**
@@ -226,8 +225,8 @@ export default async ({
       const policyPromise = new Promise<void>(resolvePolicy =>
         kms.getKeyPolicy({ KeyId, PolicyName: 'default' }, (err, data) => {
           if (err) {
-            logger.warn('There was a problem getting data for service kms: unable to getKeyPolicy')
-            logger.debug(err)
+            generateAwsErrorLog(serviceName, 'kms:getKeyPolicy', err)
+            resolvePolicy()
           }
 
           /**
@@ -267,8 +266,7 @@ export default async ({
       const tagsPromise = new Promise<void>(resolveTags =>
         kms.listResourceTags({ KeyId }, (err, data) => {
           if (err) {
-            logger.warn('There was a problem getting data for service kms: unable to listResourceTags')
-            logger.debug(err)
+            generateAwsErrorLog(serviceName, 'kms:listResourceTags', err)
           }
 
           /**

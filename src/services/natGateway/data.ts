@@ -13,11 +13,12 @@ import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
 import { AwsTag, Credentials, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { initTestEndpoint } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('NAT Gateway')
+const serviceName = 'NAT Gateway'
+const endpoint = initTestEndpoint(serviceName)
 
 /**
  * NAT Gateway
@@ -59,10 +60,7 @@ export default async ({
         args,
         (err: AWSError, data: DescribeNatGatewaysResult) => {
           if (err) {
-            logger.warn(
-              'There was an error getting data for service natGateway: unable to describeNatGateways'
-            )
-            logger.debug(err)
+            generateAwsErrorLog(serviceName, 'ec2:describeNatGateways', err)
           }
 
           /**

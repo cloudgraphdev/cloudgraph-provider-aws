@@ -13,12 +13,13 @@ import isEmpty from 'lodash/isEmpty'
 
 import { Credentials, AwsTag, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('IGW')
+const serviceName = 'IGW'
+const endpoint = initTestEndpoint(serviceName)
 /**
  * IGW
  */
@@ -60,10 +61,7 @@ export default async ({
         args,
         (err: AWSError, data: DescribeInternetGatewaysResult) => {
           if (err) {
-            logger.warn(
-              'There was an error getting data for service igw: unable to describeInternetGateways'
-            )
-            logger.debug(err)
+            generateAwsErrorLog(serviceName, 'ec2:describeInternetGateways', err)
           }
 
           /**

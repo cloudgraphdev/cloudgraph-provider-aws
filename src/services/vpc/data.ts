@@ -14,12 +14,13 @@ import CloudGraph from '@cloudgraph/sdk'
 
 import { AwsTag, Credentials, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('VPC')
+const serviceName = 'VPC'
+const endpoint = initTestEndpoint(serviceName)
 
 /**
  * VPC
@@ -68,10 +69,7 @@ export default async ({
         args,
         (err: AWSError, data: DescribeVpcsResult) => {
           if (err) {
-            logger.warn(
-              'There was an error getting data for service vpc: unable to describeVpcs'
-            )
-            logger.debug(err)
+            generateAwsErrorLog(serviceName, 'ec2:describeVpcs', err)
           }
 
           /**
@@ -147,10 +145,7 @@ export default async ({
         const additionalAttrPromise = new Promise<void>(resolveAdditionalAttr =>
           ec2.describeVpcAttribute({ VpcId, Attribute }, (err, data) => {
             if (err) {
-              logger.warn(
-                'There was an error getting data for service vpc: unable to describeVpcAttribute'
-              )
-              logger.debug(err)
+              generateAwsErrorLog(serviceName, 'ec2:describeVpcAttribute', err)
             }
 
             /**
