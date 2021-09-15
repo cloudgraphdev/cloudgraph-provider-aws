@@ -1,3 +1,12 @@
+# [0.17.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.16.4...0.17.0) (2021-09-15)
+
+
+### Features
+
+* Added route53 service ([537d6be](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/537d6be1fa3d2c46c7e071d2be75dbee91bd37e3))
+* Added tests for Route53 ([a3ec6c7](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a3ec6c7c2c0dd4ef8770ed88942d5320a1656fbd))
+* Reuse new util to generate route53 ids ([604e0d9](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/604e0d962691ae67b97a8a02450058bc1e16b2c7))
+
 ## [0.16.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.16.3...0.16.4) (2021-09-15)
 
 
