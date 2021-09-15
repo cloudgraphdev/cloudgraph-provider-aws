@@ -1,3 +1,11 @@
+## [0.16.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.16.3...0.16.4) (2021-09-15)
+
+
+### Bug Fixes
+
+* Fixed Kinesis unit tests ([4345517](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/43455170171734b3fb3e803d1e5452e9ca27bf34))
+* Fixed SQS unit tests ([0cadfae](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/0cadfaefc460f504ebda2b51bf4d481c29235528))
+
 ## [0.16.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.16.2...0.16.3) (2021-09-15)
 
 
