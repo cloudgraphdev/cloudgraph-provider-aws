@@ -1,5 +1,3 @@
-import * as Sentry from '@sentry/node'
-
 import EC2, {
   DescribeVolumesResult,
   DescribeVolumesRequest,
@@ -12,12 +10,10 @@ import isEmpty from 'lodash/isEmpty'
 
 import CloudGraph from '@cloudgraph/sdk'
 
-import environment from '../../config/environment'
 import { Credentials, AwsTag } from '../../types'
 
-import { generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-
 import awsLoggerText from '../../properties/logger'
 
 /**
@@ -27,10 +23,7 @@ import awsLoggerText from '../../properties/logger'
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'EBS'
-const endpoint =
-  (environment.NODE_ENV === 'test' && environment.LOCALSTACK_AWS_ENDPOINT) ||
-  undefined
-endpoint && logger.debug('EBS getData in test mode!')
+const endpoint = initTestEndpoint(serviceName)
 
 const listEbsVolumes = async ({
   ec2,

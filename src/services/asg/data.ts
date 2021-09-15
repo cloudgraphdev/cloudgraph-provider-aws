@@ -1,5 +1,3 @@
-import * as Sentry from '@sentry/node'
-
 import ASG, {
   AutoScalingGroup,
   LaunchConfiguration,
@@ -10,11 +8,12 @@ import CloudGraph from '@cloudgraph/sdk'
 
 import { Credentials, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'ASG'
+const endpoint = initTestEndpoint(serviceName)
 
 /**
  * ASG
@@ -91,7 +90,7 @@ export default async ({
   let launchConfigData
 
   for (const region of regions.split(',')) {
-    const asg = new ASG({ region, credentials })
+    const asg = new ASG({ region, credentials, endpoint })
 
     /**
      * Step 1) Get all the ASG data for each region

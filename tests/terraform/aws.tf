@@ -40,7 +40,7 @@ provider "aws" {
 
 resource "aws_vpc" "vpc" {
   cidr_block = "10.0.0.0/16"
-  tags       =  { Key = "vpc", Value = "example" }
+  tags       = { Key = "vpc", Value = "example" }
 }
 
 resource "aws_instance" "instance" {
@@ -65,16 +65,16 @@ resource "aws_security_group" "sg" {
   vpc_id      = aws_vpc.vpc.id
 
   ingress {
-    description      = "TLS from VPC"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
+    description = "TLS from VPC"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
   }
 
   tags = {
@@ -104,7 +104,7 @@ resource "aws_cloudwatch_metric_alarm" "metric_alarm" {
   dimensions = {
     InstanceId = "i-1234567890abcdef0"
   }
-  tags                      = { Key = "testTag", Value = "TestValue" }
+  tags = { Key = "testTag", Value = "TestValue" }
 
   depends_on = [aws_sns_topic.sns_topic]
 }
@@ -113,8 +113,8 @@ data "aws_availability_zones" "available" {}
 
 resource "aws_subnet" "subnet" {
   availability_zone = data.aws_availability_zones.available.names[0]
-  vpc_id     = aws_vpc.vpc.id
-  cidr_block = "10.0.1.0/24"
+  vpc_id            = aws_vpc.vpc.id
+  cidr_block        = "10.0.1.0/24"
 
   tags = {
     Name = "Main"
@@ -176,7 +176,7 @@ resource "aws_api_gateway_rest_api" "example" {
     }
   })
 
-  name = "api_gateway_rest_api"
+  name        = "api_gateway_rest_api"
   description = "example description"
 
   endpoint_configuration {
@@ -254,7 +254,7 @@ resource "aws_api_gateway_stage" "api_gateway_stage" {
   cache_cluster_size    = 0.5
   client_certificate_id = aws_api_gateway_client_certificate.demo.id
   documentation_version = "0.0.1"
-  xray_tracing_enabled = true
+  xray_tracing_enabled  = true
 }
 
 resource "aws_api_gateway_resource" "exampleResource" {
@@ -316,20 +316,20 @@ resource "aws_volume_attachment" "ebs_att" {
 
 # NAT GW SG
 resource "aws_security_group" "natgw" {
-  name = "natgwSecurityGroup"
+  name        = "natgwSecurityGroup"
   description = "natgwSecurityGroup"
-  vpc_id = aws_vpc.vpc.id
+  vpc_id      = aws_vpc.vpc.id
   ingress {
     cidr_blocks = ["0.0.0.0/0"]
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
   }
   egress {
     cidr_blocks = ["0.0.0.0/0"]
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
   }
   tags = {
     "Name" = "natgwSecurityGroup"
@@ -340,8 +340,8 @@ resource "aws_security_group" "natgw" {
 
 resource "aws_subnet" "nat_gateway" {
   availability_zone = data.aws_availability_zones.available.names[0]
-  cidr_block = "10.0.2.0/24"
-  vpc_id = aws_vpc.vpc.id
+  cidr_block        = "10.0.2.0/24"
+  vpc_id            = aws_vpc.vpc.id
   tags = {
     "Name" = "DummySubnetNAT"
   }
@@ -363,7 +363,7 @@ resource "aws_eip" "nat_gateway" {
 
 resource "aws_nat_gateway" "nat_gateway" {
   allocation_id = aws_eip.nat_gateway.id
-  subnet_id = aws_subnet.nat_gateway.id
+  subnet_id     = aws_subnet.nat_gateway.id
   tags = {
     "Name" = "DummyNatGateway"
   }
@@ -383,3 +383,50 @@ resource "aws_nat_gateway" "nat_gateway" {
 #   subnet_id = aws_subnet.nat_gateway.id
 #   route_table_id = aws_route_table.nat_gateway.id
 # }
+
+resource "aws_kinesis_stream" "kinesis" {
+  name             = "cloudgraph-kinesis"
+  shard_count      = 1
+  retention_period = 48
+
+  shard_level_metrics = [
+    "IncomingBytes",
+    "OutgoingBytes",
+  ]
+
+  tags = {
+    Environment = "test"
+  }
+}
+
+resource "aws_sqs_queue_policy" "policy" {
+  queue_url = aws_sqs_queue.cloudgraph_queue.id
+
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Id": "sqspolicy",
+  "Statement": [
+    {
+      "Sid": "First",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "sqs:SendMessage",
+      "Resource": "${aws_sqs_queue.cloudgraph_queue.arn}"
+    }
+  ]
+}
+POLICY
+}
+
+resource "aws_sqs_queue" "cloudgraph_queue" {
+  name                      = "cloudgraph-queue"
+  delay_seconds             = 90
+  max_message_size          = 2048
+  message_retention_seconds = 86400
+  receive_wait_time_seconds = 10
+
+  tags = {
+    Environment = "test"
+  }
+}

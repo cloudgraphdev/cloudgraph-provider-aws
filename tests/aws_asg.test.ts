@@ -5,11 +5,12 @@ import SGService from '../src/services/securityGroup'
 import EBSService from '../src/services/ebs'
 import AsgClass from '../src/services/asg'
 import { RawAwsAsg } from '../src/services/asg/data'
-import { initTestConfig } from "../src/utils"
+import { initTestConfig } from '../src/utils'
 import { account, credentials, region } from '../src/properties/test'
 import services from '../src/enums/services'
 
-describe('ASG Service Test: ', () => {
+// TODO: Test when Localstack PRO is enabled
+describe.skip('ASG Service Test: ', () => {
   let getDataResult
   let formatResult
   let asgConnections
@@ -78,8 +79,6 @@ describe('ASG Service Test: ', () => {
             ],
             region,
           })
-
-
         } catch (error) {
           console.error(error) // eslint-disable-line no-console
         }
@@ -118,7 +117,7 @@ describe('ASG Service Test: ', () => {
             region: expect.any(String),
             minSize: expect.any(Number),
             maxSize: expect.any(Number),
-          })
+          }),
         ])
       )
     })

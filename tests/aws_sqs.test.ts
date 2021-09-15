@@ -19,12 +19,10 @@ describe('SQS Service Test: ', () => {
             credentials,
             regions: region,
           })
-          
-  
+
           formatResult = getDataResult[region].map((item: AwsSqs) =>
             sqsClass.format({ service: item, region })
           )
-  
         } catch (error) {
           console.error(error) // eslint-disable-line no-console
         }
@@ -36,7 +34,7 @@ describe('SQS Service Test: ', () => {
     it('should return a truthy value ', () => {
       expect(getDataResult).toBeTruthy()
     })
-  
+
     it('should return data from a region in the correct format', () => {
       expect(getDataResult[region]).toEqual(
         expect.arrayContaining([
@@ -44,14 +42,14 @@ describe('SQS Service Test: ', () => {
             queueUrl: expect.any(String),
             region: expect.any(String),
             sqsAttributes: expect.objectContaining({
-              QueueArn: expect.any(String)
-            })
-          })
+              QueueArn: expect.any(String),
+            }),
+          }),
         ])
       )
     })
   })
-  
+
   describe('format', () => {
     it('should return data in the correct format matching the schema type', () => {
       expect(formatResult).toEqual(
@@ -61,7 +59,7 @@ describe('SQS Service Test: ', () => {
             queueUrl: expect.any(String),
             queueType: expect.any(String),
             policy: expect.any(String),
-          })
+          }),
         ])
       )
     })
