@@ -302,11 +302,16 @@ export default {
     'Looking for S3 buckets with security violations...',
   foundAnotherThousand: 'Found another thousand objects in the s3 bucket...',
   fetchingS3Data: 'Fetching S3 data for this AWS account via the AWS SDK...',
-  doneFetchingS3Data: '✅ Done fetching S3 Data ✅',
+  doneFetchingS3Data: (num: number): string =>
+    `🕒 Done fetching S3 Data in ${num} 🕘`,
   fetchedS3Buckets: (num: number): string => `Fetched ${num} S3 Buckets`,
   creatingS3Bucket: (num: number): string => `Creating S3 Bucket #${num}`,
   addingS3Buckets: (num: number): string =>
     `Found ${num} S3 Buckets, adding them to the Region`,
+  gettingBucketBasicInfo: (name: string): string =>
+    `Fetching basic information for ${name} bucket...`,
+  gettingBucketAdditionalInfo: (name: string): string =>
+    `Fetching additional information for ${name} bucket...`,
   /**
    * DynamoDb
    */

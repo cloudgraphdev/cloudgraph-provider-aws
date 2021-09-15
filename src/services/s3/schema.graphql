@@ -1,0 +1,35 @@
+type awsS3 @key(fields: "arn") {
+  id: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  access: String @search(by: [hash, regexp])
+  bucketOwnerName: String @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
+  requesterPays: String @search(by: [hash, regexp])
+  size: String @search(by: [hash, regexp])
+  totalNumberOfObjectsInBucket: String @search(by: [hash, regexp])
+  transferAcceleration: String @search(by: [hash, regexp])
+  corsConfiguration: String @search(by: [hash, regexp])
+  encrypted: String @search(by: [hash, regexp])
+  lifecycle: String @search(by: [hash, regexp])
+  logging: String @search(by: [hash, regexp])
+  blockPublicAcls: String @search(by: [hash, regexp])
+  ignorePublicAcls: String @search(by: [hash, regexp])
+  blockPublicPolicy: String @search(by: [hash, regexp])
+  restrictPublicBuckets: String @search(by: [hash, regexp])
+  crossRegionReplication: String @search(by: [hash, regexp])
+  mfa: String @search(by: [hash, regexp])
+  versioning: String @search(by: [hash, regexp])
+  staticWebsiteHosting: String @search(by: [hash, regexp])
+  bucketPolicies: [awsBucketPolicy]
+  tags: [Tag]
+}
+
+type awsBucketPolicy
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: ID
+  policy: String
+}

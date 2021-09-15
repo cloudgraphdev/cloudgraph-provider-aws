@@ -21,4 +21,5 @@ export default {
   sg: 'sg',
   vpc: 'vpc',
   sqs: 'sqs',
+  s3: 's3',
 }

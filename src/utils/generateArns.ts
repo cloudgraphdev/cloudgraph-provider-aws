@@ -25,3 +25,5 @@ export const routeTableArn = ({
   account: string
   id: string
 }): string => `arn:aws:ec2:${region}:${account}:route-table/${id}`
+export const s3BucketArn = ({ name }: { name: string }): string =>
+  `arn:aws:s3:::${name}`
