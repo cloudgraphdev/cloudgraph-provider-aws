@@ -59,6 +59,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | eip                | vpc, ec2, networkInterface                               |
 | elb                | securityGroups, vpc                                      |
 | igw                | vpc                                                      |
+| kinesisStream      |                                                          |
 | kms                | lambda                                                   |
 | lambda             | vpc, kms, securityGroups                                 |
 | natGateway         | networkInterface, vpc                                    |
