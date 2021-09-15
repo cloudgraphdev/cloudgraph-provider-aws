@@ -1,13 +1,13 @@
 import { ServiceConnection } from '@cloudgraph/sdk'
-import { isEmpty } from 'lodash'
 import { RestApi } from 'aws-sdk/clients/apigateway'
+import { isEmpty } from 'lodash'
 
 import { AwsApiGatewayResource } from '../apiGatewayResource/data'
 import { AwsApiGatewayStage } from '../apiGatewayStage/data'
 import {
   apiGatewayRestApiArn,
   apiGatewayStageArn,
-  apiGatewayArn
+  apiGatewayArn,
 } from '../../utils/generateArns'
 
 import services from '../../enums/services'
@@ -23,19 +23,19 @@ export default ({
 }): {
   [property: string]: ServiceConnection[]
 } => {
-  const {
-    id,
-  } = service
+  const { id } = service
   const connections: ServiceConnection[] = []
   /**
    * Find Resources
    */
-  const resources: { name: string; data: { [property: string]: AwsApiGatewayResource[] } } =
-    data.find(({ name }) => name === services.apiGatewayResource)
+  const resources: {
+    name: string
+    data: { [property: string]: AwsApiGatewayResource[] }
+  } = data.find(({ name }) => name === services.apiGatewayResource)
   if (resources?.data?.[region]) {
-    const resourcesInRegion: AwsApiGatewayResource[] = resources.data[region].filter(
-      ({ restApiId }: AwsApiGatewayResource) => restApiId === id
-    )
+    const resourcesInRegion: AwsApiGatewayResource[] = resources.data[
+      region
+    ].filter(({ restApiId }: AwsApiGatewayResource) => restApiId === id)
     if (!isEmpty(resourcesInRegion)) {
       for (const resource of resourcesInRegion) {
         const { id } = resource

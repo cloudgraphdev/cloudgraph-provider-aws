@@ -25,8 +25,8 @@ export default ({
   const {
     LoadBalancerArn: id,
     SecurityGroups: securityGroups = [],
-    AvailabilityZones: azs = [],
-  }: RawAwsAlb = alb
+  }: // AvailabilityZones: azs = [],
+  RawAwsAlb = alb
 
   const connections: ServiceConnection[] = []
   /**

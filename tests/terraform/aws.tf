@@ -38,6 +38,31 @@ provider "aws" {
   }
 }
 
+
+resource "aws_route53_zone" "zone" {
+  name = "cloudgraph.com"
+}
+
+resource "aws_route53_zone" "dev" {
+  name = "dev.cloudgraph.com"
+}
+
+resource "aws_route53_record" "record" {
+  name    = "private.cloudgraph.com"
+  ttl     = 30
+  type    = "NS"
+  zone_id = aws_route53_zone.zone.zone_id
+
+  records = aws_route53_zone.dev.name_servers
+}
+resource "aws_route53_record" "www" {
+  zone_id = aws_route53_zone.zone.zone_id
+  name    = "www.cloudgraph.com"
+  type    = "A"
+  ttl     = "300"
+  records = [aws_eip.eip.public_ip]
+}
+
 resource "aws_vpc" "vpc" {
   cidr_block = "10.0.0.0/16"
   tags       = { Key = "vpc", Value = "example" }

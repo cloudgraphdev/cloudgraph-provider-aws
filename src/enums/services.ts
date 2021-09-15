@@ -15,6 +15,8 @@ export default {
   lambda: 'lambda',
   nat: 'nat',
   networkInterface: 'networkInterface',
+  route53HostedZone: 'route53HostedZone',
+  route53Record: 'route53Record',
   sg: 'sg',
   vpc: 'vpc',
   sqs: 'sqs',

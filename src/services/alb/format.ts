@@ -38,6 +38,7 @@ const awsAlbListernerGraphFormat = (listener): AwsAlbListener => {
 export default ({ service: alb }: { service: RawAwsAlb }): AwsAlb => {
   // TODO: type this from aws
   const {
+    LoadBalancerName: id,
     LoadBalancerArn: arn,
     DNSName: dnsName,
     Scheme: scheme,
@@ -68,7 +69,7 @@ export default ({ service: alb }: { service: RawAwsAlb }): AwsAlb => {
   // }
 
   const albResult = {
-    id: arn,
+    id,
     arn,
     dnsName,
     scheme,

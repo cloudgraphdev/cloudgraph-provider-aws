@@ -41,7 +41,7 @@ export default ({
       )
       if (!isEmpty(dataAtRegion)) {
         for (const alb of dataAtRegion) {
-          const { LoadBalancerArn: id } = alb
+          const { LoadBalancerName: id } = alb
           connections.push({
             id,
             resourceType: services.alb,
@@ -51,7 +51,6 @@ export default ({
         }
       }
     }
-
 
     /**
      * Find related ASG
@@ -198,7 +197,7 @@ export default ({
     /**
      * Find related SQS
      */
-     const sqsQueues: {
+    const sqsQueues: {
       name: string
       data: { [property: string]: any[] }
     } = data.find(({ name }) => name === services.sqs)
@@ -209,7 +208,9 @@ export default ({
       )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
-          const { sqsAttributes: { QueueArn: id } } = instance
+          const {
+            sqsAttributes: { QueueArn: id },
+          } = instance
 
           connections.push({
             id,

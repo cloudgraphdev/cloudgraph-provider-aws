@@ -52,7 +52,9 @@ export default {
   lookingForRoute53: 'Looking for Route53 Hosted Zones to add to account...',
   addingRoute53: (num: number): string =>
     `Created and added ${num} Route53 Hosted Zones to this account`,
-  doneFetchingRoute53Data: '✅ Done fetching Route53 Data ✅',
+  doneFetchingRoute53HostedZoneData:
+    '✅ Done fetching Route53 Hosted Zones Data ✅',
+  doneFetchingRoute53RecordsData: '✅ Done fetching Route53 Records Data ✅',
   /**
    * CloudWatch
    */
@@ -99,15 +101,12 @@ export default {
     `Fetched ${num} Api Gateway Rest Apis`,
   fetchedApiGatewayResources: (num: number) =>
     `Fetched ${num} Api Gateway Resources`,
-  fetchedApiGatewayStages: (num: number) =>
-    `Fetched ${num} Api Gateway Stages`,
+  fetchedApiGatewayStages: (num: number) => `Fetched ${num} Api Gateway Stages`,
   fetchingApiGatewayData:
     'Fetching API Gateway data for this AWS account via the AWS SDK...',
   doneFetchingApiGatewayData: '✅ Done fetching API Gateway Data ✅',
-  gettingApiGatewayTags:
-    'Fetching tags for each Api Gateway Rest Api...',
-  gettingApiGatewayStageTags:
-    'Fetching tags for each Api Gateway Stage...',
+  gettingApiGatewayTags: 'Fetching tags for each Api Gateway Rest Api...',
+  gettingApiGatewayStageTags: 'Fetching tags for each Api Gateway Stage...',
   /**
    * Vpc
    */
@@ -128,8 +127,10 @@ export default {
   fetchedNatGateways: (num: number): string => `Fetched ${num} NAT Gateways`,
   foundSecurityGroups: (num: number): string =>
     `Found ${num} Security Groups to add to VPC`,
-  fetchedSecurityGroups: (num: number): string => `Fetched ${num} Security Groups`,
-  foundVpcLambdas: (num: number): string => `Found ${num} Lambdas to add to VPC`,
+  fetchedSecurityGroups: (num: number): string =>
+    `Fetched ${num} Security Groups`,
+  foundVpcLambdas: (num: number): string =>
+    `Found ${num} Lambdas to add to VPC`,
   gatheringRouteTableAssociations: 'Gathering route table associations',
   gatheringSubnets: 'Gathering subnets to add to VPC',
   fetchedSubnets: (num: number): string => `Fetched ${num} Subnets`,
@@ -186,7 +187,8 @@ export default {
    * IGW
    */
   fetchedIgws: (num: number): string => `Fetched ${num} IGWs`,
-  foundIgw: (num: number): string => `Found ${num} Internet Gateway to add to VPC`,
+  foundIgw: (num: number): string =>
+    `Found ${num} Internet Gateway to add to VPC`,
   fetchingIgw: 'Fetching IGW data for this AWS account via the AWS SDK...',
   doneFetchingIgwData: (num: number): string =>
     `🕒 Done fetching IGW Data in ${num} 🕘`,
@@ -267,7 +269,10 @@ export default {
   fetchedEmrClusters: (num: number): string => `Fetched ${num} EMR Clusters`,
   fetchedEmrClusterInstances: (num: number): string =>
     `Fetched ${num} EMR Clusters Instances`,
-  addingEmrEc2Connection: (clusterName: string, ec2InstanceName: string): string =>
+  addingEmrEc2Connection: (
+    clusterName: string,
+    ec2InstanceName: string
+  ): string =>
     `Found ec2 instance ${ec2InstanceName} to add to emr cluster ${clusterName}`,
   noEmrClusterParentFoundForEc2Instance: ({ name }): string =>
     `❌ WARNING: No EMR Cluster found for EC2 Instance ${name} ❌ `,

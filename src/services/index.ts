@@ -29,6 +29,8 @@ import SQS from './sqs'
 import APIGatewayRestApi from './apiGatewayRestApi'
 import APIGatewayResource from './apiGatewayResource'
 import APIGatewayStage from './apiGatewayStage'
+import Route53HostedZone from './route53HostedZone'
+import Route53Record from './route53Record'
 
 import regions from '../enums/regions'
 import resources from '../enums/resources'
@@ -63,6 +65,8 @@ export const serviceMap = {
   // [services.subnet]: AwsSubnet, // TODO: Enable when going for ENG-222
   [services.vpc]: VPC,
   [services.sqs]: SQS,
+  [services.route53HostedZone]: Route53HostedZone,
+  [services.route53Record]: Route53Record,
   tag: AwsTag,
 }
 

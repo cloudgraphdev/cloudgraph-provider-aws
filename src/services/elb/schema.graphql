@@ -20,6 +20,7 @@ type awsElb @key(fields: "arn") {
   tags: [Tag]
   securityGroups: [awsSecurityGroup] @hasInverse(field: elb)
   vpc: [awsVpc] @hasInverse(field: elb)
+  route53Record: [awsRoute53Record] @hasInverse(field: elb)
   # subnets: [awsSubnet] @hasInverse(field: elb) TODO: Enable when subnet service is complete
 }
 

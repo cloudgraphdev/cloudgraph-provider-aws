@@ -43,6 +43,7 @@ export type AwsAlb = {
   tags?: Maybe<Array<Maybe<Tag>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  route53Record?: Maybe<Array<Maybe<AwsRoute53Record>>>;
   listeners?: Maybe<Array<Maybe<AwsAlbListener>>>;
 };
 
@@ -308,6 +309,7 @@ export type AwsElb = {
   tags?: Maybe<Array<Maybe<Tag>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  route53Record?: Maybe<Array<Maybe<AwsRoute53Record>>>;
 };
 
 export type AwsElbHealthCheck = {
@@ -507,6 +509,36 @@ export type AwsNetworkInterfaceAttachment = {
   status?: Maybe<Scalars['String']>;
 };
 
+export type AwsRoute53Alias = {
+  zoneId: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  evaluateTargetHealth?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsRoute53HostedZone = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  comment?: Maybe<Scalars['String']>;
+  delegationSetId?: Maybe<Scalars['String']>;
+  nameServers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  route53Record?: Maybe<Array<Maybe<AwsRoute53Record>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+};
+
+export type AwsRoute53Record = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  zoneId?: Maybe<Scalars['String']>;
+  alias?: Maybe<AwsRoute53Alias>;
+  type?: Maybe<Scalars['String']>;
+  ttl?: Maybe<Scalars['Int']>;
+  records?: Maybe<Array<Maybe<Scalars['String']>>>;
+  route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
+  elb?: Maybe<Array<Maybe<AwsElb>>>;
+  alb?: Maybe<Array<Maybe<AwsAlb>>>;
+};
+
 export type AwsSecurityGroup = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -638,6 +670,7 @@ export type AwsVpc = {
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
 };
 
 export type BlockDeviceEbs = {

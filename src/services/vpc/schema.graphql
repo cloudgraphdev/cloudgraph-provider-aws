@@ -1,4 +1,4 @@
-type awsVpc @key(fields: "id"){
+type awsVpc @key(fields: "id") {
   arn: String! @id
   defaultVpc: Boolean @search
   dhcpOptionsSet: String @search(by: [hash, regexp])
@@ -19,4 +19,5 @@ type awsVpc @key(fields: "id"){
   lambda: [awsLambda] @hasInverse(field: vpc)
   natGateway: [awsNatGateway] @hasInverse(field: vpc)
   networkInterface: [awsNetworkInterface] @hasInverse(field: vpc)
+  route53HostedZone: [awsRoute53HostedZone] @hasInverse(field: vpc)
 }
