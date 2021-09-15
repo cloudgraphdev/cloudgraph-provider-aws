@@ -16,11 +16,12 @@ import ELB, {
 
 import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('ELB')
+const serviceName = 'ELB'
+const endpoint = initTestEndpoint(serviceName)
 
 const getElbTags = async (
   elb: ELB,
@@ -33,8 +34,7 @@ const getElbTags = async (
       },
       (err: AWSError, data: DescribeTagsOutput) => {
         if (err) {
-          logger.debug(err.message)
-          Sentry.captureException(new Error(err.message))
+          generateAwsErrorLog(serviceName, 'elb:describeTags', err)
         }
 
         if (!isEmpty(data)) {
@@ -60,10 +60,7 @@ const listElbData = async (
     elb.describeLoadBalancers(
       (err: AWSError, data: DescribeAccessPointsOutput) => {
         if (err) {
-          logger.warn(
-            'There was an error getting data for service elb: unable to describeLoadBalancers'
-          )
-          logger.debug(err)
+          generateAwsErrorLog(serviceName, 'elb:describeLoadBalancers', err)
         }
         if (!isEmpty(data)) {
           const { LoadBalancerDescriptions: loadBalancerDescriptions = [] } =
@@ -94,10 +91,7 @@ const listElbAttributes = async (
       },
       (err: AWSError, data: DescribeLoadBalancerAttributesOutput) => {
         if (err) {
-          logger.warn(
-            'There was an error getting data for service elb: unable to describeLoadBalancerAttributes'
-          )
-          logger.debug(err)
+          generateAwsErrorLog(serviceName, 'elb:describeLoadBalancerAttributes', err)
         }
 
         if (!isEmpty(data)) {

@@ -100,3 +100,13 @@ export function initTestEndpoint(service?: string): string | undefined {
 export function initTestConfig(): void {
   jest.setTimeout(30000)
 }
+
+export function generateAwsErrorLog(service: string, functionName: string, err?: {message: string, [key: string]: any}): void {
+  const notAuthorized = 'not authorized' // part of the error string aws passes back for permissions errors
+  const accessDenied = 'AccessDeniedException' // an error code aws sometimes sends back for permissions errors
+  logger.warn(`There was a problem getting data for service ${service}, CG encountered an error calling ${functionName}`)
+  if (err?.message?.includes(notAuthorized) || err?.code === accessDenied) {
+    logger.warn(err.message)
+  }
+  logger.debug(err)
+}

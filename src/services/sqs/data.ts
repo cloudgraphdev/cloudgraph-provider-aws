@@ -4,6 +4,7 @@ import SQS, { QueueAttributeMap, TagMap } from 'aws-sdk/clients/sqs'
 import CloudGraph, { Opts } from '@cloudgraph/sdk'
 import { isEmpty } from 'lodash'
 import { Credentials } from '../../types'
+import { generateAwsErrorLog } from '../../utils'
 
 export type AwsSqs = {
     region: string
@@ -13,6 +14,7 @@ export type AwsSqs = {
   }
 
 const { logger } = CloudGraph
+const serviceName = 'SQS'
 
 const listSqsQueueUrlsForRegion = async (sqs: SQS): Promise<string[]> => {
   const allQueueUrls = []
@@ -30,10 +32,7 @@ const listSqsQueueUrlsForRegion = async (sqs: SQS): Promise<string[]> => {
 
     return allQueueUrls
   } catch (err) {
-    logger.warn(
-      'There was an error getting data for service sqs: unable to listQueues'
-    )
-    logger.debug(err)
+    generateAwsErrorLog(serviceName, 'sqs:listQueues', err)
   }
   return []
 }
@@ -49,10 +48,7 @@ const getQueueAttributes = async (
     }).promise()
     return attributes.Attributes
   } catch (err) {
-    logger.warn(
-      'There was an error getting data for service sqs: unable to getQueueAttributes'
-    )
-    logger.debug(err)
+    generateAwsErrorLog(serviceName, 'sqs:getQueueAttributes', err)
   }
   return null
 }
@@ -65,10 +61,7 @@ const getQueueTags = async (
     const tags = await sqs.listQueueTags({ QueueUrl: queueUrl }).promise()
     return tags.Tags
   } catch (err) {
-    logger.warn(
-      'There was an error getting data for service sqs: unable to listQueueTags'
-    )
-    logger.debug(err)
+    generateAwsErrorLog(serviceName, 'sqs:listQueueTags', err)
   }
   return null
 }

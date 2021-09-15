@@ -15,6 +15,7 @@ import CloudGraph from '@cloudgraph/sdk'
 import environment from '../../config/environment'
 import { Credentials, AwsTag } from '../../types'
 
+import { generateAwsErrorLog } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 
 import awsLoggerText from '../../properties/logger'
@@ -25,6 +26,7 @@ import awsLoggerText from '../../properties/logger'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
+const serviceName = 'EBS'
 const endpoint =
   (environment.NODE_ENV === 'test' && environment.LOCALSTACK_AWS_ENDPOINT) ||
   undefined
@@ -51,10 +53,7 @@ const listEbsVolumes = async ({
 
   ec2.describeVolumes(args, (err: AWSError, data: DescribeVolumesResult) => {
     if (err) {
-      logger.warn(
-        'There was an error getting data for service ebs: unable to describeVolumes'
-      )
-      logger.debug(err)
+      generateAwsErrorLog(serviceName, 'ec2:describeVolumes', err)
     }
 
     /**

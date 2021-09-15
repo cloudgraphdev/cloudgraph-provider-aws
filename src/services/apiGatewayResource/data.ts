@@ -13,13 +13,14 @@ import isEmpty from 'lodash/isEmpty'
 import groupBy from 'lodash/groupBy'
 import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const {logger} = CloudGraph
 const MAX_REST_API = 500
 const MAX_RESOURCES = 500
-const endpoint = initTestEndpoint('API Gateway Resource')
+const serviceName = 'API gateway Resource'
+const endpoint = initTestEndpoint(serviceName)
 
 export interface AwsApiGatewayResource extends Resource {
   restApiId: string
@@ -39,8 +40,7 @@ const getRestApisForRegion = async apiGw =>
         apiGw.getRestApis(getRestApisOpts, (err: AWSError, data: RestApis) => {
           const { position, items = [] } = data || {}
           if (err) {
-            logger.warn('There was a problem getting data for service apiGateway: unable to getRestApis')
-            logger.debug(err)
+            generateAwsErrorLog(serviceName, 'apiGw:getRestApis', err)
           }
 
           restApiList.push(...items)
@@ -76,8 +76,7 @@ const getResources = async ({ apiGw, restApiId }) =>
           (err: AWSError, data: Resources) => {
             const { position, items = [] } = data || {}
             if (err) {
-              logger.warn('There was a problem getting data for service apiGateway: unable to getResources')
-              logger.debug(err)
+              generateAwsErrorLog(serviceName, 'apiGw:getResources', err)
             }
             /**
              * No rest APIs for this region

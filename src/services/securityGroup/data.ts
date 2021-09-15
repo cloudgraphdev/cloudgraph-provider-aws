@@ -13,12 +13,13 @@ import CloudGraph from '@cloudgraph/sdk'
 import { Credentials, TagMap, AwsTag } from '../../types'
 
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('Security Groups')
+const serviceName = 'Security Groups'
+const endpoint = initTestEndpoint(serviceName)
 
 /**
  * Security Groups
@@ -61,10 +62,7 @@ export default async ({
         args,
         (err: AWSError, data: DescribeSecurityGroupsResult) => {
           if (err) {
-            logger.warn(
-              'There was an error getting data for service securityGroups: unable to describeSecurityGroups'
-            )
-            logger.debug(err)
+            generateAwsErrorLog(serviceName, 'ec2:describeSecurityGroups', err)
           }
 
           /**

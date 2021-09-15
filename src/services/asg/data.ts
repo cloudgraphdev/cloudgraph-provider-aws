@@ -10,9 +10,11 @@ import CloudGraph from '@cloudgraph/sdk'
 
 import { Credentials, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
+import { generateAwsErrorLog } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
+const serviceName = 'ASG'
 
 /**
  * ASG
@@ -42,8 +44,7 @@ const listAsgData = async (asg: ASG): Promise<AutoScalingGroup[]> => {
 
     return fullResources
   } catch (err) {
-    logger.error(err)
-    Sentry.captureException(new Error(err.message))
+    generateAwsErrorLog(serviceName, 'asg:describeAutoScalingGroups', err)
   }
   return null
 }
@@ -72,8 +73,7 @@ const listLaunchConfigData = async (
 
     return fullResources
   } catch (err) {
-    logger.error(err)
-    Sentry.captureException(new Error(err.message))
+    generateAwsErrorLog(serviceName, 'asg:describeLaunchConfiguration', err)
   }
   return null
 }

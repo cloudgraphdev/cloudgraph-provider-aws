@@ -6,14 +6,15 @@ import EC2, { Address, DescribeAddressesResult } from 'aws-sdk/clients/ec2'
 import { Credentials, AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 /**
  * EIP
  */
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('EIP')
+const serviceName = 'EIP'
+const endpoint = initTestEndpoint(serviceName)
 
 /**
  * EIP
@@ -41,10 +42,7 @@ export default async ({
           {},
           (err: AWSError, data: DescribeAddressesResult) => {
             if (err) {
-              logger.warn(
-                'There was an error getting data for service eip: unable to describeAddresses'
-              )
-              logger.debug(err)
+              generateAwsErrorLog(serviceName, 'ec2:describeAddresses', err)
             }
 
             const { Addresses: addresses = [] } = data || {}
