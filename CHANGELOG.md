@@ -1,3 +1,11 @@
+## [0.16.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.16.2...0.16.3) (2021-09-15)
+
+
+### Bug Fixes
+
+* **logging:** improve aws error logging with new util. catch permissions errors specifically. small fixes ([11e0903](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/11e09036cb0dec43c14410375d0d02901aba5e6f))
+* **readme:** update service table with kinesis stream ([f930ffe](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/f930ffebc435e6e8f87c72a46fc56ef65f24cb42))
+
 ## [0.16.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.16.1...0.16.2) (2021-09-14)
 
 
