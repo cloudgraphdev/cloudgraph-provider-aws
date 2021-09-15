@@ -12,11 +12,12 @@ import { AWSError } from 'aws-sdk/lib/error'
 
 import { Credentials, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint } from '../../utils'
+import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('Route Table')
+const serviceName = 'Route Table'
+const endpoint = initTestEndpoint(serviceName)
 
 /**
  * Route Table
@@ -60,7 +61,7 @@ export default async ({
         args,
         (err: AWSError, data: DescribeRouteTablesResult) => {
           if (err) {
-            logger.error(err)
+            generateAwsErrorLog(serviceName, 'ec2:describeRouteTables', err)
           }
 
           /**

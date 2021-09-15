@@ -1,12 +1,15 @@
 import CloudGraph from '@cloudgraph/sdk'
 import RouteTableService from '../src/services/routeTable'
+import VPCService from '../src/services/vpc'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
+import services from '../src/enums/services'
 
 describe('Route Table Service Test: ', () => {
   let getDataResult
   let formatResult
-  let instanceId
+  let routeTableConnections
+  let routeTableId
   initTestConfig()
   beforeAll(
     async () =>
@@ -14,6 +17,9 @@ describe('Route Table Service Test: ', () => {
         getDataResult = {}
         formatResult = {}
         try {
+          const vpcService = new VPCService({
+            logger: CloudGraph.logger,
+          })
           const routeTableService = new RouteTableService({
             logger: CloudGraph.logger,
           })
@@ -32,6 +38,29 @@ describe('Route Table Service Test: ', () => {
               account,
             })
           )
+
+          // Get VPC data
+          const vpcData = await vpcService.getData({
+            credentials,
+            regions: region,
+          })
+
+          const [routeTable] = getDataResult[region]
+          routeTableId = routeTable.RouteTableId
+
+          routeTableConnections = routeTableService.getConnections({
+            service: routeTable,
+            data: [
+              {
+                name: services.vpc,
+                data: vpcData,
+                account,
+                region,
+              },
+            ],
+            account,
+            region,
+          })
         } catch (error) {
           console.error(error) // eslint-disable-line no-console
         }
@@ -86,5 +115,18 @@ describe('Route Table Service Test: ', () => {
         ])
       )
     })
+  })
+
+  describe('connections', () => {
+    test('should verify the connection to VPCs', async () => {
+      const vpcConnections = routeTableConnections[routeTableId]?.filter(
+        connection => connection.resourceType === services.vpc
+      )
+
+      expect(vpcConnections).toBeDefined()
+      expect(vpcConnections.length).toBe(1)
+    })
+
+    test.todo('should verify the connection to subnet')
   })
 })

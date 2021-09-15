@@ -554,6 +554,7 @@ export type AwsRouteTable = {
   explicitlyAssociatedWithSubnets?: Maybe<Scalars['Int']>;
   subnetAssociations?: Maybe<Array<Maybe<Scalars['String']>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
 export type AwsSecurityGroup = {
@@ -666,6 +667,7 @@ export type AwsTag = {
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   sqs?: Maybe<Array<Maybe<AwsSqs>>>;
+  routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
 };
 
 export type AwsVpc = {
@@ -688,6 +690,7 @@ export type AwsVpc = {
   natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
+  routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
 };
 
 export type BlockDeviceEbs = {
