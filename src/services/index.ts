@@ -93,9 +93,16 @@ export default class Provider extends CloudGraph.Client {
     resources: { [key: string]: string }
   }
 
-  logSelectedRegionsAndResources(regionsToLog: string, resourcesToLog: string): void {
-    this.logger.info(`Regions configured: ${chalk.green(regionsToLog.replace(/,/g, ', '))}`)
-    this.logger.info(`Resources configured: ${chalk.green(resourcesToLog.replace(/,/g, ', '))}`)
+  logSelectedRegionsAndResources(
+    regionsToLog: string,
+    resourcesToLog: string
+  ): void {
+    this.logger.info(
+      `Regions configured: ${chalk.green(regionsToLog.replace(/,/g, ', '))}`
+    )
+    this.logger.info(
+      `Resources configured: ${chalk.green(resourcesToLog.replace(/,/g, ', '))}`
+    )
   }
 
   async configure(flags: any): Promise<{ [key: string]: any }> {
@@ -113,12 +120,16 @@ export default class Provider extends CloudGraph.Client {
     ])
     this.logger.debug(`Regions selected: ${regionsAnswer}`)
     if (!regionsAnswer.length) {
-      this.logger.info(`No Regions selected, using default region: ${chalk.green(DEFAULT_REGION)}`)
+      this.logger.info(
+        `No Regions selected, using default region: ${chalk.green(
+          DEFAULT_REGION
+        )}`
+      )
       result.regions = DEFAULT_REGION
     } else {
       result.regions = regionsAnswer.join(',')
     }
-    
+
     // Prompt for resources if flag set
     if (flags.resources) {
       const { resources: resourcesAnswer } = await this.interface.prompt([
@@ -143,8 +154,12 @@ export default class Provider extends CloudGraph.Client {
     } else {
       result.resources = DEFAULT_RESOURCES
     }
-    const confettiBall = String.fromCodePoint(0x1F38A) // confetti ball emoji
-    this.logger.success(`${confettiBall} ${chalk.green('AWS')} configuration successfully completed ${confettiBall}`)
+    const confettiBall = String.fromCodePoint(0x1f38a) // confetti ball emoji
+    this.logger.success(
+      `${confettiBall} ${chalk.green(
+        'AWS'
+      )} configuration successfully completed ${confettiBall}`
+    )
     this.logSelectedRegionsAndResources(result.regions, result.resources)
     return result
   }
@@ -168,9 +183,9 @@ export default class Provider extends CloudGraph.Client {
   }
 
   private getCredentials(): Promise<Credentials> {
-    return new Promise(async resolve => {
+    return new Promise(async resolveCreds => {
       if (this.credentials) {
-        return resolve(this.credentials)
+        return resolveCreds(this.credentials)
       }
       this.logger.info('Searching for AWS credentials...')
       switch (true) {
@@ -268,6 +283,22 @@ export default class Provider extends CloudGraph.Client {
           this.logger.error('Cannot scan AWS without credentials')
           throw new Error()
         }
+      } else {
+        const { approved } = await this.interface.prompt([
+          {
+            type: 'confirm',
+            message: `CG found AWS credentials with accessKeyId: ${chalk.green(
+              obfuscateSensitiveString(this.credentials.accessKeyId)
+            )}. Are these ok to use?`,
+            name: 'approved',
+          },
+        ])
+        if (!approved) {
+          this.logger.error(
+            'CG does not have approval to use the credentials it found, please rerun CG with the credentials you want to use'
+          )
+          throw new Error('Credentials not approved')
+        }
       }
       this.logger.success('Found and using the following AWS credentials')
       this.logger.success(
@@ -283,7 +314,7 @@ export default class Provider extends CloudGraph.Client {
           obfuscateSensitiveString(this.credentials.secretAccessKey)
         )}`
       )
-      resolve(this.credentials)
+      resolveCreds(this.credentials)
     })
   }
 
