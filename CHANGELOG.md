@@ -1,3 +1,12 @@
+# [0.18.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.17.0...0.18.0) (2021-09-16)
+
+
+### Features
+
+* Added connections ([5620963](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/5620963020f2e7c0b519c79892d258f930117068))
+* Added Route Table service ([7d70b8f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/7d70b8f4db17b6af2cb34e9cb9ec07f451ebd59d))
+* Added unit tests for Route Table service ([dc21f7d](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/dc21f7da660e3f8fb4c1e5e239493947d0499792))
+
 # [0.17.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.16.4...0.17.0) (2021-09-15)
 
 
