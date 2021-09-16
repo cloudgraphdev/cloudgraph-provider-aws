@@ -372,6 +372,30 @@ export default ({
         }
       }
     }
+
+    /**
+     * Find related Route Tables
+     */
+    const routeTables: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.routeTable)
+    if (routeTables?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        routeTables.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { RouteTableId: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.routeTable,
+            relation: 'child',
+            field: 'routeTable',
+          })
+        }
+      }
+    }
   }
 
   const tagResult = {

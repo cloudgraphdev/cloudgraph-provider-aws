@@ -16,3 +16,12 @@ export const route53RecordArn = ({
   hostedZoneId: string
   id: string
 }): string => `arn:aws:route53:::hostedzone/${hostedZoneId}/recordset/${id}`
+export const routeTableArn = ({
+  region,
+  account,
+  id,
+}: {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:route-table/${id}`

@@ -17,10 +17,11 @@ type awsTag @key(fields: "id") {
   vpc: [awsVpc]
   ec2Instance: [awsEc2]
   sqs: [awsSqs]
+  routeTable: [awsRouteTable]
 }
 
 # TODO: would this cause a collision with other providers? should we rename to like awsRawTag?
-type Tag 
+type Tag
   @generate(
     query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }

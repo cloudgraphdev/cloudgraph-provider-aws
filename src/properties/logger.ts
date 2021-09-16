@@ -97,11 +97,12 @@ export default {
   lookingForApiGateway: 'Looking for Api Gateways to add to Region...',
   addingApiGateway: (num: number): string =>
     `Created and added ${num} Api Gateways to this region`,
-  fetchedApiGatewayRestApis: (num: number) =>
+  fetchedApiGatewayRestApis: (num: number): string =>
     `Fetched ${num} Api Gateway Rest Apis`,
-  fetchedApiGatewayResources: (num: number) =>
+  fetchedApiGatewayResources: (num: number): string =>
     `Fetched ${num} Api Gateway Resources`,
-  fetchedApiGatewayStages: (num: number) => `Fetched ${num} Api Gateway Stages`,
+  fetchedApiGatewayStages: (num: number): string =>
+    `Fetched ${num} Api Gateway Stages`,
   fetchingApiGatewayData:
     'Fetching API Gateway data for this AWS account via the AWS SDK...',
   doneFetchingApiGatewayData: '✅ Done fetching API Gateway Data ✅',
@@ -121,8 +122,6 @@ export default {
     found
       ? 'Found supplemental VPC data to add'
       : '❌ ERROR - Missing supplemental VPC data ❌',
-  foundRouteTables: (num: number): string =>
-    `Found ${num} Route Tables to add to VPC`,
   foundNacls: (num: number): string => `Found ${num} NACLs to add to VPC`,
   fetchedNatGateways: (num: number): string => `Fetched ${num} NAT Gateways`,
   foundSecurityGroups: (num: number): string =>
@@ -351,7 +350,7 @@ export default {
    * Kinesis Data Stream
    */
   fetchedKinesisStream: (num: number): string =>
-  `Fetched ${num} Kinesis streams`,
+    `Fetched ${num} Kinesis streams`,
   /**
    * KMS
    */
@@ -527,4 +526,16 @@ export default {
   fetchingVpcDnsSupportData: 'Fetching Enable DNS Support config for VPCs...',
   fetchingVpcDnsHostnamesData:
     'Fetching Enable DNS Hostnames config for VPCs...',
+  /**
+   * Route Tables
+   */
+  fetchedRouteTables: (num: number): string => `Fetched ${num} Route Tables`,
+  foundRouteTables: (num: number): string =>
+    `Found ${num} Route Tables to add to VPC`,
+  fetchingRouteTable:
+    'Fetching Route Table data for this AWS account via the AWS SDK...',
+  doneFetchingRouteTableData: (num: number): string =>
+    `🕒 Done fetching Route Table Data in ${num} 🕘`,
+  addingMainRouteTableToVpc: (vpcId: string): string =>
+    `Adding Main Toute Table to VPC ${vpcId}`,
 }

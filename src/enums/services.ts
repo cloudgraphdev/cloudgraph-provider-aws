@@ -17,6 +17,7 @@ export default {
   networkInterface: 'networkInterface',
   route53HostedZone: 'route53HostedZone',
   route53Record: 'route53Record',
+  routeTable: 'routeTable',
   sg: 'sg',
   vpc: 'vpc',
   sqs: 'sqs',
