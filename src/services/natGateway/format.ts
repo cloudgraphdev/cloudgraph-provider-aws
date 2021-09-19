@@ -25,8 +25,8 @@ export default ({
   return {
     id,
     tags: formatTagsFromMap(Tags),
-    arn: `arn:aws:ec2:${region}:${account}:nat-gateway/${id}`,
+    arn: `arn:aws:ec2:${region}:${account}:natgateway/${id}`,
     state,
-    createTime: createTime.toUTCString()
+    createTime: createTime.toUTCString(),
   }
 }
