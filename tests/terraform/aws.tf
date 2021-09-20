@@ -455,3 +455,132 @@ resource "aws_sqs_queue" "cloudgraph_queue" {
     Environment = "test"
   }
 }
+
+resource "aws_s3_bucket" "source" {
+  bucket = "cloudgraph-bucket-source"
+  acl    = "public-read"
+
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["PUT", "POST"]
+    allowed_origins = ["*"]
+    expose_headers  = ["ETag"]
+    max_age_seconds = 3000
+  }
+
+  versioning {
+    enabled = true
+  }
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        kms_master_key_id = aws_kms_key.lambda_kms_key.arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+
+  replication_configuration {
+    role = aws_iam_role.lambda_iam_role.arn
+
+    rules {
+      id     = "foobar"
+      prefix = "foo"
+      status = "Enabled"
+
+      destination {
+        bucket        = aws_s3_bucket.destination.arn
+        storage_class = "STANDARD"
+      }
+    }
+  }
+
+  lifecycle_rule {
+    id      = "log"
+    enabled = true
+
+    prefix = "log/"
+
+    tags = {
+      rule      = "log"
+      autoclean = "true"
+    }
+
+    transition {
+      days          = 30
+      storage_class = "STANDARD_IA" # or "ONEZONE_IA"
+    }
+
+    transition {
+      days          = 60
+      storage_class = "GLACIER"
+    }
+
+    expiration {
+      days = 90
+    }
+  }
+
+  tags = {
+    Name        = "Cloudgraph Source"
+    Environment = "Dev"
+  }
+}
+
+resource "aws_s3_bucket" "destination" {
+  bucket = "cloudgraph-bucket-destination"
+
+  tags = {
+    Name        = "Cloudgraph Destination"
+    Environment = "Dev"
+  }
+}
+
+resource "aws_iam_policy" "replication" {
+  name = "cloudgraph-policy-replication"
+
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "s3:GetReplicationConfiguration",
+        "s3:ListBucket"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "${aws_s3_bucket.source.arn}"
+      ]
+    },
+    {
+      "Action": [
+        "s3:GetObjectVersionForReplication",
+        "s3:GetObjectVersionAcl",
+         "s3:GetObjectVersionTagging"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "${aws_s3_bucket.source.arn}/*"
+      ]
+    },
+    {
+      "Action": [
+        "s3:ReplicateObject",
+        "s3:ReplicateDelete",
+        "s3:ReplicateTags"
+      ],
+      "Effect": "Allow",
+      "Resource": "${aws_s3_bucket.destination.arn}/*"
+    }
+  ]
+}
+POLICY
+}
+
+resource "aws_iam_role_policy_attachment" "replication" {
+  role       = aws_iam_role.lambda_iam_role.name
+  policy_arn = aws_iam_policy.replication.arn
+}
