@@ -33,8 +33,6 @@ export default class Provider extends CloudGraph.Client {
     this.serviceMap = serviceMap
   }
 
-  private credentials: Credentials | undefined
-
   private serviceMap: { [key: string]: any } // TODO: how to type the service map
 
   private properties: {
@@ -59,10 +57,18 @@ export default class Provider extends CloudGraph.Client {
     const result: { [key: string]: any } = {
       ...this.config,
     }
+    const profileAnswer = await this.interface.prompt([
+      {
+        type: 'input',
+        message: 'Please enter the name of the AWS credential profile to load from the shared credentials file',
+        name: 'profile',
+        default: 'default'
+      }
+    ])
     // Try to find a users aws credentials so we can request to use them and add the profile to approved list.
-    await this.getCredentials()
+    await this.getCredentials(profileAnswer)
     // If we get here, we know we have credentials to use
-    const profile = this.config.profile || 'default'
+    const { profile } = profileAnswer
     if (!result.profileApprovedList?.find((val: string) => val === profile)) {
       result.profileApprovedList = [
         ...(result.profileApprovedList ?? []),
@@ -127,9 +133,9 @@ export default class Provider extends CloudGraph.Client {
     return result
   }
 
-  async getIdentity(): Promise<{ accountId: string }> {
+  async getIdentity({ profile, role }: { profile: string, role: string }): Promise<{ accountId: string }> {
     try {
-      const credentials = await this.getCredentials()
+      const credentials = await this.getCredentials({ profile, role })
       return new Promise((resolve, reject) =>
         new STS({ credentials }).getCallerIdentity((err, data) => {
           if (err) {
@@ -145,7 +151,7 @@ export default class Provider extends CloudGraph.Client {
     }
   }
 
-  private getCredentials(): Promise<Credentials> {
+  private getCredentials({ profile, role }: { profile: string, role: string }): Promise<Credentials> {
     return new Promise(async resolveCreds => {
       // If we have keys set in the config file, just use them
       if (this.config.accessKeyId && this.config.secretAccessKey) {
@@ -154,10 +160,6 @@ export default class Provider extends CloudGraph.Client {
           secretAccessKey: this.config.secretAccessKey,
         }
       }
-      // If the client instance has creds set, weve gone through this function before.. just reuse them
-      if (this.credentials) {
-        return resolveCreds(this.credentials)
-      }
       /**
        * Tries to find creds in priority order
        * 1. if they have configured a roleArn and profile assume that role using STS
@@ -165,25 +167,23 @@ export default class Provider extends CloudGraph.Client {
        * 3. if they have not configured either of the above, assume profile = default from ~/.aws/credentials
        */
       this.logger.info('Searching for AWS credentials...')
+      let credentials
       switch (true) {
-        case this.config.profile &&
-          this.config.profile !== 'default' &&
-          this.config.role &&
-          this.config.role !== '': {
+        case profile && profile !== 'default' && role && role !== '': {
           const sts = new AWS.STS()
-          await new Promise<void>(resolve => {
+          credentials = await new Promise<Credentials>(resolve => {
             sts.assumeRole(
               {
-                RoleArn: this.config.role,
+                RoleArn: role,
                 RoleSessionName: 'CloudGraph',
               },
               (err, data) => {
                 if (err) {
                   this.logger.error(
-                    `No credentials found for profile: ${this.config.profile} role: ${this.config.role}`
+                    `No credentials found for profile: ${profile} role: ${role}`
                   )
                   this.logger.debug(err)
-                  resolve()
+                  resolve(null)
                 } else {
                   // successful response
                   const {
@@ -197,30 +197,28 @@ export default class Provider extends CloudGraph.Client {
                     sessionToken,
                   }
                   AWS.config.update(creds)
-                  this.credentials = creds
-                  resolve()
+                  resolve(creds)
                 }
               }
             )
           })
           break
         }
-        case this.config.profile && this.config.profile !== 'default': {
+        case profile && profile !== 'default': {
           try {
             // TODO: how to catch the error from SharedIniFileCredentials when profile doent exist
-            const credentials = new AWS.SharedIniFileCredentials({
-              profile: this.config.profile,
+            credentials = new AWS.SharedIniFileCredentials({
+              profile: profile,
               callback: (err: any) => {
                 if (err) {
                   this.logger.error(
-                    `No credentails found for profile ${this.config.profile}`
+                    `No credentails found for profile ${profile}`
                   )
                 }
               },
             })
             if (credentials) {
               AWS.config.credentials = credentials
-              this.credentials = AWS.config.credentials
             }
             break
           } catch (error: any) {
@@ -233,15 +231,14 @@ export default class Provider extends CloudGraph.Client {
               if (err) {
                 resolve()
               } else {
-                this.credentials = AWS.config.credentials
+                credentials = AWS.config.credentials
                 resolve()
               }
             })
           )
         }
       }
-      // If we still havent found creds, prompt them directly to input them
-      if (!this.credentials) {
+      if (!credentials) {
         this.logger.info('No AWS Credentials found, please enter them manually')
         const answers = await this.interface.prompt([
           {
@@ -256,13 +253,13 @@ export default class Provider extends CloudGraph.Client {
           },
         ])
         if (answers?.accessKeyId && answers?.secretAccessKey) {
-          this.credentials = answers
+          credentials = answers
         } else {
           this.logger.error('Cannot scan AWS without credentials')
           throw new Error()
         }
       } else {
-        const profileName = this.config.profile || 'default'
+        const profileName = profile || 'default'
         if (
           !this.config?.profileApprovedList?.find(
             (val: string) => val === profileName
@@ -273,7 +270,7 @@ export default class Provider extends CloudGraph.Client {
             {
               type: 'confirm',
               message: `CG found AWS credentials with accessKeyId: ${chalk.green(
-                obfuscateSensitiveString(this.credentials.accessKeyId)
+                obfuscateSensitiveString(credentials.accessKeyId)
               )}. Are these ok to use?`,
               name: 'approved',
             },
@@ -288,19 +285,19 @@ export default class Provider extends CloudGraph.Client {
       }
       this.logger.success('Found and using the following AWS credentials')
       this.logger.success(
-        `profile: ${chalk.underline.green(this.config.profile ?? 'default')}`
+        `profile: ${chalk.underline.green(profile ?? 'default')}`
       )
       this.logger.success(
         `accessKeyId: ${chalk.underline.green(
-          obfuscateSensitiveString(this.credentials.accessKeyId)
+          obfuscateSensitiveString(credentials.accessKeyId)
         )}`
       )
       this.logger.success(
         `secretAccessKey: ${chalk.underline.green(
-          obfuscateSensitiveString(this.credentials.secretAccessKey)
+          obfuscateSensitiveString(credentials.secretAccessKey)
         )}`
       )
-      resolveCreds(this.credentials)
+      resolveCreds(credentials)
     })
   }
 
@@ -333,147 +330,144 @@ export default class Provider extends CloudGraph.Client {
    * @returns Promise<any> All provider data
    */
   async getData({ opts }: { opts: Opts }): Promise<ProviderData> {
-    let { regions: configuredRegions, resources: configuredResources } =
-      this.config
-    if (!configuredRegions) {
-      configuredRegions = this.properties.regions.join(',')
-    } else {
-      configuredRegions = [...new Set(configuredRegions.split(','))].join(',')
-    }
-    if (!configuredResources) {
-      configuredResources = Object.values(this.properties.services).join(',')
-    }
-    const credentials = await this.getCredentials()
-    const rawData = []
-    const resourceNames: string[] = sortResourcesDependencies([
-      ...new Set<string>(configuredResources.split(',')),
-    ])
-
-    this.logSelectedRegionsAndResources(configuredRegions, configuredResources)
-
-    // Leaving this here in case we need to test another service or to inject a logging function
-    // setAwsRetryOptions({ global: true, configObj: this.config })
-
-    // Get Raw data for services
-    try {
-      for (const resource of resourceNames) {
-        const serviceClass = this.getService(resource)
-        if (serviceClass && serviceClass.getData) {
-          rawData.push({
-            name: resource,
-            data: await serviceClass.getData({
-              regions: configuredRegions,
-              credentials,
-              opts,
-              rawData,
-            }),
-          })
-          this.logger.success(`${resource} scan completed`)
-        } else {
-          this.logger.warn(`Skipping service ${resource} as there was an issue getting data for it. Is it currently supported?`)
-        }
-      }
-    } catch (error: any) {
-      this.logger.error('There was an error scanning AWS sdk data')
-      this.logger.debug(error)
-    }
-    // Handle global tag entities
-    try {
-      const tagRegion = 'aws-global'
-      const tags = { name: 'tag', data: { [tagRegion]: [] } }
-      for (const { data: entityData } of rawData) {
-        for (const region of Object.keys(entityData)) {
-          const dataAtRegion = entityData[region]
-          dataAtRegion.forEach(singleEntity => {
-            if (!isEmpty(singleEntity.Tags)) {
-              for (const [key, value] of Object.entries(singleEntity.Tags)) {
-                if (
-                  !tags.data[tagRegion].find(
-                    ({ id }) => id === `${key}:${value}`
-                  )
-                ) {
-                  tags.data[tagRegion].push({
-                    id: `${key}:${value}`,
-                    key,
-                    value,
-                  })
-                }
-              }
-            }
-          })
-        }
-      }
-      rawData.push(tags)
-    } catch (error: any) {
-      this.logger.error('There was an error aggregating AWS tags')
-      this.logger.debug(error)
-    }
-
-    /**
-     * Loop through the aws sdk data to format entities and build connections
-     * 1. Format data with provider service format function
-     * 2. build connections for data with provider service connections function
-     * 3. spread new connections over result.connections
-     * 4. push the array of formatted entities into result.entites
-     */
     const result: ProviderData = {
       entities: [],
       connections: {},
     }
-    try {
-      const { accountId } = await this.getIdentity()
-      for (const serviceData of rawData) {
-        const serviceClass = this.getService(serviceData.name)
-        const entities: any[] = []
-        for (const region of Object.keys(serviceData.data)) {
-          const data = serviceData.data[region]
-          if (!isEmpty(data)) {
-            data.forEach((service: any) => {
-              entities.push(
-                serviceClass.format({
-                  service,
-                  region,
-                  account: accountId,
-                })
-              )
-              if (typeof serviceClass.getConnections === 'function') {
-                // We need to loop through all configured regions here because services can be connected to things in another region
-                for (const connectionRegion of configuredRegions.split(',')) {
-                  result.connections = {
-                    ...result.connections,
-                    ...serviceClass.getConnections({
-                      service,
-                      region: connectionRegion,
-                      account: accountId,
-                      data: rawData,
-                    }),
+    for (const account of this.config.accounts) {
+      let { regions: configuredRegions, resources: configuredResources } = account
+      if (!configuredRegions) {
+        configuredRegions = this.properties.regions.join(',')
+      } else {
+        configuredRegions = [...new Set(configuredRegions.split(','))].join(',')
+      }
+      if (!configuredResources) {
+        configuredResources = Object.values(this.properties.services).join(',')
+      }
+      const credentials = await this.getCredentials(account)
+      const rawData = []
+      const resourceNames: string[] = [
+        ...new Set<string>(configuredResources.split(',')),
+      ]
+
+      // Leaving this here in case we need to test another service or to inject a logging function
+      // setAwsRetryOptions({ global: true, configObj: this.config })
+
+      // Get Raw data for services
+      try {
+        for (const resource of resourceNames) {
+          const serviceClass = this.getService(resource)
+          if (serviceClass && serviceClass.getData) {
+            rawData.push({
+              name: resource,
+              data: await serviceClass.getData({
+                regions: configuredRegions,
+                credentials,
+                opts,
+                rawData,
+              }),
+            })
+            this.logger.success(`${resource} scan completed`)
+          } else {
+            this.logger.warn(`Skipping service ${resource} as there was an issue getting data for it. Is it currently supported?`)
+          }
+        }
+      } catch (error: any) {
+        this.logger.error('There was an error scanning AWS sdk data')
+        this.logger.debug(error)
+      }
+      // Handle global tag entities
+      try {
+        const tagRegion = 'aws-global'
+        const tags = { name: 'tag', data: { [tagRegion]: [] } }
+        for (const { data: entityData } of rawData) {
+          for (const region of Object.keys(entityData)) {
+            const dataAtRegion = entityData[region]
+            dataAtRegion.forEach(singleEntity => {
+              if (!isEmpty(singleEntity.Tags)) {
+                for (const [key, value] of Object.entries(singleEntity.Tags)) {
+                  if (
+                    !tags.data[tagRegion].find(
+                      ({ id }) => id === `${key}:${value}`
+                    )
+                  ) {
+                    tags.data[tagRegion].push({
+                      id: `${key}:${value}`,
+                      key,
+                      value,
+                    })
                   }
                 }
               }
             })
           }
         }
-        result.entities.push({
-          name: serviceData.name,
-          mutation: serviceClass.mutation,
-          data: entities,
-        })
+        rawData.push(tags)
+      } catch (error: any) {
+        this.logger.error('There was an error aggregating AWS tags')
+        this.logger.debug(error)
       }
-    } catch (error: any) {
-      this.logger.error('There was an error building connections for AWS data')
-      this.logger.debug(error)
-    }
-    try {
-      result.entities = this.enrichInstanceWithBillingData(
-        configuredRegions,
-        rawData,
-        result.entities
-      )
-    } catch (error: any) {
-      this.logger.error(
-        'There was an error enriching AWS data with billing data'
-      )
-      this.logger.debug(error)
+
+      /**
+       * Loop through the aws sdk data to format entities and build connections
+       * 1. Format data with provider service format function
+       * 2. build connections for data with provider service connections function
+       * 3. spread new connections over result.connections
+       * 4. push the array of formatted entities into result.entites
+       */
+      const result: ProviderData = {
+        entities: [],
+        connections: {},
+      }
+      try {
+        const { accountId } = await this.getIdentity(account)
+        for (const serviceData of rawData) {
+          const serviceClass = this.getService(serviceData.name)
+          const entities: any[] = []
+          for (const region of Object.keys(serviceData.data)) {
+            const data = serviceData.data[region]
+            if (!isEmpty(data)) {
+              data.forEach((service: any) => {
+                entities.push(
+                  serviceClass.format({
+                    service,
+                    region,
+                    account: accountId,
+                  })
+                )
+                if (typeof serviceClass.getConnections === 'function') {
+                  // We need to loop through all configured regions here because services can be connected to things in another region
+                  for (const connectionRegion of configuredRegions.split(',')) {
+                    result.connections = {
+                      ...result.connections,
+                      ...serviceClass.getConnections({
+                        service,
+                        region: connectionRegion,
+                        account: accountId,
+                        data: rawData,
+                      }),
+                    }
+                  }
+                }
+              })
+            }
+          }
+          result.entities.push({
+            name: serviceData.name,
+            mutation: serviceClass.mutation,
+            data: entities,
+          })
+        }
+      } catch (error: any) {
+        this.logger.error('There was an error building connections for AWS data')
+        this.logger.debug(error)
+      }
+      try {
+        result.entities = this.enrichInstanceWithBillingData(configuredRegions, rawData, result.entities)
+      } catch (error: any) {
+        this.logger.error('There was an error enriching AWS data with billing data')
+        this.logger.debug(error)
+      }
     }
     return result
   }
