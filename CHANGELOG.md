@@ -1,3 +1,10 @@
+## [0.18.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.18.0...0.18.1) (2021-09-20)
+
+
+### Bug Fixes
+
+* **nat:** fixing NAT Gateway ARN ([3c04d74](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/3c04d74e5e5ad609426e23aaf559eed910372a5c))
+
 # [0.18.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.17.0...0.18.0) (2021-09-16)
 
 
