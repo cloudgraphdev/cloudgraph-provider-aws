@@ -106,7 +106,20 @@ export default class Provider extends CloudGraph.Client {
   }
 
   async configure(flags: any): Promise<{ [key: string]: any }> {
-    const result: { [key: string]: any } = {}
+    const result: { [key: string]: any } = {
+      ...this.config,
+    }
+    // Try to find a users aws credentials so we can request to use them and add the profile to approved list.
+    await this.getCredentials()
+    // If we get here, we know we have credentials to use
+    const profile = this.config.profile || 'default'
+    if (!result.profileApprovedList?.find((val: string) => val === profile)) {
+      result.profileApprovedList = [
+        ...(result.profileApprovedList ?? []),
+        profile,
+      ]
+    }
+
     const { regions: regionsAnswer } = await this.interface.prompt([
       {
         type: 'checkbox',
@@ -184,9 +197,23 @@ export default class Provider extends CloudGraph.Client {
 
   private getCredentials(): Promise<Credentials> {
     return new Promise(async resolveCreds => {
+      // If we have keys set in the config file, just use them
+      if (this.config.accessKeyId && this.config.secretAccessKey) {
+        return {
+          accessKeyId: this.config.accessKeyId,
+          secretAccessKey: this.config.secretAccessKey,
+        }
+      }
+      // If the client instance has creds set, weve gone through this function before.. just reuse them
       if (this.credentials) {
         return resolveCreds(this.credentials)
       }
+      /**
+       * Tries to find creds in priority order
+       * 1. if they have configured a roleArn and profile assume that role using STS
+       * 2. if they have configured a profile, assume that profile from ~/.aws/credentials
+       * 3. if they have not configured either of the above, assume profile = default from ~/.aws/credentials
+       */
       this.logger.info('Searching for AWS credentials...')
       switch (true) {
         case this.config.profile &&
@@ -263,6 +290,7 @@ export default class Provider extends CloudGraph.Client {
           )
         }
       }
+      // If we still havent found creds, prompt them directly to input them
       if (!this.credentials) {
         this.logger.info('No AWS Credentials found, please enter them manually')
         const answers = await this.interface.prompt([
@@ -284,20 +312,28 @@ export default class Provider extends CloudGraph.Client {
           throw new Error()
         }
       } else {
-        const { approved } = await this.interface.prompt([
-          {
-            type: 'confirm',
-            message: `CG found AWS credentials with accessKeyId: ${chalk.green(
-              obfuscateSensitiveString(this.credentials.accessKeyId)
-            )}. Are these ok to use?`,
-            name: 'approved',
-          },
-        ])
-        if (!approved) {
-          this.logger.error(
-            'CG does not have approval to use the credentials it found, please rerun CG with the credentials you want to use'
+        const profileName = this.config.profile || 'default'
+        if (
+          !this.config?.profileApprovedList?.find(
+            (val: string) => val === profileName
           )
-          throw new Error('Credentials not approved')
+        ) {
+          // Confirm the found credentials are ok to use
+          const { approved } = await this.interface.prompt([
+            {
+              type: 'confirm',
+              message: `CG found AWS credentials with accessKeyId: ${chalk.green(
+                obfuscateSensitiveString(this.credentials.accessKeyId)
+              )}. Are these ok to use?`,
+              name: 'approved',
+            },
+          ])
+          if (!approved) {
+            this.logger.error(
+              'CG does not have approval to use the credentials it found, please rerun CG with the credentials you want to use'
+            )
+            throw new Error('Credentials not approved')
+          }
         }
       }
       this.logger.success('Found and using the following AWS credentials')
