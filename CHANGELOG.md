@@ -1,3 +1,15 @@
+# [0.19.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.18.1...0.19.0) (2021-09-20)
+
+
+### Bug Fixes
+
+* **creds:** Update with profileApprovedList so we only prompt once ([ceb15ad](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/ceb15ad464f37cb0778145ddb1fa87914e0eedfc))
+
+
+### Features
+
+* **creds:** update creds function to ask if the creds are ok to use ([032cd61](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/032cd61f0b6694307eb481a737b01926b404af8e))
+
 ## [0.18.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.18.0...0.18.1) (2021-09-20)
 
 
