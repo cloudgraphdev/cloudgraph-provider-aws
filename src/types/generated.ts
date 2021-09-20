@@ -166,7 +166,7 @@ export type AwsAsg = {
 };
 
 export type AwsBucketPolicy = {
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['String'];
   policy?: Maybe<Scalars['String']>;
 };
 

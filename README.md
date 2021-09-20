@@ -74,6 +74,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | route53HostedZone  | route53Record, vpc                                       |
 | route53Record      | route53HostedZone, elb, alb                              |
 | routeTable         | vpc                                                      |
+| s3                 |                                                          |
 
 # Query Examples
 

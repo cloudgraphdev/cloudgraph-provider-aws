@@ -30,6 +30,6 @@ type awsBucketPolicy
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-  id: ID
+  id: String! @id
   policy: String
 }

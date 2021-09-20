@@ -64,10 +64,6 @@ const getBucketAcl = async (s3: S3, name: BucketName) =>
         Bucket: name,
       },
       (err: AWSError, data: GetBucketAclOutput) => {
-        if (err) {
-          generateAwsErrorLog(serviceName, 's3:getBucketAcl', err)
-        }
-
         if (!isEmpty(data)) {
           resolve(data)
         }
@@ -84,14 +80,6 @@ const getBucketAcceleration = async (s3: S3, name: BucketName) =>
         Bucket: name,
       },
       (err: AWSError, data: GetBucketAccelerateConfigurationOutput) => {
-        if (err) {
-          generateAwsErrorLog(
-            serviceName,
-            's3:getBucketAccelerateConfiguration',
-            err
-          )
-        }
-
         if (!isEmpty(data)) {
           resolve(data.Status)
         }
@@ -108,10 +96,6 @@ const getBucketCors = async (s3: S3, name: BucketName) =>
         Bucket: name,
       },
       (err: AWSError, data: GetBucketCorsOutput) => {
-        if (err) {
-          generateAwsErrorLog(serviceName, 's3:getBucketCors', err)
-        }
-
         if (!isEmpty(data)) {
           resolve(data.CORSRules)
         }
@@ -128,10 +112,6 @@ const getBucketEncryption = async (s3: S3, name: BucketName) =>
         Bucket: name,
       },
       (err: AWSError, data: GetBucketEncryptionOutput) => {
-        if (err) {
-          generateAwsErrorLog(serviceName, 's3:getBucketEncryption', err)
-        }
-
         if (!isEmpty(data)) {
           resolve(data.ServerSideEncryptionConfiguration)
         }
@@ -148,14 +128,6 @@ const getBucketLifecycleConfiguration = async (s3: S3, name: BucketName) =>
         Bucket: name,
       },
       (err: AWSError, data: GetBucketLifecycleConfigurationOutput) => {
-        if (err) {
-          generateAwsErrorLog(
-            serviceName,
-            's3:getBucketLifecycleConfiguration',
-            err
-          )
-        }
-
         if (!isEmpty(data)) {
           resolve(data.Rules)
         }
@@ -174,10 +146,6 @@ const checkIfBucketLocationMatchesCrawlRegion = async (
     s3.getBucketLocation(
       { Bucket: name },
       (err: AWSError, data: GetBucketLocationOutput) => {
-        if (err) {
-          generateAwsErrorLog(serviceName, 's3:getBucketLocation', err)
-        }
-
         if (!isEmpty(data)) {
           const foundRegion =
             data.LocationConstraint !== ''
@@ -198,10 +166,6 @@ const getBucketLogging = async (s3: S3, name: BucketName) =>
         Bucket: name,
       },
       (err: AWSError, data: GetBucketLoggingOutput) => {
-        if (err) {
-          generateAwsErrorLog(serviceName, 's3:getBucketLogging', err)
-        }
-
         if (!isEmpty(data)) {
           resolve(data.LoggingEnabled)
         }
@@ -219,13 +183,6 @@ const getBucketPolicy = async (s3: S3, name: BucketName) =>
         Bucket: name,
       },
       (err: AWSError, data: GetBucketPolicyOutput) => {
-        if (err) {
-          /**
-           * This error is ok, not all buckets have policies
-           */
-          logger.error(err.message)
-        }
-
         if (!isEmpty(data)) {
           resolve(data.Policy)
         }
@@ -241,13 +198,6 @@ const getBucketPolicyStatus = async (s3: S3, name: BucketName) =>
         Bucket: name,
       },
       (err: AWSError, data: GetBucketPolicyStatusOutput) => {
-        if (err) {
-          /**
-           * This error is ok, not all buckets have policies
-           */
-          logger.error(err.message)
-        }
-
         if (!isEmpty(data)) {
           resolve(data.PolicyStatus)
         }
@@ -263,10 +213,6 @@ const getBucketPublicAccessBlock = async (s3: S3, name: BucketName) =>
         Bucket: name,
       },
       (err: AWSError, data: GetPublicAccessBlockOutput) => {
-        if (err) {
-          generateAwsErrorLog(serviceName, 's3:getPublicAccessBlock', err)
-        }
-
         if (!isEmpty(data)) {
           resolve(data.PublicAccessBlockConfiguration)
         }
@@ -282,10 +228,6 @@ const getBucketReplication = async (s3: S3, name: BucketName) =>
         Bucket: name,
       },
       (err: AWSError, data: GetBucketReplicationOutput) => {
-        if (err) {
-          generateAwsErrorLog(serviceName, 's3:getBucketReplication', err)
-        }
-
         if (!isEmpty(data)) {
           resolve(data.ReplicationConfiguration)
         }
@@ -302,9 +244,6 @@ const getBucketRequestPayment = async (s3: S3, name: BucketName) =>
         Bucket: name,
       },
       (err: AWSError, data: GetBucketRequestPaymentOutput) => {
-        if (err) {
-          generateAwsErrorLog(serviceName, 's3:getBucketRequestPayment', err)
-        }
         if (!isEmpty(data)) {
           resolve(data.Payer)
         }
@@ -320,9 +259,6 @@ const getBucketVersioning = async (s3: S3, name: BucketName) =>
         Bucket: name,
       },
       (err: AWSError, data: GetBucketVersioningOutput) => {
-        if (err) {
-          generateAwsErrorLog(serviceName, 's3:getBucketVersioning', err)
-        }
         if (!isEmpty(data)) {
           resolve(data)
         }
@@ -338,10 +274,6 @@ const getBucketTagging = async (s3: S3, name: BucketName) =>
         Bucket: name,
       },
       (err: AWSError, data: GetBucketTaggingOutput) => {
-        if (err) {
-          generateAwsErrorLog(serviceName, 's3:getBucketTagging', err)
-        }
-
         if (!isEmpty(data)) {
           resolve(data.TagSet)
         }
@@ -357,9 +289,6 @@ const getBucketWebsite = async (s3: S3, name: BucketName) =>
         Bucket: name,
       },
       (err: AWSError, data: GetBucketWebsiteOutput) => {
-        if (err) {
-          generateAwsErrorLog(serviceName, 's3:getBucketWebsite', err)
-        }
         if (!isEmpty(data)) {
           resolve(data)
         }
@@ -488,7 +417,7 @@ const listBucketObjects = async (s3: S3, name: BucketName) =>
         contents.push(...Contents)
 
         if (IsTruncated && contents.length < awsBucketItemsLimit) {
-          logger.info(lt.foundAnotherThousand)
+          logger.debug(lt.foundAnotherThousand)
           listAllObjects(NextContinuationToken)
         }
 
@@ -575,7 +504,7 @@ export default async ({
       regionPromises.push(regionPromise)
     })
     await Promise.all(regionPromises)
-    logger.info(lt.fetchedS3Buckets(bucketData.length))
+    logger.debug(lt.fetchedS3Buckets(bucketData.length))
 
     bucketData.map(({ Name, region }, idx: number) => {
       const bucketObjectListPromise = new Promise<void>(async resolveBucket => {
@@ -585,7 +514,7 @@ export default async ({
           endpoint,
           s3ForcePathStyle: true,
         })
-        logger.info(lt.gettingBucketBasicInfo(Name))
+        logger.debug(lt.gettingBucketBasicInfo(Name))
         const bucketObjectList: S3Object[] = await listBucketObjects(s3, Name)
 
         bucketData[idx].Contents = []
@@ -607,7 +536,7 @@ export default async ({
       })
       const additionalInfoPromise = new Promise<void>(
         async resolvePublicStatus => {
-          logger.info(lt.gettingBucketAdditionalInfo(Name))
+          logger.debug(lt.gettingBucketAdditionalInfo(Name))
           const { Tags, ...additionalInfo } = await getBucketAdditionalInfo(
             s3,
             Name

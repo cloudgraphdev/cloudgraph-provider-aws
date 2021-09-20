@@ -1,3 +1,4 @@
+import cuid from 'cuid'
 import isEmpty from 'lodash/isEmpty'
 
 import {
@@ -61,10 +62,10 @@ export default ({
     }`
   }
 
-  const bucketPolicies: { policy: Policy }[] = []
+  const bucketPolicies: { id: string; policy: Policy }[] = []
 
   if (!isEmpty(policy)) {
-    bucketPolicies.push({ policy })
+    bucketPolicies.push({ id: cuid(), policy })
   }
 
   let publicAccessBlockData = {
