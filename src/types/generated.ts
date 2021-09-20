@@ -23,6 +23,12 @@ export type AwsAccessLogSettings = {
   destinationArn?: Maybe<Scalars['String']>;
 };
 
+export type AwsAccountRecoverySetting = {
+  id: Scalars['String'];
+  priority?: Maybe<Scalars['Int']>;
+  name?: Maybe<Scalars['String']>;
+};
+
 export type AwsAlb = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -191,6 +197,119 @@ export type AwsCloudwatchDimensions = {
   id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
+};
+
+export type AwsCognitoIdentityPool = {
+  id: Scalars['String'];
+  identityPoolName?: Maybe<Scalars['String']>;
+  allowUnauthenticatedIdentities?: Maybe<Scalars['String']>;
+  allowClassicFlow?: Maybe<Scalars['String']>;
+  supportedLoginProviders?: Maybe<Array<Maybe<AwsSupportedLoginProvider>>>;
+  developerProviderName?: Maybe<Scalars['String']>;
+  openIdConnectProviderARNs?: Maybe<Array<Maybe<Scalars['String']>>>;
+  cognitoIdentityProviders?: Maybe<Array<Maybe<AwsCognitoIdentityProviders>>>;
+  samlProviderARNs?: Maybe<Array<Maybe<Scalars['String']>>>;
+  region?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
+export type AwsCognitoIdentityProviders = {
+  providerName?: Maybe<Scalars['String']>;
+  clientId?: Maybe<Scalars['String']>;
+  serverSideTokenCheck?: Maybe<Scalars['String']>;
+};
+
+export type AwsCognitoUserPool = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  policies?: Maybe<AwsCognitoUserPoolPasswordPolicy>;
+  lambdaConfig?: Maybe<AwsCognitoUserPoolLambdaConfig>;
+  status?: Maybe<Scalars['String']>;
+  lastModifiedDate?: Maybe<Scalars['String']>;
+  creationDate?: Maybe<Scalars['String']>;
+  schemaAttributes?: Maybe<Array<Maybe<AwsCognitoUserPoolSchemaAttribute>>>;
+  autoVerifiedAttributes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  aliasAttributes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  usernameAttributes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  smsVerificationMessage?: Maybe<Scalars['String']>;
+  emailVerificationMessage?: Maybe<Scalars['String']>;
+  emailVerificationSubject?: Maybe<Scalars['String']>;
+  verificationMessageTemplateSmsMessage?: Maybe<Scalars['String']>;
+  verificationMessageTemplateEmailMessage?: Maybe<Scalars['String']>;
+  verificationMessageTemplateEmailSubject?: Maybe<Scalars['String']>;
+  verificationMessageTemplateEmailMessageByLink?: Maybe<Scalars['String']>;
+  verificationMessageTemplateEmailSubjectByLink?: Maybe<Scalars['String']>;
+  verificationMessageTemplateDefaultEmailOption?: Maybe<Scalars['String']>;
+  smsAuthenticationMessage?: Maybe<Scalars['String']>;
+  mfaConfiguration?: Maybe<Scalars['String']>;
+  deviceConfigChallengeRequiredOnNewDevice?: Maybe<Scalars['String']>;
+  deviceConfigDeviceOnlyRememberedOnUserPrompt?: Maybe<Scalars['String']>;
+  estimatedNumberOfUsers?: Maybe<Scalars['Int']>;
+  emailConfigSourceArn?: Maybe<Scalars['String']>;
+  emailConfigReplyToEmailAddress?: Maybe<Scalars['String']>;
+  emailConfigEmailSendingAccount?: Maybe<Scalars['String']>;
+  emailConfigFrom?: Maybe<Scalars['String']>;
+  emailConfigConfigurationSet?: Maybe<Scalars['String']>;
+  smsConfigurationSnsCallerArn?: Maybe<Scalars['String']>;
+  smsConfigurationExternalId?: Maybe<Scalars['String']>;
+  smsConfigurationFailure?: Maybe<Scalars['String']>;
+  emailConfigurationFailure?: Maybe<Scalars['String']>;
+  domain?: Maybe<Scalars['String']>;
+  customDomain?: Maybe<Scalars['String']>;
+  adminCreateUserConfigAllowAdminCreateUserOnly?: Maybe<Scalars['String']>;
+  adminCreateUserConfigUnusedAccountValidityDays?: Maybe<Scalars['Int']>;
+  adminCreateUserConfigInviteMessageTemplateSMSMessage?: Maybe<Scalars['String']>;
+  adminCreateUserConfigInviteMessageTemplateEmailMessage?: Maybe<Scalars['String']>;
+  adminCreateUserConfigInviteMessageTemplateEmailSubject?: Maybe<Scalars['String']>;
+  userPoolAddOnsAdvancedSecurityMode?: Maybe<Scalars['String']>;
+  usernameConfigurationCaseSensitive?: Maybe<Scalars['String']>;
+  accountRecoverySetting?: Maybe<Array<Maybe<AwsAccountRecoverySetting>>>;
+  region: Scalars['String'];
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+};
+
+export type AwsCognitoUserPoolLambdaConfig = {
+  id: Scalars['String'];
+  preSignUp?: Maybe<Scalars['String']>;
+  customMessage?: Maybe<Scalars['String']>;
+  postConfirmation?: Maybe<Scalars['String']>;
+  preAuthentication?: Maybe<Scalars['String']>;
+  postAuthentication?: Maybe<Scalars['String']>;
+  defineAuthChallenge?: Maybe<Scalars['String']>;
+  createAuthChallenge?: Maybe<Scalars['String']>;
+  verifyAuthChallengeResponse?: Maybe<Scalars['String']>;
+  preTokenGeneration?: Maybe<Scalars['String']>;
+  userMigration?: Maybe<Scalars['String']>;
+  customSMSSenderLambdaVersion?: Maybe<Scalars['String']>;
+  customSMSSenderLambdaArn?: Maybe<Scalars['String']>;
+  customEmailSenderLambdaVersion?: Maybe<Scalars['String']>;
+  customEmailSenderLambdaArn?: Maybe<Scalars['String']>;
+  kmsKeyID?: Maybe<Scalars['String']>;
+};
+
+export type AwsCognitoUserPoolPasswordPolicy = {
+  id: Scalars['String'];
+  minimumLength?: Maybe<Scalars['Int']>;
+  requireUppercase?: Maybe<Scalars['String']>;
+  requireLowercase?: Maybe<Scalars['String']>;
+  requireNumbers?: Maybe<Scalars['String']>;
+  requireSymbols?: Maybe<Scalars['String']>;
+  temporaryPasswordValidityDays?: Maybe<Scalars['Int']>;
+};
+
+export type AwsCognitoUserPoolSchemaAttribute = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  attributeDataType?: Maybe<Scalars['String']>;
+  developerOnlyAttribute?: Maybe<Scalars['String']>;
+  mutable?: Maybe<Scalars['String']>;
+  required?: Maybe<Scalars['String']>;
+  numberAttributeConstraintsMinValue?: Maybe<Scalars['String']>;
+  numberAttributeConstraintsMaxValue?: Maybe<Scalars['String']>;
+  stringAttributeConstraintsMinValue?: Maybe<Scalars['String']>;
+  stringAttributeConstraintsMaxValue?: Maybe<Scalars['String']>;
 };
 
 export type AwsEbs = {
@@ -422,6 +541,7 @@ export type AwsLambda = {
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
 };
 
 export type AwsLaunchConfiguration = {
@@ -672,6 +792,11 @@ export type AwsSubnet = {
   ipV6Cidr?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
+export type AwsSupportedLoginProvider = {
+  identityProvider?: Maybe<Scalars['String']>;
+  identityProviderId?: Maybe<Scalars['String']>;
 };
 
 export type AwsSuspendedProcess = {
