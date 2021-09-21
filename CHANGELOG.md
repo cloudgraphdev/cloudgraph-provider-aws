@@ -1,3 +1,11 @@
+# [0.20.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.19.0...0.20.0) (2021-09-21)
+
+
+### Features
+
+* Added S3 service ([7933db1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/7933db13c75329a0c99487d89d1caf83db5d707f))
+* Added unit tests for S3 service ([b0cff5d](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b0cff5d5b56bd65f5853211ceaa791ca06618816))
+
 # [0.19.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.18.1...0.19.0) (2021-09-20)
 
 
