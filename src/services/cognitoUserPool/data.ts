@@ -6,9 +6,11 @@ import COGUSER, {
 import CloudGraph from '@cloudgraph/sdk'
 import { groupBy } from 'lodash'
 import { Credentials, TagMap } from '../../types'
-import { generateAwsErrorLog } from '../../utils'
+import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
 import awsLoggerText from '../../properties/logger'
 
+const serviceName = 'Cognito User Pool'
+const endpoint = initTestEndpoint(serviceName)
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 
@@ -17,7 +19,6 @@ const { logger } = CloudGraph
  */
 
 const MAX_RESULTS = 60
-const serviceName = 'cognitoUserPool'
 
 export interface RawAwsCognitoUserPool extends Omit<UserPoolType, 'UserPoolTags'> {
   region: string
@@ -107,7 +108,7 @@ export default async ({
   const cognitoData = []
   
   for (const region of regions.split(',')) {
-    const cogUser = new COGUSER({ region, credentials })
+    const cogUser = new COGUSER({ region, credentials, endpoint })
 
     /**
      * Fetch all  User Pools
