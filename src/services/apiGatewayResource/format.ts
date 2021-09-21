@@ -10,9 +10,11 @@ import {
 
 export default ({
   service,
+  account: accountId,
 }: 
 {
   service: AwsApiGatewayResource
+  account: string
 }): AwsAGResourceType => {
   const {
     id,
@@ -26,6 +28,7 @@ export default ({
   })
 
   const methods = Object.values(resourceMethods).map(({ httpMethod, authorizationType, apiKeyRequired }) => ({
+    accountId,
     arn: apiGatewayMethodArn({ resourceArn: arn, httpMethod }),
     httpMethod,
     authorization: authorizationType,
@@ -34,6 +37,7 @@ export default ({
 
   return {
     id,
+    accountId,
     arn,
     path,
     methods,

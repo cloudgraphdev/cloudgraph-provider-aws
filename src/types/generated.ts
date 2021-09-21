@@ -89,6 +89,7 @@ export type AwsApiGatewayEndpointConfiguration = {
 };
 
 export type AwsApiGatewayMethod = {
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   httpMethod?: Maybe<Scalars['String']>;
   authorization?: Maybe<Scalars['String']>;
@@ -97,6 +98,7 @@ export type AwsApiGatewayMethod = {
 
 export type AwsApiGatewayResource = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
   path?: Maybe<Scalars['String']>;
@@ -105,6 +107,7 @@ export type AwsApiGatewayResource = {
 
 export type AwsApiGatewayRestApi = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   policy?: Maybe<Scalars['String']>;
@@ -121,6 +124,7 @@ export type AwsApiGatewayRestApi = {
 
 export type AwsApiGatewayStage = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;

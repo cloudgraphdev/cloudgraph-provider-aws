@@ -30,6 +30,7 @@ const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({ baseDelay: API_GATEWAY_CUSTOM_DELAY })
 
 export interface AwsApiGatewayStage extends Omit<Stage, 'tags'> {
+  accountId: string
   restApiId: string
   tags: TagMap
   region: string

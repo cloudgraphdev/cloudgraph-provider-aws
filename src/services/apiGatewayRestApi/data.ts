@@ -28,6 +28,7 @@ const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({ baseDelay: API_GATEWAY_CUSTOM_DELAY })
 
 export interface AwsApiGatewayRestApi extends Omit<RestApi, 'tags'> {
+  accountId: string
   tags: TagMap
   domainNames: (DomainName & { restApiData?: string[] })[]
   region: string

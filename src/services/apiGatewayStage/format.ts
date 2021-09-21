@@ -11,9 +11,11 @@ import { formatTagsFromMap } from '../../utils/format'
 
 export default ({
   service,
+  account: accountId,
 }: 
 {
   service: AwsApiGatewayStage
+  account: string
 }): AwsAGStageType => {
   const {
     stageName: name,
@@ -43,6 +45,7 @@ export default ({
 
   return {
     id: arn,
+    accountId,
     arn,
     name,
     description,
