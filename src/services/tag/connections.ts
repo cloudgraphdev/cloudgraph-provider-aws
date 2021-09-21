@@ -2,6 +2,8 @@ import { ServiceConnection } from '@cloudgraph/sdk'
 import { MetricAlarm } from 'aws-sdk/clients/cloudwatch'
 import { NatGateway, Vpc } from 'aws-sdk/clients/ec2'
 import { isEmpty } from 'lodash'
+import { RawAwsCognitoIdentityPool } from '../cognitoIdentityPool/data'
+import { RawAwsCognitoUserPool } from '../cognitoUserPool/data'
 import services from '../../enums/services'
 import regions from '../../enums/regions'
 
@@ -95,6 +97,52 @@ export default ({
             resourceType: services.cloudwatch,
             relation: 'child',
             field: 'cloudwatch',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related CognitoIdentityPools
+     */
+    const pools: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.cognitoIdentityPool)
+    if (pools?.data?.[region]) {
+      const dataAtRegion: any = findServiceInstancesWithTag(
+        tag,
+        pools.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const pool of dataAtRegion) {
+          const { IdentityPoolId: id }: RawAwsCognitoIdentityPool = pool
+          connections.push({
+            id,
+            resourceType: services.cognitoIdentityPool,
+            relation: 'child',
+            field: 'cognitoIdentityPool',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related CognitoUserPools
+     */
+    const userPools: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.cognitoUserPool)
+    if (userPools?.data?.[region]) {
+      const dataAtRegion: RawAwsCognitoUserPool[] = findServiceInstancesWithTag(
+        tag,
+        userPools.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const pool of dataAtRegion) {
+          const { Id: id } = pool
+          connections.push({
+            id,
+            resourceType: services.cognitoUserPool,
+            relation: 'child',
+            field: 'cognitoUserPool',
           })
         }
       }

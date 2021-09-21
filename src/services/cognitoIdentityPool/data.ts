@@ -2,7 +2,7 @@ import COGID, { IdentityPool, IdentityPoolShortDescription } from 'aws-sdk/clien
 
 import CloudGraph from '@cloudgraph/sdk'
 import { groupBy } from 'lodash'
-import { Credentials } from '../../types'
+import { Credentials, TagMap } from '../../types'
 import { generateAwsErrorLog } from '../../utils'
 import awsLoggerText from '../../properties/logger'
 
@@ -16,8 +16,9 @@ const { logger } = CloudGraph
 const MAX_RESULTS = 60
 const serviceName = 'cognitoIdentityPool'
 
-export interface RawAwsCognitoIdentityPool extends IdentityPool {
+export interface RawAwsCognitoIdentityPool extends Omit<IdentityPool, 'IdentityPoolTags'> {
   region: string
+  Tags: TagMap
 }
 
 const listIdentityPoolIds = async (cogId: COGID): Promise<IdentityPoolShortDescription[]> => {
@@ -51,11 +52,17 @@ const describeIdentityPool = async ({
 }: {
   cogId: COGID, 
   IdentityPoolId: string, 
-}): Promise<IdentityPool> => {
+}): Promise<Omit<IdentityPool, 'IdentityPoolTags'> & {Tags: TagMap}> => {
   try {
     const identityPool = await cogId.describeIdentityPool({IdentityPoolId}).promise()
     logger.debug(lt.fetchedCognitoIdentityPool(IdentityPoolId))
-    return identityPool
+    const Tags = identityPool.IdentityPoolTags || {}
+    delete identityPool.IdentityPoolTags
+    const pool = {
+      ...identityPool,
+      Tags
+    }
+    return pool
   } catch (err) {
     generateAwsErrorLog(serviceName, 'cognitoIdentityPool:describeIdentityPool', err)
   }

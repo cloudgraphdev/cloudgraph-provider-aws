@@ -37,7 +37,7 @@ export default ({
     OpenIdConnectProviderARNs: openIdConnectProviderARNs,
     CognitoIdentityProviders: cognitoIdentityProviders,
     SamlProviderARNs: samlProviderARNs,
-    IdentityPoolTags: identityPoolTags,
+    Tags: identityPoolTags,
   } = rawData
 
   const cognitoIdentityProviderList = cognitoIdentityProviders?.map(({

@@ -5,7 +5,7 @@ import COGUSER, {
 
 import CloudGraph from '@cloudgraph/sdk'
 import { groupBy } from 'lodash'
-import { Credentials } from '../../types'
+import { Credentials, TagMap } from '../../types'
 import { generateAwsErrorLog } from '../../utils'
 import awsLoggerText from '../../properties/logger'
 
@@ -19,8 +19,9 @@ const { logger } = CloudGraph
 const MAX_RESULTS = 60
 const serviceName = 'cognitoUserPool'
 
-export interface RawAwsCognitoUserPool extends UserPoolType {
+export interface RawAwsCognitoUserPool extends Omit<UserPoolType, 'UserPoolTags'> {
   region: string
+  Tags: TagMap
 }
 
 const listUserPoolIds = async (cogUser: COGUSER): Promise<UserPoolDescriptionType[]> => {
@@ -54,11 +55,17 @@ const describeUserPool = async ({
 }: {
   cogUser: COGUSER, 
   userPoolId: string, 
-}): Promise<UserPoolType> => {
+}): Promise<Omit<UserPoolType, 'UserPoolTags'> & {Tags?: TagMap}> => {
   try {
     const userPool = await cogUser.describeUserPool({UserPoolId}).promise()
     logger.debug(lt.fetchedCognitoUserPool(UserPoolId))
-    return userPool.UserPool
+    const Tags: TagMap = userPool.UserPool.UserPoolTags
+    delete userPool.UserPool.UserPoolTags
+    const pool = {
+      ...userPool.UserPool,
+      Tags
+    }
+    return pool
   } catch (err) {
     generateAwsErrorLog(serviceName, 'cognitoUserPool:describeUserPool', err)
   }

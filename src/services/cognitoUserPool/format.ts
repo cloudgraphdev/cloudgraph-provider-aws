@@ -40,7 +40,7 @@ export default ({
     EstimatedNumberOfUsers: estimatedNumberOfUsers,
     EmailConfiguration: emailConfiguration,
     SmsConfiguration: smsConfiguration,
-    UserPoolTags: userPoolTags,
+    Tags: userPoolTags,
     SmsConfigurationFailure: smsConfigurationFailure,
     EmailConfigurationFailure: emailConfigurationFailure,
     Domain: domain,

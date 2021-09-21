@@ -825,6 +825,8 @@ export type AwsTag = {
   sqs?: Maybe<Array<Maybe<AwsSqs>>>;
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
   s3?: Maybe<Array<Maybe<AwsS3>>>;
+  cognitoIdentityPool?: Maybe<Array<Maybe<AwsCognitoIdentityPool>>>;
+  cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
 };
 
 export type AwsVpc = {

@@ -19,6 +19,8 @@ type awsTag @key(fields: "id") {
   sqs: [awsSqs]
   routeTable: [awsRouteTable]
   s3: [awsS3]
+  cognitoIdentityPool: [awsCognitoIdentityPool]
+  cognitoUserPool: [awsCognitoUserPool]
 }
 
 # TODO: would this cause a collision with other providers? should we rename to like awsRawTag?
