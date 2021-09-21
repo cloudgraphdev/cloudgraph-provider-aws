@@ -18,6 +18,7 @@ type awsTag @key(fields: "id") {
   ec2Instance: [awsEc2]
   sqs: [awsSqs]
   routeTable: [awsRouteTable]
+  s3: [awsS3]
 }
 
 # TODO: would this cause a collision with other providers? should we rename to like awsRawTag?

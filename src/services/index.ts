@@ -32,6 +32,7 @@ import APIGatewayStage from './apiGatewayStage'
 import Route53HostedZone from './route53HostedZone'
 import Route53Record from './route53Record'
 import RouteTable from './routeTable'
+import S3 from './s3'
 
 import regions from '../enums/regions'
 import resources from '../enums/resources'
@@ -69,6 +70,7 @@ export const serviceMap = {
   [services.route53HostedZone]: Route53HostedZone,
   [services.route53Record]: Route53Record,
   [services.routeTable]: RouteTable,
+  [services.s3]: S3,
   tag: AwsTag,
 }
 

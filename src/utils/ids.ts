@@ -16,3 +16,6 @@ export const getRecordId = ({
   type: string
 }): string =>
   `${hostedZoneId}_${name}-${type}-${kebabCase(resources.route53ZRecord)}`
+
+export const gets3BucketId = (id: string): string =>
+  `${id}-${kebabCase(resources.s3Bucket)}`

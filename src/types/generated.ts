@@ -165,6 +165,11 @@ export type AwsAsg = {
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
 };
 
+export type AwsBucketPolicy = {
+  id: Scalars['String'];
+  policy?: Maybe<Scalars['String']>;
+};
+
 export type AwsCloudwatch = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -557,6 +562,32 @@ export type AwsRouteTable = {
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
+export type AwsS3 = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  access?: Maybe<Scalars['String']>;
+  bucketOwnerName?: Maybe<Scalars['String']>;
+  region?: Maybe<Scalars['String']>;
+  requesterPays?: Maybe<Scalars['String']>;
+  size?: Maybe<Scalars['String']>;
+  totalNumberOfObjectsInBucket?: Maybe<Scalars['String']>;
+  transferAcceleration?: Maybe<Scalars['String']>;
+  corsConfiguration?: Maybe<Scalars['String']>;
+  encrypted?: Maybe<Scalars['String']>;
+  lifecycle?: Maybe<Scalars['String']>;
+  logging?: Maybe<Scalars['String']>;
+  blockPublicAcls?: Maybe<Scalars['String']>;
+  ignorePublicAcls?: Maybe<Scalars['String']>;
+  blockPublicPolicy?: Maybe<Scalars['String']>;
+  restrictPublicBuckets?: Maybe<Scalars['String']>;
+  crossRegionReplication?: Maybe<Scalars['String']>;
+  mfa?: Maybe<Scalars['String']>;
+  versioning?: Maybe<Scalars['String']>;
+  staticWebsiteHosting?: Maybe<Scalars['String']>;
+  bucketPolicies?: Maybe<Array<Maybe<AwsBucketPolicy>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
 export type AwsSecurityGroup = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -668,6 +699,7 @@ export type AwsTag = {
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   sqs?: Maybe<Array<Maybe<AwsSqs>>>;
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
+  s3?: Maybe<Array<Maybe<AwsS3>>>;
 };
 
 export type AwsVpc = {

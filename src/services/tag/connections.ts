@@ -396,6 +396,30 @@ export default ({
         }
       }
     }
+
+    /**
+     * Find related S3 buckets
+     */
+    const buckets: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.s3)
+    if (buckets?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        buckets.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { Id: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.s3,
+            relation: 'child',
+            field: 's3',
+          })
+        }
+      }
+    }
   }
 
   const tagResult = {
