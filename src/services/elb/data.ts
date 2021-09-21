@@ -1,5 +1,3 @@
-import * as Sentry from '@sentry/node'
-
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
