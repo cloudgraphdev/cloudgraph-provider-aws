@@ -1,9 +1,14 @@
-import AWS from 'aws-sdk'
+import AWS, { AWSError, ConfigurationOptions } from 'aws-sdk'
+import { APIVersions } from 'aws-sdk/lib/config'
 import CloudGraph, { Opts } from '@cloudgraph/sdk'
 import STS from 'aws-sdk/clients/sts'
 import camelCase from 'lodash/camelCase'
 import environment from '../config/environment'
 import { Credentials } from '../types'
+import {
+  BASE_CUSTOM_RETRY_DELAY,
+  MAX_FAILED_AWS_REQUEST_RETRIES,
+} from '../config/constants'
 
 const { logger } = CloudGraph
 
@@ -39,7 +44,10 @@ export const toCamel = (o: any): any => {
   return newObject
 }
 
-export const getKeyByValue = (object, value) => {
+export const getKeyByValue = (
+  object: Record<string, unknown>,
+  value: any
+): string | undefined => {
   return Object.keys(object).find(key => object[key] === value)
 }
 
@@ -89,6 +97,39 @@ export function getCredentials(opts: Opts): Promise<Credentials> {
   })
 }
 
+/* Method to inject to set aws global config settings,
+   logger utility or to use a particular aws config profile */
+export const setAwsRetryOptions = (opts: {
+  baseDelay?: number
+  global?: boolean
+  maxRetries?: number
+  configObj?: any
+  profile?: string
+}): void | (ConfigurationOptions & APIVersions) => {
+  const {
+    global = false,
+    maxRetries = MAX_FAILED_AWS_REQUEST_RETRIES,
+    baseDelay: base = BASE_CUSTOM_RETRY_DELAY,
+    profile = undefined,
+    configObj = undefined,
+    ...rest
+  } = opts
+  // logger.log = logger.debug
+  const config: ConfigurationOptions & APIVersions = {
+    maxRetries,
+    // logger,
+    retryDelayOptions: {
+      base,
+    },
+    ...rest,
+  }
+  if (profile && configObj) {
+    configObj.profile = profile
+  }
+  global && AWS.config.update(config)
+  return config
+}
+
 export function initTestEndpoint(service?: string): string | undefined {
   const endpoint =
     (environment.NODE_ENV === 'test' && environment.LOCALSTACK_AWS_ENDPOINT) ||
@@ -98,13 +139,22 @@ export function initTestEndpoint(service?: string): string | undefined {
 }
 
 export function initTestConfig(): void {
-  jest.setTimeout(30000)
+  jest.setTimeout(300000)
 }
 
-export function generateAwsErrorLog(service: string, functionName: string, err?: {message: string, [key: string]: any}): void {
+export function generateAwsErrorLog(
+  service: string,
+  functionName: string,
+  err?: AWSError
+): void {
+  if (err.statusCode === 400) {
+    err.retryable = true
+  }
   const notAuthorized = 'not authorized' // part of the error string aws passes back for permissions errors
   const accessDenied = 'AccessDeniedException' // an error code aws sometimes sends back for permissions errors
-  logger.warn(`There was a problem getting data for service ${service}, CG encountered an error calling ${functionName}`)
+  logger.warn(
+    `There was a problem getting data for service ${service}, CG encountered an error calling ${functionName}`
+  )
   if (err?.message?.includes(notAuthorized) || err?.code === accessDenied) {
     logger.warn(err.message)
   }

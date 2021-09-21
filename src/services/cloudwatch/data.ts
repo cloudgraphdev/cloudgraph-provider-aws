@@ -14,8 +14,9 @@ import { AWSError } from 'aws-sdk/lib/error'
 
 import { Credentials, TagMap, AwsTag } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog, setAwsRetryOptions } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
+import { CLOUDWATCH_CUSTOM_DELAY } from '../../config/constants'
 
 /**
  * Cloudwatch
@@ -25,6 +26,7 @@ const MAX_ITEMS = 100
 const { logger } = CloudGraph
 const serviceName = 'Cloudwatch'
 const endpoint = initTestEndpoint(serviceName)
+const customRetrySettings = setAwsRetryOptions({ baseDelay: CLOUDWATCH_CUSTOM_DELAY })
 
 export interface RawAwsCloudwatch extends MetricAlarm {
   region: string
@@ -140,7 +142,7 @@ export default async ({
 
     // get all tags for each environment
     cloudwatchData.map(({ AlarmArn, region }, idx) => {
-      const cloudwatch = new CloudWatch({ region, credentials, endpoint })
+      const cloudwatch = new CloudWatch({ region, credentials, endpoint, ...customRetrySettings })
       const tagsPromise = new Promise<void>(async resolveTags => {
         const envTags = await getResourceTags(cloudwatch, AlarmArn)
         cloudwatchData[idx].Tags = envTags

@@ -25,7 +25,8 @@ import { Credentials, TagMap } from '../../types'
 
 import awsLoggerText from '../../properties/logger'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog, setAwsRetryOptions } from '../../utils'
+import { ALB_CUSTOM_DELAY } from '../../config/constants'
 
 const lt = { ...awsLoggerText }
 /**
@@ -34,6 +35,7 @@ const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'ALB'
 const endpoint = initTestEndpoint(serviceName)
+const customRetrySettings = setAwsRetryOptions({ baseDelay: ALB_CUSTOM_DELAY })
 
 export type RawAwsAlb = LoadBalancer & {
   listeners: Listeners
@@ -145,7 +147,7 @@ export default async ({
         new Promise<void>(resolveRegion =>
           describeAlbs({
             region,
-            elbv2: new ELBV2({ region, credentials, endpoint }),
+            elbv2: new ELBV2({ region, credentials, endpoint, ...customRetrySettings }),
             resolveRegion,
           })
         )
@@ -213,7 +215,7 @@ export default async ({
 
     albData.map(alb => {
       const { LoadBalancerArn: arn, region } = alb
-      const elbv2 = new ELBV2({ region, credentials, endpoint })
+      const elbv2 = new ELBV2({ region, credentials, endpoint, ...customRetrySettings })
 
       tagPromises.push(
         new Promise<void>(resolveTags => {
@@ -290,7 +292,7 @@ export default async ({
 
     albData.map(alb => {
       const { LoadBalancerArn, region } = alb
-      const elbv2 = new ELBV2({ region, credentials, endpoint })
+      const elbv2 = new ELBV2({ region, credentials, endpoint, ...customRetrySettings })
       tagPromises.push(
         new Promise<void>(resolveAttributes => {
           getAttributesForAlb({
@@ -387,7 +389,7 @@ export default async ({
 
     albData.map(alb => {
       const { LoadBalancerArn, region } = alb
-      const elbv2 = new ELBV2({ region, credentials, endpoint })
+      const elbv2 = new ELBV2({ region, credentials, endpoint, ...customRetrySettings })
       const listenerPromise = new Promise<void>(resolveListeners => {
         describeListenersForAlb({
           alb,
@@ -486,7 +488,7 @@ export default async ({
 
     albData.map(alb => {
       const { LoadBalancerArn, region } = alb
-      const elbv2 = new ELBV2({ region, credentials, endpoint })
+      const elbv2 = new ELBV2({ region, credentials, endpoint, ...customRetrySettings })
       const targetGroupPromise = new Promise<void>(resolveTargetGroups => {
         describeTargetGroupsForAlb({
           alb,
@@ -555,7 +557,7 @@ export default async ({
 
     albData.map(alb => {
       const { region, targetGroups = [] } = alb
-      const elbv2 = new ELBV2({ region, credentials, endpoint })
+      const elbv2 = new ELBV2({ region, credentials, endpoint, ...customRetrySettings })
       targetGroups.map(({ TargetGroupArn }) => {
         targetHealthPromises.push(
           new Promise<void>(resolveTargetHealth => {

@@ -19,13 +19,15 @@ import {
 } from '../../utils/generateArns'
 import { Credentials, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog, setAwsRetryOptions } from '../../utils'
+import { API_GATEWAY_CUSTOM_DELAY } from '../../config/constants'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const MAX_REST_API = 500
 const serviceName = 'API Gateway Stage'
 const endpoint = initTestEndpoint(serviceName)
+const customRetrySettings = setAwsRetryOptions({ baseDelay: API_GATEWAY_CUSTOM_DELAY })
 
 export interface AwsApiGatewayStage extends Omit<Stage, 'tags'> {
   restApiId: string
@@ -116,7 +118,7 @@ export default async ({
     const tagsPromises = []
 
     regions.split(',').map(region => {
-      const apiGw = new APIGW({ region, credentials, endpoint })
+      const apiGw = new APIGW({ region, credentials, endpoint, ...customRetrySettings })
       const regionPromise = new Promise<void>(async resolveRegion => {
         const restApiList = await getRestApisForRegion(apiGw)
         if (!isEmpty(restApiList)) {
@@ -135,7 +137,7 @@ export default async ({
     await Promise.all(regionPromises)
 
     apiGatewayData.map(({ restApiId, region }) => {
-      const apiGw = new APIGW({ region, credentials, endpoint })
+      const apiGw = new APIGW({ region, credentials, endpoint, ...customRetrySettings })
       const additionalPromise = new Promise<void>(async resolveAdditional => {
         const stages = await getStages({ apiGw, restApiId })
         apiGatewayStages.push(
@@ -157,7 +159,7 @@ export default async ({
     // get all tags for each stage
     apiGatewayStages.map(stage => {
       const { stageName, restApiId, region } = stage
-      const apiGw = new APIGW({ region, credentials, endpoint })
+      const apiGw = new APIGW({ region, credentials, endpoint, ...customRetrySettings })
       const tagsPromise = new Promise<void>(async resolveTags => {
         const arn = apiGatewayRestApiArn({
           restApiArn: apiGatewayArn({ region }),

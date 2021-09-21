@@ -13,7 +13,8 @@ import isEmpty from 'lodash/isEmpty'
 import groupBy from 'lodash/groupBy'
 import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog, setAwsRetryOptions } from '../../utils'
+import { API_GATEWAY_CUSTOM_DELAY } from '../../config/constants'
 
 const lt = { ...awsLoggerText }
 const {logger} = CloudGraph
@@ -21,6 +22,7 @@ const MAX_REST_API = 500
 const MAX_RESOURCES = 500
 const serviceName = 'API gateway Resource'
 const endpoint = initTestEndpoint(serviceName)
+const customRetrySettings = setAwsRetryOptions({ baseDelay: API_GATEWAY_CUSTOM_DELAY })
 
 export interface AwsApiGatewayResource extends Resource {
   restApiId: string
@@ -113,7 +115,7 @@ export default async ({
     const additionalPromises = []
 
     regions.split(',').map(region => {
-      const apiGw = new APIGW({ region, credentials, endpoint })
+      const apiGw = new APIGW({ region, credentials, endpoint, ...customRetrySettings })
       const regionPromise = new Promise<void>(async resolveRegion => {
         const restApiList = await getRestApisForRegion(apiGw)
         if (!isEmpty(restApiList)) {
@@ -132,7 +134,7 @@ export default async ({
     await Promise.all(regionPromises)
 
     apiGatewayData.map(({ restApiId, region }) => {
-      const apiGw = new APIGW({ region, credentials, endpoint })
+      const apiGw = new APIGW({ region, credentials, endpoint, ...customRetrySettings })
       const additionalPromise = new Promise<void>(async resolveAdditional => {
         const resources = await getResources({ apiGw, restApiId })
         apiGatewayResources.push(...resources.map(resource => ({

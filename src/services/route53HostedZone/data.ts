@@ -14,12 +14,14 @@ import Route53, {
 
 import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
+import { generateAwsErrorLog, initTestEndpoint, setAwsRetryOptions } from '../../utils'
+import { ROUTE_53_CUSTOM_DELAY } from '../../config/constants'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'Route53 Hosted Zones'
 const endpoint = initTestEndpoint(serviceName)
+const customRetrySettings = setAwsRetryOptions({ baseDelay: ROUTE_53_CUSTOM_DELAY })
 
 const listHostedZones = async (
   route53: Route53,
@@ -101,7 +103,7 @@ export default async ({
     const zoneIds: { Id: string }[] = []
     const hostedZonesData: RawAwsRoute53HostedZone[] = []
 
-    const route53 = new Route53({ region: 'us-east-1', credentials, endpoint })
+    const route53 = new Route53({ region: 'us-east-1', credentials, endpoint, ...customRetrySettings })
 
     /**
      * Step 1) for all regions, list all the hosted zones
