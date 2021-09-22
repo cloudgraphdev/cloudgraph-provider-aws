@@ -1,3 +1,17 @@
+# [0.21.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.20.0...0.21.0) (2021-09-22)
+
+
+### Bug Fixes
+
+* **cognito:** Update cognito for tags connections ([5fe3081](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/5fe308128a5207d53f64b6be017db4843fd3ba55))
+* **deps:** update sdk dep and remove unneeded deps ([b9d99bb](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b9d99bbd7341a55de3fac6c4c0c400bd37ce5ae4))
+* **tests:** comment out tests as cognito is ls pro service ([9163309](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/916330990633e97214bfdce6bdab88b00348a311))
+
+
+### Features
+
+* **cognito:** add cognito user pool and identity pool ([a97eff1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a97eff124750916fd0fc115d7cd8c586ec0f7dac))
+
 # [0.20.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.19.0...0.20.0) (2021-09-21)
 
 
