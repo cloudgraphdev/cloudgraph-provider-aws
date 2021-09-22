@@ -9,6 +9,7 @@ import {
   BASE_CUSTOM_RETRY_DELAY,
   MAX_FAILED_AWS_REQUEST_RETRIES,
 } from '../config/constants'
+import relations from '../enums/relations'
 
 const { logger } = CloudGraph
 
@@ -161,7 +162,9 @@ export function generateAwsErrorLog(
   logger.debug(err)
 }
 
-export const settleAllPromises = async (promises: Promise<any>[]): Promise<any[]> =>
+export const settleAllPromises = async (
+  promises: Promise<any>[]
+): Promise<any[]> =>
   (await Promise.allSettled(promises)).map(
     /** We force the PromiseFulfilledResult interface
      *  because all promises that we input to Promise.allSettled
@@ -170,3 +173,18 @@ export const settleAllPromises = async (promises: Promise<any>[]): Promise<any[]
      *  and that the value property doesn't exist for the PromiseRejectedResult interface */
     i => (i as PromiseFulfilledResult<any>).value
   )
+
+/**
+ * Sorts a services list depending on his dependencies
+ * @param resourceNames services to sort
+ * @returns sorted list of services
+ */
+export const sortResourcesDependencies = (resourceNames: string[]): string[] =>
+  resourceNames.sort((prevResource, nextResource) => {
+    const dependecies = relations[prevResource]
+
+    if (dependecies && dependecies.includes(nextResource)) {
+      return -1
+    }
+    return 0
+  })
