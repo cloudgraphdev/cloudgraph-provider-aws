@@ -78,62 +78,356 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 
 # Query Examples
 
-Find Unencrypted EBS Volumes.
+<br />
 
-```
+Find all the unencrypted `EBS Volumes`:
+
+```graphql
 query {
-  queryawsEbs(filter: { encrypted: false }) {
-    id,
-    arn,
-    availabilityZone,
-    encrypted
-  }
+  queryawsEbs(filter: { encrypted: false }) {
+    id
+    arn
+    availabilityZone
+    encrypted
+  }
 }
 ```
 
-Find KMS Keys in region us-east-1
+<br />
 
-```
+Find all the `KMS` keys in `"us-east-1"`:
+
+```graphql
 query {
-  queryawsKms(filter: {arn: { regexp: "/.*us-east-1.*/" } }) {
-    id
-		arn
-    description
-    enableKeyRotation
-    tags {
-      key
-      value
-    }
-  }
+  queryawsKms(filter: { arn: { regexp: "/.*us-east-1.*/" } }) {
+    id
+    arn
+    description
+    enableKeyRotation
+    tags {
+      key
+      value
+    }
+  }
 }
 ```
 
-Find public ALBs
+<br />
 
-```
+Find all the burstable `T` series instances:
+
+```graphql
 query {
-  queryawsAlb (filter: { scheme: { eq: "internet-facing" } } ) {
-    id
-    arn
-  	dnsName
-    createdAt
-    tags {
-      key
-      value
-    }
-  }
+  queryawsEc2(filter: { instanceType: { regexp: "/^t.*/" } }) {
+    id
+    arn
+    availabilityZone
+    instanceType
+  }
 }
 ```
 
-Find default VPC
+<br />
 
-```
+Find the default `VPCs`:
+
+```graphql
 query {
-  queryawsVpc( filter: { defaultVpc: true } ) {
-    id
-    arn
-    defaultVpc
-    state
-  }
+  queryawsVpc(filter: { defaultVpc: true }) {
+    id
+    arn
+    defaultVpc
+    state
+  }
 }
 ```
+
+<br />
+
+Find the public `ALBs`:
+
+```graphql
+query {
+  queryawsAlb(filter: { scheme: { eq: "internet-facing" } }) {
+    id
+    arn
+    dnsName
+    createdAt
+    tags {
+      key
+      value
+    }
+  }
+}
+```
+
+<br />
+
+Find all of the `EC2s`, `Lambdas`, and `VPCs` that have a `Tag` value of `"Production"`:
+
+```graphql
+query {
+  queryawsTag(filter: { value: { eq: "Production" } }) {
+    key
+    value
+    ec2Instance {
+      id
+      arn
+    }
+    lambda {
+      id
+      arn
+    }
+    vpc {
+      id
+      arn
+    }
+  }
+}
+```
+
+<br />
+
+Do the same thing but look for both a `key` and a `value`:
+
+```graphql
+query {
+  queryawsTag(
+    filter: {  key: { eq: "Environment" }, value: { eq: "Production" } }
+  ) {
+    key
+    value
+    ec2Instance {
+      id
+      arn
+    }
+    lambda {
+      id
+      arn
+    }
+    vpc {
+      id
+      arn
+    }
+  }
+}
+```
+
+<br />
+
+Do the same thing using `getawsTag` instead of `queryawsTag`. Note that when searching for tags using `getawsTag` your must specify **both** the `key` and `value` as the `id` like is done below with `"Environment:Production"`:
+
+```graphql
+query {
+  getawsTag(id: "Environment:Production") {
+    key
+    value
+    ec2Instance {
+      id
+      arn
+    }
+    lambda {
+      id
+      arn
+    }
+    vpc {
+      id
+      arn
+    }
+  }
+}
+```
+
+<br />
+
+Get the `ID` and `ARN` of a single `EC2 instance`:
+
+```graphql
+query {
+  getawsEc2(
+    arn: "arn:aws:ec2:us-east-1:123445678997:instance/i-12345567889012234"
+  ) {
+    id
+    arn
+  }
+}
+```
+
+<br />
+
+Get the `ID` and `ARN` of each `EC2` in your entire AWS account:
+
+```graphql
+query {
+  queryawsEc2 {
+    id
+    arn
+  }
+}
+```
+
+<br />
+
+Get the `ID` and `ARN` of each `EC2` in `"us-east-1"` using a regex to search the `ARN`:
+
+```graphql
+query {
+  queryawsEc2(filter: { arn: { regexp: "/.*us-east-1.*/" } }) {
+    id
+    arn
+  }
+}
+```
+
+<br />
+
+Do the same thing but checking to see that the `region` is equal to `"us-east-1"` instead of using a regex:
+
+```graphql
+query {
+  queryawsEc2(filter: { region: { eq: "us-east-1" } }) {
+    id
+    arn
+  }
+}
+```
+
+<br />
+
+Do the same thing but checking to see that the `region` contains `"us-east-1"` in the name instead of using eq:
+
+```graphql
+query {
+  queryawsEc2(filter: { region: { in: "us-east-1" } }) {
+    id
+    arn
+  }
+}
+```
+
+<br />
+
+Get the `ID` and `ARN` of each `M5` series `EC2 instance` in `"us-east-1"`
+
+```graphql
+query {
+  queryawsEc2(
+    filter: { region: { eq: "us-east-1" }, instanceType: { regexp: "/^m5a*/" } }
+  ) {
+    id
+    arn
+  }
+}
+```
+
+<br />
+
+Do the same thing but skip the first found result (i.e. `offset: 1`) and then only return the first two results after that (i.e. `first: 2`) and order those results by AZ in ascending order (`order: { asc: availabilityZone }`) so that instance(s) in `"us-east-1a"` are returned at the top of the list.
+
+```graphql
+query {
+  queryawsEc2(
+    filter: { region: { eq: "us-east-1" }, instanceType: { regexp: "/^m5a*/" } }
+    order: { asc: availabilityZone }
+    first: 2
+    offset: 1
+  ) {
+    id
+    arn
+  }
+}
+```
+
+<br />
+
+Do the same thing but also include the `EBS Volume` that is the boot disk for each `EC2 instance`:
+
+```graphql
+query {
+  queryawsEc2(
+    filter: { region: { eq: "us-east-1" }, instanceType: { regexp: "/^m5a*/" } }
+    order: { asc: availabilityZone }
+    first: 2
+    offset: 1
+  ) {
+    id
+    arn
+    ebs(filter: { isBootDisk: true }, first: 1) {
+      id
+      arn
+      isBootDisk
+    }
+  }
+}
+```
+
+<br />
+
+Do the same thing, but also include the `SGs` and `ALBs` for each `EC2`. For the `ALBs`, get the `EC2s` that they are connected to along with the `ID` and `ARN` of each found `EC2 instance` (i.e. a circular query).
+
+```graphql
+query {
+  queryawsEc2(
+    filter: { region: { eq: "us-east-1" }, instanceType: { regexp: "/^m5a*/" } }
+    order: { asc: availabilityZone }
+    first: 2
+    offset: 1
+  ) {
+    id
+    arn
+    ebs(filter: { isBootDisk: true }, first: 1) {
+      id
+      arn
+      isBootDisk
+    }
+    securityGroups {
+      id
+      arn
+    }
+    alb {
+      id
+      arn
+      ec2Instance {
+        id
+        arn
+      }
+    }
+  }
+}
+```
+
+<br />
+
+Get each `VPC`, the `ALBs` and `Lambdas` in that `VPC`, and then a bunch of nested sub-data as well... you get the idea.
+
+```graphql
+query {
+  queryawsVpc {
+    id
+    arn
+    alb {
+      id
+      arn
+      ec2Instance {
+        id
+        arn
+        ebs(filter: { isBootDisk: true }) {
+          id
+          arn
+        }
+      }
+    }
+    lambda {
+      id
+      arn
+      kms {
+        id
+        arn
+      }
+    }
+  }
+}
+```
+
+<br />
+
