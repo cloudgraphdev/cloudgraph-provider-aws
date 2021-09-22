@@ -50,31 +50,33 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 
 # Supported Services
 
-| Service            | Relations                                                |
-| ------------------ | -------------------------------------------------------- |
-| alb                | ec2, vpc                                                 |
-| apiGatewayRestApi  | apiGatewaystage, apiGatewayResource                      |
-| apiGatewayStage    | apiGatewayRestApi                                        |
-| apiGatewayResource | apiGatewayRestApi                                        |
-| asg                | ec2, securityGroups, ebs                                 |
-| cloudwatch         |                                                          |
-| ebs                | ec2, asg                                                 |
-| ec2                | alb, securityGroups, ebs, eip, networkInterface, asg     |
-| eip                | vpc, ec2, networkInterface                               |
-| elb                | securityGroups, vpc                                      |
-| igw                | vpc                                                      |
-| kinesisStream      |                                                          |
-| kms                | lambda                                                   |
-| lambda             | vpc, kms, securityGroups                                 |
-| natGateway         | networkInterface, vpc                                    |
-| networkInterface   | ec2, natGateway, vpc, eip                                |
-| securityGroup      | asg, lambda, ec2, elb                                    |
-| sqs                |                                                          |
-| vpc                | alb, eip, elb, igw, lambda, natGateway, networkInterface |
-| route53HostedZone  | route53Record, vpc                                       |
-| route53Record      | route53HostedZone, elb, alb                              |
-| routeTable         | vpc                                                      |
-| s3                 |                                                          |
+| Service               | Relations                                                |
+| ------------------    | -------------------------------------------------------- |
+| alb                   | ec2, vpc                                                 |
+| apiGatewayRestApi     | apiGatewaystage, apiGatewayResource                      |
+| apiGatewayStage       | apiGatewayRestApi                                        |
+| apiGatewayResource    | apiGatewayRestApi                                        |
+| asg                   | ec2, securityGroups, ebs                                 |
+| cloudwatch            |                                                          |
+| cognitoIdentityPool   |                                                          |
+| cognitoUserPool       | lambda                                                   |
+| ebs                   | ec2, asg                                                 |
+| ec2                   | alb, securityGroups, ebs, eip, networkInterface, asg     |
+| eip                   | vpc, ec2, networkInterface                               |
+| elb                   | securityGroups, vpc                                      |
+| igw                   | vpc                                                      |
+| kinesisStream         |                                                          |
+| kms                   | lambda                                                   |
+| lambda                | vpc, kms, securityGroups                                 |
+| natGateway            | networkInterface, vpc                                    |
+| networkInterface      | ec2, natGateway, vpc, eip                                |
+| s3                    |                                                          |
+| securityGroup         | asg, lambda, ec2, elb                                    |
+| sqs                   |                                                          |
+| vpc                   | alb, eip, elb, igw, lambda, natGateway, networkInterface |
+| route53HostedZone     | route53Record, vpc                                       |
+| route53Record         | route53HostedZone, elb, alb                              |
+| routeTable            | vpc                                                      |
 
 # Query Examples
 

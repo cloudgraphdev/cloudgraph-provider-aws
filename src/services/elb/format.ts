@@ -35,13 +35,13 @@ export default ({
       Timeout: timeout,
       HealthyThreshold: healthyThreshold,
       UnhealthyThreshold: unhealthyThreshold,
-    },
+    } = {},
     Attributes: {
       AccessLog: accesslog,
       CrossZoneLoadBalancing: crossZoneLoadBalancing,
       ConnectionSettings: connectionSettings,
       ConnectionDraining: connectionDraining,
-    },
+    } = {},
     ListenerDescriptions: listenerDescriptions,
     Tags: tags = {},
   } = rawData

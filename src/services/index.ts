@@ -16,6 +16,8 @@ import AwsKms from './kms'
 import AwsSecurityGroup from './securityGroup'
 import AwsTag from './tag'
 import ASG from './asg'
+import CognitoIdentityPool from './cognitoIdentityPool'
+import CognitoUserPool from './cognitoUserPool'
 import CloudWatch from './cloudwatch'
 import EBS from './ebs'
 import EC2 from './ec2'
@@ -52,6 +54,8 @@ export const serviceMap = {
   [services.apiGatewayRestApi]: APIGatewayRestApi,
   [services.apiGatewayStage]: APIGatewayStage,
   [services.asg]: ASG,
+  [services.cognitoIdentityPool]: CognitoIdentityPool,
+  [services.cognitoUserPool]: CognitoUserPool,
   [services.cloudwatch]: CloudWatch,
   [services.ebs]: EBS,
   [services.ec2Instance]: EC2,

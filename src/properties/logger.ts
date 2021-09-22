@@ -460,10 +460,10 @@ export default {
   addingUserPools: (num: number): string =>
     `Found ${num} Cognito User Pools, adding them to the Region`,
   doneFetchingCognitoData: '✅ Done fetching Cognito Data ✅',
-  fetchedCognito: (num: number): string => `Found ${num} Cognito User Pools`,
+  fetchedCognitoUserPools: (num: number): string => `Found ${num} Cognito User Pools`,
   fetchedCognitoIdentityPools: (num: number): string =>
     `Found ${num} Cognito Identity Pools`,
-  fetchedCognitoPool: (id: string): string =>
+  fetchedCognitoUserPool: (id: string): string =>
     `Fetched Cognito User Pool data for ${id}`,
   fetchedCognitoIdentityPool: (id: string): string =>
     `Fetched Cognito Identity Pool data for ${id}`,
