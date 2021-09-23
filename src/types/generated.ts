@@ -104,6 +104,7 @@ export type AwsApiGatewayRestApi = {
   binaryMediaTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
   stages?: Maybe<Array<Maybe<AwsApiGatewayStage>>>;
   resources?: Maybe<Array<Maybe<AwsApiGatewayResource>>>;
+  route53Record?: Maybe<Array<Maybe<AwsRoute53Record>>>;
 };
 
 export type AwsApiGatewayStage = {
@@ -801,6 +802,7 @@ export type AwsRoute53Record = {
   route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
+  restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
 };
 
 export type AwsRouteTable = {

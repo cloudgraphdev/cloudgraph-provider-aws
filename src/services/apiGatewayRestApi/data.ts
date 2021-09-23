@@ -29,6 +29,7 @@ const customRetrySettings = setAwsRetryOptions({ baseDelay: API_GATEWAY_CUSTOM_D
 
 export interface AwsApiGatewayRestApi extends Omit<RestApi, 'tags'> {
   tags: TagMap
+  domainNames: (DomainName & { restApiData?: string[] })[]
   region: string
 }
 

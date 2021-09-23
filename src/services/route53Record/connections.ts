@@ -8,6 +8,8 @@ import { RawAwsRoute53Record } from './data'
 import { RawAwsAlb } from '../alb/data'
 import { RawAwsElb } from '../elb/data'
 import { getHostedZoneId, getRecordId } from '../../utils/ids'
+import { AwsApiGatewayRestApi } from '../apiGatewayRestApi/data'
+import { domain } from 'process'
 
 /**
  * Route53 Record
@@ -34,7 +36,7 @@ export default ({
 
   /**
    * Find ELBs
-   * related to this Hosted Zone
+   * related to this Record
    */
   const elbs: RawAwsElb[] =
     flatMap(
@@ -63,7 +65,7 @@ export default ({
 
   /**
    * Find ALBs
-   * related to this Hosted Zone
+   * related to this Record
    */
   const albs: RawAwsAlb[] =
     flatMap(
@@ -85,6 +87,37 @@ export default ({
           resourceType: services.alb,
           relation: 'child',
           field: 'alb',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find APIGWs
+   * related to this Record
+   */
+  const restApis: AwsApiGatewayRestApi[] =
+    flatMap(
+      data.find(
+        ({ name: serviceName }) => serviceName === services.apiGatewayRestApi
+      )?.data
+    ) || []
+
+  if (!isEmpty(restApis)) {
+    const restApisInRegion = restApis.filter(
+      ({ domainNames }: AwsApiGatewayRestApi) =>
+        domainNames.find(({ domainName }) => name.includes(domainName))
+    )
+
+    if (!isEmpty(restApisInRegion)) {
+      for (const instance of restApisInRegion) {
+        const { id: restApiId } = instance
+
+        connections.push({
+          id: restApiId,
+          resourceType: services.apiGatewayRestApi,
+          relation: 'child',
+          field: 'restApi',
         })
       }
     }
