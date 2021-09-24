@@ -8,9 +8,6 @@ import isEmpty from 'lodash/isEmpty'
 import head from 'lodash/head'
 import get from 'lodash/get'
 import { regionMap } from '../../enums/regions'
-
-// import { AWSError } from 'aws-sdk/lib/error'
-
 import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
