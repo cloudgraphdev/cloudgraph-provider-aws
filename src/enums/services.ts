@@ -4,6 +4,7 @@ export default {
   apiGatewayRestApi: 'apiGatewayRestApi',
   apiGatewayStage: 'apiGatewayStage',
   asg: 'asg',
+  billing: 'billing',
   cognitoIdentityPool: 'cognitoIdentityPool',
   cognitoUserPool: 'cognitoUserPool',
   cloudwatch: 'cloudwatch',

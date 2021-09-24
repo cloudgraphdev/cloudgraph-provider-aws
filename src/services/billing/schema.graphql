@@ -1,0 +1,17 @@
+type awsBilling {
+  id: String! @id
+  totalCostMonthToDate: String
+  totalCostLast30Days: String
+  monthToDate: [awsServiceBillingData]
+  last30Days: [awsServiceBillingData]
+}
+
+type awsServiceBillingData 
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    name: String!
+    cost: String
+  }

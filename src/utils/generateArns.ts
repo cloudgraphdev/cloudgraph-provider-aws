@@ -27,3 +27,13 @@ export const routeTableArn = ({
 }): string => `arn:aws:ec2:${region}:${account}:route-table/${id}`
 export const s3BucketArn = ({ name }: { name: string }): string =>
   `arn:aws:s3:::${name}`
+
+export const natGatewayArn = ({
+  region,
+  account,
+  id,
+}: {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:natgateway/${id}`

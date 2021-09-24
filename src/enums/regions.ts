@@ -1,6 +1,6 @@
 export const globalRegionName = 'aws-global'
 
-const regions = {
+export const regionMap = {
   usEast1: 'us-east-1', // Virginia
   usEast2: 'us-east-2', // Ohio
   usWest1: 'us-west-1', // N California
@@ -48,7 +48,7 @@ const {
   usGovEast1,
   cnNorthwest1,
   cnNorth1,
-} = regions
+} = regionMap
 
 export default [
   usEast1,

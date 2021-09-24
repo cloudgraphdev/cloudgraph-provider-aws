@@ -546,4 +546,24 @@ export default {
     `🕒 Done fetching Route Table Data in ${num} 🕘`,
   addingMainRouteTableToVpc: (vpcId: string): string =>
     `Adding Main Toute Table to VPC ${vpcId}`,
+  /**
+   * Billing
+   */
+  fetchingAggregateFinOpsData:
+    'Fetching aggregate FinOps data for this AWS account via the AWS SDK...',
+  unableToFindFinOpsAggregateData:
+    '❌ Unable to getCostAndUsage data for this AWS account, ResultsByTime was missing. ❌',
+  unableToFindFinOpsIndividualData:
+    '❌ Unable to getCostAndUsageWithResources data for this AWS account, ResultsByTime was missing. ❌',
+  queryingAggregateFinOpsDataForRegion: (
+    region: string,
+    type: string
+  ): string =>
+    `Querying aggregate FinOps data for the ${region} region using the ${type} method...`,
+  queryingIndividualFinOpsDataForRegion: (region: string): string =>
+    `Querying individual FinOps data for the ${region} region...`,
+  doneFetchingAggregateFinOpsData: (num: number): string =>
+    `🕒 Done fetching aggregate FinOps data in ${num} 🕘`,
+  unableToFindFinOpsServiceData:
+    '❌ Unable to listAvailabeServices data for this AWS account, DimensionValues was missing. ❌',
 }

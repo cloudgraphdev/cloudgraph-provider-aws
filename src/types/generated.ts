@@ -9,7 +9,9 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  DateTime: string;
 };
+
 
 export type Tag = {
   id: Scalars['String'];
@@ -169,6 +171,14 @@ export type AwsAsg = {
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
+};
+
+export type AwsBilling = {
+  id: Scalars['String'];
+  totalCostMonthToDate?: Maybe<Scalars['String']>;
+  totalCostLast30Days?: Maybe<Scalars['String']>;
+  monthToDate?: Maybe<Array<Maybe<AwsServiceBillingData>>>;
+  last30Days?: Maybe<Array<Maybe<AwsServiceBillingData>>>;
 };
 
 export type AwsBucketPolicy = {
@@ -363,6 +373,7 @@ export type AwsEc2 = {
   cpuThreadsPerCore?: Maybe<Scalars['Int']>;
   iamInstanceProfile?: Maybe<Scalars['String']>;
   deletionProtection?: Maybe<Scalars['String']>;
+  dailyCost?: Maybe<Scalars['String']>;
   primaryNetworkInterface?: Maybe<Scalars['String']>;
   metadataOptions?: Maybe<AwsEc2MetadataOptions>;
   metadatasecurityGroupIdsOptions?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -601,6 +612,7 @@ export type AwsNatGateway = {
   arn: Scalars['String'];
   state?: Maybe<Scalars['String']>;
   createTime?: Maybe<Scalars['String']>;
+  dailyCost?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
@@ -725,6 +737,11 @@ export type AwsSecurityGroup = {
   elb?: Maybe<Array<Maybe<AwsElb>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   asg?: Maybe<Array<Maybe<AwsAsg>>>;
+};
+
+export type AwsServiceBillingData = {
+  name: Scalars['String'];
+  cost?: Maybe<Scalars['String']>;
 };
 
 export type AwsSgInboundRule = {
