@@ -560,7 +560,7 @@ export default {
     `Querying aggregate FinOps data for the ${region} region using the ${type} method...`,
   queryingIndividualFinOpsDataForRegion: (region: string): string =>
     `Querying individual FinOps data for the ${region} region...`,
-  doneFetchingAggregateFinOpsData: (num: number) =>
+  doneFetchingAggregateFinOpsData: (num: number): string =>
     `🕒 Done fetching aggregate FinOps data in ${num} 🕘`,
   unableToFindFinOpsServiceData:
     '❌ Unable to listAvailabeServices data for this AWS account, DimensionValues was missing. ❌',
