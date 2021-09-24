@@ -312,6 +312,8 @@ export default {
     `Fetching basic information for ${name} bucket...`,
   gettingBucketAdditionalInfo: (name: string): string =>
     `Fetching additional information for ${name} bucket...`,
+  gettingBucketAdditionalInfoError: (name: string): string =>
+    `There was an error fetching additional information for ${name} bucket...`,
   /**
    * DynamoDb
    */
@@ -460,7 +462,8 @@ export default {
   addingUserPools: (num: number): string =>
     `Found ${num} Cognito User Pools, adding them to the Region`,
   doneFetchingCognitoData: '✅ Done fetching Cognito Data ✅',
-  fetchedCognitoUserPools: (num: number): string => `Found ${num} Cognito User Pools`,
+  fetchedCognitoUserPools: (num: number): string =>
+    `Found ${num} Cognito User Pools`,
   fetchedCognitoIdentityPools: (num: number): string =>
     `Found ${num} Cognito Identity Pools`,
   fetchedCognitoUserPool: (id: string): string =>

@@ -33,7 +33,7 @@ export default ({
     Tags: tags = {},
     AdditionalInfo: {
       AccelerationConfig: accelerationStatus,
-      BucketOwnerData: { DisplayName: bucketOwnerName },
+      BucketOwnerData: { DisplayName: bucketOwnerName } = {},
       CorsInfo: corsInfo,
       EncryptionInfo: encryptionInfo,
       Grants: grants,
@@ -46,7 +46,7 @@ export default ({
       ReqPaymentConfig: reqPaymentConfig,
       StaticWebsiteInfo: staticWebsiteInfo,
       VersioningInfo: versioningInfo,
-    },
+    } = {},
   } = rawData
 
   let size = '0 Kb'

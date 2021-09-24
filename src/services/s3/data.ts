@@ -537,17 +537,19 @@ export default async ({
       const additionalInfoPromise = new Promise<void>(
         async resolvePublicStatus => {
           logger.debug(lt.gettingBucketAdditionalInfo(Name))
-          const { Tags, ...additionalInfo } = await getBucketAdditionalInfo(
-            s3,
-            Name
-          )
+          try {
+            const bucketAdditionalData = await getBucketAdditionalInfo(s3, Name)
 
-          if (!isEmpty(additionalInfo)) {
-            bucketData[idx].AdditionalInfo = {
-              ...bucketData[idx].AdditionalInfo,
-              ...additionalInfo,
+            if (!isEmpty(bucketAdditionalData)) {
+              const { Tags, ...additionalInfo } = bucketAdditionalData
+              bucketData[idx].AdditionalInfo = {
+                ...bucketData[idx].AdditionalInfo,
+                ...additionalInfo,
+              }
+              bucketData[idx].Tags = Tags
             }
-            bucketData[idx].Tags = Tags
+          } catch (error) {
+            logger.debug(lt.gettingBucketAdditionalInfoError(Name))
           }
 
           resolvePublicStatus()
