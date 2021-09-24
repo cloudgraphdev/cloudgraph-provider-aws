@@ -1,3 +1,10 @@
+## [0.22.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.22.1...0.22.2) (2021-09-24)
+
+
+### Bug Fixes
+
+* Prevent errors formatting s3 additional data ([1a5a053](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/1a5a053d0d0ab160afc857bcfa09463acf0ad8a5))
+
 ## [0.22.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.22.0...0.22.1) (2021-09-24)
 
 
