@@ -1,3 +1,10 @@
+## [0.21.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.21.0...0.21.1) (2021-09-24)
+
+
+### Bug Fixes
+
+* **aws-provider:** added new retry options ([44a30bd](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/44a30bd68b3ada76d4894e4d7d68a9f86bce698d))
+
 # [0.21.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.20.0...0.21.0) (2021-09-22)
 
 
