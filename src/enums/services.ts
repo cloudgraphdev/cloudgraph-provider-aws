@@ -7,6 +7,7 @@ export default {
   billing: 'billing',
   cognitoIdentityPool: 'cognitoIdentityPool',
   cognitoUserPool: 'cognitoUserPool',
+  cloudfront: 'cloudfront',
   cloudwatch: 'cloudwatch',
   ebs: 'ebs',
   ec2Instance: 'ec2Instance',

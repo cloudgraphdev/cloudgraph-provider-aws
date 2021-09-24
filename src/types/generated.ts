@@ -184,6 +184,94 @@ export type AwsBucketPolicy = {
   policy?: Maybe<Scalars['String']>;
 };
 
+export type AwsCloudfront = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  etag?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  enabled?: Maybe<Scalars['String']>;
+  priceClass?: Maybe<Scalars['String']>;
+  domainName?: Maybe<Scalars['String']>;
+  httpVersion?: Maybe<Scalars['String']>;
+  lastModified?: Maybe<Scalars['String']>;
+  callerReference?: Maybe<Scalars['String']>;
+  ipv6Enabled?: Maybe<Scalars['String']>;
+  defaultRootObject?: Maybe<Scalars['String']>;
+  webAclId?: Maybe<Scalars['String']>;
+  geoRestrictions?: Maybe<Scalars['String']>;
+  customErrorResponse?: Maybe<Array<Maybe<AwsCloudfrontCustomErrorResponse>>>;
+  defaultCacheBehavior?: Maybe<AwsCloudfrontCacheBehavior>;
+  orderedCacheBehavior?: Maybe<Array<Maybe<AwsCloudfrontCacheBehavior>>>;
+  viewerCertificate?: Maybe<AwsCloudfrontViewerCertificate>;
+  origin?: Maybe<Array<Maybe<AwsCloudfrontOriginData>>>;
+  elb?: Maybe<Array<Maybe<AwsElb>>>;
+  s3?: Maybe<Array<Maybe<AwsS3>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
+export type AwsCloudfrontCacheBehavior = {
+  id: Scalars['String'];
+  allowedMethods?: Maybe<Array<Maybe<Scalars['String']>>>;
+  cachedMethods?: Maybe<Array<Maybe<Scalars['String']>>>;
+  compress?: Maybe<Scalars['String']>;
+  defaultTtl?: Maybe<Scalars['String']>;
+  forwardedValues?: Maybe<AwsCloudfrontforwardedValues>;
+  maxTtl?: Maybe<Scalars['String']>;
+  minTtl?: Maybe<Scalars['String']>;
+  patternPath?: Maybe<Scalars['String']>;
+  smoothStreaming?: Maybe<Scalars['String']>;
+  targetOriginId?: Maybe<Scalars['String']>;
+  viewerProtocolPolicy?: Maybe<Scalars['String']>;
+};
+
+export type AwsCloudfrontCustomErrorResponse = {
+  errorCachingMinTtl?: Maybe<Scalars['String']>;
+  errorCode?: Maybe<Scalars['Int']>;
+  responseCode?: Maybe<Scalars['String']>;
+  responsePagePath?: Maybe<Scalars['String']>;
+};
+
+export type AwsCloudfrontCustomOriginConfig = {
+  httpPort?: Maybe<Scalars['Int']>;
+  httpsPort?: Maybe<Scalars['Int']>;
+  originProtocolPolicy?: Maybe<Scalars['String']>;
+  originSslProtocols?: Maybe<AwsCloudfrontOriginSslProtocols>;
+  originReadTimeout?: Maybe<Scalars['Int']>;
+  originKeepaliveTimeout?: Maybe<Scalars['Int']>;
+};
+
+export type AwsCloudfrontOriginCustomHeader = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+export type AwsCloudfrontOriginData = {
+  customHeader?: Maybe<Array<Maybe<AwsCloudfrontOriginCustomHeader>>>;
+  customOriginConfig?: Maybe<AwsCloudfrontCustomOriginConfig>;
+  domainName?: Maybe<Scalars['String']>;
+  originId: Scalars['String'];
+  originPath?: Maybe<Scalars['String']>;
+};
+
+export type AwsCloudfrontOriginSslProtocols = {
+  quantity?: Maybe<Scalars['Int']>;
+  items?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsCloudfrontViewerCertificate = {
+  acmCertificateArn?: Maybe<Scalars['String']>;
+  cloudfrontDefaultCertificate?: Maybe<Scalars['String']>;
+  iamCertificateId?: Maybe<Scalars['String']>;
+  minimumProtocolVersion?: Maybe<Scalars['String']>;
+  sslSupportMethod?: Maybe<Scalars['String']>;
+};
+
+export type AwsCloudfrontforwardedValues = {
+  headers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  queryString?: Maybe<Scalars['String']>;
+};
+
 export type AwsCloudwatch = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -440,6 +528,7 @@ export type AwsElb = {
   healthCheck?: Maybe<AwsElbHealthCheck>;
   listeners?: Maybe<Array<Maybe<AwsElbListener>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  cloudfrontDistribution?: Maybe<Array<Maybe<AwsCloudfront>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   route53Record?: Maybe<Array<Maybe<AwsRoute53Record>>>;
@@ -751,6 +840,7 @@ export type AwsS3 = {
   bucketPolicies?: Maybe<Array<Maybe<AwsBucketPolicy>>>;
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  cloudfrontDistribution?: Maybe<Array<Maybe<AwsCloudfront>>>;
 };
 
 export type AwsSecurityGroup = {

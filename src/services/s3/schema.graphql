@@ -23,6 +23,7 @@ type awsS3 @key(fields: "arn") {
   bucketPolicies: [awsBucketPolicy]
   kinesisFirehose: [awsKinesisFirehose] @hasInverse(field: s3)
   tags: [Tag]
+  cloudfrontDistribution: [awsCloudfront] @hasInverse(field: s3)
 }
 
 type awsBucketPolicy

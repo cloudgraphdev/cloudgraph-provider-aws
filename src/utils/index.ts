@@ -160,3 +160,13 @@ export function generateAwsErrorLog(
   }
   logger.debug(err)
 }
+
+export const settleAllPromises = async (promises: Promise<any>[]): Promise<any[]> =>
+  (await Promise.allSettled(promises)).map(
+    /** We force the PromiseFulfilledResult interface
+     *  because all promises that we input to Promise.allSettled
+     *  are always resolved, that way we suppress the compiler error complaining
+     *  that Promise.allSettled returns an Array<PromiseFulfilledResult | PromiseRejectedResult>
+     *  and that the value property doesn't exist for the PromiseRejectedResult interface */
+    i => (i as PromiseFulfilledResult<any>).value
+  )

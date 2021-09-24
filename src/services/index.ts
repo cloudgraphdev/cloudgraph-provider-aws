@@ -20,6 +20,7 @@ import ASG from './asg'
 import Billing from './billing'
 import CognitoIdentityPool from './cognitoIdentityPool'
 import CognitoUserPool from './cognitoUserPool'
+import CloudFront from './cloudfront'
 import CloudWatch from './cloudwatch'
 import EBS from './ebs'
 import EC2 from './ec2'
@@ -57,6 +58,7 @@ export const serviceMap = {
   [services.apiGatewayRestApi]: APIGatewayRestApi,
   [services.apiGatewayStage]: APIGatewayStage,
   [services.asg]: ASG,
+  [services.cloudfront]: CloudFront,
   [services.cognitoIdentityPool]: CognitoIdentityPool,
   [services.cognitoUserPool]: CognitoUserPool,
   [services.cloudwatch]: CloudWatch,
