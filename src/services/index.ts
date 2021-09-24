@@ -511,7 +511,7 @@ export default class Provider extends CloudGraph.Client {
       )
       if (individualData) {
         for (const [key, value] of Object.entries(individualData)) {
-          if (key.includes('natgateway')) {
+          if (key.includes('natgateway') && !isEmpty()) {
             // this billing data is for natgateway, search for the instance
             const {
               name,
@@ -520,23 +520,25 @@ export default class Provider extends CloudGraph.Client {
             } = result.find(
               ({ name: instanceName }: { name: string }) =>
                 instanceName === services.nat
-            )
-            const natsWithBilling = nats.map(val => {
-              if (key.includes(val.id)) {
-                return {
-                  ...val,
-                  dailyCost: value,
+            ) ?? {}
+            if (!isEmpty(nats)) {
+              const natsWithBilling = nats.map(val => {
+                if (key.includes(val.id)) {
+                  return {
+                    ...val,
+                    dailyCost: value,
+                  }
                 }
-              }
-              return val
-            })
-            result = result.filter(({ name: serviceName }) => serviceName !== services.nat
-            )
-            result.push({
-              name,
-              mutation,
-              data: natsWithBilling,
-            })
+                return val
+              })
+              result = result.filter(({ name: serviceName }) => serviceName !== services.nat
+              )
+              result.push({
+                name,
+                mutation,
+                data: natsWithBilling,
+              })
+            }
           }
           if (key.includes('i-')) {
             // this billing data is for ec2, search for the instance
@@ -547,23 +549,25 @@ export default class Provider extends CloudGraph.Client {
             } = result.find(
               ({ name: instanceName }: { name: string }) =>
                 instanceName === services.ec2Instance
-            )
-            const ec2WithBilling = ec2s.map(val => {
-              if (key === val.id) {
-                return {
-                  ...val,
-                  dailyCost: value,
+            ) ?? {}
+            if (!isEmpty(ec2s)) {
+              const ec2WithBilling = ec2s.map(val => {
+                if (key === val.id) {
+                  return {
+                    ...val,
+                    dailyCost: value,
+                  }
                 }
-              }
-              return val
-            })
-            result = result.filter(({ name: serviceName }) => serviceName !== services.ec2Instance
-            )
-            result.push({
-              name,
-              mutation,
-              data: ec2WithBilling,
-            })
+                return val
+              })
+              result = result.filter(({ name: serviceName }) => serviceName !== services.ec2Instance
+              )
+              result.push({
+                name,
+                mutation,
+                data: ec2WithBilling,
+              })
+            }
           }
         }
       }
