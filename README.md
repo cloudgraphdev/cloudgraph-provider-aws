@@ -80,6 +80,214 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 
 # Query Examples
 
+To use CloudGraph, you will need to be familiar with GraphQL. This section contains a handful of example queries to get you up and running but is by no means exhaustive. Feel free to make a PR with other examples you would like to see included, check out the [Contribution Guidelines](#contribution-guidelines) section for more information.
+
+<br />
+
+## Basic AWS Query Syntax Examples:
+
+For the purposes of these examples we will just request the IDs and ARNs of AWS resources to keep things brief, but you can query whatever attributes you want.
+
+<br />
+
+Get the `ID` and `ARN` of a single `EC2 instance`:
+
+```graphql
+query {
+  getawsEc2(
+    arn: "arn:aws:ec2:us-east-1:123445678997:instance/i-12345567889012234"
+  ) {
+    id
+    arn
+  }
+}
+```
+
+<br />
+
+Get the `ID` and `ARN` of each `EC2` in your entire AWS account:
+
+```graphql
+query {
+  queryawsEc2 {
+    id
+    arn
+  }
+}
+```
+
+<br />
+
+Get the `ID` and `ARN` of each `EC2` in `"us-east-1"` using a regex to search the `ARN`:
+
+```graphql
+query {
+  queryawsEc2(filter: { arn: { regexp: "/.*us-east-1.*/" } }) {
+    id
+    arn
+  }
+}
+```
+
+<br />
+
+Do the same thing but checking to see that the `region` is equal to `"us-east-1"` instead of using a regex:
+
+```graphql
+query {
+  queryawsEc2(filter: { region: { eq: "us-east-1" } }) {
+    id
+    arn
+  }
+}
+```
+
+<br />
+
+Do the same thing but checking to see that the `region` contains `"us-east-1"` in the name instead of using eq:
+
+```graphql
+query {
+  queryawsEc2(filter: { region: { in: "us-east-1" } }) {
+    id
+    arn
+  }
+}
+```
+
+<br />
+
+Get the `ID` and `ARN` of each `M5` series `EC2 instance` in `"us-east-1"`
+
+```graphql
+query {
+  queryawsEc2(
+    filter: { region: { eq: "us-east-1" }, instanceType: { regexp: "/^m5a*/" } }
+  ) {
+    id
+    arn
+  }
+}
+```
+
+<br />
+
+Do the same thing but skip the first found result (i.e. `offset: 1`) and then only return the first two results after that (i.e. `first: 2`) and order those results by AZ in ascending order (`order: { asc: availabilityZone }`) so that instance(s) in `"us-east-1a"` are returned at the top of the list.
+
+```graphql
+query {
+  queryawsEc2(
+    filter: { region: { eq: "us-east-1" }, instanceType: { regexp: "/^m5a*/" } }
+    order: { asc: availabilityZone }
+    first: 2
+    offset: 1
+  ) {
+    id
+    arn
+  }
+}
+```
+
+<br />
+
+Do the same thing but also include the `EBS Volume` that is the boot disk for each `EC2 instance`:
+
+```graphql
+query {
+  queryawsEc2(
+    filter: { region: { eq: "us-east-1" }, instanceType: { regexp: "/^m5a*/" } }
+    order: { asc: availabilityZone }
+    first: 2
+    offset: 1
+  ) {
+    id
+    arn
+    ebs(filter: { isBootDisk: true }, first: 1) {
+      id
+      arn
+      isBootDisk
+    }
+  }
+}
+```
+
+<br />
+
+Do the same thing, but also include the `SGs` and `ALBs` for each `EC2`. For the `ALBs`, get the `EC2s` that they are connected to along with the `ID` and `ARN` of each found `EC2 instance` (i.e. a circular query).
+
+```graphql
+query {
+  queryawsEc2(
+    filter: { region: { eq: "us-east-1" }, instanceType: { regexp: "/^m5a*/" } }
+    order: { asc: availabilityZone }
+    first: 2
+    offset: 1
+  ) {
+    id
+    arn
+    ebs(filter: { isBootDisk: true }, first: 1) {
+      id
+      arn
+      isBootDisk
+    }
+    securityGroups {
+      id
+      arn
+    }
+    alb {
+      id
+      arn
+      ec2Instance {
+        id
+        arn
+      }
+    }
+  }
+}
+```
+
+<br />
+
+Get each `VPC`, the `ALBs` and `Lambdas` in that `VPC`, and then a bunch of nested sub-data as well. Also get each `S3 Bucket` in `us-east-1`. Also get the `SQS` queue with an `ARN` of `arn:aws:sqs:us-east-1:8499274828484:autocloud.fifo` and check the `approximateNumberOfMessages`. You get the idea, CloudGraph is **extremely** powerful.
+
+```graphql
+query {
+  queryawsVpc {
+	id
+    arn
+    alb {
+      id
+      arn
+      ec2Instance{
+        id
+        arn
+        ebs(filter: { isBootDisk: true }) {
+          id
+          arn
+        }
+      }
+    }
+    lambda {
+      id
+      arn
+      kms {id
+      arn}
+    }
+  }
+  queryawsS3(filter: { region: { eq: "us-east-1" } }) {
+    id
+    arn
+  }
+  getawsSqs(arn: "arn:aws:sqs:us-east-1:8499274828484:autocloud.fifo") {
+    approximateNumberOfMessages
+  }
+}
+```
+
+<br />
+
+## AWS security, compliance, and governance examples:
+
 <br />
 
 Find all the unencrypted `EBS Volumes`:
@@ -242,194 +450,80 @@ query {
 
 <br />
 
-Get the `ID` and `ARN` of a single `EC2 instance`:
+## AWS FinOps examples:
+<br />
+
+Note that in order to successfully ingest FinOps related data you must have the Cost Explorer API enabled in your AWS Account. [You can view how to do that here](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-access.html)
+
+<br />
+
+Get the `total cost` of your AWS account for the `last 30 days`, the `total cost` of your AWS account `month to date`, a breakdown of `each service and its cost for the last 30 days`, and a breakdown of `each service and its cost month to date`: 
 
 ```graphql
 query {
-  getawsEc2(
-    arn: "arn:aws:ec2:us-east-1:123445678997:instance/i-12345567889012234"
-  ) {
-    id
-    arn
+  queryawsBilling {
+    totalCostLast30Days
+    totalCostMonthToDate
+    monthToDate {
+      name
+      cost
+    }
+    last30Days {
+      name
+      cost
+    }
   }
 }
 ```
 
 <br />
 
-Get the `ID` and `ARN` of each `EC2` in your entire AWS account:
+Get each `EC2 instance` in your AWS account along with its daily cost:
 
 ```graphql
 query {
   queryawsEc2 {
-    id
     arn
+    dailyCost
   }
 }
 ```
 
 <br />
 
-Get the `ID` and `ARN` of each `EC2` in `"us-east-1"` using a regex to search the `ARN`:
+Get each `NAT Gateway` in your AWS account along with its daily cost:
 
 ```graphql
 query {
-  queryawsEc2(filter: { arn: { regexp: "/.*us-east-1.*/" } }) {
-    id
+  queryawsNatGateway {
     arn
+    dailyCost
   }
 }
 ```
 
 <br />
 
-Do the same thing but checking to see that the `region` is equal to `"us-east-1"` instead of using a regex:
-
-```graphql
-query {
-  queryawsEc2(filter: { region: { eq: "us-east-1" } }) {
-    id
-    arn
-  }
-}
-```
+## Limitations
 
 <br />
 
-Do the same thing but checking to see that the `region` contains `"us-east-1"` in the name instead of using eq:
-
-```graphql
-query {
-  queryawsEc2(filter: { region: { in: "us-east-1" } }) {
-    id
-    arn
-  }
-}
-```
+Today, the biggest limitation with CloudGraph and our query abilities is we don't support nested filtering based on child attributes. So for example, as cool as it would be to do the following, it's just not possible yet:
 
 <br />
 
-Get the `ID` and `ARN` of each `M5` series `EC2 instance` in `"us-east-1"`
-
 ```graphql
 query {
-  queryawsEc2(
-    filter: { region: { eq: "us-east-1" }, instanceType: { regexp: "/^m5a*/" } }
-  ) {
+  queryawsEc2(filter: { ebs: { isBootDisk: true } }) {
     id
     arn
-  }
-}
-```
-
-<br />
-
-Do the same thing but skip the first found result (i.e. `offset: 1`) and then only return the first two results after that (i.e. `first: 2`) and order those results by AZ in ascending order (`order: { asc: availabilityZone }`) so that instance(s) in `"us-east-1a"` are returned at the top of the list.
-
-```graphql
-query {
-  queryawsEc2(
-    filter: { region: { eq: "us-east-1" }, instanceType: { regexp: "/^m5a*/" } }
-    order: { asc: availabilityZone }
-    first: 2
-    offset: 1
-  ) {
-    id
-    arn
-  }
-}
-```
-
-<br />
-
-Do the same thing but also include the `EBS Volume` that is the boot disk for each `EC2 instance`:
-
-```graphql
-query {
-  queryawsEc2(
-    filter: { region: { eq: "us-east-1" }, instanceType: { regexp: "/^m5a*/" } }
-    order: { asc: availabilityZone }
-    first: 2
-    offset: 1
-  ) {
-    id
-    arn
-    ebs(filter: { isBootDisk: true }, first: 1) {
-      id
-      arn
-      isBootDisk
-    }
-  }
-}
-```
-
-<br />
-
-Do the same thing, but also include the `SGs` and `ALBs` for each `EC2`. For the `ALBs`, get the `EC2s` that they are connected to along with the `ID` and `ARN` of each found `EC2 instance` (i.e. a circular query).
-
-```graphql
-query {
-  queryawsEc2(
-    filter: { region: { eq: "us-east-1" }, instanceType: { regexp: "/^m5a*/" } }
-    order: { asc: availabilityZone }
-    first: 2
-    offset: 1
-  ) {
-    id
-    arn
-    ebs(filter: { isBootDisk: true }, first: 1) {
-      id
-      arn
-      isBootDisk
-    }
-    securityGroups {
+    ebs {
       id
       arn
     }
-    alb {
-      id
-      arn
-      ec2Instance {
-        id
-        arn
-      }
-    }
   }
 }
 ```
 
-<br />
-
-Get each `VPC`, the `ALBs` and `Lambdas` in that `VPC`, and then a bunch of nested sub-data as well... you get the idea.
-
-```graphql
-query {
-  queryawsVpc {
-    id
-    arn
-    alb {
-      id
-      arn
-      ec2Instance {
-        id
-        arn
-        ebs(filter: { isBootDisk: true }) {
-          id
-          arn
-        }
-      }
-    }
-    lambda {
-      id
-      arn
-      kms {
-        id
-        arn
-      }
-    }
-  }
-}
-```
-
-<br />
+This is actually not a limitation of CloudGraph, but rather a feature that still needs to be implemented with Dgraph. [You can view and comment on the discussion thread here](https://discuss.dgraph.io/t/proposal-nested-object-filters-for-graphql-rewritten-as-var-blocks-in-dql/12252/2)
 
