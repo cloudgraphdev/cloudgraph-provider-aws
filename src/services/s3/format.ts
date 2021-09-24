@@ -33,7 +33,7 @@ export default ({
     Tags: tags = {},
     AdditionalInfo: {
       AccelerationConfig: accelerationStatus,
-      BucketOwnerData: { DisplayName: bucketOwnerName } = {},
+      BucketOwnerData: { DisplayName: bucketOwnerName },
       CorsInfo: corsInfo,
       EncryptionInfo: encryptionInfo,
       Grants: grants,
@@ -46,7 +46,22 @@ export default ({
       ReqPaymentConfig: reqPaymentConfig,
       StaticWebsiteInfo: staticWebsiteInfo,
       VersioningInfo: versioningInfo,
-    } = {},
+    } = {
+      AccelerationConfig: '',
+      BucketOwnerData: { DisplayName: '' },
+      CorsInfo: [],
+      EncryptionInfo: {},
+      Grants: [],
+      LifecycleConfig: [],
+      LoggingInfo: {},
+      Policy: '',
+      PolicyStatus: {},
+      PublicAccessBlockConfig: {},
+      ReplicationConfig: {},
+      ReqPaymentConfig: '',
+      StaticWebsiteInfo: {},
+      VersioningInfo: {},
+    },
   } = rawData
 
   let size = '0 Kb'
@@ -149,8 +164,8 @@ export default ({
     const { IsPublic }: PolicyStatus = policyStatus
     access = IsPublic ? t.public : t.private
   } else if (!isEmpty(grants)) {
-    grants.map(({ Grantee: { URI } }) => {
-      if (URI === publicBucketGrant) {
+    grants.map(({ Grantee }) => {
+      if (Grantee?.URI === publicBucketGrant) {
         access = t.public
       }
     })
