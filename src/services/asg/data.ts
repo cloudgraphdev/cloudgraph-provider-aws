@@ -8,12 +8,14 @@ import CloudGraph from '@cloudgraph/sdk'
 
 import { Credentials, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint, generateAwsErrorLog, setAwsRetryOptions } from '../../utils'
+import { ASG_CUSTOM_DELAY } from '../../config/constants'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'ASG'
 const endpoint = initTestEndpoint(serviceName)
+const customRetrySettings = setAwsRetryOptions({ baseDelay: ASG_CUSTOM_DELAY })
 
 /**
  * ASG
@@ -90,7 +92,7 @@ export default async ({
   let launchConfigData
 
   for (const region of regions.split(',')) {
-    const asg = new ASG({ region, credentials, endpoint })
+    const asg = new ASG({ region, credentials, endpoint, ...customRetrySettings })
 
     /**
      * Step 1) Get all the ASG data for each region

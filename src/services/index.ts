@@ -41,6 +41,7 @@ import resources from '../enums/resources'
 import services from '../enums/services'
 import { Credentials } from '../types'
 import { obfuscateSensitiveString } from '../utils/format'
+// import { setAwsRetryOptions } from '../utils'
 
 const DEFAULT_REGION = 'us-east-1'
 const DEFAULT_RESOURCES = Object.values(services).join(',')
@@ -409,6 +410,9 @@ export default class Provider extends CloudGraph.Client {
     ]
 
     this.logSelectedRegionsAndResources(configuredRegions, configuredResources)
+
+    // Leaving this here in case we need to test another service or to inject a logging function
+    // setAwsRetryOptions({ global: true, configObj: this.config })
 
     // Get Raw data for services
     for (const resource of resourceNames) {
