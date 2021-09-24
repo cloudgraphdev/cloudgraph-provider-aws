@@ -1,5 +1,6 @@
-type awsRoute53Record @key(fields: "id") {
-  id: String! @id @search(by: [hash])
+type awsRoute53Record @key(fields: "arn") {
+  id: String! @search(by: [hash])
+  accountId: String! @search(by: [hash])
   zoneId: String
   alias: awsRoute53Alias
   type: String

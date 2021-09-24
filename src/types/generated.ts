@@ -43,6 +43,7 @@ export type AwsAdditionalAuthenticationProvider = {
 
 export type AwsAlb = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   dnsName?: Maybe<Scalars['String']>;
   scheme?: Maybe<Scalars['String']>;
@@ -257,6 +258,7 @@ export type AwsAppSyncType = {
 
 export type AwsAsg = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
@@ -515,6 +517,7 @@ export type AwsCloudfrontforwardedValues = {
 
 export type AwsCloudwatch = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   metric?: Maybe<Scalars['String']>;
   namespace?: Maybe<Scalars['String']>;
@@ -651,6 +654,7 @@ export type AwsCognitoUserPoolSchemaAttribute = {
 
 export type AwsEbs = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   attachments?: Maybe<Array<Maybe<AwsEbsAttachment>>>;
   iops?: Maybe<Scalars['Int']>;
@@ -677,6 +681,7 @@ export type AwsEbsAttachment = {
 
 export type AwsEc2 = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   region?: Maybe<Scalars['String']>;
   ami?: Maybe<Scalars['String']>;
@@ -730,6 +735,7 @@ export type AwsEc2MetadataOptions = {
 
 export type AwsEip = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   tags?: Maybe<Array<Maybe<Tag>>>;
   vpc?: Maybe<Scalars['String']>;
@@ -751,6 +757,7 @@ export type AwsEip = {
 
 export type AwsElb = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   dnsName?: Maybe<Scalars['String']>;
   hostedZone?: Maybe<Scalars['String']>;
@@ -810,6 +817,7 @@ export type AwsEnabledMetrics = {
 };
 
 export type AwsIgw = {
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   id: Scalars['String'];
   owner?: Maybe<Scalars['String']>;
@@ -858,6 +866,7 @@ export type AwsKinesisFirehoseSource = {
 
 export type AwsKinesisStream = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   streamName: Scalars['String'];
   streamStatus: Scalars['String'];
@@ -871,6 +880,7 @@ export type AwsKinesisStream = {
 };
 
 export type AwsKms = {
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   id: Scalars['String'];
   description?: Maybe<Scalars['String']>;
@@ -897,6 +907,7 @@ export type AwsLambaEnvironmentVariable = {
 
 export type AwsLambda = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   handler?: Maybe<Scalars['String']>;
@@ -972,6 +983,7 @@ export type AwsMixedInstancesPolicy = {
 
 export type AwsNatGateway = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   state?: Maybe<Scalars['String']>;
   createTime?: Maybe<Scalars['String']>;
@@ -983,6 +995,7 @@ export type AwsNatGateway = {
 
 export type AwsNetworkInterface = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   subnetId?: Maybe<Scalars['String']>;
   macAddress?: Maybe<Scalars['String']>;
@@ -1029,6 +1042,7 @@ export type AwsRoute53Alias = {
 
 export type AwsRoute53HostedZone = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   comment?: Maybe<Scalars['String']>;
@@ -1040,6 +1054,7 @@ export type AwsRoute53HostedZone = {
 
 export type AwsRoute53Record = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   zoneId?: Maybe<Scalars['String']>;
   alias?: Maybe<AwsRoute53Alias>;
   type?: Maybe<Scalars['String']>;
@@ -1053,6 +1068,7 @@ export type AwsRoute53Record = {
 
 export type AwsRouteTable = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   vpcId?: Maybe<Scalars['String']>;
   routes?: Maybe<Array<Maybe<AwsRoute>>>;
@@ -1093,6 +1109,7 @@ export type AwsS3 = {
 
 export type AwsSecurityGroup = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   name: Scalars['String'];
   vpcId?: Maybe<Scalars['String']>;
@@ -1155,6 +1172,7 @@ export type AwsShards = {
 
 export type AwsSqs = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   queueUrl: Scalars['String'];
   queueType: Scalars['String'];
@@ -1172,6 +1190,7 @@ export type AwsSqs = {
 
 export type AwsSubnet = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   autoAssignPublicIpv4Address?: Maybe<Scalars['String']>;
   autoAssignPublicIpv6Address?: Maybe<Scalars['String']>;
@@ -1232,6 +1251,7 @@ export type AwsTotalBillingInfo = {
 };
 
 export type AwsVpc = {
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   defaultVpc?: Maybe<Scalars['Boolean']>;
   dhcpOptionsSet?: Maybe<Scalars['String']>;

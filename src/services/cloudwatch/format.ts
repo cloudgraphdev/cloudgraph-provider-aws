@@ -1,5 +1,6 @@
 import { MetricAlarm } from 'aws-sdk/clients/cloudwatch'
 import cuid from 'cuid'
+import { account } from '../../properties/test'
 import t from '../../properties/translations'
 import { TagMap } from '../../types'
 import { AwsCloudwatch } from '../../types/generated'
@@ -10,8 +11,10 @@ import { formatTagsFromMap } from '../../utils/format'
  */
 export default ({
   service,
+  account,
 }: {
   service: MetricAlarm & { Tags?: TagMap; region: string }
+  account: string
 }): AwsCloudwatch => {
   const {
     AlarmDescription: description,
@@ -32,6 +35,7 @@ export default ({
   } = service
   return {
     id: name,
+    accountId: account,
     arn,
     metric,
     namespace,

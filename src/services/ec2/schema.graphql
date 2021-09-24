@@ -34,6 +34,7 @@ type awsEc2Blockdevice
 
 type awsEc2 @key(fields: "arn") {
   id: String! @search(by: [hash])
+  accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
   ami: String @search(by: [hash, regexp])

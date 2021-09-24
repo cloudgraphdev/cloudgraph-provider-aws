@@ -62,6 +62,7 @@ export default ({
   const instanceTags = formatTagsFromMap(tags)
 
   const ec2 = {
+    accountId: account,
     arn: `arn:aws:ec2:${region}:${account}:instance/${id}`,
     id,
     region,

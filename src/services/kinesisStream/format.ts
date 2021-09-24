@@ -3,9 +3,11 @@ import { RawAwsKinesisStream } from './data';
 
 export default ({
   service: rawData,
+  account,
   region,
 }: {
   service: RawAwsKinesisStream
+  account: string
   region: string
 }): AwsKinesisStream => {
   const {
@@ -44,6 +46,7 @@ export default ({
 
   const dataStream = {
     id: streamARN,
+    accountId: account,
     arn: streamARN,
     streamName,
     streamStatus,

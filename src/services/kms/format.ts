@@ -2,12 +2,13 @@ import t from '../../properties/translations'
 import { AwsKms } from './data'
 import { AwsKms as AwsKmsType } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
+import { account } from '../../properties/test'
 
 /**
  * KMS
  */
 
-export default ({ service: key }: { service: AwsKms }): AwsKmsType => {
+export default ({ service: key, account }: { service: AwsKms, account: string }): AwsKmsType => {
   const {
     Arn: arn,
     Tags,
@@ -27,6 +28,7 @@ export default ({ service: key }: { service: AwsKms }): AwsKmsType => {
   } = key
 
   return {
+    accountId: account,
     arn,
     id,
     description,

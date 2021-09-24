@@ -1,4 +1,5 @@
 type awsKms @key(fields: "id"){
+  accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   id: String! @id @search(by: [hash])
   description: String @search(by: [hash, regexp, fulltext])

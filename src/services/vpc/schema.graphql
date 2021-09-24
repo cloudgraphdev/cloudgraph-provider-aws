@@ -1,4 +1,5 @@
 type awsVpc @key(fields: "id") {
+  accountId: String! @search(by: [hash])
   arn: String! @id
   defaultVpc: Boolean @search
   dhcpOptionsSet: String @search(by: [hash, regexp])

@@ -3,6 +3,7 @@ import { AwsSqs as AwsSqsType } from '../../types/generated'
 import t from '../../properties/translations'
 import getTime from '../../utils/dateutils'
 import { formatTagsFromMap } from '../../utils/format'
+import { account } from '../../properties/test'
 
 /**
  * SQS
@@ -10,8 +11,10 @@ import { formatTagsFromMap } from '../../utils/format'
 
 export default ({ 
   service: key,
+  account,
 }:{
   service: AwsSqs
+  account: string
   // allTagData: Tags[]
 }): AwsSqsType => {
   const {
@@ -34,6 +37,7 @@ export default ({
 
   return {
     id: arn,
+    accountId: account,
     arn,
     queueUrl,
     queueType: arn.includes('.fifo') ? t.fifo : t.standard,

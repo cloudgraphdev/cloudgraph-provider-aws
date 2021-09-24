@@ -1,3 +1,4 @@
+import { account } from '../../properties/test'
 import { AwsRoute53HostedZone } from '../../types/generated'
 import { route53HostedZoneArn } from '../../utils/generateArns'
 import { getHostedZoneId } from '../../utils/ids'
@@ -28,6 +29,7 @@ export default ({
 
   const hostedZone = {
     id,
+    accountId: account,
     arn: route53HostedZoneArn({ id }),
     name,
     comment,

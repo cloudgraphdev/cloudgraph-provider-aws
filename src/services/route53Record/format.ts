@@ -8,6 +8,7 @@ import { getHostedZoneId, getRecordId } from '../../utils/ids'
 
 export default ({
   service: rawData,
+  account,
 }: {
   service: RawAwsRoute53Record
   account: string
@@ -30,6 +31,7 @@ export default ({
 
   const record = {
     id,
+    accountId: account,
     zoneId: hostedZoneId,
     type,
     ttl,

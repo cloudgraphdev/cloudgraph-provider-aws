@@ -6,9 +6,11 @@ import { RawAwsAsg } from './data';
 
 export default ({
   service: rawData,
+  account,
   region,
 }: {
   service: RawAwsAsg
+  account: string
   region: string
 }): AwsAsg => {
   const {
@@ -97,6 +99,7 @@ export default ({
 
   return {
     id: arn,
+    accountId: account,
     arn,
     name,
     region,

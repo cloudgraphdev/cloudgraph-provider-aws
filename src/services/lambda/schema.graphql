@@ -1,5 +1,6 @@
 type awsLambda @key(fields: "id") {
   id: String! @id @search(by: [hash])
+  accountId: String! @id @search(by: [hash])
   arn: String! @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp, fulltext])
   handler: String @search(by: [hash, regexp])

@@ -82,6 +82,7 @@ export default ({
 
   const elb = {
     id: loadBalancerName,
+    accountId: account,
     arn: `arn:aws:elasticloadbalancing:${region}:${account}:loadbalancer/${loadBalancerName}`,
     dnsName,
     createdAt: createdAt.toISOString(),

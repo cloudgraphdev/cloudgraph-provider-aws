@@ -1,4 +1,5 @@
 import isEmpty from 'lodash/isEmpty'
+import { account } from '../../properties/test'
 import t from '../../properties/translations'
 import { AwsLambda } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
@@ -9,8 +10,10 @@ import { RawAwsLambdaFunction } from './data'
  */
 export default ({
   service: rawData,
+  account,
 }: {
   service: RawAwsLambdaFunction
+  account: string
 }): AwsLambda => {
   const {
     CodeSize: codeSize,
@@ -53,6 +56,7 @@ export default ({
     .join(', ')
 
   return {
+    accountId: account,
     arn,
     description,
     handler,

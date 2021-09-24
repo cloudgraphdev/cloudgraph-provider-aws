@@ -1,5 +1,6 @@
 type awsRouteTable @key(fields: "arn") {
   id: String! @search(by: [hash])
+  accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   vpcId: String @search(by: [hash])
   routes: [awsRoute]
