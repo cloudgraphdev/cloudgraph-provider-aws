@@ -94,7 +94,7 @@ const getAPIMappings = (apiGw: APIGW, domainName: string) =>
           }
 
           if (err) {
-            logger.error(err)
+            generateAwsErrorLog(serviceName, 'apiGw:getBasePathMappings', err)
           }
 
           const { items: restApiData = [] } = data || {}
@@ -120,12 +120,12 @@ export const getDomainNamesForRegion = async (
         getDomainNamesOpts,
         (err: AWSError, data: DomainNames) => {
           if (err) {
-            logger.error(err)
+            generateAwsErrorLog(serviceName, 'apiGw:getDomainNames', err)
           }
 
           const { items = [] } = data || {}
 
-          logger.info(lt.fetchedApiGwDomainNames(items.length))
+          logger.debug(lt.fetchedApiGwDomainNames(items.length))
 
           /**
            * No API Gateway Domain Names Found
