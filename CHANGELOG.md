@@ -1,3 +1,10 @@
+## [0.22.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.22.0...0.22.1) (2021-09-24)
+
+
+### Bug Fixes
+
+* **provider:** Add try/catch blocks to all getData functions for more error details ([3c45469](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/3c45469c9f4e789bc417335740afcf5e6634596f))
+
 # [0.22.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.21.1...0.22.0) (2021-09-24)
 
 
