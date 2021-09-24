@@ -17,3 +17,18 @@ export default (seconds: string): string => {
   }
   return `${numberOfSeconds} ${t.seconds}`.toLowerCase()
 }
+
+export const getDaysAgo = (days: number): string =>
+  new Date(
+    new Date(Date.now() - days * 24 * 60 * 60 * 1000)
+  ).toLocaleDateString('en-ca')
+
+export const getFirstDayOfMonth = (): string => {
+  const today = getDaysAgo(0).split('-')
+  today.pop()
+  today.push('01')
+  return today.join('-')
+}
+
+export const createDiffSecs = (startDate: Date): number =>
+  (new Date().getTime() - startDate.getTime()) / 1000

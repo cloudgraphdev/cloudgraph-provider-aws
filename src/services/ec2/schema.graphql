@@ -57,6 +57,7 @@ type awsEc2 @key(fields: "arn") {
   cpuThreadsPerCore: Int @search
   iamInstanceProfile: String @search(by: [hash, regexp])
   deletionProtection: String @search(by: [hash, regexp])
+  dailyCost: String
   primaryNetworkInterface: String @search(by: [hash, regexp])
   metadataOptions: awsEc2MetadataOptions
   metadatasecurityGroupIdsOptions: [String] @search(by: [hash])

@@ -5,7 +5,7 @@ import AWS from 'aws-sdk'
 import chalk from 'chalk'
 import { print } from 'graphql'
 import STS from 'aws-sdk/clients/sts'
-import { isEmpty } from 'lodash'
+import { isEmpty, get } from 'lodash'
 import path from 'path'
 
 // import AwsSubnet from './subnet'
@@ -16,6 +16,7 @@ import AwsKms from './kms'
 import AwsSecurityGroup from './securityGroup'
 import AwsTag from './tag'
 import ASG from './asg'
+import Billing from './billing'
 import CognitoIdentityPool from './cognitoIdentityPool'
 import CognitoUserPool from './cognitoUserPool'
 import CloudWatch from './cloudwatch'
@@ -36,7 +37,7 @@ import Route53Record from './route53Record'
 import RouteTable from './routeTable'
 import S3 from './s3'
 
-import regions from '../enums/regions'
+import regions, { regionMap } from '../enums/regions'
 import resources from '../enums/resources'
 import services from '../enums/services'
 import { Credentials } from '../types'
@@ -75,6 +76,7 @@ export const serviceMap = {
   [services.route53Record]: Route53Record,
   [services.routeTable]: RouteTable,
   [services.s3]: S3,
+  [services.billing]: Billing,
   tag: AwsTag,
 }
 
@@ -421,6 +423,7 @@ export default class Provider extends CloudGraph.Client {
           opts,
         }),
       })
+      this.logger.success(`${resource} scan completed`)
     }
     // Handle global tag entities
     const tagRegion = 'aws-global'
@@ -460,32 +463,110 @@ export default class Provider extends CloudGraph.Client {
       const entities: any[] = []
       for (const region of Object.keys(serviceData.data)) {
         const data = serviceData.data[region]
-        data.forEach((service: any) => {
-          entities.push(
-            serviceClass.format({
-              service,
-              region,
-              account: accountId,
-            })
-          )
-          if (typeof serviceClass.getConnections === 'function') {
-            result.connections = {
-              ...result.connections,
-              ...serviceClass.getConnections({
+        if (!isEmpty(data)) {
+          data.forEach((service: any) => {
+            entities.push(
+              serviceClass.format({
                 service,
                 region,
                 account: accountId,
-                data: rawData,
-              }),
+              })
+            )
+            if (typeof serviceClass.getConnections === 'function') {
+              // We need to loop through all configured regions here because services can be connected to things in another region
+              for (const connectionRegion of configuredRegions.split(',')) {
+                result.connections = {
+                  ...result.connections,
+                  ...serviceClass.getConnections({
+                    service,
+                    region: connectionRegion,
+                    account: accountId,
+                    data: rawData,
+                  }),
+                }
+              }
             }
-          }
-        })
+          })
+        }
       }
       result.entities.push({
         name: serviceData.name,
         mutation: serviceClass.mutation,
         data: entities,
       })
+    }
+    result.entities = this.enrichInstanceWithBillingData(configuredRegions, rawData, result.entities)
+    return result
+  }
+
+  enrichInstanceWithBillingData(configuredRegions: string, rawData: any, entities: any): any[] {
+    const billingRegion = regionMap.usEast1
+    let result = entities
+    if (configuredRegions.includes(billingRegion)) {
+      const billing = rawData.find(({ name }) => name === services.billing) ?? {}
+      const individualData = get(
+        billing,
+        ['data', billingRegion, '0', 'individualData'],
+        undefined
+      )
+      if (individualData) {
+        for (const [key, value] of Object.entries(individualData)) {
+          if (key.includes('natgateway')) {
+            // this billing data is for natgateway, search for the instance
+            const {
+              name,
+              mutation,
+              data: nats,
+            } = result.find(
+              ({ name: instanceName }: { name: string }) =>
+                instanceName === services.nat
+            )
+            const natsWithBilling = nats.map(val => {
+              if (key.includes(val.id)) {
+                return {
+                  ...val,
+                  dailyCost: value,
+                }
+              }
+              return val
+            })
+            result = result.filter(({ name: serviceName }) => serviceName !== services.nat
+            )
+            result.push({
+              name,
+              mutation,
+              data: natsWithBilling,
+            })
+          }
+          if (key.includes('i-')) {
+            // this billing data is for ec2, search for the instance
+            const {
+              name,
+              mutation,
+              data: ec2s,
+            } = result.find(
+              ({ name: instanceName }: { name: string }) =>
+                instanceName === services.ec2Instance
+            )
+            const ec2WithBilling = ec2s.map(val => {
+              if (key === val.id) {
+                return {
+                  ...val,
+                  dailyCost: value,
+                }
+              }
+              return val
+            })
+            result = result.filter(({ name: serviceName }) => serviceName !== services.ec2Instance
+            )
+            result.push({
+              name,
+              mutation,
+              data: ec2WithBilling,
+            })
+          }
+        }
+      }
     }
     return result
   }

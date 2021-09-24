@@ -20,15 +20,18 @@ const listSqsQueueUrlsForRegion = async (sqs: SQS): Promise<string[]> => {
   const allQueueUrls = []
   try {
     let listQueuesOutput = await sqs.listQueues().promise()
-    allQueueUrls.push(...listQueuesOutput.QueueUrls)
-
+    if (listQueuesOutput?.QueueUrls) {
+      allQueueUrls.push(...listQueuesOutput.QueueUrls)
+    }
     let nextToken = listQueuesOutput.NextToken
 
     while (nextToken) {
       listQueuesOutput = await sqs
         .listQueues({ NextToken: nextToken })
         .promise()
-      allQueueUrls.push(...listQueuesOutput.QueueUrls)
+      if (listQueuesOutput?.QueueUrls) {
+        allQueueUrls.push(...listQueuesOutput.QueueUrls)
+      }
       nextToken = listQueuesOutput.NextToken
     }
 
@@ -50,7 +53,7 @@ const getQueueAttributes = async (
         AttributeNames: ['All'],
       })
       .promise()
-    return attributes.Attributes
+    return attributes?.Attributes ?? {}
   } catch (err) {
     generateAwsErrorLog(serviceName, 'sqs:getQueueAttributes', err)
   }

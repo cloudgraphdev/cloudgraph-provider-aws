@@ -1,5 +1,6 @@
 import { AwsNatGateway } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
+import { natGatewayArn } from '../../utils/generateArns'
 import { RawAwsNATGateway } from './data'
 
 /**
@@ -25,7 +26,7 @@ export default ({
   return {
     id,
     tags: formatTagsFromMap(Tags),
-    arn: `arn:aws:ec2:${region}:${account}:natgateway/${id}`,
+    arn: natGatewayArn({ region, account, id }),
     state,
     createTime: createTime.toUTCString(),
   }
