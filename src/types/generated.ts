@@ -1078,6 +1078,7 @@ export type AwsTag = {
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
   asg?: Maybe<Array<Maybe<AwsAsg>>>;
   cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
+  cloudfront?: Maybe<Array<Maybe<AwsCloudfront>>>;
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
   eip?: Maybe<Array<Maybe<AwsEip>>>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;

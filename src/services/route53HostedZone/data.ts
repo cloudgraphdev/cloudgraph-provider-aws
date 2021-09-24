@@ -152,7 +152,6 @@ export default async ({
     const hostedZonesData: RawAwsRoute53HostedZone[] = []
 
     const route53 = new Route53({
-      region: 'us-east-1',
       credentials,
       endpoint,
       ...customRetrySettings,

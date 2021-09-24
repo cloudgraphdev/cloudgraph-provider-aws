@@ -148,7 +148,6 @@ export default async ({
     const recordData: RawAwsRoute53Record[] = []
 
     const route53 = new Route53({
-      region: 'us-east-1',
       credentials,
       endpoint,
       ...customRetrySettings,
