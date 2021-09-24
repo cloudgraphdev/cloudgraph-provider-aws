@@ -2,7 +2,6 @@ import t from '../../properties/translations'
 import { AwsKms } from './data'
 import { AwsKms as AwsKmsType } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
-import { account } from '../../properties/test'
 
 /**
  * KMS

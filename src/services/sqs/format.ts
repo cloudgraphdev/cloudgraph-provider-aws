@@ -3,7 +3,6 @@ import { AwsSqs as AwsSqsType } from '../../types/generated'
 import t from '../../properties/translations'
 import getTime from '../../utils/dateutils'
 import { formatTagsFromMap } from '../../utils/format'
-import { account } from '../../properties/test'
 
 /**
  * SQS

@@ -1,5 +1,4 @@
 import isEmpty from 'lodash/isEmpty'
-import { account } from '../../properties/test'
 import t from '../../properties/translations'
 import { AwsLambda } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'

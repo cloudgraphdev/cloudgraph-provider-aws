@@ -1,4 +1,3 @@
-import { account } from '../../properties/test'
 import { AwsRoute53HostedZone } from '../../types/generated'
 import { route53HostedZoneArn } from '../../utils/generateArns'
 import { getHostedZoneId } from '../../utils/ids'
@@ -10,6 +9,7 @@ import { RawAwsRoute53HostedZone } from './data'
 
 export default ({
   service: rawData,
+  account,
 }: {
   service: RawAwsRoute53HostedZone
   account: string
