@@ -541,6 +541,7 @@ export type AwsCloudwatchDimensions = {
 
 export type AwsCognitoIdentityPool = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   identityPoolName?: Maybe<Scalars['String']>;
   allowUnauthenticatedIdentities?: Maybe<Scalars['String']>;
   allowClassicFlow?: Maybe<Scalars['String']>;
@@ -561,6 +562,7 @@ export type AwsCognitoIdentityProviders = {
 
 export type AwsCognitoUserPool = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   policies?: Maybe<AwsCognitoUserPoolPasswordPolicy>;
@@ -1081,6 +1083,7 @@ export type AwsRouteTable = {
 
 export type AwsS3 = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   access?: Maybe<Scalars['String']>;
   bucketOwnerName?: Maybe<Scalars['String']>;

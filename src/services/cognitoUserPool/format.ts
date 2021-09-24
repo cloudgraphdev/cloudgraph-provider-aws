@@ -11,10 +11,11 @@ import { RawAwsCognitoUserPool } from './data';
 
 export default ({
   service: rawData,
+  account,
   region,
 }: {
-  account: string
   service: RawAwsCognitoUserPool
+  account: string
   region: string
 }): AwsCognitoUserPool => {
   const {
@@ -87,6 +88,7 @@ export default ({
 
   const userPool  = {
     id,
+    accountId: account,
     arn,
     name,
     policies: {
