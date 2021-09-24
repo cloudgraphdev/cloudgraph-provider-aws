@@ -1,3 +1,10 @@
+# [0.23.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.22.2...0.23.0) (2021-09-24)
+
+
+### Features
+
+* **kinesisFirehose:** add kinesis firehose service ([12cd3e7](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/12cd3e79f7900dbb332de08b58822b6f18c53378))
+
 ## [0.22.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.22.1...0.22.2) (2021-09-24)
 
 
