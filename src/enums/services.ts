@@ -13,6 +13,7 @@ export default {
   eip: 'eip',
   elb: 'elb',
   igw: 'igw',
+  kinesisFirehose: 'kinesisFirehose',
   kinesisStream: 'kinesisStream',
   kms: 'kms',
   lambda: 'lambda',

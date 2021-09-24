@@ -9,9 +9,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  DateTime: string;
 };
-
 
 export type Tag = {
   id: Scalars['String'];
@@ -494,6 +492,39 @@ export type AwsIgwAttachment = {
   vpcId: Scalars['String'];
 };
 
+export type AwsKinesisFirehose = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  name: Scalars['String'];
+  deliveryStreamStatus: Scalars['String'];
+  failureDescriptionType: Scalars['String'];
+  failureDescriptionDetails: Scalars['String'];
+  encryptionConfig?: Maybe<AwsKinesisFirehoseEncryptionConfig>;
+  deliveryStreamType: Scalars['String'];
+  versionId: Scalars['String'];
+  createTimestamp?: Maybe<Scalars['String']>;
+  lastUpdateTimestamp?: Maybe<Scalars['String']>;
+  source?: Maybe<AwsKinesisFirehoseSource>;
+  region?: Maybe<Scalars['String']>;
+  kinesisStream?: Maybe<Array<Maybe<AwsKinesisStream>>>;
+  s3?: Maybe<Array<Maybe<AwsS3>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
+export type AwsKinesisFirehoseEncryptionConfig = {
+  keyARN?: Maybe<Scalars['String']>;
+  keyType?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  failureDescriptionType?: Maybe<Scalars['String']>;
+  failureDescriptionDetails?: Maybe<Scalars['String']>;
+};
+
+export type AwsKinesisFirehoseSource = {
+  kinesisStreamARN?: Maybe<Scalars['String']>;
+  roleARN?: Maybe<Scalars['String']>;
+  deliveryStartTimestamp?: Maybe<Scalars['String']>;
+};
+
 export type AwsKinesisStream = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -505,6 +536,7 @@ export type AwsKinesisStream = {
   encryptionType?: Maybe<Scalars['String']>;
   keyId?: Maybe<Scalars['String']>;
   region: Scalars['String'];
+  kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
 };
 
 export type AwsKms = {
@@ -717,6 +749,7 @@ export type AwsS3 = {
   versioning?: Maybe<Scalars['String']>;
   staticWebsiteHosting?: Maybe<Scalars['String']>;
   bucketPolicies?: Maybe<Array<Maybe<AwsBucketPolicy>>>;
+  kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
 };
 
@@ -844,6 +877,7 @@ export type AwsTag = {
   s3?: Maybe<Array<Maybe<AwsS3>>>;
   cognitoIdentityPool?: Maybe<Array<Maybe<AwsCognitoIdentityPool>>>;
   cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
+  kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
 };
 
 export type AwsVpc = {
