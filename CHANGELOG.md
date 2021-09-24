@@ -1,3 +1,16 @@
+# [0.22.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.21.1...0.22.0) (2021-09-24)
+
+
+### Bug Fixes
+
+* **billing:** update billing code to fix not scanning ec2/nat ([2e4b781](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/2e4b78115c3a550417dcfe39a98e0c3dbb6be423))
+* Prevent errors getting s3 additional information ([d827eac](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d827eac1d406f708280e019cbfae92b7efcdd840))
+
+
+### Features
+
+* **billing:** Add new billing service and logic to update ec2/nat entities with billing data. Fix small bugs in SQS and service loop; ([8e72984](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/8e7298430e378ddc41cb4b0160bf88d713d3b322))
+
 ## [0.21.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.21.0...0.21.1) (2021-09-24)
 
 
