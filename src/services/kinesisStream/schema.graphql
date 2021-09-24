@@ -33,4 +33,5 @@ type awsKinesisStream @key(fields: "arn") {
   encryptionType: String @search(by: [hash, regexp])
   keyId: String @search(by: [hash, regexp])
   region: String! @search(by: [hash, regexp])
+  kinesisFirehose: [awsKinesisFirehose] @hasInverse(field: kinesisStream)
 }

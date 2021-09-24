@@ -32,7 +32,7 @@
     "terraform:cleanup": "rimraf ./tests/terraform/{.terraform,.terraform.lock.hcl,tfplan} ./tests/terraform/*.{tfstate,tfplan,backup}"
   },
   "dependencies": {
-    "@cloudgraph/sdk": "0.3.7",
+    "@cloudgraph/sdk": "0.3.8",
     "@graphql-tools/load-files": "^6.3.2",
     "@graphql-tools/merge": "^8.0.1",
     "aws-sdk": "^2.931.0",

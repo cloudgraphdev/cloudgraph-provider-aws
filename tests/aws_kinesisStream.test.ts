@@ -5,7 +5,7 @@ import { initTestConfig } from '../src/utils'
 import { credentials, region } from '../src/properties/test'
 import { RawAwsKinesisStream } from '../src/services/kinesisStream/data'
 
-describe('Kinesis Stream Service Test: ', () => {
+xdescribe('Kinesis Stream Service Test: ', () => {
   let getDataResult
   let formatResult
 

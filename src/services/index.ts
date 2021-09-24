@@ -11,6 +11,7 @@ import path from 'path'
 // import AwsSubnet from './subnet'
 import ALB from './alb'
 import AwsInternetGateway from './igw'
+import AwsKinesisFirehose from './kinesisFirehose'
 import AwsKinesisStream from './kinesisStream'
 import AwsKms from './kms'
 import AwsSecurityGroup from './securityGroup'
@@ -64,6 +65,7 @@ export const serviceMap = {
   [services.eip]: EIP,
   [services.elb]: ELB,
   [services.igw]: AwsInternetGateway,
+  [services.kinesisFirehose]: AwsKinesisFirehose,
   [services.kinesisStream]: AwsKinesisStream,
   [services.kms]: AwsKms,
   [services.lambda]: Lambda,
@@ -426,6 +428,7 @@ export default class Provider extends CloudGraph.Client {
             regions: configuredRegions,
             credentials,
             opts,
+            rawData
           }),
         })
         this.logger.success(`${resource} scan completed`)

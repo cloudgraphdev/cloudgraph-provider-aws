@@ -6,6 +6,7 @@ import { RawAwsCognitoIdentityPool } from '../cognitoIdentityPool/data'
 import { RawAwsCognitoUserPool } from '../cognitoUserPool/data'
 import services from '../../enums/services'
 import regions from '../../enums/regions'
+import { RawAwsKinesisFirehose } from '../kinesisFirehose/data'
 
 const findServiceInstancesWithTag = (tag, service) => {
   const { id } = tag
@@ -464,6 +465,30 @@ export default ({
             resourceType: services.s3,
             relation: 'child',
             field: 's3',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related Kinesis Firehose streams
+     */
+    const KFStreams: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.kinesisFirehose)
+    if (KFStreams?.data?.[region]) {
+      const dataAtRegion: RawAwsKinesisFirehose[] = findServiceInstancesWithTag(
+        tag,
+        KFStreams.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { DeliveryStreamARN: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.kinesisFirehose,
+            relation: 'child',
+            field: 'kinesisFirehose',
           })
         }
       }

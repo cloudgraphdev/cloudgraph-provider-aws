@@ -354,6 +354,11 @@ export default {
   addingSes: (num: number): string =>
     `Found ${num} SES, adding them to the Region`,
   /**
+   * Kinesis Data Firehose
+   */
+  fetchedKinesisFirehose: (num: number): string =>
+    `Fetched ${num} Kinesis Firehose`,
+  /**
    * Kinesis Data Stream
    */
   fetchedKinesisStream: (num: number): string =>
