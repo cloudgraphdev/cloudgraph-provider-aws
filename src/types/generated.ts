@@ -29,6 +29,18 @@ export type AwsAccountRecoverySetting = {
   name?: Maybe<Scalars['String']>;
 };
 
+export type AwsAdditionalAuthenticationProvider = {
+  id: Scalars['String'];
+  authenticationType?: Maybe<Scalars['String']>;
+  openIDConnectIssuer?: Maybe<Scalars['String']>;
+  openIDConnectClientId?: Maybe<Scalars['String']>;
+  openIDConnectIatTTL?: Maybe<Scalars['Int']>;
+  openIDConnectAuthTTL?: Maybe<Scalars['Int']>;
+  userPoolId?: Maybe<Scalars['String']>;
+  userPoolAwsRegion?: Maybe<Scalars['String']>;
+  userPoolAppIdClientRegex?: Maybe<Scalars['String']>;
+};
+
 export type AwsAlb = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -125,6 +137,117 @@ export type AwsApiGatewayStage = {
 export type AwsApiGatewayStageVariable = {
   key: Scalars['String'];
   value?: Maybe<Scalars['String']>;
+};
+
+export type AwsAppSync = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  name: Scalars['String'];
+  region: Scalars['String'];
+  authenticationType?: Maybe<Scalars['String']>;
+  logFieldLogLevel?: Maybe<Scalars['String']>;
+  logCloudWatchLogsRoleArn?: Maybe<Scalars['String']>;
+  logExcludeVerboseContent?: Maybe<Scalars['String']>;
+  userPoolId?: Maybe<Scalars['String']>;
+  userPoolAwsRegion?: Maybe<Scalars['String']>;
+  userPoolDefaultAction?: Maybe<Scalars['String']>;
+  userPoolAppIdClientRegex?: Maybe<Scalars['String']>;
+  openIDConnectIssuer?: Maybe<Scalars['String']>;
+  openIDConnectClientId?: Maybe<Scalars['String']>;
+  openIDConnectIatTTL?: Maybe<Scalars['Int']>;
+  openIDConnectAuthTTL?: Maybe<Scalars['Int']>;
+  uris?: Maybe<Array<Maybe<AwsAppSyncGraphqlApiUris>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  additionalAuthenticationProviders?: Maybe<Array<Maybe<AwsAdditionalAuthenticationProvider>>>;
+  xrayEnabled?: Maybe<Scalars['String']>;
+  wafWebAclArn?: Maybe<Scalars['String']>;
+  lambdaAuthorizerResultTtlInSeconds?: Maybe<Scalars['Int']>;
+  lambdaAuthorizerUri?: Maybe<Scalars['String']>;
+  lambdaAuthorizerIdentityValidationExpression?: Maybe<Scalars['String']>;
+  apiKeys?: Maybe<Array<Maybe<AwsAppSyncApiKey>>>;
+  dataSources?: Maybe<Array<Maybe<AwsAppSyncDataSource>>>;
+  functions?: Maybe<Array<Maybe<AwsAppSyncFunction>>>;
+  types?: Maybe<Array<Maybe<AwsAppSyncType>>>;
+};
+
+export type AwsAppSyncApiKey = {
+  id: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  expires?: Maybe<Scalars['Int']>;
+};
+
+export type AwsAppSyncDataSource = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  serviceRoleArn?: Maybe<Scalars['String']>;
+  dynamodbTableName?: Maybe<Scalars['String']>;
+  dynamodbAwsRegion?: Maybe<Scalars['String']>;
+  dynamodbUseCallerCredentials?: Maybe<Scalars['String']>;
+  dynamodbDeltaSyncBaseTableTTL?: Maybe<Scalars['Int']>;
+  dynamodbDeltaSyncTableName?: Maybe<Scalars['String']>;
+  dynamodbDeltaSyncTableTTL?: Maybe<Scalars['Int']>;
+  dynamodbVersioned?: Maybe<Scalars['String']>;
+  lambdaFunctionArn?: Maybe<Scalars['String']>;
+  elasticsearchEndpoint?: Maybe<Scalars['String']>;
+  elasticsearchAwsRegion?: Maybe<Scalars['String']>;
+  httpEndpoint?: Maybe<Scalars['String']>;
+  httpAuthorizationType?: Maybe<Scalars['String']>;
+  httpAuthorizationIamSigningRegion?: Maybe<Scalars['String']>;
+  httpAuthorizationIamSigningServiceName?: Maybe<Scalars['String']>;
+  relationalDatabaseSourceType?: Maybe<Scalars['String']>;
+  relationalDatabaseAwsRegion?: Maybe<Scalars['String']>;
+  relationalDatabaseClusterIdentifier?: Maybe<Scalars['String']>;
+  relationalDatabaseName?: Maybe<Scalars['String']>;
+  relationalDatabaseSchema?: Maybe<Scalars['String']>;
+  relationalDatabaseAwsSecretStoreArn?: Maybe<Scalars['String']>;
+};
+
+export type AwsAppSyncFunction = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  dataSourceName?: Maybe<Scalars['String']>;
+  requestMappingTemplate?: Maybe<Scalars['String']>;
+  responseMappingTemplate?: Maybe<Scalars['String']>;
+  functionVersion?: Maybe<Scalars['String']>;
+  resolvers?: Maybe<Array<Maybe<AwsAppSyncResolver>>>;
+};
+
+export type AwsAppSyncGraphqlApiUris = {
+  id: Scalars['String'];
+  key: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type AwsAppSyncResolver = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  typeName?: Maybe<Scalars['String']>;
+  fieldName?: Maybe<Scalars['String']>;
+  dataSourceName?: Maybe<Scalars['String']>;
+  requestMappingTemplate?: Maybe<Scalars['String']>;
+  responseMappingTemplate?: Maybe<Scalars['String']>;
+  kind?: Maybe<Scalars['String']>;
+  pipelineFunctionIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  syncConflictHandler?: Maybe<Scalars['String']>;
+  syncConflictDetection?: Maybe<Scalars['String']>;
+  syncLambdaConflictHandlerArn?: Maybe<Scalars['String']>;
+  cachingTTL?: Maybe<Scalars['Int']>;
+  cachingKeys?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsAppSyncType = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  definition?: Maybe<Scalars['String']>;
+  format?: Maybe<Scalars['String']>;
+  resolvers?: Maybe<Array<Maybe<AwsAppSyncResolver>>>;
 };
 
 export type AwsAsg = {

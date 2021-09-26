@@ -16,6 +16,7 @@ import AwsKinesisStream from './kinesisStream'
 import AwsKms from './kms'
 import AwsSecurityGroup from './securityGroup'
 import AwsTag from './tag'
+import AppSync from './appSync'
 import ASG from './asg'
 import Billing from './billing'
 import CognitoIdentityPool from './cognitoIdentityPool'
@@ -57,6 +58,7 @@ export const serviceMap = {
   [services.apiGatewayResource]: APIGatewayResource,
   [services.apiGatewayRestApi]: APIGatewayRestApi,
   [services.apiGatewayStage]: APIGatewayStage,
+  [services.appSync]: AppSync,
   [services.asg]: ASG,
   [services.cloudfront]: CloudFront,
   [services.cognitoIdentityPool]: CognitoIdentityPool,

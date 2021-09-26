@@ -3,6 +3,7 @@ export default {
   apiGatewayResource: 'apiGatewayResource',
   apiGatewayRestApi: 'apiGatewayRestApi',
   apiGatewayStage: 'apiGatewayStage',
+  appSync: 'appSync',
   asg: 'asg',
   billing: 'billing',
   cognitoIdentityPool: 'cognitoIdentityPool',
