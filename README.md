@@ -80,17 +80,15 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 
 # Query Examples
 
-To use CloudGraph, you will need to be familiar with GraphQL. This section contains a handful of example queries to get you up and running but is by no means exhaustive. Feel free to make a PR with other examples you would like to see included, check out the [Contribution Guidelines](#contribution-guidelines) section for more information.
+To use CloudGraph, you will need to be familiar with GraphQL. This section contains a handful of example queries to get you up and running but is by no means exhaustive. Feel free to make a PR with other examples you would like to see included, check out the [Contribution Guidelines](https://github.com/cloudgraphdev/cloudgraph-provider-aws/blob/master/CONTRIBUTING.md) section for more information.
 
 <br />
 
 ## Basic AWS Query Syntax Examples:
 
-For the purposes of these examples we will just request the IDs and ARNs of AWS resources to keep things brief, but you can query whatever attributes you want.
+To explain how CloudGraph works consider the following query that you can run to get the `ID` and `ARN` of a single `EC2 instance`. Note that for the purposes of these examples we will just request the `IDs` and `ARNs` of AWS resources to keep things terse, but you can query whatever attributes you want:
 
 <br />
-
-Get the `ID` and `ARN` of a single `EC2 instance`:
 
 ```graphql
 query {
@@ -100,6 +98,26 @@ query {
     id
     arn
   }
+}
+```
+
+<br />
+
+This query will return a `JSON response` that looks like this. All of the following examples will follow suit:
+
+<br />
+
+```json
+{
+  "data": {
+    "getawsEc2": {
+      "id": "i-12345567889012234",
+      "arn": "arn:aws:ec2:us-east-1:123445678997:instance/i-12345567889012234"
+    },
+  },
+  "extensions": {
+    "touched_uids": 4
+  }
 }
 ```
 
@@ -290,6 +308,21 @@ query {
 
 <br />
 
+Find all the unencrypted `EBS Volumes`:
+
+```graphql
+query {
+  queryawsEbs(filter: { encrypted: false }) {
+    id
+    arn
+    availabilityZone
+    encrypted
+  }
+}
+```
+
+<br />
+
 Find all the public `S3 Buckets`:
 
 ```graphql
@@ -313,21 +346,6 @@ query {
     arn
     access
   }
-}
-```
-
-<br />
-
-Find all the unencrypted `EBS Volumes`:
-
-```graphql
-query {
-  queryawsEbs(filter: { encrypted: false }) {
-    id
-    arn
-    availabilityZone
-    encrypted
-  }
 }
 ```
 
@@ -532,6 +550,32 @@ query {
 
 <br />
 
+## Thinking in terms of a graph:
+
+<br />
+
+When you think, "in terms of a graph", you can do almost anything with CloudGraph. Say for example that you want to know what Lamba functions don't belong to a VPC (i.e. they don't leverage VPC networking). Because CloudGraph connects all resources that have relationships, such as VPC parents to their Lambda children, you are able to answer this question easily. Simply check to see what lambda functions the VPC is "connected" to, and compare that against the list of all lambda functions like so:
+
+
+```graphql
+query {
+  queryawsVpc{
+    id
+    arn
+    lambda {
+      id
+      arn
+    }
+  }
+  queryawsLambda {
+    id
+    arn
+  }
+}
+```
+
+<br />
+
 ## Limitations
 
 <br />
@@ -554,4 +598,3 @@ query {
 ```
 
 This is actually not a limitation of CloudGraph, but rather a feature that still needs to be implemented with Dgraph. [You can view and comment on the discussion thread here](https://discuss.dgraph.io/t/proposal-nested-object-filters-for-graphql-rewritten-as-var-blocks-in-dql/12252/2)
-
