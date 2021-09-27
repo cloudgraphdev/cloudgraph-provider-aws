@@ -1,3 +1,10 @@
+# [0.24.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.23.0...0.24.0) (2021-09-27)
+
+
+### Features
+
+* **cloudfront:** add cloudfront service ([28bbeb2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/28bbeb2c290e50732aef5a92dc39f8dbeffd58ac))
+
 # [0.23.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.22.2...0.23.0) (2021-09-24)
 
 
