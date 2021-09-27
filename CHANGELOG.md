@@ -1,3 +1,10 @@
+## [0.24.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.24.1...0.24.2) (2021-09-27)
+
+
+### Bug Fixes
+
+* **asg:** added ids to awsSuspendedProcess and awsSuspendedProcess fields ([a2f7999](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a2f79997572aa12e6b05fb8d446998f1260a68cc))
+
 ## [0.24.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.24.0...0.24.1) (2021-09-27)
 
 
