@@ -5,6 +5,7 @@ type awsTag @key(fields: "id") {
   alb: [awsAlb]
   asg: [awsAsg]
   cloudwatch: [awsCloudwatch]
+  cloudfront: [awsCloudfront]
   ebs: [awsEbs]
   eip: [awsEip]
   elb: [awsElb]
