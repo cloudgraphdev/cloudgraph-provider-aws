@@ -212,7 +212,7 @@ export default class Provider extends CloudGraph.Client {
               callback: (err: any) => {
                 if (err) {
                   this.logger.error(
-                    `No credentails found for profile ${profile}`
+                    `No credentials found for profile ${profile}`
                   )
                 }
               },
@@ -265,6 +265,7 @@ export default class Provider extends CloudGraph.Client {
             (val: string) => val === profileName
           )
         ) {
+          const msg = this.logger.stopSpinner()
           // Confirm the found credentials are ok to use
           const { approved } = await this.interface.prompt([
             {
@@ -281,6 +282,7 @@ export default class Provider extends CloudGraph.Client {
             )
             throw new Error('Credentials not approved')
           }
+          this.logger.startSpinner(msg)
         }
       }
       this.logger.success('Found and using the following AWS credentials')
