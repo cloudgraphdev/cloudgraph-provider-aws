@@ -9,7 +9,6 @@ import { RawAwsAlb } from '../alb/data'
 import { RawAwsElb } from '../elb/data'
 import { getHostedZoneId, getRecordId } from '../../utils/ids'
 import { AwsApiGatewayRestApi } from '../apiGatewayRestApi/data'
-import { domain } from 'process'
 
 /**
  * Route53 Record
