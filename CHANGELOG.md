@@ -1,3 +1,12 @@
+## [0.24.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.24.0...0.24.1) (2021-09-27)
+
+
+### Bug Fixes
+
+* Added api gateway connection to route53 record ([3dc6bdb](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/3dc6bdbc4de121948c69f5831dbf8db614dd0f6c))
+* Added missing domain name data to API gateway ([de969cd](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/de969cdeea5a565122e34fe3cbee33068f2925a2))
+* Uncomment cognito tests ([13838f5](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/13838f59c229da6fe5ea823db1a9204be07de0b9))
+
 # [0.24.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.23.0...0.24.0) (2021-09-27)
 
 
