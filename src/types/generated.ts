@@ -1091,6 +1091,7 @@ export type AwsTag = {
   cognitoIdentityPool?: Maybe<Array<Maybe<AwsCognitoIdentityPool>>>;
   cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
+  appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
 };
 
 export type AwsVpc = {

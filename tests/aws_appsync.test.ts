@@ -5,7 +5,7 @@ import { RawAwsAsg } from '../src/services/asg/data'
 import { initTestConfig } from '../src/utils'
 import { credentials, region } from '../src/properties/test'
 
-describe('AppSync Service Test: ', () => {
+describe.skip('AppSync Service Test: ', () => {
   let getDataResult
   let formatResult
 

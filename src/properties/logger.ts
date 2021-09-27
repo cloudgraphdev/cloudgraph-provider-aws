@@ -222,7 +222,7 @@ export default {
   /**
    * AppSync
    */
-  fetchedAppSync: (num: number): string => `Fetched ${num} AutoScaling Groups`,
+  fetchedAppSync: (num: number): string => `Fetched ${num} App Syncs`,
   doneFetchedAppSync: '✅ Done fetching AppSync Data ✅',
   /**
    * EBS

@@ -1,5 +1,5 @@
-import { ApiKey, DataSource, Resolver } from 'aws-sdk/clients/appsync';
-import cuid from 'cuid';
+import { ApiKey, DataSource, Resolver } from 'aws-sdk/clients/appsync'
+import cuid from 'cuid'
 import t from '../../properties/translations'
 import {
   AwsAppSyncApiKey,
@@ -9,15 +9,19 @@ import {
   AwsAppSyncGraphqlApiUris,
   AwsAppSyncResolver,
   AwsAppSyncType,
-} from '../../types/generated';
-import { formatTagsFromMap } from '../../utils/format';
-import { RawAwsAppSync, RawAwsFunction, RawAwsType } from './data';
+} from '../../types/generated'
+import { formatTagsFromMap } from '../../utils/format'
+import { RawAwsAppSync, RawAwsFunction, RawAwsType } from './data'
 
 /**
  * AppSync
  */
 
- const formatApiKey = ({ id, description, expires }: ApiKey): AwsAppSyncApiKey => {
+const formatApiKey = ({
+  id,
+  description,
+  expires,
+}: ApiKey): AwsAppSyncApiKey => {
   return {
     id,
     description,
@@ -46,24 +50,39 @@ const formatDataSource = ({
     serviceRoleArn,
     dynamodbTableName: dynamodbConfig?.tableName || '',
     dynamodbAwsRegion: dynamodbConfig?.awsRegion || '',
-    dynamodbUseCallerCredentials: dynamodbConfig?.useCallerCredentials? t.yes : t.no,
-    dynamodbDeltaSyncBaseTableTTL: dynamodbConfig?.deltaSyncConfig?.baseTableTTL || 0,
-    dynamodbDeltaSyncTableName: dynamodbConfig?.deltaSyncConfig?.deltaSyncTableName || '',
-    dynamodbDeltaSyncTableTTL: dynamodbConfig?.deltaSyncConfig?.deltaSyncTableTTL || 0,
-    dynamodbVersioned: dynamodbConfig?.versioned? t.yes : t.no,
+    dynamodbUseCallerCredentials: dynamodbConfig?.useCallerCredentials
+      ? t.yes
+      : t.no,
+    dynamodbDeltaSyncBaseTableTTL:
+      dynamodbConfig?.deltaSyncConfig?.baseTableTTL || 0,
+    dynamodbDeltaSyncTableName:
+      dynamodbConfig?.deltaSyncConfig?.deltaSyncTableName || '',
+    dynamodbDeltaSyncTableTTL:
+      dynamodbConfig?.deltaSyncConfig?.deltaSyncTableTTL || 0,
+    dynamodbVersioned: dynamodbConfig?.versioned ? t.yes : t.no,
     lambdaFunctionArn: lambdaConfig?.lambdaFunctionArn || '',
     elasticsearchEndpoint: elasticsearchConfig?.endpoint || '',
     elasticsearchAwsRegion: elasticsearchConfig?.awsRegion || '',
     httpEndpoint: httpConfig?.endpoint || '',
-    httpAuthorizationType: httpConfig?.authorizationConfig?.authorizationType || '',
-    httpAuthorizationIamSigningRegion: httpConfig?.authorizationConfig?.awsIamConfig?.signingRegion || '',
-    httpAuthorizationIamSigningServiceName: httpConfig?.authorizationConfig?.awsIamConfig?.signingServiceName || '',
-    relationalDatabaseSourceType: relationalDatabaseConfig?.relationalDatabaseSourceType || '',
-    relationalDatabaseAwsRegion: relationalDatabaseConfig?.rdsHttpEndpointConfig?.awsRegion || '',
-    relationalDatabaseClusterIdentifier: relationalDatabaseConfig?.rdsHttpEndpointConfig?.dbClusterIdentifier || '',
-    relationalDatabaseName: relationalDatabaseConfig?.rdsHttpEndpointConfig?.databaseName || '',
-    relationalDatabaseSchema: relationalDatabaseConfig?.rdsHttpEndpointConfig?.schema || '',
-    relationalDatabaseAwsSecretStoreArn: relationalDatabaseConfig?.rdsHttpEndpointConfig?.awsSecretStoreArn || '',
+    httpAuthorizationType:
+      httpConfig?.authorizationConfig?.authorizationType || '',
+    httpAuthorizationIamSigningRegion:
+      httpConfig?.authorizationConfig?.awsIamConfig?.signingRegion || '',
+    httpAuthorizationIamSigningServiceName:
+      httpConfig?.authorizationConfig?.awsIamConfig?.signingServiceName || '',
+    relationalDatabaseSourceType:
+      relationalDatabaseConfig?.relationalDatabaseSourceType || '',
+    relationalDatabaseAwsRegion:
+      relationalDatabaseConfig?.rdsHttpEndpointConfig?.awsRegion || '',
+    relationalDatabaseClusterIdentifier:
+      relationalDatabaseConfig?.rdsHttpEndpointConfig?.dbClusterIdentifier ||
+      '',
+    relationalDatabaseName:
+      relationalDatabaseConfig?.rdsHttpEndpointConfig?.databaseName || '',
+    relationalDatabaseSchema:
+      relationalDatabaseConfig?.rdsHttpEndpointConfig?.schema || '',
+    relationalDatabaseAwsSecretStoreArn:
+      relationalDatabaseConfig?.rdsHttpEndpointConfig?.awsSecretStoreArn || '',
   }
 }
 
@@ -91,9 +110,10 @@ const formatResolver = ({
     pipelineFunctionIds: pipelineConfig?.functions || [],
     syncConflictHandler: syncConfig?.conflictHandler || '',
     syncConflictDetection: syncConfig?.conflictDetection || '',
-    syncLambdaConflictHandlerArn: syncConfig?.lambdaConflictHandlerConfig?.lambdaConflictHandlerArn || '',
+    syncLambdaConflictHandlerArn:
+      syncConfig?.lambdaConflictHandlerConfig?.lambdaConflictHandlerArn || '',
     cachingTTL: cachingConfig?.ttl || 0,
-    cachingKeys: cachingConfig?.cachingKeys || []
+    cachingKeys: cachingConfig?.cachingKeys || [],
   }
 }
 
@@ -117,7 +137,7 @@ const formatFunction = ({
     requestMappingTemplate,
     responseMappingTemplate,
     functionVersion,
-    resolvers: resolvers?.map(resolver => formatResolver(resolver)) || []
+    resolvers: resolvers?.map(resolver => formatResolver(resolver)) || [],
   }
 }
 
@@ -136,7 +156,7 @@ const formatType = ({
     description,
     definition,
     format,
-    resolvers: resolvers?.map(resolver => formatResolver(resolver)) || []
+    resolvers: resolvers?.map(resolver => formatResolver(resolver)) || [],
   }
 }
 
@@ -156,7 +176,7 @@ export default ({
     openIDConnectConfig,
     arn,
     uris,
-    tags,
+    Tags = {},
     additionalAuthenticationProviders,
     xrayEnabled,
     wafWebAclArn,
@@ -167,26 +187,28 @@ export default ({
     awsTypes,
   } = rawData
 
-  const additionalAuthenticationProviderList = additionalAuthenticationProviders?.map(
-    ({
-      authenticationType: additionalAuthenticationType,
-      openIDConnectConfig: additionalOpenIDConnectConfig,
-      userPoolConfig: additionalUserPoolConfig,
-    }) => {
-      return {
-        id: cuid(),
-        authenticationType: additionalAuthenticationType || '',
-        openIDConnectIssuer: additionalOpenIDConnectConfig?.issuer || '',
-        openIDConnectClientId: additionalOpenIDConnectConfig?.clientId || '',
-        openIDConnectIatTTL: additionalOpenIDConnectConfig?.iatTTL || 0,
-        openIDConnectAuthTTL: additionalOpenIDConnectConfig?.authTTL || 0,
-        userPoolId: additionalUserPoolConfig?.userPoolId || '',
-        userPoolAwsRegion: additionalUserPoolConfig?.awsRegion || '',
-        userPoolAppIdClientRegex: additionalUserPoolConfig?.appIdClientRegex || '',
+  const additionalAuthenticationProviderList =
+    additionalAuthenticationProviders?.map(
+      ({
+        authenticationType: additionalAuthenticationType,
+        openIDConnectConfig: additionalOpenIDConnectConfig,
+        userPoolConfig: additionalUserPoolConfig,
+      }) => {
+        return {
+          id: cuid(),
+          authenticationType: additionalAuthenticationType || '',
+          openIDConnectIssuer: additionalOpenIDConnectConfig?.issuer || '',
+          openIDConnectClientId: additionalOpenIDConnectConfig?.clientId || '',
+          openIDConnectIatTTL: additionalOpenIDConnectConfig?.iatTTL || 0,
+          openIDConnectAuthTTL: additionalOpenIDConnectConfig?.authTTL || 0,
+          userPoolId: additionalUserPoolConfig?.userPoolId || '',
+          userPoolAwsRegion: additionalUserPoolConfig?.awsRegion || '',
+          userPoolAppIdClientRegex:
+            additionalUserPoolConfig?.appIdClientRegex || '',
+        }
       }
-    }
-  ) || []
-  
+    ) || []
+
   const formatUrisData = (): AwsAppSyncGraphqlApiUris[] => {
     const result: AwsAppSyncGraphqlApiUris[] = []
     for (const [key, value] of Object.entries(uris)) {
@@ -212,17 +234,21 @@ export default ({
     openIDConnectIatTTL: openIDConnectConfig?.iatTTL || 0,
     openIDConnectAuthTTL: openIDConnectConfig?.authTTL || 0,
     uris: formatUrisData(),
-    tags: formatTagsFromMap(tags),
+    tags: formatTagsFromMap(Tags),
     additionalAuthenticationProviders: additionalAuthenticationProviderList,
     xrayEnabled: xrayEnabled ? t.yes : t.no,
     wafWebAclArn,
-    lambdaAuthorizerResultTtlInSeconds: lambdaAuthorizerConfig?.authorizerResultTtlInSeconds || 0,
+    lambdaAuthorizerResultTtlInSeconds:
+      lambdaAuthorizerConfig?.authorizerResultTtlInSeconds || 0,
     lambdaAuthorizerUri: lambdaAuthorizerConfig?.authorizerUri || '',
-    lambdaAuthorizerIdentityValidationExpression: lambdaAuthorizerConfig?.identityValidationExpression || '',
+    lambdaAuthorizerIdentityValidationExpression:
+      lambdaAuthorizerConfig?.identityValidationExpression || '',
     region,
     apiKeys: awsApiKeys?.map(apiKey => formatApiKey(apiKey)) || [],
-    dataSources: awsDataSources?.map(dataSource =>  formatDataSource(dataSource)) || [],
-    functions: awsFunctions?.map(functionData => formatFunction(functionData)) || [],
+    dataSources:
+      awsDataSources?.map(dataSource => formatDataSource(dataSource)) || [],
+    functions:
+      awsFunctions?.map(functionData => formatFunction(functionData)) || [],
     types: awsTypes?.map(typeData => formatType(typeData)) || [],
   }
 
