@@ -5,6 +5,10 @@ import APIGW, {
   ListOfRestApi,
   GetRestApisRequest,
   Tags,
+  GetDomainNamesRequest,
+  DomainNames,
+  BasePathMappings,
+  DomainName,
 } from 'aws-sdk/clients/apigateway'
 import { AWSError } from 'aws-sdk/lib/error'
 import isEmpty from 'lodash/isEmpty'
@@ -18,16 +22,18 @@ import { API_GATEWAY_CUSTOM_DELAY } from '../../config/constants'
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const MAX_REST_API = 500
+const MAX_DOMAIN_NAMES = 500
 const serviceName = 'API Gateway Rest API'
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({ baseDelay: API_GATEWAY_CUSTOM_DELAY })
 
 export interface AwsApiGatewayRestApi extends Omit<RestApi, 'tags'> {
   tags: TagMap
+  domainNames: (DomainName & { restApiData?: string[] })[]
   region: string
 }
 
-const getRestApisForRegion = async apiGw =>
+const getRestApisForRegion = async (apiGw: APIGW) =>
   new Promise<ListOfRestApi>(resolve => {
     const restApiList: ListOfRestApi = []
     const getRestApisOpts: GetRestApisRequest = {}
@@ -74,6 +80,69 @@ const getTags = async ({ apiGw, arn }): Promise<TagMap> =>
     }
   })
 
+const getAPIMappings = (apiGw: APIGW, domainName: string) =>
+  new Promise<{ domainName: string; restApiData: string[] }>(
+    resolveBasePathMapping =>
+      apiGw.getBasePathMappings(
+        { domainName },
+        (err: AWSError, data: BasePathMappings) => {
+          /**
+           * No Data for the region
+           */
+          if (isEmpty(data)) {
+            return
+          }
+
+          if (err) {
+            generateAwsErrorLog(serviceName, 'apiGw:getBasePathMappings', err)
+          }
+
+          const { items: restApiData = [] } = data || {}
+
+          resolveBasePathMapping({
+            domainName,
+            restApiData: restApiData.map(({ restApiId }) => restApiId),
+          })
+        }
+      )
+  )
+
+export const getDomainNamesForRegion = async (
+  apiGw: APIGW
+): Promise<DomainName[]> =>
+  new Promise(async resolve => {
+    const getDomainNamesOpts: GetDomainNamesRequest = {
+      limit: MAX_DOMAIN_NAMES,
+    }
+
+    try {
+      apiGw.getDomainNames(
+        getDomainNamesOpts,
+        (err: AWSError, data: DomainNames) => {
+          if (err) {
+            generateAwsErrorLog(serviceName, 'apiGw:getDomainNames', err)
+          }
+
+          const { items = [] } = data || {}
+
+          logger.debug(lt.fetchedApiGwDomainNames(items.length))
+
+          /**
+           * No API Gateway Domain Names Found
+           */
+
+          if (!isEmpty(items)) {
+            resolve(items)
+          } else {
+            resolve([])
+          }
+        }
+      )
+    } catch (error) {
+      resolve([])
+    }
+  })
+
 export default async ({
   regions,
   credentials,
@@ -83,17 +152,31 @@ export default async ({
 }): Promise<{ [property: string]: AwsApiGatewayRestApi[] }> =>
   new Promise(async resolve => {
     const apiGatewayData = []
+    let domainNamesData: (DomainName & { restApiData?: string[] })[] = []
     const regionPromises = []
     const tagsPromises = []
 
     regions.split(',').map(region => {
       const apiGw = new APIGW({ region, credentials, endpoint, ...customRetrySettings })
       const regionPromise = new Promise<void>(async resolveRegion => {
+        domainNamesData = await getDomainNamesForRegion(apiGw)
+        const mappingPromises = domainNamesData.map(({ domainName }) =>
+          getAPIMappings(apiGw, domainName)
+        )
+        const mappingData = await Promise.all(mappingPromises)
         const restApiList = await getRestApisForRegion(apiGw)
         if (!isEmpty(restApiList)) {
           apiGatewayData.push(
             ...restApiList.map(restApi => ({
               ...restApi,
+              domainNames: domainNamesData.map(domain => ({
+                ...domain,
+                restApiData: (
+                  mappingData?.find(
+                    ({ domainName }) => domainName === domain.domainName
+                  ) || { restApiData: [] }
+                ).restApiData,
+              })),
               region,
             }))
           )

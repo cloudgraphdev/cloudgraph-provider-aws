@@ -108,6 +108,8 @@ export default {
     `Fetched ${num} Api Gateway Resources`,
   fetchedApiGatewayStages: (num: number): string =>
     `Fetched ${num} Api Gateway Stages`,
+  fetchedApiGwDomainNames: (num: number): string =>
+    `Fetched ${num} API Gateway Domain Names`,
   fetchingApiGatewayData:
     'Fetching API Gateway data for this AWS account via the AWS SDK...',
   doneFetchingApiGatewayData: '✅ Done fetching API Gateway Data ✅',
