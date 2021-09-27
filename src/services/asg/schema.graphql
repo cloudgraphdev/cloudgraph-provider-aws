@@ -36,6 +36,7 @@ type awsSuspendedProcess
     mutation: { add: false, delete: false }
     subscription: false
   ) {
+    id: String! @id
     processName: String! @id @search(by: [hash, regexp])
     suspensionReason: String @search(by: [hash, regexp])
   }
@@ -46,6 +47,7 @@ type awsEnabledMetrics
     mutation: { add: false, delete: false }
     subscription: false
   ) {
+    id: String! @id
     metric: String! @id @search(by: [hash, regexp])
     granularity: String @search(by: [hash, regexp])
   }

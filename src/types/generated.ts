@@ -564,6 +564,7 @@ export type AwsElbSourceSecurityGroup = {
 };
 
 export type AwsEnabledMetrics = {
+  id: Scalars['String'];
   metric: Scalars['String'];
   granularity?: Maybe<Scalars['String']>;
 };
@@ -942,6 +943,7 @@ export type AwsSupportedLoginProvider = {
 };
 
 export type AwsSuspendedProcess = {
+  id: Scalars['String'];
   processName: Scalars['String'];
   suspensionReason?: Maybe<Scalars['String']>;
 };

@@ -67,6 +67,7 @@ export default ({
     SuspensionReason: suspensionReason,
   }) => {
     return {
+      id: cuid(),
       processName,
       suspensionReason,
   }}) || [];
@@ -76,6 +77,7 @@ export default ({
     Granularity: granularity,
   }) => {
     return {
+      id: cuid(),
       metric,
       granularity,
     }
@@ -93,7 +95,7 @@ export default ({
     }
   }) || []
 
-  const asg = {
+  return {
     id: arn,
     arn,
     name,
@@ -166,6 +168,4 @@ export default ({
       metadataOptHttpEndpoint: launchConfiguration?.MetadataOptions?.HttpEndpoint || '',
     }
   }
-
-  return asg
 }
