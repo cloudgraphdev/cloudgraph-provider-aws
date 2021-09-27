@@ -1,3 +1,11 @@
+# [0.25.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.24.3...0.25.0) (2021-09-27)
+
+
+### Features
+
+* Added tag connections to App sync service ([7d02a59](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/7d02a59009333446a919fdeedf3e24ccb162cc02))
+* **appsync:** add appsync ([57ce867](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/57ce86789fafcfb35d37fe1e42b758e8bdd2dfd4))
+
 ## [0.24.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.24.2...0.24.3) (2021-09-27)
 
 
