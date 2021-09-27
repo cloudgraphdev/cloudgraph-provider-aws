@@ -1,3 +1,10 @@
+## [0.24.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.24.2...0.24.3) (2021-09-27)
+
+
+### Bug Fixes
+
+* **tags:** update tags schema for cloudfront ([fdf9962](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/fdf9962da33a2c4bdd80a522bb7f8f10514e4ebc))
+
 ## [0.24.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.24.1...0.24.2) (2021-09-27)
 
 
