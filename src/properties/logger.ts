@@ -222,6 +222,11 @@ export default {
     `Found ${num} AutoScaling Groups, adding them to the VPC`,
   lookingForAsgs: 'Looking for AutoScaling Groups to add...',
   /**
+   * AppSync
+   */
+  fetchedAppSync: (num: number): string => `Fetched ${num} App Syncs`,
+  doneFetchedAppSync: '✅ Done fetching AppSync Data ✅',
+  /**
    * EBS
    */
   fetchingEbsData: 'Fetching EBS data for this AWS account via the AWS SDK...',

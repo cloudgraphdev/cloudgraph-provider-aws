@@ -8,6 +8,7 @@ import { RawAwsCloudfront } from '../cloudfront/data'
 import { RawAwsCognitoIdentityPool } from '../cognitoIdentityPool/data'
 import { RawAwsCognitoUserPool } from '../cognitoUserPool/data'
 import { RawAwsKinesisFirehose } from '../kinesisFirehose/data'
+import { RawAwsAppSync } from '../appSync/data'
 
 const findServiceInstancesWithTag = (tag, service) => {
   const { id } = tag
@@ -516,6 +517,32 @@ export default ({
             resourceType: services.kinesisFirehose,
             relation: 'child',
             field: 'kinesisFirehose',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related App sync
+     */
+    const appSyncs: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.appSync)
+
+    if (appSyncs?.data?.[region]) {
+      const dataAtRegion: RawAwsAppSync[] = findServiceInstancesWithTag(
+        tag,
+        appSyncs.data[region]
+      )
+
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { apiId: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.appSync,
+            relation: 'child',
+            field: 'appSync',
           })
         }
       }
