@@ -2,10 +2,11 @@ import { ServiceConnection } from '@cloudgraph/sdk'
 import { MetricAlarm } from 'aws-sdk/clients/cloudwatch'
 import { NatGateway, Vpc } from 'aws-sdk/clients/ec2'
 import { isEmpty } from 'lodash'
+import regions, { globalRegionName } from '../../enums/regions'
+import services from '../../enums/services'
+import { RawAwsCloudfront } from '../cloudfront/data'
 import { RawAwsCognitoIdentityPool } from '../cognitoIdentityPool/data'
 import { RawAwsCognitoUserPool } from '../cognitoUserPool/data'
-import services from '../../enums/services'
-import regions from '../../enums/regions'
 import { RawAwsKinesisFirehose } from '../kinesisFirehose/data'
 
 const findServiceInstancesWithTag = (tag, service) => {
@@ -465,6 +466,32 @@ export default ({
             resourceType: services.s3,
             relation: 'child',
             field: 's3',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related Cloudfront distros
+     */
+    const distros: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.cloudfront)
+    if (distros?.data?.[globalRegionName]) {
+      const dataAtRegion: RawAwsCloudfront[] = findServiceInstancesWithTag(
+        tag,
+        distros.data[globalRegionName]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const {
+            summary: { Id: id },
+          } = instance
+
+          connections.push({
+            id,
+            resourceType: services.cloudfront,
+            relation: 'child',
+            field: 'cloudfront',
           })
         }
       }

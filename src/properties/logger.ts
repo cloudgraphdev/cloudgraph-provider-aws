@@ -39,9 +39,14 @@ export default {
   /**
    * CloudFront
    */
-  lookingForCloudFront: 'Looking for CloudFront Distros to add to account...',
-  addingCloudFront: (num: number): string =>
-    `Created and added ${num} CloudFront Distros to this account`,
+   fetchingCloudFrontData:
+     'Fetching CloudFront Distros for this AWS account via the AWS SDK...',
+   fetchedCloudFrontDistros: (num: number) =>
+     `Fetched ${num} CloudFront Distros`,
+   fetchingCloudFrontDistrosConfigAndTags:
+     'Fetching CloudFront Distros Config Data and Tags...',
+   doneFetchingCloudFrontDistrosConfigAndTags:
+     'Done fetching CloudFront Distros Config Data and Tags...',
   /**
    * Route53
    */

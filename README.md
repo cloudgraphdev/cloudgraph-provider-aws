@@ -57,6 +57,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | apiGatewayStage       | apiGatewayRestApi                                        |
 | apiGatewayResource    | apiGatewayRestApi                                        |
 | asg                   | ec2, securityGroups, ebs                                 |
+| cloudfront            | elb, s3
 | cloudwatch            |                                                          |
 | cognitoIdentityPool   |                                                          |
 | cognitoUserPool       | lambda                                                   |
