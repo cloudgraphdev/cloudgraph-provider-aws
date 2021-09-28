@@ -417,10 +417,6 @@ export default class Provider extends CloudGraph.Client {
        * 3. spread new connections over result.connections
        * 4. push the array of formatted entities into result.entites
        */
-      const result: ProviderData = {
-        entities: [],
-        connections: {},
-      }
       try {
         const { accountId } = await this.getIdentity(account)
         for (const serviceData of rawData) {
