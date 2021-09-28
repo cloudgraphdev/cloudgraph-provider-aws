@@ -1,7 +1,6 @@
 import { AwsRoute53Record } from '../../types/generated'
 import { RawAwsRoute53Record } from './data'
 import { getHostedZoneId, getRecordId } from '../../utils/ids'
-import { route53RecordArn } from '../../utils/generateArns'
 
 /**
  * Route53 Record
@@ -31,7 +30,6 @@ export default ({
 
   const record = {
     id,
-    arn: route53RecordArn({ hostedZoneId, id }),
     zoneId: hostedZoneId,
     type,
     ttl,

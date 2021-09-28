@@ -917,7 +917,6 @@ export type AwsRoute53HostedZone = {
 
 export type AwsRoute53Record = {
   id: Scalars['String'];
-  arn: Scalars['String'];
   zoneId?: Maybe<Scalars['String']>;
   alias?: Maybe<AwsRoute53Alias>;
   type?: Maybe<Scalars['String']>;
@@ -1078,6 +1077,7 @@ export type AwsTag = {
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
   asg?: Maybe<Array<Maybe<AwsAsg>>>;
   cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
+  cloudfront?: Maybe<Array<Maybe<AwsCloudfront>>>;
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
   eip?: Maybe<Array<Maybe<AwsEip>>>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
