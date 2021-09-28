@@ -1,3 +1,10 @@
+## [0.25.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.25.1...0.25.2) (2021-09-28)
+
+
+### Bug Fixes
+
+* Reduce duplication of calls between dependant services ([f9c975c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/f9c975cc510cbe0d05b7feaa29527b5f6ce77d5a))
+
 ## [0.25.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.25.0...0.25.1) (2021-09-28)
 
 
