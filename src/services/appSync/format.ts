@@ -162,9 +162,11 @@ const formatType = ({
 
 export default ({
   service: rawData,
+  account,
   region,
 }: {
   service: RawAwsAppSync
+  account: string
   region: string
 }): AwsAppSync => {
   const {
@@ -219,6 +221,7 @@ export default ({
 
   const appSync = {
     id,
+    accountId: account,
     arn,
     name,
     authenticationType,

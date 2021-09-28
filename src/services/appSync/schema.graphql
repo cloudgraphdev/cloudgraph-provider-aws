@@ -127,6 +127,7 @@ type awsAdditionalAuthenticationProvider
 
 type awsAppSync @key(fields: "arn") {
   id: String! @id @search(by: [hash])
+  accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   name: String! @search(by: [hash, regexp])
   region: String! @search(by: [hash, regexp])

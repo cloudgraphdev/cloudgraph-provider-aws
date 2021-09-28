@@ -147,6 +147,7 @@ export type AwsApiGatewayStageVariable = {
 
 export type AwsAppSync = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   name: Scalars['String'];
   region: Scalars['String'];
@@ -429,6 +430,7 @@ export type AwsCloudFormationStackSetParameter = {
 
 export type AwsCloudfront = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   etag?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
@@ -835,6 +837,7 @@ export type AwsIgwAttachment = {
 
 export type AwsKinesisFirehose = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   name: Scalars['String'];
   deliveryStreamStatus: Scalars['String'];
