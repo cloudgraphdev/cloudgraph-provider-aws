@@ -33,6 +33,10 @@ export default class Provider extends CloudGraph.Client {
     this.serviceMap = serviceMap
   }
 
+  private credentials: Credentials | undefined
+
+  private profile: string | undefined
+
   private serviceMap: { [key: string]: any } // TODO: how to type the service map
 
   private properties: {
@@ -160,6 +164,10 @@ export default class Provider extends CloudGraph.Client {
           secretAccessKey: this.config.secretAccessKey,
         }
       }
+      // If the client instance has creds set, weve gone through this function before.. just reuse them
+      if (this.credentials && this.profile === profile) {
+        return resolveCreds(this.credentials)
+      }
       /**
        * Tries to find creds in priority order
        * 1. if they have configured a roleArn and profile assume that role using STS
@@ -167,11 +175,10 @@ export default class Provider extends CloudGraph.Client {
        * 3. if they have not configured either of the above, assume profile = default from ~/.aws/credentials
        */
       this.logger.info('Searching for AWS credentials...')
-      let credentials
       switch (true) {
         case profile && profile !== 'default' && role && role !== '': {
           const sts = new AWS.STS()
-          credentials = await new Promise<Credentials>(resolve => {
+          await new Promise<Credentials>(resolve => {
             sts.assumeRole(
               {
                 RoleArn: role,
@@ -193,10 +200,13 @@ export default class Provider extends CloudGraph.Client {
                   } = data.Credentials
                   const creds = {
                     accessKeyId,
+                    profile,
                     secretAccessKey,
                     sessionToken,
                   }
                   AWS.config.update(creds)
+                  this.credentials = creds
+                  this.profile = profile
                   resolve(creds)
                 }
               }
@@ -207,7 +217,7 @@ export default class Provider extends CloudGraph.Client {
         case profile && profile !== 'default': {
           try {
             // TODO: how to catch the error from SharedIniFileCredentials when profile doent exist
-            credentials = new AWS.SharedIniFileCredentials({
+            const credentials = new AWS.SharedIniFileCredentials({
               profile: profile,
               callback: (err: any) => {
                 if (err) {
@@ -219,6 +229,8 @@ export default class Provider extends CloudGraph.Client {
             })
             if (credentials) {
               AWS.config.credentials = credentials
+              this.credentials = AWS.config.credentials
+              this.profile = profile
             }
             break
           } catch (error: any) {
@@ -231,14 +243,15 @@ export default class Provider extends CloudGraph.Client {
               if (err) {
                 resolve()
               } else {
-                credentials = AWS.config.credentials
+                this.credentials = AWS.config.credentials
+                this.profile = profile
                 resolve()
               }
             })
           )
         }
       }
-      if (!credentials) {
+      if (!this.credentials) {
         this.logger.info('No AWS Credentials found, please enter them manually')
         const answers = await this.interface.prompt([
           {
@@ -253,7 +266,8 @@ export default class Provider extends CloudGraph.Client {
           },
         ])
         if (answers?.accessKeyId && answers?.secretAccessKey) {
-          credentials = answers
+          this.credentials = answers
+          this.profile = profile
         } else {
           this.logger.error('Cannot scan AWS without credentials')
           throw new Error()
@@ -271,7 +285,7 @@ export default class Provider extends CloudGraph.Client {
             {
               type: 'confirm',
               message: `CG found AWS credentials with accessKeyId: ${chalk.green(
-                obfuscateSensitiveString(credentials.accessKeyId)
+                obfuscateSensitiveString(this.credentials.accessKeyId)
               )}. Are these ok to use?`,
               name: 'approved',
             },
@@ -291,15 +305,15 @@ export default class Provider extends CloudGraph.Client {
       )
       this.logger.success(
         `accessKeyId: ${chalk.underline.green(
-          obfuscateSensitiveString(credentials.accessKeyId)
+          obfuscateSensitiveString(this.credentials.accessKeyId)
         )}`
       )
       this.logger.success(
         `secretAccessKey: ${chalk.underline.green(
-          obfuscateSensitiveString(credentials.secretAccessKey)
+          obfuscateSensitiveString(this.credentials.secretAccessKey)
         )}`
       )
-      resolveCreds(credentials)
+      resolveCreds(this.credentials)
     })
   }
 
