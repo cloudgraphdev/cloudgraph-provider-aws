@@ -14,16 +14,28 @@ import Route53, {
 
 import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { generateAwsErrorLog, initTestEndpoint, setAwsRetryOptions } from '../../utils'
+import {
+  generateAwsErrorLog,
+  initTestEndpoint,
+  setAwsRetryOptions,
+} from '../../utils'
 import { ROUTE_53_CUSTOM_DELAY } from '../../config/constants'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'Route53 Hosted Zones'
 const endpoint = initTestEndpoint(serviceName)
-const customRetrySettings = setAwsRetryOptions({ baseDelay: ROUTE_53_CUSTOM_DELAY })
+const customRetrySettings = setAwsRetryOptions({
+  baseDelay: ROUTE_53_CUSTOM_DELAY,
+})
 
-const listHostedZones = async (
+export interface RawAwsRoute53HostedZone extends HostedZone {
+  DelegationSet?: DelegationSet
+  VPCs?: VPCs
+  region: string
+}
+
+export const listHostedZones = async (
   route53: Route53,
   hostedZonesIds: { Id: string }[]
 ) =>
@@ -82,38 +94,13 @@ const listHostedZones = async (
     listZones()
   })
 
-/**
- * Route53 Hosted Zones
- */
-export interface RawAwsRoute53HostedZone extends HostedZone {
-  DelegationSet?: DelegationSet
-  VPCs?: VPCs
-  region: string
-}
-
-export default async ({
-  credentials,
-}: {
-  regions: string
-  credentials: Credentials
-}): Promise<{
-  [region: string]: RawAwsRoute53HostedZone[]
-}> =>
-  new Promise(async resolve => {
-    const zoneIds: { Id: string }[] = []
-    const hostedZonesData: RawAwsRoute53HostedZone[] = []
-
-    const route53 = new Route53({ region: 'us-east-1', credentials, endpoint, ...customRetrySettings })
-
-    /**
-     * Step 1) for all regions, list all the hosted zones
-     */
-    await listHostedZones(route53, zoneIds)
-
-    /**
-     * Step 2) now that we have all of the hosted zones, get the individual zone data
-     */
-    const zonePromises = zoneIds.map(({ Id }) => {
+export const getHostedZoneData = async (
+  route53: Route53,
+  hostedZonesIds: { Id: string }[],
+  hostedZonesData: RawAwsRoute53HostedZone[]
+) =>
+  Promise.all(
+    hostedZonesIds.map(({ Id }) => {
       const zonePromise = new Promise<void>(resolveZone =>
         route53.getHostedZone(
           { Id },
@@ -146,8 +133,40 @@ export default async ({
       )
       return zonePromise
     })
+  )
 
-    await Promise.all(zonePromises)
+/**
+ * Route53 Hosted Zones
+ */
+
+export default async ({
+  credentials,
+}: {
+  regions: string
+  credentials: Credentials
+}): Promise<{
+  [region: string]: RawAwsRoute53HostedZone[]
+}> =>
+  new Promise(async resolve => {
+    const zoneIds: { Id: string }[] = []
+    const hostedZonesData: RawAwsRoute53HostedZone[] = []
+
+    const route53 = new Route53({
+      credentials,
+      endpoint,
+      ...customRetrySettings,
+    })
+
+    /**
+     * Step 1) for all regions, list all the hosted zones
+     */
+    await listHostedZones(route53, zoneIds)
+
+    /**
+     * Step 2) now that we have all of the hosted zones, get the individual zone data
+     */
+
+    await getHostedZoneData(route53, zoneIds, hostedZonesData)
 
     logger.debug(lt.doneFetchingRoute53HostedZoneData)
 

@@ -8,84 +8,17 @@ import STS from 'aws-sdk/clients/sts'
 import { isEmpty, get } from 'lodash'
 import path from 'path'
 
-// import AwsSubnet from './subnet'
-import ALB from './alb'
-import AwsInternetGateway from './igw'
-import AwsKinesisFirehose from './kinesisFirehose'
-import AwsKinesisStream from './kinesisStream'
-import AwsKms from './kms'
-import AwsSecurityGroup from './securityGroup'
-import AwsTag from './tag'
-import AppSync from './appSync'
-import ASG from './asg'
-import Billing from './billing'
-import CognitoIdentityPool from './cognitoIdentityPool'
-import CognitoUserPool from './cognitoUserPool'
-import CloudFront from './cloudfront'
-import CloudWatch from './cloudwatch'
-import EBS from './ebs'
-import EC2 from './ec2'
-import EIP from './eip'
-import ELB from './elb'
-import Lambda from './lambda'
-import NATGateway from './natGateway'
-import NetworkInterface from './networkInterface'
-import VPC from './vpc'
-import SQS from './sqs'
-import APIGatewayRestApi from './apiGatewayRestApi'
-import APIGatewayResource from './apiGatewayResource'
-import APIGatewayStage from './apiGatewayStage'
-import Route53HostedZone from './route53HostedZone'
-import Route53Record from './route53Record'
-import RouteTable from './routeTable'
-import S3 from './s3'
-
 import regions, { regionMap } from '../enums/regions'
 import resources from '../enums/resources'
 import services from '../enums/services'
+import serviceMap from '../enums/serviceMap'
 import { Credentials } from '../types'
 import { obfuscateSensitiveString } from '../utils/format'
 // import { setAwsRetryOptions } from '../utils'
+import { sortResourcesDependencies } from '../utils'
 
 const DEFAULT_REGION = 'us-east-1'
 const DEFAULT_RESOURCES = Object.values(services).join(',')
-/**
- * serviceMap is an object that contains all currently supported services for AWS
- * serviceMap is used by the serviceFactory to produce instances of service classes
- */
-export const serviceMap = {
-  [services.alb]: ALB,
-  [services.apiGatewayResource]: APIGatewayResource,
-  [services.apiGatewayRestApi]: APIGatewayRestApi,
-  [services.apiGatewayStage]: APIGatewayStage,
-  [services.appSync]: AppSync,
-  [services.asg]: ASG,
-  [services.cloudfront]: CloudFront,
-  [services.cognitoIdentityPool]: CognitoIdentityPool,
-  [services.cognitoUserPool]: CognitoUserPool,
-  [services.cloudwatch]: CloudWatch,
-  [services.ebs]: EBS,
-  [services.ec2Instance]: EC2,
-  [services.eip]: EIP,
-  [services.elb]: ELB,
-  [services.igw]: AwsInternetGateway,
-  [services.kinesisFirehose]: AwsKinesisFirehose,
-  [services.kinesisStream]: AwsKinesisStream,
-  [services.kms]: AwsKms,
-  [services.lambda]: Lambda,
-  [services.nat]: NATGateway,
-  [services.networkInterface]: NetworkInterface,
-  [services.sg]: AwsSecurityGroup,
-  // [services.subnet]: AwsSubnet, // TODO: Enable when going for ENG-222
-  [services.vpc]: VPC,
-  [services.sqs]: SQS,
-  [services.route53HostedZone]: Route53HostedZone,
-  [services.route53Record]: Route53Record,
-  [services.routeTable]: RouteTable,
-  [services.s3]: S3,
-  [services.billing]: Billing,
-  tag: AwsTag,
-}
 
 export const enums = {
   services,
@@ -413,9 +346,9 @@ export default class Provider extends CloudGraph.Client {
     }
     const credentials = await this.getCredentials()
     const rawData = []
-    const resourceNames: string[] = [
+    const resourceNames: string[] = sortResourcesDependencies([
       ...new Set<string>(configuredResources.split(',')),
-    ]
+    ])
 
     this.logSelectedRegionsAndResources(configuredRegions, configuredResources)
 
@@ -432,7 +365,7 @@ export default class Provider extends CloudGraph.Client {
             regions: configuredRegions,
             credentials,
             opts,
-            rawData
+            rawData,
           }),
         })
         this.logger.success(`${resource} scan completed`)
@@ -452,9 +385,15 @@ export default class Provider extends CloudGraph.Client {
             if (!isEmpty(singleEntity.Tags)) {
               for (const [key, value] of Object.entries(singleEntity.Tags)) {
                 if (
-                  !tags.data[tagRegion].find(({ id }) => id === `${key}:${value}`)
+                  !tags.data[tagRegion].find(
+                    ({ id }) => id === `${key}:${value}`
+                  )
                 ) {
-                  tags.data[tagRegion].push({ id: `${key}:${value}`, key, value })
+                  tags.data[tagRegion].push({
+                    id: `${key}:${value}`,
+                    key,
+                    value,
+                  })
                 }
               }
             }
@@ -516,25 +455,36 @@ export default class Provider extends CloudGraph.Client {
           mutation: serviceClass.mutation,
           data: entities,
         })
-    }
+      }
     } catch (error: any) {
       this.logger.error('There was an error building connections for AWS data')
       this.logger.debug(error)
     }
     try {
-      result.entities = this.enrichInstanceWithBillingData(configuredRegions, rawData, result.entities)
+      result.entities = this.enrichInstanceWithBillingData(
+        configuredRegions,
+        rawData,
+        result.entities
+      )
     } catch (error: any) {
-      this.logger.error('There was an error enriching AWS data with billing data')
+      this.logger.error(
+        'There was an error enriching AWS data with billing data'
+      )
       this.logger.debug(error)
     }
     return result
   }
 
-  enrichInstanceWithBillingData(configuredRegions: string, rawData: any, entities: any): any[] {
+  enrichInstanceWithBillingData(
+    configuredRegions: string,
+    rawData: any,
+    entities: any
+  ): any[] {
     const billingRegion = regionMap.usEast1
     let result = entities
     if (configuredRegions.includes(billingRegion)) {
-      const billing = rawData.find(({ name }) => name === services.billing) ?? {}
+      const billing =
+        rawData.find(({ name }) => name === services.billing) ?? {}
       const individualData = get(
         billing,
         ['data', billingRegion, '0', 'individualData'],
@@ -562,7 +512,8 @@ export default class Provider extends CloudGraph.Client {
                 }
                 return val
               })
-              result = result.filter(({ name: serviceName }) => serviceName !== services.nat
+              result = result.filter(
+                ({ name: serviceName }) => serviceName !== services.nat
               )
               result.push({
                 name,
@@ -591,7 +542,8 @@ export default class Provider extends CloudGraph.Client {
                 }
                 return val
               })
-              result = result.filter(({ name: serviceName }) => serviceName !== services.ec2Instance
+              result = result.filter(
+                ({ name: serviceName }) => serviceName !== services.ec2Instance
               )
               result.push({
                 name,
