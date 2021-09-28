@@ -178,7 +178,7 @@ export default class Provider extends CloudGraph.Client {
       switch (true) {
         case profile && profile !== 'default' && role && role !== '': {
           const sts = new AWS.STS()
-          await new Promise<Credentials>(resolve => {
+          await new Promise<void>(resolve => {
             sts.assumeRole(
               {
                 RoleArn: role,
@@ -190,7 +190,7 @@ export default class Provider extends CloudGraph.Client {
                     `No credentials found for profile: ${profile} role: ${role}`
                   )
                   this.logger.debug(err)
-                  resolve(null)
+                  resolve()
                 } else {
                   // successful response
                   const {
@@ -207,7 +207,7 @@ export default class Provider extends CloudGraph.Client {
                   AWS.config.update(creds)
                   this.credentials = creds
                   this.profile = profile
-                  resolve(creds)
+                  resolve()
                 }
               }
             )
