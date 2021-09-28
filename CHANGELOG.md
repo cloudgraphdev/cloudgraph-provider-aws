@@ -1,3 +1,10 @@
+## [0.25.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.25.0...0.25.1) (2021-09-28)
+
+
+### Bug Fixes
+
+* Fixed duplicated ARN at Route53 record ([fa2614d](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/fa2614d149db318cce4affb2e442fcf0b01298ef))
+
 # [0.25.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.24.3...0.25.0) (2021-09-27)
 
 
