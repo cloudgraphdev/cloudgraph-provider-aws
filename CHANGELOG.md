@@ -1,3 +1,12 @@
+# [0.26.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.25.2...0.26.0) (2021-09-29)
+
+
+### Features
+
+* **cloudFormation:** add cloud formation stack and stackSet ([bdeea8c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/bdeea8c982fd510dbd83bfe7f63df0665841571c))
+* **FinOps:** Daily averages for FinOps data ([632c601](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/632c6017bd26cfdf250ed4ba41888b1675a7b8b5))
+* **FinOps:** Daily averages for FinOps data ([2c19bec](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/2c19bec133c231d70f26030fc09c79a910f7d48e))
+
 ## [0.25.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.25.1...0.25.2) (2021-09-28)
 
 
