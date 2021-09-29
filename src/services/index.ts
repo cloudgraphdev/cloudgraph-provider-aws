@@ -322,10 +322,9 @@ export default class Provider extends CloudGraph.Client {
    * @returns Instance of an AWS service class to interact with that AWS service
    */
   private getService(service: string): Service {
-    if (!serviceMap[service]) {
-      throw new Error(`Service ${service} does not exist for AWS provider`)
+    if (serviceMap[service]) {
+      return new serviceMap[service](this)
     }
-    return new serviceMap[service](this)
   }
 
   /**
@@ -359,16 +358,20 @@ export default class Provider extends CloudGraph.Client {
     try {
       for (const resource of resourceNames) {
         const serviceClass = this.getService(resource)
-        rawData.push({
-          name: resource,
-          data: await serviceClass.getData({
-            regions: configuredRegions,
-            credentials,
-            opts,
-            rawData,
-          }),
-        })
-        this.logger.success(`${resource} scan completed`)
+        if (serviceClass && serviceClass.getData) {
+          rawData.push({
+            name: resource,
+            data: await serviceClass.getData({
+              regions: configuredRegions,
+              credentials,
+              opts,
+              rawData,
+            }),
+          })
+          this.logger.success(`${resource} scan completed`)
+        } else {
+          this.logger.warn(`Skipping service ${resource} as there was an issue getting data for it. Is it currently supported?`)
+        }
       }
     } catch (error: any) {
       this.logger.error('There was an error scanning AWS sdk data')

@@ -1,0 +1,61 @@
+type awsCloudFormationStackSetParameter
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    parameterKey: String @search(by: [hash, regexp])
+    parameterValue: String @search(by: [hash, regexp])
+    usePreviousValue: String @search(by: [hash, regexp])
+    resolvedValue: String @search(by: [hash, regexp])
+  }
+
+type awsCloudFormationStackSetDriftDetectionDetail
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    parameterKey: String @search(by: [hash, regexp])
+    parameterValue: String @search(by: [hash, regexp])
+    usePreviousValue: String @search(by: [hash, regexp])
+    resolvedValue: String @search(by: [hash, regexp])
+  }
+
+type awsCloudFormationStackSetDriftDetectionDetail {
+  id: String! @search(by: [hash])
+  driftStatus: String @search(by: [hash, regexp])
+  driftDetectionStatus: String @search(by: [hash, regexp])
+  lastDriftCheckTimestamp: String @search(by: [hash, regexp])
+  totalStackInstancesCount: Int @search
+  driftedStackInstancesCount: Int @search
+  inSyncStackInstancesCount: Int @search
+  inProgressStackInstancesCount: Int @search
+  failedStackInstancesCount: Int @search
+}
+
+type awsCloudFormationStackAutoDeploymentConfig {
+  enabled: String @search(by: [hash, regexp])
+  retainStacksOnAccountRemoval: String @search(by: [hash, regexp])
+}
+
+type awsCloudFormationStackSet @key(fields: "arn") {
+  id: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
+  templateBody: String @search(by: [hash, regexp])
+  parameters: [awsCloudFormationStackSetParameter]
+  capabilities: [String] @search
+  tags:  [Tag]
+  administrationRoleARN: String @search(by: [hash, regexp])
+  executionRoleName: String @search(by: [hash, regexp])
+  driftDetectionDetail: awsCloudFormationStackSetDriftDetectionDetail
+  autoDeploymentConfig: awsCloudFormationStackAutoDeploymentConfig
+  permissionModel: String @search(by: [hash, regexp])
+  organizationalUnitIds: [String] @search
+  region: String! @search(by: [hash, regexp])
+}

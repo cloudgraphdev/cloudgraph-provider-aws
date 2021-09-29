@@ -1,0 +1,85 @@
+type awsCloudFormationStackParameter
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    parameterKey: String @search(by: [hash, regexp])
+    parameterValue: String @search(by: [hash, regexp])
+    usePreviousValue: String @search(by: [hash, regexp])
+    resolvedValue: String @search(by: [hash, regexp])
+  }
+
+type awsRollbackConfigurationRollbackTrigger
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    arn: String @search(by: [hash, regexp])
+    type: String @search(by: [hash, regexp])
+  }
+
+type awsCloudFormationStackOutputList
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    outputKey: String @search(by: [hash, regexp])
+    outputValue: String @search(by: [hash, regexp])
+    description: String @search(by: [hash, regexp])
+    exportName: String @search(by: [hash, regexp])
+  }
+
+type awsCloudFormationStackRollbackConfiguration {
+  id: String! @id @search(by: [hash])
+  rollbackTriggers: [awsRollbackConfigurationRollbackTrigger]
+  monitoringTimeInMinutes: Int @search
+}
+
+type awsCloudFormationStackDriftInfo {
+  id: String! @id @search(by: [hash])
+  status: String @search(by: [hash, regexp])
+  lastCheckTimestamp: String @search(by: [hash, regexp])
+}
+
+type awsCloudFormationStackDriftList {
+  id: String! @id @search(by: [hash])
+  status: String @search(by: [hash, regexp])
+  resourceType: String @search(by: [hash, regexp])
+  timestamp: String @search(by: [hash, regexp])
+}
+
+type awsCloudFormationStack @key(fields: "arn") {
+  id: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  changeSetId: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  parameters: [awsCloudFormationStackParameter]
+  creationTime: String! @search(by: [hash, regexp])
+  deletionTime: String @search(by: [hash, regexp])
+  lastUpdatedTime: String @search(by: [hash, regexp])
+  rollbackConfiguration: awsCloudFormationStackRollbackConfiguration
+  stackStatus: String! @search(by: [hash, regexp])
+  stackStatusReason: String @search(by: [hash, regexp])
+  disableRollback: String @search(by: [hash, regexp])
+  notificationARNs: [String] @search(by: [hash])
+  timeoutInMinutes: Int @search
+  capabilities: [String] @search(by: [hash])
+  outputs: [awsCloudFormationStackOutputList]
+  roleARN: String @search(by: [hash, regexp])
+  tags: [Tag]
+  enableTerminationProtection: String @search(by: [hash, regexp])
+  parentId: String @search(by: [hash, regexp])
+  rootId: String @search(by: [hash, regexp])
+  stackDriftInfo: awsCloudFormationStackDriftInfo
+  stackDriftList: [awsCloudFormationStackDriftList]
+  region: String! @search(by: [hash, regexp])
+  # parentStack: awsCloudFormationStack
+  # rootStack: awsCloudFormationStack
+}

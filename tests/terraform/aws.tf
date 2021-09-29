@@ -602,7 +602,7 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
 
 resource "aws_s3_bucket" "bucket" {
   bucket = "tf-test-bucket"
-  acl    = "private"
+  acl    = "public-read"
 }
 
 resource "aws_iam_role" "kinesis_role" {
@@ -643,4 +643,106 @@ resource "aws_iam_role" "firehose_role" {
   ]
 }
 EOF
+}
+
+resource "aws_s3_bucket_object" "cf-template" {
+  bucket = aws_s3_bucket.destination.bucket
+  key    = "EC2ChooseAMI.template"
+  source = "./EC2ChooseAMI.template"
+}
+
+resource "aws_s3_bucket_object" "cf-template2" {
+  bucket = aws_s3_bucket.destination.bucket
+  key    = "CloudFront_S3.template"
+  source = "./CloudFront_S3.template"
+}
+
+resource "aws_cloudformation_stack" "cg-cloudformation-stack-test" {
+  name = "cg-cloudformation-stack-test"
+
+  parameters = {
+    VPCCidr = "10.0.0.0/16"
+  }
+
+  template_body = <<STACK
+{
+  "Parameters" : {
+    "VPCCidr" : {
+      "Type" : "String",
+      "Default" : "10.0.0.0/16",
+      "Description" : "Enter the CIDR block for the VPC. Default is 10.0.0.0/16."
+    }
+  },
+  "Resources" : {
+    "myVpc": {
+      "Type" : "AWS::EC2::VPC",
+      "Properties" : {
+        "CidrBlock" : { "Ref" : "VPCCidr" },
+        "Tags" : [
+          {"Key": "Name", "Value": "Primary_CF_VPC"}
+        ]
+      }
+    },
+    "NestedStack" : {
+      "Type" : "AWS::CloudFormation::Stack",
+      "Properties" : {
+      "TemplateURL" : "https://${aws_s3_bucket.destination.bucket_domain_name}/${aws_s3_bucket_object.cf-template.key}",
+      "Parameters" : {
+        "InstanceType" : "t1.micro",
+        "KeyName" : "nestedStack1"
+      }
+      }
+    },
+    "NestedStack2" : {
+      "Type" : "AWS::CloudFormation::Stack",
+      "Properties" : {
+        "TemplateURL" : "https://${aws_s3_bucket.destination.bucket_domain_name}/${aws_s3_bucket_object.cf-template2.key}",
+        "Parameters" : {
+          "S3DNSName" : "${aws_s3_bucket.destination.bucket_domain_name}"
+        }
+      }
+    }
+  }
+}
+STACK
+}
+
+data "aws_iam_policy_document" "AWSCloudFormationStackSetAdministrationRole_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+
+    principals {
+      identifiers = ["cloudformation.amazonaws.com"]
+      type        = "Service"
+    }
+  }
+}
+
+resource "aws_iam_role" "AWSCloudFormationStackSetAdministrationRole" {
+  assume_role_policy = data.aws_iam_policy_document.AWSCloudFormationStackSetAdministrationRole_assume_role_policy.json
+  name               = "AWSCloudFormationStackSetAdministrationRole"
+}
+
+resource "aws_cloudformation_stack_set" "cg-cloudformation-stack-set-test" {
+  administration_role_arn = aws_iam_role.AWSCloudFormationStackSetAdministrationRole.arn
+  name                    = "cg-cloudformation-stack-set-test"
+
+  parameters = {
+    VPCCidr = "10.0.0.0/16"
+  }
+}
+
+data "aws_iam_policy_document" "AWSCloudFormationStackSetAdministrationRole_ExecutionPolicy" {
+  statement {
+    actions   = ["sts:AssumeRole"]
+    effect    = "Allow"
+    resources = ["arn:aws:iam::*:role/${aws_cloudformation_stack_set.cg-cloudformation-stack-set-test.execution_role_name}"]
+  }
+}
+
+resource "aws_iam_role_policy" "AWSCloudFormationStackSetAdministrationRole_ExecutionPolicy" {
+  name   = "ExecutionPolicy"
+  policy = data.aws_iam_policy_document.AWSCloudFormationStackSetAdministrationRole_ExecutionPolicy.json
+  role   = aws_iam_role.AWSCloudFormationStackSetAdministrationRole.name
 }
