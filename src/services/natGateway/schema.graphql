@@ -3,7 +3,7 @@ type awsNatGateway @key(fields: "id") {
 	arn: String! @search(by: [hash, regexp])
 	state: String @search(by: [hash, regexp])
   createTime: String @search(by: [hash, regexp])
-  dailyCost: String
+  dailyCost: awsTotalBillingInfo
 	tags: [Tag]
   networkInterface: [awsNetworkInterface] @hasInverse(field: natGateway)
   # subnet: [awsSubnet] @hasInverse(field: natGateway)

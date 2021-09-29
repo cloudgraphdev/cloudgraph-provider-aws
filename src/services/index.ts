@@ -488,7 +488,9 @@ export default class Provider extends CloudGraph.Client {
     if (configuredRegions.includes(billingRegion)) {
       const billing =
         rawData.find(({ name }) => name === services.billing) ?? {}
-      const individualData = get(
+      const individualData: {
+        [key: string]: { cost: number; currency: string; formattedCost: string }
+      } = get(
         billing,
         ['data', billingRegion, '0', 'individualData'],
         undefined
@@ -510,7 +512,11 @@ export default class Provider extends CloudGraph.Client {
                 if (key.includes(val.id)) {
                   return {
                     ...val,
-                    dailyCost: value,
+                    dailyCost: {
+                      cost: value?.cost,
+                      currency: value?.currency,
+                      formattedCost: value?.formattedCost
+                    },
                   }
                 }
                 return val
