@@ -870,7 +870,7 @@ export type AwsKms = {
   arn: Scalars['String'];
   id: Scalars['String'];
   description?: Maybe<Scalars['String']>;
-  enableKeyRotation?: Maybe<Scalars['String']>;
+  keyRotationEnabled?: Maybe<Scalars['String']>;
   usage?: Maybe<Scalars['String']>;
   policy?: Maybe<Scalars['String']>;
   enabled?: Maybe<Scalars['String']>;

@@ -24,7 +24,7 @@ export type AwsKms = KeyListEntry &
     region: string
     policy: string
     Tags: TagMap
-    enableKeyRotation: boolean
+    keyRotationEnabled: boolean
   }
 
 export default async ({
@@ -160,7 +160,7 @@ export default async ({
             region,
             policy: '',
             Tags: {},
-            enableKeyRotation: null,
+            keyRotationEnabled: null,
           })
 
           resolveKey()
@@ -200,9 +200,9 @@ export default async ({
            * Add the rotation status to the key
            */
 
-          const { KeyRotationEnabled: enableKeyRotation } = data || {}
+          const { KeyRotationEnabled: keyRotationEnabled } = data || {}
 
-          kmsData[idx].enableKeyRotation = enableKeyRotation
+          kmsData[idx].keyRotationEnabled = keyRotationEnabled
 
           resolveRotationStatus()
         })
