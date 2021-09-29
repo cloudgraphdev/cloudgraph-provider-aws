@@ -1,3 +1,10 @@
+## [0.26.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.26.1...0.26.2) (2021-09-29)
+
+
+### Bug Fixes
+
+* **deps:** update sdk dep ([020613e](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/020613eedca87c7e39a125a716e668008888d900))
+
 ## [0.26.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.26.0...0.26.1) (2021-09-29)
 
 
