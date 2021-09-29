@@ -9,10 +9,12 @@ import AwsTag from '../services/tag'
 import AppSync from '../services/appSync'
 import ASG from '../services/asg'
 import Billing from '../services/billing'
+import CloudFront from '../services/cloudfront'
+import CloudFormationStack from '../services/cloudFormationStack'
+import CloudFormationStackSet from '../services/cloudFormationStackSet'
+import CloudWatch from '../services/cloudwatch'
 import CognitoIdentityPool from '../services/cognitoIdentityPool'
 import CognitoUserPool from '../services/cognitoUserPool'
-import CloudFront from '../services/cloudfront'
-import CloudWatch from '../services/cloudwatch'
 import EBS from '../services/ebs'
 import EC2 from '../services/ec2'
 import EIP from '../services/eip'
@@ -43,10 +45,12 @@ export default {
   [services.apiGatewayStage]: APIGatewayStage,
   [services.asg]: ASG,
   [services.billing]: Billing,
+  [services.cloudfront]: CloudFront,
+  [services.cloudFormationStack]: CloudFormationStack,
+  [services.cloudFormationStackSet]: CloudFormationStackSet,
+  [services.cloudwatch]: CloudWatch,
   [services.cognitoIdentityPool]: CognitoIdentityPool,
   [services.cognitoUserPool]: CognitoUserPool,
-  [services.cloudfront]: CloudFront,
-  [services.cloudwatch]: CloudWatch,
   [services.ebs]: EBS,
   [services.ec2Instance]: EC2,
   [services.eip]: EIP,

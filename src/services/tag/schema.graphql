@@ -24,6 +24,8 @@ type awsTag @key(fields: "id") {
   cognitoUserPool: [awsCognitoUserPool]
   kinesisFirehose: [awsKinesisFirehose]
   appSync: [awsAppSync]
+  cloudFormationStack: [awsCloudFormationStack]
+  cloudFormationStackSet: [awsCloudFormationStackSet]
 }
 
 # TODO: would this cause a collision with other providers? should we rename to like awsRawTag?

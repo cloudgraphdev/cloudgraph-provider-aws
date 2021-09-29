@@ -308,6 +308,117 @@ export type AwsBucketPolicy = {
   policy?: Maybe<Scalars['String']>;
 };
 
+export type AwsCloudFormationStack = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  changeSetId?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  parameters?: Maybe<Array<Maybe<AwsCloudFormationStackParameter>>>;
+  creationTime: Scalars['String'];
+  deletionTime?: Maybe<Scalars['String']>;
+  lastUpdatedTime?: Maybe<Scalars['String']>;
+  rollbackConfiguration?: Maybe<AwsCloudFormationStackRollbackConfiguration>;
+  stackStatus: Scalars['String'];
+  stackStatusReason?: Maybe<Scalars['String']>;
+  disableRollback?: Maybe<Scalars['String']>;
+  notificationARNs?: Maybe<Array<Maybe<Scalars['String']>>>;
+  timeoutInMinutes?: Maybe<Scalars['Int']>;
+  capabilities?: Maybe<Array<Maybe<Scalars['String']>>>;
+  outputs?: Maybe<Array<Maybe<AwsCloudFormationStackOutputList>>>;
+  roleARN?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  enableTerminationProtection?: Maybe<Scalars['String']>;
+  parentId?: Maybe<Scalars['String']>;
+  rootId?: Maybe<Scalars['String']>;
+  stackDriftInfo?: Maybe<AwsCloudFormationStackDriftInfo>;
+  stackDriftList?: Maybe<Array<Maybe<AwsCloudFormationStackDriftList>>>;
+  region: Scalars['String'];
+};
+
+export type AwsCloudFormationStackAutoDeploymentConfig = {
+  enabled?: Maybe<Scalars['String']>;
+  retainStacksOnAccountRemoval?: Maybe<Scalars['String']>;
+};
+
+export type AwsCloudFormationStackDriftInfo = {
+  id: Scalars['String'];
+  status?: Maybe<Scalars['String']>;
+  lastCheckTimestamp?: Maybe<Scalars['String']>;
+};
+
+export type AwsCloudFormationStackDriftList = {
+  id: Scalars['String'];
+  status?: Maybe<Scalars['String']>;
+  resourceType?: Maybe<Scalars['String']>;
+  timestamp?: Maybe<Scalars['String']>;
+};
+
+export type AwsCloudFormationStackOutputList = {
+  id: Scalars['String'];
+  outputKey?: Maybe<Scalars['String']>;
+  outputValue?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  exportName?: Maybe<Scalars['String']>;
+};
+
+export type AwsCloudFormationStackParameter = {
+  id: Scalars['String'];
+  parameterKey?: Maybe<Scalars['String']>;
+  parameterValue?: Maybe<Scalars['String']>;
+  usePreviousValue?: Maybe<Scalars['String']>;
+  resolvedValue?: Maybe<Scalars['String']>;
+};
+
+export type AwsCloudFormationStackRollbackConfiguration = {
+  id: Scalars['String'];
+  rollbackTriggers?: Maybe<Array<Maybe<AwsRollbackConfigurationRollbackTrigger>>>;
+  monitoringTimeInMinutes?: Maybe<Scalars['Int']>;
+};
+
+export type AwsCloudFormationStackSet = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  templateBody?: Maybe<Scalars['String']>;
+  parameters?: Maybe<Array<Maybe<AwsCloudFormationStackSetParameter>>>;
+  capabilities?: Maybe<Array<Maybe<Scalars['String']>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  administrationRoleARN?: Maybe<Scalars['String']>;
+  executionRoleName?: Maybe<Scalars['String']>;
+  driftDetectionDetail?: Maybe<AwsCloudFormationStackSetDriftDetectionDetail>;
+  autoDeploymentConfig?: Maybe<AwsCloudFormationStackAutoDeploymentConfig>;
+  permissionModel?: Maybe<Scalars['String']>;
+  organizationalUnitIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  region: Scalars['String'];
+};
+
+export type AwsCloudFormationStackSetDriftDetectionDetail = {
+  driftDetectionStatus?: Maybe<Scalars['String']>;
+  driftStatus?: Maybe<Scalars['String']>;
+  driftedStackInstancesCount?: Maybe<Scalars['Int']>;
+  failedStackInstancesCount?: Maybe<Scalars['Int']>;
+  id: Scalars['String'];
+  inProgressStackInstancesCount?: Maybe<Scalars['Int']>;
+  inSyncStackInstancesCount?: Maybe<Scalars['Int']>;
+  lastDriftCheckTimestamp?: Maybe<Scalars['String']>;
+  parameterKey?: Maybe<Scalars['String']>;
+  parameterValue?: Maybe<Scalars['String']>;
+  resolvedValue?: Maybe<Scalars['String']>;
+  totalStackInstancesCount?: Maybe<Scalars['Int']>;
+  usePreviousValue?: Maybe<Scalars['String']>;
+};
+
+export type AwsCloudFormationStackSetParameter = {
+  id: Scalars['String'];
+  parameterKey?: Maybe<Scalars['String']>;
+  parameterValue?: Maybe<Scalars['String']>;
+  usePreviousValue?: Maybe<Scalars['String']>;
+  resolvedValue?: Maybe<Scalars['String']>;
+};
+
 export type AwsCloudfront = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -892,6 +1003,12 @@ export type AwsNetworkInterfaceAttachment = {
   status?: Maybe<Scalars['String']>;
 };
 
+export type AwsRollbackConfigurationRollbackTrigger = {
+  id: Scalars['String'];
+  arn?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
 export type AwsRoute = {
   id?: Maybe<Scalars['ID']>;
   target: Scalars['String'];
@@ -1096,6 +1213,8 @@ export type AwsTag = {
   cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
   appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
+  cloudFormationStack?: Maybe<Array<Maybe<AwsCloudFormationStack>>>;
+  cloudFormationStackSet?: Maybe<Array<Maybe<AwsCloudFormationStackSet>>>;
 };
 
 export type AwsVpc = {

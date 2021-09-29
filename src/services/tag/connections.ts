@@ -9,6 +9,8 @@ import { RawAwsCognitoIdentityPool } from '../cognitoIdentityPool/data'
 import { RawAwsCognitoUserPool } from '../cognitoUserPool/data'
 import { RawAwsKinesisFirehose } from '../kinesisFirehose/data'
 import { RawAwsAppSync } from '../appSync/data'
+import { RawAwsCloudFormationStackSet } from '../cloudFormationStackSet/data'
+import { RawAwsCloudFormationStack } from '../cloudFormationStack/data'
 
 const findServiceInstancesWithTag = (tag, service) => {
   const { id } = tag
@@ -547,6 +549,50 @@ export default ({
         }
       }
     }
+
+    /**
+     * Find related Cloudformation stacks
+     */
+    const CFStacks: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.cloudFormationStack)
+    if (CFStacks?.data?.[region]) {
+      const dataAtRegion: RawAwsCloudFormationStack[] =
+        findServiceInstancesWithTag(tag, CFStacks.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { StackId: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.cloudFormationStack,
+            relation: 'child',
+            field: 'cloudFormationStack',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related Cloudformation stack sets
+     */
+     const CFStacksSets: { name: string; data: { [property: string]: any[] } } =
+     data.find(({ name }) => name === services.cloudFormationStackSet)
+   if (CFStacksSets?.data?.[region]) {
+     const dataAtRegion: RawAwsCloudFormationStackSet[] =
+       findServiceInstancesWithTag(tag, CFStacksSets.data[region])
+     if (!isEmpty(dataAtRegion)) {
+       for (const instance of dataAtRegion) {
+         const { StackSetId: id } = instance
+
+         connections.push({
+           id,
+           resourceType: services.cloudFormationStackSet,
+           relation: 'child',
+           field: 'cloudFormationStackSet',
+         })
+       }
+     }
+   }
   }
 
   const tagResult = {

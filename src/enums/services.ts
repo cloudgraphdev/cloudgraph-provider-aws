@@ -8,6 +8,8 @@ export default {
   billing: 'billing',
   cognitoIdentityPool: 'cognitoIdentityPool',
   cognitoUserPool: 'cognitoUserPool',
+  cloudFormationStack: 'cloudFormationStack',
+  cloudFormationStackSet: 'cloudFormationStackSet',
   cloudfront: 'cloudfront',
   cloudwatch: 'cloudwatch',
   ebs: 'ebs',
