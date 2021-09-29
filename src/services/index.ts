@@ -61,24 +61,20 @@ export default class Provider extends CloudGraph.Client {
     const result: { [key: string]: any } = {
       ...this.config,
     }
-    const profileAnswer = await this.interface.prompt([
+    const profiles = Object.keys(AWS['util'].getProfilesFromSharedConfig(AWS['util'].iniLoader))
+    const { profiles: profilesAnswer } = await this.interface.prompt([
       {
-        type: 'input',
-        message: 'Please enter the name of the AWS credential profile to load from the shared credentials file',
-        name: 'profile',
-        default: 'default'
+        type: 'checkbox',
+        message: 'Please select the AWS credential profiles to utilize for scanning',
+        loop: false,
+        name: 'profiles',
+        choices: profiles.map((profile: string) => ({
+          name: profile,
+        })),
       }
     ])
-    // Try to find a users aws credentials so we can request to use them and add the profile to approved list.
-    await this.getCredentials(profileAnswer)
-    // If we get here, we know we have credentials to use
-    const { profile } = profileAnswer
-    if (!result.profileApprovedList?.find((val: string) => val === profile)) {
-      result.profileApprovedList = [
-        ...(result.profileApprovedList ?? []),
-        profile,
-      ]
-    }
+
+    result.profileApprovedList = profilesAnswer
 
     const { regions: regionsAnswer } = await this.interface.prompt([
       {
@@ -137,7 +133,7 @@ export default class Provider extends CloudGraph.Client {
     return result
   }
 
-  async getIdentity({ profile, role }: { profile: string, role: string }): Promise<{ accountId: string }> {
+  async getIdentity({ profile, role }: { profile: string, role?: string }): Promise<{ accountId: string }> {
     try {
       const credentials = await this.getCredentials({ profile, role })
       return new Promise((resolve, reject) =>
@@ -155,7 +151,7 @@ export default class Provider extends CloudGraph.Client {
     }
   }
 
-  private getCredentials({ profile, role }: { profile: string, role: string }): Promise<Credentials> {
+  private getCredentials({ profile, role }: { profile: string, role?: string }): Promise<Credentials> {
     return new Promise(async resolveCreds => {
       // If we have keys set in the config file, just use them
       if (this.config.accessKeyId && this.config.secretAccessKey) {
@@ -350,21 +346,22 @@ export default class Provider extends CloudGraph.Client {
       entities: [],
       connections: {},
     }
-    for (const account of this.config.accounts) {
-      let { regions: configuredRegions, resources: configuredResources } = account
-      if (!configuredRegions) {
-        configuredRegions = this.properties.regions.join(',')
-      } else {
-        configuredRegions = [...new Set(configuredRegions.split(','))].join(',')
-      }
-      if (!configuredResources) {
-        configuredResources = Object.values(this.properties.services).join(',')
-      }
-      const credentials = await this.getCredentials(account)
+    let { regions: configuredRegions, resources: configuredResources } =
+      this.config
+    if (!configuredRegions) {
+      configuredRegions = this.properties.regions.join(',')
+    } else {
+      configuredRegions = [...new Set(configuredRegions.split(','))].join(',')
+    }
+    if (!configuredResources) {
+      configuredResources = Object.values(this.properties.services).join(',')
+    }
+    const resourceNames: string[] = [
+      ...new Set<string>(configuredResources.split(',')),
+    ]
+    for (const profile of this.config.profileApprovedList) {
+      const credentials = await this.getCredentials({ profile })
       const rawData = []
-      const resourceNames: string[] = [
-        ...new Set<string>(configuredResources.split(',')),
-      ]
 
       // Leaving this here in case we need to test another service or to inject a logging function
       // setAwsRetryOptions({ global: true, configObj: this.config })
@@ -432,7 +429,7 @@ export default class Provider extends CloudGraph.Client {
        * 4. push the array of formatted entities into result.entites
        */
       try {
-        const { accountId } = await this.getIdentity(account)
+        const { accountId } = await this.getIdentity({ profile })
         for (const serviceData of rawData) {
           const serviceClass = this.getService(serviceData.name)
           const entities: any[] = []
