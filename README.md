@@ -78,9 +78,9 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | route53Record         | route53HostedZone, elb, alb                              |
 | routeTable            | vpc                                                      |
 
-<!-- examplesqueries -->
+<br />
 
-# Example Queries
+# Query Examples
 
 To use CloudGraph, you will need to be familiar with GraphQL. This section contains a handful of example queries to get you up and running but is by no means exhaustive. Feel free to make a PR with other examples you would like to see included, check out the [Contribution Guidelines](https://github.com/cloudgraphdev/cloudgraph-provider-aws/blob/master/CONTRIBUTING.md) section for more information.
 
@@ -769,5 +769,3 @@ query {
 ```
 
 This is actually not a limitation of CloudGraph, but rather a feature that still needs to be implemented with Dgraph. [You can view and comment on the discussion thread here](https://discuss.dgraph.io/t/proposal-nested-object-filters-for-graphql-rewritten-as-var-blocks-in-dql/12252/2)
-
-<!-- examplesqueriesstop -->
