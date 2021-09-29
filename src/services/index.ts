@@ -359,13 +359,15 @@ export default class Provider extends CloudGraph.Client {
     const resourceNames: string[] = [
       ...new Set<string>(configuredResources.split(',')),
     ]
+
+    this.logSelectedRegionsAndResources(configuredRegions, configuredResources)
+
+    // Leaving this here in case we need to test another service or to inject a logging function
+    // setAwsRetryOptions({ global: true, configObj: this.config })
+
     for (const profile of this.config.profileApprovedList) {
       const credentials = await this.getCredentials({ profile })
       const rawData = []
-
-      // Leaving this here in case we need to test another service or to inject a logging function
-      // setAwsRetryOptions({ global: true, configObj: this.config })
-
       // Get Raw data for services
       try {
         for (const resource of resourceNames) {
