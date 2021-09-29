@@ -30,5 +30,10 @@ export const getFirstDayOfMonth = (): string => {
   return today.join('-')
 }
 
+export const getCurrentDayOfMonth = (): string => {
+  const today = getDaysAgo(0).split('-')
+  return today.pop()
+}
+
 export const createDiffSecs = (startDate: Date): number =>
   (new Date().getTime() - startDate.getTime()) / 1000

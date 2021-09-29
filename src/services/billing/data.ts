@@ -11,7 +11,7 @@ import { regionMap } from '../../enums/regions'
 import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
-import { getDaysAgo, getFirstDayOfMonth, createDiffSecs } from '../../utils/dateutils'
+import { getDaysAgo, getFirstDayOfMonth, getCurrentDayOfMonth, createDiffSecs } from '../../utils/dateutils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
@@ -22,22 +22,29 @@ export const getRoundedAmount = (amount: string): number =>
   Math.round((parseFloat(amount) + Number.EPSILON) * 100) / 100
 
 export const formatAmmountAndUnit = ({
-  Amount: amount = '0',
+  Amount: amount = 0,
   Unit: currency = 'USD',
 }: {
-  Amount?: string
+  Amount?: number
   Unit?: string
 }): string =>
   new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(
-    getRoundedAmount(amount)
+    getRoundedAmount(amount.toString())
   )
 
+export interface costInterface {
+  cost?: number,
+  currency?: string,
+  formattedCost?: string
+}
 export interface RawAwsBilling {
-  totalCostLast30Days: string
-  totalCostMonthToDate: string
-  monthToDate: { [key: string]: any }
-  last30Days: { [key: string]: any }
-  individualData: { [key: string]: string}
+  totalCostLast30Days: costInterface
+  totalCostMonthToDate: costInterface
+  monthToDateDailyAverage: { [key: string]: costInterface }
+  last30DaysDailyAverage: { [key: string]: costInterface }
+  monthToDate: { [key: string]: costInterface }
+  last30Days: { [key: string]: costInterface }
+  individualData: { [key: string]: costInterface }
 }
 
 const listAvailabeServices = ({
@@ -90,8 +97,10 @@ export default async ({
   const startDate = new Date()
   const region = regionMap.usEast1
   const results: RawAwsBilling = {
-    totalCostLast30Days: '',
-    totalCostMonthToDate: '',
+    totalCostLast30Days: {},
+    totalCostMonthToDate: {},
+    monthToDateDailyAverage: {},
+    last30DaysDailyAverage: {},
     monthToDate: {},
     last30Days: {},
     individualData: {}
@@ -156,12 +165,13 @@ export default async ({
 
           const services: CE.Groups = head(resultsByTime).Groups || []
           services.map(({ Keys, Metrics }: CE.Group) => {
-            results[type][head(Keys)] = formatAmmountAndUnit(
-              get(Metrics, 'BlendedCost', {
-                Amount: '',
-                Unit: '',
-              }) || { Amount: '', Unit: '' }
-            )
+            const { Amount = '', Unit = '' } = get(Metrics, 'BlendedCost', {Amount: '', Unit: ''}) || { Amount: '', Unit: ''}
+            const cost = getRoundedAmount(Amount)
+            results[type][head(Keys)] = {
+              cost,
+              currency: Unit,
+              formattedCost: formatAmmountAndUnit({Amount: cost, Unit})
+            }
           })
         } else {
           /**
@@ -169,25 +179,26 @@ export default async ({
            * [ { Total: { BlendedCost: { Amount: '-0.2775129004', Unit: 'USD' } } } ... ]
            */
 
-          let currencyUnit = ''
+           let currency
 
-          results[type] = formatAmmountAndUnit({
-            Amount: resultsByTime
-              .reduce(
-                (
-                  prev,
-                  { Total: { BlendedCost: blendedCost } = { BlendedCost: {} } }
-                ) => {
-                  if (!currencyUnit) {
-                    currencyUnit = blendedCost.Unit
-                  }
-                  return prev + getRoundedAmount(blendedCost.Amount)
-                },
-                0
-              )
-              .toString(),
-            Unit: currencyUnit,
-          })
+           const cost = resultsByTime.reduce(
+             (
+               prev,
+               { Total: { BlendedCost: blendedCost } = { BlendedCost: {} } }
+             ) => {
+               if (!currency) {
+                 currency = blendedCost.Unit
+               }
+               return prev + getRoundedAmount(blendedCost.Amount)
+             },
+             0
+           )
+ 
+           results[type] = {
+             cost,
+             currency,
+             formattedCost: formatAmmountAndUnit({ Amount: cost, Unit: currency }),
+           }
         }
         resolve()
       })
@@ -250,12 +261,16 @@ const listIndividualFinOpsData = ({
 
       const resources: CE.Groups = head(resultsByTime).Groups || []
       resources.map(({ Keys, Metrics }: CE.Group) => {
-        results.individualData[head(Keys)] = formatAmmountAndUnit(
-          get(Metrics, 'BlendedCost', {
-            Amount: '',
-            Unit: '',
-          }) || { Amount: '', Unit: '' }
-        )
+        const { Amount, Unit } = get(Metrics, 'BlendedCost', {
+          Amount: '',
+          Unit: '',
+        }) || { Amount: '', Unit: '' }
+        const cost = getRoundedAmount(Amount)
+        results.individualData[head(Keys)] = {
+          cost,
+          currency: Unit,
+          formattedCost: formatAmmountAndUnit({Amount: cost, Unit})
+        }
       })
 
       resolve()
@@ -269,7 +284,7 @@ const listIndividualFinOpsData = ({
      */
 
     const costExplorer = new CE({ region, credentials, endpoint })
-    const today = new Date().toLocaleDateString('en-ca')
+    const today = new Date().toLocaleDateString('en-ca') // We use en-ca to ensure the correct date structure for CE
     const startOfMonth = getFirstDayOfMonth()
 
     const commonArgs = {
@@ -347,7 +362,7 @@ const listIndividualFinOpsData = ({
         ),
         timePeriod: {
           Start: getDaysAgo(1), // i.e. get the daily cost
-          End: new Date().toLocaleDateString('en-ca'),
+          End: new Date().toLocaleDateString('en-ca'), // We use en-ca to ensure correct date structure for CE
         },
         resolve,
       })
@@ -356,6 +371,38 @@ const listIndividualFinOpsData = ({
     resultPromises.push(individualDataPromise)
 
     await Promise.all(resultPromises)
+
+    /**
+     * Create Daily Averages
+     */
+
+     const createDailyAverage = ({
+      days,
+      resultMonthlyData,
+      resultAverageData,
+    }): void[] =>
+      Object.keys(resultMonthlyData).map(service => {
+        const { cost: aggregateCost, currency } = resultMonthlyData[service]
+        const cost = parseFloat((aggregateCost / days).toFixed(2))
+        results[resultAverageData][service] = {
+          cost,
+          currency,
+          formattedCost: formatAmmountAndUnit({ Amount: cost, Unit: currency }),
+        }
+      })
+
+    if (!isEmpty(results.monthToDate) && !isEmpty(results.last30Days)) {
+      createDailyAverage({
+        days: parseInt(getCurrentDayOfMonth(), 10),
+        resultMonthlyData: results.monthToDate,
+        resultAverageData: 'monthToDateDailyAverage',
+      })
+      createDailyAverage({
+        days: 30,
+        resultMonthlyData: results.last30Days,
+        resultAverageData: 'last30DaysDailyAverage',
+      })
+    }
     logger.debug(lt.doneFetchingAggregateFinOpsData(createDiffSecs(startDate)))
     return { [region]: [results] }
   } catch (e) {

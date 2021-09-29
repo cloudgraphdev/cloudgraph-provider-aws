@@ -296,11 +296,13 @@ export type AwsAsg = {
 };
 
 export type AwsBilling = {
-  id: Scalars['String'];
-  totalCostMonthToDate?: Maybe<Scalars['String']>;
-  totalCostLast30Days?: Maybe<Scalars['String']>;
-  monthToDate?: Maybe<Array<Maybe<AwsServiceBillingData>>>;
-  last30Days?: Maybe<Array<Maybe<AwsServiceBillingData>>>;
+  account: Scalars['String'];
+  totalCostMonthToDate?: Maybe<AwsTotalBillingInfo>;
+  totalCostLast30Days?: Maybe<AwsTotalBillingInfo>;
+  monthToDateDailyAverage?: Maybe<Array<Maybe<AwsServiceBillingInfo>>>;
+  last30DaysDailyAverage?: Maybe<Array<Maybe<AwsServiceBillingInfo>>>;
+  monthToDate?: Maybe<Array<Maybe<AwsServiceBillingInfo>>>;
+  last30Days?: Maybe<Array<Maybe<AwsServiceBillingInfo>>>;
 };
 
 export type AwsBucketPolicy = {
@@ -583,7 +585,7 @@ export type AwsEc2 = {
   cpuThreadsPerCore?: Maybe<Scalars['Int']>;
   iamInstanceProfile?: Maybe<Scalars['String']>;
   deletionProtection?: Maybe<Scalars['String']>;
-  dailyCost?: Maybe<Scalars['String']>;
+  dailyCost?: Maybe<AwsTotalBillingInfo>;
   primaryNetworkInterface?: Maybe<Scalars['String']>;
   metadataOptions?: Maybe<AwsEc2MetadataOptions>;
   metadatasecurityGroupIdsOptions?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -858,7 +860,7 @@ export type AwsNatGateway = {
   arn: Scalars['String'];
   state?: Maybe<Scalars['String']>;
   createTime?: Maybe<Scalars['String']>;
-  dailyCost?: Maybe<Scalars['String']>;
+  dailyCost?: Maybe<AwsTotalBillingInfo>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
@@ -987,9 +989,11 @@ export type AwsSecurityGroup = {
   asg?: Maybe<Array<Maybe<AwsAsg>>>;
 };
 
-export type AwsServiceBillingData = {
+export type AwsServiceBillingInfo = {
   name: Scalars['String'];
-  cost?: Maybe<Scalars['String']>;
+  cost?: Maybe<Scalars['Float']>;
+  currency?: Maybe<Scalars['String']>;
+  formattedCost?: Maybe<Scalars['String']>;
 };
 
 export type AwsSgInboundRule = {
@@ -1096,6 +1100,12 @@ export type AwsTag = {
   cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
   appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
+};
+
+export type AwsTotalBillingInfo = {
+  cost?: Maybe<Scalars['Float']>;
+  currency?: Maybe<Scalars['String']>;
+  formattedCost?: Maybe<Scalars['String']>;
 };
 
 export type AwsVpc = {

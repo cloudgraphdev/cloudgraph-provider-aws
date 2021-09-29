@@ -1,12 +1,12 @@
-import { RawAwsBilling } from './data'
+import { RawAwsBilling, costInterface } from './data'
 import { AwsBilling } from '../../types/generated'
 
 const formatCostData = (costData: {
-  [key: string]: string
-}): { name: string; cost: string }[] =>
+  [key: string]: costInterface
+}): { name: string; cost?: number, currency?: string, formattedCost?: string }[] =>
   Object.keys(costData).map(name => ({
     name,
-    cost: costData[name],
+    ...costData[name]
   }))
 /**
  * CloudWatch
@@ -21,16 +21,22 @@ export default ({
   const {
     totalCostLast30Days,
     totalCostMonthToDate,
+    last30DaysDailyAverage,
+    monthToDateDailyAverage,
     monthToDate = {},
     last30Days = {},
   } = service
   const formattedMonthToDate = formatCostData(monthToDate)
   const formattedLast30Days = formatCostData(last30Days)
+  const formattedLast30DailyAverage = formatCostData(last30DaysDailyAverage)
+  const formattedMonthToDateDailyAverage = formatCostData(monthToDateDailyAverage)
   return {
-    id: account,
+    account,
     totalCostMonthToDate,
     totalCostLast30Days,
     monthToDate: formattedMonthToDate,
     last30Days: formattedLast30Days,
+    monthToDateDailyAverage: formattedMonthToDateDailyAverage,
+    last30DaysDailyAverage: formattedLast30DailyAverage
   }
 }
