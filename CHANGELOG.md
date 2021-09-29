@@ -1,3 +1,10 @@
+## [0.26.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.26.0...0.26.1) (2021-09-29)
+
+
+### Bug Fixes
+
+* **billing:** update billing for new structure ([6787f7b](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/6787f7b4261095664be95ed0206be54b80cda81c))
+
 # [0.26.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.25.2...0.26.0) (2021-09-29)
 
 
