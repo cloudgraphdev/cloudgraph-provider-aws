@@ -2,7 +2,7 @@ type awsKms @key(fields: "id"){
   arn: String! @id @search(by: [hash, regexp])
   id: String! @id @search(by: [hash])
   description: String @search(by: [hash, regexp, fulltext])
-  enableKeyRotation: String @search(by: [hash, regexp])
+  keyRotationEnabled: String @search(by: [hash, regexp])
   usage: String @search(by: [hash, regexp])
   policy: String @search(by: [hash, regexp])
   enabled: String @search(by: [hash, regexp])

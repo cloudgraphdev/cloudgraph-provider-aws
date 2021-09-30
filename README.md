@@ -365,7 +365,7 @@ query {
     id
     arn
     description
-    enableKeyRotation
+    keyRotationEnabled
     tags {
       key
       value
