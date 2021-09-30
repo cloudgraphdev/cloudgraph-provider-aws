@@ -1,3 +1,10 @@
+## [0.26.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.26.2...0.26.3) (2021-09-30)
+
+
+### Bug Fixes
+
+* **kms:** update field name from enableKeyRotation to keyRotationEnabled ([362388d](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/362388d572a94e7b49fc2f199978c61052ee6b5a))
+
 ## [0.26.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.26.1...0.26.2) (2021-09-29)
 
 
