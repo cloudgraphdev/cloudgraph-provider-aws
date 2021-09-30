@@ -61,20 +61,25 @@ export default class Provider extends CloudGraph.Client {
     const result: { [key: string]: any } = {
       ...this.config,
     }
-    const profiles = Object.keys(AWS['util'].getProfilesFromSharedConfig(AWS['util'].iniLoader))
-    const { profiles: profilesAnswer } = await this.interface.prompt([
-      {
-        type: 'checkbox',
-        message: 'Please select the AWS credential profiles to utilize for scanning',
-        loop: false,
-        name: 'profiles',
-        choices: profiles.map((profile: string) => ({
-          name: profile,
-        })),
-      }
-    ])
 
-    result.profileApprovedList = profilesAnswer
+    const profiles = this.getProfilesFromSharedConfig()
+
+    if (profiles && profiles.length) {
+      const { profiles: profilesAnswer } = await this.interface.prompt([
+        {
+          type: 'checkbox',
+          message: 'Please select the AWS credential profiles to utilize for scanning',
+          loop: false,
+          name: 'profiles',
+          choices: profiles.map((profile: string) => ({
+            name: profile,
+          })),
+        }
+      ])
+      result.profileApprovedList = profilesAnswer
+    }
+
+    if (!result.profileApprovedList) result.profileApprovedList = [null]
 
     const { regions: regionsAnswer } = await this.interface.prompt([
       {
@@ -249,6 +254,8 @@ export default class Provider extends CloudGraph.Client {
       }
       if (!this.credentials) {
         this.logger.info('No AWS Credentials found, please enter them manually')
+        // when pausing the ora spinner the position of this call must come after any logger output
+        const msg = this.logger.stopSpinner()
         const answers = await this.interface.prompt([
           {
             type: 'input',
@@ -268,6 +275,7 @@ export default class Provider extends CloudGraph.Client {
           this.logger.error('Cannot scan AWS without credentials')
           throw new Error()
         }
+        this.logger.startSpinner(msg)
       } else {
         const profileName = profile || 'default'
         if (
@@ -336,6 +344,18 @@ export default class Provider extends CloudGraph.Client {
     }
   }
 
+  private getProfilesFromSharedConfig(): string[] {
+    let profiles
+    try {
+      profiles = Object.keys(AWS['util'].getProfilesFromSharedConfig(AWS['util'].iniLoader))
+    } catch (error: any) {
+      this.logger.warn('Unable to read AWS shared credential file')
+      this.logger.debug(error)
+    }
+
+    return profiles || []
+  }
+
   /**
    * getData is used to fetch all provider data specified in the config for the provider
    * @param opts: A set of optional values to configure how getData works
@@ -365,7 +385,12 @@ export default class Provider extends CloudGraph.Client {
     // Leaving this here in case we need to test another service or to inject a logging function
     // setAwsRetryOptions({ global: true, configObj: this.config })
 
-    for (const profile of this.config.profileApprovedList) {
+    for (let profile of this.config.profileApprovedList) {
+      // verify that profile exists in the shared credential file
+      const profiles = this.getProfilesFromSharedConfig()
+      if (!profiles.includes(profile)) {
+        profile = null
+      }
       const credentials = await this.getCredentials({ profile })
       const rawData = []
       // Get Raw data for services
