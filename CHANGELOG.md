@@ -1,3 +1,11 @@
+## [0.26.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.26.3...0.26.4) (2021-10-01)
+
+
+### Bug Fixes
+
+* **billing:** format data file and update to still grab last30 daily average when month data not available ([8e55cbe](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/8e55cbe008c520f470436cf5b40cb818a4b2509b))
+* **billing:** handle case where you cant get month to date data because its start of the month ([8c8046b](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/8c8046ba6cbb3f2fa35d9d205aaa1ccc3a934a23))
+
 ## [0.26.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.26.2...0.26.3) (2021-09-30)
 
 
