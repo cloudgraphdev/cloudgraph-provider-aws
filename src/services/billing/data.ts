@@ -11,7 +11,12 @@ import { regionMap } from '../../enums/regions'
 import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
-import { getDaysAgo, getFirstDayOfMonth, getCurrentDayOfMonth, createDiffSecs } from '../../utils/dateutils'
+import {
+  getDaysAgo,
+  getFirstDayOfMonth,
+  getCurrentDayOfMonth,
+  createDiffSecs,
+} from '../../utils/dateutils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
@@ -33,8 +38,8 @@ export const formatAmmountAndUnit = ({
   )
 
 export interface costInterface {
-  cost?: number,
-  currency?: string,
+  cost?: number
+  currency?: string
   formattedCost?: string
 }
 export interface RawAwsBilling {
@@ -103,7 +108,7 @@ export default async ({
     last30DaysDailyAverage: {},
     monthToDate: {},
     last30Days: {},
-    individualData: {}
+    individualData: {},
   }
   const resultPromises = []
   logger.debug(lt.fetchingAggregateFinOpsData)
@@ -165,12 +170,15 @@ export default async ({
 
           const services: CE.Groups = head(resultsByTime).Groups || []
           services.map(({ Keys, Metrics }: CE.Group) => {
-            const { Amount = '', Unit = '' } = get(Metrics, 'BlendedCost', {Amount: '', Unit: ''}) || { Amount: '', Unit: ''}
+            const { Amount = '', Unit = '' } = get(Metrics, 'BlendedCost', {
+              Amount: '',
+              Unit: '',
+            }) || { Amount: '', Unit: '' }
             const cost = getRoundedAmount(Amount)
             results[type][head(Keys)] = {
               cost,
               currency: Unit,
-              formattedCost: formatAmmountAndUnit({Amount: cost, Unit})
+              formattedCost: formatAmmountAndUnit({ Amount: cost, Unit }),
             }
           })
         } else {
@@ -179,104 +187,111 @@ export default async ({
            * [ { Total: { BlendedCost: { Amount: '-0.2775129004', Unit: 'USD' } } } ... ]
            */
 
-           let currency
+          let currency
 
-           const cost = resultsByTime.reduce(
-             (
-               prev,
-               { Total: { BlendedCost: blendedCost } = { BlendedCost: {} } }
-             ) => {
-               if (!currency) {
-                 currency = blendedCost.Unit
-               }
-               return prev + getRoundedAmount(blendedCost.Amount)
-             },
-             0
-           )
- 
-           results[type] = {
-             cost,
-             currency,
-             formattedCost: formatAmmountAndUnit({ Amount: cost, Unit: currency }),
-           }
+          const cost = resultsByTime.reduce(
+            (
+              prev,
+              { Total: { BlendedCost: blendedCost } = { BlendedCost: {} } }
+            ) => {
+              if (!currency) {
+                currency = blendedCost.Unit
+              }
+              return prev + getRoundedAmount(blendedCost.Amount)
+            },
+            0
+          )
+
+          results[type] = {
+            cost,
+            currency,
+            formattedCost: formatAmmountAndUnit({
+              Amount: cost,
+              Unit: currency,
+            }),
+          }
         }
         resolve()
       })
     }
 
     // Try to get individual entity data
-const listIndividualFinOpsData = ({
-  costExplorer,
-  resolve,
-  services,
-  timePeriod: TimePeriod,
-}: {
-  costExplorer: CE
-  resolve: (value: void | PromiseLike<void>) => void
-  services: string[]
-  timePeriod: { Start: string; End: string }
-}): Request<CE.GetCostAndUsageWithResourcesResponse, AWSError> => {
-  logger.debug(lt.queryingIndividualFinOpsDataForRegion(region))
+    const listIndividualFinOpsData = ({
+      costExplorer,
+      resolve,
+      services,
+      timePeriod: TimePeriod,
+    }: {
+      costExplorer: CE
+      resolve: (value: void | PromiseLike<void>) => void
+      services: string[]
+      timePeriod: { Start: string; End: string }
+    }): Request<CE.GetCostAndUsageWithResourcesResponse, AWSError> => {
+      logger.debug(lt.queryingIndividualFinOpsDataForRegion(region))
 
-  /**
-   * NOTES: This only currently with services that are compute (i.e. EC2) based such as instances
-   * NAT Gateways, and Dedicated Hosts. Everything else comes back as having "NoResourceId" like:
-   * { 'arn:aws:ec2:us-east-1:938345459433:dedicated-host/h-fssg93hq0400454': '$360.64',
-   * 'i-0043545435j4535': '$0.01', NoResourceId: '$2,857.64'... }
-   * More info here: https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/CostExplorer.html#getCostAndUsageWithResources-property
-   */
+      /**
+       * NOTES: This only currently with services that are compute (i.e. EC2) based such as instances
+       * NAT Gateways, and Dedicated Hosts. Everything else comes back as having "NoResourceId" like:
+       * { 'arn:aws:ec2:us-east-1:938345459433:dedicated-host/h-fssg93hq0400454': '$360.64',
+       * 'i-0043545435j4535': '$0.01', NoResourceId: '$2,857.64'... }
+       * More info here: https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/CostExplorer.html#getCostAndUsageWithResources-property
+       */
 
-  return costExplorer.getCostAndUsageWithResources(
-    {
-      Metrics: ['BlendedCost'],
-      TimePeriod,
-      Granularity: 'DAILY',
-      GroupBy: [{ Key: 'RESOURCE_ID', Type: 'DIMENSION' }],
-      Filter: {
-        Dimensions: {
-          Key: 'SERVICE',
-          Values: services,
+      return costExplorer.getCostAndUsageWithResources(
+        {
+          Metrics: ['BlendedCost'],
+          TimePeriod,
+          Granularity: 'DAILY',
+          GroupBy: [{ Key: 'RESOURCE_ID', Type: 'DIMENSION' }],
+          Filter: {
+            Dimensions: {
+              Key: 'SERVICE',
+              Values: services,
+            },
+          },
         },
-      },
-    },
-    (err, data) => {
-      /**
-       * Error fetching the cost data
-       */
-      if (err) {
-        generateAwsErrorLog(serviceName, 'ce:getCostAndUsageWithResources', err)
-        return resolve()
-      }
+        (err, data) => {
+          /**
+           * Error fetching the cost data
+           */
+          if (err) {
+            generateAwsErrorLog(
+              serviceName,
+              'ce:getCostAndUsageWithResources',
+              err
+            )
+            return resolve()
+          }
 
-      const { ResultsByTime: resultsByTime = [] } = data || {}
+          const { ResultsByTime: resultsByTime = [] } = data || {}
 
-      /**
-       * The results are for some reason empty when they should not be
-       */
+          /**
+           * The results are for some reason empty when they should not be
+           */
 
-      if (isEmpty(resultsByTime)) {
-        logger.debug(lt.unableToFindFinOpsIndividualData)
-        return resolve()
-      }
+          if (isEmpty(resultsByTime)) {
+            logger.debug(lt.unableToFindFinOpsIndividualData)
+            return resolve()
+          }
 
-      const resources: CE.Groups = head(resultsByTime).Groups || []
-      resources.map(({ Keys, Metrics }: CE.Group) => {
-        const { Amount, Unit } = get(Metrics, 'BlendedCost', {
-          Amount: '',
-          Unit: '',
-        }) || { Amount: '', Unit: '' }
-        const cost = getRoundedAmount(Amount)
-        results.individualData[head(Keys)] = {
-          cost,
-          currency: Unit,
-          formattedCost: formatAmmountAndUnit({Amount: cost, Unit})
+          const resources: CE.Groups = head(resultsByTime).Groups || []
+          resources.map(({ Keys, Metrics }: CE.Group) => {
+            const { Amount, Unit } = get(Metrics, 'BlendedCost', {
+              Amount: '',
+              Unit: '',
+            }) || { Amount: '', Unit: '' }
+            const cost = getRoundedAmount(Amount)
+            results.individualData[head(Keys)] = {
+              cost,
+              currency: Unit,
+              formattedCost: formatAmmountAndUnit({ Amount: cost, Unit }),
+            }
+          })
+
+          resolve()
         }
-      })
-
-      resolve()
+      )
     }
-  )
-}
 
     /**
      * Now we make 4 queries to the api in order to get aggregate pricing data sliced in various ways
@@ -311,18 +326,20 @@ const listIndividualFinOpsData = ({
     /**
      * Breakdown by service types and spend since the beginning of the month
      */
-    const monthToDateData = new Promise<void>(resolve =>
-      listAggregateFinOpsData({
-        costExplorer,
-        resolve,
-        type: 'monthToDate',
-        timePeriod: {
-          Start: startOfMonth,
-          End: today,
-        },
-      })
-    )
-    resultPromises.push(monthToDateData)
+    if (!(today === startOfMonth)) {
+      const monthToDateData = new Promise<void>(resolve =>
+        listAggregateFinOpsData({
+          costExplorer,
+          resolve,
+          type: 'monthToDate',
+          timePeriod: {
+            Start: startOfMonth,
+            End: today,
+          },
+        })
+      )
+      resultPromises.push(monthToDateData)
+    }
 
     /**
      * The single total cost of everything in the last 30 days
@@ -340,21 +357,23 @@ const listIndividualFinOpsData = ({
     /**
      * The single total cost of everything in the current month
      */
-    const totalCostMonthToDate = new Promise<void>(resolve =>
-      listAggregateFinOpsData({
-        ...commonArgs,
-        resolve,
-        type: 'totalCostMonthToDate',
-        groupBy: false,
-        timePeriod: {
-          Start: startOfMonth,
-          End: today,
-        },
-      })
-    )
-    resultPromises.push(totalCostMonthToDate)
+    if (!(today === startOfMonth)) {
+      const totalCostMonthToDate = new Promise<void>(resolve =>
+        listAggregateFinOpsData({
+          ...commonArgs,
+          resolve,
+          type: 'totalCostMonthToDate',
+          groupBy: false,
+          timePeriod: {
+            Start: startOfMonth,
+            End: today,
+          },
+        })
+      )
+      resultPromises.push(totalCostMonthToDate)
+    }
 
-    const individualDataPromise =  new Promise<void>(async resolve => {
+    const individualDataPromise = new Promise<void>(async resolve => {
       return listIndividualFinOpsData({
         costExplorer,
         services: await new Promise(resolveServices =>
@@ -376,7 +395,7 @@ const listIndividualFinOpsData = ({
      * Create Daily Averages
      */
 
-     const createDailyAverage = ({
+    const createDailyAverage = ({
       days,
       resultMonthlyData,
       resultAverageData,
@@ -391,12 +410,14 @@ const listIndividualFinOpsData = ({
         }
       })
 
-    if (!isEmpty(results.monthToDate) && !isEmpty(results.last30Days)) {
+    if (!isEmpty(results.monthToDate)) {
       createDailyAverage({
         days: parseInt(getCurrentDayOfMonth(), 10),
         resultMonthlyData: results.monthToDate,
         resultAverageData: 'monthToDateDailyAverage',
       })
+    }
+    if (!isEmpty(results.last30Days)) {
       createDailyAverage({
         days: 30,
         resultMonthlyData: results.last30Days,
