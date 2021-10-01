@@ -311,18 +311,20 @@ const listIndividualFinOpsData = ({
     /**
      * Breakdown by service types and spend since the beginning of the month
      */
-    const monthToDateData = new Promise<void>(resolve =>
-      listAggregateFinOpsData({
-        costExplorer,
-        resolve,
-        type: 'monthToDate',
-        timePeriod: {
-          Start: startOfMonth,
-          End: today,
-        },
-      })
-    )
-    resultPromises.push(monthToDateData)
+    if (!(today === startOfMonth)) {
+      const monthToDateData = new Promise<void>(resolve =>
+        listAggregateFinOpsData({
+          costExplorer,
+          resolve,
+          type: 'monthToDate',
+          timePeriod: {
+            Start: startOfMonth,
+            End: today,
+          },
+        })
+      )
+      resultPromises.push(monthToDateData)
+    }
 
     /**
      * The single total cost of everything in the last 30 days
@@ -340,19 +342,21 @@ const listIndividualFinOpsData = ({
     /**
      * The single total cost of everything in the current month
      */
-    const totalCostMonthToDate = new Promise<void>(resolve =>
-      listAggregateFinOpsData({
-        ...commonArgs,
-        resolve,
-        type: 'totalCostMonthToDate',
-        groupBy: false,
-        timePeriod: {
-          Start: startOfMonth,
-          End: today,
-        },
-      })
-    )
-    resultPromises.push(totalCostMonthToDate)
+    if (!(today === startOfMonth)) {
+      const totalCostMonthToDate = new Promise<void>(resolve =>
+        listAggregateFinOpsData({
+          ...commonArgs,
+          resolve,
+          type: 'totalCostMonthToDate',
+          groupBy: false,
+          timePeriod: {
+            Start: startOfMonth,
+            End: today,
+          },
+        })
+      )
+      resultPromises.push(totalCostMonthToDate)
+    }
 
     const individualDataPromise =  new Promise<void>(async resolve => {
       return listIndividualFinOpsData({
