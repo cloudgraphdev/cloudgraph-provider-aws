@@ -11,6 +11,7 @@ export default {
   cloudFormationStack: 'cloudFormationStack',
   cloudFormationStackSet: 'cloudFormationStackSet',
   cloudfront: 'cloudfront',
+  cloudtrail: 'cloudtrail',
   cloudwatch: 'cloudwatch',
   dynamodb: 'dynamodb',
   ebs: 'ebs',
