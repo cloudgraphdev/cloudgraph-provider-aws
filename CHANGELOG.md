@@ -1,3 +1,10 @@
+## [0.26.5](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.26.4...0.26.5) (2021-10-04)
+
+
+### Bug Fixes
+
+* **asg:** remove id from metric field ([6796aa5](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/6796aa588b7e946e7b15149ccc1f2259d95d7c57))
+
 ## [0.26.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.26.3...0.26.4) (2021-10-01)
 
 
