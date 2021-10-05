@@ -398,9 +398,10 @@ export default class Provider extends CloudGraph.Client {
     if (!configuredResources) {
       configuredResources = Object.values(this.properties.services).join(',')
     }
-    const resourceNames: string[] = [
+    const resourceNames: string[] = sortResourcesDependencies([
       ...new Set<string>(configuredResources.split(',')),
-    ]
+    ])
+
     const credentials = await this.getCredentials({ profile })
     const { accountId } = await this.getIdentity({ profile })
     try {
@@ -471,6 +472,7 @@ export default class Provider extends CloudGraph.Client {
     if (process.env.AWS_ACCESS_KEY_ID) {
       rawData = await this.getRawData('default', opts)
     } else {
+      const crawledAccounts = []
       for (const profile of configuredProfiles) {
         // verify that profile exists in the shared credential file
         const profiles = this.getProfilesFromSharedConfig()
@@ -478,7 +480,13 @@ export default class Provider extends CloudGraph.Client {
           // eslint-disable-next-line no-continue
           continue
         }
-       rawData = [...rawData, ...(await this.getRawData(profile, opts))]
+       const { accountId } = await this.getIdentity({ profile })
+       if (!crawledAccounts.find(val => val === accountId)) {
+         crawledAccounts.push(accountId)
+         rawData = [...rawData, ...(await this.getRawData(profile, opts))]
+       } else {
+        this.logger.warn(`profile: ${profile} returned accountId ${accountId} which has already been crawled, skipping...`)
+      }
       }
     }
     // Handle global tag entities
