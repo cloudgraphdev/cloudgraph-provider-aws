@@ -19,6 +19,7 @@ import { sortResourcesDependencies } from '../utils'
 
 const DEFAULT_REGION = 'us-east-1'
 const DEFAULT_RESOURCES = Object.values(services).join(',')
+const ENV_VAR_CREDS_LOG = 'Using ENV variable credentials'
 
 export const enums = {
   services,
@@ -82,7 +83,9 @@ export default class Provider extends CloudGraph.Client {
         },
       ])
       this.logger.debug(`profiles selected: ${profilesAnswer}`)
-      result.profileApprovedList = profilesAnswer.length ? profilesAnswer : ['default']
+      result.profileApprovedList = profilesAnswer.length
+        ? profilesAnswer
+        : ['default']
     }
 
     const { regions: regionsAnswer } = await this.interface.prompt([
@@ -323,10 +326,15 @@ export default class Provider extends CloudGraph.Client {
           this.logger.startSpinner(msg)
         }
       }
-      this.logger.success('Found and using the following AWS credentials')
-      this.logger.success(
-        `profile: ${chalk.underline.green(profile ?? 'default')}`
-      )
+      const usingEnvCreds = !!process.env.AWS_ACCESS_KEY_ID
+      if (usingEnvCreds) {
+        this.logger.success('Using credentials set by ENV variables')
+      } else {
+        this.logger.success('Found and using the following AWS credentials')
+        this.logger.success(
+          `profile: ${chalk.underline.green(profile ?? 'default')}`
+        )
+      }
       this.logger.success(
         `accessKeyId: ${chalk.underline.green(
           obfuscateSensitiveString(this.credentials.accessKeyId)
@@ -378,21 +386,10 @@ export default class Provider extends CloudGraph.Client {
     return profiles || []
   }
 
-  /**
-   * getData is used to fetch all provider data specified in the config for the provider
-   * @param opts: A set of optional values to configure how getData works
-   * @returns Promise<any> All provider data
-   */
-  async getData({ opts }: { opts: Opts }): Promise<ProviderData> {
-    const result: ProviderData = {
-      entities: [],
-      connections: {},
-    }
-    let {
-      regions: configuredRegions,
-      resources: configuredResources,
-    } = this.config
-    const { profileApprovedList: configuredProfiles } = this.config
+  private async getRawData(profile, opts): Promise<{name: string, accountId: string, data: any}[]> {
+    let { regions: configuredRegions, resources: configuredResources } =
+      this.config
+    const result = []
     if (!configuredRegions) {
       configuredRegions = this.properties.regions.join(',')
     } else {
@@ -404,167 +401,196 @@ export default class Provider extends CloudGraph.Client {
     const resourceNames: string[] = [
       ...new Set<string>(configuredResources.split(',')),
     ]
+    const credentials = await this.getCredentials({ profile })
+    const { accountId } = await this.getIdentity({ profile })
+    try {
+      for (const resource of resourceNames) {
+        const serviceClass = this.getService(resource)
+        if (serviceClass && serviceClass.getData) {
+          result.push({
+            name: resource,
+            accountId,
+            data: await serviceClass.getData({
+              regions: configuredRegions,
+              credentials,
+              opts,
+              rawData: result,
+            }),
+          })
+          this.logger.success(`${resource} scan completed`)
+        } else {
+          this.logger.warn(
+            `Skipping service ${resource} as there was an issue getting data for it. Is it currently supported?`
+          )
+        }
+      }
+      this.logger.success(`Account: ${accountId} scan completed`)
+    } catch (error: any) {
+      this.logger.error('There was an error scanning AWS sdk data')
+      this.logger.debug(error)
+    }
+    return result
+  }
+
+  /**
+   * getData is used to fetch all provider data specified in the config for the provider
+   * @param opts: A set of optional values to configure how getData works
+   * @returns Promise<any> All provider data
+   */
+  async getData({ opts }: { opts: Opts }): Promise<ProviderData> {
+    const result: ProviderData = {
+      entities: [],
+      connections: {},
+    }
+    let { regions: configuredRegions, resources: configuredResources } =
+      this.config
+    const { profileApprovedList: configuredProfiles } = this.config
+    if (!configuredRegions) {
+      configuredRegions = this.properties.regions.join(',')
+    } else {
+      configuredRegions = [...new Set(configuredRegions.split(','))].join(',')
+    }
+    if (!configuredResources) {
+      configuredResources = Object.values(this.properties.services).join(',')
+    }
+
+    const usingEnvCreds = !!process.env.AWS_ACCESS_KEY_ID
 
     this.logSelectedProfilesRegionsAndResources(
-      configuredProfiles,
+      usingEnvCreds ? [ENV_VAR_CREDS_LOG] : configuredProfiles,
       configuredRegions,
       configuredResources
     )
 
     // Leaving this here in case we need to test another service or to inject a logging function
     // setAwsRetryOptions({ global: true, configObj: this.config })
-    const rawData = []
+    let rawData = []
     const tagRegion = 'aws-global'
     const tags = { name: 'tag', data: { [tagRegion]: [] } }
-    for (const profile of configuredProfiles) {
-      // verify that profile exists in the shared credential file
-      const profiles = this.getProfilesFromSharedConfig()
-      if (!profiles.includes(profile)) {
-        // eslint-disable-next-line no-continue
-        continue
-      }
-      const credentials = await this.getCredentials({ profile })
-      const { accountId } = await this.getIdentity({ profile })
-      // Get Raw data for services
-      try {
-        for (const resource of resourceNames) {
-          const serviceClass = this.getService(resource)
-          if (serviceClass && serviceClass.getData) {
-            rawData.push({
-              name: resource,
-              accountId,
-              data: await serviceClass.getData({
-                regions: configuredRegions,
-                credentials,
-                opts,
-                rawData,
-              }),
-            })
-            this.logger.success(`${resource} scan completed`)
-          } else {
-            this.logger.warn(
-              `Skipping service ${resource} as there was an issue getting data for it. Is it currently supported?`
-            )
-          }
+    // If the user has passed aws creds as env variables, dont use profile list
+    if (process.env.AWS_ACCESS_KEY_ID) {
+      rawData = await this.getRawData('default', opts)
+    } else {
+      for (const profile of configuredProfiles) {
+        // verify that profile exists in the shared credential file
+        const profiles = this.getProfilesFromSharedConfig()
+        if (!profiles.includes(profile)) {
+          // eslint-disable-next-line no-continue
+          continue
         }
-        this.logger.success(`Account: ${accountId} scan completed`)
-      } catch (error: any) {
-        this.logger.error('There was an error scanning AWS sdk data')
-        this.logger.debug(error)
+       rawData = [...rawData, ...(await this.getRawData(profile, opts))]
       }
     }
-      // Handle global tag entities
-      try {
-        for (const { data: entityData } of rawData) {
-          for (const region of Object.keys(entityData)) {
-            const dataAtRegion = entityData[region]
-            dataAtRegion.forEach(singleEntity => {
-              if (!isEmpty(singleEntity.Tags)) {
-                for (const [key, value] of Object.entries(singleEntity.Tags)) {
-                  if (
-                    !tags.data[tagRegion].find(
-                      ({ id }) => id === `${key}:${value}`
-                    )
-                  ) {
-                    tags.data[tagRegion].push({
-                      id: `${key}:${value}`,
-                      key,
-                      value,
-                    })
+    // Handle global tag entities
+    try {
+      for (const { data: entityData } of rawData) {
+        for (const region of Object.keys(entityData)) {
+          const dataAtRegion = entityData[region]
+          dataAtRegion.forEach(singleEntity => {
+            if (!isEmpty(singleEntity.Tags)) {
+              for (const [key, value] of Object.entries(singleEntity.Tags)) {
+                if (
+                  !tags.data[tagRegion].find(
+                    ({ id }) => id === `${key}:${value}`
+                  )
+                ) {
+                  tags.data[tagRegion].push({
+                    id: `${key}:${value}`,
+                    key,
+                    value,
+                  })
+                }
+              }
+            }
+          })
+        }
+      }
+      const existingTagsIdx = rawData.findIndex(({ name }) => {
+        return name === 'tag'
+      })
+      if (existingTagsIdx > -1) {
+        rawData[existingTagsIdx] = tags
+      } else {
+        rawData.push(tags)
+      }
+    } catch (error: any) {
+      this.logger.error('There was an error aggregating AWS tags')
+      this.logger.debug(error)
+    }
+
+    /**
+     * Loop through the aws sdk data to format entities and build connections
+     * 1. Format data with provider service format function
+     * 2. build connections for data with provider service connections function
+     * 3. spread new connections over result.connections
+     * 4. push the array of formatted entities into result.entites
+     */
+    try {
+      for (const serviceData of rawData) {
+        const serviceClass = this.getService(serviceData.name)
+        const entities: any[] = []
+        for (const region of Object.keys(serviceData.data)) {
+          const data = serviceData.data[region]
+          if (!isEmpty(data)) {
+            data.forEach((service: any) => {
+              entities.push(
+                serviceClass.format({
+                  service,
+                  region,
+                  account: serviceData.accountId,
+                })
+              )
+              if (typeof serviceClass.getConnections === 'function') {
+                // We need to loop through all configured regions here because services can be connected to things in another region
+                for (const connectionRegion of configuredRegions.split(',')) {
+                  result.connections = {
+                    ...result.connections,
+                    ...serviceClass.getConnections({
+                      service,
+                      region: connectionRegion,
+                      account: serviceData.accountId,
+                      data: rawData,
+                    }),
                   }
                 }
               }
             })
           }
         }
-        const existingTagsIdx = rawData.findIndex(({name}) => {
-          return name === 'tag'
+        const existingServiceIdx = result.entities.findIndex(({ name }) => {
+          return name === serviceData.name
         })
-        if (existingTagsIdx > -1) {
-          rawData[existingTagsIdx] = tags
+        if (existingServiceIdx > -1) {
+          const existingData = result.entities[existingServiceIdx].data
+          result.entities[existingServiceIdx] = {
+            name: serviceData.name,
+            mutation: serviceClass.mutation,
+            data: [...existingData, ...entities],
+          }
         } else {
-          rawData.push(tags)
-        }
-      } catch (error: any) {
-        this.logger.error('There was an error aggregating AWS tags')
-        this.logger.debug(error)
-      }
-
-      /**
-       * Loop through the aws sdk data to format entities and build connections
-       * 1. Format data with provider service format function
-       * 2. build connections for data with provider service connections function
-       * 3. spread new connections over result.connections
-       * 4. push the array of formatted entities into result.entites
-       */
-      try {
-        for (const serviceData of rawData) {
-          const serviceClass = this.getService(serviceData.name)
-          const entities: any[] = []
-          for (const region of Object.keys(serviceData.data)) {
-            const data = serviceData.data[region]
-            if (!isEmpty(data)) {
-              data.forEach((service: any) => {
-                entities.push(
-                  serviceClass.format({
-                    service,
-                    region,
-                    account: serviceData.accountId,
-                  })
-                )
-                if (typeof serviceClass.getConnections === 'function') {
-                  // We need to loop through all configured regions here because services can be connected to things in another region
-                  for (const connectionRegion of configuredRegions.split(',')) {
-                    result.connections = {
-                      ...result.connections,
-                      ...serviceClass.getConnections({
-                        service,
-                        region: connectionRegion,
-                        account: serviceData.accountId,
-                        data: rawData,
-                      }),
-                    }
-                  }
-                }
-              })
-            }
-          }
-          const existingServiceIdx = result.entities.findIndex(({name}) => {
-            return name === serviceData.name
+          result.entities.push({
+            name: serviceData.name,
+            mutation: serviceClass.mutation,
+            data: entities,
           })
-          if (existingServiceIdx > -1) {
-            const existingData = result.entities[existingServiceIdx].data
-            result.entities[existingServiceIdx] = {
-              name: serviceData.name,
-              mutation: serviceClass.mutation,
-              data: [...existingData, ...entities]
-            }
-          } else {
-            result.entities.push({
-              name: serviceData.name,
-              mutation: serviceClass.mutation,
-              data: entities,
-            })
-          }
         }
-      } catch (error: any) {
-        this.logger.error(
-          'There was an error building connections for AWS data'
-        )
-        this.logger.debug(error)
       }
-      try {
-        result.entities = this.enrichInstanceWithBillingData(
-          configuredRegions,
-          rawData,
-          result.entities
-        )
-      } catch (error: any) {
-        this.logger.error(
-          'There was an error enriching AWS data with billing data'
-        )
-        this.logger.debug(error)
-      }
+    } catch (error: any) {
+      this.logger.error('There was an error building connections for AWS data')
+      this.logger.debug(error)
+    }
+    try {
+      result.entities = this.enrichInstanceWithBillingData(
+        configuredRegions,
+        rawData,
+        result.entities
+      )
+    } catch (error: any) {
+      this.logger.error(
+        'There was an error enriching AWS data with billing data'
+      )
+      this.logger.debug(error)
+    }
     return result
   }
 
