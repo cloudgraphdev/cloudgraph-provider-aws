@@ -45,10 +45,14 @@ export default class Provider extends CloudGraph.Client {
     resources: { [key: string]: string }
   }
 
-  logSelectedRegionsAndResources(
+  logSelectedProfilesRegionsAndResources(
+    profilesToLog: string[],
     regionsToLog: string,
     resourcesToLog: string
   ): void {
+    this.logger.info(
+      `Profiles configured: ${chalk.green(profilesToLog.join(', '))}`
+    )
     this.logger.info(
       `Regions configured: ${chalk.green(regionsToLog.replace(/,/g, ', '))}`
     )
@@ -68,18 +72,18 @@ export default class Provider extends CloudGraph.Client {
       const { profiles: profilesAnswer } = await this.interface.prompt([
         {
           type: 'checkbox',
-          message: 'Please select the AWS credential profiles to utilize for scanning',
+          message:
+            'Please select the AWS credential profiles to utilize for scanning',
           loop: false,
           name: 'profiles',
           choices: profiles.map((profile: string) => ({
             name: profile,
           })),
-        }
+        },
       ])
-      result.profileApprovedList = profilesAnswer
+      this.logger.debug(`profiles selected: ${profilesAnswer}`)
+      result.profileApprovedList = profilesAnswer.length ? profilesAnswer : ['default']
     }
-
-    if (!result.profileApprovedList) result.profileApprovedList = [null]
 
     const { regions: regionsAnswer } = await this.interface.prompt([
       {
@@ -134,11 +138,21 @@ export default class Provider extends CloudGraph.Client {
         'AWS'
       )} configuration successfully completed ${confettiBall}`
     )
-    this.logSelectedRegionsAndResources(result.regions, result.resources)
+    this.logSelectedProfilesRegionsAndResources(
+      result.profileApprovedList,
+      result.regions,
+      result.resources
+    )
     return result
   }
 
-  async getIdentity({ profile, role }: { profile: string, role?: string }): Promise<{ accountId: string }> {
+  async getIdentity({
+    profile,
+    role,
+  }: {
+    profile: string
+    role?: string
+  }): Promise<{ accountId: string }> {
     try {
       const credentials = await this.getCredentials({ profile, role })
       return new Promise((resolve, reject) =>
@@ -156,7 +170,13 @@ export default class Provider extends CloudGraph.Client {
     }
   }
 
-  private getCredentials({ profile, role }: { profile: string, role?: string }): Promise<Credentials> {
+  private getCredentials({
+    profile,
+    role,
+  }: {
+    profile: string
+    role?: string
+  }): Promise<Credentials> {
     return new Promise(async resolveCreds => {
       // If we have keys set in the config file, just use them
       if (this.config.accessKeyId && this.config.secretAccessKey) {
@@ -347,7 +367,9 @@ export default class Provider extends CloudGraph.Client {
   private getProfilesFromSharedConfig(): string[] {
     let profiles
     try {
-      profiles = Object.keys(AWS['util'].getProfilesFromSharedConfig(AWS['util'].iniLoader))
+      profiles = Object.keys(
+        AWS['util'].getProfilesFromSharedConfig(AWS['util'].iniLoader)
+      )
     } catch (error: any) {
       this.logger.warn('Unable to read AWS shared credential file')
       this.logger.debug(error)
@@ -366,8 +388,11 @@ export default class Provider extends CloudGraph.Client {
       entities: [],
       connections: {},
     }
-    let { regions: configuredRegions, resources: configuredResources } =
-      this.config
+    let {
+      regions: configuredRegions,
+      resources: configuredResources,
+    } = this.config
+    const { profileApprovedList: configuredProfiles } = this.config
     if (!configuredRegions) {
       configuredRegions = this.properties.regions.join(',')
     } else {
@@ -380,19 +405,26 @@ export default class Provider extends CloudGraph.Client {
       ...new Set<string>(configuredResources.split(',')),
     ]
 
-    this.logSelectedRegionsAndResources(configuredRegions, configuredResources)
+    this.logSelectedProfilesRegionsAndResources(
+      configuredProfiles,
+      configuredRegions,
+      configuredResources
+    )
 
     // Leaving this here in case we need to test another service or to inject a logging function
     // setAwsRetryOptions({ global: true, configObj: this.config })
-
-    for (let profile of this.config.profileApprovedList) {
+    const rawData = []
+    const tagRegion = 'aws-global'
+    const tags = { name: 'tag', data: { [tagRegion]: [] } }
+    for (const profile of configuredProfiles) {
       // verify that profile exists in the shared credential file
       const profiles = this.getProfilesFromSharedConfig()
       if (!profiles.includes(profile)) {
-        profile = null
+        // eslint-disable-next-line no-continue
+        continue
       }
       const credentials = await this.getCredentials({ profile })
-      const rawData = []
+      const { accountId } = await this.getIdentity({ profile })
       // Get Raw data for services
       try {
         for (const resource of resourceNames) {
@@ -400,6 +432,7 @@ export default class Provider extends CloudGraph.Client {
           if (serviceClass && serviceClass.getData) {
             rawData.push({
               name: resource,
+              accountId,
               data: await serviceClass.getData({
                 regions: configuredRegions,
                 credentials,
@@ -409,17 +442,19 @@ export default class Provider extends CloudGraph.Client {
             })
             this.logger.success(`${resource} scan completed`)
           } else {
-            this.logger.warn(`Skipping service ${resource} as there was an issue getting data for it. Is it currently supported?`)
+            this.logger.warn(
+              `Skipping service ${resource} as there was an issue getting data for it. Is it currently supported?`
+            )
           }
         }
+        this.logger.success(`Account: ${accountId} scan completed`)
       } catch (error: any) {
         this.logger.error('There was an error scanning AWS sdk data')
         this.logger.debug(error)
       }
+    }
       // Handle global tag entities
       try {
-        const tagRegion = 'aws-global'
-        const tags = { name: 'tag', data: { [tagRegion]: [] } }
         for (const { data: entityData } of rawData) {
           for (const region of Object.keys(entityData)) {
             const dataAtRegion = entityData[region]
@@ -442,7 +477,14 @@ export default class Provider extends CloudGraph.Client {
             })
           }
         }
-        rawData.push(tags)
+        const existingTagsIdx = rawData.findIndex(({name}) => {
+          return name === 'tag'
+        })
+        if (existingTagsIdx > -1) {
+          rawData[existingTagsIdx] = tags
+        } else {
+          rawData.push(tags)
+        }
       } catch (error: any) {
         this.logger.error('There was an error aggregating AWS tags')
         this.logger.debug(error)
@@ -456,7 +498,6 @@ export default class Provider extends CloudGraph.Client {
        * 4. push the array of formatted entities into result.entites
        */
       try {
-        const { accountId } = await this.getIdentity({ profile })
         for (const serviceData of rawData) {
           const serviceClass = this.getService(serviceData.name)
           const entities: any[] = []
@@ -468,7 +509,7 @@ export default class Provider extends CloudGraph.Client {
                   serviceClass.format({
                     service,
                     region,
-                    account: accountId,
+                    account: serviceData.accountId,
                   })
                 )
                 if (typeof serviceClass.getConnections === 'function') {
@@ -479,7 +520,7 @@ export default class Provider extends CloudGraph.Client {
                       ...serviceClass.getConnections({
                         service,
                         region: connectionRegion,
-                        account: accountId,
+                        account: serviceData.accountId,
                         data: rawData,
                       }),
                     }
@@ -488,23 +529,42 @@ export default class Provider extends CloudGraph.Client {
               })
             }
           }
-          result.entities.push({
-            name: serviceData.name,
-            mutation: serviceClass.mutation,
-            data: entities,
+          const existingServiceIdx = result.entities.findIndex(({name}) => {
+            return name === serviceData.name
           })
+          if (existingServiceIdx > -1) {
+            const existingData = result.entities[existingServiceIdx].data
+            result.entities[existingServiceIdx] = {
+              name: serviceData.name,
+              mutation: serviceClass.mutation,
+              data: [...existingData, ...entities]
+            }
+          } else {
+            result.entities.push({
+              name: serviceData.name,
+              mutation: serviceClass.mutation,
+              data: entities,
+            })
+          }
         }
       } catch (error: any) {
-        this.logger.error('There was an error building connections for AWS data')
+        this.logger.error(
+          'There was an error building connections for AWS data'
+        )
         this.logger.debug(error)
       }
       try {
-        result.entities = this.enrichInstanceWithBillingData(configuredRegions, rawData, result.entities)
+        result.entities = this.enrichInstanceWithBillingData(
+          configuredRegions,
+          rawData,
+          result.entities
+        )
       } catch (error: any) {
-        this.logger.error('There was an error enriching AWS data with billing data')
+        this.logger.error(
+          'There was an error enriching AWS data with billing data'
+        )
         this.logger.debug(error)
       }
-    }
     return result
   }
 
@@ -545,7 +605,7 @@ export default class Provider extends CloudGraph.Client {
                     dailyCost: {
                       cost: value?.cost,
                       currency: value?.currency,
-                      formattedCost: value?.formattedCost
+                      formattedCost: value?.formattedCost,
                     },
                   }
                 }

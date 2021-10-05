@@ -48,7 +48,7 @@ type awsEnabledMetrics
     subscription: false
   ) {
     id: String! @id
-    metric: String! @id @search(by: [hash, regexp])
+    metric: String! @search(by: [hash, regexp])
     granularity: String @search(by: [hash, regexp])
   }
 

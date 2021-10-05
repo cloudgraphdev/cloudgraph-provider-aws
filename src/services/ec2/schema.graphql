@@ -1,13 +1,13 @@
 type awsEc2MetadataOptions
   @generate(
-    query: { get: false, query: true, aggregate: false }
+    query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
   state: String!
   httpTokens: String!
   httpPutResponseHopLimit: Int
-  httpEndpoint: String! @id
+  httpEndpoint: String!
 }
 
 type blockDeviceEbs
@@ -33,7 +33,7 @@ type awsEc2Blockdevice
 }
 
 type awsEc2 @key(fields: "arn") {
-  id: String! @search(by: [hash])
+  id: String! @id @search(by: [hash])
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
