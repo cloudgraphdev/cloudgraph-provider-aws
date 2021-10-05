@@ -984,6 +984,53 @@ export type AwsEnabledMetrics = {
   granularity?: Maybe<Scalars['String']>;
 };
 
+export type AwsIamAccessKey = {
+  accessKeyId: Scalars['String'];
+  lastUsedDate?: Maybe<Scalars['String']>;
+  lastUsedRegion?: Maybe<Scalars['String']>;
+  lastUsedService?: Maybe<Scalars['String']>;
+};
+
+export type AwsIamGroup = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  path?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+};
+
+export type AwsIamPolicy = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  path?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  policyContent?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
+export type AwsIamRole = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  path?: Maybe<Scalars['String']>;
+  assumeRolePolicy?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['String']>;
+  maxSessionDuration?: Maybe<Scalars['Int']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
+export type AwsIamUser = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  path?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  creationTime?: Maybe<Scalars['String']>;
+  passwordLastUsed?: Maybe<Scalars['String']>;
+  accessKeyData?: Maybe<Array<Maybe<AwsIamAccessKey>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
 export type AwsIgw = {
   accountId: Scalars['String'];
   arn: Scalars['String'];
