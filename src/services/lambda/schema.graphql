@@ -14,7 +14,7 @@ type awsLambda @key(fields: "id") {
   timeout: Int @search
   tracingConfig: String @search(by: [hash, regexp])
   version: String @search(by: [hash, regexp])
-  environmentVariables: [awsLambaEnvironmentVariable]
+  environmentVariables: [awsLambdaEnvironmentVariable]
   tags: [Tag]
   kms: [awsKms] @hasInverse(field: lambda)
   securityGroups: [awsSecurityGroup] @hasInverse(field: lambda)
@@ -23,13 +23,13 @@ type awsLambda @key(fields: "id") {
   cognitoUserPool: [awsCognitoUserPool] @hasInverse(field: lambda)
 }
 
-type awsLambaEnvironmentVariable
+type awsLambdaEnvironmentVariable
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-  id: ID
+  id: String! @id
   key: String!
   value: String
 }

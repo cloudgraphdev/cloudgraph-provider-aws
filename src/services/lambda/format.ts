@@ -45,7 +45,7 @@ export default ({
           }
         })
 
-        environmentVariables.push({ key, value: desiredValue })
+        environmentVariables.push({ id: `${key}:${desiredValue}`, key, value: desiredValue })
       })
     }
   }
