@@ -11,8 +11,9 @@ import { RawAwsKinesisFirehose } from '../kinesisFirehose/data'
 import { RawAwsAppSync } from '../appSync/data'
 import { RawAwsCloudFormationStackSet } from '../cloudFormationStackSet/data'
 import { RawAwsCloudFormationStack } from '../cloudFormationStack/data'
+import { RawAwsDynamoDbTable } from '../dynamodb/data'
 
-const findServiceInstancesWithTag = (tag, service) => {
+const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
   return service.filter(({ Tags }) => {
     for (const [key, value] of Object.entries(Tags)) {
@@ -575,24 +576,46 @@ export default ({
     /**
      * Find related Cloudformation stack sets
      */
-     const CFStacksSets: { name: string; data: { [property: string]: any[] } } =
-     data.find(({ name }) => name === services.cloudFormationStackSet)
-   if (CFStacksSets?.data?.[region]) {
-     const dataAtRegion: RawAwsCloudFormationStackSet[] =
-       findServiceInstancesWithTag(tag, CFStacksSets.data[region])
-     if (!isEmpty(dataAtRegion)) {
-       for (const instance of dataAtRegion) {
-         const { StackSetId: id } = instance
+    const CFStacksSets: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.cloudFormationStackSet)
+    if (CFStacksSets?.data?.[region]) {
+      const dataAtRegion: RawAwsCloudFormationStackSet[] =
+        findServiceInstancesWithTag(tag, CFStacksSets.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { StackSetId: id } = instance
 
-         connections.push({
-           id,
-           resourceType: services.cloudFormationStackSet,
-           relation: 'child',
-           field: 'cloudFormationStackSet',
-         })
-       }
-     }
-   }
+          connections.push({
+            id,
+            resourceType: services.cloudFormationStackSet,
+            relation: 'child',
+            field: 'cloudFormationStackSet',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related DynamoDb databases
+     */
+    const dynamoDbs: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.dynamodb)
+    if (dynamoDbs?.data?.[region]) {
+      const dataAtRegion: RawAwsDynamoDbTable[] =
+        findServiceInstancesWithTag(tag, dynamoDbs.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { TableId: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.dynamodb,
+            relation: 'child',
+            field: 'dynamodb',
+          })
+        }
+      }
+    }
   }
 
   const tagResult = {
