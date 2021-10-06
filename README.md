@@ -6,6 +6,7 @@ Use the CloudGraph AWS Provider to scan and normalize cloud infrastructure using
 
 - [Install](#install)
 - [Authentication](#authentication)
+- [Multi Account](#multi-account)
 - [Configuration](#configuration)
 - [Supported Services](#supported-services)
 - [Query Examples](#query-examples)
@@ -25,7 +26,10 @@ Authenticate the CloudGraph AWS Provider any of the following ways:
 
 - Credentials from env variables: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`
 - Credentials found in the `credentials` under `~/.aws` (any profile, defaults to `default`)
-- RoleArn found in CloudGraph's `cloud-graphrc.json` file under `aws.role` (TODO: Update this once multiple accounts flow is done)
+
+# Multi Account
+
+CloudGraph is able to scan multiple AWS accounts at once. This is done by setting up multiple profiles in your `~/.aws/credentials` file and then selecting all the profiles you want to crawl when running `cg init`. All resources will be tagged with an `accountId` so you can query resources specific to an account or query resources **across** accounts!
 
 # Configuration
 
@@ -40,9 +44,14 @@ CloudGraph will generate this configuration file when you run `cg init aws`. You
 
 ```
 "aws": {
-  "profile": "myTestEnv", // optional: defaults to the default profile
-  "regions": "us-east-1,us-east-2,us-west-1,us-west-2",
-  "resources": "alb,apiGatewayResource,apiGatewayRestApi,apiGatewayStage,cloudwatch,ebs,ec2Instance,eip,elb,igw,kms,lambda,nat,networkInterface,sg,vpc,sqs"
+  "profileApprovedList": [
+      "default",
+      "master",
+      "sandbox"
+    ], // Optional, defaults to the default profile
+    "regions": "us-east-1,us-east-2,us-west-2",
+    "resources": "alb,apiGatewayResource,apiGatewayRestApi,apiGatewayStage,appSync,asg,billing,cognitoIdentityPool,cognitoUserPool,cloudFormationStack,cloudFormationStackSet,cloudfront,cloudwatch,ebs,ec2Instance,eip,elb,igw,kinesisFirehose,kinesisStream,kms,lambda,nat,networkInterface,route53HostedZone,route53Record,routeTable,sg,vpc,sqs,s3"
+  }
 }
 ```
 
