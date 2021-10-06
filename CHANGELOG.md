@@ -1,3 +1,10 @@
+## [0.28.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.28.0...0.28.1) (2021-10-06)
+
+
+### Bug Fixes
+
+* **appsync:** update appsync to avoid access errors ([d51a960](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d51a9601c93dba48947b9c0362cb4edcf622b340))
+
 # [0.28.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.27.1...0.28.0) (2021-10-06)
 
 
