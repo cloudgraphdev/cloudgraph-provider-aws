@@ -1,3 +1,10 @@
+## [0.27.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.27.0...0.27.1) (2021-10-06)
+
+
+### Bug Fixes
+
+* **billing:** Always query billing data if its a selected service, even if [secure] is NOT selected as a region ([ad858a4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/ad858a450b8e34d52316d9500e9313e18572f825))
+
 # [0.27.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.26.5...0.27.0) (2021-10-06)
 
 
