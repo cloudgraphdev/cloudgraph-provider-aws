@@ -138,11 +138,24 @@ This query will return a `JSON` payload that looks like this. All of the followi
 
 <br />
 
-Get the `ID` and `ARN` of each `EC2` in your entire AWS account:
+Get the `ID` and `ARN` of each `EC2` in all of your scanned AWS accounts:
 
 ```graphql
 query {
   queryawsEc2 {
+    id
+    arn
+  }
+}
+```
+
+<br />
+
+Get the `ID` and `ARN` of all `EC2` instances in one of your AWS account:
+
+```graphql
+query {
+  queryawsEc2(filter: { accountId: { eq: '123456' } }) {
     id
     arn
   }
