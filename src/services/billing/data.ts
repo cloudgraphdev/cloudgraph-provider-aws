@@ -93,10 +93,8 @@ const listAvailabeServices = ({
  * AWS Billing
  */
 export default async ({
-  regions,
   credentials,
 }: {
-  regions: string
   credentials: Credentials
 }): Promise<{ [key: string]: RawAwsBilling[] }> => {
   const startDate = new Date()
