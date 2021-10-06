@@ -151,7 +151,7 @@ query {
 
 <br />
 
-Get the `ID` and `ARN` of all `EC2` instances in one of your AWS account:
+Get the `ID` and `ARN` of all `EC2` instances in one of your AWS accounts by filtering the accountId:
 
 ```graphql
 query {
