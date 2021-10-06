@@ -50,7 +50,7 @@ const listGraphqlApiData = async (
   } catch (err) {
     generateAwsErrorLog(serviceName, 'AppSync:listGraphqlApiData', err)
   }
-  return null
+  return []
 }
 
 const listApiKeysData = async (
@@ -74,7 +74,7 @@ const listApiKeysData = async (
   } catch (err) {
     generateAwsErrorLog(serviceName, 'AppSync:listApiKeysData', err)
   }
-  return null
+  return []
 }
 
 const listDataSourcesData = async (
@@ -100,7 +100,7 @@ const listDataSourcesData = async (
   } catch (err) {
     generateAwsErrorLog(serviceName, 'AppSync:listDataSourcesData', err)
   }
-  return null
+  return []
 }
 
 const listFunctionsData = async (
@@ -124,7 +124,7 @@ const listFunctionsData = async (
   } catch (err) {
     generateAwsErrorLog(serviceName, 'AppSync:listFunctionsData', err)
   }
-  return null
+  return []
 }
 
 const listResolversByFunction = async (
@@ -177,7 +177,7 @@ const listTypesData = async (
   } catch (err) {
     generateAwsErrorLog(serviceName, 'AppSync:listTypesData', err)
   }
-  return null
+  return []
 }
 
 const listTypesResolverData = async (
@@ -202,7 +202,7 @@ const listTypesResolverData = async (
   } catch (err) {
     generateAwsErrorLog(serviceName, 'AppSync:listTypesData', err)
   }
-  return null
+  return []
 }
 
 export default async ({
