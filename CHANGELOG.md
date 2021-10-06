@@ -1,3 +1,10 @@
+# [0.28.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.27.1...0.28.0) (2021-10-06)
+
+
+### Features
+
+* **dynamodb:** add dynamodb service ([503030a](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/503030a2bcc644d09ad06229e939e54ad76c1cb6))
+
 ## [0.27.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.27.0...0.27.1) (2021-10-06)
 
 
