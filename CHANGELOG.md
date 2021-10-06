@@ -1,3 +1,31 @@
+# [0.27.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.26.5...0.27.0) (2021-10-06)
+
+
+### Bug Fixes
+
+* **getData:** add back sorting resource deps, add check to avoid crawling the same account twice ([c3d30e0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c3d30e00cd0134173e436e5ba852f7215a58202e))
+* **lambda:** fix lambda schema and env variable ([c143041](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c1430417485d1de530b935e677879797d83ef902))
+* **multiAccount:** (re)added getData logging for regions and resources ([5afa8d2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/5afa8d27d72bec9cbcd0a2a7da440e17b2085d8f))
+* **multiAccount:** Add accountId in API Gateway results ([5fb8581](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/5fb8581c2f9c84f152df5728d2534353eebf96b3))
+* **multiAccount:** add accountId on services schema ([73763e1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/73763e1067c1f5929d41b609b9e76a02fb3299bf))
+* **multiAccount:** add accountId on services schema ([00d51aa](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/00d51aa8eb12e183324fa092f29d59e6eb95efeb))
+* **multiAccount:** add accountId on services schema ([d97508b](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d97508b9650dd81452bdcdbae12a877c94701615))
+* **multiAccount:** added exception handling for missing/empty AWS credential file, verify profiles in AWS credential file ([f77c052](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/f77c052a67ce92ec7cba0b4ff20c7d6d542b9cb5))
+* **multiAccount:** drop promise type ([d3d4843](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d3d4843af68fd7c5009c63410c26fc4679629a98))
+* **multiAccount:** merge conflict ([e71e0c7](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/e71e0c7b1ae1b8cdcfec96132fdbfd380da13feb))
+* **multiAccount:** move getData result function scope ([f98e531](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/f98e53144679f0f6abae621450044b88773d8d13))
+* **multiAccount:** pause logger on cred prompt, spelling ([ec48b15](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/ec48b15514bc2f32799fbc1397414d21308495ed))
+* **multiAccount:** remove [@id](https://gitlab.com/id) on accountId lambda schema ([ab0192a](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/ab0192a82ce4619171dd7cc217d2b26f15f2c6a6))
+* **multiAccount:** remove auto imports ([5ca06a5](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/5ca06a5132d7219d33d52efb1b05764de3196b3a))
+* **multiAccount:** track credentials for reuse ([5e8e64c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/5e8e64c4b987005c02031aaa24554796318e1361))
+* **multiAccount:** use top level settings for approved profiles ([153aed5](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/153aed523bf0e9230fa3c7b0770486842bbdab98))
+
+
+### Features
+
+* **getData:** Update get data to handle multi accounts. Remove some issues on asg and ec2 schemas. Handle default for no profiles selected in config. ([907c262](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/907c262d963b7bfb5cd0dc084fc8c60ac1e78ac7))
+* **multiAccount:** iterate config profiles, pass profile params ([555f7a3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/555f7a394f0cab03863b1b6df3f320153b0469ac))
+
 ## [0.26.5](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.26.4...0.26.5) (2021-10-04)
 
 
