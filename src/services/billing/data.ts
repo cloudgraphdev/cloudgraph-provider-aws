@@ -112,10 +112,6 @@ export default async ({
   }
   const resultPromises = []
   logger.debug(lt.fetchingAggregateFinOpsData)
-  if (!regions.includes(region)) {
-    logger.info('Billing information only available in us-east-1, skipping')
-    return {}
-  }
   try {
     const listAggregateFinOpsData = ({
       costExplorer,
