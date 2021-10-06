@@ -25,6 +25,7 @@ const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({ baseDelay: API_GATEWAY_CUSTOM_DELAY })
 
 export interface AwsApiGatewayResource extends Resource {
+  accountId: string
   restApiId: string
   region: string
 }

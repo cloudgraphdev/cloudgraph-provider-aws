@@ -1,5 +1,6 @@
 type awsEbs @key(fields: "arn") {
   id: String! @search(by: [hash])
+  accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   attachments: [awsEbsAttachment]
   iops: Int @search

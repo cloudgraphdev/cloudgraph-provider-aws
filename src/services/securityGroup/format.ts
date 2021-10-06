@@ -128,6 +128,7 @@ export default ({
     id,
     name,
     vpcId,
+    accountId: account,
     arn: `arn:aws:ec2:${region}:${account}:security-group/${id}`,
     description,
     tags: formatTagsFromMap(Tags),

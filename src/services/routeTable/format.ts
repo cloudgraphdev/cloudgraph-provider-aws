@@ -58,6 +58,7 @@ export default ({
 
   const routeTable = {
     id,
+    accountId: account,
     arn: routeTableArn({ region, account, id }),
     vpcId,
     routes: formattedRoutes,

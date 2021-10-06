@@ -1,4 +1,5 @@
 type awsIgw @key(fields: "arn") {
+  accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   id: String! @search(by: [hash])
   owner: String @search(by: [hash, regexp])

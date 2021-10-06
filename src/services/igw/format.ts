@@ -22,6 +22,7 @@ export default ({
   } = rawData
 
   return {
+    accountId: account,
     arn: `arn:aws:ec2:${region}:${account}:internet-gateway/${id}`,
     attachments: attachments.map(({ VpcId: vpcId, State: state }) => ({
       vpcId,

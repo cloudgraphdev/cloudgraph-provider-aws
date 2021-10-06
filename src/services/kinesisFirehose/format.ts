@@ -4,9 +4,11 @@ import { AwsKinesisFirehose } from '../../types/generated'
 
 export default ({
   service: rawData,
+  account,
   region,
 }: {
   service: RawAwsKinesisFirehose
+  account: string
   region: string
 }): AwsKinesisFirehose => {
   const {
@@ -26,6 +28,7 @@ export default ({
 
   return {
     id: deliveryStreamARN,
+    accountId: account,
     arn: deliveryStreamARN,
     name: deliveryStreamName,
     deliveryStreamStatus,

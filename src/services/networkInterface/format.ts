@@ -42,6 +42,7 @@ export default ({
 
   const networkInterface = {
     id,
+    accountId: account, 
     arn: `arn:aws:ec2:${region}:${account}:network-interface/${id}`,
     subnetId,
     macAddress,

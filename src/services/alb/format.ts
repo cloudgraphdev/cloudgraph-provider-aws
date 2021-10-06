@@ -35,7 +35,7 @@ const awsAlbListernerGraphFormat = (listener): AwsAlbListener => {
   }
 }
 
-export default ({ service: alb }: { service: RawAwsAlb }): AwsAlb => {
+export default ({ service: alb, account }: { service: RawAwsAlb, account: string }): AwsAlb => {
   // TODO: type this from aws
   const {
     LoadBalancerName: id,
@@ -70,6 +70,7 @@ export default ({ service: alb }: { service: RawAwsAlb }): AwsAlb => {
 
   const albResult = {
     id,
+    accountId: account,
     arn,
     dnsName,
     scheme,

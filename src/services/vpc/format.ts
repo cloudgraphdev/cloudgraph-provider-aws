@@ -29,6 +29,7 @@ export default ({
 
   return {
     id,
+    accountId: account,
     arn: `arn:aws:ec2:${region}:${account}:vpc/${id}`,
     tags: formatTagsFromMap(Tags),
     ipV4Cidr: CidrBlock,

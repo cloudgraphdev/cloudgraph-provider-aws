@@ -24,6 +24,7 @@ type awsShardLevelMetrics
 
 type awsKinesisStream @key(fields: "arn") {
   id: String! @search(by: [hash])
+  accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   streamName: String! @search(by: [hash, regexp])
   streamStatus: String! @search(by: [hash, regexp])

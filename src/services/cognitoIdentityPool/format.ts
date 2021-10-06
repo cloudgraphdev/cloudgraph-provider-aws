@@ -21,10 +21,11 @@ const formatSupportedLoginProviders = (supportedLoginProviders: IdentityProvider
 
 export default ({
   service: rawData,
+  account,
   region,
 }: {
-  account: string
   service: RawAwsCognitoIdentityPool
+  account: string
   region: string
 }): AwsCognitoIdentityPool => {
   const {
@@ -53,6 +54,7 @@ export default ({
 
   const identityPool  = {
     id: identityPoolId,
+    accountId: account,
     identityPoolName,
     allowUnauthenticatedIdentities: allowUnauthenticatedIdentities? t.yes : t.no,
     allowClassicFlow: allowClassicFlow? t.yes : t.no,

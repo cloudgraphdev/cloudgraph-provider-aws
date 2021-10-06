@@ -1,5 +1,6 @@
 type awsAlb @key(fields: "arn") {
   id: String!
+  accountId: String!
   arn: String! @id
   dnsName: String @search(by: [hash, regexp])
   scheme: String @search(by: [hash, regexp])

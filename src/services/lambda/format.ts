@@ -9,8 +9,10 @@ import { RawAwsLambdaFunction } from './data'
  */
 export default ({
   service: rawData,
+  account,
 }: {
   service: RawAwsLambdaFunction
+  account: string
 }): AwsLambda => {
   const {
     CodeSize: codeSize,
@@ -43,7 +45,7 @@ export default ({
           }
         })
 
-        environmentVariables.push({ key, value: desiredValue })
+        environmentVariables.push({ id: `${key}:${desiredValue}`, key, value: desiredValue })
       })
     }
   }
@@ -53,6 +55,7 @@ export default ({
     .join(', ')
 
   return {
+    accountId: account,
     arn,
     description,
     handler,

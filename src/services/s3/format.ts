@@ -20,6 +20,7 @@ import { awsBucketItemsLimit, publicBucketGrant, RawAwsS3 } from './data'
 
 export default ({
   service: rawData,
+  account,
   region,
 }: {
   service: RawAwsS3
@@ -185,6 +186,7 @@ export default ({
     ...websiteAdditions,
     id,
     access,
+    accountId: account,
     arn: s3BucketArn({ name }),
     bucketOwnerName,
     bucketPolicies,

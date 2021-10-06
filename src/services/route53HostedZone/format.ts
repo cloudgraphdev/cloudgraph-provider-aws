@@ -9,6 +9,7 @@ import { RawAwsRoute53HostedZone } from './data'
 
 export default ({
   service: rawData,
+  account,
 }: {
   service: RawAwsRoute53HostedZone
   account: string
@@ -28,6 +29,7 @@ export default ({
 
   const hostedZone = {
     id,
+    accountId: account,
     arn: route53HostedZoneArn({ id }),
     name,
     comment,

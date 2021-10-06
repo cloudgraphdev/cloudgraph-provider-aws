@@ -49,6 +49,7 @@ export default ({
 
   const ebs = {
     id,
+    accountId: account,
     arn: `arn:aws:ec2:${region}:${account}:volume/${id}`,
     attachments: volumeAttachments,
     iops,

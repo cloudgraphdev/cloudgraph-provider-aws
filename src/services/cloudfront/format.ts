@@ -105,7 +105,7 @@ export const createDefaultCacheBehavior = (
  * CloudFront
  */
 
-export default ({ service }: { service: RawAwsCloudfront }): AwsCloudfront => {
+export default ({ service, account }: { service: RawAwsCloudfront, account: string }): AwsCloudfront => {
   const {
     config: {
       CallerReference: callerReference,
@@ -206,6 +206,7 @@ export default ({ service }: { service: RawAwsCloudfront }): AwsCloudfront => {
 
   return {
     id,
+    accountId: account,
     arn,
     callerReference,
     customErrorResponse,
