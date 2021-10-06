@@ -93,10 +93,8 @@ const listAvailabeServices = ({
  * AWS Billing
  */
 export default async ({
-  regions,
   credentials,
 }: {
-  regions: string
   credentials: Credentials
 }): Promise<{ [key: string]: RawAwsBilling[] }> => {
   const startDate = new Date()
@@ -112,10 +110,6 @@ export default async ({
   }
   const resultPromises = []
   logger.debug(lt.fetchingAggregateFinOpsData)
-  if (!regions.includes(region)) {
-    logger.info('Billing information only available in us-east-1, skipping')
-    return {}
-  }
   try {
     const listAggregateFinOpsData = ({
       costExplorer,
