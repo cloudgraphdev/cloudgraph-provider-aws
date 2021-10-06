@@ -72,6 +72,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | cloudwatch            |                                                          |
 | cognitoIdentityPool   |                                                          |
 | cognitoUserPool       | lambda                                                   |
+| dynamodb              |                                                          |
 | ebs                   | ec2, asg                                                 |
 | ec2                   | alb, securityGroups, ebs, eip, networkInterface, asg     |
 | eip                   | vpc, ec2, networkInterface                               |

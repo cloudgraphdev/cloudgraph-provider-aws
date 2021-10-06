@@ -12,6 +12,7 @@ export default {
   cloudFormationStackSet: 'cloudFormationStackSet',
   cloudfront: 'cloudfront',
   cloudwatch: 'cloudwatch',
+  dynamodb: 'dynamodb',
   ebs: 'ebs',
   ec2Instance: 'ec2Instance',
   eip: 'eip',

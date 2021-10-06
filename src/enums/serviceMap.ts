@@ -15,6 +15,7 @@ import CloudFormationStackSet from '../services/cloudFormationStackSet'
 import CloudWatch from '../services/cloudwatch'
 import CognitoIdentityPool from '../services/cognitoIdentityPool'
 import CognitoUserPool from '../services/cognitoUserPool'
+import DynamoDB from '../services/dynamodb'
 import EBS from '../services/ebs'
 import EC2 from '../services/ec2'
 import EIP from '../services/eip'
@@ -55,6 +56,7 @@ export default {
   [services.ec2Instance]: EC2,
   [services.eip]: EIP,
   [services.elb]: ELB,
+  [services.dynamodb]: DynamoDB,
   [services.igw]: AwsInternetGateway,
   [services.kinesisFirehose]: AwsKinesisFirehose,
   [services.kinesisStream]: AwsKinesisStream,

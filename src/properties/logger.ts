@@ -329,9 +329,20 @@ export default {
   /**
    * DynamoDb
    */
-  lookingForDynamoDb: 'Looking for DynamoDb Tables to add...',
-  addingDynamoDbTables: (num: number): string =>
-    `Found ${num} Dynamo DB tables, adding them to the Region`,
+   lookingForDynamoDb: 'Looking for DynamoDb Tables to add...',
+   fetchingDynamoDbData:
+     'Fetching DynamoDB data for this AWS account via the AWS SDK...',
+   doneFetchingDynamoDbData: (num: number) =>
+     `🕒 Done fetching DynamoDb Data in ${num} 🕘`,
+   fetchedDynamoDbTableNames: (num: number) =>
+     `Fetched ${num} DynamoDB table names`,
+   addingDynamoDbTables: (num: number) =>
+     `Found ${num} Dynamo DB tables, adding them to the Region`,
+   gettingTableDetails: 'Fetching details for each table...',
+   gettingTableTags: 'Fetching tags for each table...',
+   gettingTableTtlInfo: 'Fetching TTL description for each table...',
+   gettingTableBackupInfo:
+     'Fetching Continuous Backup description for each table...',
   /**
    * SNS
    */
