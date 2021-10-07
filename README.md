@@ -69,6 +69,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | cloudformationStack   | cloudformationStack                                      |
 | cloudformationStackSet|                                                          |
 | cloudfront            | elb, s3                                                  |
+| cloudtrail            | kms, s3                                                  |
 | cloudwatch            |                                                          |
 | cognitoIdentityPool   |                                                          |
 | cognitoUserPool       | lambda                                                   |
