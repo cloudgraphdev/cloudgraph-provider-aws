@@ -34,7 +34,7 @@ export const toCamel = (o: any): any => {
       value = o[origKey]
       if (
         value instanceof Array ||
-        (value !== null && value.constructor === Object)
+        (value !== null && value !== undefined && value.constructor === Object)
       ) {
         value = toCamel(value)
       }
