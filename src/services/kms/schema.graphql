@@ -16,5 +16,5 @@ type awsKms @key(fields: "id"){
   deletionDate: String @search(by: [hash, regexp])
   validTo: String @search(by: [hash, regexp])
   lambda: [awsLambda] @hasInverse(field: kms)
-  cloudTrail: [awsCloudTrail] @hasInverse(field: kms)
+  cloudtrail: [awsCloudtrail] @hasInverse(field: kms)
 }

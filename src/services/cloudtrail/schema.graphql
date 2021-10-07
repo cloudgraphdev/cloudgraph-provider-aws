@@ -1,4 +1,4 @@
-type awsCloudTrail @key(fields: "arn") {
+type awsCloudtrail @key(fields: "arn") {
   id: String! @id @search(by: [hash, regexp])
   arn: String! @id @search(by: [hash, regexp])
   name: String @search(by: [hash, regexp])
@@ -18,6 +18,6 @@ type awsCloudTrail @key(fields: "arn") {
   isOrganizationTrail: String @search(by: [hash, regexp])
   tags: [Tag],
   region: String @search(by: [hash, regexp])
-  s3: [awsS3] @hasInverse(field: cloudTrail)
-  kms: [awsKms] @hasInverse(field: cloudTrail)
+  s3: [awsS3] @hasInverse(field: cloudtrail)
+  kms: [awsKms] @hasInverse(field: cloudtrail)
 }

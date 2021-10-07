@@ -1,5 +1,5 @@
 import t from '../../properties/translations'
-import { AwsCloudTrail } from '../../types/generated';
+import { AwsCloudtrail } from '../../types/generated';
 import { formatTagsFromMap } from '../../utils/format';
 import { RawAwsCloudTrail } from './data';
 
@@ -9,7 +9,7 @@ export default ({
 }: {
   service: RawAwsCloudTrail
   region: string
-}): AwsCloudTrail => {
+}): AwsCloudtrail => {
   const {
     Name: name,
     S3BucketName: s3BucketName,

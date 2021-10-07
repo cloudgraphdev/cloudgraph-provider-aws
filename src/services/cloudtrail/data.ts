@@ -40,7 +40,7 @@ const getTrailArnData = async (
   } catch (err) {
     generateAwsErrorLog(serviceName, 'cloudTrail:getTrailArnData', err)
   }
-  return null
+  return []
 }
 
 const listTrailData = async (

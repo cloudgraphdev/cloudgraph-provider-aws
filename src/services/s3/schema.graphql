@@ -25,7 +25,7 @@ type awsS3 @key(fields: "arn") {
   kinesisFirehose: [awsKinesisFirehose] @hasInverse(field: s3)
   tags: [Tag]
   cloudfrontDistribution: [awsCloudfront] @hasInverse(field: s3)
-  cloudTrail: [awsCloudTrail] @hasInverse(field: s3)
+  cloudtrail: [awsCloudtrail] @hasInverse(field: s3)
 }
 
 type awsBucketPolicy
