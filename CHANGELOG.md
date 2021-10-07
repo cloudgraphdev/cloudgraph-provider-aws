@@ -1,3 +1,10 @@
+## [0.28.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.28.1...0.28.2) (2021-10-07)
+
+
+### Bug Fixes
+
+* **toCamel:** fixing a case where value can be undefined and then this crashes ([43dda10](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/43dda1052959cc94e35c72da821fbe75f0df5942))
+
 ## [0.28.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.28.0...0.28.1) (2021-10-06)
 
 
