@@ -386,7 +386,10 @@ export default class Provider extends CloudGraph.Client {
     return profiles || []
   }
 
-  private async getRawData(profile, opts): Promise<{name: string, accountId: string, data: any}[]> {
+  private async getRawData(
+    profile,
+    opts
+  ): Promise<{ name: string; accountId: string; data: any }[]> {
     let { regions: configuredRegions, resources: configuredResources } =
       this.config
     const result = []
@@ -417,7 +420,7 @@ export default class Provider extends CloudGraph.Client {
           result.push({
             name: resource,
             accountId,
-            data
+            data,
           })
           this.logger.success(`${resource} scan completed`)
         } else {
@@ -481,13 +484,15 @@ export default class Provider extends CloudGraph.Client {
           // eslint-disable-next-line no-continue
           continue
         }
-       const { accountId } = await this.getIdentity({ profile })
-       if (!crawledAccounts.find(val => val === accountId)) {
-         crawledAccounts.push(accountId)
-         rawData = [...rawData, ...(await this.getRawData(profile, opts))]
-       } else {
-        this.logger.warn(`profile: ${profile} returned accountId ${accountId} which has already been crawled, skipping...`)
-      }
+        const { accountId } = await this.getIdentity({ profile })
+        if (!crawledAccounts.find(val => val === accountId)) {
+          crawledAccounts.push(accountId)
+          rawData = [...rawData, ...(await this.getRawData(profile, opts))]
+        } else {
+          this.logger.warn(
+            `profile: ${profile} returned accountId ${accountId} which has already been crawled, skipping...`
+          )
+        }
       }
     }
     // Handle global tag entities
@@ -565,17 +570,30 @@ export default class Provider extends CloudGraph.Client {
             })
           }
         }
+        /**
+         * we have 2 things to check here, both dealing with multi-account senarios
+         * 1. Do we already have an entity by this name in the result (i.e. both accounts have vpcs)
+         * 2. Do we already have the data for an entity that lives in multiple accounts 
+         * (i.e. a cloudtrail that appears in a master and sandbox account).
+         * If so, we need to merge the data. We use lodash merge to recursively merge arrays as there are 
+         * cases where acct A gets more data for service obj X than acct B does.
+         * (i.e. Acct A cannot access the cloudtrail's tags but acct B can because the cloudtrail's arn points to acct B)
+         */
         const existingServiceIdx = result.entities.findIndex(({ name }) => {
           return name === serviceData.name
         })
         if (existingServiceIdx > -1) {
           const existingData = result.entities[existingServiceIdx].data
           for (const currentEntity of entities) {
-            const exisingEntityIdx = existingData.findIndex(({ id }) => id === currentEntity.id)
+            const exisingEntityIdx = existingData.findIndex(
+              ({ id }) => id === currentEntity.id
+            )
             if (exisingEntityIdx > -1) {
               const entityToDelete = existingData[exisingEntityIdx]
               existingData.splice(exisingEntityIdx, 1)
-              const entityToMergeIdx = entities.findIndex(({ id }) => id === currentEntity.id)
+              const entityToMergeIdx = entities.findIndex(
+                ({ id }) => id === currentEntity.id
+              )
               entities[entityToMergeIdx] = merge(entityToDelete, currentEntity)
             }
           }
