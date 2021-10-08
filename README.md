@@ -62,7 +62,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | Service               | Relations                                                |
 | ------------------    | -------------------------------------------------------- |
 | alb                   | ec2, vpc                                                 |
-| apiGatewayRestApi     | apiGatewaystage, apiGatewayResource                      |
+| apiGatewayRestApi     | apiGatewayStage, apiGatewayResource                      |
 | apiGatewayStage       | apiGatewayRestApi                                        |
 | apiGatewayResource    | apiGatewayRestApi                                        |
 | asg                   | ec2, securityGroups, ebs                                 |
@@ -83,6 +83,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | kms                   | lambda                                                   |
 | lambda                | vpc, kms, securityGroups                                 |
 | natGateway            | networkInterface, vpc                                    |
+| nacl                  | vpc                                                      |
 | networkInterface      | ec2, natGateway, vpc, eip                                |
 | s3                    |                                                          |
 | securityGroup         | asg, lambda, ec2, elb                                    |

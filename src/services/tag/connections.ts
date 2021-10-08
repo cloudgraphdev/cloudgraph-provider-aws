@@ -4,14 +4,15 @@ import { NatGateway, Vpc } from 'aws-sdk/clients/ec2'
 import { isEmpty } from 'lodash'
 import regions, { globalRegionName } from '../../enums/regions'
 import services from '../../enums/services'
+import { RawAwsAppSync } from '../appSync/data'
+import { RawAwsCloudFormationStack } from '../cloudFormationStack/data'
+import { RawAwsCloudFormationStackSet } from '../cloudFormationStackSet/data'
 import { RawAwsCloudfront } from '../cloudfront/data'
 import { RawAwsCognitoIdentityPool } from '../cognitoIdentityPool/data'
 import { RawAwsCognitoUserPool } from '../cognitoUserPool/data'
-import { RawAwsKinesisFirehose } from '../kinesisFirehose/data'
-import { RawAwsAppSync } from '../appSync/data'
-import { RawAwsCloudFormationStackSet } from '../cloudFormationStackSet/data'
-import { RawAwsCloudFormationStack } from '../cloudFormationStack/data'
 import { RawAwsDynamoDbTable } from '../dynamodb/data'
+import { RawAwsKinesisFirehose } from '../kinesisFirehose/data'
+import { RawAwsNetworkAcl } from '../nacl/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -612,6 +613,30 @@ export default ({
             resourceType: services.dynamodb,
             relation: 'child',
             field: 'dynamodb',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related Network ACLs
+     */
+    const nacls: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.nacl)
+    if (nacls?.data?.[region]) {
+      const dataAtRegion: RawAwsNetworkAcl[] = findServiceInstancesWithTag(
+        tag,
+        nacls.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { NetworkAclId: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.nacl,
+            relation: 'child',
+            field: 'nacl',
           })
         }
       }

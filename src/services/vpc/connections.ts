@@ -174,24 +174,6 @@ export default ({
     }
   }
   /**
-   * Find any NACL related data
-   */
-  // TODO: Uncomment and check this for correctness after NACL is added
-  // const nacls = data.find(({ name }) => name === services.nacl)
-  // if (nacls?.data?.[region]) {
-  //   const dataAtRegion: NetworkAcl[] = nacls.data[region].filter(
-  //     ({ VpcId }: NetworkAcl) => VpcId === id
-  //   )
-  //   for (const nacl of dataAtRegion) {
-  //     connections.push({
-  //       id: nacl.NetworkAclId,
-  //       resourceType: services.lambda,
-  //       relation: 'child',
-  //       field: 'nacl',
-  //     })
-  //   }
-  // }
-  /**
    * Find any NAT related data
    */
   const nats = data.find(({ name }) => name === services.nat)

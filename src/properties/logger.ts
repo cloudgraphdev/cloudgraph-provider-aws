@@ -594,4 +594,8 @@ export default {
     `🕒 Done fetching aggregate FinOps data in ${num} 🕘`,
   unableToFindFinOpsServiceData:
     '❌ Unable to listAvailabeServices data for this AWS account, DimensionValues was missing. ❌',
+  /**
+   * NACL
+   */
+   fetchedNacls: (num: number): string => `Fetched ${num} NACLs`,
 }

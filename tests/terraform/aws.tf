@@ -651,12 +651,6 @@ resource "aws_s3_bucket_object" "cf-template" {
   source = "./EC2ChooseAMI.template"
 }
 
-resource "aws_s3_bucket_object" "cf-template2" {
-  bucket = aws_s3_bucket.destination.bucket
-  key    = "CloudFront_S3.template"
-  source = "./CloudFront_S3.template"
-}
-
 resource "aws_cloudformation_stack" "cg-cloudformation-stack-test" {
   name = "cg-cloudformation-stack-test"
 
@@ -691,15 +685,6 @@ resource "aws_cloudformation_stack" "cg-cloudformation-stack-test" {
         "InstanceType" : "t1.micro",
         "KeyName" : "nestedStack1"
       }
-      }
-    },
-    "NestedStack2" : {
-      "Type" : "AWS::CloudFormation::Stack",
-      "Properties" : {
-        "TemplateURL" : "https://${aws_s3_bucket.destination.bucket_domain_name}/${aws_s3_bucket_object.cf-template2.key}",
-        "Parameters" : {
-          "S3DNSName" : "${aws_s3_bucket.destination.bucket_domain_name}"
-        }
       }
     }
   }
@@ -806,5 +791,42 @@ resource "aws_dynamodb_table" "test-table" {
   tags = {
     Name        = "test-table-test-env"
     Environment = "test-env"
+  }
+}
+
+resource "aws_network_acl" "cg-test-nacl" {
+  vpc_id = aws_vpc.vpc.id
+  subnet_ids = [aws_subnet.subnet.id]
+
+  egress = [
+    {
+      protocol   = "tcp"
+      rule_no    = 200
+      action     = "allow"
+      cidr_block = "10.3.0.0/18"
+      from_port  = 443
+      to_port    = 443
+      icmp_code  = 0
+      icmp_type  = 0
+      ipv6_cidr_block = ""
+    }
+  ]
+
+  ingress = [
+    {
+      protocol   = "tcp"
+      rule_no    = 100
+      action     = "allow"
+      cidr_block = "10.3.0.0/18"
+      from_port  = 80
+      to_port    = 80
+      icmp_code  = 0
+      icmp_type  = 0
+      ipv6_cidr_block = ""
+    }
+  ]
+
+  tags = {
+    Name = "cg-test-nacl"
   }
 }

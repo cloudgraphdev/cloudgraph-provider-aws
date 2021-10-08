@@ -1,17 +1,20 @@
 // import AwsSubnet from '../services/subnet'
 import ALB from '../services/alb'
+import APIGatewayResource from '../services/apiGatewayResource'
+import APIGatewayRestApi from '../services/apiGatewayRestApi'
+import APIGatewayStage from '../services/apiGatewayStage'
+import ASG from '../services/asg'
+import AppSync from '../services/appSync'
 import AwsInternetGateway from '../services/igw'
 import AwsKinesisFirehose from '../services/kinesisFirehose'
 import AwsKinesisStream from '../services/kinesisStream'
 import AwsKms from '../services/kms'
 import AwsSecurityGroup from '../services/securityGroup'
 import AwsTag from '../services/tag'
-import AppSync from '../services/appSync'
-import ASG from '../services/asg'
 import Billing from '../services/billing'
-import CloudFront from '../services/cloudfront'
 import CloudFormationStack from '../services/cloudFormationStack'
 import CloudFormationStackSet from '../services/cloudFormationStackSet'
+import CloudFront from '../services/cloudfront'
 import CloudWatch from '../services/cloudwatch'
 import CognitoIdentityPool from '../services/cognitoIdentityPool'
 import CognitoUserPool from '../services/cognitoUserPool'
@@ -22,16 +25,14 @@ import EIP from '../services/eip'
 import ELB from '../services/elb'
 import Lambda from '../services/lambda'
 import NATGateway from '../services/natGateway'
+import NetworkAcl from '../services/nacl'
 import NetworkInterface from '../services/networkInterface'
-import VPC from '../services/vpc'
-import SQS from '../services/sqs'
-import APIGatewayRestApi from '../services/apiGatewayRestApi'
-import APIGatewayResource from '../services/apiGatewayResource'
-import APIGatewayStage from '../services/apiGatewayStage'
 import Route53HostedZone from '../services/route53HostedZone'
 import Route53Record from '../services/route53Record'
 import RouteTable from '../services/routeTable'
 import S3 from '../services/s3'
+import SQS from '../services/sqs'
+import VPC from '../services/vpc'
 import services from './services'
 
 /**
@@ -62,6 +63,7 @@ export default {
   [services.kinesisStream]: AwsKinesisStream,
   [services.kms]: AwsKms,
   [services.lambda]: Lambda,
+  [services.nacl]: NetworkAcl,
   [services.nat]: NATGateway,
   [services.networkInterface]: NetworkInterface,
   [services.sg]: AwsSecurityGroup,
