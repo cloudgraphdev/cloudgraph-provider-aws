@@ -994,23 +994,31 @@ export type AwsIamAccessKey = {
 export type AwsIamGroup = {
   id: Scalars['String'];
   arn: Scalars['String'];
+  accountId: Scalars['String'];
   path?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
+  attachedPolicy?: Maybe<Array<Maybe<AwsIamPolicy>>>;
+  user?: Maybe<Array<Maybe<AwsIamUser>>>;
 };
 
 export type AwsIamPolicy = {
   id: Scalars['String'];
   arn: Scalars['String'];
+  accountId: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   policyContent?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  role?: Maybe<Array<Maybe<AwsIamRole>>>;
+  group?: Maybe<Array<Maybe<AwsIamGroup>>>;
 };
 
 export type AwsIamRole = {
   id: Scalars['String'];
   arn: Scalars['String'];
+  accountId: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
   assumeRolePolicy?: Maybe<Scalars['String']>;
@@ -1018,17 +1026,22 @@ export type AwsIamRole = {
   createdAt?: Maybe<Scalars['String']>;
   maxSessionDuration?: Maybe<Scalars['Int']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
+  attachedPolicy?: Maybe<Array<Maybe<AwsIamPolicy>>>;
 };
 
 export type AwsIamUser = {
   id: Scalars['String'];
   arn: Scalars['String'];
+  accountId: Scalars['String'];
   path?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   creationTime?: Maybe<Scalars['String']>;
   passwordLastUsed?: Maybe<Scalars['String']>;
   accessKeyData?: Maybe<Array<Maybe<AwsIamAccessKey>>>;
+  groups?: Maybe<Array<Maybe<Scalars['String']>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  group?: Maybe<Array<Maybe<AwsIamGroup>>>;
 };
 
 export type AwsIgw = {
@@ -1542,6 +1555,9 @@ export type AwsTag = {
   ecr?: Maybe<Array<Maybe<AwsEcr>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   secretsManager?: Maybe<Array<Maybe<AwsSecretsManager>>>;
+  user?: Maybe<Array<Maybe<AwsIamUser>>>;
+  role?: Maybe<Array<Maybe<AwsIamRole>>>;
+  policy?: Maybe<Array<Maybe<AwsIamPolicy>>>;
 };
 
 export type AwsTotalBillingInfo = {

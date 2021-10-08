@@ -85,8 +85,6 @@ export default ({
   //   const hostedZones: Array<any> = route53Data.map(
   //     awsRoute53HostedZoneConverter
   //   )
-  //   console.log('hosted zones')
-  //   console.log(JSON.stringify(hostedZones))
 
   //   if (!isEmpty(hostedZones)) {
   //     /**

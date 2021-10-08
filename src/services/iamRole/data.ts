@@ -37,7 +37,7 @@ const customRetrySettings = setAwsRetryOptions({
   baseDelay: IAM_CUSTOM_DELAY,
 })
 
-export interface RawAwsRole extends Omit<Role, 'Tags'> {
+export interface RawAwsIamRole extends Omit<Role, 'Tags'> {
   Policies: string[]
   ManagedPolicies: AttachedPolicy[]
   region: string
@@ -122,9 +122,9 @@ const managedPoliciesByRoleName = async (
 export const listIamRoles = async (
   iam: IAM,
   marker?: string
-): Promise<RawAwsRole[]> =>
+): Promise<RawAwsIamRole[]> =>
   new Promise(resolve => {
-    const result: RawAwsRole[] = []
+    const result: RawAwsIamRole[] = []
     const policiesByRoleNamePromises = []
     const tagsByRoleNamePromises = []
     const managedPoliciesByRoleNamePromises = []
@@ -196,16 +196,15 @@ export const listIamRoles = async (
 
 export default async ({
   credentials,
-}: // rawData,
-{
+}: {
   regions: string
   credentials: Credentials
   rawData: any
 }): Promise<{
-  [region: string]: RawAwsRole[]
+  [region: string]: RawAwsIamRole[]
 }> =>
   new Promise(async resolve => {
-    let rolesData: RawAwsRole[] = []
+    let rolesData: RawAwsIamRole[] = []
 
     const client = new IAM({ credentials, endpoint, ...customRetrySettings })
 

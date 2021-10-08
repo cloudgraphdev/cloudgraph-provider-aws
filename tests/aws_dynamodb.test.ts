@@ -17,12 +17,10 @@ xdescribe('DynamoDB Service Test: ', () => {
         credentials,
         regions: region,
       })
-      console.log(getDataResult)
 
       formatResult = getDataResult[region].map(dynamoDbData =>
         dynamoDb.format({ service: dynamoDbData, region, account })
       )
-      console.log(formatResult)
     } catch (error) {
       console.error(error) // eslint-disable-line no-console
     }

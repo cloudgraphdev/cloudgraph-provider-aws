@@ -1,129 +1,59 @@
-// import isEmpty from 'lodash/isEmpty'
-// import flatMap from 'lodash/flatMap'
+import flatMap from 'lodash/flatMap'
+import isEmpty from 'lodash/isEmpty'
+import kebabCase from 'lodash/kebabCase'
 
-// import { ServiceConnection } from '@cloudgraph/sdk'
+import { ServiceConnection } from '@cloudgraph/sdk'
 
-// import services from '../../enums/services'
-// import { RawAwsRoute53Record } from './data'
-// import { RawAwsAlb } from '../alb/data'
-// import { RawAwsElb } from '../elb/data'
-// import { getHostedZoneId, getRecordId } from '../../utils/ids'
-// import { AwsApiGatewayRestApi } from '../apiGatewayRestApi/data'
+import services from '../../enums/services'
+import { RawAwsIamRole } from './data'
+import { RawAwsIamPolicy } from '../iamPolicy/data'
+import resources from '../../enums/resources'
 
-// /**
-//  * Route53 Record
-//  */
+/**
+ * IAM Role
+ */
 
-// export default ({
-//   service: record,
-//   data,
-// }: {
-//   account: string
-//   data: { name: string; data: { [property: string]: any[] } }[]
-//   service: RawAwsRoute53Record
-//   region: string
-// }): { [key: string]: ServiceConnection[] } => {
-//   const connections: ServiceConnection[] = []
-//   const {
-//     HostedZoneId: Id,
-//     Name: name,
-//     Type: type,
-//     AliasTarget: alias,
-//   } = record
-//   const hostedZoneId = getHostedZoneId(Id)
-//   const id = getRecordId({ hostedZoneId, name, type })
+export default ({
+  service: role,
+  data,
+}: {
+  account: string
+  data: { name: string; data: { [property: string]: any[] } }[]
+  service: RawAwsIamRole
+  region: string
+}): { [key: string]: ServiceConnection[] } => {
+  const connections: ServiceConnection[] = []
+  const { RoleId: id, RoleName: name, ManagedPolicies: managedPolicies } = role
 
-//   /**
-//    * Find ELBs
-//    * related to this Record
-//    */
-//   const elbs: RawAwsElb[] =
-//     flatMap(
-//       data.find(({ name: serviceName }) => serviceName === services.elb)?.data
-//     ) || []
+  const policies: RawAwsIamPolicy[] =
+    flatMap(
+      data.find(({ name: serviceName }) => serviceName === services.iamPolicy)
+        ?.data
+    ) || []
 
-//   if (elbs && alias?.HostedZoneId) {
-//     const elbsInRegion = elbs.filter(
-//       ({ CanonicalHostedZoneNameID: hostedZoneNameId }: RawAwsElb) =>
-//         hostedZoneNameId === alias?.HostedZoneId
-//     )
+  /**
+   * Find Managed Policies
+   * related to this IAM Role
+   */
 
-//     if (!isEmpty(elbsInRegion)) {
-//       for (const instance of elbsInRegion) {
-//         const { LoadBalancerName: lbId } = instance
+  const attachedPolicies = policies.filter(({ Arn: arn }: RawAwsIamPolicy) =>
+    managedPolicies.find(p => p.PolicyArn === arn)
+  )
 
-//         connections.push({
-//           id: lbId,
-//           resourceType: services.elb,
-//           relation: 'child',
-//           field: 'elb',
-//         })
-//       }
-//     }
-//   }
+  if (!isEmpty(attachedPolicies)) {
+    for (const instance of attachedPolicies) {
+      const { PolicyId: policyId, PolicyName: policyName } = instance
 
-//   /**
-//    * Find ALBs
-//    * related to this Record
-//    */
-//   const albs: RawAwsAlb[] =
-//     flatMap(
-//       data.find(({ name: serviceName }) => serviceName === services.alb)?.data
-//     ) || []
+      connections.push({
+        id: `${policyName}-${policyId}-${kebabCase(resources.iamPolicy)}`,
+        resourceType: services.iamPolicy,
+        relation: 'child',
+        field: 'attachedPolicy',
+      })
+    }
+  }
 
-//   if (albs && alias?.HostedZoneId) {
-//     const albsInRegion = albs.filter(
-//       ({ CanonicalHostedZoneId }: RawAwsAlb) =>
-//         CanonicalHostedZoneId === alias?.HostedZoneId
-//     )
-
-//     if (!isEmpty(albsInRegion)) {
-//       for (const instance of albsInRegion) {
-//         const { LoadBalancerName: lbId } = instance
-
-//         connections.push({
-//           id: lbId,
-//           resourceType: services.alb,
-//           relation: 'child',
-//           field: 'alb',
-//         })
-//       }
-//     }
-//   }
-
-//   /**
-//    * Find APIGWs
-//    * related to this Record
-//    */
-//   const restApis: AwsApiGatewayRestApi[] =
-//     flatMap(
-//       data.find(
-//         ({ name: serviceName }) => serviceName === services.apiGatewayRestApi
-//       )?.data
-//     ) || []
-
-//   if (!isEmpty(restApis)) {
-//     const restApisInRegion = restApis.filter(
-//       ({ domainNames }: AwsApiGatewayRestApi) =>
-//         domainNames.find(({ domainName }) => name.includes(domainName))
-//     )
-
-//     if (!isEmpty(restApisInRegion)) {
-//       for (const instance of restApisInRegion) {
-//         const { id: restApiId } = instance
-
-//         connections.push({
-//           id: restApiId,
-//           resourceType: services.apiGatewayRestApi,
-//           relation: 'child',
-//           field: 'restApi',
-//         })
-//       }
-//     }
-//   }
-
-//   const recordResult = {
-//     [id]: connections,
-//   }
-//   return recordResult
-// }
+  return {
+    [`${name}-${id}-${kebabCase(resources.iamRole)}`]: connections,
+  }
+}

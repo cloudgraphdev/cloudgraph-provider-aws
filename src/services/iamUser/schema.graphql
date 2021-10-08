@@ -1,12 +1,15 @@
 type awsIamUser @key(fields: "arn") {
-  id: String! @search(by: [hash])
+  id: String! @id @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash, regexp])
   path: String @search(by: [hash, regexp])
   name: String @search(by: [hash, regexp])
   creationTime: String @search(by: [hash, regexp])
   passwordLastUsed: String @search(by: [hash, regexp])
   accessKeyData: [awsIamAccessKey]
+  groups: [String]
   tags: [Tag]
+  group: [awsIamGroup] @hasInverse(field: user)
 }
 
 type awsIamAccessKey

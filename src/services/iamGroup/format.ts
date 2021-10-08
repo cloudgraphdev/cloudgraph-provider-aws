@@ -9,23 +9,27 @@ import { RawAwsIamGroup } from '../iamGroup/data'
 
 export default ({
   service: rawData,
+  account,
 }: {
   service: RawAwsIamGroup
   account: string
   region: string
 }): AwsIamGroup => {
   const {
+    GroupId: id,
     GroupName: name,
     Arn: arn,
     Path: path,
-    // ManagedPolicies: managedPolicies,
+    Policies: inlinePolicies,
   } = rawData
 
   const record = {
-    id: `${name}-${kebabCase(resources.iamGroup)}`,
+    id: `${name}-${id}-${kebabCase(resources.iamGroup)}`,
     arn,
+    accountId: account,
     path,
     name,
+    inlinePolicies,
   }
   return record
 }

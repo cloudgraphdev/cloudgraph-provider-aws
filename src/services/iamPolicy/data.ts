@@ -35,7 +35,7 @@ const customRetrySettings = setAwsRetryOptions({
   baseDelay: IAM_CUSTOM_DELAY,
 })
 
-export interface RawAwsPolicy extends Omit<Policy, 'Tags'> {
+export interface RawAwsIamPolicy extends Omit<Policy, 'Tags'> {
   Document: string
   region: string
   Tags?: TagMap
@@ -94,9 +94,9 @@ const policyVersionByPolicyArn = async (
 export const listIamPolicies = async (
   iam: IAM,
   marker?: string
-): Promise<RawAwsPolicy[]> =>
+): Promise<RawAwsIamPolicy[]> =>
   new Promise(resolve => {
-    const result: RawAwsPolicy[] = []
+    const result: RawAwsIamPolicy[] = []
     const tagsByArnPromises = []
     const policyDetailByArnePromises = []
 
@@ -150,16 +150,15 @@ export const listIamPolicies = async (
 
 export default async ({
   credentials,
-}: // rawData,
-{
+}: {
   regions: string
   credentials: Credentials
   rawData: any
 }): Promise<{
-  [region: string]: RawAwsPolicy[]
+  [region: string]: RawAwsIamPolicy[]
 }> =>
   new Promise(async resolve => {
-    let policiesData: RawAwsPolicy[] = []
+    let policiesData: RawAwsIamPolicy[] = []
 
     const client = new IAM({ credentials, endpoint, ...customRetrySettings })
 

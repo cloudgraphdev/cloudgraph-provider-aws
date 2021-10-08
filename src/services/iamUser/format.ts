@@ -11,18 +11,21 @@ import { RawAwsIamUser } from '../iamUser/data'
 
 export default ({
   service: rawData,
+  account,
 }: {
   service: RawAwsIamUser
   account: string
   region: string
 }): AwsIamGroup => {
   const {
+    UserId: id,
     Arn: arn,
     UserName: name,
     Path: path,
     CreateDate: creationTime,
     PasswordLastUsed: passwordLastUsed,
     AccessKeyLastUsedData: accessKeys = [],
+    Groups: groups = [],
     Tags: tags = {},
   } = rawData
 
@@ -44,13 +47,15 @@ export default ({
   const userTags = formatTagsFromMap(tags)
 
   const user = {
-    id: `${name}-${kebabCase(resources.iamUser)}`,
+    id: `${name}-${id}-${kebabCase(resources.iamUser)}`,
     arn,
+    accountId: account,
     name,
     path,
     creationTime: creationTime?.toISOString() || '',
     accessKeyData,
     passwordLastUsed: passwordLastUsed?.toISOString() || '',
+    groups,
     tags: userTags,
   }
   return user

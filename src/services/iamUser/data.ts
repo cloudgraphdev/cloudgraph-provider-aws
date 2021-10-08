@@ -260,8 +260,7 @@ export const listIamUsers = async (
 
 export default async ({
   credentials,
-}: // rawData,
-{
+}: {
   regions: string
   credentials: Credentials
   rawData: any

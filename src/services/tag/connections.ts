@@ -1,7 +1,7 @@
 import { ServiceConnection } from '@cloudgraph/sdk'
 import { MetricAlarm } from 'aws-sdk/clients/cloudwatch'
 import { NatGateway, Vpc } from 'aws-sdk/clients/ec2'
-import { isEmpty } from 'lodash'
+import { isEmpty, kebabCase } from 'lodash'
 import regions, { globalRegionName } from '../../enums/regions'
 import services from '../../enums/services'
 import { RawAwsAppSync } from '../appSync/data'
@@ -17,6 +17,10 @@ import { RawAwsCloudTrail } from '../cloudtrail/data'
 import { RawAwsEcr } from '../ecr/data'
 import { RawAwsSubnet } from '../subnet/data'
 import { RawAwsSecretsManager } from '../secretsManager/data'
+import { RawAwsIamUser } from '../iamUser/data'
+import { RawAwsIamRole } from '../iamRole/data'
+import { RawAwsIamPolicy } from '../iamPolicy/data'
+import resources from '../../enums/resources'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -93,7 +97,7 @@ export default ({
     /**
      * Find related CloudTrails
      */
-     const cloudtrails: {
+    const cloudtrails: {
       name: string
       data: { [property: string]: any[] }
     } = data.find(({ name }) => name === services.cloudtrail)
@@ -722,10 +726,12 @@ export default ({
     }
 
     /**
-    * Find related SecretsManagers
-    */
-    const secretsManagers: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.secretsManager)
+     * Find related SecretsManagers
+     */
+    const secretsManagers: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.secretsManager)
     if (secretsManagers?.data?.[region]) {
       const dataAtRegion: RawAwsSecretsManager[] = findServiceInstancesWithTag(
         tag,
@@ -740,6 +746,78 @@ export default ({
             resourceType: services.secretsManager,
             relation: 'child',
             field: 'secretsManager',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related IAM Users
+     */
+    const users: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.iamUser)
+    if (users?.data?.[globalRegionName]) {
+      const dataAtRegion: RawAwsIamUser[] = findServiceInstancesWithTag(
+        tag,
+        users.data[globalRegionName]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { UserId: userId, UserName: userName } = instance
+
+          connections.push({
+            id: `${userName}-${userId}-${kebabCase(resources.iamUser)}`,
+            resourceType: services.iamUser,
+            relation: 'child',
+            field: 'user',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related IAM Roles
+     */
+    const roles: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.iamRole)
+    if (roles?.data?.[globalRegionName]) {
+      const dataAtRegion: RawAwsIamRole[] = findServiceInstancesWithTag(
+        tag,
+        roles.data[globalRegionName]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { RoleId: roleId, RoleName: roleName } = instance
+
+          connections.push({
+            id: `${roleName}-${roleId}-${kebabCase(resources.iamRole)}`,
+            resourceType: services.iamRole,
+            relation: 'child',
+            field: 'role',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related IAM Policies
+     */
+    const policies: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.iamPolicy)
+    if (policies?.data?.[globalRegionName]) {
+      const dataAtRegion: RawAwsIamPolicy[] = findServiceInstancesWithTag(
+        tag,
+        policies.data[globalRegionName]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { PolicyId: policyId, PolicyName: policyName } = instance
+
+          connections.push({
+            id: `${policyName}-${policyId}-${kebabCase(resources.iamPolicy)}`,
+            resourceType: services.iamPolicy,
+            relation: 'child',
+            field: 'policy',
           })
         }
       }
