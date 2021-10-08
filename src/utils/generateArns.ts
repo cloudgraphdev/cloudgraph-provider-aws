@@ -30,3 +30,13 @@ export const natGatewayArn = ({
   account: string
   id: string
 }): string => `arn:aws:ec2:${region}:${account}:natgateway/${id}`
+
+export const networkAclArn = ({
+  region,
+  account,
+  id,
+}: {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:network-acl/${id}`

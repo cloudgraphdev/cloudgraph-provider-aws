@@ -22,6 +22,7 @@ export default {
   kinesisStream: 'kinesisStream',
   kms: 'kms',
   lambda: 'lambda',
+  nacl: 'nacl',
   nat: 'nat',
   networkInterface: 'networkInterface',
   route53HostedZone: 'route53HostedZone',

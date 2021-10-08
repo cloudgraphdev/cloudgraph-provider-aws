@@ -1,14 +1,13 @@
 import CloudGraph, { ServiceConnection } from '@cloudgraph/sdk'
 
 import CloudFormationClass from '../src/services/cloudFormationStack'
-import { RawAwsAsg } from '../src/services/asg/data'
+import { RawAwsCloudFormationStack } from '../src/services/cloudFormationStack/data'
 import { credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
 
 describe('Cloud formation Service Test: ', () => {
   let getDataResult
   let formatResult
-  let connections 
 
   initTestConfig()
 
@@ -22,7 +21,7 @@ describe('Cloud formation Service Test: ', () => {
             credentials,
             regions: region,
           })
-          formatResult = getDataResult[region].map((item: RawAwsAsg) =>
+          formatResult = getDataResult[region].map((item: RawAwsCloudFormationStack) =>
             cfClass.format({ service: item, region })
           )
 
