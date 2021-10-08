@@ -5,7 +5,7 @@ import AWS from 'aws-sdk'
 import chalk from 'chalk'
 import { print } from 'graphql'
 import STS from 'aws-sdk/clients/sts'
-import { isEmpty, get } from 'lodash'
+import { isEmpty, get, merge } from 'lodash'
 import path from 'path'
 
 import regions, { regionMap } from '../enums/regions'
@@ -242,7 +242,7 @@ export default class Provider extends CloudGraph.Client {
           try {
             // TODO: how to catch the error from SharedIniFileCredentials when profile doent exist
             const credentials = new AWS.SharedIniFileCredentials({
-              profile: profile,
+              profile,
               callback: (err: any) => {
                 if (err) {
                   this.logger.error(
@@ -386,7 +386,10 @@ export default class Provider extends CloudGraph.Client {
     return profiles || []
   }
 
-  private async getRawData(profile, opts): Promise<{name: string, accountId: string, data: any}[]> {
+  private async getRawData(
+    profile,
+    opts
+  ): Promise<{ name: string; accountId: string; data: any }[]> {
     let { regions: configuredRegions, resources: configuredResources } =
       this.config
     const result = []
@@ -408,15 +411,16 @@ export default class Provider extends CloudGraph.Client {
       for (const resource of resourceNames) {
         const serviceClass = this.getService(resource)
         if (serviceClass && serviceClass.getData) {
+          const data = await serviceClass.getData({
+            regions: configuredRegions,
+            credentials,
+            opts,
+            rawData: result,
+          })
           result.push({
             name: resource,
             accountId,
-            data: await serviceClass.getData({
-              regions: configuredRegions,
-              credentials,
-              opts,
-              rawData: result,
-            }),
+            data,
           })
           this.logger.success(`${resource} scan completed`)
         } else {
@@ -480,13 +484,15 @@ export default class Provider extends CloudGraph.Client {
           // eslint-disable-next-line no-continue
           continue
         }
-       const { accountId } = await this.getIdentity({ profile })
-       if (!crawledAccounts.find(val => val === accountId)) {
-         crawledAccounts.push(accountId)
-         rawData = [...rawData, ...(await this.getRawData(profile, opts))]
-       } else {
-        this.logger.warn(`profile: ${profile} returned accountId ${accountId} which has already been crawled, skipping...`)
-      }
+        const { accountId } = await this.getIdentity({ profile })
+        if (!crawledAccounts.find(val => val === accountId)) {
+          crawledAccounts.push(accountId)
+          rawData = [...rawData, ...(await this.getRawData(profile, opts))]
+        } else {
+          this.logger.warn(
+            `profile: ${profile} returned accountId ${accountId} which has already been crawled, skipping...`
+          )
+        }
       }
     }
     // Handle global tag entities
@@ -541,13 +547,12 @@ export default class Provider extends CloudGraph.Client {
           const data = serviceData.data[region]
           if (!isEmpty(data)) {
             data.forEach((service: any) => {
-              entities.push(
-                serviceClass.format({
-                  service,
-                  region,
-                  account: serviceData.accountId,
-                })
-              )
+              const formattedData = serviceClass.format({
+                service,
+                region,
+                account: serviceData.accountId,
+              })
+              entities.push(formattedData)
               if (typeof serviceClass.getConnections === 'function') {
                 // We need to loop through all configured regions here because services can be connected to things in another region
                 for (const connectionRegion of configuredRegions.split(',')) {
@@ -565,11 +570,33 @@ export default class Provider extends CloudGraph.Client {
             })
           }
         }
+        /**
+         * we have 2 things to check here, both dealing with multi-account senarios
+         * 1. Do we already have an entity by this name in the result (i.e. both accounts have vpcs)
+         * 2. Do we already have the data for an entity that lives in multiple accounts 
+         * (i.e. a cloudtrail that appears in a master and sandbox account).
+         * If so, we need to merge the data. We use lodash merge to recursively merge arrays as there are 
+         * cases where acct A gets more data for service obj X than acct B does.
+         * (i.e. Acct A cannot access the cloudtrail's tags but acct B can because the cloudtrail's arn points to acct B)
+         */
         const existingServiceIdx = result.entities.findIndex(({ name }) => {
           return name === serviceData.name
         })
         if (existingServiceIdx > -1) {
           const existingData = result.entities[existingServiceIdx].data
+          for (const currentEntity of entities) {
+            const exisingEntityIdx = existingData.findIndex(
+              ({ id }) => id === currentEntity.id
+            )
+            if (exisingEntityIdx > -1) {
+              const entityToDelete = existingData[exisingEntityIdx]
+              existingData.splice(exisingEntityIdx, 1)
+              const entityToMergeIdx = entities.findIndex(
+                ({ id }) => id === currentEntity.id
+              )
+              entities[entityToMergeIdx] = merge(entityToDelete, currentEntity)
+            }
+          }
           result.entities[existingServiceIdx] = {
             name: serviceData.name,
             mutation: serviceClass.mutation,

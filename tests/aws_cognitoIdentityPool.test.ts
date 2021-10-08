@@ -39,7 +39,6 @@ describe.skip('Cognito Identity Pool Service Test: ', () => {
     })
 
     test('should return data from a region in the correct format', () => {
-      console.log(getDataResult)
       expect(getDataResult[region]).toEqual(
         expect.arrayContaining([
           expect.objectContaining({

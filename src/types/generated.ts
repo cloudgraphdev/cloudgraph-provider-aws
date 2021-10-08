@@ -517,6 +517,31 @@ export type AwsCloudfrontforwardedValues = {
   queryString?: Maybe<Scalars['String']>;
 };
 
+export type AwsCloudtrail = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  s3BucketName?: Maybe<Scalars['String']>;
+  s3KeyPrefix?: Maybe<Scalars['String']>;
+  snsTopicName?: Maybe<Scalars['String']>;
+  snsTopicARN?: Maybe<Scalars['String']>;
+  includeGlobalServiceEvents?: Maybe<Scalars['String']>;
+  isMultiRegionTrail?: Maybe<Scalars['String']>;
+  homeRegion?: Maybe<Scalars['String']>;
+  logFileValidationEnabled?: Maybe<Scalars['String']>;
+  cloudWatchLogsLogGroupArn?: Maybe<Scalars['String']>;
+  cloudWatchLogsRoleArn?: Maybe<Scalars['String']>;
+  kmsKeyId?: Maybe<Scalars['String']>;
+  hasCustomEventSelectors?: Maybe<Scalars['String']>;
+  hasInsightSelectors?: Maybe<Scalars['String']>;
+  isOrganizationTrail?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  region?: Maybe<Scalars['String']>;
+  s3?: Maybe<Array<Maybe<AwsS3>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
+};
+
 export type AwsCloudwatch = {
   id: Scalars['String'];
   accountId: Scalars['String'];
@@ -1016,6 +1041,7 @@ export type AwsKms = {
   deletionDate?: Maybe<Scalars['String']>;
   validTo?: Maybe<Scalars['String']>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
 };
 
 export type AwsLambda = {
@@ -1255,6 +1281,7 @@ export type AwsS3 = {
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   cloudfrontDistribution?: Maybe<Array<Maybe<AwsCloudfront>>>;
+  cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
 };
 
 export type AwsSecurityGroup = {
@@ -1390,6 +1417,7 @@ export type AwsTag = {
   cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
   appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
+  cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
   cloudFormationStack?: Maybe<Array<Maybe<AwsCloudFormationStack>>>;
   cloudFormationStackSet?: Maybe<Array<Maybe<AwsCloudFormationStackSet>>>;
   dynamodb?: Maybe<Array<Maybe<AwsDynamoDbTable>>>;

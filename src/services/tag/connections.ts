@@ -13,6 +13,7 @@ import { RawAwsCognitoUserPool } from '../cognitoUserPool/data'
 import { RawAwsDynamoDbTable } from '../dynamodb/data'
 import { RawAwsKinesisFirehose } from '../kinesisFirehose/data'
 import { RawAwsNetworkAcl } from '../nacl/data'
+import { RawAwsCloudTrail } from '../cloudtrail/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -81,6 +82,31 @@ export default ({
             resourceType: services.asg,
             relation: 'child',
             field: 'asg',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related CloudTrails
+     */
+     const cloudtrails: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.cloudtrail)
+    if (cloudtrails?.data?.[region]) {
+      const dataAtRegion: RawAwsCloudTrail[] = findServiceInstancesWithTag(
+        tag,
+        cloudtrails.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const cloudtrail of dataAtRegion) {
+          const { TrailARN: id } = cloudtrail
+          connections.push({
+            id,
+            resourceType: services.cloudtrail,
+            relation: 'child',
+            field: 'cloudtrail',
           })
         }
       }

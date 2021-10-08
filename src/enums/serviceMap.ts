@@ -12,9 +12,10 @@ import AwsKms from '../services/kms'
 import AwsSecurityGroup from '../services/securityGroup'
 import AwsTag from '../services/tag'
 import Billing from '../services/billing'
+import CloudFront from '../services/cloudfront'
+import CloudTrail from '../services/cloudtrail'
 import CloudFormationStack from '../services/cloudFormationStack'
 import CloudFormationStackSet from '../services/cloudFormationStackSet'
-import CloudFront from '../services/cloudfront'
 import CloudWatch from '../services/cloudwatch'
 import CognitoIdentityPool from '../services/cognitoIdentityPool'
 import CognitoUserPool from '../services/cognitoUserPool'
@@ -48,6 +49,7 @@ export default {
   [services.asg]: ASG,
   [services.billing]: Billing,
   [services.cloudfront]: CloudFront,
+  [services.cloudtrail]: CloudTrail,
   [services.cloudFormationStack]: CloudFormationStack,
   [services.cloudFormationStackSet]: CloudFormationStackSet,
   [services.cloudwatch]: CloudWatch,

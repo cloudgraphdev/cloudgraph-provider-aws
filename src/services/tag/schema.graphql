@@ -24,6 +24,7 @@ type awsTag @key(fields: "id") {
   cognitoUserPool: [awsCognitoUserPool]
   kinesisFirehose: [awsKinesisFirehose]
   appSync: [awsAppSync]
+  cloudtrail: [awsCloudtrail]
   cloudFormationStack: [awsCloudFormationStack]
   cloudFormationStackSet: [awsCloudFormationStackSet]
   dynamodb: [awsDynamoDbTable]
