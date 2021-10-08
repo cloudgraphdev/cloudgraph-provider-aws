@@ -6,8 +6,10 @@ import { RawAwsCloudTrail } from './data';
 export default ({
   service: rawData,
   region,
+  account
 }: {
   service: RawAwsCloudTrail
+  account: string
   region: string
 }): AwsCloudtrail => {
   const {
@@ -33,6 +35,7 @@ export default ({
   const cloudTrail = {
     id: arn,
     arn,
+    accountId: account,
     name,
     s3BucketName,
     s3KeyPrefix,

@@ -102,7 +102,6 @@ export default async ({
     const trailArnList = await getTrailArnData(cloudTrail)
     const trailList = await listTrailData(cloudTrail, trailArnList)
     const trailTagList = await listTrailTagData(cloudTrail, trailArnList)
-
     cloudTrailData.push(
       ...trailList.map((trail: Trail) => ({
         ...trail,

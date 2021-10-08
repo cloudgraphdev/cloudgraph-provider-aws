@@ -520,6 +520,7 @@ export type AwsCloudfrontforwardedValues = {
 export type AwsCloudtrail = {
   id: Scalars['String'];
   arn: Scalars['String'];
+  accountId: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   s3BucketName?: Maybe<Scalars['String']>;
   s3KeyPrefix?: Maybe<Scalars['String']>;

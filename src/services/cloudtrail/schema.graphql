@@ -1,6 +1,7 @@
 type awsCloudtrail @key(fields: "arn") {
   id: String! @id @search(by: [hash, regexp])
   arn: String! @id @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash, regexp])
   name: String @search(by: [hash, regexp])
   s3BucketName: String @search(by: [hash, regexp])
   s3KeyPrefix: String @search(by: [hash, regexp])

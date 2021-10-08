@@ -5,7 +5,7 @@ import AWS from 'aws-sdk'
 import chalk from 'chalk'
 import { print } from 'graphql'
 import STS from 'aws-sdk/clients/sts'
-import { isEmpty, get } from 'lodash'
+import { isEmpty, get, merge } from 'lodash'
 import path from 'path'
 
 import regions, { regionMap } from '../enums/regions'
@@ -242,7 +242,7 @@ export default class Provider extends CloudGraph.Client {
           try {
             // TODO: how to catch the error from SharedIniFileCredentials when profile doent exist
             const credentials = new AWS.SharedIniFileCredentials({
-              profile: profile,
+              profile,
               callback: (err: any) => {
                 if (err) {
                   this.logger.error(
@@ -408,15 +408,16 @@ export default class Provider extends CloudGraph.Client {
       for (const resource of resourceNames) {
         const serviceClass = this.getService(resource)
         if (serviceClass && serviceClass.getData) {
+          const data = await serviceClass.getData({
+            regions: configuredRegions,
+            credentials,
+            opts,
+            rawData: result,
+          })
           result.push({
             name: resource,
             accountId,
-            data: await serviceClass.getData({
-              regions: configuredRegions,
-              credentials,
-              opts,
-              rawData: result,
-            }),
+            data
           })
           this.logger.success(`${resource} scan completed`)
         } else {
@@ -541,13 +542,12 @@ export default class Provider extends CloudGraph.Client {
           const data = serviceData.data[region]
           if (!isEmpty(data)) {
             data.forEach((service: any) => {
-              entities.push(
-                serviceClass.format({
-                  service,
-                  region,
-                  account: serviceData.accountId,
-                })
-              )
+              const formattedData = serviceClass.format({
+                service,
+                region,
+                account: serviceData.accountId,
+              })
+              entities.push(formattedData)
               if (typeof serviceClass.getConnections === 'function') {
                 // We need to loop through all configured regions here because services can be connected to things in another region
                 for (const connectionRegion of configuredRegions.split(',')) {
@@ -570,6 +570,15 @@ export default class Provider extends CloudGraph.Client {
         })
         if (existingServiceIdx > -1) {
           const existingData = result.entities[existingServiceIdx].data
+          for (const currentEntity of entities) {
+            const exisingEntityIdx = existingData.findIndex(({ id }) => id === currentEntity.id)
+            if (exisingEntityIdx > -1) {
+              const entityToDelete = existingData[exisingEntityIdx]
+              existingData.splice(exisingEntityIdx, 1)
+              const entityToMergeIdx = entities.findIndex(({ id }) => id === currentEntity.id)
+              entities[entityToMergeIdx] = merge(entityToDelete, currentEntity)
+            }
+          }
           result.entities[existingServiceIdx] = {
             name: serviceData.name,
             mutation: serviceClass.mutation,
