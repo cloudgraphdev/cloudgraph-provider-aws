@@ -23,7 +23,7 @@ export const createCacheBehavior = (
   const {
     AllowedMethods: {
       Items: allowedMethods = [],
-      CachedMethods: { Items: cachedMethods = [] },
+      CachedMethods: { Items: cachedMethods = [] } = { Items: [] },
     } = {},
     Compress: compress,
     DefaultTTL: defaultTtl,
@@ -66,7 +66,7 @@ export const createDefaultCacheBehavior = (
   const {
     AllowedMethods: {
       Items: allowedMethods = [],
-      CachedMethods: { Items: cachedMethods = [] },
+      CachedMethods: { Items: cachedMethods = [] } = { Items: [] },
     } = {},
     Compress: compress,
     DefaultTTL: defaultTtl,
@@ -105,28 +105,34 @@ export const createDefaultCacheBehavior = (
  * CloudFront
  */
 
-export default ({ service, account }: { service: RawAwsCloudfront, account: string }): AwsCloudfront => {
+export default ({
+  service,
+  account,
+}: {
+  service: RawAwsCloudfront
+  account: string
+}): AwsCloudfront => {
   const {
     config: {
       CallerReference: callerReference,
       DefaultRootObject: defaultRootObject,
       HttpVersion: httpVersion,
-      Restrictions: {
-        GeoRestriction: { Items: geoRestrictions },
+      Restrictions: { GeoRestriction: { Items: geoRestrictions = [] } } = {
+        GeoRestriction: { RestrictionType: '', Items: [], Quantity: 0 },
       },
     },
     etag,
     summary: {
       ARN: arn,
-      CacheBehaviors: { Items: orderedCacheBehavior = [] },
-      CustomErrorResponses: { Items: cer = [] },
+      CacheBehaviors: { Items: orderedCacheBehavior = [] } = { Quantity: 0 },
+      CustomErrorResponses: { Items: cer = [] } = { Quantity: 0 },
       DefaultCacheBehavior: defaultCacheBehavior,
       DomainName: domainName,
       Enabled: enabled,
       Id: id,
       IsIPV6Enabled: isIpv6Enabled,
       LastModifiedTime: lastModified,
-      Origins: { Items: originData = [] },
+      Origins: { Items: originData = [] } = { Quantity: 0, Items: [] },
       PriceClass: priceClass,
       Status: status,
       ViewerCertificate: {

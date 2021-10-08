@@ -60,7 +60,7 @@ const listCloudfrontDistributions = async (
           }
 
           const {
-            DistributionList: { Items, NextMarker: nextToken, IsTruncated },
+            DistributionList: { Items = [], NextMarker: nextToken, IsTruncated },
           } = data || {}
 
           /**
