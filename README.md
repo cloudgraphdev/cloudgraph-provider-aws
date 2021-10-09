@@ -59,45 +59,45 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 
 # Supported Services
 
-| Service               | Relations                                                                                            |
-| ------------------    | ---------------------------------------------------------------------------------------------------- |
-| alb                   | ec2, sg, subnet, vpc                                                                                 |
-| apiGatewayRestApi     | apiGatewayResource, apiGatewayStage, route53Record                                                   |
-| apiGatewayStage       | apiGatewayRestApi                                                                                    |
-| apiGatewayResource    | apiGatewayRestApi                                                                                    |
-| appSync               |                                                                                                      |
-| asg                   | ebs, ec2, securityGroups, subnet                                                                     |
-| cloudformationStack   | cloudformationStack                                                                                  |
-| cloudformationStackSet|                                                                                                      |
-| cloudfront            | elb, s3                                                                                              |
-| cloudtrail            | kms, s3                                                                                              |
-| cloudwatch            |                                                                                                      |
-| cognitoIdentityPool   |                                                                                                      |
-| cognitoUserPool       | lambda                                                                                               |
-| dynamodb              |                                                                                                      |
-| ebs                   | ec2, asg                                                                                             |
-| ec2                   | alb, asg, ebs, eip, networkInterface, securityGroups, subnet, vpc                                    |
-| ecr                   |                                                                                                      |
-| eip                   | ec2, networkInterface, vpc                                                                           |
-| elb                   | cloudfront, securityGroups, subnet, vpc                                                              |
-| igw                   | vpc                                                                                                  |
-| kinesisFirehose       | kinesisStream, s3                                                                                    |
-| kinesisStream         |                                                                                                      |
-| kms                   | lambda                                                                                               |
-| lambda                | kms, securityGroups, subnet, vpc                                                                     |
-| nacl                  | vpc                                                                                                  |
-| natGateway            | networkInterface, subnet, vpc                                                                        |
-| networkInterface      | ec2, eip, natGateway, subnet, vpc                                                                    |
-| route53Record         | alb, apiGatewayRestApi, elb, route53HostedZone                                                       |
-| route53HostedZone     | route53Record, vpc                                                                                   |
-| routeTable            | subnet, vpc                                                                                          |
-| s3                    |                                                                                                      |
-| secretsManager        |                                                                                                      |
-| securityGroup         | asg, lambda, ec2, elb                                                                                |
-| ses                   |                                                                                                      |
-| sqs                   |                                                                                                      |
-| subnet                | alb, asg, ec2, elb, lambda, natGateway, networkInterface, routeTable, vpc                            |
-| vpc                   | alb, ec2, eip, elb, igw, lambda, natGateway, networkInterface, route53HostedZone, routeTable, subnet |
+| Service                | Relations                                                                                            |
+| ---------------------- | ---------------------------------------------------------------------------------------------------- |
+| alb                    | ec2, sg, subnet, vpc                                                                                 |
+| apiGatewayRestApi      | apiGatewayResource, apiGatewayStage, route53Record                                                   |
+| apiGatewayStage        | apiGatewayRestApi                                                                                    |
+| apiGatewayResource     | apiGatewayRestApi                                                                                    |
+| appSync                |                                                                                                      |
+| asg                    | ebs, ec2, securityGroups, subnet                                                                     |
+| cloudformationStack    | cloudformationStack                                                                                  |
+| cloudformationStackSet |                                                                                                      |
+| cloudfront             | elb, s3                                                                                              |
+| cloudtrail             | kms, s3                                                                                              |
+| cloudwatch             |                                                                                                      |
+| cognitoIdentityPool    |                                                                                                      |
+| cognitoUserPool        | lambda                                                                                               |
+| dynamodb               |                                                                                                      |
+| ebs                    | ec2, asg                                                                                             |
+| ec2                    | alb, asg, ebs, eip, networkInterface, securityGroups, subnet, vpc                                    |
+| ecr                    |                                                                                                      |
+| eip                    | ec2, networkInterface, vpc                                                                           |
+| elb                    | cloudfront, securityGroups, subnet, vpc                                                              |
+| igw                    | vpc                                                                                                  |
+| kinesisFirehose        | kinesisStream, s3                                                                                    |
+| kinesisStream          |                                                                                                      |
+| kms                    | lambda                                                                                               |
+| lambda                 | kms, securityGroups, subnet, vpc                                                                     |
+| nacl                   | vpc                                                                                                  |
+| natGateway             | networkInterface, subnet, vpc                                                                        |
+| networkInterface       | ec2, eip, natGateway, subnet, vpc                                                                    |
+| route53Record          | alb, apiGatewayRestApi, elb, route53HostedZone                                                       |
+| route53HostedZone      | route53Record, vpc                                                                                   |
+| routeTable             | subnet, vpc                                                                                          |
+| s3                     |                                                                                                      |
+| secretsManager         |                                                                                                      |
+| securityGroup          | asg, lambda, ec2, elb                                                                                |
+| ses                    |                                                                                                      |
+| sqs                    |                                                                                                      |
+| subnet                 | alb, asg, ec2, elb, lambda, natGateway, networkInterface, routeTable, vpc                            |
+| vpc                    | alb, ec2, eip, elb, igw, lambda, natGateway, networkInterface, route53HostedZone, routeTable, subnet |
 
 <br />
 
@@ -136,7 +136,7 @@ This query will return a `JSON` payload that looks like this. All of the followi
     "getawsEc2": {
       "id": "i-12345567889012234",
       "arn": "arn:aws:ec2:us-east-1:123445678997:instance/i-12345567889012234"
-    },
+    }
   },
   "extensions": {
     "touched_uids": 4
@@ -307,12 +307,12 @@ Get each `VPC`, the `ALBs` and `Lambdas` in that `VPC`, and then a bunch of nest
 ```graphql
 query {
   queryawsVpc {
-	id
+    id
     arn
     alb {
       id
       arn
-      ec2Instance{
+      ec2Instance {
         id
         arn
         ebs(filter: { isBootDisk: true }) {
@@ -535,6 +535,7 @@ query {
 <br />
 
 ## AWS FinOps examples:
+
 <br />
 
 Note that in order to successfully ingest FinOps related data you must have the Cost Explorer API enabled in your AWS Account. [You can view how to do that here](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-access.html)
@@ -712,7 +713,6 @@ query {
     }
   }
 }
-
 ```
 
 <br />
@@ -774,10 +774,9 @@ query {
 
 When you think, "in terms of a graph", you can do almost anything with CloudGraph. Say for example that you want to know what Lamba functions don't belong to a VPC (i.e. they don't leverage VPC networking). Because CloudGraph connects all resources that have relationships, such as VPC parents to their Lambda children, you are able to answer this question easily. Simply check to see what lambda functions the VPC is "connected" to, and compare that against the list of all lambda functions like so:
 
-
 ```graphql
 query {
-  queryawsVpc{
+  queryawsVpc {
     id
     arn
     lambda {
