@@ -1,8 +1,8 @@
 import isEmpty from 'lodash/isEmpty'
-import kebabCase from 'lodash/kebabCase'
 import resources from '../../enums/resources'
 import { AwsIamGroup } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
+import { getIamId } from '../../utils/ids'
 import { RawAwsIamUser } from '../iamUser/data'
 
 /**
@@ -47,7 +47,11 @@ export default ({
   const userTags = formatTagsFromMap(tags)
 
   const user = {
-    id: `${name}-${id}-${kebabCase(resources.iamUser)}`,
+    id: getIamId({
+      resourceId: id,
+      resourceName: name,
+      resourceType: resources.iamUser,
+    }),
     arn,
     accountId: account,
     name,

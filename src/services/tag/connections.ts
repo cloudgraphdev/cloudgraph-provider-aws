@@ -1,7 +1,7 @@
 import { ServiceConnection } from '@cloudgraph/sdk'
 import { MetricAlarm } from 'aws-sdk/clients/cloudwatch'
 import { NatGateway, Vpc } from 'aws-sdk/clients/ec2'
-import { isEmpty, kebabCase } from 'lodash'
+import { isEmpty } from 'lodash'
 import regions, { globalRegionName } from '../../enums/regions'
 import services from '../../enums/services'
 import { RawAwsAppSync } from '../appSync/data'
@@ -21,6 +21,7 @@ import { RawAwsIamUser } from '../iamUser/data'
 import { RawAwsIamRole } from '../iamRole/data'
 import { RawAwsIamPolicy } from '../iamPolicy/data'
 import resources from '../../enums/resources'
+import { getIamId } from '../../utils/ids'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -766,7 +767,11 @@ export default ({
           const { UserId: userId, UserName: userName } = instance
 
           connections.push({
-            id: `${userName}-${userId}-${kebabCase(resources.iamUser)}`,
+            id: getIamId({
+              resourceId: userId,
+              resourceName: userName,
+              resourceType: resources.iamUser,
+            }),
             resourceType: services.iamUser,
             relation: 'child',
             field: 'user',
@@ -790,7 +795,11 @@ export default ({
           const { RoleId: roleId, RoleName: roleName } = instance
 
           connections.push({
-            id: `${roleName}-${roleId}-${kebabCase(resources.iamRole)}`,
+            id: getIamId({
+              resourceId: roleId,
+              resourceName: roleName,
+              resourceType: resources.iamRole,
+            }),
             resourceType: services.iamRole,
             relation: 'child',
             field: 'role',
@@ -814,7 +823,11 @@ export default ({
           const { PolicyId: policyId, PolicyName: policyName } = instance
 
           connections.push({
-            id: `${policyName}-${policyId}-${kebabCase(resources.iamPolicy)}`,
+            id: getIamId({
+              resourceId: policyId,
+              resourceName: policyName,
+              resourceType: resources.iamPolicy,
+            }),
             resourceType: services.iamPolicy,
             relation: 'child',
             field: 'policy',

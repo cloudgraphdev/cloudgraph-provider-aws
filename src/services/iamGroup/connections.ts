@@ -9,6 +9,7 @@ import { RawAwsIamGroup } from './data'
 import { RawAwsIamPolicy } from '../iamPolicy/data'
 import { RawAwsIamUser } from '../iamUser/data'
 import resources from '../../enums/resources'
+import { getIamId } from '../../utils/ids'
 
 /**
  * IAM Group
@@ -87,6 +88,10 @@ export default ({
   }
 
   return {
-    [`${name}-${id}-${kebabCase(resources.iamGroup)}`]: connections,
+    [getIamId({
+      resourceId: id,
+      resourceName: name,
+      resourceType: resources.iamGroup,
+    })]: connections,
   }
 }

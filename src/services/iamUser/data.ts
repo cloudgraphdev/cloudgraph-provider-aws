@@ -12,8 +12,9 @@ import IAM, {
   ListUserTagsResponse,
   User,
 } from 'aws-sdk/clients/iam'
+import { Config } from 'aws-sdk/lib/config'
 
-import { Credentials, TagMap } from '../../types'
+import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import {
   initTestEndpoint,
@@ -259,10 +260,10 @@ export const listIamUsers = async (
  */
 
 export default async ({
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
   rawData: any
 }): Promise<{
   [region: string]: RawAwsIamUser[]
@@ -270,7 +271,12 @@ export default async ({
   new Promise(async resolve => {
     let usersData: RawAwsIamUser[] = []
 
-    const client = new IAM({ credentials, endpoint, ...customRetrySettings })
+    const client = new IAM({
+      ...config,
+      region: globalRegionName,
+      endpoint,
+      ...customRetrySettings,
+    })
 
     logger.debug(lt.lookingForIamUsers)
 

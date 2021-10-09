@@ -1,7 +1,7 @@
-import kebabCase from 'lodash/kebabCase'
 import resources from '../../enums/resources'
 import { AwsIamPolicy } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
+import { getIamId } from '../../utils/ids'
 import { RawAwsIamPolicy } from './data'
 
 /**
@@ -17,12 +17,12 @@ export default ({
   region: string
 }): AwsIamPolicy => {
   const {
-    PolicyId: id,
-    PolicyName: name,
-    Arn: arn,
-    Path: path,
+    PolicyId: id = '',
+    PolicyName: name = '',
+    Arn: arn = '',
+    Path: path = '',
     Description: description = '',
-    Document: policyContent,
+    Document: policyContent = '',
     Tags: tags = {},
   } = rawData
 
@@ -30,7 +30,11 @@ export default ({
   const policyTags = formatTagsFromMap(tags)
 
   const policy = {
-    id: `${name}-${id}-${kebabCase(resources.iamPolicy)}`,
+    id: getIamId({
+      resourceId: id,
+      resourceName: name,
+      resourceType: resources.iamPolicy,
+    }),
     name,
     arn,
     accountId: account,

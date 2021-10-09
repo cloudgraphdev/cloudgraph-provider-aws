@@ -8,6 +8,7 @@ import services from '../../enums/services'
 import { RawAwsIamRole } from './data'
 import { RawAwsIamPolicy } from '../iamPolicy/data'
 import resources from '../../enums/resources'
+import { getIamId } from '../../utils/ids'
 
 /**
  * IAM Role
@@ -54,6 +55,10 @@ export default ({
   }
 
   return {
-    [`${name}-${id}-${kebabCase(resources.iamRole)}`]: connections,
+    [getIamId({
+      resourceId: id,
+      resourceName: name,
+      resourceType: resources.iamRole,
+    })]: connections,
   }
 }

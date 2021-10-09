@@ -10,8 +10,8 @@ import IAM, {
   ListGroupsResponse,
   ListUserPoliciesResponse,
 } from 'aws-sdk/clients/iam'
+import { Config } from 'aws-sdk/lib/config'
 
-import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import {
   initTestEndpoint,
@@ -156,11 +156,10 @@ export const listIamGroups = async (
  */
 
 export default async ({
-  credentials,
-}: // rawData,
-{
+  config,
+}: {
   regions: string
-  credentials: Credentials
+  config: Config
   rawData: any
 }): Promise<{
   [region: string]: RawAwsIamGroup[]
@@ -168,7 +167,12 @@ export default async ({
   new Promise(async resolve => {
     let groupsData: RawAwsIamGroup[] = []
 
-    const client = new IAM({ credentials, endpoint, ...customRetrySettings })
+    const client = new IAM({
+      ...config,
+      region: globalRegionName,
+      endpoint,
+      ...customRetrySettings,
+    })
 
     logger.debug(lt.lookingForIamGroups)
 

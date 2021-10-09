@@ -1,7 +1,7 @@
-import kebabCase from 'lodash/kebabCase'
 import resources from '../../enums/resources'
 import { AwsIamRole } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
+import { getIamId } from '../../utils/ids'
 import { RawAwsIamRole } from './data'
 
 /**
@@ -17,15 +17,15 @@ export default ({
   region: string
 }): AwsIamRole => {
   const {
-    RoleId: id,
-    RoleName: name,
-    Arn: arn,
-    Path: path,
+    RoleId: id = '',
+    RoleName: name = '',
+    Arn: arn = '',
+    Path: path = '',
     CreateDate: createdAt,
-    Description: description,
-    AssumeRolePolicyDocument: assumeRolePolicy,
-    MaxSessionDuration: maxSessionDuration,
-    Policies: inlinePolicies,
+    Description: description = '',
+    AssumeRolePolicyDocument: assumeRolePolicy = '',
+    MaxSessionDuration: maxSessionDuration = 0,
+    Policies: inlinePolicies = [],
     Tags: tags = {},
   } = rawData
 
@@ -33,7 +33,11 @@ export default ({
   const roleTags = formatTagsFromMap(tags)
 
   const role = {
-    id: `${name}-${id}-${kebabCase(resources.iamRole)}`,
+    id: getIamId({
+      resourceId: id,
+      resourceName: name,
+      resourceType: resources.iamRole,
+    }),
     arn,
     accountId: account,
     name,

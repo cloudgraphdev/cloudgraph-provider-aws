@@ -10,8 +10,9 @@ import IAM, {
   ListPolicyTagsResponse,
   Policy,
 } from 'aws-sdk/clients/iam'
+import { Config } from 'aws-sdk/lib/config'
 
-import { Credentials, TagMap } from '../../types'
+import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import {
   initTestEndpoint,
@@ -24,6 +25,7 @@ import { convertAwsTagsToTagMap } from '../../utils/format'
 import {
   IAM_CUSTOM_DELAY,
   MAX_FAILED_AWS_REQUEST_RETRIES,
+  POLICY_SCOPE,
 } from '../../config/constants'
 
 const lt = { ...awsLoggerText }
@@ -101,7 +103,7 @@ export const listIamPolicies = async (
     const policyDetailByArnePromises = []
 
     iam.listPolicies(
-      { Marker: marker },
+      { Marker: marker, Scope: POLICY_SCOPE },
       async (err: AWSError, data: ListPoliciesResponse) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'iam:listPolicies', err)
@@ -149,10 +151,10 @@ export const listIamPolicies = async (
  */
 
 export default async ({
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
   rawData: any
 }): Promise<{
   [region: string]: RawAwsIamPolicy[]
@@ -160,9 +162,17 @@ export default async ({
   new Promise(async resolve => {
     let policiesData: RawAwsIamPolicy[] = []
 
-    const client = new IAM({ credentials, endpoint, ...customRetrySettings })
+    const client = new IAM({
+      ...config,
+      region: globalRegionName,
+      endpoint,
+      ...customRetrySettings,
+    })
 
     logger.debug(lt.lookingForIamPolicies)
+    logger.warn(
+      'Please be patient, IAM policies can take a long time to fetch if you have a large account'
+    )
 
     // Fetch IAM Policies
     policiesData = await listIamPolicies(client)

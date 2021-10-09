@@ -80,6 +80,10 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | ecr                    |                                                                                                      |
 | eip                    | ec2, networkInterface, vpc                                                                           |
 | elb                    | cloudfront, securityGroups, subnet, vpc                                                              |
+| iamUser                | iamGroup                                                                                             |
+| iamPolicy              | iamRole, iamGroup                                                                                    |
+| iamRole                | iamPolicy                                                                                            |
+| iamGroup               | iamUser, iamPolicy                                                                                   |
 | igw                    | vpc                                                                                                  |
 | kinesisFirehose        | kinesisStream, s3                                                                                    |
 | kinesisStream          |                                                                                                      |

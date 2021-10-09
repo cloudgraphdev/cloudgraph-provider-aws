@@ -1,6 +1,6 @@
-import kebabCase from 'lodash/kebabCase'
 import resources from '../../enums/resources'
 import { AwsIamGroup } from '../../types/generated'
+import { getIamId } from '../../utils/ids'
 import { RawAwsIamGroup } from '../iamGroup/data'
 
 /**
@@ -16,15 +16,19 @@ export default ({
   region: string
 }): AwsIamGroup => {
   const {
-    GroupId: id,
-    GroupName: name,
-    Arn: arn,
-    Path: path,
-    Policies: inlinePolicies,
+    GroupId: id = '',
+    GroupName: name = '',
+    Arn: arn = '',
+    Path: path = '',
+    Policies: inlinePolicies = [],
   } = rawData
 
   const record = {
-    id: `${name}-${id}-${kebabCase(resources.iamGroup)}`,
+    id: getIamId({
+      resourceId: id,
+      resourceName: name,
+      resourceType: resources.iamGroup,
+    }),
     arn,
     accountId: account,
     path,

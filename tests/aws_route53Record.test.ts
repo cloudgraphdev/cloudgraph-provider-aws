@@ -10,7 +10,7 @@ import last from 'lodash/last'
 import kebabCase from 'lodash/kebabCase'
 import resources from '../src/enums/resources'
 
-describe('Route53 Record Service Test: ', () => {
+xdescribe('Route53 Record Service Test: ', () => {
   let getDataResult
   let formatResult
   let route53Connections

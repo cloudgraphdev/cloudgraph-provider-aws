@@ -19,3 +19,13 @@ export const getRecordId = ({
 
 export const gets3BucketId = (id: string): string =>
   `${id}-${kebabCase(resources.s3Bucket)}`
+
+export const getIamId = ({
+  resourceId,
+  resourceName,
+  resourceType,
+}: {
+  resourceId: string
+  resourceName: string
+  resourceType: string
+}): string => `${resourceName}-${resourceId}-${kebabCase(resourceType)}`

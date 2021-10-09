@@ -12,8 +12,9 @@ import IAM, {
   ListRoleTagsResponse,
   Role,
 } from 'aws-sdk/clients/iam'
+import { Config } from 'aws-sdk/lib/config'
 
-import { Credentials, TagMap } from '../../types'
+import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import {
   initTestEndpoint,
@@ -195,18 +196,22 @@ export const listIamRoles = async (
  */
 
 export default async ({
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
-  rawData: any
+  config: Config
 }): Promise<{
   [region: string]: RawAwsIamRole[]
 }> =>
   new Promise(async resolve => {
     let rolesData: RawAwsIamRole[] = []
 
-    const client = new IAM({ credentials, endpoint, ...customRetrySettings })
+    const client = new IAM({
+      ...config,
+      region: globalRegionName,
+      endpoint,
+      ...customRetrySettings,
+    })
 
     logger.debug(lt.lookingForIamRoles)
 
