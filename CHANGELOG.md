@@ -1,3 +1,19 @@
+# [0.29.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.28.2...0.29.0) (2021-10-10)
+
+
+### Bug Fixes
+
+* **cloudfront:** added missing null/undefined checks ([58f169e](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/58f169e76efec57a3e0baa49bd39ba2551bb7a30))
+* **cloudtrail:** handle the case of the same cloudtrail living in 2 accounts ([4264059](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/426405910996b4ef2662d888129625af08f2a453))
+* **cloudtrail:** update casing, add tag connection ([f943e05](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/f943e054e8499d208e748edccdb370b8af78e7f9))
+* **README:** fixing query in readme ([691d3ae](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/691d3aeabcdc71760ce8c77903aedb7182d4410a))
+
+
+### Features
+
+* **cloudtrail:** add cloudtrail ([42ec52d](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/42ec52d0454aff5d2383b57f2b0e90faa69bb75a))
+* **nacl:** add networkACL service ([40becb3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/40becb34e9831bfebe5021ad0d66bd5213d88b88))
+
 ## [0.28.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.28.1...0.28.2) (2021-10-07)
 
 
