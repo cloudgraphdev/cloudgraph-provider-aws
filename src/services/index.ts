@@ -5,7 +5,7 @@ import AWS from 'aws-sdk'
 import chalk from 'chalk'
 import { print } from 'graphql'
 import STS from 'aws-sdk/clients/sts'
-import { isEmpty, get, merge } from 'lodash'
+import { isEmpty, get, merge, unionBy } from 'lodash'
 import path from 'path'
 
 import regions, { regionMap } from '../enums/regions'
@@ -38,6 +38,8 @@ export default class Provider extends CloudGraph.Client {
 
   private profile: string | undefined
 
+  private role: string | undefined
+
   private serviceMap: { [key: string]: any } // TODO: how to type the service map
 
   private properties: {
@@ -46,13 +48,14 @@ export default class Provider extends CloudGraph.Client {
     resources: { [key: string]: string }
   }
 
-  logSelectedProfilesRegionsAndResources(
-    profilesToLog: string[],
+  logSelectedAccessRegionsAndResources(
+    accessType: string,
+    profilesOrRolesToLog: string[],
     regionsToLog: string,
     resourcesToLog: string
   ): void {
     this.logger.info(
-      `Profiles configured: ${chalk.green(profilesToLog.join(', '))}`
+      `${accessType === 'profile' ? 'profiles' : 'roleARNs'} configured: ${chalk.green(profilesOrRolesToLog.join(', '))}`
     )
     this.logger.info(
       `Regions configured: ${chalk.green(regionsToLog.replace(/,/g, ', '))}`
@@ -66,10 +69,14 @@ export default class Provider extends CloudGraph.Client {
     const result: { [key: string]: any } = {
       ...this.config,
     }
+    let profiles
+    try {
+      profiles = this.getProfilesFromSharedConfig()
+    } catch (error: any) {
+      this.logger.warn('No AWS profiles found')
+    }
 
-    const profiles = this.getProfilesFromSharedConfig()
-
-    if (profiles && profiles.length) {
+    if (!flags['use-roles'] && profiles && profiles.length) {
       const { profiles: profilesAnswer } = await this.interface.prompt([
         {
           type: 'checkbox',
@@ -83,9 +90,22 @@ export default class Provider extends CloudGraph.Client {
         },
       ])
       this.logger.debug(`profiles selected: ${profilesAnswer}`)
-      result.profileApprovedList = profilesAnswer.length
-        ? profilesAnswer
-        : ['default']
+      result.accounts = profilesAnswer.length
+        ? profilesAnswer.map(val => ({ profile: val }))
+        : [{ profile: 'default' }]
+    } else {
+      const { roles: rolesAnswer }: {roles: string} = await this.interface.prompt([
+        {
+          type: 'input',
+          message: 'Please input roleARNs in a comma separated list (roleArn1,roleArn2,...)',
+          name: 'roles'
+        }
+      ])
+      if (!rolesAnswer) {
+        throw new Error('No roleARNs were input, aborting AWS configuration')
+      }
+      const roles = rolesAnswer.split(',')
+      result.accounts = roles.map(val => ({roleArn: val}))
     }
 
     const { regions: regionsAnswer } = await this.interface.prompt([
@@ -141,8 +161,9 @@ export default class Provider extends CloudGraph.Client {
         'AWS'
       )} configuration successfully completed ${confettiBall}`
     )
-    this.logSelectedProfilesRegionsAndResources(
-      result.profileApprovedList,
+    this.logSelectedAccessRegionsAndResources(
+      flags['use-roles'] || !profiles.length ? 'role' : 'profile',
+      result.accounts.map(acct => acct.roleArn ?? acct.profile),
       result.regions,
       result.resources
     )
@@ -152,12 +173,14 @@ export default class Provider extends CloudGraph.Client {
   async getIdentity({
     profile,
     role,
+    externalId
   }: {
     profile: string
-    role?: string
+    role: string | undefined
+    externalId: string | undefined
   }): Promise<{ accountId: string }> {
     try {
-      const credentials = await this.getCredentials({ profile, role })
+      const credentials = await this.getCredentials({ profile, role, externalId })
       return new Promise((resolve, reject) =>
         new STS({ credentials }).getCallerIdentity((err, data) => {
           if (err) {
@@ -176,9 +199,11 @@ export default class Provider extends CloudGraph.Client {
   private getCredentials({
     profile,
     role,
+    externalId
   }: {
     profile: string
-    role?: string
+    role: string | undefined
+    externalId: string | undefined
   }): Promise<Credentials> {
     return new Promise(async resolveCreds => {
       // If we have keys set in the config file, just use them
@@ -189,7 +214,7 @@ export default class Provider extends CloudGraph.Client {
         }
       }
       // If the client instance has creds set, weve gone through this function before.. just reuse them
-      if (this.credentials && this.profile === profile) {
+      if (this.credentials && (this.profile === profile || this.role === role)) {
         return resolveCreds(this.credentials)
       }
       /**
@@ -200,18 +225,19 @@ export default class Provider extends CloudGraph.Client {
        */
       this.logger.info('Searching for AWS credentials...')
       switch (true) {
-        case profile && profile !== 'default' && role && role !== '': {
+        case role && role !== '': {
           const sts = new AWS.STS()
           await new Promise<void>(resolve => {
             sts.assumeRole(
               {
                 RoleArn: role,
+                ExternalId: externalId,
                 RoleSessionName: 'CloudGraph',
               },
               (err, data) => {
                 if (err) {
                   this.logger.error(
-                    `No credentials found for profile: ${profile} role: ${role}`
+                    `No credentials found for roleARN: ${role}`
                   )
                   this.logger.debug(err)
                   resolve()
@@ -299,40 +325,41 @@ export default class Provider extends CloudGraph.Client {
           throw new Error()
         }
         this.logger.startSpinner(msg)
-      } else {
-        const profileName = profile || 'default'
-        if (
-          !this.config?.profileApprovedList?.find(
-            (val: string) => val === profileName
-          )
-        ) {
-          const msg = this.logger.stopSpinner()
-          // Confirm the found credentials are ok to use
-          const { approved } = await this.interface.prompt([
-            {
-              type: 'confirm',
-              message: `CG found AWS credentials with accessKeyId: ${chalk.green(
-                obfuscateSensitiveString(this.credentials.accessKeyId)
-              )}. Are these ok to use?`,
-              name: 'approved',
-            },
-          ])
-          if (!approved) {
-            this.logger.error(
-              'CG does not have approval to use the credentials it found, please rerun CG with the credentials you want to use'
-            )
-            throw new Error('Credentials not approved')
-          }
-          this.logger.startSpinner(msg)
-        }
       }
+        // const profileName = profile || 'default'
+      //   if (
+      //     !this.config?.profileApprovedList?.find(
+      //       (val: string) => val === profileName
+      //     )
+      //   ) {
+      //     const msg = this.logger.stopSpinner()
+      //     // Confirm the found credentials are ok to use
+      //     const { approved } = await this.interface.prompt([
+      //       {
+      //         type: 'confirm',
+      //         message: `CG found AWS credentials with accessKeyId: ${chalk.green(
+      //           obfuscateSensitiveString(this.credentials.accessKeyId)
+      //         )}. Are these ok to use?`,
+      //         name: 'approved',
+      //       },
+      //     ])
+      //     if (!approved) {
+      //       this.logger.error(
+      //         'CG does not have approval to use the credentials it found, please rerun CG with the credentials you want to use'
+      //       )
+      //       throw new Error('Credentials not approved')
+      //     }
+      //     this.logger.startSpinner(msg)
+      //   }
+      // }
+      const profileName = profile || 'default'
       const usingEnvCreds = !!process.env.AWS_ACCESS_KEY_ID
       if (usingEnvCreds) {
         this.logger.success('Using credentials set by ENV variables')
       } else {
         this.logger.success('Found and using the following AWS credentials')
         this.logger.success(
-          `profile: ${chalk.underline.green(profile ?? 'default')}`
+          `${role ? 'roleARN' : 'profile'}: ${chalk.underline.green(role ?? profileName)}`
         )
       }
       this.logger.success(
@@ -387,8 +414,10 @@ export default class Provider extends CloudGraph.Client {
   }
 
   private async getRawData(
-    profile,
-    opts
+    profile: string | undefined,
+    role: string | undefined,
+    externalId: string | undefined,
+    opts?: Opts
   ): Promise<{ name: string; accountId: string; data: any }[]> {
     let { regions: configuredRegions, resources: configuredResources } =
       this.config
@@ -405,8 +434,8 @@ export default class Provider extends CloudGraph.Client {
       ...new Set<string>(configuredResources.split(',')),
     ])
 
-    const credentials = await this.getCredentials({ profile })
-    const { accountId } = await this.getIdentity({ profile })
+    const credentials = await this.getCredentials({ profile, role, externalId })
+    const { accountId } = await this.getIdentity({ profile, role, externalId })
     try {
       for (const resource of resourceNames) {
         const serviceClass = this.getService(resource)
@@ -449,7 +478,7 @@ export default class Provider extends CloudGraph.Client {
     }
     let { regions: configuredRegions, resources: configuredResources } =
       this.config
-    const { profileApprovedList: configuredProfiles } = this.config
+    const { accounts: configuredAccounts } = this.config
     if (!configuredRegions) {
       configuredRegions = this.properties.regions.join(',')
     } else {
@@ -461,8 +490,11 @@ export default class Provider extends CloudGraph.Client {
 
     const usingEnvCreds = !!process.env.AWS_ACCESS_KEY_ID
 
-    this.logSelectedProfilesRegionsAndResources(
-      usingEnvCreds ? [ENV_VAR_CREDS_LOG] : configuredProfiles,
+    this.logSelectedAccessRegionsAndResources(
+      configuredAccounts[0].roleArn ? 'role' : 'profile',
+      usingEnvCreds ? [ENV_VAR_CREDS_LOG] : configuredAccounts.map(acct => {
+        return acct.roleArn ?? acct.profile
+      }),
       configuredRegions,
       configuredResources
     )
@@ -474,23 +506,27 @@ export default class Provider extends CloudGraph.Client {
     const tags = { name: 'tag', data: { [tagRegion]: [] } }
     // If the user has passed aws creds as env variables, dont use profile list
     if (process.env.AWS_ACCESS_KEY_ID) {
-      rawData = await this.getRawData('default', opts)
+      rawData = await this.getRawData('default', undefined, undefined, opts)
     } else {
       const crawledAccounts = []
-      for (const profile of configuredProfiles) {
+      for (const { profile, roleArn: role, externalId } of configuredAccounts) {
         // verify that profile exists in the shared credential file
-        const profiles = this.getProfilesFromSharedConfig()
-        if (!profiles.includes(profile)) {
-          // eslint-disable-next-line no-continue
-          continue
+        if (profile) {
+          const profiles = this.getProfilesFromSharedConfig()
+          if (!profiles.includes(profile)) {
+            this.logger.warn(`Profile: ${profile} not found in shared credentials file. Skipping...`)
+            // eslint-disable-next-line no-continue
+            continue
+          }
         }
-        const { accountId } = await this.getIdentity({ profile })
+        const { accountId } = await this.getIdentity({ profile, role, externalId })
         if (!crawledAccounts.find(val => val === accountId)) {
           crawledAccounts.push(accountId)
-          rawData = [...rawData, ...(await this.getRawData(profile, opts))]
+          rawData = [...rawData, ...(await this.getRawData(profile, role, externalId, opts))]
         } else {
           this.logger.warn(
-            `profile: ${profile} returned accountId ${accountId} which has already been crawled, skipping...`
+            // eslint-disable-next-line max-len
+            `${profile ? 'profile' : 'roleARN'}: ${profile ?? role} returned accountId ${accountId} which has already been crawled, skipping...`
           )
         }
       }
@@ -555,16 +591,26 @@ export default class Provider extends CloudGraph.Client {
               entities.push(formattedData)
               if (typeof serviceClass.getConnections === 'function') {
                 // We need to loop through all configured regions here because services can be connected to things in another region
+                let serviceConnections = {} 
                 for (const connectionRegion of configuredRegions.split(',')) {
-                  result.connections = {
-                    ...result.connections,
-                    ...serviceClass.getConnections({
-                      service,
-                      region: connectionRegion,
-                      account: serviceData.accountId,
-                      data: rawData,
-                    }),
+                  const newConnections = serviceClass.getConnections({
+                    service,
+                    region: connectionRegion,
+                    account: serviceData.accountId,
+                    data: rawData,
+                  })
+                  if (!isEmpty(serviceConnections)) {
+                    const entries: [string, any[]][] = Object.entries(serviceConnections)
+                    for (const [key, value] of entries) {
+                      serviceConnections[key] = unionBy(value, newConnections, 'id')
+                    }
+                  } else {
+                    serviceConnections = newConnections
                   }
+                }
+                result.connections = {
+                  ...result.connections,
+                  ...serviceConnections
                 }
               }
             })
