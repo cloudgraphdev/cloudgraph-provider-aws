@@ -1,3 +1,10 @@
+## [0.29.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.29.0...0.29.1) (2021-10-10)
+
+
+### Bug Fixes
+
+* **alb:** fix alb connections to use correct field for id ([7138f96](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/7138f96822387f9da9873ebfde6122a759195124))
+
 # [0.29.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.28.2...0.29.0) (2021-10-10)
 
 
