@@ -23,7 +23,7 @@ export default ({
   region: string
 }): { [key: string]: ServiceConnection[] } => {
   const {
-    LoadBalancerArn: id,
+    LoadBalancerName: id,
     SecurityGroups: securityGroups = [],
   }: // AvailabilityZones: azs = [],
   RawAwsAlb = alb
