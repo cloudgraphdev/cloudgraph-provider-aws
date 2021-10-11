@@ -14,12 +14,13 @@ import DynamoDB, {
   ListTablesInput,
   ContinuousBackupsDescription,
 } from 'aws-sdk/clients/dynamodb'
+import { Config } from 'aws-sdk/lib/config'
 import { AWSError } from 'aws-sdk/lib/error'
 import isEmpty from 'lodash/isEmpty'
 import groupBy from 'lodash/groupBy'
 
 import awsLoggerText from '../../properties/logger'
-import { AwsTag, Credentials, TagMap } from '../../types'
+import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 
 import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
@@ -213,10 +214,10 @@ const getTableBackupsDescription = async (
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{ [property: string]: RawAwsDynamoDbTable[] }> =>
   new Promise(async resolve => {
     const tableNames: Array<{ name: TableName; region: string }> = []
@@ -230,7 +231,7 @@ export default async ({
     // First we get all table name for all regions
     regions.split(',').map(region => {
       // We instatiate a client per region
-      const dynamoDb = new DynamoDB({ region, credentials, endpoint })
+      const dynamoDb = new DynamoDB({ ...config, region, endpoint })
       const regionPromise = new Promise<void>(async resolveRegion => {
         // Then we try to fetch all table names per region
         // region gets resolved if there's any data found for this region
@@ -252,7 +253,7 @@ export default async ({
 
     // Then we get the full table description for each name
     tableNames.map(({ name: tableName, region }) => {
-      const dynamoDb = new DynamoDB({ region, credentials, endpoint })
+      const dynamoDb = new DynamoDB({ ...config, region, endpoint })
       const tablePromise = new Promise<void>(async resolveTable => {
         const tableDescription: TableDescription = await getTableDescription(
           dynamoDb,
@@ -271,7 +272,7 @@ export default async ({
 
     // Afterwards we get all tags for each table
     tableData.map(({ TableArn: tableArn, region }, idx) => {
-      const dynamoDb = new DynamoDB({ region, credentials, endpoint })
+      const dynamoDb = new DynamoDB({ ...config, region, endpoint })
       const tagsPromise = new Promise<void>(async resolveTags => {
         tableData[idx].Tags = (await getTableTags(dynamoDb, tableArn)) || {}
         resolveTags()
@@ -283,7 +284,7 @@ export default async ({
 
     // Then we get the ttl description for each table
     tableData.map(({ TableName, region }, idx) => {
-      const dynamoDb = new DynamoDB({ region, credentials, endpoint })
+      const dynamoDb = new DynamoDB({ ...config, region, endpoint })
       const ttlInfoPromise = new Promise<void>(async resolveTtlInfo => {
         const ttlInfo: TimeToLiveDescription = await getTableTTLDescription(
           dynamoDb,
@@ -299,7 +300,7 @@ export default async ({
 
     // Finally we get the backup information for each table
     tableData.map(({ TableName, region }, idx) => {
-      const dynamoDb = new DynamoDB({ region, credentials, endpoint })
+      const dynamoDb = new DynamoDB({ ...config, region, endpoint })
       const backupInfoPromise = new Promise<void>(async resolveBackupInfo => {
         const backupInfo: ContinuousBackupsDescription =
           await getTableBackupsDescription(dynamoDb, TableName)

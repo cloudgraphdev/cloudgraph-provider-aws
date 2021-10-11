@@ -1,4 +1,5 @@
 import COGID, { IdentityPool, IdentityPoolShortDescription } from 'aws-sdk/clients/cognitoidentity'
+import { Config } from 'aws-sdk/lib/config'
 
 import CloudGraph from '@cloudgraph/sdk'
 import { groupBy } from 'lodash'
@@ -95,17 +96,17 @@ const listIdentityPoolData = async ({
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{
   [region: string]: RawAwsCognitoIdentityPool[]
 }> => {
   const cognitoData = []
   
   for (const region of regions.split(',')) {
-    const cogId = new COGID({ region, credentials, endpoint })
+    const cogId = new COGID({ ...config, region, endpoint })
 
     /**
      * Fetch all Identity Pools

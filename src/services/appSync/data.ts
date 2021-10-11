@@ -1,8 +1,9 @@
 import CloudGraph from '@cloudgraph/sdk'
 import { AppSync } from 'aws-sdk'
+import { Config } from 'aws-sdk/lib/config'
 
 import { groupBy } from 'lodash'
-import { Credentials, TagMap } from '../../types'
+import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
@@ -207,17 +208,17 @@ const listTypesResolverData = async (
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{
   [region: string]: RawAwsAppSync[]
 }> => {
   const graphqlApiData: RawAwsAppSync[] = []
 
   for (const region of regions.split(',')) {
-    const appSync = new AppSync({ region, credentials, endpoint })
+    const appSync = new AppSync({ ...config, region, endpoint })
     const graphqlApis = await listGraphqlApiData(appSync)
 
     for (const graphqlApi of graphqlApis) {

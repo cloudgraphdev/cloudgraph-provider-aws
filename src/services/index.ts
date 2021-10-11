@@ -249,8 +249,6 @@ export default class Provider extends CloudGraph.Client {
           if (err) {
             return reject(err)
           }
-          console.log('PROFILE HERE')
-          console.log(profile)
           return resolve({ accountId: data.Account })
         })
       )
@@ -361,7 +359,6 @@ export default class Provider extends CloudGraph.Client {
               if (err) {
                 resolve()
               } else {
-                console.log(AWS.config.credentials)
                 this.credentials = AWS.config.credentials
                 this.profile = profile
                 resolve()

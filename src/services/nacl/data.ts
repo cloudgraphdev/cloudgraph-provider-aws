@@ -1,11 +1,12 @@
 import CloudGraph from '@cloudgraph/sdk'
 import { AWSError } from 'aws-sdk'
+import { Config } from 'aws-sdk/lib/config'
 import EC2, { DescribeNetworkAclsRequest, DescribeNetworkAclsResult, NetworkAcl } from 'aws-sdk/clients/ec2';
 import groupBy from 'lodash/groupBy';
 import isEmpty from 'lodash/isEmpty'
 
 import awsLoggerText from '../../properties/logger'
-import { AwsTag, Credentials, TagMap } from '../../types'
+import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import {
   generateAwsErrorLog,
@@ -28,10 +29,10 @@ export interface RawAwsNetworkAcl extends Omit<NetworkAcl, 'Tags'> {
  */
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{ [property: string]: RawAwsNetworkAcl[] }> =>
   new Promise(async resolve => {
     const naclData = []
@@ -87,7 +88,7 @@ export default async ({
     }
 
     regions.split(',').map(region => {
-      const ec2 = new EC2({ region, credentials, endpoint })
+      const ec2 = new EC2({ ...config, region, endpoint })
       const regionPromise = new Promise<void>(resolveRegion =>
         listNaclData({ ec2, region, resolveRegion })
       )

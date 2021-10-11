@@ -1,5 +1,5 @@
 import CloudGraph from '@cloudgraph/sdk'
-import { AWSError } from 'aws-sdk'
+import { AWSError, Config } from 'aws-sdk'
 import Cloudfront, {
   DistributionConfig,
   DistributionSummary,
@@ -12,7 +12,7 @@ import groupBy from 'lodash/groupBy';
 import isEmpty from 'lodash/isEmpty'
 
 import awsLoggerText from '../../properties/logger'
-import { AwsTag, Credentials, TagMap } from '../../types'
+import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import {
   generateAwsErrorLog,
@@ -60,7 +60,7 @@ const listCloudfrontDistributions = async (
           }
 
           const {
-            DistributionList: { Items = [], NextMarker: nextToken, IsTruncated },
+            DistributionList: { Items = [], NextMarker: nextToken = '', IsTruncated = false } = {},
           } = data || {}
 
           /**
@@ -143,11 +143,11 @@ const getDistributionConfig = async (
  * Cloudfront
  */
 export default async ({
-  credentials,
+  config,
 }: {
-  credentials: Credentials
+  config: Config
 }): Promise<{[property: string]: RawAwsCloudfront[]}> => {
-  const cloudfront = new Cloudfront({ credentials, endpoint })
+  const cloudfront = new Cloudfront({ ...config, endpoint })
   const distributionList: DistributionSummary[] =
     await listCloudfrontDistributions(cloudfront)
 

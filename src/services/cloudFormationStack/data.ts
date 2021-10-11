@@ -7,6 +7,7 @@ import CloudFormation, {
   Stack,
   StackResourceDrift,
 } from 'aws-sdk/clients/cloudformation'
+import { Config } from 'aws-sdk/lib/config'
 import { groupBy, isEmpty } from 'lodash'
 
 import { Credentials, TagMap } from '../../types'
@@ -106,10 +107,10 @@ const getStackResourceDrifts = async (
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{
   [region: string]: RawAwsCloudFormationStack[]
 }> => {
@@ -117,8 +118,8 @@ export default async ({
 
   for (const region of regions.split(',')) {
     const cf = new CloudFormation({
+      ...config,
       region,
-      credentials,
       endpoint,
       ...customRetrySettings,
     })

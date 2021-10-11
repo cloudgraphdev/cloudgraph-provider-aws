@@ -2,10 +2,11 @@ import COGUSER, {
   UserPoolDescriptionType,
   UserPoolType,
 } from 'aws-sdk/clients/cognitoidentityserviceprovider'
+import { Config } from 'aws-sdk/lib/config'
 
 import CloudGraph from '@cloudgraph/sdk'
 import { groupBy } from 'lodash'
-import { Credentials, TagMap } from '../../types'
+import { TagMap } from '../../types'
 import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
 import awsLoggerText from '../../properties/logger'
 
@@ -98,17 +99,17 @@ const listUserPoolData = async ({
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{
   [region: string]: RawAwsCognitoUserPool[]
 }> => {
   const cognitoData = []
   
   for (const region of regions.split(',')) {
-    const cogUser = new COGUSER({ region, credentials, endpoint })
+    const cogUser = new COGUSER({ ...config, region, endpoint })
 
     /**
      * Fetch all  User Pools

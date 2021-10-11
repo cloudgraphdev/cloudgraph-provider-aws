@@ -9,9 +9,9 @@ import APIGW, {
   Resource,
 } from 'aws-sdk/clients/apigateway'
 import { AWSError } from 'aws-sdk/lib/error'
+import { Config } from 'aws-sdk/lib/config'
 import isEmpty from 'lodash/isEmpty'
 import groupBy from 'lodash/groupBy'
-import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog, setAwsRetryOptions } from '../../utils'
 import { API_GATEWAY_CUSTOM_DELAY } from '../../config/constants'
@@ -104,10 +104,10 @@ const getResources = async ({ apiGw, restApiId }) =>
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{ [property: string]: AwsApiGatewayResource[] }> =>
   new Promise(async resolve => {
     const apiGatewayData = []
@@ -116,7 +116,7 @@ export default async ({
     const additionalPromises = []
 
     regions.split(',').map(region => {
-      const apiGw = new APIGW({ region, credentials, endpoint, ...customRetrySettings })
+      const apiGw = new APIGW({ ...config, region, endpoint, ...customRetrySettings })
       const regionPromise = new Promise<void>(async resolveRegion => {
         const restApiList = await getRestApisForRegion(apiGw)
         if (!isEmpty(restApiList)) {
@@ -135,7 +135,7 @@ export default async ({
     await Promise.all(regionPromises)
 
     apiGatewayData.map(({ restApiId, region }) => {
-      const apiGw = new APIGW({ region, credentials, endpoint, ...customRetrySettings })
+      const apiGw = new APIGW({ ...config, region, endpoint, ...customRetrySettings })
       const additionalPromise = new Promise<void>(async resolveAdditional => {
         const resources = await getResources({ apiGw, restApiId })
         apiGatewayResources.push(...resources.map(resource => ({

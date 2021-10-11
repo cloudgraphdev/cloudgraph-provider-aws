@@ -1,6 +1,6 @@
 import CloudGraph from '@cloudgraph/sdk'
-
-import { Request } from 'aws-sdk'
+import { Request } from 'aws-sdk/lib/request'
+import { Config } from 'aws-sdk/lib/config'
 import EC2, {
   DescribeInternetGatewaysRequest,
   DescribeInternetGatewaysResult,
@@ -11,7 +11,7 @@ import { AWSError } from 'aws-sdk/lib/error'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import { Credentials, AwsTag, TagMap } from '../../types'
+import { AwsTag, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
@@ -30,10 +30,10 @@ export interface RawAwsIgw extends Omit<InternetGateway, 'Tags'> {
 }
 
 export default async ({
-  credentials,
+  config,
   regions,
 }: {
-  credentials: Credentials
+  config: Config
   regions: string
 }): Promise<{ [property: string]: RawAwsIgw[] }> =>
   new Promise(async resolve => {
@@ -115,7 +115,7 @@ export default async ({
     }
 
     regions.split(',').map(region => {
-      const ec2 = new EC2({ region, credentials, endpoint })
+      const ec2 = new EC2({ ...config, region, endpoint })
       const regionPromise = new Promise<void>(resolveRegion =>
         listIgwData({ ec2, region, resolveRegion })
       )

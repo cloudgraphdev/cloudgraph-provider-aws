@@ -11,8 +11,8 @@ import Route53, {
   ListHostedZonesResponse,
   VPCs,
 } from 'aws-sdk/clients/route53'
+import { Config } from 'aws-sdk/lib/config'
 
-import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import {
   generateAwsErrorLog,
@@ -140,10 +140,10 @@ export const getHostedZoneData = async (
  */
 
 export default async ({
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{
   [region: string]: RawAwsRoute53HostedZone[]
 }> =>
@@ -152,7 +152,7 @@ export default async ({
     const hostedZonesData: RawAwsRoute53HostedZone[] = []
 
     const route53 = new Route53({
-      credentials,
+      ...config,
       endpoint,
       ...customRetrySettings,
     })

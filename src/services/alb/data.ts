@@ -21,7 +21,7 @@ import groupBy from 'lodash/groupBy'
 
 import isEmpty from 'lodash/isEmpty'
 
-import { Credentials, TagMap } from '../../types'
+import { TagMap } from '../../types'
 
 import awsLoggerText from '../../properties/logger'
 import { convertAwsTagsToTagMap } from '../../utils/format'

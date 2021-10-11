@@ -11,10 +11,11 @@ import APIGW, {
   DomainName,
 } from 'aws-sdk/clients/apigateway'
 import { AWSError } from 'aws-sdk/lib/error'
+import { Config } from 'aws-sdk/lib/config'
 import isEmpty from 'lodash/isEmpty'
 import groupBy from 'lodash/groupBy'
 import { apiGatewayArn, apiGatewayRestApiArn } from '../../utils/generateArns'
-import { Credentials, TagMap } from '../../types'
+import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog, setAwsRetryOptions } from '../../utils'
 import { API_GATEWAY_CUSTOM_DELAY } from '../../config/constants'
@@ -146,10 +147,10 @@ export const getDomainNamesForRegion = async (
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{ [property: string]: AwsApiGatewayRestApi[] }> =>
   new Promise(async resolve => {
     const apiGatewayData = []
@@ -158,7 +159,7 @@ export default async ({
     const tagsPromises = []
 
     regions.split(',').map(region => {
-      const apiGw = new APIGW({ region, credentials, endpoint, ...customRetrySettings })
+      const apiGw = new APIGW({ ...config, region, endpoint, ...customRetrySettings })
       const regionPromise = new Promise<void>(async resolveRegion => {
         domainNamesData = await getDomainNamesForRegion(apiGw)
         const mappingPromises = domainNamesData.map(({ domainName }) =>
@@ -192,7 +193,7 @@ export default async ({
 
     // get all tags for each rest api
     apiGatewayData.map(({ id, region }, idx) => {
-      const apiGw = new APIGW({ region, credentials, endpoint, ...customRetrySettings })
+      const apiGw = new APIGW({ ...config, region, endpoint, ...customRetrySettings })
       const tagsPromise = new Promise<void>(async resolveTags => {
         const arn = apiGatewayRestApiArn({
           restApiArn: apiGatewayArn({ region }),

@@ -1,16 +1,17 @@
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import { Request } from 'aws-sdk'
 import EC2, {
   Subnet,
   DescribeSubnetsResult,
   DescribeSubnetsRequest,
 } from 'aws-sdk/clients/ec2'
 import { AWSError } from 'aws-sdk/lib/error'
+import { Config } from 'aws-sdk/lib/config'
+import { Request } from 'aws-sdk/lib/request'
 
 import CloudGraph from '@cloudgraph/sdk'
-import { Credentials, TagMap, AwsTag } from '../../types'
+import { TagMap, AwsTag } from '../../types'
 
 import awsLoggerText from '../../properties/logger'
 // import { Tag } from '../../types/generated'
@@ -32,10 +33,10 @@ export interface AwsSubnet extends Omit<Subnet, 'Tags'> {
 
 export default ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{ [property: string]: AwsSubnet[] }> =>
   new Promise(async resolve => {
     const subnetData: AwsSubnet[] = []
@@ -120,7 +121,7 @@ export default ({
     }
 
     regions.split(',').map(region => {
-      const ec2 = new EC2({ region, credentials, endpoint })
+      const ec2 = new EC2({ ...config, region, endpoint })
       const regionPromise = new Promise<void>(resolveSubnet =>
         listSubnetData({ region, ec2, resolveSubnet })
       )

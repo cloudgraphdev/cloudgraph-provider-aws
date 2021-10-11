@@ -1,8 +1,8 @@
-import { CloudTrail } from 'aws-sdk'
-import { ResourceTag, Trail, TrailInfo } from 'aws-sdk/clients/cloudtrail'
+import CloudTrail, { ResourceTag, Trail, TrailInfo } from 'aws-sdk/clients/cloudtrail'
+import { Config } from 'aws-sdk/lib/config'
 import groupBy from 'lodash/groupBy'
 
-import { Credentials, TagMap } from '../../types'
+import { TagMap } from '../../types'
 import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 
@@ -88,16 +88,16 @@ const listTrailTagData = async (
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{
   [region: string]: RawAwsCloudTrail[]
 }> => {
   const cloudTrailData = []
   for (const region of regions.split(',')) {
-    const cloudTrail = new CloudTrail({ region, credentials, endpoint })
+    const cloudTrail = new CloudTrail({ ...config, region, endpoint })
   
     const trailArnList = await getTrailArnData(cloudTrail)
     const trailList = await listTrailData(cloudTrail, trailArnList)

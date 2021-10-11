@@ -3,6 +3,7 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
 import { AWSError } from 'aws-sdk/lib/error'
+import { Config } from 'aws-sdk/lib/config'
 import ELB, {
   DescribeAccessPointsOutput,
   DescribeLoadBalancerAttributesOutput,
@@ -12,7 +13,6 @@ import ELB, {
   TagList,
 } from 'aws-sdk/clients/elb'
 
-import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
@@ -116,10 +116,10 @@ export interface RawAwsElb extends LoadBalancerDescription {
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{
   [region: string]: RawAwsElb[]
 }> =>
@@ -127,7 +127,7 @@ export default async ({
     let elbData: RawAwsElb[] = []
 
     const regionPromises = regions.split(',').map(region => {
-      const elbInstance = new ELB({ region, credentials, endpoint })
+      const elbInstance = new ELB({ ...config, region, endpoint })
       return new Promise<void>(async resolveElbData => {
         // Get Load Balancer Data
         elbData = await listElbData(elbInstance, region)

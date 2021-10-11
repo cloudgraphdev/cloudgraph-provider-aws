@@ -1,5 +1,5 @@
 import CloudGraph from '@cloudgraph/sdk'
-import { AWSError, Request } from 'aws-sdk'
+import { AWSError, Request, Config } from 'aws-sdk'
 import CE, {
   GetCostAndUsageResponse,
   GetDimensionValuesResponse,
@@ -8,7 +8,6 @@ import isEmpty from 'lodash/isEmpty'
 import head from 'lodash/head'
 import get from 'lodash/get'
 import { regionMap } from '../../enums/regions'
-import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 import {
@@ -93,9 +92,9 @@ const listAvailabeServices = ({
  * AWS Billing
  */
 export default async ({
-  credentials,
+  config,
 }: {
-  credentials: Credentials
+  config: Config
 }): Promise<{ [key: string]: RawAwsBilling[] }> => {
   const startDate = new Date()
   const region = regionMap.usEast1
@@ -292,7 +291,7 @@ export default async ({
      * Note that this API is only availavbe in the us-east-1
      */
 
-    const costExplorer = new CE({ region, credentials, endpoint })
+    const costExplorer = new CE({ ...config, region, endpoint })
     const today = new Date().toLocaleDateString('en-ca') // We use en-ca to ensure the correct date structure for CE
     const startOfMonth = getFirstDayOfMonth()
 

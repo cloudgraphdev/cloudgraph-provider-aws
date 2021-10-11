@@ -8,8 +8,8 @@ import EC2, {
   NetworkInterface,
 } from 'aws-sdk/clients/ec2'
 import { AWSError } from 'aws-sdk/lib/error'
+import { Config } from 'aws-sdk/lib/config'
 
-import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
@@ -109,10 +109,10 @@ const listNetworkInterfaces = async ({
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{
   [region: string]: RawNetworkInterface[]
 }> =>
@@ -121,7 +121,7 @@ export default async ({
 
     // Get all the network interfaces for each region
     const regionPromises = regions.split(',').map(region => {
-      const ec2 = new EC2({ region, credentials, endpoint })
+      const ec2 = new EC2({ ...config, region, endpoint })
       return new Promise<void>(resolveRegion =>
         listNetworkInterfaces({
           ec2,
