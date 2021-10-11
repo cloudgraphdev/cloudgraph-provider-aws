@@ -1,4 +1,4 @@
-import { AWSError, Request } from 'aws-sdk'
+import { AWSError, Request, Config } from 'aws-sdk'
 import ELBV2, {
   DescribeListenersInput,
   DescribeListenersOutput,
@@ -48,11 +48,11 @@ export type RawAwsAlb = LoadBalancer & {
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: // opts,
 {
   regions: string
-  credentials: Credentials
+  config: Config
   opts: Opts
 }): Promise<{ [property: string]: RawAwsAlb[] }> =>
   new Promise(async resolve => {
@@ -147,7 +147,7 @@ export default async ({
         new Promise<void>(resolveRegion =>
           describeAlbs({
             region,
-            elbv2: new ELBV2({ region, credentials, endpoint, ...customRetrySettings }),
+            elbv2: new ELBV2({ ...config, region, endpoint, ...customRetrySettings }),
             resolveRegion,
           })
         )
@@ -215,7 +215,7 @@ export default async ({
 
     albData.map(alb => {
       const { LoadBalancerArn: arn, region } = alb
-      const elbv2 = new ELBV2({ region, credentials, endpoint, ...customRetrySettings })
+      const elbv2 = new ELBV2({ ...config, region, endpoint, ...customRetrySettings })
 
       tagPromises.push(
         new Promise<void>(resolveTags => {
@@ -292,7 +292,7 @@ export default async ({
 
     albData.map(alb => {
       const { LoadBalancerArn, region } = alb
-      const elbv2 = new ELBV2({ region, credentials, endpoint, ...customRetrySettings })
+      const elbv2 = new ELBV2({ ...config, region, endpoint, ...customRetrySettings })
       tagPromises.push(
         new Promise<void>(resolveAttributes => {
           getAttributesForAlb({
@@ -389,7 +389,7 @@ export default async ({
 
     albData.map(alb => {
       const { LoadBalancerArn, region } = alb
-      const elbv2 = new ELBV2({ region, credentials, endpoint, ...customRetrySettings })
+      const elbv2 = new ELBV2({ ...config, region, endpoint, ...customRetrySettings })
       const listenerPromise = new Promise<void>(resolveListeners => {
         describeListenersForAlb({
           alb,
@@ -488,7 +488,7 @@ export default async ({
 
     albData.map(alb => {
       const { LoadBalancerArn, region } = alb
-      const elbv2 = new ELBV2({ region, credentials, endpoint, ...customRetrySettings })
+      const elbv2 = new ELBV2({ ...config, region, endpoint, ...customRetrySettings })
       const targetGroupPromise = new Promise<void>(resolveTargetGroups => {
         describeTargetGroupsForAlb({
           alb,
@@ -557,7 +557,7 @@ export default async ({
 
     albData.map(alb => {
       const { region, targetGroups = [] } = alb
-      const elbv2 = new ELBV2({ region, credentials, endpoint, ...customRetrySettings })
+      const elbv2 = new ELBV2({ ...config, region, endpoint, ...customRetrySettings })
       targetGroups.map(({ TargetGroupArn }) => {
         targetHealthPromises.push(
           new Promise<void>(resolveTargetHealth => {

@@ -1,7 +1,7 @@
 import CloudGraph, { Service, Opts, ProviderData } from '@cloudgraph/sdk'
 import { loadFilesSync } from '@graphql-tools/load-files'
 import { mergeTypeDefs } from '@graphql-tools/merge'
-import AWS from 'aws-sdk'
+import AWS, { Config } from 'aws-sdk'
 import chalk from 'chalk'
 import { print } from 'graphql'
 import STS from 'aws-sdk/clients/sts'
@@ -21,6 +21,9 @@ const DEFAULT_REGION = 'us-east-1'
 const DEFAULT_RESOURCES = Object.values(services).join(',')
 const ENV_VAR_CREDS_LOG = 'Using ENV variable credentials'
 
+interface testService extends Omit<Service, 'getData'> {
+  getData: any
+}
 export const enums = {
   services,
   regions,
@@ -75,38 +78,98 @@ export default class Provider extends CloudGraph.Client {
     } catch (error: any) {
       this.logger.warn('No AWS profiles found')
     }
-
-    if (!flags['use-roles'] && profiles && profiles.length) {
-      const { profiles: profilesAnswer } = await this.interface.prompt([
-        {
-          type: 'checkbox',
-          message:
-            'Please select the AWS credential profiles to utilize for scanning',
-          loop: false,
-          name: 'profiles',
-          choices: profiles.map((profile: string) => ({
-            name: profile,
-          })),
-        },
-      ])
-      this.logger.debug(`profiles selected: ${profilesAnswer}`)
-      result.accounts = profilesAnswer.length
-        ? profilesAnswer.map(val => ({ profile: val }))
-        : [{ profile: 'default' }]
-    } else {
-      const { roles: rolesAnswer }: {roles: string} = await this.interface.prompt([
-        {
-          type: 'input',
-          message: 'Please input roleARNs in a comma separated list (roleArn1,roleArn2,...)',
-          name: 'roles'
+    const accounts = []
+    while (true) {
+      if (accounts.length > 0) {
+        const { addAccount } = await this.interface.prompt([{
+          type: 'confirm',
+          message: 'Configure another AWS account?',
+          name: 'addAccount',
+          default: true
+        }])
+        if (!addAccount) {
+          break
         }
-      ])
-      if (!rolesAnswer) {
-        throw new Error('No roleARNs were input, aborting AWS configuration')
       }
-      const roles = rolesAnswer.split(',')
-      result.accounts = roles.map(val => ({roleArn: val}))
+      let profile = ''
+      let role = ''
+      let externalId = ''
+      if (!flags['use-roles'] && profiles && profiles.length) {
+        const { profile: profileAnswer } = await this.interface.prompt([
+          {
+            type: 'list',
+            message: 'Please select AWS identity',
+            name: 'profile',
+            loop: false,
+            choices: profiles.map((profile: string) => ({
+              name: profile,
+            })),
+          }
+        ])
+        profile = profileAnswer
+      }
+        const { addRoleArn } = await this.interface.prompt([{
+          type: 'confirm',
+          message: 'Do you want to provide a role ARN for this identity to assume?',
+          name: 'addRoleArn',
+          default: false
+        }])
+        if (addRoleArn) {
+          const { role: roleAnswer, externalId: externalIdAnswer }: {role: string, externalId: string} = await this.interface.prompt([
+            {
+              type: 'input',
+              message: 'Enter role ARN for identity to assume',
+              name: 'role'
+            },
+            {
+              type: 'input',
+              message: 'Enter ExternalID for role OR press ENTER for none',
+              name: 'externalId'
+            }
+          ])
+          role = roleAnswer
+          externalId = externalIdAnswer
+        }
+      accounts.push({ profile, roleArn: role, externalId })
     }
+
+    if (!accounts.length) {
+      accounts.push({ profile: '', roleArn: '', externalId: ''})
+    }
+
+    result.accounts = accounts
+
+    // if (!flags['use-roles'] && !flags['no-prompt'] && profiles && profiles.length) {
+    //   const { profiles: profilesAnswer } = await this.interface.prompt([
+    //     {
+    //       type: 'checkbox',
+    //       message:
+    //         'Please select the AWS credential profiles to utilize for scanning',
+    //       loop: false,
+    //       name: 'profiles',
+    //       choices: profiles.map((profile: string) => ({
+    //         name: profile,
+    //       })),
+    //     },
+    //   ])
+    //   this.logger.debug(`profiles selected: ${profilesAnswer}`)
+    //   result.accounts = profilesAnswer.length
+    //     ? profilesAnswer.map(val => ({ profile: val }))
+    //     : [{ profile: 'default' }]
+    // } else {
+    //   const { roles: rolesAnswer }: {roles: string} = await this.interface.prompt([
+    //     {
+    //       type: 'input',
+    //       message: 'Enter roleARNs in a comma separated list OR press ENTER to use default credentials ',
+    //       name: 'roles'
+    //     }
+    //   ])
+    //   if (!rolesAnswer) {
+    //     throw new Error('No roleARNs were input, aborting AWS configuration')
+    //   }
+    //   const roles = rolesAnswer.split(',')
+    //   result.accounts = roles.map(val => ({roleArn: val}))
+    // }
 
     const { regions: regionsAnswer } = await this.interface.prompt([
       {
@@ -171,8 +234,8 @@ export default class Provider extends CloudGraph.Client {
   }
 
   async getIdentity({
-    profile,
-    role,
+    profile = 'default',
+    role = 'default',
     externalId
   }: {
     profile: string
@@ -180,12 +243,14 @@ export default class Provider extends CloudGraph.Client {
     externalId: string | undefined
   }): Promise<{ accountId: string }> {
     try {
-      const credentials = await this.getCredentials({ profile, role, externalId })
+      const config = await this.getAwsConfig({ profile, role, externalId })
       return new Promise((resolve, reject) =>
-        new STS({ credentials }).getCallerIdentity((err, data) => {
+        new STS(config).getCallerIdentity((err, data) => {
           if (err) {
             return reject(err)
           }
+          console.log('PROFILE HERE')
+          console.log(profile)
           return resolve({ accountId: data.Account })
         })
       )
@@ -196,7 +261,7 @@ export default class Provider extends CloudGraph.Client {
     }
   }
 
-  private getCredentials({
+  private getAwsConfig({
     profile,
     role,
     externalId
@@ -204,18 +269,21 @@ export default class Provider extends CloudGraph.Client {
     profile: string
     role: string | undefined
     externalId: string | undefined
-  }): Promise<Credentials> {
-    return new Promise(async resolveCreds => {
+  }): Promise<Config> {
+    return new Promise(async resolveConfig => {
       // If we have keys set in the config file, just use them
       if (this.config.accessKeyId && this.config.secretAccessKey) {
-        return {
+        const creds = {
           accessKeyId: this.config.accessKeyId,
           secretAccessKey: this.config.secretAccessKey,
         }
+        AWS.config.credentials = creds
+        this.credentials = creds
+        resolveConfig(AWS.config)
       }
       // If the client instance has creds set, weve gone through this function before.. just reuse them
       if (this.credentials && (this.profile === profile || this.role === role)) {
-        return resolveCreds(this.credentials)
+        return resolveConfig(AWS.config)
       }
       /**
        * Tries to find creds in priority order
@@ -228,12 +296,13 @@ export default class Provider extends CloudGraph.Client {
         case role && role !== '': {
           const sts = new AWS.STS()
           await new Promise<void>(resolve => {
+            const options = {
+              RoleSessionName: 'CloudGraph',
+              RoleArn: role,
+              ...(externalId && {ExternalId: externalId })
+            }
             sts.assumeRole(
-              {
-                RoleArn: role,
-                ExternalId: externalId,
-                RoleSessionName: 'CloudGraph',
-              },
+              options,
               (err, data) => {
                 if (err) {
                   this.logger.error(
@@ -250,11 +319,10 @@ export default class Provider extends CloudGraph.Client {
                   } = data.Credentials
                   const creds = {
                     accessKeyId,
-                    profile,
                     secretAccessKey,
                     sessionToken,
                   }
-                  AWS.config.update(creds)
+                  AWS.config.update({ credentials: creds })
                   this.credentials = creds
                   this.profile = profile
                   resolve()
@@ -278,8 +346,8 @@ export default class Provider extends CloudGraph.Client {
               },
             })
             if (credentials) {
-              AWS.config.credentials = credentials
-              this.credentials = AWS.config.credentials
+              AWS.config.update({ credentials })
+              this.credentials = credentials
               this.profile = profile
             }
             break
@@ -293,6 +361,7 @@ export default class Provider extends CloudGraph.Client {
               if (err) {
                 resolve()
               } else {
+                console.log(AWS.config.credentials)
                 this.credentials = AWS.config.credentials
                 this.profile = profile
                 resolve()
@@ -301,31 +370,31 @@ export default class Provider extends CloudGraph.Client {
           )
         }
       }
-      if (!this.credentials) {
-        this.logger.info('No AWS Credentials found, please enter them manually')
-        // when pausing the ora spinner the position of this call must come after any logger output
-        const msg = this.logger.stopSpinner()
-        const answers = await this.interface.prompt([
-          {
-            type: 'input',
-            message: 'Please input a valid accessKeyId',
-            name: 'accessKeyId',
-          },
-          {
-            type: 'input',
-            message: 'Please input a valid secretAccessKey',
-            name: 'secretAccessKey',
-          },
-        ])
-        if (answers?.accessKeyId && answers?.secretAccessKey) {
-          this.credentials = answers
-          this.profile = profile
-        } else {
-          this.logger.error('Cannot scan AWS without credentials')
-          throw new Error()
-        }
-        this.logger.startSpinner(msg)
-      }
+      // if (!this.credentials) {
+      //   this.logger.info('No AWS Credentials found, please enter them manually')
+      //   // when pausing the ora spinner the position of this call must come after any logger output
+      //   const msg = this.logger.stopSpinner()
+      //   const answers = await this.interface.prompt([
+      //     {
+      //       type: 'input',
+      //       message: 'Please input a valid accessKeyId',
+      //       name: 'accessKeyId',
+      //     },
+      //     {
+      //       type: 'input',
+      //       message: 'Please input a valid secretAccessKey',
+      //       name: 'secretAccessKey',
+      //     },
+      //   ])
+      //   if (answers?.accessKeyId && answers?.secretAccessKey) {
+      //     this.credentials = answers
+      //     this.profile = profile
+      //   } else {
+      //     this.logger.error('Cannot scan AWS without credentials')
+      //     throw new Error()
+      //   }
+      //   this.logger.startSpinner(msg)
+      // }
         // const profileName = profile || 'default'
       //   if (
       //     !this.config?.profileApprovedList?.find(
@@ -372,7 +441,7 @@ export default class Provider extends CloudGraph.Client {
           obfuscateSensitiveString(this.credentials.secretAccessKey)
         )}`
       )
-      resolveCreds(this.credentials)
+      resolveConfig(AWS.config)
     })
   }
 
@@ -393,7 +462,7 @@ export default class Provider extends CloudGraph.Client {
    * @param service an AWS service that is listed within the service map (current supported services)
    * @returns Instance of an AWS service class to interact with that AWS service
    */
-  private getService(service: string): Service {
+  private getService(service: string): testService {
     if (serviceMap[service]) {
       return new serviceMap[service](this)
     }
@@ -434,7 +503,7 @@ export default class Provider extends CloudGraph.Client {
       ...new Set<string>(configuredResources.split(',')),
     ])
 
-    const credentials = await this.getCredentials({ profile, role, externalId })
+    const config = await this.getAwsConfig({ profile, role, externalId })
     const { accountId } = await this.getIdentity({ profile, role, externalId })
     try {
       for (const resource of resourceNames) {
@@ -442,7 +511,7 @@ export default class Provider extends CloudGraph.Client {
         if (serviceClass && serviceClass.getData) {
           const data = await serviceClass.getData({
             regions: configuredRegions,
-            credentials,
+            config,
             opts,
             rawData: result,
           })
