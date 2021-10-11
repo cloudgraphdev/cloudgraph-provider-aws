@@ -21,9 +21,6 @@ const DEFAULT_REGION = 'us-east-1'
 const DEFAULT_RESOURCES = Object.values(services).join(',')
 const ENV_VAR_CREDS_LOG = 'Using ENV variable credentials'
 
-interface testService extends Omit<Service, 'getData'> {
-  getData: any
-}
 export const enums = {
   services,
   regions,
@@ -367,57 +364,31 @@ export default class Provider extends CloudGraph.Client {
           )
         }
       }
-      // if (!this.credentials) {
-      //   this.logger.info('No AWS Credentials found, please enter them manually')
-      //   // when pausing the ora spinner the position of this call must come after any logger output
-      //   const msg = this.logger.stopSpinner()
-      //   const answers = await this.interface.prompt([
-      //     {
-      //       type: 'input',
-      //       message: 'Please input a valid accessKeyId',
-      //       name: 'accessKeyId',
-      //     },
-      //     {
-      //       type: 'input',
-      //       message: 'Please input a valid secretAccessKey',
-      //       name: 'secretAccessKey',
-      //     },
-      //   ])
-      //   if (answers?.accessKeyId && answers?.secretAccessKey) {
-      //     this.credentials = answers
-      //     this.profile = profile
-      //   } else {
-      //     this.logger.error('Cannot scan AWS without credentials')
-      //     throw new Error()
-      //   }
-      //   this.logger.startSpinner(msg)
-      // }
-        // const profileName = profile || 'default'
-      //   if (
-      //     !this.config?.profileApprovedList?.find(
-      //       (val: string) => val === profileName
-      //     )
-      //   ) {
-      //     const msg = this.logger.stopSpinner()
-      //     // Confirm the found credentials are ok to use
-      //     const { approved } = await this.interface.prompt([
-      //       {
-      //         type: 'confirm',
-      //         message: `CG found AWS credentials with accessKeyId: ${chalk.green(
-      //           obfuscateSensitiveString(this.credentials.accessKeyId)
-      //         )}. Are these ok to use?`,
-      //         name: 'approved',
-      //       },
-      //     ])
-      //     if (!approved) {
-      //       this.logger.error(
-      //         'CG does not have approval to use the credentials it found, please rerun CG with the credentials you want to use'
-      //       )
-      //       throw new Error('Credentials not approved')
-      //     }
-      //     this.logger.startSpinner(msg)
-      //   }
-      // }
+      if (!this.credentials) {
+        this.logger.info('No AWS Credentials found, please enter them manually')
+        // when pausing the ora spinner the position of this call must come after any logger output
+        const msg = this.logger.stopSpinner()
+        const answers = await this.interface.prompt([
+          {
+            type: 'input',
+            message: 'Please input a valid accessKeyId',
+            name: 'accessKeyId',
+          },
+          {
+            type: 'input',
+            message: 'Please input a valid secretAccessKey',
+            name: 'secretAccessKey',
+          },
+        ])
+        if (answers?.accessKeyId && answers?.secretAccessKey) {
+          this.credentials = answers
+          this.profile = profile
+        } else {
+          this.logger.error('Cannot scan AWS without credentials')
+          throw new Error()
+        }
+        this.logger.startSpinner(msg)
+      }
       const profileName = profile || 'default'
       const usingEnvCreds = !!process.env.AWS_ACCESS_KEY_ID
       if (usingEnvCreds) {
@@ -459,7 +430,7 @@ export default class Provider extends CloudGraph.Client {
    * @param service an AWS service that is listed within the service map (current supported services)
    * @returns Instance of an AWS service class to interact with that AWS service
    */
-  private getService(service: string): testService {
+  private getService(service: string): Service {
     if (serviceMap[service]) {
       return new serviceMap[service](this)
     }
