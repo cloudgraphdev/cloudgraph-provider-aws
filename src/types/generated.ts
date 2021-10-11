@@ -1294,7 +1294,6 @@ export type AwsRdsdbCluster = {
   characterSetName?: Maybe<Scalars['String']>;
   databaseName?: Maybe<Scalars['String']>;
   dbClusterIdentifier?: Maybe<Scalars['String']>;
-  parameterGroup?: Maybe<Scalars['String']>;
   subnets?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
   percentProgress?: Maybe<Scalars['String']>;

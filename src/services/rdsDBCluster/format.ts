@@ -55,7 +55,6 @@ export default ({
     characterSetName,
     databaseName,
     dbClusterIdentifier,
-    //parameterGroup: String @search(by: [hash])
     subnets,
     status,
     percentProgress,

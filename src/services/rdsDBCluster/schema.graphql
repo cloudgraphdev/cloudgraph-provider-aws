@@ -7,7 +7,6 @@ type awsRDSDBCluster @key(fields: "arn") {
   characterSetName: String @search(by: [hash, regexp])
   databaseName: String @search(by: [hash, regexp])
   dbClusterIdentifier: String @search(by: [hash])
-  parameterGroup: String @search(by: [hash])
   subnets: String @search(by: [hash])
   status: String @search(by: [hash, regexp])
   percentProgress: String @search(by: [hash, regexp])
