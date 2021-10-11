@@ -40,3 +40,13 @@ export const networkAclArn = ({
   account: string
   id: string
 }): string => `arn:aws:ec2:${region}:${account}:network-acl/${id}`
+
+export const sesArn = ({
+  region,
+  account,
+  email,
+}: {
+  region: string
+  account: string
+  email: string
+}): string => `arn:aws:ses:${region}:${account}:identity/${email}`

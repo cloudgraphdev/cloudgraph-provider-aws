@@ -830,3 +830,7 @@ resource "aws_network_acl" "cg-test-nacl" {
     Name = "cg-test-nacl"
   }
 }
+
+resource "aws_ses_email_identity" "example" {
+  email = "email@example.com"
+}
