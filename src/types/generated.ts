@@ -1285,6 +1285,84 @@ export type AwsNetworkInterfaceAttachment = {
   status?: Maybe<Scalars['String']>;
 };
 
+export type AwsRdsdbCluster = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  allocatedStorage?: Maybe<Scalars['Int']>;
+  backupRetentionPeriod?: Maybe<Scalars['Int']>;
+  characterSetName?: Maybe<Scalars['String']>;
+  databaseName?: Maybe<Scalars['String']>;
+  dbClusterIdentifier?: Maybe<Scalars['String']>;
+  parameterGroup?: Maybe<Scalars['String']>;
+  subnets?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  percentProgress?: Maybe<Scalars['String']>;
+  readerEndpoint?: Maybe<Scalars['String']>;
+  multiAZ?: Maybe<Scalars['Boolean']>;
+  engine?: Maybe<Scalars['String']>;
+  engineVersion?: Maybe<Scalars['String']>;
+  port?: Maybe<Scalars['Int']>;
+  username?: Maybe<Scalars['String']>;
+  replicationSourceIdentifier?: Maybe<Scalars['String']>;
+  hostedZoneId?: Maybe<Scalars['String']>;
+  encrypted?: Maybe<Scalars['Boolean']>;
+  kmsKey?: Maybe<Scalars['String']>;
+  resourceId?: Maybe<Scalars['String']>;
+  iamDbAuthenticationEnabled?: Maybe<Scalars['Boolean']>;
+  cloneGroupId?: Maybe<Scalars['String']>;
+  createdTime?: Maybe<Scalars['String']>;
+  capacity?: Maybe<Scalars['Int']>;
+  engineMode?: Maybe<Scalars['String']>;
+  deletionProtection?: Maybe<Scalars['Boolean']>;
+  httpEndpointEnabled?: Maybe<Scalars['Boolean']>;
+  copyTagsToSnapshot?: Maybe<Scalars['Boolean']>;
+  crossAccountClone?: Maybe<Scalars['Boolean']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  globalWriteForwardingRequested?: Maybe<Scalars['Boolean']>;
+  instances?: Maybe<Array<Maybe<AwsRdsdbInstance>>>;
+};
+
+export type AwsRdsdbInstance = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  port?: Maybe<Scalars['Int']>;
+  address?: Maybe<Scalars['String']>;
+  hostedZoneId?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+  resourceId?: Maybe<Scalars['String']>;
+  engine?: Maybe<Scalars['String']>;
+  engineVersion?: Maybe<Scalars['String']>;
+  createdTime?: Maybe<Scalars['String']>;
+  copyTagsToSnapshot?: Maybe<Scalars['Boolean']>;
+  deletionProtection?: Maybe<Scalars['Boolean']>;
+  dBInstanceIdentifier?: Maybe<Scalars['String']>;
+  performanceInsightsEnabled?: Maybe<Scalars['Boolean']>;
+  autoMinorVersionUpgrade?: Maybe<Scalars['Boolean']>;
+  iamDbAuthenticationEnabled?: Maybe<Scalars['Boolean']>;
+  optionsGroups?: Maybe<Scalars['String']>;
+  parameterGroup?: Maybe<Scalars['String']>;
+  storageType?: Maybe<Scalars['String']>;
+  instanceClass?: Maybe<Scalars['String']>;
+  allocatedStorage?: Maybe<Scalars['Int']>;
+  multiAZ?: Maybe<Scalars['Boolean']>;
+  subnetGroup?: Maybe<Scalars['String']>;
+  subnets?: Maybe<Array<Maybe<Scalars['String']>>>;
+  availabilityZone?: Maybe<Scalars['String']>;
+  dbSecurityGroups?: Maybe<Array<Maybe<Scalars['String']>>>;
+  vpcSecurityGroups?: Maybe<Array<Maybe<Scalars['String']>>>;
+  publiclyAccessible?: Maybe<Scalars['Boolean']>;
+  certificateAuthority?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  failoverPriority?: Maybe<Scalars['Int']>;
+  kmsKey?: Maybe<Scalars['String']>;
+  encrypted?: Maybe<Scalars['Boolean']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  cluster?: Maybe<AwsRdsdbCluster>;
+};
+
 export type AwsRollbackConfigurationRollbackTrigger = {
   id: Scalars['String'];
   arn?: Maybe<Scalars['String']>;
@@ -1558,6 +1636,8 @@ export type AwsTag = {
   iamUsers?: Maybe<Array<Maybe<AwsIamUser>>>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   iamPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
+  rdsDBCluster?: Maybe<Array<Maybe<AwsRdsdbCluster>>>;
+  rdsDBInstance?: Maybe<Array<Maybe<AwsRdsdbInstance>>>;
 };
 
 export type AwsTotalBillingInfo = {

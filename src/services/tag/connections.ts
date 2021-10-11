@@ -22,6 +22,8 @@ import { RawAwsIamRole } from '../iamRole/data'
 import { RawAwsIamPolicy } from '../iamPolicy/data'
 import resources from '../../enums/resources'
 import { getIamId } from '../../utils/ids'
+import { RawAwsRDSDBCluster } from '../rdsDBCluster/data'
+import { RawAwsRDSDBInstance } from '../rdsDBInstance/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -831,6 +833,50 @@ export default ({
             resourceType: services.iamPolicy,
             relation: 'child',
             field: 'iamPolicies',
+          })
+        }
+      }
+    }
+
+    /**
+    * Find related RDS clusters
+    */
+    const rdsDBClusters: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.rdsDBCluster)
+    if (rdsDBClusters?.data?.[region]) {
+      const dataAtRegion: RawAwsRDSDBCluster[] =
+        findServiceInstancesWithTag(tag, rdsDBClusters.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { DBClusterArn: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.rdsDBCluster,
+            relation: 'child',
+            field: 'rdsDBCluster',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related RDS instances
+     */
+    const rdsDBInstances: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.rdsDBInstance)
+    if (rdsDBInstances?.data?.[region]) {
+      const dataAtRegion: RawAwsRDSDBInstance[] =
+        findServiceInstancesWithTag(tag, rdsDBInstances.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { DBInstanceArn: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.rdsDBInstance,
+            relation: 'child',
+            field: 'rdsDBInstance',
           })
         }
       }

@@ -1,0 +1,39 @@
+type awsRDSDBInstance @key(fields: "arn") {
+  id: String! @search(by: [hash])
+  accountId: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  port: Int @search
+  address: String @search(by: [hash, regexp])
+  hostedZoneId: String @search(by: [hash])
+  username: String @search(by: [hash, regexp])
+  resourceId: String @search(by: [hash])
+  engine: String @search(by: [hash, regexp])
+  engineVersion: String @search(by: [hash, regexp])
+  createdTime: String @search(by: [hash, regexp])
+  copyTagsToSnapshot: Boolean @search
+  deletionProtection: Boolean @search
+  dBInstanceIdentifier: String @search(by: [hash])
+  performanceInsightsEnabled: Boolean @search
+  autoMinorVersionUpgrade: Boolean @search
+  iamDbAuthenticationEnabled: Boolean @search
+  optionsGroups: String
+  parameterGroup: String
+  storageType: String @search(by: [hash, regexp])
+  instanceClass: String @search(by: [hash, regexp])
+  allocatedStorage: Int @search
+  multiAZ: Boolean @search
+  subnetGroup: String @search(by: [hash, regexp])
+  subnets: [String] @search(by: [hash])
+  availabilityZone: String @search(by: [hash, regexp])
+  dbSecurityGroups: [String]
+  vpcSecurityGroups: [String]
+  publiclyAccessible: Boolean @search
+  certificateAuthority: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
+  failoverPriority: Int @search
+  kmsKey: String @search(by: [hash, regexp])
+  encrypted: Boolean @search
+  tags: [Tag]
+  cluster: awsRDSDBCluster @hasInverse(field: instances)
+}

@@ -28,6 +28,8 @@ import Lambda from '../services/lambda'
 import NATGateway from '../services/natGateway'
 import NetworkAcl from '../services/nacl'
 import NetworkInterface from '../services/networkInterface'
+import RDSDBCluster from '../services/rdsDBCluster'
+import RDSDBInstance from '../services/rdsDBInstance'
 import Route53HostedZone from '../services/route53HostedZone'
 import Route53Record from '../services/route53Record'
 import RouteTable from '../services/routeTable'
@@ -80,6 +82,8 @@ export default {
   [services.subnet]: AwsSubnet,
   [services.vpc]: VPC,
   [services.sqs]: SQS,
+  [services.rdsDBCluster]: RDSDBCluster,
+  [services.rdsDBInstance]: RDSDBInstance,
   [services.route53HostedZone]: Route53HostedZone,
   [services.route53Record]: Route53Record,
   [services.routeTable]: RouteTable,

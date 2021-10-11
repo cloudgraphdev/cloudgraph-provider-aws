@@ -257,9 +257,9 @@ export default {
   lookingforRdsInstances: 'Looking for RDS Instances...',
   lookingforRdsClusters: 'Looking for RDS Clusters...',
   creatingRdsInstance: (num: number): string => `Creating RDS Instance #${num}`,
-  fetchedRdsClusters: (num: number): string => `Fetched ${num} Rds Clusters`,
+  fetchedRdsClusters: (num: number): string => `Fetched ${num} RDS Clusters`,
   fetchedRdsInstances: (num: number): string =>
-    `Fetched ${num} Rds Db Instances`,
+    `Fetched ${num} RDS DB Instances`,
   noClusterFound: '❎ DB Instance is not part of a cluster ❎ ',
   foundCluster: 'Found the cluster the instance belongs to',
   addingRdsInstances: (num: number): string =>

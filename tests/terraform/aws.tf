@@ -25,6 +25,7 @@ provider "aws" {
     kinesis        = "http://localhost:4566"
     kms            = "http://localhost:4566"
     lambda         = "http://localhost:4566"
+    rds            = "http://localhost:4566"
     redshift       = "http://localhost:4566"
     route53        = "http://localhost:4566"
     s3             = "http://localhost:4566"
@@ -700,3 +701,20 @@ resource "aws_ses_email_identity" "example" {
 resource "aws_secretsmanager_secret" "example" {
   name = "example"
 }
+# Localstack Pro Tier
+# resource "aws_rds_cluster_instance" "cluster_instances" {
+#   count              = 2
+#   identifier         = "aurora-cluster-demo-${count.index}"
+#   cluster_identifier = aws_rds_cluster.default.id
+#   instance_class     = "db.r4.large"
+#   engine             = aws_rds_cluster.default.engine
+#   engine_version     = aws_rds_cluster.default.engine_version
+# }
+
+# resource "aws_rds_cluster" "default" {
+#   cluster_identifier = "aurora-cluster-demo"
+#   availability_zones = ["us-west-2a", "us-west-2b", "us-west-2c"]
+#   database_name      = "mydb"
+#   master_username    = "foo"
+#   master_password    = "barbut8chars"
+# }

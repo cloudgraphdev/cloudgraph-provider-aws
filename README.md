@@ -92,6 +92,8 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | nacl                   | vpc                                                                                                  |
 | natGateway             | networkInterface, subnet, vpc                                                                        |
 | networkInterface       | ec2, eip, natGateway, subnet, vpc                                                                    |
+| rdsDBCluster           | rdsDBInstance, securityGroups                                                                        |
+| rdsDBInstance          | rdsDBCluster, securityGroups, vpc, subnet                                                            |
 | route53Record          | alb, apiGatewayRestApi, elb, route53HostedZone                                                       |
 | route53HostedZone      | route53Record, vpc                                                                                   |
 | routeTable             | subnet, vpc                                                                                          |
