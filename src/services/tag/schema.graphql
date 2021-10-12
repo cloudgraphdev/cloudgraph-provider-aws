@@ -29,6 +29,7 @@ type awsTag @key(fields: "id") {
   cloudFormationStackSet: [awsCloudFormationStackSet]
   dynamodb: [awsDynamoDbTable]
   nacl: [awsNetworkAcl]
+  ecr: [awsEcr]
 }
 
 # TODO: would this cause a collision with other providers? should we rename to like awsRawTag?

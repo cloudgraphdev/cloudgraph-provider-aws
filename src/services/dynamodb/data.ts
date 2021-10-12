@@ -152,7 +152,7 @@ const getTableTags = async (
             tags.push(...Tags)
 
             if (nextToken) {
-              logger.info(lt.foundAnotherThousand)
+              logger.debug(lt.foundAnotherThousand)
               listAllTags(nextToken)
             } else {
               resolveTags(convertAwsTagsToTagMap(tags as AwsTag[]))

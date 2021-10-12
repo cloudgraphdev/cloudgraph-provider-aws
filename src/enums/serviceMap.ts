@@ -34,6 +34,7 @@ import RouteTable from '../services/routeTable'
 import S3 from '../services/s3'
 import SQS from '../services/sqs'
 import VPC from '../services/vpc'
+import ECR from '../services/ecr'
 import services from './services'
 
 /**
@@ -57,6 +58,7 @@ export default {
   [services.cognitoUserPool]: CognitoUserPool,
   [services.ebs]: EBS,
   [services.ec2Instance]: EC2,
+  [services.ecr]: ECR,
   [services.eip]: EIP,
   [services.elb]: ELB,
   [services.dynamodb]: DynamoDB,
