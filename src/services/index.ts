@@ -76,6 +76,13 @@ export default class Provider extends CloudGraph.Client {
       this.logger.warn('No AWS profiles found')
     }
     const accounts = []
+    /**
+     * Multi account setup flow. We loop through the questions and allow them to answer yes to add another account
+     * If we find profiles, we show that list of profiles and allow them to select one
+     * They can then add a role ARN and externalId to that profile for it to assume other roles
+     * If we find no profiles, they can input just a role ARN and (if needed) an externalId to authenticate that way
+     * If they want to just use default creds of the system (such as in ec2), they can just answer no to the role ARN ?
+     */
     while (true) {
       if (accounts.length > 0) {
         const { addAccount } = await this.interface.prompt([{
@@ -135,38 +142,6 @@ export default class Provider extends CloudGraph.Client {
     }
 
     result.accounts = accounts
-
-    // if (!flags['use-roles'] && !flags['no-prompt'] && profiles && profiles.length) {
-    //   const { profiles: profilesAnswer } = await this.interface.prompt([
-    //     {
-    //       type: 'checkbox',
-    //       message:
-    //         'Please select the AWS credential profiles to utilize for scanning',
-    //       loop: false,
-    //       name: 'profiles',
-    //       choices: profiles.map((profile: string) => ({
-    //         name: profile,
-    //       })),
-    //     },
-    //   ])
-    //   this.logger.debug(`profiles selected: ${profilesAnswer}`)
-    //   result.accounts = profilesAnswer.length
-    //     ? profilesAnswer.map(val => ({ profile: val }))
-    //     : [{ profile: 'default' }]
-    // } else {
-    //   const { roles: rolesAnswer }: {roles: string} = await this.interface.prompt([
-    //     {
-    //       type: 'input',
-    //       message: 'Enter roleARNs in a comma separated list OR press ENTER to use default credentials ',
-    //       name: 'roles'
-    //     }
-    //   ])
-    //   if (!rolesAnswer) {
-    //     throw new Error('No roleARNs were input, aborting AWS configuration')
-    //   }
-    //   const roles = rolesAnswer.split(',')
-    //   result.accounts = roles.map(val => ({roleArn: val}))
-    // }
 
     const { regions: regionsAnswer } = await this.interface.prompt([
       {
