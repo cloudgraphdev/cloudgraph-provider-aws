@@ -14,6 +14,7 @@ import { RawAwsDynamoDbTable } from '../dynamodb/data'
 import { RawAwsKinesisFirehose } from '../kinesisFirehose/data'
 import { RawAwsNetworkAcl } from '../nacl/data'
 import { RawAwsCloudTrail } from '../cloudtrail/data'
+import { RawAwsEcr } from '../ecr/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -628,8 +629,10 @@ export default ({
     const dynamoDbs: { name: string; data: { [property: string]: any[] } } =
       data.find(({ name }) => name === services.dynamodb)
     if (dynamoDbs?.data?.[region]) {
-      const dataAtRegion: RawAwsDynamoDbTable[] =
-        findServiceInstancesWithTag(tag, dynamoDbs.data[region])
+      const dataAtRegion: RawAwsDynamoDbTable[] = findServiceInstancesWithTag(
+        tag,
+        dynamoDbs.data[region]
+      )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
           const { TableId: id } = instance
@@ -663,6 +666,30 @@ export default ({
             resourceType: services.nacl,
             relation: 'child',
             field: 'nacl',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related ECRs
+     */
+    const ecrs: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.ecr)
+    if (ecrs?.data?.[region]) {
+      const dataAtRegion: RawAwsEcr[] = findServiceInstancesWithTag(
+        tag,
+        ecrs.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { repositoryArn: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.ecr,
+            relation: 'child',
+            field: 'ecr',
           })
         }
       }

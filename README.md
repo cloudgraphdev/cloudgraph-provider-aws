@@ -76,6 +76,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | dynamodb              |                                                          |
 | ebs                   | ec2, asg                                                 |
 | ec2                   | alb, securityGroups, ebs, eip, networkInterface, asg     |
+| ecr                   |                                                          |
 | eip                   | vpc, ec2, networkInterface                               |
 | elb                   | securityGroups, vpc                                      |
 | igw                   | vpc                                                      |

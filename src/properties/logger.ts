@@ -428,9 +428,11 @@ export default {
   /**
    * ECR
    */
-  lookingForEcr: 'Looking for ECR Repositories to add...',
-  addingEcr: (num: number): string =>
-    `Found ${num} ECR Repositories, adding them to the VPC`,
+   fetchedECRRepos: (num: number): string => `Found ${num} ECR repos...`,
+   foundMoreECRRepos: (num: number) =>
+     `Found another ${num} ECR repos in this region...`,
+   gettingECRRepos: 'Fetching ECR repos...',
+   gettingECRRepoTags: 'Fetching tags for each ECR repo...',
   /**
    * Transit Gateway
    */

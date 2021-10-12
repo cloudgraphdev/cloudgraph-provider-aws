@@ -876,6 +876,26 @@ export type AwsEc2MetadataOptions = {
   httpEndpoint: Scalars['String'];
 };
 
+export type AwsEcr = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  createdAt?: Maybe<Scalars['String']>;
+  encryptionConfig?: Maybe<AwsEcrEncryptionConfiguration>;
+  imageScanOnPush?: Maybe<Scalars['Boolean']>;
+  imageTagMutability?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  registryAccountId?: Maybe<Scalars['String']>;
+  repositoryUri?: Maybe<Scalars['String']>;
+  scanOnPush?: Maybe<Scalars['Boolean']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
+export type AwsEcrEncryptionConfiguration = {
+  type?: Maybe<Scalars['String']>;
+  kmsKey?: Maybe<Scalars['String']>;
+};
+
 export type AwsEip = {
   id: Scalars['String'];
   accountId: Scalars['String'];
@@ -1422,6 +1442,7 @@ export type AwsTag = {
   cloudFormationStackSet?: Maybe<Array<Maybe<AwsCloudFormationStackSet>>>;
   dynamodb?: Maybe<Array<Maybe<AwsDynamoDbTable>>>;
   nacl?: Maybe<Array<Maybe<AwsNetworkAcl>>>;
+  ecr?: Maybe<Array<Maybe<AwsEcr>>>;
 };
 
 export type AwsTotalBillingInfo = {
