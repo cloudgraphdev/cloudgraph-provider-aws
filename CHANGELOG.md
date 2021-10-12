@@ -1,3 +1,17 @@
+# [0.30.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.29.1...0.30.0) (2021-10-12)
+
+
+### Bug Fixes
+
+* **config:** update logs to use profile when there is no role ([32fb9bf](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/32fb9bff6a26a5387f28abb69b3f3a01808cc2e8))
+* **creds:** update creds function for roles and default flow ([da804d3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/da804d35d60edcf5be49072ecaaf1324128188ef))
+
+
+### Features
+
+* **auth:** update auth to work with role arns ([d5d7aa5](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d5d7aa53799ccbdc8061b5109075bd7c19c32d02))
+* **multi-account:** update all services with new config setup ([364446f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/364446f1e9be3ac8872db6ad4a738aa89feaf927))
+
 ## [0.29.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.29.0...0.29.1) (2021-10-10)
 
 
