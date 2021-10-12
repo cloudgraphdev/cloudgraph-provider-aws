@@ -396,7 +396,7 @@ export default class Provider extends CloudGraph.Client {
       } else {
         this.logger.success('Found and using the following AWS credentials')
         this.logger.success(
-          `${role ? 'roleARN' : 'profile'}: ${chalk.underline.green(role ?? profileName)}`
+          `${role ? 'roleARN' : 'profile'}: ${chalk.underline.green(role || profileName)}`
         )
       }
       this.logger.success(
