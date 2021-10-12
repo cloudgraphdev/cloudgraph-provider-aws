@@ -1,3 +1,10 @@
+# [0.31.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.30.0...0.31.0) (2021-10-12)
+
+
+### Features
+
+* **ecr:** add ecr service ([73c2d88](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/73c2d885ff095e99529347a4c5cf34b7cedd2ef1))
+
 # [0.30.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.29.1...0.30.0) (2021-10-12)
 
 
