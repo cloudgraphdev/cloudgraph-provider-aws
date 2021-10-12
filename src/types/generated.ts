@@ -1312,6 +1312,29 @@ export type AwsS3 = {
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
 };
 
+export type AwsSecretsManager = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  kmsKeyId?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  rotationEnabled?: Maybe<Scalars['Boolean']>;
+  rotationLambdaARN?: Maybe<Scalars['String']>;
+  rotationRules?: Maybe<AwsSecretsManagerRotationRule>;
+  lastRotatedDate?: Maybe<Scalars['String']>;
+  lastChangedDate?: Maybe<Scalars['String']>;
+  lastAccessedDate?: Maybe<Scalars['String']>;
+  deletedDate?: Maybe<Scalars['String']>;
+  owningService?: Maybe<Scalars['String']>;
+};
+
+export type AwsSecretsManagerRotationRule = {
+  id?: Maybe<Scalars['ID']>;
+  automaticallyAfterDays?: Maybe<Scalars['Int']>;
+};
+
 export type AwsSecurityGroup = {
   id: Scalars['String'];
   accountId: Scalars['String'];

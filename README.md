@@ -92,6 +92,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | route53HostedZone     | route53Record, vpc                                                                                   |
 | routeTable            | subnet, vpc                                                                                          |
 | s3                    |                                                                                                      |
+| secretsManager        |                                                                                                      |
 | securityGroup         | asg, lambda, ec2, elb                                                                                |
 | ses                   |                                                                                                      |
 | sqs                   |                                                                                                      |

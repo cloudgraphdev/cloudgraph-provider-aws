@@ -31,6 +31,7 @@ export default {
   route53Record: 'route53Record',
   routeTable: 'routeTable',
   s3: 's3',
+  secretsManager: 'secretsManager',
   ses: 'ses',
   sg: 'sg',
   sqs: 'sqs',

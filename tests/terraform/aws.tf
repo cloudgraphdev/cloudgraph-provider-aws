@@ -732,67 +732,67 @@ resource "aws_iam_role_policy" "AWSCloudFormationStackSetAdministrationRole_Exec
   role   = aws_iam_role.AWSCloudFormationStackSetAdministrationRole.name
 }
 
-resource "aws_dynamodb_table" "test-table" {
-  name           = "test-table"
-  billing_mode   = "PROVISIONED"
-  read_capacity  = 2
-  write_capacity = 2
-  hash_key       = "testHashKey"
-  range_key      = "anotherKey"
+# resource "aws_dynamodb_table" "test-table" {
+#   name           = "test-table"
+#   billing_mode   = "PROVISIONED"
+#   read_capacity  = 2
+#   write_capacity = 2
+#   hash_key       = "testHashKey"
+#   range_key      = "anotherKey"
 
-  stream_enabled   = true
-  stream_view_type = "NEW_IMAGE"
+#   stream_enabled   = true
+#   stream_view_type = "NEW_IMAGE"
 
-  ttl {
-    attribute_name = "TimeToExist"
-    enabled        = true
-  }
+#   ttl {
+#     attribute_name = "TimeToExist"
+#     enabled        = true
+#   }
 
-  server_side_encryption {
-    enabled = true
-  }
+#   server_side_encryption {
+#     enabled = true
+#   }
 
-  point_in_time_recovery {
-    enabled = false
-  }
+#   point_in_time_recovery {
+#     enabled = false
+#   }
 
-  attribute {
-    name = "testHashKey"
-    type = "S"
-  }
+#   attribute {
+#     name = "testHashKey"
+#     type = "S"
+#   }
 
-  attribute {
-    name = "anotherKey"
-    type = "S"
-  }
+#   attribute {
+#     name = "anotherKey"
+#     type = "S"
+#   }
 
-  attribute {
-    name = "yetAnotherKey"
-    type = "S"
-  }
-
-
-  local_secondary_index {
-    name            = "lsi-testHashKey-anotherKey"
-    range_key       = "anotherKey"
-    projection_type = "ALL"
-  }
-
-  global_secondary_index {
-    name               = "gsi-yetAnotherKey"
-    hash_key           = "testHashKey"
-    range_key          = "yetAnotherKey"
-    write_capacity     = 1
-    read_capacity      = 1
-    projection_type    = "ALL"
-  }
+#   attribute {
+#     name = "yetAnotherKey"
+#     type = "S"
+#   }
 
 
-  tags = {
-    Name        = "test-table-test-env"
-    Environment = "test-env"
-  }
-}
+#   local_secondary_index {
+#     name            = "lsi-testHashKey-anotherKey"
+#     range_key       = "anotherKey"
+#     projection_type = "ALL"
+#   }
+
+#   global_secondary_index {
+#     name               = "gsi-yetAnotherKey"
+#     hash_key           = "testHashKey"
+#     range_key          = "yetAnotherKey"
+#     write_capacity     = 1
+#     read_capacity      = 1
+#     projection_type    = "ALL"
+#   }
+
+
+#   tags = {
+#     Name        = "test-table-test-env"
+#     Environment = "test-env"
+#   }
+# }
 
 resource "aws_network_acl" "cg-test-nacl" {
   vpc_id = aws_vpc.vpc.id
@@ -833,4 +833,8 @@ resource "aws_network_acl" "cg-test-nacl" {
 
 resource "aws_ses_email_identity" "example" {
   email = "email@example.com"
+}
+
+resource "aws_secretsmanager_secret" "example" {
+  name = "example"
 }

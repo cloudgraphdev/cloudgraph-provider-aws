@@ -31,6 +31,7 @@ import NetworkInterface from '../services/networkInterface'
 import Route53HostedZone from '../services/route53HostedZone'
 import Route53Record from '../services/route53Record'
 import RouteTable from '../services/routeTable'
+import SecretsManager from '../services/secretsManager'
 import S3 from '../services/s3'
 import SES from '../services/ses'
 import SQS from '../services/sqs'
@@ -79,6 +80,7 @@ export default {
   [services.route53Record]: Route53Record,
   [services.routeTable]: RouteTable,
   [services.s3]: S3,
+  [services.secretsManager]: SecretsManager,
   [services.ses]: SES,
   tag: AwsTag,
 }
