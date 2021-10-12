@@ -1,7 +1,8 @@
 import CloudFormation, { StackSet, StackSetSummary } from 'aws-sdk/clients/cloudformation'
+import { Config } from 'aws-sdk/lib/config'
 import { groupBy, isEmpty } from 'lodash'
 
-import { Credentials, TagMap } from '../../types'
+import { TagMap } from '../../types'
 import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 
@@ -50,17 +51,17 @@ const describeStackSet = async (cf: CloudFormation, StackSetName: string): Promi
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{
   [region: string]: RawAwsCloudFormationStackSet[]
 }> => {
   const cfStackSetData = []
 
   for (const region of regions.split(',')) {
-    const cf = new CloudFormation({ region, credentials, endpoint })
+    const cf = new CloudFormation({ ...config, region, endpoint })
 
     const stackSets =  await listStackSets(cf)
     

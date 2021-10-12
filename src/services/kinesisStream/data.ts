@@ -1,5 +1,5 @@
-import { Kinesis } from 'aws-sdk'
-import { Shard, StreamDescription } from 'aws-sdk/clients/kinesis'
+import { Config } from 'aws-sdk/lib/config'
+import Kinesis, { Shard, StreamDescription } from 'aws-sdk/clients/kinesis'
 import CloudGraph from '@cloudgraph/sdk'
 import { groupBy } from 'lodash'
 import { Credentials } from '../../types'
@@ -76,17 +76,17 @@ const listStreamsData = async (
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{
   [region: string]: RawAwsKinesisStream[]
 }> => {
   const streamDescriptionsData = []
 
   for (const region of regions.split(',')) {
-    const kinesis = new Kinesis({ region, credentials, endpoint })
+    const kinesis = new Kinesis({ ...config, region, endpoint })
 
     const streamDescriptions = await listStreamsData(kinesis)
 

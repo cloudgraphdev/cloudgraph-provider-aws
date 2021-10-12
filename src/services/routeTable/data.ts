@@ -2,15 +2,16 @@ import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import { Request } from 'aws-sdk'
 import EC2, {
   DescribeRouteTablesRequest,
   DescribeRouteTablesResult,
   RouteTable,
 } from 'aws-sdk/clients/ec2'
+import { Request } from 'aws-sdk/lib/request'
 import { AWSError } from 'aws-sdk/lib/error'
+import { Config } from 'aws-sdk/lib/config'
 
-import { Credentials, TagMap } from '../../types'
+import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
 
@@ -29,10 +30,10 @@ export interface RawAwsRouteTable extends Omit<RouteTable, 'Tags'> {
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{
   [region: string]: RawAwsRouteTable[]
 }> =>
@@ -117,7 +118,7 @@ export default async ({
     }
 
     regions.split(',').map(region => {
-      const ec2 = new EC2({ region, credentials, endpoint })
+      const ec2 = new EC2({ ...config, region, endpoint })
       const regionPromise = new Promise<void>(resolveRegion =>
         listRouteTableData({ ec2, region, resolveRegion })
       )

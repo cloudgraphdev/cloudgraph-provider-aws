@@ -1,17 +1,18 @@
-import { Request } from 'aws-sdk'
 import EC2, {
   DescribeNatGatewaysRequest,
   DescribeNatGatewaysResult,
   NatGateway,
 } from 'aws-sdk/clients/ec2'
 import { AWSError } from 'aws-sdk/lib/error'
+import { Request } from 'aws-sdk/lib/request'
+import { Config } from 'aws-sdk/lib/config'
 
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
 import awsLoggerText from '../../properties/logger'
-import { AwsTag, Credentials, TagMap } from '../../types'
+import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
@@ -30,10 +31,10 @@ export interface RawAwsNATGateway extends Omit<NatGateway, 'Tags'> {
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{ [property: string]: RawAwsNATGateway[] }> =>
   new Promise(async resolve => {
     const natGatewayData: RawAwsNATGateway[] = []
@@ -114,7 +115,7 @@ export default async ({
     }
 
     regions.split(',').map(region => {
-      const ec2 = new EC2({ region, credentials, endpoint })
+      const ec2 = new EC2({ ...config, region, endpoint })
       const regionPromise = new Promise<void>(resolveRegion =>
         listNatGatewayData({ ec2, region, resolveRegion })
       )

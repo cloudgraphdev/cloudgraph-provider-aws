@@ -12,11 +12,12 @@ import EC2, {
   Instance,
   InstanceAttribute,
 } from 'aws-sdk/clients/ec2'
+import { Config } from 'aws-sdk/lib/config'
 import { AWSError } from 'aws-sdk/lib/error'
 
 import CloudGraph from '@cloudgraph/sdk'
 
-import { Credentials, TagMap } from '../../types'
+import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
@@ -39,10 +40,10 @@ export interface RawAwsEC2 extends Omit<Instance, 'Tags'> {
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{
   [region: string]: RawAwsEC2[]
 }> =>
@@ -127,7 +128,7 @@ export default async ({
     }
 
     const regionPromises = regions.split(',').map(region => {
-      const ec2 = new EC2({ region, credentials, endpoint })
+      const ec2 = new EC2({ ...config, region, endpoint })
 
       const regionPromise = new Promise<void>(resolveRegion =>
         listEc2Instances({ ec2, region, resolveRegion })
@@ -142,7 +143,7 @@ export default async ({
      */
 
     const keyPairPromises = ec2Instances.map(({ region }, ec2Idx) => {
-      const ec2 = new EC2({ region, credentials, endpoint })
+      const ec2 = new EC2({ ...config, region, endpoint })
 
       const keyPairPromise = new Promise<void>(resolveKeyPair =>
         ec2.describeKeyPairs(
@@ -191,7 +192,7 @@ export default async ({
 
     const deletionProtectionPromises = ec2Instances.map(
       ({ region, InstanceId }, ec2Idx) => {
-        const ec2 = new EC2({ region, credentials, endpoint })
+        const ec2 = new EC2({ ...config, region, endpoint })
 
         const deletionProtectionPromise = new Promise<void>(
           resolveDeletionProtection =>
@@ -315,7 +316,7 @@ export default async ({
     }
 
     const tagsPromises = regions.split(',').map(region => {
-      const ec2 = new EC2({ region, credentials, endpoint })
+      const ec2 = new EC2({ ...config, region, endpoint })
       const tagPromise = new Promise<void>(resolveTags =>
         listAllTagsforAllInstances({
           region,
@@ -341,7 +342,7 @@ export default async ({
     const iamInstanceProfile = {}
 
     const iamProfileAssociationsPromises = regions.split(',').map(region => {
-      const ec2 = new EC2({ region, credentials, endpoint })
+      const ec2 = new EC2({ ...config, region, endpoint })
       return new Promise<void>(resolveRegion =>
         ec2.describeIamInstanceProfileAssociations(
           {},

@@ -2,6 +2,7 @@
 import { Firehose } from 'aws-sdk'
 import CloudGraph from '@cloudgraph/sdk'
 import { groupBy } from 'lodash'
+import { Config } from 'aws-sdk/lib/config'
 import { DeliveryStreamDescription } from 'aws-sdk/clients/firehose'
 import { Credentials, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
@@ -66,17 +67,17 @@ const listTagsForDeliveryStream = async (kinesis: Firehose, deliveryStreamName: 
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{
   [region: string]: RawAwsKinesisFirehose[]
 }> => {
   const streamDescriptionsData = []
 
   for (const region of regions.split(',')) {
-    const kinesis = new Firehose({ region, credentials, endpoint })
+    const kinesis = new Firehose({ ...config, region, endpoint })
     
     const streamDescriptions = await listDeliveryStreamData(kinesis)
     for (const streamDescription of streamDescriptions) {

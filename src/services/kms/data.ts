@@ -4,9 +4,10 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
 import { AWSError, Request } from 'aws-sdk'
+import { Config } from 'aws-sdk/lib/config'
 import KMS, { KeyListEntry, KeyMetadata, ListKeysRequest, ListKeysResponse } from 'aws-sdk/clients/kms'
 
-import { Credentials, TagMap } from '../../types'
+import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
@@ -29,10 +30,10 @@ export type AwsKms = KeyListEntry &
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{ [property: string]: AwsKms[] }> =>
   new Promise(async resolve => {
     const kmsIds = []
@@ -116,7 +117,7 @@ export default async ({
     }
 
     regions.split(',').map(region => {
-      const kms = new KMS({ region, credentials, endpoint })
+      const kms = new KMS({ ...config, region, endpoint })
       const regionPromise = new Promise<void>(resolveRegion =>
         listKmsKeys({ kms, region, resolveRegion })
       )
@@ -132,7 +133,7 @@ export default async ({
     logger.debug(lt.gettingKeyDetails)
 
     kmsIds.map(({ region, KeyId }: { region: string; KeyId: string }) => {
-      const kms = new KMS({ region, credentials, endpoint })
+      const kms = new KMS({ ...config, region, endpoint })
 
       const keyPromise = new Promise<void>(resolveKey =>
         kms.describeKey({ KeyId }, (err, data) => {
@@ -179,7 +180,7 @@ export default async ({
     logger.debug(lt.gettingRotationStatus)
 
     kmsData.map(({ region, KeyId }, idx) => {
-      const kms = new KMS({ region, credentials, endpoint })
+      const kms = new KMS({ ...config, region, endpoint })
 
       const rotationStatusPromise = new Promise<void>(resolveRotationStatus =>
         kms.getKeyRotationStatus({ KeyId }, (err, data) => {
@@ -220,7 +221,7 @@ export default async ({
     logger.debug(lt.gettingPolicies)
 
     kmsData.map(({ region, KeyId }, idx) => {
-      const kms = new KMS({ region, credentials, endpoint })
+      const kms = new KMS({ ...config, region, endpoint })
 
       const policyPromise = new Promise<void>(resolvePolicy =>
         kms.getKeyPolicy({ KeyId, PolicyName: 'default' }, (err, data) => {
@@ -261,7 +262,7 @@ export default async ({
     logger.debug(lt.gettingTags)
 
     kmsData.map(({ region, KeyId }, idx) => {
-      const kms = new KMS({ region, credentials, endpoint })
+      const kms = new KMS({ ...config, region, endpoint })
 
       const tagsPromise = new Promise<void>(resolveTags =>
         kms.listResourceTags({ KeyId }, (err, data) => {

@@ -2,11 +2,12 @@ import ASG, {
   AutoScalingGroup,
   LaunchConfiguration,
 } from 'aws-sdk/clients/autoscaling'
+import { Config } from 'aws-sdk/lib/config'
 import { groupBy, isEmpty } from 'lodash'
 
 import CloudGraph from '@cloudgraph/sdk'
 
-import { Credentials, TagMap } from '../../types'
+import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog, setAwsRetryOptions } from '../../utils'
 import { ASG_CUSTOM_DELAY } from '../../config/constants'
@@ -81,10 +82,10 @@ const listLaunchConfigData = async (
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{
   [region: string]: RawAwsAsg[]
 }> => {
@@ -92,7 +93,7 @@ export default async ({
   let launchConfigData
 
   for (const region of regions.split(',')) {
-    const asg = new ASG({ region, credentials, endpoint, ...customRetrySettings })
+    const asg = new ASG({ ...config, region, endpoint, ...customRetrySettings })
 
     /**
      * Step 1) Get all the ASG data for each region

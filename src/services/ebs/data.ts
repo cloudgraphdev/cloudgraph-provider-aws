@@ -3,6 +3,7 @@ import EC2, {
   DescribeVolumesRequest,
   Volume,
 } from 'aws-sdk/clients/ec2'
+import { Config } from 'aws-sdk/lib/config'
 import { AWSError } from 'aws-sdk/lib/error'
 
 import groupBy from 'lodash/groupBy'
@@ -10,7 +11,7 @@ import isEmpty from 'lodash/isEmpty'
 
 import CloudGraph from '@cloudgraph/sdk'
 
-import { Credentials, AwsTag } from '../../types'
+import { AwsTag } from '../../types'
 
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
@@ -95,10 +96,10 @@ const listEbsVolumes = async ({
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{
   [region: string]: Volume & { region: string }[]
 }> =>
@@ -107,7 +108,7 @@ export default async ({
 
     // Get all the EBS data for each region
     const regionPromises = regions.split(',').map(region => {
-      const ec2 = new EC2({ region, credentials, endpoint })
+      const ec2 = new EC2({ ...config, region, endpoint })
       return new Promise<void>(resolveRegion =>
         listEbsVolumes({ ec2, region, ebsData, resolveRegion })
       )

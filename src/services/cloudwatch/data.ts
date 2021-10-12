@@ -9,10 +9,10 @@ import CloudWatch, {
   ListTagsForResourceOutput,
   MetricAlarms,
 } from 'aws-sdk/clients/cloudwatch'
-
+import { Config } from 'aws-sdk/lib/config'
 import { AWSError } from 'aws-sdk/lib/error'
 
-import { Credentials, TagMap, AwsTag } from '../../types'
+import { TagMap, AwsTag } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog, setAwsRetryOptions } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
@@ -102,10 +102,10 @@ const getResourceTags = async (cloudwatch: CloudWatch, arn: string) =>
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{[property: string]: RawAwsCloudwatch[]}> =>
   new Promise(async resolve => {
     const cloudwatchData: Array<
@@ -117,8 +117,8 @@ export default async ({
     // get all metrics for all regions
     regions.split(',').map(region => {
       const cloudwatch = new CloudWatch({
+        ...config,
         region,
-        credentials,
         endpoint,
       })
       const regionPromise = new Promise<void>(async resolveRegion => {
@@ -142,7 +142,7 @@ export default async ({
 
     // get all tags for each environment
     cloudwatchData.map(({ AlarmArn, region }, idx) => {
-      const cloudwatch = new CloudWatch({ region, credentials, endpoint, ...customRetrySettings })
+      const cloudwatch = new CloudWatch({ ...config, region, endpoint, ...customRetrySettings })
       const tagsPromise = new Promise<void>(async resolveTags => {
         const envTags = await getResourceTags(cloudwatch, AlarmArn)
         cloudwatchData[idx].Tags = envTags

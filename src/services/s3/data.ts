@@ -3,6 +3,7 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
 import { AWSError } from 'aws-sdk/lib/error'
+import { Config } from 'aws-sdk/lib/config'
 import S3, {
   Bucket,
   BucketAccelerateStatus,
@@ -40,7 +41,7 @@ import S3, {
   TagSet,
 } from 'aws-sdk/clients/s3'
 
-import { Credentials, TagMap } from '../../types'
+import { TagMap } from '../../types'
 import t from '../../properties/translations'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
@@ -457,10 +458,10 @@ export interface RawAwsS3 {
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{
   [region: string]: RawAwsS3[]
 }> =>
@@ -473,8 +474,8 @@ export default async ({
     regions.split(',').map((region: BucketLocationConstraint) => {
       const regionPromise = new Promise<void>(async resolveRegion => {
         const s3 = new S3({
+          ...config,
           region,
-          credentials,
           endpoint,
           s3ForcePathStyle: true,
         })
@@ -509,8 +510,8 @@ export default async ({
     bucketData.map(({ Name, region }, idx: number) => {
       const bucketObjectListPromise = new Promise<void>(async resolveBucket => {
         const s3 = new S3({
+          ...config,
           region,
-          credentials,
           endpoint,
           s3ForcePathStyle: true,
         })
@@ -529,8 +530,8 @@ export default async ({
 
     bucketData.map(({ Name, region }, idx: number) => {
       const s3 = new S3({
+        ...config,
         region,
-        credentials,
         endpoint,
         s3ForcePathStyle: true,
       })

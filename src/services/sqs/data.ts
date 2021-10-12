@@ -1,9 +1,9 @@
 import groupBy from 'lodash/groupBy'
 
 import SQS, { QueueAttributeMap, TagMap } from 'aws-sdk/clients/sqs'
+import { Config } from 'aws-sdk/lib/config'
 import { Opts } from '@cloudgraph/sdk'
 import { isEmpty } from 'lodash'
-import { Credentials } from '../../types'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 export type AwsSqs = {
@@ -72,18 +72,18 @@ const getQueueTags = async (sqs: SQS, queueUrl: string): Promise<TagMap> => {
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: // opts,
 {
   regions: string
-  credentials: Credentials
+  config: Config
   opts: Opts
 }): Promise<{ [property: string]: AwsSqs[] }> => {
   const sqsList = []
 
   // get all SQS queueUrls for all regions
   for (const region of regions.split(',')) {
-    const sqs = new SQS({ region, credentials, endpoint })
+    const sqs = new SQS({ ...config, region, endpoint })
     const queueUrls = await listSqsQueueUrlsForRegion(sqs)
 
     for (const queueUrl of queueUrls) {

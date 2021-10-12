@@ -11,10 +11,11 @@ import Lambda, {
   ReservedConcurrentExecutions,
 } from 'aws-sdk/clients/lambda'
 import { AWSError } from 'aws-sdk/lib/error'
+import { Config } from 'aws-sdk/lib/config'
 import CloudGraph from '@cloudgraph/sdk'
 import awsLoggerText from '../../properties/logger'
 
-import { Credentials, TagMap } from '../../types'
+import { TagMap } from '../../types'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 const lt = { ...awsLoggerText }
@@ -122,10 +123,10 @@ const getResourceTags = async (lambda: Lambda, arn: string): Promise<TagMap> =>
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{ [property: string]: RawAwsLambdaFunction[] }> =>
   new Promise(async resolve => {
     const lambdaData: RawAwsLambdaFunction[] = []
@@ -134,7 +135,7 @@ export default async ({
 
     // get all Lambdas for all regions
     regions.split(',').map(region => {
-      const lambda = new Lambda({ region, credentials, endpoint })
+      const lambda = new Lambda({ ...config, region, endpoint })
       const regionPromise = new Promise<void>(async resolveRegion => {
         const functionsList = await listFunctionsForRegion({
           lambda,
@@ -161,7 +162,7 @@ export default async ({
 
     // get all tags for each Lambda
     lambdaData.map(({ FunctionArn: arn, region }, idx) => {
-      const lambda = new Lambda({ region, credentials, endpoint })
+      const lambda = new Lambda({ ...config, region, endpoint })
       const tagsPromise = new Promise<void>(async resolveTags => {
         const envTags: TagMap = await getResourceTags(lambda, arn)
         lambdaData[idx].Tags = envTags

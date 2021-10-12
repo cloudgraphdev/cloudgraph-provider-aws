@@ -1,9 +1,10 @@
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import { AWSError } from 'aws-sdk/lib/error'
+import { Config } from 'aws-sdk/lib/config'
 import EC2, { Address, DescribeAddressesResult } from 'aws-sdk/clients/ec2'
 
-import { Credentials, AwsTag, TagMap } from '../../types'
+import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
@@ -26,17 +27,17 @@ export interface RawAwsEip extends Omit<Address, 'Tags'> {
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{ [property: string]: RawAwsEip[] }> =>
   new Promise(async resolve => {
     const eipData: RawAwsEip[] = []
 
     // Get all the EIP data for each region
     const regionPromises = regions.split(',').map(region => {
-      const ec2 = new EC2({ region, credentials, endpoint })
+      const ec2 = new EC2({ ...config, region, endpoint })
       return new Promise<void>(resolveRegion =>
         ec2.describeAddresses(
           {},

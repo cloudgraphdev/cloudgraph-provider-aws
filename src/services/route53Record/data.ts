@@ -9,8 +9,8 @@ import Route53, {
   ListResourceRecordSetsResponse,
   ResourceRecordSet,
 } from 'aws-sdk/clients/route53'
+import { Config } from 'aws-sdk/lib/config'
 
-import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import {
   initTestEndpoint,
@@ -133,11 +133,11 @@ const listRecordsForHostedZone = async ({
  */
 
 export default async ({
-  credentials,
+  config,
   rawData,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
   rawData: any
 }): Promise<{
   [region: string]: RawAwsRoute53Record[]
@@ -148,7 +148,7 @@ export default async ({
     const recordData: RawAwsRoute53Record[] = []
 
     const route53 = new Route53({
-      credentials,
+      ...config,
       endpoint,
       ...customRetrySettings,
     })

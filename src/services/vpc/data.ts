@@ -3,8 +3,9 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 import upperFirst from 'lodash/upperFirst'
 
-import { Request } from 'aws-sdk'
+import { Request } from 'aws-sdk/lib/request'
 import { AWSError } from 'aws-sdk/lib/error'
+import { Config } from 'aws-sdk/lib/config'
 import EC2, {
   DescribeVpcsRequest,
   DescribeVpcsResult,
@@ -12,7 +13,7 @@ import EC2, {
 } from 'aws-sdk/clients/ec2'
 import CloudGraph from '@cloudgraph/sdk'
 
-import { AwsTag, Credentials, TagMap } from '../../types'
+import { AwsTag, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
@@ -34,10 +35,10 @@ export interface RawAwsVpc extends Omit<Vpc, 'Tags'> {
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{ [property: string]: RawAwsVpc[] }> =>
   new Promise(async resolve => {
     const vpcData: RawAwsVpc[] = []
@@ -125,7 +126,7 @@ export default async ({
     }
 
     regions.split(',').map(region => {
-      const ec2 = new EC2({ region, credentials, endpoint })
+      const ec2 = new EC2({ ...config, region, endpoint })
       const regionPromise = new Promise<void>(resolveRegion =>
         listVpcData({ ec2, region, resolveRegion })
       )
@@ -140,7 +141,7 @@ export default async ({
 
     const fetchVpcAttribute = (Attribute): void[] =>
       vpcData.map(({ region, VpcId }, idx): void => {
-        const ec2 = new EC2({ region, credentials, endpoint })
+        const ec2 = new EC2({ ...config, region, endpoint })
 
         const additionalAttrPromise = new Promise<void>(resolveAdditionalAttr =>
           ec2.describeVpcAttribute({ VpcId, Attribute }, (err, data) => {
