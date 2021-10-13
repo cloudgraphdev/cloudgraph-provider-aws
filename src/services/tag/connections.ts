@@ -16,6 +16,7 @@ import { RawAwsNetworkAcl } from '../nacl/data'
 import { RawAwsCloudTrail } from '../cloudtrail/data'
 import { RawAwsEcr } from '../ecr/data'
 import { RawAwsSubnet } from '../subnet/data'
+import { RawAwsSecretsManager } from '../secretsManager/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -715,6 +716,30 @@ export default ({
             relation: 'child',
             resourceType: services.subnet,
             field: 'subnet',
+          })
+        }
+      }
+    }
+
+    /**
+    * Find related SecretsManagers
+    */
+    const secretsManagers: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.secretsManager)
+    if (secretsManagers?.data?.[region]) {
+      const dataAtRegion: RawAwsSecretsManager[] = findServiceInstancesWithTag(
+        tag,
+        secretsManagers.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { ARN: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.secretsManager,
+            relation: 'child',
+            field: 'secretsManager',
           })
         }
       }

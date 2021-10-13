@@ -1492,6 +1492,7 @@ export type AwsTag = {
   nacl?: Maybe<Array<Maybe<AwsNetworkAcl>>>;
   ecr?: Maybe<Array<Maybe<AwsEcr>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
+  secretsManager?: Maybe<Array<Maybe<AwsSecretsManager>>>;
 };
 
 export type AwsTotalBillingInfo = {
