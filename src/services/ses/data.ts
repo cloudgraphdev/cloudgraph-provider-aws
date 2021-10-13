@@ -10,7 +10,7 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
 import awsLoggerText from '../../properties/logger'
-import { Credentials } from '../../types'
+import { Config } from 'aws-sdk/lib/config'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 const lt = { ...awsLoggerText }
@@ -28,10 +28,10 @@ export interface RawAwsSes extends IdentityVerificationAttributes {
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{ [property: string]: RawAwsSes[] }> =>
   new Promise(async resolve => {
     const sesData: RawAwsSes[] = []
@@ -40,7 +40,7 @@ export default async ({
 
     regions.split(',').map(region => {
       const regionPromise = new Promise<void>(resolveRegion => {
-        const ses = new SES({ region, credentials, endpoint })
+        const ses = new SES({ ...config, region, endpoint })
 
         ses.listIdentities(
           {},
@@ -66,7 +66,7 @@ export default async ({
               return resolveRegion()
             }
 
-            logger.info(lt.fetchedSesIdentities(Identities.length))
+            logger.debug(lt.fetchedSesIdentities(Identities.length))
 
             const identityVerificationPromise = new Promise<void>(
               resolveIdVer => {
