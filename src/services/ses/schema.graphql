@@ -1,0 +1,7 @@
+type awsSes @key(fields: "id") {
+  id: String! @id @search(by: [hash])
+  accountId: String! @search(by: [hash])
+	arn: String! @search(by: [hash, regexp])
+  email: String @search(by: [hash, regexp])
+  verificationStatus: String @search(by: [hash, regexp])
+}

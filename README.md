@@ -89,6 +89,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | networkInterface      | ec2, natGateway, vpc, eip                                |
 | s3                    |                                                          |
 | securityGroup         | asg, lambda, ec2, elb                                    |
+| ses                   |                                                          |
 | sqs                   |                                                          |
 | vpc                   | alb, eip, elb, igw, lambda, natGateway, networkInterface |
 | route53HostedZone     | route53Record, vpc                                       |

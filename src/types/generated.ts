@@ -1331,6 +1331,14 @@ export type AwsServiceBillingInfo = {
   formattedCost?: Maybe<Scalars['String']>;
 };
 
+export type AwsSes = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
+  verificationStatus?: Maybe<Scalars['String']>;
+};
+
 export type AwsSgInboundRule = {
   id: Scalars['String'];
   description?: Maybe<Scalars['String']>;
