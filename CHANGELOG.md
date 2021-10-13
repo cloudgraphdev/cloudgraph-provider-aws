@@ -1,3 +1,10 @@
+## [0.34.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.34.0...0.34.1) (2021-10-13)
+
+
+### Bug Fixes
+
+* **alb:** fix alb connection for security groups ([484cd5b](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/484cd5be46c0b0cb0583ab6e1ba257d1a0b4dbd4))
+
 # [0.34.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.33.0...0.34.0) (2021-10-13)
 
 
