@@ -1,3 +1,10 @@
+# [0.33.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.32.0...0.33.0) (2021-10-13)
+
+
+### Features
+
+* **subnet:** add subnet service ([5caaed8](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/5caaed8efbfe08c4fd9f479efadd8848c2ab0df5))
+
 # [0.32.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.31.0...0.32.0) (2021-10-13)
 
 
