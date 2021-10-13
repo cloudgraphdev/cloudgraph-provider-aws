@@ -34,5 +34,6 @@ export default {
   ses: 'ses',
   sg: 'sg',
   sqs: 'sqs',
+  subnet: 'subnet',
   vpc: 'vpc',
 }

@@ -25,8 +25,8 @@ export default ({
   const {
     LoadBalancerName: id,
     SecurityGroups: securityGroups = [],
-  }: // AvailabilityZones: azs = [],
-  RawAwsAlb = alb
+    AvailabilityZones: azs = [],
+  }: RawAwsAlb = alb
 
   const connections: ServiceConnection[] = []
   /**
@@ -52,15 +52,16 @@ export default ({
   /**
    * Add subnets
    */
-  // TODO: Implement when Subnet service is fully ready
-  // connections.push(
-  //   ...azs.map(({ SubnetId }) => ({
-  //     id: SubnetId,
-  //     resourceType: services.subnet,
-  //     relation: 'child',
-  //     field: 'subnets',
-  //   }))
-  // )
+  connections.push(
+    ...azs
+      .filter(i => i.SubnetId)
+      .map(({ SubnetId }) => ({
+        id: SubnetId,
+        resourceType: services.subnet,
+        relation: 'child',
+        field: 'subnet',
+      }))
+  )
 
   /**
    * Add Security Groups

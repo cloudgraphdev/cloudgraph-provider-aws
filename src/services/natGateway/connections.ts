@@ -1,12 +1,10 @@
 import { ServiceConnection } from '@cloudgraph/sdk'
 import { isEmpty } from 'lodash'
 
-import {
-  NatGateway,
-  NetworkInterface,
-} from 'aws-sdk/clients/ec2'
+import { NatGateway, NetworkInterface } from 'aws-sdk/clients/ec2'
 
 import services from '../../enums/services'
+import { RawAwsSubnet } from '../subnet/data'
 
 export default ({
   service: natGw,
@@ -19,7 +17,7 @@ export default ({
 }): {
   [property: string]: ServiceConnection[]
 } => {
-  const { NatGatewayId, NatGatewayAddresses } = natGw
+  const { NatGatewayId, NatGatewayAddresses, SubnetId } = natGw
   const connections: ServiceConnection[] = []
   /**
    * Find Network Interfaces used in NatGW
@@ -46,6 +44,29 @@ export default ({
           resourceType: services.networkInterface,
           relation: 'child',
           field: 'networkInterface',
+        })
+      }
+    }
+  }
+  /**
+   * Find Subnets used in NatGW
+   */
+  const subnets: {
+    name: string
+    data: { [property: string]: any[] }
+  } = data.find(({ name }) => name === services.subnet)
+  if (subnets?.data?.[region]) {
+    const subnetsInRegion: RawAwsSubnet[] = subnets.data[region].filter(
+      ({ SubnetId: sId }: RawAwsSubnet) => sId === SubnetId
+    )
+    if (!isEmpty(subnetsInRegion)) {
+      for (const subnet of subnetsInRegion) {
+        const { SubnetId: id } = subnet
+        connections.push({
+          id,
+          resourceType: services.subnet,
+          relation: 'child',
+          field: 'subnet',
         })
       }
     }

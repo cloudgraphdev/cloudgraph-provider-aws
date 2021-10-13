@@ -12,6 +12,7 @@ import {
 import { ServiceConnection } from '@cloudgraph/sdk'
 
 import services from '../../enums/services'
+import { RawAwsSubnet } from '../subnet/data'
 
 /**
  * EC2
@@ -38,6 +39,7 @@ export default ({
     InstanceId: id,
     SecurityGroups: instanceSecurityGroups = [],
     NetworkInterfaces: instanceNetworkInterfaces = [],
+    SubnetId: subnetId,
   } = instance
 
   /**
@@ -166,9 +168,28 @@ export default ({
 
   /**
    * Find Subnets
-   * related to this EC2 loadbalancer
+   * related to this EC2 load balancer
    */
-  // TODO: Implement when subnet service is ready
+  const subnets: {
+    name: string
+    data: { [property: string]: any[] }
+  } = data.find(({ name }) => name === services.subnet)
+  if (subnets?.data?.[region]) {
+    const subnetsInRegion: RawAwsSubnet[] = subnets.data[region].filter(
+      ({ SubnetId }: RawAwsSubnet) => subnetId === SubnetId
+    )
+
+    if (!isEmpty(subnetsInRegion)) {
+      for (const subnet of subnetsInRegion) {
+        connections.push({
+          id: subnet.SubnetId,
+          resourceType: services.subnet,
+          relation: 'child',
+          field: 'subnet',
+        })
+      }
+    }
+  }
 
   /**
    * Find EKS

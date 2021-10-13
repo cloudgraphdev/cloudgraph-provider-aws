@@ -1,4 +1,3 @@
-// import AwsSubnet from '../services/subnet'
 import ALB from '../services/alb'
 import APIGatewayResource from '../services/apiGatewayResource'
 import APIGatewayRestApi from '../services/apiGatewayRestApi'
@@ -10,6 +9,7 @@ import AwsKinesisFirehose from '../services/kinesisFirehose'
 import AwsKinesisStream from '../services/kinesisStream'
 import AwsKms from '../services/kms'
 import AwsSecurityGroup from '../services/securityGroup'
+import AwsSubnet from '../services/subnet'
 import AwsTag from '../services/tag'
 import Billing from '../services/billing'
 import CloudFront from '../services/cloudfront'
@@ -72,7 +72,7 @@ export default {
   [services.nat]: NATGateway,
   [services.networkInterface]: NetworkInterface,
   [services.sg]: AwsSecurityGroup,
-  // [services.subnet]: AwsSubnet, // TODO: Enable when going for ENG-222
+  [services.subnet]: AwsSubnet,
   [services.vpc]: VPC,
   [services.sqs]: SQS,
   [services.route53HostedZone]: Route53HostedZone,

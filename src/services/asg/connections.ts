@@ -2,13 +2,14 @@ import {
   AutoScalingGroup,
   LaunchConfiguration,
   TagDescriptionList,
-} from 'aws-sdk/clients/autoscaling';
+} from 'aws-sdk/clients/autoscaling'
 
-import { ServiceConnection } from '@cloudgraph/sdk';
+import { ServiceConnection } from '@cloudgraph/sdk'
 
-import { SecurityGroup, Volume } from 'aws-sdk/clients/ec2';
-import { isEmpty } from 'lodash';
-import services from '../../enums/services';
+import { SecurityGroup, Volume } from 'aws-sdk/clients/ec2'
+import { isEmpty } from 'lodash'
+import services from '../../enums/services'
+import { RawAwsSubnet } from '../subnet/data'
 
 /**
  * ASG
@@ -32,11 +33,10 @@ export default ({
   const {
     AutoScalingGroupARN: id,
     Instances: instances = [],
+    VPCZoneIdentifier: commaSeparatedSubnetIds = '',
   } = asg
 
-  const {
-    SecurityGroups: sgIds = [],
-  } = asg.LaunchConfiguration
+  const { SecurityGroups: sgIds = [] } = asg.LaunchConfiguration
 
   /**
    * Find EC2 Instances
@@ -89,10 +89,10 @@ export default ({
       }
     }
   }
-  
+
   /**
    * Find EBS volumes
-   * related to this EC2 instance
+   * related to this Auto Scaling Group
    */
   const ebsVolumes: {
     name: string
@@ -101,7 +101,9 @@ export default ({
   if (ebsVolumes?.data?.[region]) {
     const volumesInRegion = ebsVolumes.data[region].filter(
       ({ Attachments: attachments }) =>
-        attachments.find(({ InstanceId }) => ec2InstanceIds.includes(InstanceId))
+        attachments.find(({ InstanceId }) =>
+          ec2InstanceIds.includes(InstanceId)
+        )
     )
 
     if (!isEmpty(volumesInRegion)) {
@@ -116,8 +118,32 @@ export default ({
     }
   }
 
+  /**
+   * Find Subnets
+   * related to this Auto Scaling Group
+   */
+  const subnets = data.find(({ name }) => name === services.subnet)
+  if (subnets?.data?.[region]) {
+    const subnetsInRegion = subnets.data[region].filter(
+      (subnet: RawAwsSubnet) =>
+        commaSeparatedSubnetIds.includes(subnet.SubnetId)
+    )
+    if (!isEmpty(subnetsInRegion)) {
+      for (const subnet of subnetsInRegion) {
+        const { SubnetId } = subnet
+
+        connections.push({
+          id: SubnetId,
+          resourceType: services.subnet,
+          relation: 'child',
+          field: 'subnet',
+        })
+      }
+    }
+  }
+
   const asgResult = {
     [id]: connections,
   }
-  return asgResult;
+  return asgResult
 }

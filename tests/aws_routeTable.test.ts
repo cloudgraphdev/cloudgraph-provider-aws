@@ -1,5 +1,6 @@
 import CloudGraph from '@cloudgraph/sdk'
 import RouteTableService from '../src/services/routeTable'
+import SubnetService from '../src/services/subnet'
 import VPCService from '../src/services/vpc'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
@@ -17,6 +18,9 @@ describe('Route Table Service Test: ', () => {
         getDataResult = {}
         formatResult = {}
         try {
+          const subnetService = new SubnetService({
+            logger: CloudGraph.logger,
+          })
           const vpcService = new VPCService({
             logger: CloudGraph.logger,
           })
@@ -39,12 +43,6 @@ describe('Route Table Service Test: ', () => {
             })
           )
 
-          // Get VPC data
-          const vpcData = await vpcService.getData({
-            credentials,
-            regions: region,
-          })
-
           const [routeTable] = getDataResult[region]
           routeTableId = routeTable.RouteTableId
 
@@ -53,7 +51,19 @@ describe('Route Table Service Test: ', () => {
             data: [
               {
                 name: services.vpc,
-                data: vpcData,
+                data: await vpcService.getData({
+                  credentials,
+                  regions: region,
+                }),
+                account,
+                region,
+              },
+              {
+                name: services.subnet,
+                data: await subnetService.getData({
+                  credentials,
+                  regions: region,
+                }),
                 account,
                 region,
               },
@@ -127,6 +137,14 @@ describe('Route Table Service Test: ', () => {
       expect(vpcConnections.length).toBe(1)
     })
 
-    test.todo('should verify the connection to subnet')
+    // TODO: Localstack Pro Tier
+    // test('should verify the connection to subnet', async () => {
+    //   const vpcConnections = routeTableConnections[routeTableId]?.filter(
+    //     connection => connection.resourceType === services.subnet
+    //   )
+
+    //   expect(vpcConnections).toBeDefined()
+    //   expect(vpcConnections.length).toBe(1)
+    // })
   })
 })

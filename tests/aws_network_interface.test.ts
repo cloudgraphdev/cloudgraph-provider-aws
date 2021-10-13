@@ -1,19 +1,25 @@
 import CloudGraph from '@cloudgraph/sdk'
 import NetworkInterfaceService from '../src/services/networkInterface'
+import SubnetService from '../src/services/subnet'
+import services from '../src/enums/services'
+import { RawNetworkInterface } from '../src/services/networkInterface/data'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
 
 describe('Network Interface Service Test: ', () => {
-  let getDataResult
+  let getDataResult: RawNetworkInterface[]
   let formatResult
+  let connections
+  let netId
   initTestConfig()
   beforeAll(async () => {
-    getDataResult = {}
+    getDataResult = []
     formatResult = {}
     try {
       const config = { logger: CloudGraph.logger }
 
       const classInstance = new NetworkInterfaceService(config)
+      const subnetService = new SubnetService(config)
 
       getDataResult = await classInstance.getData({
         credentials,
@@ -27,6 +33,26 @@ describe('Network Interface Service Test: ', () => {
           account,
         })
       )
+
+      const [instance] = getDataResult[region]
+      netId = instance.NetworkInterfaceId
+      
+      connections = classInstance.getConnections({
+        service: instance,
+        data: [
+          {
+            name: services.subnet,
+            data: await subnetService.getData({
+              credentials,
+              regions: region,
+            }),
+            account,
+            region,
+          },
+        ],
+        account,
+        region,
+      })
     } catch (error) {
       console.error(error) // eslint-disable-line no-console
     }
@@ -107,6 +133,18 @@ describe('Network Interface Service Test: ', () => {
           }),
         ])
       )
+    })
+  })
+
+  // TODO: Localstack Pro Tier
+  describe('connections', () => {
+    test('should verify the connection to subnet', () => {
+      const subnetConnections = connections[netId]?.filter(
+        connection => connection.resourceType === services.subnet
+      )
+
+      expect(subnetConnections).toBeDefined()
+      expect(subnetConnections.length).toBe(1)
     })
   })
 })

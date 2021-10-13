@@ -11,6 +11,13 @@ type awsSubnet @key(fields: "id") {
   ipV6Cidr: String @search(by: [hash, regexp])
   state: String @search(by: [hash, regexp])
   tags: [Tag]
-  # lambda: [awsLambda] @hasInverse(field: subnets)
-  # natGateway: [awsNatGateway] @hasInverse(field: subnet)
+  alb: [awsAlb] @hasInverse(field: subnet)
+  asg: [awsAsg] @hasInverse(field: subnet)
+  ec2Instance: [awsEc2] @hasInverse(field: subnet)
+  elb: [awsElb] @hasInverse(field: subnet)
+  lambda: [awsLambda] @hasInverse(field: subnet)
+  natGateway: [awsNatGateway] @hasInverse(field: subnet)
+  networkInterface: [awsNetworkInterface] @hasInverse(field: subnet)
+  routeTable: [awsRouteTable] @hasInverse(field: subnet)
+  vpc: [awsVpc] @hasInverse(field: subnet)
 }

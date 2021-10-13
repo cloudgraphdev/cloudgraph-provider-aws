@@ -15,20 +15,21 @@ import { TagMap, AwsTag } from '../../types'
 
 import awsLoggerText from '../../properties/logger'
 // import { Tag } from '../../types/generated'
-import { initTestEndpoint } from '../../utils'
+import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const endpoint = initTestEndpoint('Subnet')
+const serviceName = 'Subnet'
+const endpoint = initTestEndpoint(serviceName)
 
 /**
  * Subnets
  */
 
-export interface AwsSubnet extends Omit<Subnet, 'Tags'> {
+export interface RawAwsSubnet extends Omit<Subnet, 'Tags'> {
   region: string
-  tags: TagMap
+  Tags: TagMap
 }
 
 export default ({
@@ -37,9 +38,9 @@ export default ({
 }: {
   regions: string
   config: Config
-}): Promise<{ [property: string]: AwsSubnet[] }> =>
+}): Promise<{ [property: string]: RawAwsSubnet[] }> =>
   new Promise(async resolve => {
-    const subnetData: AwsSubnet[] = []
+    const subnetData: RawAwsSubnet[] = []
     const regionPromises = []
 
     const listSubnetData = async ({
@@ -63,10 +64,7 @@ export default ({
         args,
         (err: AWSError, data: DescribeSubnetsResult) => {
           if (err) {
-            logger.warn(
-              'There was an error getting data for service subnet: unable to describeSubnets'
-            )
-            logger.debug(err)
+            generateAwsErrorLog(serviceName, 'ec2:describeSubnets', err)
           }
 
           /**
@@ -105,7 +103,7 @@ export default ({
             ...subnets.map(({ Tags, ...subnet }) => ({
               ...subnet,
               region,
-              tags: convertAwsTagsToTagMap(Tags as AwsTag[]),
+              Tags: convertAwsTagsToTagMap(Tags as AwsTag[]),
             }))
           )
 

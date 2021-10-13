@@ -19,6 +19,7 @@ import { FunctionConfiguration } from 'aws-sdk/clients/lambda'
 
 import services from '../../enums/services'
 import { intersectStringArrays } from '../../utils/index'
+import { RawAwsSubnet } from '../subnet/data'
 /**
  * ALBs
  */
@@ -45,9 +46,9 @@ export default ({
   const sgIds =
     sgs?.data?.[region]?.map(({ GroupId }: SecurityGroup) => GroupId) || []
   // TODO: Implement when Subnet service is fully ready
-  // const subnets = data.find(({ name }) => name === services.subnet)
-  // const subnetIds =
-  //   subnets?.data?.[region]?.map(({ SubnetId }: Subnet) => SubnetId) || []
+  const subnets = data.find(({ name }) => name === services.subnet)
+  const subnetIds =
+    subnets?.data?.[region]?.map(({ SubnetId }: RawAwsSubnet) => SubnetId) || []
 
   /**
    * Find any ALB Instances
@@ -107,24 +108,6 @@ export default ({
   //   }
   // }
   /**
-   * Find any ELB related data
-   */
-  // TODO: Uncomment and check if LoadBalancerName is the id when adding ELB
-  // const elbs = data.find(({ name }) => name === services.elb)
-  // if (elbs?.data?.[region]) {
-  //   const dataAtRegion: LoadBalancerDescription[] = elbs.data[region].filter(
-  //     ({ VPCId }: LoadBalancerDescription) => VPCId === id
-  //   )
-  //   for (const elb of dataAtRegion) {
-  //     connections.push({
-  //       id: elb.LoadBalancerName,
-  //       resourceType: services.eks,
-  //       relation: 'child',
-  //       field: 'elb',
-  //     })
-  //   }
-  // }
-  /**
    * Find any IGW related data
    */
   const igws = data.find(({ name }) => name === services.igw)
@@ -149,18 +132,12 @@ export default ({
   if (lambdas?.data?.[region]) {
     const dataAtRegion: FunctionConfiguration[] = lambdas.data[region].filter(
       ({
-        // VpcConfig: { VpcId, SecurityGroupIds, SubnetIds } = {},
-        VpcConfig: { VpcId, SecurityGroupIds } = {},
+        VpcConfig: { VpcId, SecurityGroupIds, SubnetIds } = {},
       }: FunctionConfiguration) => {
-        // TODO: Implement when Subnet service is fully ready
-        // return (
-        //   VpcId === id ||
-        //   intersectStringArrays(sgIds, SecurityGroupIds).length > 0 ||
-        //   intersectStringArrays(subnetIds, SubnetIds).length > 0
-        // )
         return (
           VpcId === id ||
-          intersectStringArrays(sgIds, SecurityGroupIds).length > 0
+          intersectStringArrays(sgIds, SecurityGroupIds).length > 0 ||
+          intersectStringArrays(subnetIds, SubnetIds).length > 0
         )
       }
     )
@@ -236,6 +213,23 @@ export default ({
   //     })
   //   }
   // }
+
+  /**
+   * Find any Subnet related data
+   */
+  if (subnets?.data?.[region]) {
+    const dataAtRegion: RawAwsSubnet[] = subnets.data[region].filter(
+      ({ VpcId }: RawAwsSubnet) => VpcId === id
+    )
+    for (const subnet of dataAtRegion) {
+      connections.push({
+        id: subnet.SubnetId,
+        resourceType: services.subnet,
+        relation: 'child',
+        field: 'subnet',
+      })
+    }
+  }
   const VpcResult = {
     [id]: connections,
   }
