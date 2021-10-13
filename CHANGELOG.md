@@ -1,3 +1,18 @@
+# [0.34.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.33.0...0.34.0) (2021-10-13)
+
+
+### Bug Fixes
+
+* **secretsManager:** tag service connection ([dc2928c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/dc2928cc00762fadcdd4a6307d142e789e30ac4a))
+* **secretsManager:** uncomment aws_dynamodb_table in tf config ([e4c132a](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/e4c132a2eefb741d1f9df9beeec6fc4d9a998bb8))
+* **secretsManager:** update SecretsManager class name ([cb5ae52](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/cb5ae526df44725b3722bd9dab7ef284281996c1))
+* **secretsManager:** update with new config changes, info -> debug ([d641364](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d641364074f07b0057b62cba08a96d76ceb77b9e))
+
+
+### Features
+
+* **secretsManager:** add secretsManager service ([62da466](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/62da4666dc38efb68afce4b10aa1cb1f314fa003))
+
 # [0.33.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.32.0...0.33.0) (2021-10-13)
 
 
