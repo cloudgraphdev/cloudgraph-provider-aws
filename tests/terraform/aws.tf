@@ -834,3 +834,7 @@ resource "aws_network_acl" "cg-test-nacl" {
 resource "aws_ses_email_identity" "example" {
   email = "email@example.com"
 }
+
+resource "aws_secretsmanager_secret" "example" {
+  name = "example"
+}

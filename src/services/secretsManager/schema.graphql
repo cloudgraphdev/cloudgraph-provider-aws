@@ -1,0 +1,27 @@
+type awsSecretsManagerRotationRule
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: ID
+    automaticallyAfterDays: Int @search
+  }
+
+type awsSecretsManager @key(fields: "arn") {
+  id: String! @search(by: [hash])
+  accountId: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  kmsKeyId: String @search(by: [hash])
+  tags: [Tag]
+  rotationEnabled: Boolean @search
+  rotationLambdaARN: String @search(by: [hash, regexp])
+  rotationRules: awsSecretsManagerRotationRule
+  lastRotatedDate: String @search(by: [hash, regexp])
+  lastChangedDate: String @search(by: [hash, regexp])
+  lastAccessedDate: String @search(by: [hash, regexp])
+  deletedDate: String @search(by: [hash, regexp])
+  owningService: String @search(by: [hash, regexp])
+}
