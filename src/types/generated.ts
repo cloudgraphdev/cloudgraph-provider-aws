@@ -60,6 +60,7 @@ export type AwsAlb = {
   createdAt?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   route53Record?: Maybe<Array<Maybe<AwsRoute53Record>>>;
@@ -1326,6 +1327,7 @@ export type AwsSecurityGroup = {
   outboundRules?: Maybe<Array<Maybe<AwsSgOutboundRule>>>;
   inboundRuleCount?: Maybe<Scalars['Int']>;
   outboundRuleCount?: Maybe<Scalars['Int']>;
+  alb?: Maybe<Array<Maybe<AwsAlb>>>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
