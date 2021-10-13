@@ -744,3 +744,7 @@ resource "aws_secretsmanager_secret" "example" {
 #   node_type          = "dc1.large"
 #   cluster_type       = "single-node"
 # }
+resource "aws_sns_topic" "user_updates" {
+  name              = "user-updates-topic"
+  kms_master_key_id = "alias/aws/sns"
+}

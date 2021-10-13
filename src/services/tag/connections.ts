@@ -4,8 +4,6 @@ import { NatGateway, Vpc } from 'aws-sdk/clients/ec2'
 import { isEmpty } from 'lodash'
 import regions, { globalRegionName } from '../../enums/regions'
 import services from '../../enums/services'
-import resources from '../../enums/resources'
-import { getIamId } from '../../utils/ids'
 import { RawAwsAppSync } from '../appSync/data'
 import { RawAwsCloudFormationStack } from '../cloudFormationStack/data'
 import { RawAwsCloudFormationStackSet } from '../cloudFormationStackSet/data'
@@ -26,6 +24,9 @@ import { RawAwsRdsCluster } from '../rdsCluster/data'
 import { RawAwsRdsDbInstance } from '../rdsDbInstance/data'
 import { RawAwsElasticBeanstalkApp } from '../elasticBeanstalkApplication/data'
 import { RawAwsElasticBeanstalkEnv } from '../elasticBeanstalkEnvironment/data'
+import resources from '../../enums/resources'
+import { getIamId } from '../../utils/ids'
+import { RawAwsSns } from '../sns/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -892,7 +893,7 @@ export default ({
     /**
      * Find related ElasticBeanstalk Apps
      */
-     const elasticBeanstalkApps: {
+    const elasticBeanstalkApps: {
       name: string
       data: { [property: string]: any[] }
     } = data.find(({ name }) => name === services.elasticBeanstalkApp)
@@ -916,7 +917,7 @@ export default ({
     /**
      * Find related ElasticBeanstalk Envs
      */
-     const elasticBeanstalkEnvs: {
+    const elasticBeanstalkEnvs: {
       name: string
       data: { [property: string]: any[] }
     } = data.find(({ name }) => name === services.elasticBeanstalkEnv)
@@ -932,6 +933,30 @@ export default ({
             resourceType: services.elasticBeanstalkEnv,
             relation: 'child',
             field: 'elasticBeanstalkEnv',
+          })
+        }
+      }
+    }
+    
+    /**
+    * Find related SNS
+    */
+    const sns: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.sns)
+    if (sns?.data?.[region]) {
+      const dataAtRegion: RawAwsSns[] = findServiceInstancesWithTag(
+        tag,
+        sns.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { TopicArn: id } = instance
+
+          connections.push({
+            id,
+            relation: 'child',
+            resourceType: services.sns,
+            field: 'sns',
           })
         }
       }

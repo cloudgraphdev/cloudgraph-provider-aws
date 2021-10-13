@@ -47,6 +47,7 @@ export default {
   secretsManager: 'secretsManager',
   ses: 'ses',
   sg: 'sg',
+  sns: 'sns',
   sqs: 'sqs',
   subnet: 'subnet',
   vpc: 'vpc',

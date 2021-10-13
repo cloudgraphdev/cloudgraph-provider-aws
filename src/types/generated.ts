@@ -1682,6 +1682,25 @@ export type AwsShards = {
   sequenceNumberRangeEnding?: Maybe<Scalars['String']>;
 };
 
+export type AwsSns = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  policy?: Maybe<Scalars['String']>;
+  displayName?: Maybe<Scalars['String']>;
+  deliveryPolicy?: Maybe<Scalars['String']>;
+  kmsMasterKeyId?: Maybe<Scalars['String']>;
+  subscriptions?: Maybe<Array<Maybe<AwsSnsSubscription>>>;
+};
+
+export type AwsSnsSubscription = {
+  id?: Maybe<Scalars['ID']>;
+  arn?: Maybe<Scalars['String']>;
+  endpoint?: Maybe<Scalars['String']>;
+  protocol?: Maybe<Scalars['String']>;
+};
+
 export type AwsSqs = {
   id: Scalars['String'];
   accountId: Scalars['String'];
@@ -1779,6 +1798,7 @@ export type AwsTag = {
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   elasticBeanstalkApp?: Maybe<Array<Maybe<AwsElasticBeanstalkApp>>>;
   elasticBeanstalkEnv?: Maybe<Array<Maybe<AwsElasticBeanstalkEnv>>>;
+  sns?: Maybe<Array<Maybe<AwsSns>>>;
 };
 
 export type AwsTotalBillingInfo = {
