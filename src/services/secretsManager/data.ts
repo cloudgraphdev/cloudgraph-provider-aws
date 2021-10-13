@@ -2,13 +2,12 @@ import SM, {
   SecretListEntry
 } from 'aws-sdk/clients/secretsmanager'
 import { AWSError } from 'aws-sdk/lib/error'
-
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
-
+import { Config } from 'aws-sdk/lib/config'
 import awsLoggerText from '../../properties/logger'
-import { AwsTag, Credentials, TagMap } from '../../types'
+import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
@@ -27,10 +26,10 @@ export interface RawAwsSecretsManager extends Omit<SecretListEntry, 'Tags'> {
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{ [property: string]: RawAwsSecretsManager[] }> =>
   new Promise(async resolve => {
     const smData: RawAwsSecretsManager[] = []
@@ -38,7 +37,7 @@ export default async ({
 
     regions.split(',').map(region => {
       const regionPromise = new Promise<void>(resolveSecretsManagerData => {
-        new SM({ region, credentials, endpoint }).listSecrets({}, (err: AWSError, data) => {
+        new SM({ ...config, region, endpoint }).listSecrets({}, (err: AWSError, data) => {
           if (err) {
             generateAwsErrorLog(serviceName, 'sm:listSecrets', err)
           }
@@ -53,7 +52,7 @@ export default async ({
             return resolveSecretsManagerData()
           }
 
-          logger.info(lt.fetchedSecretsManager(secrets.length))
+          logger.debug(lt.fetchedSecretsManager(secrets.length))
 
           smData.push(
             ...secrets.map(({Tags, ...secret}) => ({
