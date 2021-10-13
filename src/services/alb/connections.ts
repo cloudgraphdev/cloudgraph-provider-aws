@@ -69,7 +69,7 @@ export default ({
   connections.push(
     ...securityGroups.map(sg => ({
       id: sg,
-      resourceType: resourceTypes.securityGroup,
+      resourceType: services.sg,
       relation: 'child',
       field: 'securityGroups',
     }))
