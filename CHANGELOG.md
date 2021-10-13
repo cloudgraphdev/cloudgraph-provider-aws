@@ -1,3 +1,15 @@
+# [0.32.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.31.0...0.32.0) (2021-10-13)
+
+
+### Bug Fixes
+
+* **ses:** update with new config changes, info -> debug ([c87d532](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c87d532c7dbba8c899992702fe2336b68aa10cfb))
+
+
+### Features
+
+* **ses:** add ses service ([a954752](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a9547523d17598944577795ba908cf393f0308e7))
+
 # [0.31.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.30.0...0.31.0) (2021-10-12)
 
 
