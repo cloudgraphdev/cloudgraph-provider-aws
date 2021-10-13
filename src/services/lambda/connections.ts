@@ -6,6 +6,7 @@ import { FunctionConfiguration } from 'aws-sdk/clients/lambda'
 import { SecurityGroup } from 'aws-sdk/clients/ec2'
 
 import services from '../../enums/services'
+import { RawAwsSubnet } from '../subnet/data'
 
 export default ({
   service: lambda,
@@ -20,8 +21,8 @@ export default ({
 } => {
   const {
     KMSKeyArn,
-    FunctionName: functionName,
-    VpcConfig: { SecurityGroupIds: sgIds = [] } = { SecurityGroupIds: [] },
+    FunctionArn: id,
+    VpcConfig: { SecurityGroupIds: sgIds = [], SubnetIds: subnetIds = [] } = {},
   } = lambda
   const connections: ServiceConnection[] = []
   /**
@@ -34,9 +35,8 @@ export default ({
       ({ Arn }: KeyMetadata) => Arn === KMSKeyArn
     )
     if (!isEmpty(kmsKey)) {
-      const { KeyId: id } = kmsKey
       connections.push({
-        id,
+        id: kmsKey.KeyId,
         resourceType: services.kms,
         relation: 'child',
         field: 'kms',
@@ -45,7 +45,7 @@ export default ({
   }
 
   /**
-   * Find Security Groups VPC Security Groups
+   * Find from VPC, Security Groups
    * related to this lambda function
    */
   const securityGroups: {
@@ -58,9 +58,8 @@ export default ({
     )
     if (!isEmpty(sgsInRegion)) {
       for (const sg of sgsInRegion) {
-        const id = sg.GroupId
         connections.push({
-          id,
+          id: sg.GroupId,
           resourceType: services.sg,
           relation: 'child',
           field: 'securityGroups',
@@ -69,8 +68,32 @@ export default ({
     }
   }
 
+  /**
+   * Find Subnets
+   * related to this lambda function
+   */
+  const subnets: {
+    name: string
+    data: { [property: string]: RawAwsSubnet[] }
+  } = data.find(({ name }) => name === services.subnet)
+  if (subnets?.data?.[region]) {
+    const subnetsInRegion: RawAwsSubnet[] = subnets.data[region].filter(
+      ({ SubnetId }: RawAwsSubnet) => subnetIds.includes(SubnetId)
+    )
+    if (!isEmpty(subnetsInRegion)) {
+      for (const subnet of subnetsInRegion) {
+        connections.push({
+          id:subnet.SubnetId,
+          resourceType: services.subnet,
+          relation: 'child',
+          field: 'subnet',
+        })
+      }
+    }
+  }
+
   const lambdaResult = {
-    [functionName]: connections,
+    [id]: connections,
   }
   return lambdaResult
 }

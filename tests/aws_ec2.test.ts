@@ -1,8 +1,9 @@
 import CloudGraph from '@cloudgraph/sdk'
-import EC2Service from '../src/services/ec2'
-import SGService from '../src/services/securityGroup'
 import EBSService from '../src/services/ebs'
+import EC2Service from '../src/services/ec2'
 import EIPService from '../src/services/eip'
+import SubnetService from '../src/services/subnet'
+import SGService from '../src/services/securityGroup'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
 import services from '../src/enums/services'
@@ -19,10 +20,11 @@ describe('EC2 Service Test: ', () => {
         getDataResult = {}
         formatResult = {}
         try {
-          const ec2Service = new EC2Service({ logger: CloudGraph.logger })
-          const sgService = new SGService({ logger: CloudGraph.logger })
           const ebsService = new EBSService({ logger: CloudGraph.logger })
+          const ec2Service = new EC2Service({ logger: CloudGraph.logger })
           const eipService = new EIPService({ logger: CloudGraph.logger })
+          const sgService = new SGService({ logger: CloudGraph.logger })
+          const subnetService = new SubnetService({ logger: CloudGraph.logger })
 
           // Get EC2 data
           getDataResult = await ec2Service.getData({
@@ -35,24 +37,6 @@ describe('EC2 Service Test: ', () => {
             ec2Service.format({ service: elbData, region, account })
           )
 
-          // Get SG data
-          const sgData = await sgService.getData({
-            credentials,
-            regions: region,
-          })
-
-          // Get EBS data
-          const ebsData = await ebsService.getData({
-            credentials,
-            regions: region,
-          })
-
-          // Get EIP data
-          const eipData = await eipService.getData({
-            credentials,
-            regions: region,
-          })
-
           const [instance] = getDataResult[region]
           instanceId = instance.InstanceId
 
@@ -61,19 +45,37 @@ describe('EC2 Service Test: ', () => {
             data: [
               {
                 name: services.sg,
-                data: sgData,
+                data: await sgService.getData({
+                  credentials,
+                  regions: region,
+                }),
                 account,
                 region,
               },
               {
                 name: services.ebs,
-                data: ebsData,
+                data: await ebsService.getData({
+                  credentials,
+                  regions: region,
+                }),
                 account,
                 region,
               },
               {
                 name: services.eip,
-                data: eipData,
+                data: await eipService.getData({
+                  credentials,
+                  regions: region,
+                }),
+                account,
+                region,
+              },
+              {
+                name: services.subnet,
+                data: await subnetService.getData({
+                  credentials,
+                  regions: region,
+                }),
                 account,
                 region,
               },
@@ -199,7 +201,14 @@ describe('EC2 Service Test: ', () => {
       expect(eipConnections.length).toBe(1)
     })
 
-    test.todo('should verify the connection to subnet')
+    test('should verify the connection to subnet', () => {
+      const subnetConnections = ec2Connections[instanceId]?.filter(
+        connection => connection.resourceType === services.subnet
+      )
+
+      expect(subnetConnections).toBeDefined()
+      expect(subnetConnections.length).toBe(1)
+    })
 
     test.todo('should verify the connection to eks')
 

@@ -7,6 +7,6 @@ type awsNatGateway @key(fields: "id") {
   dailyCost: awsTotalBillingInfo
 	tags: [Tag]
   networkInterface: [awsNetworkInterface] @hasInverse(field: natGateway)
-  # subnet: [awsSubnet] @hasInverse(field: natGateway)
+  subnet: [awsSubnet] @hasInverse(field: natGateway)
   vpc: [awsVpc] @hasInverse(field: natGateway)
 }

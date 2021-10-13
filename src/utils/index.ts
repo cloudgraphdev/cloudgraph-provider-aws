@@ -140,7 +140,7 @@ export function initTestEndpoint(service?: string): string | undefined {
 }
 
 export function initTestConfig(): void {
-  jest.setTimeout(300000)
+  jest.setTimeout(900000)
 }
 
 export function generateAwsErrorLog(

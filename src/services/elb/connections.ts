@@ -9,6 +9,7 @@ import {
 import { SecurityGroup } from 'aws-sdk/clients/ec2'
 
 import services from '../../enums/services'
+import { RawAwsSubnet } from '../subnet/data'
 
 /**
  * ELB
@@ -32,6 +33,7 @@ export default ({
     LoadBalancerName: id,
     SecurityGroups: loadbalancerSecurityGroups,
     VPCId: vpcId,
+    Subnets = [],
   } = loadbalancer
 
   /**
@@ -89,7 +91,25 @@ export default ({
    * Find Subnets
    * related to this ELB loadbalancer
    */
-  // TODO: Implement when subnet service is ready
+  const subnets: {
+    name: string
+    data: { [property: string]: any[] }
+  } = data.find(({ name }) => name === services.subnet)
+
+  if (subnets?.data?.[region]) {
+    const subnet = subnets.data[region].find(({ SubnetId }: RawAwsSubnet) =>
+      Subnets.includes(SubnetId)
+    )
+
+    if (subnet) {
+      connections.push({
+        id: subnet.SubnetId,
+        resourceType: services.subnet,
+        relation: 'child',
+        field: 'subnet',
+      })
+    }
+  }
 
   const elbResult = {
     [id]: connections,

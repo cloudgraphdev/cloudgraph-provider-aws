@@ -135,4 +135,5 @@ type awsAsg @key(fields: "arn") {
   ec2Instance: [awsEc2] @hasInverse(field: asg)
   securityGroups: [awsSecurityGroup] @hasInverse(field: asg)
   ebs: [awsEbs] @hasInverse(field: asg)
+  subnet: [awsSubnet] @hasInverse(field: asg)
 }

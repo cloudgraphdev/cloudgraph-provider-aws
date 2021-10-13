@@ -30,6 +30,7 @@ type awsTag @key(fields: "id") {
   dynamodb: [awsDynamoDbTable]
   nacl: [awsNetworkAcl]
   ecr: [awsEcr]
+  subnet: [awsSubnet]
 }
 
 # TODO: would this cause a collision with other providers? should we rename to like awsRawTag?

@@ -3,6 +3,7 @@ import CloudGraph, { ServiceConnection } from '@cloudgraph/sdk'
 import LambdaClass from '../src/services/lambda'
 import VpcClass from '../src/services/vpc'
 import SecurityGroupClass from '../src/services/securityGroup'
+import SubnetClass from '../src/services/subnet'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
 import { RawAwsLambdaFunction } from '../src/services/lambda/data'
@@ -19,6 +20,8 @@ describe('Lambda Service Test: ', () => {
   let initiatorGetConnectionsResult: Array<{
     [property: string]: ServiceConnection[]
   }>
+  let lambdaConnections: ServiceConnection[]
+  let lambdaId: string
   initTestConfig()
   beforeAll(
     async () =>
@@ -27,6 +30,7 @@ describe('Lambda Service Test: ', () => {
           const lambdaClass = new LambdaClass({ logger: CloudGraph.logger })
           const vpcClass = new VpcClass({ logger: CloudGraph.logger })
           const sgClass = new SecurityGroupClass({ logger: CloudGraph.logger })
+          const subnetClass = new SubnetClass({ logger: CloudGraph.logger })
           getDataResult = await lambdaClass.getData({
             credentials,
             regions: region,
@@ -36,6 +40,10 @@ describe('Lambda Service Test: ', () => {
               lambdaClass.format({ service: item, region, account })
           )
           initiatorTestData = [
+            {
+              name: services.lambda,
+              data: getDataResult,
+            },
             {
               name: services.vpc,
               data: await vpcClass.getData({
@@ -51,11 +59,14 @@ describe('Lambda Service Test: ', () => {
               }),
             },
             {
-              name: services.lambda,
-              data: getDataResult,
+              name: services.subnet,
+              data: await subnetClass.getData({
+                credentials,
+                regions: region,
+              }),
             },
           ]
-          initiatorGetConnectionsResult = initiatorTestData[0].data[region].map(
+          initiatorGetConnectionsResult = initiatorTestData[1].data[region].map(
             vpc =>
               vpcClass.getConnections({
                 service: vpc,
@@ -64,6 +75,13 @@ describe('Lambda Service Test: ', () => {
                 region,
               })
           )
+          lambdaId = getDataResult[region][0].FunctionName
+          lambdaConnections = lambdaClass.getConnections({
+            service: getDataResult[region][0],
+            data: initiatorTestData,
+            account,
+            region,
+          })
         } catch (error) {
           console.error(error) // eslint-disable-line no-console
         }
@@ -131,7 +149,7 @@ describe('Lambda Service Test: ', () => {
   })
 
   describe('format', () => {
-    test('should return data in wthe correct format matching the schema type', () => {
+    test('should return data in the correct format matching the schema type', () => {
       expect(formatResult).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
@@ -170,6 +188,14 @@ describe('Lambda Service Test: ', () => {
       expect(initiatorGetConnectionsResult).toEqual(
         expect.arrayContaining([expect.any(Object)])
       )
+    })
+    test('should verify the connection to subnet', () => {
+      const subnetConnections = lambdaConnections[lambdaId]?.filter(
+        connection => connection.resourceType === services.subnet
+      )
+
+      expect(subnetConnections).toBeDefined()
+      expect(subnetConnections.length).toBe(1)
     })
   })
 })

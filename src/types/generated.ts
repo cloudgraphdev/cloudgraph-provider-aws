@@ -64,6 +64,7 @@ export type AwsAlb = {
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   route53Record?: Maybe<Array<Maybe<AwsRoute53Record>>>;
   listeners?: Maybe<Array<Maybe<AwsAlbListener>>>;
+  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
 };
 
 export type AwsAlbListener = {
@@ -300,6 +301,7 @@ export type AwsAsg = {
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
+  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
 };
 
 export type AwsBilling = {
@@ -857,11 +859,12 @@ export type AwsEc2 = {
   associatePublicIpAddress?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
-  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  asg?: Maybe<Array<Maybe<AwsAsg>>>;
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
   eip?: Maybe<Array<Maybe<AwsEip>>>;
   networkInterfaces?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
-  asg?: Maybe<Array<Maybe<AwsAsg>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
 };
 
 export type AwsEc2Blockdevice = {
@@ -943,6 +946,7 @@ export type AwsElb = {
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   route53Record?: Maybe<Array<Maybe<AwsRoute53Record>>>;
+  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
 };
 
 export type AwsElbHealthCheck = {
@@ -1084,6 +1088,7 @@ export type AwsLambda = {
   tags?: Maybe<Array<Maybe<Tag>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
 };
@@ -1155,6 +1160,7 @@ export type AwsNatGateway = {
   dailyCost?: Maybe<AwsTotalBillingInfo>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
@@ -1205,9 +1211,10 @@ export type AwsNetworkInterface = {
   attachment?: Maybe<AwsNetworkInterfaceAttachment>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
-  natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
-  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   eip?: Maybe<Array<Maybe<AwsEip>>>;
+  natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
+  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
 export type AwsNetworkInterfaceAttachment = {
@@ -1271,6 +1278,7 @@ export type AwsRouteTable = {
   explicitlyAssociatedWithSubnets?: Maybe<Scalars['Int']>;
   subnetAssociations?: Maybe<Array<Maybe<Scalars['String']>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
@@ -1406,6 +1414,15 @@ export type AwsSubnet = {
   ipV6Cidr?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  alb?: Maybe<Array<Maybe<AwsAlb>>>;
+  asg?: Maybe<Array<Maybe<AwsAsg>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
+  elb?: Maybe<Array<Maybe<AwsElb>>>;
+  lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
+  networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
 export type AwsSupportedLoginProvider = {
@@ -1451,6 +1468,7 @@ export type AwsTag = {
   dynamodb?: Maybe<Array<Maybe<AwsDynamoDbTable>>>;
   nacl?: Maybe<Array<Maybe<AwsNetworkAcl>>>;
   ecr?: Maybe<Array<Maybe<AwsEcr>>>;
+  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
 };
 
 export type AwsTotalBillingInfo = {
@@ -1482,6 +1500,7 @@ export type AwsVpc = {
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
+  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
 };
 
 export type BlockDeviceEbs = {

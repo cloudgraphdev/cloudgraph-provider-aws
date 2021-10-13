@@ -21,6 +21,7 @@ type awsAlb @key(fields: "arn") {
   vpc: [awsVpc] @hasInverse(field: alb)
   route53Record: [awsRoute53Record] @hasInverse(field: alb)
   listeners: [awsAlbListener]
+  subnet: [awsSubnet] @hasInverse(field: alb)
 }
 
 type awsAlbListener

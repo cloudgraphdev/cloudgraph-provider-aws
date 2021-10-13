@@ -2,6 +2,7 @@ import { ServiceConnection } from '@cloudgraph/sdk'
 import { SecurityGroup } from 'aws-sdk/clients/ec2'
 
 import services from '../../enums/services'
+import { RawAwsSubnet } from '../subnet/data'
 import { RawAwsRouteTable } from './data'
 
 /**
@@ -19,7 +20,7 @@ export default ({
   region: string
 }): { [key: string]: ServiceConnection[] } => {
   const connections: ServiceConnection[] = []
-  const { RouteTableId: id, VpcId: vpcId } = routeTable
+  const { Associations, RouteTableId: id, VpcId: vpcId } = routeTable
 
   /**
    * Find VPCs
@@ -49,7 +50,25 @@ export default ({
    * Find Subnets
    * related to this Route Table
    */
-  // TODO: Implement when subnet service is ready
+  const subnets: {
+    name: string
+    data: { [property: string]: any[] }
+  } = data.find(({ name }) => name === services.subnet)
+  const subnetIds = Associations.map(({ SubnetId }) => SubnetId)
+  if (subnets?.data?.[region]) {
+    const subnet = subnets.data[region].find(({ SubnetId }: RawAwsSubnet) =>
+      subnetIds.includes(SubnetId)
+    )
+
+    if (subnet) {
+      connections.push({
+        id: subnet.SubnetId,
+        resourceType: services.subnet,
+        relation: 'child',
+        field: 'subnet',
+      })
+    }
+  }
 
   const routeTableResult = {
     [id]: connections,

@@ -2,19 +2,24 @@
 import CloudGraph from '@cloudgraph/sdk'
 
 import NatGWClass from '../src/services/natGateway'
+import SubnetClass from '../src/services/subnet'
 import { RawAwsNATGateway } from '../src/services/natGateway/data'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
+import services from '../src/enums/services'
 
 describe('NatGateway Service Test: ', () => {
   let getDataResult
   let formatResult
+  let connections
+  let natId
   initTestConfig()
   beforeAll(
     async () =>
       new Promise<void>(async (resolve, reject) => {
         try {
           const natGWClass = new NatGWClass({ logger: CloudGraph.logger })
+          const subnetClass = new SubnetClass({ logger: CloudGraph.logger })
           getDataResult = await natGWClass.getData({
             credentials,
             regions: region,
@@ -22,6 +27,26 @@ describe('NatGateway Service Test: ', () => {
           formatResult = getDataResult[region].map((item: RawAwsNATGateway) =>
             natGWClass.format({ service: item, region, account })
           )
+
+          const [instance] = getDataResult[region]
+          natId = instance.NetworkInterfaceId
+          
+          connections = natGWClass.getConnections({
+            service: instance,
+            data: [
+              {
+                name: services.subnet,
+                data: await subnetClass.getData({
+                  credentials,
+                  regions: region,
+                }),
+                account,
+                region,
+              },
+            ],
+            account,
+            region,
+          })
           resolve()
         } catch (error) {
           console.error(error) // eslint-disable-line no-console
@@ -66,7 +91,7 @@ describe('NatGateway Service Test: ', () => {
   })
 
   describe('format', () => {
-    test('should return data in wthe correct format matching the schema type', () => {
+    test('should return data in the correct format matching the schema type', () => {
       expect(formatResult).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
@@ -81,4 +106,16 @@ describe('NatGateway Service Test: ', () => {
       )
     })
   })
+
+  // TODO: Localstack Pro Tier
+  // describe('connections', () => {
+  //   test('should verify the connection to subnet', () => {
+  //     const subnetConnections = connections[natId]?.filter(
+  //       connection => connection.resourceType === services.subnet
+  //     )
+
+  //     expect(subnetConnections).toBeDefined()
+  //     expect(subnetConnections.length).toBe(1)
+  //   })
+  // })
 })

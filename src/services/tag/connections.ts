@@ -15,6 +15,7 @@ import { RawAwsKinesisFirehose } from '../kinesisFirehose/data'
 import { RawAwsNetworkAcl } from '../nacl/data'
 import { RawAwsCloudTrail } from '../cloudtrail/data'
 import { RawAwsEcr } from '../ecr/data'
+import { RawAwsSubnet } from '../subnet/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -690,6 +691,30 @@ export default ({
             resourceType: services.ecr,
             relation: 'child',
             field: 'ecr',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related Subnets
+     */
+    const subnets: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.subnet)
+    if (subnets?.data?.[region]) {
+      const dataAtRegion: RawAwsSubnet[] = findServiceInstancesWithTag(
+        tag,
+        subnets.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { SubnetId: id } = instance
+
+          connections.push({
+            id,
+            relation: 'child',
+            resourceType: services.subnet,
+            field: 'subnet',
           })
         }
       }

@@ -18,7 +18,7 @@ type awsLambda @key(fields: "id") {
   tags: [Tag]
   kms: [awsKms] @hasInverse(field: lambda)
   securityGroups: [awsSecurityGroup] @hasInverse(field: lambda)
-  # subnets: [awsSubnet] @hasInverse(field: lambda)
+  subnet: [awsSubnet] @hasInverse(field: lambda)
   vpc: [awsVpc] @hasInverse(field: lambda)
   cognitoUserPool: [awsCognitoUserPool] @hasInverse(field: lambda)
 }
