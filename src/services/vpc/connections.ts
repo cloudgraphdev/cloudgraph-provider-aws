@@ -12,7 +12,7 @@ import {
   Vpc,
 } from 'aws-sdk/clients/ec2'
 // import { Cluster } from 'aws-sdk/clients/eks' // TODO: Uncomment when adding EKS
-// import { DBCluster } from 'aws-sdk/clients/rds' // TODO: Uncomment when adding RDS
+import { DBInstance } from 'aws-sdk/clients/rds'
 import { LoadBalancer } from 'aws-sdk/clients/elbv2'
 import { FunctionConfiguration } from 'aws-sdk/clients/lambda'
 // import { LoadBalancerDescription } from 'aws-sdk/clients/elb' // TODO: Uncomment when adding ELB
@@ -191,29 +191,20 @@ export default ({
   /**
    * Find any RDS related data
    */
-  // TODO: Uncomment and check this for correctness after RDS and SG are added
-  // const rdsS = data.find(({ name }) => name === services.rds)
-  // const sgs = data.find(({ name }) => name === services.sg)
-  // if (rdsS?.data?.[region] && sgs?.data?.[region]) {
-  //   const sgIdsForVpc: string[] = rdsS.data[region]
-  //     .filter(({ VpcId }: SecurityGroup) => VpcId === id)
-  //     .map(({ GroupId }) => GroupId)
-  //   const dataAtRegion: DBCluster[] = rdsS.data[region].filter(
-  //     ({ VpcSecurityGroups }: DBCluster) =>
-  //       VpcSecurityGroups.find(({ VpcSecurityGroupId }) =>
-  //         sgIdsForVpc.includes(VpcSecurityGroupId)
-  //       )
-  //   )
-  //   for (const rds of dataAtRegion) {
-  //     connections.push({
-  //       id: rds.DBClusterIdentifier,
-  //       resourceType: services.rds,
-  //       relation: 'child',
-  //       field: 'rdsInstances',
-  //     })
-  //   }
-  // }
+  const rdsDBInstances = data.find(({ name }) => name === services.rdsDBInstance)
+  if (rdsDBInstances?.data?.[region] && sgs?.data?.[region]) {
+    const dataAtRegion: DBInstance[] = rdsDBInstances.data[region]
+      .filter(({ DBSubnetGroup }) => DBSubnetGroup.VpcId === id)
 
+    for (const rds of dataAtRegion) {
+      connections.push({
+        id: rds.DBInstanceArn,
+        resourceType: services.rdsDBInstance,
+        relation: 'child',
+        field: 'rdsDBInstance',
+      })
+    }
+  }
   /**
    * Find any Subnet related data
    */

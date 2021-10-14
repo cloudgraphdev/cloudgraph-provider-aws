@@ -1,8 +1,8 @@
 import { ServiceConnection } from '@cloudgraph/sdk'
 import { isEmpty } from 'lodash'
 import { SecurityGroup } from 'aws-sdk/clients/ec2'
-import { DBInstance, DBCluster } from 'aws-sdk/clients/rds'
-
+import { DBInstance } from 'aws-sdk/clients/rds'
+import { RawAwsSubnet } from '../subnet/data'
 import services from '../../enums/services'
 
 export default ({
@@ -10,42 +10,24 @@ export default ({
   data,
   region,
 }: {
-  service: DBCluster
+  service: DBInstance
   data: Array<{ name: string; data: { [property: string]: any[] } }>
   region: string
 }): {
   [property: string]: ServiceConnection[]
 } => {
   const connections: ServiceConnection[] = []
-  const { DBClusterIdentifier: id, VpcSecurityGroups } = service
+  const { DBInstanceIdentifier: id, VpcSecurityGroups, DBSubnetGroup } = service
+
   const sgIds = VpcSecurityGroups.map(
     ({ VpcSecurityGroupId }) => VpcSecurityGroupId
   )
+  const subnetIds = (DBSubnetGroup?.Subnets || []).map(
+    ({ SubnetIdentifier }) => SubnetIdentifier
+  )
 
   /**
-   * Find instances
-   */
-  const instances: { name: string; data: { [property: string]: DBInstance[] } } =
-    data.find(({ name }) => name === services.rdsDBInstance)
-  if (instances?.data?.[region]) {
-    const instancesInRegion: DBInstance[] = instances.data[region].filter(
-      ({ DBClusterIdentifier }: DBInstance) => DBClusterIdentifier === id
-    )
-    if (!isEmpty(instancesInRegion)) {
-      for (const instance of instancesInRegion) {
-        const { DBInstanceArn: id } = instance
-        connections.push({
-          id,
-          resourceType: services.rdsDBInstance,
-          relation: 'child',
-          field: 'instances',
-        })
-      }
-    }
-  }
-
-  /**
-   * Find SecurityGroups
+   * Find Security Groups VPC Security Groups
    */
   const securityGroups: {
     name: string
@@ -69,8 +51,30 @@ export default ({
     }
   }
 
-  const rdsDBClusterResult = {
+  /**
+   * Find Subnets
+   */
+  const subnets = data.find(({ name }) => name === services.subnet)
+  if (subnets?.data?.[region]) {
+    const subnetsInRegion = subnets.data[region].filter(
+      (subnet: RawAwsSubnet) => subnetIds.includes(subnet.SubnetId)
+    )
+    if (!isEmpty(subnetsInRegion)) {
+      for (const subnet of subnetsInRegion) {
+        const { SubnetId } = subnet
+
+        connections.push({
+          id: SubnetId,
+          resourceType: services.subnet,
+          relation: 'child',
+          field: 'subnet',
+        })
+      }
+    }
+  }
+
+  const rdsDBInstanceResult = {
     [id]: connections,
   }
-  return rdsDBClusterResult
+  return rdsDBInstanceResult
 }

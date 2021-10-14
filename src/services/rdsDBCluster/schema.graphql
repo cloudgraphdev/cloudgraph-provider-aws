@@ -33,5 +33,6 @@ type awsRDSDBCluster @key(fields: "arn") {
   tags: [Tag]
   globalWriteForwardingRequested: Boolean @search
   instances: [awsRDSDBInstance] @hasInverse(field: cluster)
+  securityGroups: [awsSecurityGroup] @hasInverse(field: rdsDBCluster)
 }
  

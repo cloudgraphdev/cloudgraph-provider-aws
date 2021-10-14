@@ -10,7 +10,8 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 const {logger} = CloudGraph
 import awsLoggerText from '../../properties/logger'
-import { Credentials, TagMap, AwsTag } from '../../types'
+import { Config } from 'aws-sdk/lib/config'
+import { TagMap, AwsTag } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 const lt = { ...awsLoggerText }
 
@@ -72,16 +73,16 @@ const getResourceTags = async (rds: RDS, arn: string): Promise<TagMap> =>
   })
 
 export interface RawAwsRDSDBInstance extends DBInstance {
-  tags?: TagMap
+  Tags?: TagMap
   region: string
 }
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{ [property: string]: RawAwsRDSDBInstance[] }> =>
   new Promise(async resolve => {
     const rdsData: RawAwsRDSDBInstance[] = []
@@ -91,7 +92,7 @@ export default async ({
     // Get all the instances for the region
     regions.split(',').map(region => {
       const regionPromise = new Promise<void>(async resolveRegion => {
-        const rds = new RDS({ region, credentials, endpoint })
+        const rds = new RDS({ ...config, region, endpoint })
         const instances = await listDBInstancesForRegion(rds)
 
         if (!isEmpty(instances)) {
@@ -108,13 +109,13 @@ export default async ({
     })
 
     await Promise.all(regionPromises)
-    logger.info(lt.fetchedRdsInstances(rdsData.length))
+    logger.debug(lt.fetchedRdsInstances(rdsData.length))
 
     // get all tags for each instance
     rdsData.map(({ DBInstanceArn, region }, idx) => {
-      const rds = new RDS({ region, credentials, endpoint })
+      const rds = new RDS({ ...config, region, endpoint })
       const tagsPromise = new Promise<void>(async resolveTags => {
-        rdsData[idx].tags = await getResourceTags(rds, DBInstanceArn)
+        rdsData[idx].Tags = await getResourceTags(rds, DBInstanceArn)
         resolveTags()
       })
       tagsPromises.push(tagsPromise)

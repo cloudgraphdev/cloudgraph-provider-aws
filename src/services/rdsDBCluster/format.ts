@@ -43,7 +43,7 @@ export default ({
     HttpEndpointEnabled: httpEndpointEnabled,
     CrossAccountClone: crossAccountClone,
     GlobalWriteForwardingRequested: globalWriteForwardingRequested,
-    tags = {},
+    Tags = {},
   } = service
 
   return {
@@ -78,7 +78,7 @@ export default ({
     httpEndpointEnabled,
     copyTagsToSnapshot,
     crossAccountClone,
-    tags: formatTagsFromMap(tags),
+    tags: formatTagsFromMap(Tags),
     globalWriteForwardingRequested,
   }
 }

@@ -24,10 +24,7 @@ type awsRDSDBInstance @key(fields: "arn") {
   allocatedStorage: Int @search
   multiAZ: Boolean @search
   subnetGroup: String @search(by: [hash, regexp])
-  subnets: [String] @search(by: [hash])
   availabilityZone: String @search(by: [hash, regexp])
-  dbSecurityGroups: [String]
-  vpcSecurityGroups: [String]
   publiclyAccessible: Boolean @search
   certificateAuthority: String @search(by: [hash, regexp])
   status: String @search(by: [hash, regexp])
@@ -36,4 +33,7 @@ type awsRDSDBInstance @key(fields: "arn") {
   encrypted: Boolean @search
   tags: [Tag]
   cluster: awsRDSDBCluster @hasInverse(field: instances)
+  securityGroups: [awsSecurityGroup] @hasInverse(field: rdsDBInstance)
+  subnet: [awsSubnet] @hasInverse(field: rdsDBInstance)
+  vpc: [awsVpc] @hasInverse(field: rdsDBInstance)
 }

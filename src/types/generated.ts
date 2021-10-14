@@ -1320,6 +1320,7 @@ export type AwsRdsdbCluster = {
   tags?: Maybe<Array<Maybe<Tag>>>;
   globalWriteForwardingRequested?: Maybe<Scalars['Boolean']>;
   instances?: Maybe<Array<Maybe<AwsRdsdbInstance>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
 };
 
 export type AwsRdsdbInstance = {
@@ -1348,10 +1349,7 @@ export type AwsRdsdbInstance = {
   allocatedStorage?: Maybe<Scalars['Int']>;
   multiAZ?: Maybe<Scalars['Boolean']>;
   subnetGroup?: Maybe<Scalars['String']>;
-  subnets?: Maybe<Array<Maybe<Scalars['String']>>>;
   availabilityZone?: Maybe<Scalars['String']>;
-  dbSecurityGroups?: Maybe<Array<Maybe<Scalars['String']>>>;
-  vpcSecurityGroups?: Maybe<Array<Maybe<Scalars['String']>>>;
   publiclyAccessible?: Maybe<Scalars['Boolean']>;
   certificateAuthority?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
@@ -1360,6 +1358,9 @@ export type AwsRdsdbInstance = {
   encrypted?: Maybe<Scalars['Boolean']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   cluster?: Maybe<AwsRdsdbCluster>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
 export type AwsRollbackConfigurationRollbackTrigger = {
@@ -1492,6 +1493,8 @@ export type AwsSecurityGroup = {
   elb?: Maybe<Array<Maybe<AwsElb>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   asg?: Maybe<Array<Maybe<AwsAsg>>>;
+  rdsDBCluster?: Maybe<Array<Maybe<AwsRdsdbCluster>>>;
+  rdsDBInstance?: Maybe<Array<Maybe<AwsRdsdbInstance>>>;
 };
 
 export type AwsServiceBillingInfo = {
@@ -1585,6 +1588,7 @@ export type AwsSubnet = {
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  rdsDBInstance?: Maybe<Array<Maybe<AwsRdsdbInstance>>>;
 };
 
 export type AwsSupportedLoginProvider = {
@@ -1666,6 +1670,7 @@ export type AwsVpc = {
   nacl?: Maybe<Array<Maybe<AwsNetworkAcl>>>;
   natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  rdsDBInstance?: Maybe<Array<Maybe<AwsRdsdbInstance>>>;
   route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;

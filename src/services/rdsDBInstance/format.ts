@@ -38,10 +38,9 @@ export default ({
     IAMDatabaseAuthenticationEnabled: iamDbAuthenticationEnabled,
     DbiResourceId: resourceId,
     Endpoint: endpoint,
-    tags = {},
+    Tags = {},
   } = service
 
-  const usedSgs = []
   const subnetGroup = service.DBSubnetGroup?.DBSubnetGroupName || ''
 
   const parameterGroup = service.DBParameterGroups.map(
@@ -53,31 +52,6 @@ export default ({
     ({ OptionGroupName, Status }) =>
       `${OptionGroupName} (${upperFirst(Status)})`
   ).join(' | ')
-
-  const vpcSecurityGroups = service.VpcSecurityGroups.map(
-    ({ VpcSecurityGroupId, Status }) => {
-      if (!usedSgs.includes(VpcSecurityGroupId)) {
-        usedSgs.push(VpcSecurityGroupId)
-      }
-      return `${VpcSecurityGroupId} (${upperFirst(Status)})`
-    }
-  )
-  const dbSecurityGroups = service.DBSecurityGroups.map(
-    ({ DBSecurityGroupName, Status }) => {
-      if (!usedSgs.includes(DBSecurityGroupName)) {
-        usedSgs.push(DBSecurityGroupName)
-      }
-      return `${DBSecurityGroupName} (${upperFirst(Status)})`
-    }
-  )
-
-  const subnets = (service.DBSubnetGroup?.Subnets || []).map(
-    ({
-      SubnetStatus,
-      SubnetIdentifier,
-      SubnetAvailabilityZone: { Name: name },
-    }) => `${SubnetIdentifier} (${name} - ${SubnetStatus})`
-  )
 
   return {
     id: arn,
@@ -105,16 +79,13 @@ export default ({
     allocatedStorage,
     multiAZ,
     subnetGroup,
-    subnets,
     availabilityZone,
-    dbSecurityGroups,
-    vpcSecurityGroups,
     publiclyAccessible,
     certificateAuthority,
     status,
     failoverPriority,
     kmsKey,
     encrypted,
-    tags: formatTagsFromMap(tags),
+    tags: formatTagsFromMap(Tags),
   }
 }

@@ -17,6 +17,8 @@ type awsSecurityGroup @key(fields: "id") {
   elb: [awsElb] @hasInverse(field: securityGroups)
   ec2Instance: [awsEc2] @hasInverse(field: securityGroups)
   asg: [awsAsg] @hasInverse(field: securityGroups)
+  rdsDBCluster: [awsRDSDBCluster] @hasInverse(field: securityGroups)
+  rdsDBInstance: [awsRDSDBInstance] @hasInverse(field: securityGroups)
 }
 
 type awsSgOutboundRule
