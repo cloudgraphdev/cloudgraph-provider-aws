@@ -1,3 +1,11 @@
+## [0.34.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.34.1...0.34.2) (2021-10-14)
+
+
+### Bug Fixes
+
+* **acconts:** update account flow to enable passing keys directly at an account level (for override) ([a0287be](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a0287bea11f53b09d1f2d00b7798bd5b256a0084))
+* **accounts:** update account flow to enable passing keys directly ([0ec112e](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/0ec112ebcf780cb1cb87b7e23eca1ecd90afa0e8))
+
 ## [0.34.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.34.0...0.34.1) (2021-10-13)
 
 
