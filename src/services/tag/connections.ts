@@ -22,8 +22,8 @@ import { RawAwsIamRole } from '../iamRole/data'
 import { RawAwsIamPolicy } from '../iamPolicy/data'
 import resources from '../../enums/resources'
 import { getIamId } from '../../utils/ids'
-import { RawAwsRDSDBCluster } from '../rdsDBCluster/data'
-import { RawAwsRDSDBInstance } from '../rdsDBInstance/data'
+import { RawAwsrdsCluster } from '../rdsCluster/data'
+import { RawAwsRDSDbInstance } from '../rdsDbInstance/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -841,20 +841,20 @@ export default ({
     /**
     * Find related RDS clusters
     */
-    const rdsDBClusters: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.rdsDBCluster)
-    if (rdsDBClusters?.data?.[region]) {
-      const dataAtRegion: RawAwsRDSDBCluster[] =
-        findServiceInstancesWithTag(tag, rdsDBClusters.data[region])
+    const rdsClusters: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.rdsCluster)
+    if (rdsClusters?.data?.[region]) {
+      const dataAtRegion: RawAwsrdsCluster[] =
+        findServiceInstancesWithTag(tag, rdsClusters.data[region])
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
           const { DBClusterArn: id } = instance
 
           connections.push({
             id,
-            resourceType: services.rdsDBCluster,
+            resourceType: services.rdsCluster,
             relation: 'child',
-            field: 'rdsDBCluster',
+            field: 'rdsCluster',
           })
         }
       }
@@ -863,20 +863,20 @@ export default ({
     /**
      * Find related RDS instances
      */
-    const rdsDBInstances: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.rdsDBInstance)
-    if (rdsDBInstances?.data?.[region]) {
-      const dataAtRegion: RawAwsRDSDBInstance[] =
-        findServiceInstancesWithTag(tag, rdsDBInstances.data[region])
+    const rdsDbInstances: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.rdsDbInstance)
+    if (rdsDbInstances?.data?.[region]) {
+      const dataAtRegion: RawAwsRDSDbInstance[] =
+        findServiceInstancesWithTag(tag, rdsDbInstances.data[region])
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
           const { DBInstanceArn: id } = instance
 
           connections.push({
             id,
-            resourceType: services.rdsDBInstance,
+            resourceType: services.rdsDbInstance,
             relation: 'child',
-            field: 'rdsDBInstance',
+            field: 'rdsDbInstance',
           })
         }
       }

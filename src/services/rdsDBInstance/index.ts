@@ -5,7 +5,7 @@ import format from './format'
 import getData from './data'
 import mutation from './mutation'
 
-export default class RDSDBInstance extends BaseService implements Service {
+export default class RDSDbInstance extends BaseService implements Service {
   format = format.bind(this)
 
   getConnections = getConnections.bind(this)

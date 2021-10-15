@@ -5,7 +5,7 @@ import getConnections from './connections'
 import getData from './data'
 import mutation from './mutation'
 
-export default class RDSDBCluster extends BaseService implements Service {
+export default class rdsCluster extends BaseService implements Service {
   format = format.bind(this)
 
   getConnections = getConnections.bind(this)

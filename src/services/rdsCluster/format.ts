@@ -1,6 +1,6 @@
-import { RawAwsRDSDBCluster } from './data'
+import { RawAwsrdsCluster } from './data'
 import { 
-  AwsRdsdbCluster, 
+  AwsrdsCluster, 
 } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
 
@@ -9,9 +9,9 @@ export default ({
   account,
 }: 
 {
-  service: RawAwsRDSDBCluster
+  service: RawAwsrdsCluster
   account: string
-}): AwsRdsdbCluster => {
+}): AwsrdsCluster => {
   const {
     DBClusterArn: arn,
     DBClusterIdentifier: dbClusterIdentifier,

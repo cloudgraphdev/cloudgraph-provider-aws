@@ -191,17 +191,17 @@ export default ({
   /**
    * Find any RDS related data
    */
-  const rdsDBInstances = data.find(({ name }) => name === services.rdsDBInstance)
-  if (rdsDBInstances?.data?.[region] && sgs?.data?.[region]) {
-    const dataAtRegion: DBInstance[] = rdsDBInstances.data[region]
+  const rdsDbInstances = data.find(({ name }) => name === services.rdsDbInstance)
+  if (rdsDbInstances?.data?.[region] && sgs?.data?.[region]) {
+    const dataAtRegion: DBInstance[] = rdsDbInstances.data[region]
       .filter(({ DBSubnetGroup }) => DBSubnetGroup.VpcId === id)
 
     for (const rds of dataAtRegion) {
       connections.push({
         id: rds.DBInstanceArn,
-        resourceType: services.rdsDBInstance,
+        resourceType: services.rdsDbInstance,
         relation: 'child',
-        field: 'rdsDBInstance',
+        field: 'rdsDbInstance',
       })
     }
   }

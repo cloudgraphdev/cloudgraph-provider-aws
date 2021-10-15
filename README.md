@@ -92,14 +92,14 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | nacl                   | vpc                                                                                                  |
 | natGateway             | networkInterface, subnet, vpc                                                                        |
 | networkInterface       | ec2, eip, natGateway, subnet, vpc                                                                    |
-| rdsDBCluster           | rdsDBInstance, securityGroups                                                                        |
-| rdsDBInstance          | rdsDBCluster, securityGroups, vpc, subnet                                                            |
+| rdsCluster             | rdsDbInstance, securityGroups                                                                        |
+| rdsDbInstance          | rdsCluster, securityGroups, vpc, subnet                                                              |
 | route53Record          | alb, apiGatewayRestApi, elb, route53HostedZone                                                       |
 | route53HostedZone      | route53Record, vpc                                                                                   |
 | routeTable             | subnet, vpc                                                                                          |
 | s3                     |                                                                                                      |
 | secretsManager         |                                                                                                      |
-| securityGroup          | asg, lambda, ec2, elb                                                                                |
+| securityGroup          | asg, lambda, ec2, elb, rdsCluster, rdsDbInstance                                                     |
 | ses                    |                                                                                                      |
 | sqs                    |                                                                                                      |
 | subnet                 | alb, asg, ec2, elb, lambda, natGateway, networkInterface, routeTable, vpc                            |

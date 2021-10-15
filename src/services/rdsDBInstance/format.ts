@@ -1,8 +1,8 @@
-import { RawAwsRDSDBInstance } from './data'
-import { 
-  AwsRdsdbInstance, 
-} from '../../types/generated'
 import upperFirst from 'lodash/upperFirst'
+import { RawAwsRDSDbInstance } from './data'
+import { 
+  AwsRdsDbInstance, 
+} from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
 
 export default ({
@@ -10,9 +10,9 @@ export default ({
   account,
 }: 
 {
-  service: RawAwsRDSDBInstance
+  service: RawAwsRDSDbInstance
   account: string
-}): AwsRdsdbInstance => {
+}): AwsRdsDbInstance => {
   const {
     DBInstanceArn: arn,
     DBInstanceIdentifier: dBInstanceIdentifier,

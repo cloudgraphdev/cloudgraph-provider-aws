@@ -1,5 +1,5 @@
-export default `mutation($input: [AddawsRDSDBInstanceInput!]!) {
-  addawsRDSDBInstance(input: $input, upsert: true) {
+export default `mutation($input: [AddawsRDSDbInstanceInput!]!) {
+  addawsRDSDbInstance(input: $input, upsert: true) {
     numUids
   }
 }`

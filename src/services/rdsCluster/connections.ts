@@ -26,7 +26,7 @@ export default ({
    * Find instances
    */
   const instances: { name: string; data: { [property: string]: DBInstance[] } } =
-    data.find(({ name }) => name === services.rdsDBInstance)
+    data.find(({ name }) => name === services.rdsDbInstance)
   if (instances?.data?.[region]) {
     const instancesInRegion: DBInstance[] = instances.data[region].filter(
       ({ DBClusterIdentifier }: DBInstance) => DBClusterIdentifier === id
@@ -36,7 +36,7 @@ export default ({
         const { DBInstanceArn: id } = instance
         connections.push({
           id,
-          resourceType: services.rdsDBInstance,
+          resourceType: services.rdsDbInstance,
           relation: 'child',
           field: 'instances',
         })
@@ -69,8 +69,8 @@ export default ({
     }
   }
 
-  const rdsDBClusterResult = {
+  const rdsClusterResult = {
     [id]: connections,
   }
-  return rdsDBClusterResult
+  return rdsClusterResult
 }

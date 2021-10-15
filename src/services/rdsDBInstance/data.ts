@@ -8,15 +8,13 @@ import RDS, {
 import { AWSError } from 'aws-sdk/lib/error'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
-const {logger} = CloudGraph
-import awsLoggerText from '../../properties/logger'
 import { Config } from 'aws-sdk/lib/config'
+import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
+import awsLoggerText from '../../properties/logger'
 import { TagMap, AwsTag } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
+const {logger} = CloudGraph
 const lt = { ...awsLoggerText }
-
-import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
-
 const serviceName = 'RDS DB instance'
 const endpoint = initTestEndpoint(serviceName)
 
@@ -72,7 +70,7 @@ const getResourceTags = async (rds: RDS, arn: string): Promise<TagMap> =>
     }
   })
 
-export interface RawAwsRDSDBInstance extends DBInstance {
+export interface RawAwsRDSDbInstance extends DBInstance {
   Tags?: TagMap
   region: string
 }
@@ -83,9 +81,9 @@ export default async ({
 }: {
   regions: string
   config: Config
-}): Promise<{ [property: string]: RawAwsRDSDBInstance[] }> =>
+}): Promise<{ [property: string]: RawAwsRDSDbInstance[] }> =>
   new Promise(async resolve => {
-    const rdsData: RawAwsRDSDBInstance[] = []
+    const rdsData: RawAwsRDSDbInstance[] = []
     const regionPromises = []
     const tagsPromises = []
 

@@ -73,8 +73,8 @@ export default ({
     }
   }
 
-  const rdsDBInstanceResult = {
+  const rdsDbInstanceResult = {
     [id]: connections,
   }
-  return rdsDBInstanceResult
+  return rdsDbInstanceResult
 }

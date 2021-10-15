@@ -1,9 +1,9 @@
 import CloudGraph from '@cloudgraph/sdk'
 
-import RDSDBInstance from '../src/services/rdsDBInstance'
+import RDSDbInstance from '../src/services/rdsDbInstance'
 import { initTestConfig } from '../src/utils'
 import { credentials, region } from '../src/properties/test'
-import { RawAwsRDSDBInstance } from '../src/services/rdsDBInstance/data'
+import { RawAwsRDSDbInstance } from '../src/services/rdsDbInstance/data'
 
 describe('RDS DB Cluster Service Test: ', () => {
 
