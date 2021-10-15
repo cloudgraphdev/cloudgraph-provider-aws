@@ -998,8 +998,8 @@ export type AwsIamGroup = {
   path?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
-  attachedPolicy?: Maybe<Array<Maybe<AwsIamPolicy>>>;
-  user?: Maybe<Array<Maybe<AwsIamUser>>>;
+  iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
+  iamUsers?: Maybe<Array<Maybe<AwsIamUser>>>;
 };
 
 export type AwsIamPolicy = {
@@ -1011,8 +1011,8 @@ export type AwsIamPolicy = {
   description?: Maybe<Scalars['String']>;
   policyContent?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
-  role?: Maybe<Array<Maybe<AwsIamRole>>>;
-  group?: Maybe<Array<Maybe<AwsIamGroup>>>;
+  iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
+  iamGroups?: Maybe<Array<Maybe<AwsIamGroup>>>;
 };
 
 export type AwsIamRole = {
@@ -1027,7 +1027,7 @@ export type AwsIamRole = {
   maxSessionDuration?: Maybe<Scalars['Int']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
-  attachedPolicy?: Maybe<Array<Maybe<AwsIamPolicy>>>;
+  iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
 };
 
 export type AwsIamUser = {
@@ -1041,7 +1041,7 @@ export type AwsIamUser = {
   accessKeyData?: Maybe<Array<Maybe<AwsIamAccessKey>>>;
   groups?: Maybe<Array<Maybe<Scalars['String']>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
-  group?: Maybe<Array<Maybe<AwsIamGroup>>>;
+  iamGroups?: Maybe<Array<Maybe<AwsIamGroup>>>;
 };
 
 export type AwsIgw = {
@@ -1555,9 +1555,9 @@ export type AwsTag = {
   ecr?: Maybe<Array<Maybe<AwsEcr>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   secretsManager?: Maybe<Array<Maybe<AwsSecretsManager>>>;
-  user?: Maybe<Array<Maybe<AwsIamUser>>>;
-  role?: Maybe<Array<Maybe<AwsIamRole>>>;
-  policy?: Maybe<Array<Maybe<AwsIamPolicy>>>;
+  iamUsers?: Maybe<Array<Maybe<AwsIamUser>>>;
+  iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
+  iamPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
 };
 
 export type AwsTotalBillingInfo = {

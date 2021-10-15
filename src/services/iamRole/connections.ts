@@ -49,7 +49,7 @@ export default ({
         id: `${policyName}-${policyId}-${kebabCase(resources.iamPolicy)}`,
         resourceType: services.iamPolicy,
         relation: 'child',
-        field: 'attachedPolicy',
+        field: 'iamAttachedPolicies',
       })
     }
   }

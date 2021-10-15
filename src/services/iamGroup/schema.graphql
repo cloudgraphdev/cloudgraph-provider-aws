@@ -5,6 +5,6 @@ type awsIamGroup @key(fields: "arn") {
   path: String @search(by: [hash, regexp])
   name: String @search(by: [hash, regexp])
   inlinePolicies: [String]
-  attachedPolicy: [awsIamPolicy] @hasInverse(field: group)
-  user: [awsIamUser] @hasInverse(field: group)
+  iamAttachedPolicies: [awsIamPolicy] @hasInverse(field: iamGroups)
+  iamUsers: [awsIamUser] @hasInverse(field: iamGroups)
 }

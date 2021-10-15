@@ -7,6 +7,6 @@ type awsIamPolicy @key(fields: "arn") {
   description: String @search(by: [hash, regexp])
   policyContent: String
   tags: [Tag]
-  role: [awsIamRole] @hasInverse(field: attachedPolicy)
-  group: [awsIamGroup] @hasInverse(field: attachedPolicy)
+  iamRoles: [awsIamRole] @hasInverse(field: iamAttachedPolicies)
+  iamGroups: [awsIamGroup] @hasInverse(field: iamAttachedPolicies)
 }

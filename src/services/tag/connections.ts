@@ -774,7 +774,7 @@ export default ({
             }),
             resourceType: services.iamUser,
             relation: 'child',
-            field: 'user',
+            field: 'iamUsers',
           })
         }
       }
@@ -802,7 +802,7 @@ export default ({
             }),
             resourceType: services.iamRole,
             relation: 'child',
-            field: 'role',
+            field: 'iamRoles',
           })
         }
       }
@@ -830,7 +830,7 @@ export default ({
             }),
             resourceType: services.iamPolicy,
             relation: 'child',
-            field: 'policy',
+            field: 'iamPolicies',
           })
         }
       }

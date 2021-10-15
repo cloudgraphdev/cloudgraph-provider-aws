@@ -10,5 +10,5 @@ type awsIamRole @key(fields: "arn") {
   maxSessionDuration: Int @search
   tags: [Tag]
   inlinePolicies: [String]
-  attachedPolicy: [awsIamPolicy] @hasInverse(field: role)
+  iamAttachedPolicies: [awsIamPolicy] @hasInverse(field: iamRoles)
 }

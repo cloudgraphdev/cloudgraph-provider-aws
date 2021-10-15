@@ -54,7 +54,7 @@ export default ({
         id: `${policyName}-${policyId}-${kebabCase(resources.iamPolicy)}`,
         resourceType: services.iamPolicy,
         relation: 'child',
-        field: 'attachedPolicy',
+        field: 'iamAttachedPolicies',
       })
     }
   }
@@ -82,7 +82,7 @@ export default ({
         id: `${userName}-${userId}-${kebabCase(resources.iamUser)}`,
         resourceType: services.iamUser,
         relation: 'child',
-        field: 'user',
+        field: 'iamUsers',
       })
     }
   }

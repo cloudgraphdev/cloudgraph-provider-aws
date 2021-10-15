@@ -9,7 +9,7 @@ type awsIamUser @key(fields: "arn") {
   accessKeyData: [awsIamAccessKey]
   groups: [String]
   tags: [Tag]
-  group: [awsIamGroup] @hasInverse(field: user)
+  iamGroups: [awsIamGroup] @hasInverse(field: iamUsers)
 }
 
 type awsIamAccessKey

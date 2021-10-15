@@ -27,6 +27,7 @@ import {
   MAX_FAILED_AWS_REQUEST_RETRIES,
   POLICY_SCOPE,
 } from '../../config/constants'
+import MessageInterval from '../../utils/messageInterval'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
@@ -93,10 +94,15 @@ const policyVersionByPolicyArn = async (
     )
   })
 
-export const listIamPolicies = async (
-  iam: IAM,
+export const listIamPolicies = async ({
+  iam,
+  marker,
+  intervalMessage,
+}: {
+  iam: IAM
   marker?: string
-): Promise<RawAwsIamPolicy[]> =>
+  intervalMessage: MessageInterval
+}): Promise<RawAwsIamPolicy[]> =>
   new Promise(resolve => {
     const result: RawAwsIamPolicy[] = []
     const tagsByArnPromises = []
@@ -134,8 +140,16 @@ export const listIamPolicies = async (
             })
           )
 
+          intervalMessage.updateFetchedCounter(result.length)
+
           if (IsTruncated) {
-            result.push(...(await listIamPolicies(iam, Marker)))
+            result.push(
+              ...(await listIamPolicies({
+                iam,
+                marker: Marker,
+                intervalMessage,
+              }))
+            )
           }
 
           resolve(result)
@@ -161,6 +175,7 @@ export default async ({
 }> =>
   new Promise(async resolve => {
     let policiesData: RawAwsIamPolicy[] = []
+    const intervalMessage = new MessageInterval('IAM Policies')
 
     const client = new IAM({
       ...config,
@@ -174,8 +189,12 @@ export default async ({
       'Please be patient, IAM policies can take a long time to fetch if you have a large account'
     )
 
+    intervalMessage.start()
+
     // Fetch IAM Policies
-    policiesData = await listIamPolicies(client)
+    policiesData = await listIamPolicies({ iam: client, intervalMessage })
+
+    intervalMessage.stop()
 
     logger.debug(lt.foundPolicies(policiesData.length))
 

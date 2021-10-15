@@ -10,3 +10,4 @@ export const ROUTE_53_CUSTOM_DELAY = 200
 export const IAM_CUSTOM_DELAY = 1000
 export const CLOUDFORMATION_STACK_CUSTOM_DELAY = 1000
 export const POLICY_SCOPE = environment.NODE_ENV === 'test' ? 'Local' : 'All'
+export const MESSAGE_INTERVAL = 45000
