@@ -1,5 +1,5 @@
-export default `mutation($input: [AddawsrdsClusterInput!]!) {
-  addawsrdsCluster(input: $input, upsert: true) {
+export default `mutation($input: [AddawsRdsClusterInput!]!) {
+  addawsRdsCluster(input: $input, upsert: true) {
     numUids
   }
 }`

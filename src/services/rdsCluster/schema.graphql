@@ -1,4 +1,4 @@
-type awsrdsCluster @key(fields: "arn") {
+type awsRdsCluster @key(fields: "arn") {
   id: String! @search(by: [hash])
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
@@ -32,7 +32,7 @@ type awsrdsCluster @key(fields: "arn") {
   crossAccountClone: Boolean @search
   tags: [Tag]
   globalWriteForwardingRequested: Boolean @search
-  instances: [awsRDSDbInstance] @hasInverse(field: cluster)
+  instances: [awsRdsDbInstance] @hasInverse(field: cluster)
   securityGroups: [awsSecurityGroup] @hasInverse(field: rdsCluster)
 }
  

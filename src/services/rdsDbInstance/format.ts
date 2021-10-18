@@ -1,5 +1,5 @@
 import upperFirst from 'lodash/upperFirst'
-import { RawAwsRDSDbInstance } from './data'
+import { RawAwsRdsDbInstance } from './data'
 import { 
   AwsRdsDbInstance, 
 } from '../../types/generated'
@@ -10,7 +10,7 @@ export default ({
   account,
 }: 
 {
-  service: RawAwsRDSDbInstance
+  service: RawAwsRdsDbInstance
   account: string
 }): AwsRdsDbInstance => {
   const {

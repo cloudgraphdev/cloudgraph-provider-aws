@@ -1,4 +1,4 @@
-type awsRDSDbInstance @key(fields: "arn") {
+type awsRdsDbInstance @key(fields: "arn") {
   id: String! @search(by: [hash])
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
@@ -32,7 +32,7 @@ type awsRDSDbInstance @key(fields: "arn") {
   kmsKey: String @search(by: [hash, regexp])
   encrypted: Boolean @search
   tags: [Tag]
-  cluster: awsrdsCluster @hasInverse(field: instances)
+  cluster: awsRdsCluster @hasInverse(field: instances)
   securityGroups: [awsSecurityGroup] @hasInverse(field: rdsDbInstance)
   subnet: [awsSubnet] @hasInverse(field: rdsDbInstance)
   vpc: [awsVpc] @hasInverse(field: rdsDbInstance)

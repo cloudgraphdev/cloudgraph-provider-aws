@@ -35,8 +35,8 @@ type awsTag @key(fields: "id") {
   iamUsers: [awsIamUser]
   iamRoles: [awsIamRole]
   iamPolicies: [awsIamPolicy]
-  rdsCluster: [awsrdsCluster]
-  rdsDbInstance: [awsRDSDbInstance]
+  rdsCluster: [awsRdsCluster]
+  rdsDbInstance: [awsRdsDbInstance]
 }
 
 # TODO: would this cause a collision with other providers? should we rename to like awsRawTag?

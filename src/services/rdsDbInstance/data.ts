@@ -70,7 +70,7 @@ const getResourceTags = async (rds: RDS, arn: string): Promise<TagMap> =>
     }
   })
 
-export interface RawAwsRDSDbInstance extends DBInstance {
+export interface RawAwsRdsDbInstance extends DBInstance {
   Tags?: TagMap
   region: string
 }
@@ -81,9 +81,9 @@ export default async ({
 }: {
   regions: string
   config: Config
-}): Promise<{ [property: string]: RawAwsRDSDbInstance[] }> =>
+}): Promise<{ [property: string]: RawAwsRdsDbInstance[] }> =>
   new Promise(async resolve => {
-    const rdsData: RawAwsRDSDbInstance[] = []
+    const rdsData: RawAwsRdsDbInstance[] = []
     const regionPromises = []
     const tagsPromises = []
 

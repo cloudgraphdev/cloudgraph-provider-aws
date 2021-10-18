@@ -70,7 +70,7 @@ const getResourceTags = async (rds: RDS, arn: string): Promise<TagMap> =>
     }
   })
 
-  export interface RawAwsrdsCluster extends DBCluster {
+  export interface RawAwsRdsCluster extends DBCluster {
     Tags?: TagMap
     region: string
   }
@@ -81,9 +81,9 @@ const getResourceTags = async (rds: RDS, arn: string): Promise<TagMap> =>
   }: {
     regions: string
     config: Config
-  }): Promise<{ [property: string]: RawAwsrdsCluster[] }> =>
+  }): Promise<{ [property: string]: RawAwsRdsCluster[] }> =>
     new Promise(async resolve => {
-      const rdsData: RawAwsrdsCluster[] = []
+      const rdsData: RawAwsRdsCluster[] = []
       const regionPromises = []
       const tagsPromises = []
   

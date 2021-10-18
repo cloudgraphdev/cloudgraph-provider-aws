@@ -22,8 +22,8 @@ import { RawAwsIamRole } from '../iamRole/data'
 import { RawAwsIamPolicy } from '../iamPolicy/data'
 import resources from '../../enums/resources'
 import { getIamId } from '../../utils/ids'
-import { RawAwsrdsCluster } from '../rdsCluster/data'
-import { RawAwsRDSDbInstance } from '../rdsDbInstance/data'
+import { RawAwsRdsCluster } from '../rdsCluster/data'
+import { RawAwsRdsDbInstance } from '../rdsDbInstance/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -844,7 +844,7 @@ export default ({
     const rdsClusters: { name: string; data: { [property: string]: any[] } } =
       data.find(({ name }) => name === services.rdsCluster)
     if (rdsClusters?.data?.[region]) {
-      const dataAtRegion: RawAwsrdsCluster[] =
+      const dataAtRegion: RawAwsRdsCluster[] =
         findServiceInstancesWithTag(tag, rdsClusters.data[region])
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
@@ -866,7 +866,7 @@ export default ({
     const rdsDbInstances: { name: string; data: { [property: string]: any[] } } =
       data.find(({ name }) => name === services.rdsDbInstance)
     if (rdsDbInstances?.data?.[region]) {
-      const dataAtRegion: RawAwsRDSDbInstance[] =
+      const dataAtRegion: RawAwsRdsDbInstance[] =
         findServiceInstancesWithTag(tag, rdsDbInstances.data[region])
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {

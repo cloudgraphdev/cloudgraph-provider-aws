@@ -1285,6 +1285,44 @@ export type AwsNetworkInterfaceAttachment = {
   status?: Maybe<Scalars['String']>;
 };
 
+export type AwsRdsCluster = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  allocatedStorage?: Maybe<Scalars['Int']>;
+  backupRetentionPeriod?: Maybe<Scalars['Int']>;
+  characterSetName?: Maybe<Scalars['String']>;
+  databaseName?: Maybe<Scalars['String']>;
+  dbClusterIdentifier?: Maybe<Scalars['String']>;
+  subnets?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  percentProgress?: Maybe<Scalars['String']>;
+  readerEndpoint?: Maybe<Scalars['String']>;
+  multiAZ?: Maybe<Scalars['Boolean']>;
+  engine?: Maybe<Scalars['String']>;
+  engineVersion?: Maybe<Scalars['String']>;
+  port?: Maybe<Scalars['Int']>;
+  username?: Maybe<Scalars['String']>;
+  replicationSourceIdentifier?: Maybe<Scalars['String']>;
+  hostedZoneId?: Maybe<Scalars['String']>;
+  encrypted?: Maybe<Scalars['Boolean']>;
+  kmsKey?: Maybe<Scalars['String']>;
+  resourceId?: Maybe<Scalars['String']>;
+  iamDbAuthenticationEnabled?: Maybe<Scalars['Boolean']>;
+  cloneGroupId?: Maybe<Scalars['String']>;
+  createdTime?: Maybe<Scalars['String']>;
+  capacity?: Maybe<Scalars['Int']>;
+  engineMode?: Maybe<Scalars['String']>;
+  deletionProtection?: Maybe<Scalars['Boolean']>;
+  httpEndpointEnabled?: Maybe<Scalars['Boolean']>;
+  copyTagsToSnapshot?: Maybe<Scalars['Boolean']>;
+  crossAccountClone?: Maybe<Scalars['Boolean']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  globalWriteForwardingRequested?: Maybe<Scalars['Boolean']>;
+  instances?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+};
+
 export type AwsRdsDbInstance = {
   id: Scalars['String'];
   accountId: Scalars['String'];
@@ -1319,7 +1357,7 @@ export type AwsRdsDbInstance = {
   kmsKey?: Maybe<Scalars['String']>;
   encrypted?: Maybe<Scalars['Boolean']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
-  cluster?: Maybe<AwsrdsCluster>;
+  cluster?: Maybe<AwsRdsCluster>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
@@ -1455,7 +1493,7 @@ export type AwsSecurityGroup = {
   elb?: Maybe<Array<Maybe<AwsElb>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   asg?: Maybe<Array<Maybe<AwsAsg>>>;
-  rdsCluster?: Maybe<Array<Maybe<AwsrdsCluster>>>;
+  rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
 };
 
@@ -1601,7 +1639,7 @@ export type AwsTag = {
   iamUsers?: Maybe<Array<Maybe<AwsIamUser>>>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   iamPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
-  rdsCluster?: Maybe<Array<Maybe<AwsrdsCluster>>>;
+  rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
 };
 
@@ -1636,44 +1674,6 @@ export type AwsVpc = {
   route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
-};
-
-export type AwsrdsCluster = {
-  id: Scalars['String'];
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
-  allocatedStorage?: Maybe<Scalars['Int']>;
-  backupRetentionPeriod?: Maybe<Scalars['Int']>;
-  characterSetName?: Maybe<Scalars['String']>;
-  databaseName?: Maybe<Scalars['String']>;
-  dbClusterIdentifier?: Maybe<Scalars['String']>;
-  subnets?: Maybe<Scalars['String']>;
-  status?: Maybe<Scalars['String']>;
-  percentProgress?: Maybe<Scalars['String']>;
-  readerEndpoint?: Maybe<Scalars['String']>;
-  multiAZ?: Maybe<Scalars['Boolean']>;
-  engine?: Maybe<Scalars['String']>;
-  engineVersion?: Maybe<Scalars['String']>;
-  port?: Maybe<Scalars['Int']>;
-  username?: Maybe<Scalars['String']>;
-  replicationSourceIdentifier?: Maybe<Scalars['String']>;
-  hostedZoneId?: Maybe<Scalars['String']>;
-  encrypted?: Maybe<Scalars['Boolean']>;
-  kmsKey?: Maybe<Scalars['String']>;
-  resourceId?: Maybe<Scalars['String']>;
-  iamDbAuthenticationEnabled?: Maybe<Scalars['Boolean']>;
-  cloneGroupId?: Maybe<Scalars['String']>;
-  createdTime?: Maybe<Scalars['String']>;
-  capacity?: Maybe<Scalars['Int']>;
-  engineMode?: Maybe<Scalars['String']>;
-  deletionProtection?: Maybe<Scalars['Boolean']>;
-  httpEndpointEnabled?: Maybe<Scalars['Boolean']>;
-  copyTagsToSnapshot?: Maybe<Scalars['Boolean']>;
-  crossAccountClone?: Maybe<Scalars['Boolean']>;
-  tags?: Maybe<Array<Maybe<Tag>>>;
-  globalWriteForwardingRequested?: Maybe<Scalars['Boolean']>;
-  instances?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
-  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
 };
 
 export type BlockDeviceEbs = {
