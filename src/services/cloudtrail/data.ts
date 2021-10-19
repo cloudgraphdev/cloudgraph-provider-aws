@@ -97,28 +97,34 @@ export default async ({
 }> => {
   const cloudTrailData = []
   for (const region of regions.split(',')) {
-    const cloudTrail = new CloudTrail({ ...config, region, endpoint })
-  
-    const trailArnList = await getTrailArnData(cloudTrail)
-    const trailList = await listTrailData(cloudTrail, trailArnList)
-    const trailTagList = await listTrailTagData(cloudTrail, trailArnList)
-    cloudTrailData.push(
-      ...trailList.map((trail: Trail) => ({
-        ...trail,
-        Tags: convertAwsTagsToTagMap(
-          (trailTagList
-            .find((trailTag: ResourceTag) =>
-              trailTag.ResourceId === trail.TrailARN))?.TagsList
-                .map(tag => ({
-                  Key: tag.Key,
-                  Value:tag.Value || '',
-                })
-          )
-        ),
-        region,
-      }))
-    )
-    cloudTrail.listPublicKeys()
+    try {
+      const cloudTrail = new CloudTrail({ ...config, region, endpoint })
+
+      const trailArnList = await getTrailArnData(cloudTrail)
+      const trailList = await listTrailData(cloudTrail, trailArnList)
+      const trailTagList = await listTrailTagData(cloudTrail, trailArnList)
+      if (trailList) {
+        cloudTrailData.push(
+          ...trailList.map((trail: Trail) => ({
+            ...trail,
+            Tags: convertAwsTagsToTagMap(
+              (trailTagList
+                .find((trailTag: ResourceTag) =>
+                  trailTag.ResourceId === trail.TrailARN))?.TagsList
+                    .map(tag => ({
+                      Key: tag.Key,
+                      Value:tag.Value || '',
+                    })
+              )
+            ),
+            region,
+          }))
+        )
+        cloudTrail.listPublicKeys()
+      }
+    } catch (err) {
+      generateAwsErrorLog(serviceName, 'cloudTrail:listTrail', err)
+    }
   }
 
   return groupBy(cloudTrailData, 'region')
