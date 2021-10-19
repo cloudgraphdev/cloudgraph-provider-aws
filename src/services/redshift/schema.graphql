@@ -1,0 +1,27 @@
+type awsRedshiftCluster @key(fields: "arn") {
+  id: String! @search(by: [hash])
+  accountId: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  allowVersionUpgrade: Boolean @search
+  automatedSnapshotRetentionPeriod: Int @search
+  availabilityZone: String @search(by: [hash, regexp])
+  clusterAvailabilityStatus: String @search(by: [hash, regexp])
+  clusterCreateTime: String @search(by: [hash, regexp])
+  clusterRevisionNumber: String @search(by: [hash, regexp])
+  clusterStatus: String @search(by: [hash, regexp])
+  clusterSubnetGroupName: String @search(by: [hash, regexp])
+  clusterVersion: String @search(by: [hash, regexp])
+  dBName: String @search(by: [hash, regexp])
+  encrypted: Boolean @search
+  enhancedVpcRouting: Boolean @search
+  manualSnapshotRetentionPeriod: Int @search
+  masterUsername: String @search(by: [hash, regexp])
+  modifyStatus: String @search(by: [hash, regexp])
+  nodeType: String @search(by: [hash, regexp])
+  numberOfNodes: Int @search
+  preferredMaintenanceWindow: String @search(by: [hash, regexp])
+  publiclyAccessible: Boolean @search
+  tags: [Tag]
+  kms: [awsKms] @hasInverse(field: redshiftCluster)
+  vpc: [awsVpc] @hasInverse(field: redshiftCluster)
+}

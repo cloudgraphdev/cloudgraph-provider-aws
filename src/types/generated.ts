@@ -1222,6 +1222,7 @@ export type AwsKms = {
   validTo?: Maybe<Scalars['String']>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
+  redshiftCluster?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
 };
 
 export type AwsLambda = {
@@ -1460,6 +1461,34 @@ export type AwsRdsDbInstance = {
   cluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+};
+
+export type AwsRedshiftCluster = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  allowVersionUpgrade?: Maybe<Scalars['Boolean']>;
+  automatedSnapshotRetentionPeriod?: Maybe<Scalars['Int']>;
+  availabilityZone?: Maybe<Scalars['String']>;
+  clusterAvailabilityStatus?: Maybe<Scalars['String']>;
+  clusterCreateTime?: Maybe<Scalars['String']>;
+  clusterRevisionNumber?: Maybe<Scalars['String']>;
+  clusterStatus?: Maybe<Scalars['String']>;
+  clusterSubnetGroupName?: Maybe<Scalars['String']>;
+  clusterVersion?: Maybe<Scalars['String']>;
+  dBName?: Maybe<Scalars['String']>;
+  encrypted?: Maybe<Scalars['Boolean']>;
+  enhancedVpcRouting?: Maybe<Scalars['Boolean']>;
+  manualSnapshotRetentionPeriod?: Maybe<Scalars['Int']>;
+  masterUsername?: Maybe<Scalars['String']>;
+  modifyStatus?: Maybe<Scalars['String']>;
+  nodeType?: Maybe<Scalars['String']>;
+  numberOfNodes?: Maybe<Scalars['Int']>;
+  preferredMaintenanceWindow?: Maybe<Scalars['String']>;
+  publiclyAccessible?: Maybe<Scalars['Boolean']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
@@ -1780,6 +1809,7 @@ export type AwsVpc = {
   natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
+  redshiftCluster?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
   route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
