@@ -91,7 +91,8 @@ const getTopicAttributes = async (
         if (err || !topicAttributesData) {
           generateAwsErrorLog(serviceName, 'sns:getTopicAttributes', err)
         }
-        resolve(topicAttributesData.Attributes)
+        const { Attributes = {} } = topicAttributesData || {}
+        resolve(Attributes)
       }
     )
   })
@@ -213,10 +214,7 @@ export default async ({
     snsData.map(({ TopicArn: arn, region }, idx) => {
       const sns = new SNS({ ...config, region, endpoint })
       const tagsPromise = new Promise<void>(async resolveTags => {
-        const topicTags: TagMap = await getTopicTags(sns, arn)
-        if (!isEmpty(topicTags)) {
-          snsData[idx].Tags = topicTags
-        }
+        snsData[idx].Tags = await getTopicTags(sns, arn)
         resolveTags()
       })
       tagsPromises.push(tagsPromise)

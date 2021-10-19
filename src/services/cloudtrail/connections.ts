@@ -29,7 +29,7 @@ export default ({
   const {
     TrailARN: id,
     S3BucketName: s3BucketName,
-    // SnsTopicARN: snsTopicARN,
+    SnsTopicARN: snsTopicARN,
     KmsKeyId: kmsKeyId,
   } = cloudTrail
 
@@ -51,6 +51,28 @@ export default ({
           resourceType: services.s3,
           relation: 'child',
           field: 's3',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find SNS topic
+   * related to the cloudTrail
+   */
+  const snsTopics = data.find(({ name }) => name === services.sns)
+  if (snsTopics?.data?.[region]) {
+    const snsTopicsInRegion = snsTopics.data[region].filter(topic =>
+      topic.TopicArn === snsTopicARN
+    )
+
+    if (!isEmpty(snsTopicsInRegion)) {
+      for (const topic of snsTopicsInRegion) {
+        connections.push({
+          id: topic.TopicArn,
+          resourceType: services.sns,
+          relation: 'child',
+          field: 'sns',
         })
       }
     }

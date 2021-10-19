@@ -70,7 +70,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | cloudformationStack      | cloudformationStack                                                                                  |
 | cloudformationStackSet   |                                                                                                      |
 | cloudfront               | elb, s3                                                                                              |
-| cloudtrail               | kms, s3                                                                                              |
+| cloudtrail               | kms, s3, sns                                                                                         |
 | cloudwatch               |                                                                                                      |
 | cognitoIdentityPool      |                                                                                                      |
 | cognitoUserPool          | lambda                                                                                               |
@@ -93,7 +93,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | igw                      | vpc                                                                                                  |
 | kinesisFirehose          | kinesisStream, s3                                                                                    |
 | kinesisStream            |                                                                                                      |
-| kms                      | lambda, redshiftCluster                                                                              |
+| kms                      | lambda, redshiftCluster, sns                                                                         |
 | lambda                   | kms, securityGroups, subnet, vpc                                                                     |
 | nacl                     | vpc                                                                                                  |
 | natGateway               | networkInterface, subnet, vpc                                                                        |
@@ -108,6 +108,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | secretsManager           |                                                                                                      |
 | securityGroup            | asg, lambda, ec2, elb, rdsCluster, rdsDbInstance                                                     |
 | ses                      |                                                                                                      |
+| sns                      | kms, cloudtrail                                                                                      |
 | sqs                      |                                                                                                      |
 | subnet                   | alb, asg, ec2, elb, lambda, natGateway, networkInterface, routeTable, vpc                            |
 | vpc                      | alb, ec2, eip, elb, igw, lambda, natGateway, networkInterface, route53HostedZone, routeTable, subnet |

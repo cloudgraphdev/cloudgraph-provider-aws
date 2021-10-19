@@ -6,8 +6,6 @@ type awsCloudtrail @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   s3BucketName: String @search(by: [hash, regexp])
   s3KeyPrefix: String @search(by: [hash, regexp])
-  snsTopicName: String @search(by: [hash, regexp])
-  snsTopicARN: String @search(by: [hash, regexp])
   includeGlobalServiceEvents: String @search(by: [hash, regexp])
   isMultiRegionTrail: String @search(by: [hash, regexp])
   homeRegion: String @search(by: [hash, regexp])
@@ -20,5 +18,6 @@ type awsCloudtrail @key(fields: "arn") {
   isOrganizationTrail: String @search(by: [hash, regexp])
   tags: [Tag]
   s3: [awsS3] @hasInverse(field: cloudtrail)
+  sns: [awsSns] @hasInverse(field: cloudtrail)
   kms: [awsKms] @hasInverse(field: cloudtrail)
 }

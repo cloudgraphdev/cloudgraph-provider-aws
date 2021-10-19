@@ -6,8 +6,9 @@ type awsSns @key(fields: "arn") {
   policy: String @search(by: [hash, regexp])
   displayName: String @search(by: [hash, regexp])
   deliveryPolicy: String @search(by: [hash, regexp])
-  kmsMasterKeyId: String @search(by: [hash])
   subscriptions: [awsSnsSubscription]
+  cloudtrail: [awsCloudtrail] @hasInverse(field: sns)
+  kms: [awsKms] @hasInverse(field: sns)
 }
 
 type awsSnsSubscription 
@@ -16,7 +17,7 @@ type awsSnsSubscription
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: ID
+    id: String! @id
     arn: String @search(by: [hash, regexp])
     endpoint: String @search(by: [hash, regexp])
     protocol: String @search(by: [hash, regexp])

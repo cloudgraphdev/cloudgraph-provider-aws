@@ -1,3 +1,4 @@
+import cuid from 'cuid'
 import { RawAwsSns } from './data'
 import { AwsSns, AwsSnsSubscription } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
@@ -10,6 +11,7 @@ import { Subscription } from 'aws-sdk/clients/sns'
  const awsSNSSubscriptionConverter = (
   subscription: Subscription
 ): AwsSnsSubscription => ({
+  id: cuid(),
   arn: subscription.SubscriptionArn,
   endpoint: subscription.Endpoint,
   protocol: subscription.Protocol,
@@ -30,7 +32,6 @@ export default ({
     Policy: policy,
     DisplayName: displayName,
     DeliveryPolicy: deliveryPolicy,
-    KmsMasterKeyId: kmsMasterKeyId,
     subscriptions,
   } = service
 
@@ -42,7 +43,6 @@ export default ({
     policy,
     displayName,
     deliveryPolicy,
-    kmsMasterKeyId,
     subscriptions: subscriptions.map(awsSNSSubscriptionConverter),
   }
 }
