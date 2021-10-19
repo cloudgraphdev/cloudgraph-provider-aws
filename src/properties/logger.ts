@@ -13,8 +13,9 @@ export default {
   /**
    * IAM
    */
-  fetchingIamData: 'Fetching IAM data for this AWS account via the AWS SDK...',
-  doneFetchingIamData: '✅ Done fetching IAM Data ✅',
+  fetchingIamData:
+    'Fetching IAM Global Data for this AWS account via the AWS SDK...',
+  doneFetchingIamData: '✅ Done fetching IAM Global Data ✅',
   fetchedIamUsers: (num: number): string => `Fetched ${num} IAM users`,
   lookingForIam: 'Looking for IAM resources to add',
   addingIam: 'Adding IAM resources',

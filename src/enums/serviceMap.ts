@@ -45,6 +45,7 @@ import IamGroup from '../services/iamGroup'
 import IamUser from '../services/iamUser'
 import IamRole from '../services/iamRole'
 import IamPolicy from '../services/iamPolicy'
+import IamGlobal from '../services/iamGlobal'
 import services from './services'
 
 /**
@@ -98,5 +99,6 @@ export default {
   [services.iamGroup]: IamGroup,
   [services.iamRole]: IamRole,
   [services.iamPolicy]: IamPolicy,
+  [services.iamGlobal]: IamGlobal,
   tag: AwsTag,
 }

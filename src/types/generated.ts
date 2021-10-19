@@ -1038,6 +1038,15 @@ export type AwsIamAccessKey = {
   lastUsedService?: Maybe<Scalars['String']>;
 };
 
+export type AwsIamGlobal = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  serverCertificates?: Maybe<Array<Maybe<AwsIamServerCertificate>>>;
+  openIdConnectProviders?: Maybe<Array<Maybe<AwsIamOpenIdConnectProvider>>>;
+  samlProviders?: Maybe<Array<Maybe<AwsIamSamlProvider>>>;
+  passwordPolicy?: Maybe<AwsIamPasswordPolicy>;
+};
+
 export type AwsIamGroup = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -1047,6 +1056,28 @@ export type AwsIamGroup = {
   inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   iamUsers?: Maybe<Array<Maybe<AwsIamUser>>>;
+};
+
+export type AwsIamMfaDevice = {
+  serialNumber: Scalars['String'];
+  enableDate?: Maybe<Scalars['String']>;
+};
+
+export type AwsIamOpenIdConnectProvider = {
+  arn: Scalars['String'];
+};
+
+export type AwsIamPasswordPolicy = {
+  minimumPasswordLength?: Maybe<Scalars['Int']>;
+  maxPasswordAge?: Maybe<Scalars['Int']>;
+  passwordReusePrevention?: Maybe<Scalars['Int']>;
+  requireSymbols?: Maybe<Scalars['Boolean']>;
+  requireNumbers?: Maybe<Scalars['Boolean']>;
+  requireUppercaseCharacters?: Maybe<Scalars['Boolean']>;
+  requireLowercaseCharacters?: Maybe<Scalars['Boolean']>;
+  allowUsersToChangePassword?: Maybe<Scalars['Boolean']>;
+  expirePasswords?: Maybe<Scalars['Boolean']>;
+  hardExpiry?: Maybe<Scalars['Boolean']>;
 };
 
 export type AwsIamPolicy = {
@@ -1077,6 +1108,21 @@ export type AwsIamRole = {
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
 };
 
+export type AwsIamSamlProvider = {
+  arn: Scalars['String'];
+  validUntil?: Maybe<Scalars['String']>;
+  createdDate?: Maybe<Scalars['String']>;
+};
+
+export type AwsIamServerCertificate = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  path?: Maybe<Scalars['String']>;
+  uploadDate?: Maybe<Scalars['String']>;
+  expiration?: Maybe<Scalars['String']>;
+};
+
 export type AwsIamUser = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -1086,6 +1132,7 @@ export type AwsIamUser = {
   creationTime?: Maybe<Scalars['String']>;
   passwordLastUsed?: Maybe<Scalars['String']>;
   accessKeyData?: Maybe<Array<Maybe<AwsIamAccessKey>>>;
+  mfaDevices?: Maybe<Array<Maybe<AwsIamMfaDevice>>>;
   groups?: Maybe<Array<Maybe<Scalars['String']>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   iamGroups?: Maybe<Array<Maybe<AwsIamGroup>>>;

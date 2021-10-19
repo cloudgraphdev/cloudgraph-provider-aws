@@ -1,0 +1,60 @@
+type awsIamGlobal @key(fields: "id") {
+  id: String! @id @search(by: [hash])
+  accountId: String! @search(by: [hash, regexp])
+  serverCertificates: [awsIamServerCertificate]
+  openIdConnectProviders: [awsIamOpenIdConnectProvider]
+  samlProviders: [awsIamSAMLProvider]
+  passwordPolicy: awsIamPasswordPolicy
+}
+
+type awsIamPasswordPolicy
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  minimumPasswordLength: Int @search
+  maxPasswordAge: Int @search
+  passwordReusePrevention: Int @search
+  requireSymbols: Boolean @search
+  requireNumbers: Boolean @search
+  requireUppercaseCharacters: Boolean @search
+  requireLowercaseCharacters: Boolean @search
+  allowUsersToChangePassword: Boolean @search
+  expirePasswords: Boolean @search
+  hardExpiry: Boolean @search
+}
+
+type awsIamServerCertificate
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash, regexp])
+  arn: String! @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  path: String @search(by: [hash, regexp])
+  uploadDate: String @search(by: [hash, regexp])
+  expiration: String @search(by: [hash, regexp])
+}
+
+type awsIamOpenIdConnectProvider
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  arn: String! @id @search(by: [hash, regexp])
+}
+
+type awsIamSAMLProvider
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  arn: String! @id @search(by: [hash, regexp])
+  validUntil: String @search(by: [hash, regexp])
+  createdDate: String @search(by: [hash, regexp])
+}

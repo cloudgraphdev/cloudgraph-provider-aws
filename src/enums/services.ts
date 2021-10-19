@@ -25,6 +25,7 @@ export default {
   iamGroup: 'iamGroup',
   iamRole: 'iamRole',
   iamPolicy: 'iamPolicy',
+  iamGlobal: 'iamGlobal',
   igw: 'igw',
   kinesisFirehose: 'kinesisFirehose',
   kinesisStream: 'kinesisStream',
