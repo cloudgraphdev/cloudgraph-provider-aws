@@ -1,5 +1,5 @@
 type awsS3 @key(fields: "arn") {
-  id: String! @search(by: [hash])
+  id: String! @id @search(by: [hash])
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   access: String @search(by: [hash, regexp])

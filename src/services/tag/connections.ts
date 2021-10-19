@@ -17,6 +17,11 @@ import { RawAwsCloudTrail } from '../cloudtrail/data'
 import { RawAwsEcr } from '../ecr/data'
 import { RawAwsSubnet } from '../subnet/data'
 import { RawAwsSecretsManager } from '../secretsManager/data'
+import { RawAwsIamUser } from '../iamUser/data'
+import { RawAwsIamRole } from '../iamRole/data'
+import { RawAwsIamPolicy } from '../iamPolicy/data'
+import resources from '../../enums/resources'
+import { getIamId } from '../../utils/ids'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -93,7 +98,7 @@ export default ({
     /**
      * Find related CloudTrails
      */
-     const cloudtrails: {
+    const cloudtrails: {
       name: string
       data: { [property: string]: any[] }
     } = data.find(({ name }) => name === services.cloudtrail)
@@ -722,10 +727,12 @@ export default ({
     }
 
     /**
-    * Find related SecretsManagers
-    */
-    const secretsManagers: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.secretsManager)
+     * Find related SecretsManagers
+     */
+    const secretsManagers: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.secretsManager)
     if (secretsManagers?.data?.[region]) {
       const dataAtRegion: RawAwsSecretsManager[] = findServiceInstancesWithTag(
         tag,
@@ -740,6 +747,90 @@ export default ({
             resourceType: services.secretsManager,
             relation: 'child',
             field: 'secretsManager',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related IAM Users
+     */
+    const users: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.iamUser)
+    if (users?.data?.[globalRegionName]) {
+      const dataAtRegion: RawAwsIamUser[] = findServiceInstancesWithTag(
+        tag,
+        users.data[globalRegionName]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { UserId: userId, UserName: userName } = instance
+
+          connections.push({
+            id: getIamId({
+              resourceId: userId,
+              resourceName: userName,
+              resourceType: resources.iamUser,
+            }),
+            resourceType: services.iamUser,
+            relation: 'child',
+            field: 'iamUsers',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related IAM Roles
+     */
+    const roles: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.iamRole)
+    if (roles?.data?.[globalRegionName]) {
+      const dataAtRegion: RawAwsIamRole[] = findServiceInstancesWithTag(
+        tag,
+        roles.data[globalRegionName]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { RoleId: roleId, RoleName: roleName } = instance
+
+          connections.push({
+            id: getIamId({
+              resourceId: roleId,
+              resourceName: roleName,
+              resourceType: resources.iamRole,
+            }),
+            resourceType: services.iamRole,
+            relation: 'child',
+            field: 'iamRoles',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related IAM Policies
+     */
+    const policies: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.iamPolicy)
+    if (policies?.data?.[globalRegionName]) {
+      const dataAtRegion: RawAwsIamPolicy[] = findServiceInstancesWithTag(
+        tag,
+        policies.data[globalRegionName]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { PolicyId: policyId, PolicyName: policyName } = instance
+
+          connections.push({
+            id: getIamId({
+              resourceId: policyId,
+              resourceName: policyName,
+              resourceType: resources.iamPolicy,
+            }),
+            resourceType: services.iamPolicy,
+            relation: 'child',
+            field: 'iamPolicies',
           })
         }
       }

@@ -153,9 +153,13 @@ export function generateAwsErrorLog(
   }
   const notAuthorized = 'not authorized' // part of the error string aws passes back for permissions errors
   const accessDenied = 'AccessDeniedException' // an error code aws sometimes sends back for permissions errors
-  logger.warn(
-    `There was a problem getting data for service ${service}, CG encountered an error calling ${functionName}`
-  )
+  const throttling = 'Throttling'
+
+  if (err?.code !== throttling) {
+    logger.warn(
+      `There was a problem getting data for service ${service}, CG encountered an error calling ${functionName}`
+    )
+  }
   if (err?.message?.includes(notAuthorized) || err?.code === accessDenied) {
     logger.warn(err.message)
   }

@@ -1,0 +1,25 @@
+type awsIamUser @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash, regexp])
+  path: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  creationTime: String @search(by: [hash, regexp])
+  passwordLastUsed: String @search(by: [hash, regexp])
+  accessKeyData: [awsIamAccessKey]
+  groups: [String]
+  tags: [Tag]
+  iamGroups: [awsIamGroup] @hasInverse(field: iamUsers)
+}
+
+type awsIamAccessKey
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  accessKeyId: String! @id @search(by: [hash, regexp])
+  lastUsedDate: String @search(by: [hash, regexp])
+  lastUsedRegion: String @search(by: [hash, regexp])
+  lastUsedService: String @search(by: [hash, regexp])
+}

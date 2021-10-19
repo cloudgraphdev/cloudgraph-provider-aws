@@ -32,6 +32,9 @@ type awsTag @key(fields: "id") {
   ecr: [awsEcr]
   subnet: [awsSubnet]
   secretsManager: [awsSecretsManager]
+  iamUsers: [awsIamUser]
+  iamRoles: [awsIamRole]
+  iamPolicies: [awsIamPolicy]
 }
 
 # TODO: would this cause a collision with other providers? should we rename to like awsRawTag?

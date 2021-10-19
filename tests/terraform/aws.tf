@@ -225,26 +225,6 @@ resource "aws_api_gateway_deployment" "example" {
   }
 }
 
-resource "aws_iam_role" "lambda_iam_role" {
-  name = "lambda_iam_role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-}
-
 resource "aws_lambda_function" "lambda_function" {
   function_name = "lambda_function_name"
   role          = aws_iam_role.lambda_iam_role.arn
@@ -538,60 +518,13 @@ resource "aws_s3_bucket" "destination" {
   }
 }
 
-resource "aws_iam_policy" "replication" {
-  name = "cloudgraph-policy-replication"
-
-  policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": [
-        "s3:GetReplicationConfiguration",
-        "s3:ListBucket"
-      ],
-      "Effect": "Allow",
-      "Resource": [
-        "${aws_s3_bucket.source.arn}"
-      ]
-    },
-    {
-      "Action": [
-        "s3:GetObjectVersionForReplication",
-        "s3:GetObjectVersionAcl",
-         "s3:GetObjectVersionTagging"
-      ],
-      "Effect": "Allow",
-      "Resource": [
-        "${aws_s3_bucket.source.arn}/*"
-      ]
-    },
-    {
-      "Action": [
-        "s3:ReplicateObject",
-        "s3:ReplicateDelete",
-        "s3:ReplicateTags"
-      ],
-      "Effect": "Allow",
-      "Resource": "${aws_s3_bucket.destination.arn}/*"
-    }
-  ]
-}
-POLICY
-}
-
-resource "aws_iam_role_policy_attachment" "replication" {
-  role       = aws_iam_role.lambda_iam_role.name
-  policy_arn = aws_iam_policy.replication.arn
-}
-
 resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
   name        = "terraform-kinesis-firehose-extended-s3-test-stream"
   destination = "extended_s3"
 
   kinesis_source_configuration {
-    kinesis_stream_arn =  aws_kinesis_stream.kinesis.arn
-    role_arn = aws_iam_role.kinesis_role.arn
+    kinesis_stream_arn = aws_kinesis_stream.kinesis.arn
+    role_arn           = aws_iam_role.kinesis_role.arn
   }
 
   extended_s3_configuration {
@@ -603,46 +536,6 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
 resource "aws_s3_bucket" "bucket" {
   bucket = "tf-test-bucket"
   acl    = "public-read"
-}
-
-resource "aws_iam_role" "kinesis_role" {
-  name = "kinesis_test_role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "kinesis.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role" "firehose_role" {
-  name = "firehose_test_role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "firehose.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
 }
 
 resource "aws_s3_bucket_object" "cf-template" {
@@ -692,23 +585,6 @@ resource "aws_cloudformation_stack" "cg-cloudformation-stack-test" {
 STACK
 }
 
-data "aws_iam_policy_document" "AWSCloudFormationStackSetAdministrationRole_assume_role_policy" {
-  statement {
-    actions = ["sts:AssumeRole"]
-    effect  = "Allow"
-
-    principals {
-      identifiers = ["cloudformation.amazonaws.com"]
-      type        = "Service"
-    }
-  }
-}
-
-resource "aws_iam_role" "AWSCloudFormationStackSetAdministrationRole" {
-  assume_role_policy = data.aws_iam_policy_document.AWSCloudFormationStackSetAdministrationRole_assume_role_policy.json
-  name               = "AWSCloudFormationStackSetAdministrationRole"
-}
-
 resource "aws_cloudformation_stack_set" "cg-cloudformation-stack-set-test" {
   administration_role_arn = aws_iam_role.AWSCloudFormationStackSetAdministrationRole.arn
   name                    = "cg-cloudformation-stack-set-test"
@@ -716,20 +592,6 @@ resource "aws_cloudformation_stack_set" "cg-cloudformation-stack-set-test" {
   parameters = {
     VPCCidr = "10.0.0.0/16"
   }
-}
-
-data "aws_iam_policy_document" "AWSCloudFormationStackSetAdministrationRole_ExecutionPolicy" {
-  statement {
-    actions   = ["sts:AssumeRole"]
-    effect    = "Allow"
-    resources = ["arn:aws:iam::*:role/${aws_cloudformation_stack_set.cg-cloudformation-stack-set-test.execution_role_name}"]
-  }
-}
-
-resource "aws_iam_role_policy" "AWSCloudFormationStackSetAdministrationRole_ExecutionPolicy" {
-  name   = "ExecutionPolicy"
-  policy = data.aws_iam_policy_document.AWSCloudFormationStackSetAdministrationRole_ExecutionPolicy.json
-  role   = aws_iam_role.AWSCloudFormationStackSetAdministrationRole.name
 }
 
 resource "aws_dynamodb_table" "test-table" {
@@ -779,12 +641,12 @@ resource "aws_dynamodb_table" "test-table" {
   }
 
   global_secondary_index {
-    name               = "gsi-yetAnotherKey"
-    hash_key           = "testHashKey"
-    range_key          = "yetAnotherKey"
-    write_capacity     = 1
-    read_capacity      = 1
-    projection_type    = "ALL"
+    name            = "gsi-yetAnotherKey"
+    hash_key        = "testHashKey"
+    range_key       = "yetAnotherKey"
+    write_capacity  = 1
+    read_capacity   = 1
+    projection_type = "ALL"
   }
 
 
@@ -795,33 +657,33 @@ resource "aws_dynamodb_table" "test-table" {
 }
 
 resource "aws_network_acl" "cg-test-nacl" {
-  vpc_id = aws_vpc.vpc.id
+  vpc_id     = aws_vpc.vpc.id
   subnet_ids = [aws_subnet.subnet.id]
 
   egress = [
     {
-      protocol   = "tcp"
-      rule_no    = 200
-      action     = "allow"
-      cidr_block = "10.3.0.0/18"
-      from_port  = 443
-      to_port    = 443
-      icmp_code  = 0
-      icmp_type  = 0
+      protocol        = "tcp"
+      rule_no         = 200
+      action          = "allow"
+      cidr_block      = "10.3.0.0/18"
+      from_port       = 443
+      to_port         = 443
+      icmp_code       = 0
+      icmp_type       = 0
       ipv6_cidr_block = ""
     }
   ]
 
   ingress = [
     {
-      protocol   = "tcp"
-      rule_no    = 100
-      action     = "allow"
-      cidr_block = "10.3.0.0/18"
-      from_port  = 80
-      to_port    = 80
-      icmp_code  = 0
-      icmp_type  = 0
+      protocol        = "tcp"
+      rule_no         = 100
+      action          = "allow"
+      cidr_block      = "10.3.0.0/18"
+      from_port       = 80
+      to_port         = 80
+      icmp_code       = 0
+      icmp_type       = 0
       ipv6_cidr_block = ""
     }
   ]

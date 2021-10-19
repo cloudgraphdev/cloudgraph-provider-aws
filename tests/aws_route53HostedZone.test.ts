@@ -8,7 +8,7 @@ import { initTestConfig } from '../src/utils'
 import services from '../src/enums/services'
 import { getHostedZoneId } from '../src/utils/ids'
 
-describe('Route53 Hosted Zone Service Test: ', () => {
+xdescribe('Route53 Hosted Zone Service Test: ', () => {
   let getDataResult
   let formatResult
   let route53Connections

@@ -984,6 +984,66 @@ export type AwsEnabledMetrics = {
   granularity?: Maybe<Scalars['String']>;
 };
 
+export type AwsIamAccessKey = {
+  accessKeyId: Scalars['String'];
+  lastUsedDate?: Maybe<Scalars['String']>;
+  lastUsedRegion?: Maybe<Scalars['String']>;
+  lastUsedService?: Maybe<Scalars['String']>;
+};
+
+export type AwsIamGroup = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  path?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
+  iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
+  iamUsers?: Maybe<Array<Maybe<AwsIamUser>>>;
+};
+
+export type AwsIamPolicy = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  path?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  policyContent?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
+  iamGroups?: Maybe<Array<Maybe<AwsIamGroup>>>;
+};
+
+export type AwsIamRole = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  path?: Maybe<Scalars['String']>;
+  assumeRolePolicy?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['String']>;
+  maxSessionDuration?: Maybe<Scalars['Int']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
+  iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
+};
+
+export type AwsIamUser = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  path?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  creationTime?: Maybe<Scalars['String']>;
+  passwordLastUsed?: Maybe<Scalars['String']>;
+  accessKeyData?: Maybe<Array<Maybe<AwsIamAccessKey>>>;
+  groups?: Maybe<Array<Maybe<Scalars['String']>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  iamGroups?: Maybe<Array<Maybe<AwsIamGroup>>>;
+};
+
 export type AwsIgw = {
   accountId: Scalars['String'];
   arn: Scalars['String'];
@@ -1495,6 +1555,9 @@ export type AwsTag = {
   ecr?: Maybe<Array<Maybe<AwsEcr>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   secretsManager?: Maybe<Array<Maybe<AwsSecretsManager>>>;
+  iamUsers?: Maybe<Array<Maybe<AwsIamUser>>>;
+  iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
+  iamPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
 };
 
 export type AwsTotalBillingInfo = {
