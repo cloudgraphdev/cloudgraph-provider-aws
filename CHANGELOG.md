@@ -1,3 +1,18 @@
+# [0.35.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.34.2...0.35.0) (2021-10-19)
+
+
+### Bug Fixes
+
+* Added [@id](https://gitlab.com/id) keyword to s3 id ([921a10c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/921a10c79aa1c369af0953c23d9d4307657f3142))
+* Added MessageInterval util and renaming connections ([a4bc0a0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a4bc0a05286385b8eedb2be70ddb53f04d747577))
+
+
+### Features
+
+* Added connections to IAM services ([7edef39](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/7edef39c7257cc4489877f9a9eb8f8635552543c))
+* Added IAM service ([0d70384](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/0d7038423d742184b396c2623932fd629b02c838))
+* Added unit tests to IAM services ([e05aa67](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/e05aa672ac2907c399133cbc17061dd85dd8e0a4))
+
 ## [0.34.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.34.1...0.34.2) (2021-10-14)
 
 
