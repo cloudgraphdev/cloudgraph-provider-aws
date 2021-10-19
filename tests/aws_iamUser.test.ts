@@ -75,7 +75,6 @@ describe('IAM User Service Test: ', () => {
             passwordLastUsed: expect.any(String),
             path: expect.any(String),
             creationTime: expect.any(String),
-
             groups: expect.arrayContaining<String>([]),
             accessKeyData: expect.arrayContaining([
               expect.objectContaining({
@@ -107,6 +106,7 @@ describe('IAM User Service Test: ', () => {
           creationTime: '',
           groups: [],
           accessKeyData: [],
+          mfaDevices: [],
         })
       )
     })
