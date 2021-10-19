@@ -17,7 +17,7 @@ export default ({
   [property: string]: ServiceConnection[]
 } => {
   const connections: ServiceConnection[] = []
-  const { DBInstanceIdentifier: id, VpcSecurityGroups, DBSubnetGroup } = service
+  const { DBInstanceArn: id, VpcSecurityGroups, DBSubnetGroup } = service
 
   const sgIds = VpcSecurityGroups.map(
     ({ VpcSecurityGroupId }) => VpcSecurityGroupId
