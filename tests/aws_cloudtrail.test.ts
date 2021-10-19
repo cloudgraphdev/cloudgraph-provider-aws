@@ -8,7 +8,7 @@ import { credentials, region } from '../src/properties/test'
 import { RawAwsCloudTrail } from '../src/services/cloudtrail/data'
 import services from '../src/enums/services'
 
-describe('CloudTrail Service Test: ', () => {
+describe.skip('CloudTrail Service Test: ', () => {
   let getDataResult
   let formatResult
   let s3Result
@@ -22,9 +22,11 @@ describe('CloudTrail Service Test: ', () => {
     async () =>
       new Promise<void>(async resolve => {
         try {
-          const cloudTrailClass = new CloudTrailClass({ logger: CloudGraph.logger })
-          const s3Service = new S3Service({logger: CloudGraph.logger,})
-          const kmsClass = new KmsClass({logger: CloudGraph.logger,})
+          const cloudTrailClass = new CloudTrailClass({
+            logger: CloudGraph.logger,
+          })
+          const s3Service = new S3Service({ logger: CloudGraph.logger })
+          const kmsClass = new KmsClass({ logger: CloudGraph.logger })
 
           getDataResult = await cloudTrailClass.getData({
             credentials,
@@ -40,7 +42,7 @@ describe('CloudTrail Service Test: ', () => {
             regions: region,
           })
 
-          // Get kms data 
+          // Get kms data
           kmsResult = await kmsClass.getData({
             credentials,
             regions: region,
