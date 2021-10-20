@@ -3,8 +3,6 @@ import CloudGraph from '@cloudgraph/sdk'
 import IamSamlProviderService from '../src/services/iamSamlProvider'
 import { account, credentials, region } from '../src/properties/test'
 import { globalRegionName } from '../src/enums/regions'
-import { getIamGlobalId } from '../src/utils/ids'
-import resources from '../src/enums/resources'
 
 describe('IAM SAML Provider Service Test: ', () => {
   let getDataResult
@@ -82,11 +80,6 @@ describe('IAM SAML Provider Service Test: ', () => {
 
       expect(result).toEqual(
         expect.objectContaining({
-          id: getIamGlobalId({
-            accountId: account,
-            region,
-            resourceType: resources.iamSamlProvider,
-          }),
           accountId: account,
           arn: '',
           validUntil: '',

@@ -1,5 +1,7 @@
 import kebabCase from 'lodash/kebabCase'
 import last from 'lodash/last'
+import cuid from 'cuid'
+
 import resources from '../enums/resources'
 
 // i.e. "Id": "/hostedzone/Z0340076V9U7PUPIWZTE"
@@ -39,4 +41,6 @@ export const getIamGlobalId = ({
   region: string
   resourceType: string
 }): string =>
-  `iam:region:${region}-account:${accountId}-${kebabCase(resourceType)}`
+  `iam:region:${region}-account:${accountId}-${kebabCase(
+    resourceType
+  )}-${cuid()}`

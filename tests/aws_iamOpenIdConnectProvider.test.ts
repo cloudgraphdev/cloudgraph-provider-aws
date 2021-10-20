@@ -3,8 +3,6 @@ import CloudGraph from '@cloudgraph/sdk'
 import IamOpenIdConnectProviderService from '../src/services/iamOpenIdConnectProvider'
 import { account, credentials, region } from '../src/properties/test'
 import { globalRegionName } from '../src/enums/regions'
-import resources from '../src/enums/resources'
-import { getIamGlobalId } from '../src/utils/ids'
 
 describe('IAM OpenId Connect Provider Service Test: ', () => {
   let getDataResult
@@ -80,12 +78,8 @@ describe('IAM OpenId Connect Provider Service Test: ', () => {
 
       expect(result).toEqual(
         expect.objectContaining({
-          id: getIamGlobalId({
-            accountId: account,
-            region,
-            resourceType: resources.iamOpenIdConnectProvider,
-          }),
           accountId: account,
+          arn: '',
         })
       )
     })

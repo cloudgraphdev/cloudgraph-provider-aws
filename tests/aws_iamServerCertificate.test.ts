@@ -3,8 +3,6 @@ import CloudGraph from '@cloudgraph/sdk'
 import IamServerCertificateService from '../src/services/iamServerCertificate'
 import { account, credentials, region } from '../src/properties/test'
 import { globalRegionName } from '../src/enums/regions'
-import resources from '../src/enums/resources'
-import { getIamGlobalId } from '../src/utils/ids'
 
 describe('IAM Server Certificate Service Test: ', () => {
   let getDataResult
@@ -88,11 +86,6 @@ describe('IAM Server Certificate Service Test: ', () => {
 
       expect(result).toEqual(
         expect.objectContaining({
-          id: getIamGlobalId({
-            accountId: account,
-            region,
-            resourceType: resources.iamServerCertificate,
-          }),
           accountId: account,
           arn: '',
           path: '',

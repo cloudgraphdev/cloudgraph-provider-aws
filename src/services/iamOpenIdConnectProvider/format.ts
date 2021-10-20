@@ -17,7 +17,7 @@ export default ({
   account: string
   region: string
 }): AwsIamOpenIdConnectProvider => {
-  const { Arn: arn } = rawData
+  const { Arn: arn = '' } = rawData
 
   return {
     id: getIamGlobalId({

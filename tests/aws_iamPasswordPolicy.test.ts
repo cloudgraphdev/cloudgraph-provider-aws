@@ -3,8 +3,6 @@ import CloudGraph from '@cloudgraph/sdk'
 import IamPasswordPolicyService from '../src/services/iamPasswordPolicy'
 import { account, credentials, region } from '../src/properties/test'
 import { globalRegionName } from '../src/enums/regions'
-import { getIamGlobalId } from '../src/utils/ids'
-import resources from '../src/enums/resources'
 
 describe('IAM Password Policy Service Test: ', () => {
   let getDataResult
@@ -96,11 +94,6 @@ describe('IAM Password Policy Service Test: ', () => {
 
       expect(result).toEqual(
         expect.objectContaining({
-          id: getIamGlobalId({
-            accountId: account,
-            region,
-            resourceType: resources.iamPasswordPolicy,
-          }),
           accountId: account,
           allowUsersToChangePassword: false,
           expirePasswords: false,
