@@ -1357,7 +1357,7 @@ export type AwsRdsDbInstance = {
   kmsKey?: Maybe<Scalars['String']>;
   encrypted?: Maybe<Scalars['Boolean']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
-  cluster?: Maybe<AwsRdsCluster>;
+  cluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
