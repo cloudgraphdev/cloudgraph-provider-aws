@@ -1,0 +1,38 @@
+type awsRdsCluster @key(fields: "arn") {
+  id: String! @search(by: [hash])
+  accountId: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  allocatedStorage: Int @search
+  backupRetentionPeriod: Int @search
+  characterSetName: String @search(by: [hash, regexp])
+  databaseName: String @search(by: [hash, regexp])
+  dbClusterIdentifier: String @search(by: [hash])
+  subnets: String @search(by: [hash])
+  status: String @search(by: [hash, regexp])
+  percentProgress: String @search(by: [hash, regexp])
+  readerEndpoint: String @search(by: [hash, regexp])
+  multiAZ: Boolean @search
+  engine: String @search(by: [hash, regexp])
+  engineVersion: String @search(by: [hash, regexp])
+  port: Int @search
+  username: String @search(by: [hash, regexp])
+  replicationSourceIdentifier: String @search(by: [hash])
+  hostedZoneId: String @search(by: [hash])
+  encrypted: Boolean @search
+  kmsKey: String @search(by: [hash])
+  resourceId: String @search(by: [hash])
+  iamDbAuthenticationEnabled: Boolean @search
+  cloneGroupId: String @search(by: [hash])
+  createdTime: String @search(by: [hash, regexp])
+  capacity: Int @search
+  engineMode: String @search(by: [hash, regexp])
+  deletionProtection: Boolean @search
+  httpEndpointEnabled: Boolean @search
+  copyTagsToSnapshot: Boolean @search
+  crossAccountClone: Boolean @search
+  tags: [Tag]
+  globalWriteForwardingRequested: Boolean @search
+  instances: [awsRdsDbInstance] @hasInverse(field: cluster)
+  securityGroups: [awsSecurityGroup] @hasInverse(field: rdsCluster)
+}
+ 

@@ -31,6 +31,8 @@ export default {
   nacl: 'nacl',
   nat: 'nat',
   networkInterface: 'networkInterface',
+  rdsCluster: 'rdsCluster',
+  rdsDbInstance: 'rdsDbInstance',
   route53HostedZone: 'route53HostedZone',
   route53Record: 'route53Record',
   routeTable: 'routeTable',

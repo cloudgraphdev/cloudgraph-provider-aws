@@ -21,6 +21,7 @@ type awsVpc @key(fields: "id") {
   nacl: [awsNetworkAcl] @hasInverse(field: vpc)
   natGateway: [awsNatGateway] @hasInverse(field: vpc)
   networkInterface: [awsNetworkInterface] @hasInverse(field: vpc)
+  rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: vpc)
   route53HostedZone: [awsRoute53HostedZone] @hasInverse(field: vpc)
   routeTable: [awsRouteTable] @hasInverse(field: vpc)
   subnet: [awsSubnet] @hasInverse(field: vpc)
