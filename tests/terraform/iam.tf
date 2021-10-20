@@ -37,7 +37,10 @@ resource "aws_iam_openid_connect_provider" "default" {
   thumbprint_list = []
 }
 
-
+resource "aws_iam_saml_provider" "default" {
+  name                   = "myprovider"
+  saml_metadata_document = file("saml-metadata.xml")
+}
 
 # IAM Group
 

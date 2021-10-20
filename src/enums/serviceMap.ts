@@ -45,7 +45,10 @@ import IamGroup from '../services/iamGroup'
 import IamUser from '../services/iamUser'
 import IamRole from '../services/iamRole'
 import IamPolicy from '../services/iamPolicy'
-import IamGlobal from '../services/iamGlobal'
+import IamPasswordPolicy from '../services/iamPasswordPolicy'
+import IamSamlProvider from '../services/iamSamlProvider'
+import IamOpenIdConnectProvider from '../services/iamOpenIdConnectProvider'
+import IamServerCertificate from '../services/iamServerCertificate'
 import services from './services'
 
 /**
@@ -99,6 +102,9 @@ export default {
   [services.iamGroup]: IamGroup,
   [services.iamRole]: IamRole,
   [services.iamPolicy]: IamPolicy,
-  [services.iamGlobal]: IamGlobal,
+  [services.iamPasswordPolicy]: IamPasswordPolicy,
+  [services.iamSamlProvider]: IamSamlProvider,
+  [services.iamOpenIdConnectProvider]: IamOpenIdConnectProvider,
+  [services.iamServerCertificate]: IamServerCertificate,
   tag: AwsTag,
 }

@@ -1038,15 +1038,6 @@ export type AwsIamAccessKey = {
   lastUsedService?: Maybe<Scalars['String']>;
 };
 
-export type AwsIamGlobal = {
-  id: Scalars['String'];
-  accountId: Scalars['String'];
-  serverCertificates?: Maybe<Array<Maybe<AwsIamServerCertificate>>>;
-  openIdConnectProviders?: Maybe<Array<Maybe<AwsIamOpenIdConnectProvider>>>;
-  samlProviders?: Maybe<Array<Maybe<AwsIamSamlProvider>>>;
-  passwordPolicy?: Maybe<AwsIamPasswordPolicy>;
-};
-
 export type AwsIamGroup = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -1064,10 +1055,14 @@ export type AwsIamMfaDevice = {
 };
 
 export type AwsIamOpenIdConnectProvider = {
+  id: Scalars['String'];
   arn: Scalars['String'];
+  accountId: Scalars['String'];
 };
 
 export type AwsIamPasswordPolicy = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
   minimumPasswordLength?: Maybe<Scalars['Int']>;
   maxPasswordAge?: Maybe<Scalars['Int']>;
   passwordReusePrevention?: Maybe<Scalars['Int']>;
@@ -1109,7 +1104,9 @@ export type AwsIamRole = {
 };
 
 export type AwsIamSamlProvider = {
+  id: Scalars['String'];
   arn: Scalars['String'];
+  accountId: Scalars['String'];
   validUntil?: Maybe<Scalars['String']>;
   createdDate?: Maybe<Scalars['String']>;
 };
@@ -1117,6 +1114,8 @@ export type AwsIamSamlProvider = {
 export type AwsIamServerCertificate = {
   id: Scalars['String'];
   arn: Scalars['String'];
+  accountId?: Maybe<Scalars['String']>;
+  certificateId?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
   uploadDate?: Maybe<Scalars['String']>;

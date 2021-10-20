@@ -4,7 +4,10 @@ import format from './format'
 import getData from './data'
 import mutation from './mutation'
 
-export default class IamGlobal extends BaseService implements Service {
+export default class IamOpenIdConnectProvider
+  extends BaseService
+  implements Service
+{
   format = format.bind(this)
 
   getData = getData.bind(this)

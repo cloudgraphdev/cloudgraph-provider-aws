@@ -13,9 +13,9 @@ export default {
   /**
    * IAM
    */
-  fetchingIamData:
-    'Fetching IAM Global Data for this AWS account via the AWS SDK...',
-  doneFetchingIamData: '✅ Done fetching IAM Global Data ✅',
+  fetchingIamPasswordPolicy:
+    'Fetching IAM Password Policy for this AWS account via the AWS SDK...',
+  doneFetchingIamPasswordPolicy: '✅ Done fetching IAM Password Policy ✅',
   fetchedIamUsers: (num: number): string => `Fetched ${num} IAM users`,
   lookingForIam: 'Looking for IAM resources to add',
   addingIam: 'Adding IAM resources',
@@ -27,6 +27,16 @@ export default {
   foundGroups: (num: number): string => `Found ${num} Groups to add`,
   lookingForIamPolicies: 'Looking for IAM Policies to add',
   foundPolicies: (num: number): string => `Found ${num} Policies to add`,
+  lookingForIamSamlProviders: 'Looking for IAM Saml Providers to add',
+  foundSamlProviders: (num: number): string =>
+    `Found ${num} Saml Providers to add`,
+  lookingForIamOpenIdProviders:
+    'Looking for IAM OpenId Connect Providers to add',
+  foundOpenIdProviders: (num: number): string =>
+    `Found ${num} OpenId Connect Providers to add`,
+  lookingForIamServerCertificates: 'Looking for IAM Server Certificates to add',
+  foundServerCertificates: (num: number): string =>
+    `Found ${num} Server Certificates to add`,
   /**
    * CloudFormation
    */

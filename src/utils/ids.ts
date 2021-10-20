@@ -1,7 +1,6 @@
 import kebabCase from 'lodash/kebabCase'
 import last from 'lodash/last'
 import resources from '../enums/resources'
-import { account } from '../properties/test'
 
 // i.e. "Id": "/hostedzone/Z0340076V9U7PUPIWZTE"
 export const getHostedZoneId = (hostedZoneId: string): string =>
@@ -34,8 +33,10 @@ export const getIamId = ({
 export const getIamGlobalId = ({
   accountId,
   region,
+  resourceType,
 }: {
   accountId: string
   region: string
+  resourceType: string
 }): string =>
-  `iam:region:${region}-account:${accountId}-${kebabCase(resources.iamGlobal)}`
+  `iam:region:${region}-account:${accountId}-${kebabCase(resourceType)}`
