@@ -1,3 +1,10 @@
+## [0.36.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.36.0...0.36.1) (2021-10-20)
+
+
+### Bug Fixes
+
+* **deps:** update deps to remove carrots ([dd1b894](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/dd1b8941059ec5be69c8dc952274b02d27e70e42))
+
 # [0.36.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.35.0...0.36.0) (2021-10-20)
 
 
