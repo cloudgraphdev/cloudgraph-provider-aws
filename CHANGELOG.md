@@ -1,3 +1,23 @@
+# [0.36.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.35.0...0.36.0) (2021-10-20)
+
+
+### Bug Fixes
+
+* **rds:** cleanup ([745734a](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/745734a988d89a286ce9b47286fc8ba0988d6f51))
+* **rds:** drop cluster level parameterGroup ([25f18fd](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/25f18fde8748688bdef07e892a62235c12c49fda))
+* **rds:** force folder name update git ([e90b2b1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/e90b2b1176243624340e8fbcaedd7f6cbb78b846))
+* **rds:** naming ([43e9644](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/43e9644e2506b23182b06a0678e56a084544caef))
+* **rds:** naming, import cleanup ([873cebe](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/873cebe7a1a215913c76357ec0f4f81b3f71b1b9))
+* **rds:** type name conformance ([43c1e27](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/43c1e277708cd5cb3b9e4df05759ed254867f805))
+* **rds:** update connection ids ([9e01d18](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/9e01d18a1086b36d22a86d6032b26f60dd3d6fd7))
+* **rds:** update instance cluster property to array ([324bde3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/324bde3fba9563ddcb616a2455b27eeca534ce1a))
+* **rds:** update with new config changes, info -> debug, add connections ([bd1a918](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/bd1a91881398791e634398aba324fb7b63f3f6d7))
+
+
+### Features
+
+* **rds:** add rds cluster/instance service ([e40730c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/e40730c7fa5fe2b2fb096c3c6581bb351635565f))
+
 # [0.35.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.34.2...0.35.0) (2021-10-19)
 
 
