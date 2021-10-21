@@ -1,0 +1,24 @@
+type awsElasticBeanstalkEnv @key(fields: "arn") {
+  id: String! @search(by: [hash])
+  accountId: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  tier: String @search(by: [hash])
+  description: String @search(by: [hash, regexp])
+  versionLabel: String @search(by: [hash, regexp])
+  solutionStackName: String @search(by: [hash, regexp])
+  cname: String @search(by: [hash])
+  applicationName: String @search(by: [hash, regexp])
+  endpointUrl: String @search(by: [hash, regexp])
+  platformArn: String @search(by: [hash])
+  settings: [awsElasticBeanstalkEnvSetting]
+  elasticBeanstalkApp: [awsElasticBeanstalkApp] @hasInverse(field: elasticBeanstalkEnv)
+  tags: [Tag]
+}
+
+type awsElasticBeanstalkEnvSetting{
+  id: String! @id @search(by: [hash])
+  optionName: String @search(by: [hash])
+  value: String @search(by: [hash, regexp])
+  namespace: String @search(by: [hash, regexp])
+}

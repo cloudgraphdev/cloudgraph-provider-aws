@@ -79,6 +79,8 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | ec2                    | alb, asg, ebs, eip, networkInterface, securityGroups, subnet, vpc                                    |
 | ecr                    |                                                                                                      |
 | eip                    | ec2, networkInterface, vpc                                                                           |
+| elasticBeanstalkApp    | elasticBeanstalkEnv                                                                                  |
+| elasticBeanstalkEnv    | elasticBeanstalkApp                                                                                  |
 | elb                    | cloudfront, securityGroups, subnet, vpc                                                              |
 | iamUser                | iamGroup                                                                                             |
 | iamPolicy              | iamRole, iamGroup                                                                                    |
