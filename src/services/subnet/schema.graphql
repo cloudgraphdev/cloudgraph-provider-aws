@@ -1,7 +1,7 @@
 type awsSubnet @key(fields: "id") {
   id: String! @id @search(by: [hash])
   accountId: String! @search(by: [hash])
-  arn: String! @search(by: [hash, regexp])
+  arn: String! @id @search(by: [hash, regexp])
   autoAssignPublicIpv4Address: String @search(by: [hash, regexp])
   autoAssignPublicIpv6Address: String @search(by: [hash, regexp])
   availabilityZone: String @search(by: [hash, regexp])
