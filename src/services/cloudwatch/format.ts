@@ -11,9 +11,11 @@ import { formatTagsFromMap } from '../../utils/format'
 export default ({
   service,
   account,
+  region
 }: {
   service: MetricAlarm & { Tags?: TagMap; region: string }
   account: string
+  region: string
 }): AwsCloudwatch => {
   const {
     AlarmDescription: description,
@@ -36,6 +38,7 @@ export default ({
     id: name,
     accountId: account,
     arn,
+    region,
     metric,
     namespace,
     description,

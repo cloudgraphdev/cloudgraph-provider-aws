@@ -2,6 +2,7 @@ type awsRdsCluster @key(fields: "arn") {
   id: String! @search(by: [hash])
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
   allocatedStorage: Int @search
   backupRetentionPeriod: Int @search
   characterSetName: String @search(by: [hash, regexp])

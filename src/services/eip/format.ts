@@ -38,7 +38,8 @@ export default ({
   return {
     id,
     accountId: account,
-    arn: `arn:aws:ec2:${region}:${account}:eip-allocation/${id}`,
+    arn: `arn:aws:ec2:${region}:${account}:eip-allocation/${id}`, // TODO: move to generate arn util
+    region,
     vpc: domain === 'vpc' ? t.yes : t.no,
     customerOwnedIp,
     customerOwnedIpv4Pool,

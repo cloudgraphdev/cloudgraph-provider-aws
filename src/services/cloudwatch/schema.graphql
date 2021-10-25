@@ -2,6 +2,7 @@ type awsCloudwatch @key(fields: "arn") {
   id: String! @search(by: [hash])
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
   metric: String @search(by: [hash])
   namespace: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp, fulltext])

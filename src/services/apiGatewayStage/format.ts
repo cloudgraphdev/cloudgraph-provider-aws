@@ -11,7 +11,7 @@ import { formatTagsFromMap } from '../../utils/format'
 
 export default ({
   service,
-  account: accountId,
+  account: accountId
 }: 
 {
   service: AwsApiGatewayStage
@@ -47,6 +47,7 @@ export default ({
     id: arn,
     accountId,
     arn,
+    region,
     name,
     description,
     cacheCluster: cacheClusterEnabled,

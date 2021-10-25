@@ -35,7 +35,15 @@ const awsAlbListernerGraphFormat = (listener): AwsAlbListener => {
   }
 }
 
-export default ({ service: alb, account }: { service: RawAwsAlb, account: string }): AwsAlb => {
+export default ({
+  service: alb,
+  account,
+  region
+}: {
+  service: RawAwsAlb
+  account: string
+  region: string
+}): AwsAlb => {
   // TODO: type this from aws
   const {
     LoadBalancerName: id,
@@ -76,7 +84,7 @@ export default ({ service: alb, account }: { service: RawAwsAlb, account: string
     scheme,
     type: startCase(type),
     hostedZone,
-    // defaultVpc: 'test', TODO: add with vpc
+    region,
     ipAddressType,
     idleTimeout: `${timeoutSeconds} ${t.seconds}`,
     deletionProtection: deletionProtection === t.true ? t.yes : t.no,

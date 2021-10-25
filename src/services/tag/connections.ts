@@ -4,6 +4,8 @@ import { NatGateway, Vpc } from 'aws-sdk/clients/ec2'
 import { isEmpty } from 'lodash'
 import regions, { globalRegionName } from '../../enums/regions'
 import services from '../../enums/services'
+import resources from '../../enums/resources'
+import { getIamId } from '../../utils/ids'
 import { RawAwsAppSync } from '../appSync/data'
 import { RawAwsCloudFormationStack } from '../cloudFormationStack/data'
 import { RawAwsCloudFormationStackSet } from '../cloudFormationStackSet/data'
@@ -20,10 +22,10 @@ import { RawAwsSecretsManager } from '../secretsManager/data'
 import { RawAwsIamUser } from '../iamUser/data'
 import { RawAwsIamRole } from '../iamRole/data'
 import { RawAwsIamPolicy } from '../iamPolicy/data'
-import resources from '../../enums/resources'
-import { getIamId } from '../../utils/ids'
 import { RawAwsRdsCluster } from '../rdsCluster/data'
 import { RawAwsRdsDbInstance } from '../rdsDbInstance/data'
+import { RawAwsElasticBeanstalkApp } from '../elasticBeanstalkApplication/data'
+import { RawAwsElasticBeanstalkEnv } from '../elasticBeanstalkEnvironment/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -839,13 +841,15 @@ export default ({
     }
 
     /**
-    * Find related RDS clusters
-    */
+     * Find related RDS clusters
+     */
     const rdsClusters: { name: string; data: { [property: string]: any[] } } =
       data.find(({ name }) => name === services.rdsCluster)
     if (rdsClusters?.data?.[region]) {
-      const dataAtRegion: RawAwsRdsCluster[] =
-        findServiceInstancesWithTag(tag, rdsClusters.data[region])
+      const dataAtRegion: RawAwsRdsCluster[] = findServiceInstancesWithTag(
+        tag,
+        rdsClusters.data[region]
+      )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
           const { DBClusterArn: id } = instance
@@ -863,11 +867,15 @@ export default ({
     /**
      * Find related RDS instances
      */
-    const rdsDbInstances: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.rdsDbInstance)
+    const rdsDbInstances: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.rdsDbInstance)
     if (rdsDbInstances?.data?.[region]) {
-      const dataAtRegion: RawAwsRdsDbInstance[] =
-        findServiceInstancesWithTag(tag, rdsDbInstances.data[region])
+      const dataAtRegion: RawAwsRdsDbInstance[] = findServiceInstancesWithTag(
+        tag,
+        rdsDbInstances.data[region]
+      )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
           const { DBInstanceArn: id } = instance
@@ -877,6 +885,54 @@ export default ({
             resourceType: services.rdsDbInstance,
             relation: 'child',
             field: 'rdsDbInstance',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related ElasticBeanstalk Apps
+     */
+     const elasticBeanstalkApps: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.elasticBeanstalkApp)
+    if (elasticBeanstalkApps?.data?.[region]) {
+      const dataAtRegion: RawAwsElasticBeanstalkApp[] =
+        findServiceInstancesWithTag(tag, elasticBeanstalkApps.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { ApplicationArn: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.elasticBeanstalkApp,
+            relation: 'child',
+            field: 'elasticBeanstalkApp',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related ElasticBeanstalk Envs
+     */
+     const elasticBeanstalkEnvs: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.elasticBeanstalkEnv)
+    if (elasticBeanstalkEnvs?.data?.[region]) {
+      const dataAtRegion: RawAwsElasticBeanstalkEnv[] =
+        findServiceInstancesWithTag(tag, elasticBeanstalkEnvs.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { EnvironmentId: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.elasticBeanstalkEnv,
+            relation: 'child',
+            field: 'elasticBeanstalkEnv',
           })
         }
       }

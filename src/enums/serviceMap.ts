@@ -23,6 +23,8 @@ import DynamoDB from '../services/dynamodb'
 import EBS from '../services/ebs'
 import EC2 from '../services/ec2'
 import EIP from '../services/eip'
+import ElasticBeanstalkApp from '../services/elasticBeanstalkApplication'
+import ElasticBeanstalkEnv from '../services/elasticBeanstalkEnvironment'
 import ELB from '../services/elb'
 import Lambda from '../services/lambda'
 import NATGateway from '../services/natGateway'
@@ -68,6 +70,8 @@ export default {
   [services.ec2Instance]: EC2,
   [services.ecr]: ECR,
   [services.eip]: EIP,
+  [services.elasticBeanstalkApp]: ElasticBeanstalkApp,
+  [services.elasticBeanstalkEnv]: ElasticBeanstalkEnv,
   [services.elb]: ELB,
   [services.dynamodb]: DynamoDB,
   [services.igw]: AwsInternetGateway,

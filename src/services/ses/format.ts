@@ -25,6 +25,7 @@ export default ({
     id: arn,
     accountId: account,
     arn,
+    region,
     email,
     verificationStatus,
   }

@@ -18,6 +18,8 @@ export default {
   ec2Instance: 'ec2Instance',
   ecr: 'ecr',
   eip: 'eip',
+  elasticBeanstalkApp: 'elasticBeanstalkApp',
+  elasticBeanstalkEnv: 'elasticBeanstalkEnv',
   elb: 'elb',
   iamUser: 'iamUser',
   iamGroup: 'iamGroup',

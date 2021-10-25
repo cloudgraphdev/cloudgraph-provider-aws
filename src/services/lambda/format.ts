@@ -10,9 +10,11 @@ import { RawAwsLambdaFunction } from './data'
 export default ({
   service: rawData,
   account,
+  region
 }: {
   service: RawAwsLambdaFunction
   account: string
+  region: string
 }): AwsLambda => {
   const {
     CodeSize: codeSize,
@@ -57,6 +59,7 @@ export default ({
   return {
     accountId: account,
     arn,
+    region,
     description,
     handler,
     id: arn,
