@@ -1,3 +1,10 @@
+## [0.38.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.38.0...0.38.1) (2021-10-25)
+
+
+### Bug Fixes
+
+* Fixed connections between RDS cluster and instances ([eaf30a9](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/eaf30a9532d9f58ae814ae8d925cd7c8bec380dc))
+
 # [0.38.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.37.0...0.38.0) (2021-10-25)
 
 
