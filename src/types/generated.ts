@@ -1791,7 +1791,3 @@ export type BlockDeviceEbs = {
   status: Scalars['String'];
   volumeId: Scalars['String'];
 };
-
-export type Node = {
-  id?: Maybe<Scalars['String']>;
-};
