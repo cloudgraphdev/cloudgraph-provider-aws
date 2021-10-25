@@ -13,9 +13,11 @@ import { RawAwsElasticBeanstalkEnv } from './data'
  */
 export default ({
   account,
+  region,
   service: env,
 }: {
   account: string
+  region: string
   service: RawAwsElasticBeanstalkEnv
 }): AwsElasticBeanstalkEnv => {
   const {
@@ -63,6 +65,7 @@ export default ({
     endpointUrl,
     platformArn,
     settings: optionSettings,
+    region,
     tags: formatTagsFromMap(Tags),
   }
 }

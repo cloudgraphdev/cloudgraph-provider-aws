@@ -70,6 +70,7 @@ type awsCognitoUserPool @key(fields: "id") {
   id: String! @id @search(by: [hash])
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
   name: String @search(by: [hash, regexp])
   policies: awsCognitoUserPoolPasswordPolicy
   lambdaConfig: awsCognitoUserPoolLambdaConfig
@@ -113,7 +114,6 @@ type awsCognitoUserPool @key(fields: "id") {
   userPoolAddOnsAdvancedSecurityMode: String @search(by: [hash, regexp])
   usernameConfigurationCaseSensitive: String @search(by: [hash, regexp])
   accountRecoverySetting: [awsAccountRecoverySetting]
-  region: String! @search(by: [hash, regexp])
   tags: [Tag]
   lambda: [awsLambda] @hasInverse(field: cognitoUserPool)
 }

@@ -1,7 +1,8 @@
 type awsSqs @key(fields: "arn"){
-  id: String! @id @search(by: [hash])
+  id: String! @search(by: [hash])
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
   queueUrl: String! @search(by: [hash, regexp, fulltext])
   queueType: String! @search(by: [hash, regexp, fulltext])
   approximateNumberOfMessages: Int @search

@@ -47,7 +47,8 @@ const listEnvironments = async (
             if (err) {
               generateAwsErrorLog(
                 serviceName,
-                'elasticBeanstalk:describeEnvironments'
+                'elasticBeanstalk:describeEnvironments',
+                err
               )
             }
 
@@ -83,7 +84,8 @@ const getConfigSettingsForEnv = async (
         if (err) {
           generateAwsErrorLog(
             serviceName,
-            'elasticBeanstalk:describeConfigurationSettings'
+            'elasticBeanstalk:describeConfigurationSettings',
+            err
           )
         }
         const { ConfigurationSettings: settings = [] } = data || {}
@@ -105,7 +107,8 @@ const getResourcesForEnv = async (
         if (err) {
           generateAwsErrorLog(
             serviceName,
-            'elasticBeanstalk:describeEnvironmentResources'
+            'elasticBeanstalk:describeEnvironmentResources',
+            err
           )
         }
         const { EnvironmentResources: resources = {} } = data || {}

@@ -30,7 +30,8 @@ export default ({
   return {
     id,
     accountId: account,
-    arn: `arn:aws:ec2:${region}:${account}:vpc/${id}`,
+    arn: `arn:aws:ec2:${region}:${account}:vpc/${id}`, // TODO: move to generate arn util
+    region,
     tags: formatTagsFromMap(Tags),
     ipV4Cidr: CidrBlock,
     ipV6Cidr: (Ipv6CidrBlockAssociationSet || [])

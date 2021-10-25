@@ -5,9 +5,11 @@ import { RawAwsEcr } from './data'
 export default ({
   service: rawData,
   account,
+  region
 }: {
   service: RawAwsEcr
   account: string
+  region: string
 }): AwsEcr => {
   const {
     repositoryArn: arn,
@@ -24,6 +26,7 @@ export default ({
   return {
     id: arn,
     arn,
+    region,
     accountId: account,
     createdAt: createdAt.toISOString(),
     encryptionConfig: { type, kmsKey },

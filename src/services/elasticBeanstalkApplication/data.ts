@@ -32,7 +32,8 @@ const listApplications = async (
         if (err) {
           generateAwsErrorLog(
             serviceName,
-            'elasticBeanstalk:describeApplications'
+            'elasticBeanstalk:describeApplications',
+            err
           )
         }
         /**
@@ -63,7 +64,8 @@ export const getResourceTags = async (
         if (err) {
           generateAwsErrorLog(
             serviceName,
-            'elasticBeanstalk:listTagsForResource'
+            'elasticBeanstalk:listTagsForResource',
+            err
           )
         }
         /**

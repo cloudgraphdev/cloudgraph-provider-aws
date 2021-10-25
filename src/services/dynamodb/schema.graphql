@@ -148,6 +148,7 @@ type awsDynamoDbTableSseDescription
 type awsDynamoDbTable @key(fields: "arn") {
   id: String! @id @search(by: [hash, regexp])
   arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
   accountId: String! @search(by: [hash, regexp])
   attributes: [awsDynamoDbTableAttributes]
   billingModeSummary: awsDynamoDbTableBillingSummary

@@ -7,7 +7,15 @@ import { formatTagsFromMap } from '../../utils/format'
  * KMS
  */
 
-export default ({ service: key, account }: { service: AwsKms, account: string }): AwsKmsType => {
+export default ({
+  service: key,
+  account,
+  region
+}: {
+  service: AwsKms
+  account: string
+  region: string
+}): AwsKmsType => {
   const {
     Arn: arn,
     Tags,
@@ -29,6 +37,7 @@ export default ({ service: key, account }: { service: AwsKms, account: string })
   return {
     accountId: account,
     arn,
+    region,
     id,
     description,
     keyRotationEnabled: keyRotationEnabled ? t.yes : t.no,

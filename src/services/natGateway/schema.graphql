@@ -1,7 +1,8 @@
 type awsNatGateway @key(fields: "id") {
   id: String! @id @search(by: [hash])
   accountId: String! @search(by: [hash])
-	arn: String! @search(by: [hash, regexp])
+	arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
 	state: String @search(by: [hash, regexp])
   createTime: String @search(by: [hash, regexp])
   dailyCost: awsTotalBillingInfo

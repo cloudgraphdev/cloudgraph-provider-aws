@@ -7,10 +7,12 @@ import { formatTagsFromMap } from '../../utils/format'
 export default ({
   service,
   account,
+  region
 }: 
 {
   service: RawAwsRdsCluster
   account: string
+  region: string
 }): AwsRdsCluster => {
   const {
     DBClusterArn: arn,
@@ -50,6 +52,7 @@ export default ({
     id: arn,
     accountId: account,
     arn,
+    region,
     allocatedStorage,
     backupRetentionPeriod,
     characterSetName,

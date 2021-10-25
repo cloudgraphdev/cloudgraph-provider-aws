@@ -11,6 +11,7 @@ type awsElasticBeanstalkEnv @key(fields: "arn") {
   applicationName: String @search(by: [hash, regexp])
   endpointUrl: String @search(by: [hash, regexp])
   platformArn: String @search(by: [hash])
+  region: String @search(by: [hash, regexp])
   settings: [awsElasticBeanstalkEnvSetting]
   elasticBeanstalkApp: [awsElasticBeanstalkApp] @hasInverse(field: elasticBeanstalkEnv)
   tags: [Tag]

@@ -23,7 +23,8 @@ export default ({
 
   return {
     accountId: account,
-    arn: `arn:aws:ec2:${region}:${account}:internet-gateway/${id}`,
+    arn: `arn:aws:ec2:${region}:${account}:internet-gateway/${id}`, // TODO: move to generate arn util
+    region,
     attachments: attachments.map(({ VpcId: vpcId, State: state }) => ({
       vpcId,
       state,

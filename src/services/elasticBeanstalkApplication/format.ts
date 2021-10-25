@@ -7,9 +7,11 @@ import { RawAwsElasticBeanstalkApp } from './data'
  */
 export default ({
   account,
+  region,
   service: application,
 }: {
   account: string
+  region: string
   service: RawAwsElasticBeanstalkApp
 }): AwsElasticBeanstalkApp => {
   const {
@@ -25,6 +27,7 @@ export default ({
     arn,
     name,
     description,
+    region,
     tags: formatTagsFromMap(Tags),
   }
 }

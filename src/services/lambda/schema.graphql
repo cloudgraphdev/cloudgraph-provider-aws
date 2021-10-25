@@ -1,7 +1,8 @@
-type awsLambda @key(fields: "id") {
-  id: String! @id @search(by: [hash])
+type awsLambda @key(fields: "arn") {
+  id: String! @search(by: [hash])
   accountId: String! @search(by: [hash])
-  arn: String! @search(by: [hash, regexp])
+  arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp, fulltext])
   handler: String @search(by: [hash, regexp])
   kmsKeyArn: String @search(by: [hash, regexp])

@@ -11,10 +11,11 @@ import { formatTagsFromMap } from '../../utils/format'
 export default ({ 
   service: key,
   account,
+  region
 }:{
   service: AwsSqs
   account: string
-  // allTagData: Tags[]
+  region: string
 }): AwsSqsType => {
   const {
     queueUrl,
@@ -38,6 +39,7 @@ export default ({
     id: arn,
     accountId: account,
     arn,
+    region,
     queueUrl,
     queueType: arn.includes('.fifo') ? t.fifo : t.standard,
     approximateNumberOfMessages: parseInt(approximateNumberOfMessages, 10),

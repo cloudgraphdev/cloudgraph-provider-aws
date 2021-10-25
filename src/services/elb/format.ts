@@ -83,7 +83,8 @@ export default ({
   const elb = {
     id: loadBalancerName,
     accountId: account,
-    arn: `arn:aws:elasticloadbalancing:${region}:${account}:loadbalancer/${loadBalancerName}`,
+    arn: `arn:aws:elasticloadbalancing:${region}:${account}:loadbalancer/${loadBalancerName}`, // TODO: move to generate arn util
+    region,
     dnsName,
     createdAt: createdAt.toISOString(),
     hostedZone,
