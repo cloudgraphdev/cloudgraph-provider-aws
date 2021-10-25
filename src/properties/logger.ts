@@ -494,6 +494,7 @@ export default {
   fetchedEcsTaskDefinitions: (num: number): string =>
     `Found ${num} Ecs Task Definitions`,
   fetchedEcsTasks: (num: number): string => `Found ${num} Ecs Tasks`,
+  fetchedEcsContainers: (num: number): string => `Found ${num} Ecs Containers`,
   ecsVpcNotFound: 'ERROR: Vpc for ECS Cluster was not found',
   addingEcsClusters: (num: number): string =>
     `Found ${num} ECS Clusters, adding them to the the VPC`,

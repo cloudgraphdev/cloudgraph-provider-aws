@@ -42,6 +42,10 @@ type awsTag @key(fields: "id") {
   sns: [awsSns]
   redshiftClusters: [awsRedshiftCluster]
   eksCluster: [awsEksCluster]
+  ecsCluster: [awsEcsCluster]
+  ecsContainer: [awsEcsContainer]
+  ecsService: [awsEcsService]
+  ecsTask: [awsEcsTask]
 }
 
 # TODO: would this cause a collision with other providers? should we rename to like awsRawTag?

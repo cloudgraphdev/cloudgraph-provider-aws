@@ -11,6 +11,15 @@ export type Scalars = {
   Float: number;
 };
 
+export type AwsEcsExecuteCommandLogConfiguration = {
+  id: Scalars['String'];
+  cloudWatchLogGroupName?: Maybe<Scalars['String']>;
+  cloudWatchEncryptionEnabled?: Maybe<Scalars['Boolean']>;
+  s3BucketName?: Maybe<Scalars['String']>;
+  s3EncryptionEnabled?: Maybe<Scalars['Boolean']>;
+  s3KeyPrefix?: Maybe<Scalars['String']>;
+};
+
 export type Tag = {
   id: Scalars['String'];
   key?: Maybe<Scalars['String']>;
@@ -875,6 +884,7 @@ export type AwsEc2 = {
   networkInterfaces?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
+  ecsContainer?: Maybe<Array<Maybe<AwsEcsContainer>>>;
 };
 
 export type AwsEc2Blockdevice = {
@@ -908,6 +918,366 @@ export type AwsEcr = {
 export type AwsEcrEncryptionConfiguration = {
   type?: Maybe<Scalars['String']>;
   kmsKey?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcsAttachment = {
+  details?: Maybe<Array<Maybe<AwsEcsAttachmentDetail>>>;
+  id: Scalars['String'];
+  status?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcsAttachmentDetail = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcsAttribute = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  targetId?: Maybe<Scalars['String']>;
+  targetType?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcsAwsVpcConfiguration = {
+  id: Scalars['String'];
+  subnets?: Maybe<Array<Maybe<Scalars['String']>>>;
+  securityGroups?: Maybe<Array<Maybe<Scalars['String']>>>;
+  assignPublicIp?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcsCapacityProviderStrategy = {
+  id: Scalars['String'];
+  capacityProvider?: Maybe<Scalars['String']>;
+  weight?: Maybe<Scalars['Int']>;
+  base?: Maybe<Scalars['Int']>;
+};
+
+export type AwsEcsCluster = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  clusterName?: Maybe<Scalars['String']>;
+  configuration?: Maybe<AwsEcsClusterConfiguration>;
+  status?: Maybe<Scalars['String']>;
+  registeredContainerInstancesCount?: Maybe<Scalars['Int']>;
+  runningTasksCount?: Maybe<Scalars['Int']>;
+  pendingTasksCount?: Maybe<Scalars['Int']>;
+  activeServicesCount?: Maybe<Scalars['Int']>;
+  statistics?: Maybe<Array<Maybe<AwsEcsStatistics>>>;
+  settings?: Maybe<Array<Maybe<AwsEcsClusterSettings>>>;
+  capacityProviders?: Maybe<Array<Maybe<Scalars['String']>>>;
+  defaultCapacityProviderStrategy?: Maybe<Array<Maybe<AwsEcsCapacityProviderStrategy>>>;
+  attachments?: Maybe<Array<Maybe<AwsEcsAttachment>>>;
+  attachmentsStatus?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
+export type AwsEcsClusterConfiguration = {
+  id: Scalars['String'];
+  executeCommandConfiguration?: Maybe<AwsEcsExecuteCommandConfiguration>;
+};
+
+export type AwsEcsClusterSettings = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcsContainer = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  ec2InstanceId?: Maybe<Scalars['String']>;
+  capacityProviderName?: Maybe<Scalars['String']>;
+  version?: Maybe<Scalars['Int']>;
+  versionInfo?: Maybe<AwsEcsversionInfo>;
+  remainingResources?: Maybe<Array<Maybe<AwsEcsResource>>>;
+  registeredResources?: Maybe<Array<Maybe<AwsEcsResource>>>;
+  status?: Maybe<Scalars['String']>;
+  statusReason?: Maybe<Scalars['String']>;
+  agentConnected?: Maybe<Scalars['Boolean']>;
+  runningTasksCount?: Maybe<Scalars['Int']>;
+  pendingTasksCount?: Maybe<Scalars['Int']>;
+  agentUpdateStatus?: Maybe<Scalars['String']>;
+  attributes?: Maybe<Array<Maybe<AwsEcsAttribute>>>;
+  registeredAt?: Maybe<Scalars['String']>;
+  attachments?: Maybe<Array<Maybe<AwsEcsAttachment>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
+  task?: Maybe<Array<Maybe<AwsEcsTask>>>;
+};
+
+export type AwsEcsContainerOverride = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  command?: Maybe<Array<Maybe<Scalars['String']>>>;
+  environment?: Maybe<Array<Maybe<AwsEcsEnvironmentVariables>>>;
+  environmentFiles?: Maybe<Array<Maybe<AwsEcsEnvironmentFile>>>;
+  cpu?: Maybe<Scalars['String']>;
+  memory?: Maybe<Scalars['Int']>;
+  memoryReservation?: Maybe<Scalars['Int']>;
+  resourceRequirements?: Maybe<Array<Maybe<AwsEcsResourceRequirement>>>;
+};
+
+export type AwsEcsDeployment = {
+  id: Scalars['String'];
+  status?: Maybe<Scalars['String']>;
+  taskDefinition?: Maybe<Scalars['String']>;
+  desiredCount?: Maybe<Scalars['Int']>;
+  pendingCount?: Maybe<Scalars['Int']>;
+  runningCount?: Maybe<Scalars['Int']>;
+  failedTasks?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+  capacityProviderStrategy?: Maybe<AwsEcsCapacityProviderStrategy>;
+  launchType?: Maybe<Scalars['String']>;
+  platformVersion?: Maybe<Scalars['String']>;
+  networkConfiguration?: Maybe<AwsEcsNetworkConfiguration>;
+  rolloutState?: Maybe<Scalars['String']>;
+  rolloutStateReason?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcsDeploymentCircuitBreaker = {
+  id: Scalars['String'];
+  enable?: Maybe<Scalars['Boolean']>;
+  rollback?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsEcsDeploymentConfiguration = {
+  id: Scalars['String'];
+  deploymentCircuitBreaker?: Maybe<AwsEcsDeploymentCircuitBreaker>;
+  maximumPercent?: Maybe<Scalars['Int']>;
+  minimumHealthyPercent?: Maybe<Scalars['Int']>;
+};
+
+export type AwsEcsDeploymentController = {
+  id: Scalars['String'];
+  type?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcsEnvironmentFile = {
+  id: Scalars['String'];
+  value?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcsEnvironmentVariables = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcsEphemeralStorage = {
+  id: Scalars['String'];
+  sizeInGiB?: Maybe<Scalars['Int']>;
+};
+
+export type AwsEcsExecuteCommandConfiguration = {
+  id: Scalars['String'];
+  kmsKeyId?: Maybe<Scalars['String']>;
+  logging?: Maybe<Scalars['String']>;
+  logConfiguration?: Maybe<AwsEcsExecuteCommandLogConfiguration>;
+};
+
+export type AwsEcsInferenceAccelerator = {
+  id: Scalars['String'];
+  deviceName?: Maybe<Scalars['String']>;
+  deviceType?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcsInferenceAcceleratorOverride = {
+  id: Scalars['String'];
+  deviceName?: Maybe<Scalars['String']>;
+  deviceType?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcsLoadBalancer = {
+  id: Scalars['String'];
+  targetGroupArn?: Maybe<Scalars['String']>;
+  loadBalancerName?: Maybe<Scalars['String']>;
+  containerName?: Maybe<Scalars['String']>;
+  containerPort?: Maybe<Scalars['Int']>;
+};
+
+export type AwsEcsNetworkConfiguration = {
+  id: Scalars['String'];
+  awsvpcConfiguration?: Maybe<AwsEcsAwsVpcConfiguration>;
+};
+
+export type AwsEcsPlacementConstraint = {
+  id: Scalars['String'];
+  type?: Maybe<Scalars['String']>;
+  expression?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcsPlacementStrategy = {
+  id: Scalars['String'];
+  type?: Maybe<Scalars['String']>;
+  field?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcsResource = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  doubleValue?: Maybe<Scalars['Float']>;
+  longValue?: Maybe<Scalars['Int']>;
+  integerValue?: Maybe<Scalars['Int']>;
+  stringSetValue?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsEcsResourceRequirement = {
+  id: Scalars['String'];
+  value?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcsScale = {
+  id: Scalars['String'];
+  value?: Maybe<Scalars['Int']>;
+  unit?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcsService = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  serviceName?: Maybe<Scalars['String']>;
+  clusterArn?: Maybe<Scalars['String']>;
+  loadBalancers?: Maybe<Array<Maybe<AwsEcsLoadBalancer>>>;
+  serviceRegistries?: Maybe<Array<Maybe<AwsEcsServiceRegistry>>>;
+  status?: Maybe<Scalars['String']>;
+  desiredCount?: Maybe<Scalars['Int']>;
+  runningCount?: Maybe<Scalars['Int']>;
+  pendingCount?: Maybe<Scalars['Int']>;
+  launchType?: Maybe<Scalars['String']>;
+  capacityProviderStrategy?: Maybe<AwsEcsCapacityProviderStrategy>;
+  platformVersion?: Maybe<Scalars['String']>;
+  taskDefinition?: Maybe<Scalars['String']>;
+  deploymentConfiguration?: Maybe<AwsEcsDeploymentConfiguration>;
+  taskSets?: Maybe<Array<Maybe<AwsEcsTaskSet>>>;
+  deployments?: Maybe<Array<Maybe<AwsEcsDeployment>>>;
+  roleArn?: Maybe<Scalars['String']>;
+  events?: Maybe<Array<Maybe<AwsEcsServiceEvent>>>;
+  createdAt?: Maybe<Scalars['String']>;
+  placementConstraints?: Maybe<Array<Maybe<AwsEcsPlacementConstraint>>>;
+  placementStrategy?: Maybe<Array<Maybe<AwsEcsPlacementStrategy>>>;
+  networkConfiguration?: Maybe<AwsEcsNetworkConfiguration>;
+  healthCheckGracePeriodSeconds?: Maybe<Scalars['Int']>;
+  schedulingStrategy?: Maybe<Scalars['String']>;
+  deploymentController?: Maybe<AwsEcsDeploymentController>;
+  createdBy?: Maybe<Scalars['String']>;
+  enableECSManagedTags?: Maybe<Scalars['Boolean']>;
+  propagateTags?: Maybe<Scalars['String']>;
+  enableExecuteCommand?: Maybe<Scalars['Boolean']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+};
+
+export type AwsEcsServiceEvent = {
+  id: Scalars['String'];
+  createdAt?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcsServiceRegistry = {
+  id: Scalars['String'];
+  registryArn?: Maybe<Scalars['String']>;
+  port?: Maybe<Scalars['Int']>;
+  containerName?: Maybe<Scalars['String']>;
+  containerPort?: Maybe<Scalars['Int']>;
+};
+
+export type AwsEcsStatistics = {
+  id: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcsTask = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  attachments?: Maybe<Array<Maybe<AwsEcsAttachment>>>;
+  attributes?: Maybe<Array<Maybe<AwsEcsAttribute>>>;
+  availabilityZone?: Maybe<Scalars['String']>;
+  capacityProviderName?: Maybe<Scalars['String']>;
+  clusterArn?: Maybe<Scalars['String']>;
+  connectivity?: Maybe<Scalars['String']>;
+  connectivityAt?: Maybe<Scalars['String']>;
+  containerInstanceArn?: Maybe<Scalars['String']>;
+  cpu?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['String']>;
+  desiredStatus?: Maybe<Scalars['String']>;
+  enableExecuteCommand?: Maybe<Scalars['Boolean']>;
+  executionStoppedAt?: Maybe<Scalars['String']>;
+  group?: Maybe<Scalars['String']>;
+  healthStatus?: Maybe<Scalars['String']>;
+  inferenceAccelerators?: Maybe<Array<Maybe<AwsEcsInferenceAccelerator>>>;
+  lastStatus?: Maybe<Scalars['String']>;
+  launchType?: Maybe<Scalars['String']>;
+  memory?: Maybe<Scalars['String']>;
+  overrides?: Maybe<AwsEcsTaskOverride>;
+  platformVersion?: Maybe<Scalars['String']>;
+  pullStartedAt?: Maybe<Scalars['String']>;
+  pullStoppedAt?: Maybe<Scalars['String']>;
+  startedAt?: Maybe<Scalars['String']>;
+  startedBy?: Maybe<Scalars['String']>;
+  stopCode?: Maybe<Scalars['String']>;
+  stoppedAt?: Maybe<Scalars['String']>;
+  stoppedReason?: Maybe<Scalars['String']>;
+  stoppingAt?: Maybe<Scalars['String']>;
+  taskDefinitionArn?: Maybe<Scalars['String']>;
+  version?: Maybe<Scalars['Int']>;
+  ephemeralStorage?: Maybe<AwsEcsEphemeralStorage>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  ecsContainer?: Maybe<Array<Maybe<AwsEcsContainer>>>;
+};
+
+export type AwsEcsTaskOverride = {
+  id: Scalars['String'];
+  containerOverrides?: Maybe<Array<Maybe<AwsEcsContainerOverride>>>;
+  cpu?: Maybe<Scalars['String']>;
+  inferenceAcceleratorOverrides?: Maybe<Array<Maybe<AwsEcsInferenceAcceleratorOverride>>>;
+  executionRoleArn?: Maybe<Scalars['String']>;
+  memory?: Maybe<Scalars['String']>;
+  taskRoleArn?: Maybe<Scalars['String']>;
+  ephemeralStorage?: Maybe<AwsEcsEphemeralStorage>;
+};
+
+export type AwsEcsTaskSet = {
+  id: Scalars['String'];
+  taskSetArn?: Maybe<Scalars['String']>;
+  serviceArn?: Maybe<Scalars['String']>;
+  clusterArn?: Maybe<Scalars['String']>;
+  startedBy?: Maybe<Scalars['String']>;
+  externalId?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  taskDefinition?: Maybe<Scalars['String']>;
+  computedDesiredCount?: Maybe<Scalars['Int']>;
+  pendingCount?: Maybe<Scalars['Int']>;
+  runningCount?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+  launchType?: Maybe<Scalars['String']>;
+  capacityProviderStrategy?: Maybe<AwsEcsCapacityProviderStrategy>;
+  platformVersion?: Maybe<Scalars['String']>;
+  networkConfiguration?: Maybe<AwsEcsNetworkConfiguration>;
+  loadBalancers?: Maybe<Array<Maybe<AwsEcsLoadBalancer>>>;
+  serviceRegistries?: Maybe<Array<Maybe<AwsEcsServiceRegistry>>>;
+  scale?: Maybe<AwsEcsScale>;
+  stabilityStatus?: Maybe<Scalars['String']>;
+  stabilityStatusAt?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcsversionInfo = {
+  id: Scalars['String'];
+  agentVersion?: Maybe<Scalars['String']>;
+  agentHash?: Maybe<Scalars['String']>;
+  dockerVersion?: Maybe<Scalars['String']>;
 };
 
 export type AwsEip = {
@@ -1888,6 +2258,10 @@ export type AwsTag = {
   sns?: Maybe<Array<Maybe<AwsSns>>>;
   redshiftClusters?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
+  ecsCluster?: Maybe<Array<Maybe<AwsEcsCluster>>>;
+  ecsContainer?: Maybe<Array<Maybe<AwsEcsContainer>>>;
+  ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
+  ecsTask?: Maybe<Array<Maybe<AwsEcsTask>>>;
 };
 
 export type AwsTotalBillingInfo = {
@@ -1924,6 +2298,7 @@ export type AwsVpc = {
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
+  ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
 };
 
 export type BlockDeviceEbs = {

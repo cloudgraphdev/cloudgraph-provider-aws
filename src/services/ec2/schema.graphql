@@ -73,4 +73,5 @@ type awsEc2 @key(fields: "arn") {
   networkInterfaces: [awsNetworkInterface] @hasInverse(field: ec2Instance)
   securityGroups: [awsSecurityGroup] @hasInverse(field: ec2Instance)
   subnet: [awsSubnet] @hasInverse(field: ec2Instance)
+  ecsContainer: [awsEcsContainer] @hasInverse(field: ec2Instance)
 }

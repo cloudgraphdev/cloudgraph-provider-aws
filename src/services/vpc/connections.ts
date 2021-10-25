@@ -20,6 +20,7 @@ import { FunctionConfiguration } from 'aws-sdk/clients/lambda'
 import services from '../../enums/services'
 import { intersectStringArrays } from '../../utils/index'
 import { RawAwsSubnet } from '../subnet/data'
+import { RawAwsEcsService } from '../ecsService/data'
 /**
  * ALBs
  */
@@ -68,9 +69,24 @@ export default ({
     }
   }
   /**
-   * Find any ECS related data
+   * Find any ECS service related data
    */
-  // TODO: Add this when adding the ECS
+  const ecsServices = data.find(({ name }) => name === services.ecsService)
+  if (ecsServices?.data?.[region]) {
+    const dataAtRegion: RawAwsEcsService[] = ecsServices.data[region].filter(({ networkConfiguration }) => {
+      const sgIds = networkConfiguration?.awsvpcConfiguration?.securityGroups
+      return sgIds.includes(id)
+    })
+
+    for (const instance of dataAtRegion) {
+      connections.push({
+        id: instance.serviceArn,
+        resourceType: services.ecsService,
+        relation: 'child',
+        field: 'ecsService',
+      })
+    }
+  }
   /**
    * Find any EIP related data
    */

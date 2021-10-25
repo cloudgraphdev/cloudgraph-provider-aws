@@ -28,4 +28,5 @@ type awsVpc @key(fields: "id") {
   routeTable: [awsRouteTable] @hasInverse(field: vpc)
   subnet: [awsSubnet] @hasInverse(field: vpc)
   eksCluster: [awsEksCluster] @hasInverse(field: vpc)
+  ecsService: [awsEcsService] @hasInverse(field: vpc)
 }

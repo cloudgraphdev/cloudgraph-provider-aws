@@ -30,6 +30,10 @@ import { RawAwsSns } from '../sns/data'
 import { RawAwsRedshiftCluster } from '../redshift/data'
 import { redshiftArn } from '../../utils/generateArns'
 import { RawAwsEksCluster } from '../eksCluster/data'
+import { RawAwsEcsCluster } from '../ecsCluster/data'
+import { RawAwsEcsContainer } from '../ecsContainer/data'
+import { RawAwsEcsService } from '../ecsService/data'
+import { RawAwsEcsTask } from '../ecsTask/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -1015,6 +1019,95 @@ export default ({
         }
       }
     }
+
+    /**
+     * Find related ECS clusters
+     */
+    const ecsClusters: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.ecsCluster)
+    if (ecsClusters?.data?.[region]) {
+      const dataAtRegion: RawAwsEcsCluster[] =
+        findServiceInstancesWithTag(tag, ecsClusters.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { clusterArn: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.ecsCluster,
+            relation: 'child',
+            field: 'ecsCluster',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related ECS containers
+     */
+    const ecsContainers: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.ecsContainer)
+    if (ecsContainers?.data?.[region]) {
+      const dataAtRegion: RawAwsEcsContainer[] =
+        findServiceInstancesWithTag(tag, ecsContainers.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { containerInstanceArn: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.ecsContainer,
+            relation: 'child',
+            field: 'ecsContainer',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related ECS services
+     */
+    const ecsServices: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.ecsService)
+    if (ecsServices?.data?.[region]) {
+      const dataAtRegion: RawAwsEcsService[] =
+        findServiceInstancesWithTag(tag, ecsServices.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { serviceArn: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.ecsService,
+            relation: 'child',
+            field: 'ecsService',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related ECS tasks
+     */
+    const ecsTasks: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.ecsTask)
+    if (ecsTasks?.data?.[region]) {
+      const dataAtRegion: RawAwsEcsTask[] =
+        findServiceInstancesWithTag(tag, ecsTasks.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { taskArn: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.ecsTask,
+            relation: 'child',
+            field: 'ecsTask',
+          })
+        }
+      }
+    }
+
   }
 
   const tagResult = {
