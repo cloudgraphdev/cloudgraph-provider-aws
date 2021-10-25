@@ -17,7 +17,11 @@ export default ({
   [property: string]: ServiceConnection[]
 } => {
   const connections: ServiceConnection[] = []
-  const { DBClusterArn: id, VpcSecurityGroups } = service
+  const {
+    DBClusterArn: id,
+    DBClusterIdentifier: clusterId,
+    VpcSecurityGroups,
+  } = service
   const sgIds = VpcSecurityGroups.map(
     ({ VpcSecurityGroupId }) => VpcSecurityGroupId
   )
@@ -25,11 +29,14 @@ export default ({
   /**
    * Find instances
    */
-  const instances: { name: string; data: { [property: string]: DBInstance[] } } =
-    data.find(({ name }) => name === services.rdsDbInstance)
+  const instances: {
+    name: string
+    data: { [property: string]: DBInstance[] }
+  } = data.find(({ name }) => name === services.rdsDbInstance)
+
   if (instances?.data?.[region]) {
     const instancesInRegion: DBInstance[] = instances.data[region].filter(
-      ({ DBClusterIdentifier }: DBInstance) => DBClusterIdentifier === id
+      ({ DBClusterIdentifier }: DBInstance) => DBClusterIdentifier === clusterId
     )
     if (!isEmpty(instancesInRegion)) {
       for (const instance of instancesInRegion) {
