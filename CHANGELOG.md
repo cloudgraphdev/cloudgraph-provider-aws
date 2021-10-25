@@ -1,3 +1,18 @@
+# [0.38.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.37.0...0.38.0) (2021-10-25)
+
+
+### Bug Fixes
+
+* Fixed broken tests ([c34a774](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c34a774b2ae517551a01edfb9fb6e5c6cc00b6af))
+
+
+### Features
+
+* Added IAM Global information as a service ([cbb6f97](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/cbb6f976e546f8c08d7c8335dec885ee9d77c647))
+* Added MFA devices to IAM User ([79a9ce7](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/79a9ce72cfe19c63d2daf055bdc174c5267b6c07))
+* Added unit tests to IAM Global service ([cf9eaf0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/cf9eaf0e1c08edc4064be4121c3b90c8d151d017))
+* Split up IAM Global service ([88aa784](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/88aa784e8c876676324fab0d6417ab7c95543cde))
+
 # [0.37.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.36.1...0.37.0) (2021-10-25)
 
 
