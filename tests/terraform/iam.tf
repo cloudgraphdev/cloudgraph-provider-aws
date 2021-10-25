@@ -1,3 +1,47 @@
+# IAM Global
+
+resource "aws_iam_account_password_policy" "strict" {
+  max_password_age               = 60
+  minimum_password_length        = 8
+  password_reuse_prevention      = 2
+  require_lowercase_characters   = true
+  require_numbers                = true
+  require_uppercase_characters   = true
+  require_symbols                = true
+  allow_users_to_change_password = true
+}
+
+resource "aws_iam_server_certificate" "test_cert_alt" {
+  name = "alt_test_cert"
+
+  certificate_body = <<EOF
+-----BEGIN CERTIFICATE-----
+[......] # cert contents
+-----END CERTIFICATE-----
+EOF
+
+  private_key = <<EOF
+-----BEGIN RSA PRIVATE KEY-----
+[......] # cert contents
+-----END RSA PRIVATE KEY-----
+EOF
+}
+
+resource "aws_iam_openid_connect_provider" "default" {
+  url = "https://accounts.google.com"
+
+  client_id_list = [
+    "266362248691-342342xasdasdasda-apps.googleusercontent.com",
+  ]
+
+  thumbprint_list = []
+}
+
+resource "aws_iam_saml_provider" "default" {
+  name                   = "myprovider"
+  saml_metadata_document = file("saml-metadata.xml")
+}
+
 # IAM Group
 
 resource "aws_iam_group" "read_only_access" {

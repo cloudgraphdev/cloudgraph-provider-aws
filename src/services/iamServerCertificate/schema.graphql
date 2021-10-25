@@ -1,0 +1,10 @@
+type awsIamServerCertificate @key(fields: "arn") {
+  id: String! @id @search(by: [hash, regexp])
+  arn: String! @id @search(by: [hash, regexp])
+  accountId: String @search(by: [hash, regexp])
+  certificateId: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  path: String @search(by: [hash, regexp])
+  uploadDate: String @search(by: [hash, regexp])
+  expiration: String @search(by: [hash, regexp])
+}

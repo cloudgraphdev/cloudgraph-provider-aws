@@ -25,6 +25,7 @@ export default ({
     CreateDate: creationTime,
     PasswordLastUsed: passwordLastUsed,
     AccessKeyLastUsedData: accessKeys = [],
+    MFADevices: mfaDevices = [],
     Groups: groups = [],
     Tags: tags = {},
   } = rawData
@@ -39,6 +40,18 @@ export default ({
         lastUsedDate: key.AccessKeyLastUsed.LastUsedDate?.toISOString(),
         lastUsedRegion: key.AccessKeyLastUsed.Region,
         lastUsedService: key.AccessKeyLastUsed.ServiceName,
+      })
+    })
+  }
+
+  // MFA Devices
+  const mfaData = []
+
+  if (!isEmpty(accessKeys)) {
+    mfaDevices.map(({ SerialNumber, EnableDate }) => {
+      mfaData.push({
+        serialNumber: SerialNumber,
+        enableDate: EnableDate?.toISOString(),
       })
     })
   }
@@ -58,6 +71,7 @@ export default ({
     path,
     creationTime: creationTime?.toISOString() || '',
     accessKeyData,
+    mfaDevices: mfaData,
     passwordLastUsed: passwordLastUsed?.toISOString() || '',
     groups,
     tags: userTags,

@@ -1049,6 +1049,32 @@ export type AwsIamGroup = {
   iamUsers?: Maybe<Array<Maybe<AwsIamUser>>>;
 };
 
+export type AwsIamMfaDevice = {
+  serialNumber: Scalars['String'];
+  enableDate?: Maybe<Scalars['String']>;
+};
+
+export type AwsIamOpenIdConnectProvider = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+};
+
+export type AwsIamPasswordPolicy = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  minimumPasswordLength?: Maybe<Scalars['Int']>;
+  maxPasswordAge?: Maybe<Scalars['Int']>;
+  passwordReusePrevention?: Maybe<Scalars['Int']>;
+  requireSymbols?: Maybe<Scalars['Boolean']>;
+  requireNumbers?: Maybe<Scalars['Boolean']>;
+  requireUppercaseCharacters?: Maybe<Scalars['Boolean']>;
+  requireLowercaseCharacters?: Maybe<Scalars['Boolean']>;
+  allowUsersToChangePassword?: Maybe<Scalars['Boolean']>;
+  expirePasswords?: Maybe<Scalars['Boolean']>;
+  hardExpiry?: Maybe<Scalars['Boolean']>;
+};
+
 export type AwsIamPolicy = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -1077,6 +1103,25 @@ export type AwsIamRole = {
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
 };
 
+export type AwsIamSamlProvider = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  validUntil?: Maybe<Scalars['String']>;
+  createdDate?: Maybe<Scalars['String']>;
+};
+
+export type AwsIamServerCertificate = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId?: Maybe<Scalars['String']>;
+  certificateId?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  path?: Maybe<Scalars['String']>;
+  uploadDate?: Maybe<Scalars['String']>;
+  expiration?: Maybe<Scalars['String']>;
+};
+
 export type AwsIamUser = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -1086,6 +1131,7 @@ export type AwsIamUser = {
   creationTime?: Maybe<Scalars['String']>;
   passwordLastUsed?: Maybe<Scalars['String']>;
   accessKeyData?: Maybe<Array<Maybe<AwsIamAccessKey>>>;
+  mfaDevices?: Maybe<Array<Maybe<AwsIamMfaDevice>>>;
   groups?: Maybe<Array<Maybe<Scalars['String']>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   iamGroups?: Maybe<Array<Maybe<AwsIamGroup>>>;

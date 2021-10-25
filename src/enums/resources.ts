@@ -11,6 +11,10 @@ export default {
   kmsKey: 'aws_kms_key',
   region: 'aws_region', // Not a real TF resource, used to organize all regional resources
   account: 'aws_account', // Not a real TF resource, used to organize all regional resources
+  iamPasswordPolicy: 'aws_iam_password_policy',
+  iamSamlProvider: 'aws_iam_saml_provider',
+  iamOpenIdConnectProvider: 'aws_iam_openidconnect_provider',
+  iamServerCertificate: 'aws_iam_server_certificate',
   iamUser: 'aws_iam_user',
   iamRole: 'aws_iam_role',
   ecsTask: 'aws_ecs_task',

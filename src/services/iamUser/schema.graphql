@@ -7,6 +7,7 @@ type awsIamUser @key(fields: "arn") {
   creationTime: String @search(by: [hash, regexp])
   passwordLastUsed: String @search(by: [hash, regexp])
   accessKeyData: [awsIamAccessKey]
+  mfaDevices: [awsIamMfaDevice]
   groups: [String]
   tags: [Tag]
   iamGroups: [awsIamGroup] @hasInverse(field: iamUsers)
@@ -22,4 +23,14 @@ type awsIamAccessKey
   lastUsedDate: String @search(by: [hash, regexp])
   lastUsedRegion: String @search(by: [hash, regexp])
   lastUsedService: String @search(by: [hash, regexp])
+}
+
+type awsIamMfaDevice
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  serialNumber: String! @id @search(by: [hash, regexp])
+  enableDate: String @search(by: [hash, regexp])
 }

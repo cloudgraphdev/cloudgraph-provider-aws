@@ -75,7 +75,7 @@ describe('Lambda Service Test: ', () => {
                 region,
               })
           )
-          lambdaId = getDataResult[region][0].FunctionName
+          lambdaId = getDataResult[region][0].FunctionArn
           lambdaConnections = lambdaClass.getConnections({
             service: getDataResult[region][0],
             data: initiatorTestData,
