@@ -2,8 +2,8 @@ import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import { AWSError } from 'aws-sdk/lib/error'
-import IAM, {
+import {
+  IAM,
   AccessKeyLastUsed,
   GetAccessKeyLastUsedResponse,
   ListGroupsForUserResponse,
@@ -11,8 +11,7 @@ import IAM, {
   ListUsersResponse,
   ListUserTagsResponse,
   User,
-} from 'aws-sdk/clients/iam'
-import { Config } from 'aws-sdk/lib/config'
+} from '@aws-sdk/client-iam'
 
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
@@ -56,7 +55,7 @@ const tagsByUsername = async (
   new Promise(resolveUserPolicies => {
     iam.listUserTags(
       { UserName },
-      (err: AWSError, data: ListUserTagsResponse) => {
+      (err: any, data: ListUserTagsResponse) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'iam:listUserTags', err)
         }
@@ -79,7 +78,7 @@ const groupsByUsername = async (
   new Promise(resolveUserGroups => {
     iam.listGroupsForUser(
       { UserName },
-      (err: AWSError, data: ListGroupsForUserResponse) => {
+      (err: any, data: ListGroupsForUserResponse) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'iam:listGroupsForUser', err)
         }
@@ -104,7 +103,7 @@ const policiesByUsername = async (
   new Promise(resolveUserPolicies => {
     iam.listUserPolicies(
       { UserName },
-      (err: AWSError, data: ListUserPoliciesResponse) => {
+      (err: any, data: ListUserPoliciesResponse) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'iam:listGroupsForUser', err)
         }
@@ -149,7 +148,7 @@ const accessKeyByUsername = async (
                   AccessKeyId,
                 },
                 (
-                  err: AWSError,
+                  err: any,
                   { AccessKeyLastUsed }: GetAccessKeyLastUsedResponse
                 ) => {
                   if (err) {
@@ -193,7 +192,7 @@ export const listIamUsers = async (
 
     iam.listUsers(
       { Marker: marker },
-      async (err: AWSError, data: ListUsersResponse) => {
+      async (err: any, data: ListUsersResponse) => {
         /**
          * No data
          */
@@ -263,7 +262,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
   rawData: any
 }): Promise<{
   [region: string]: RawAwsIamUser[]

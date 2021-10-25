@@ -1,10 +1,9 @@
 
-import { Firehose } from 'aws-sdk'
 import CloudGraph from '@cloudgraph/sdk'
 import { groupBy } from 'lodash'
-import { Config } from 'aws-sdk/lib/config'
-import { DeliveryStreamDescription } from 'aws-sdk/clients/firehose'
-import { Credentials, TagMap } from '../../types'
+// import { Config } from 'aws-sdk/lib/config'
+import { Firehose, DeliveryStreamDescription } from '@aws-sdk/client-firehose'
+import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
@@ -29,9 +28,9 @@ const LIST_TAGS_LIMIT = 50
 const listDeliveryStreamData = async (kinesis: Firehose): Promise<DeliveryStreamDescription[]> => {
   try {
     const fullResources = []
-    const deliveryStreamNames = await kinesis.listDeliveryStreams({ Limit }).promise()
+    const deliveryStreamNames = await kinesis.listDeliveryStreams({ Limit })
     for (const deliveryStreamName of deliveryStreamNames.DeliveryStreamNames) {
-      const deliveryStreams = await kinesis.describeDeliveryStream({DeliveryStreamName: deliveryStreamName}).promise()
+      const deliveryStreams = await kinesis.describeDeliveryStream({DeliveryStreamName: deliveryStreamName})
       fullResources.push(deliveryStreams.DeliveryStreamDescription)
     }
 
@@ -49,7 +48,7 @@ const listTagsForDeliveryStream = async (kinesis: Firehose, deliveryStreamName: 
     const tags = await kinesis.listTagsForDeliveryStream({
       DeliveryStreamName: deliveryStreamName,
       Limit: LIST_TAGS_LIMIT,
-    }).promise()
+    })
 
     const awsTags = tags.Tags.map(({ Key, Value }) => {
       return {
@@ -70,7 +69,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{
   [region: string]: RawAwsKinesisFirehose[]
 }> => {

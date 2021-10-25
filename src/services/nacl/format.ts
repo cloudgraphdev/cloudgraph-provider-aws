@@ -1,4 +1,4 @@
-import { NetworkAclEntry } from 'aws-sdk/clients/ec2'
+import { NetworkAclEntry } from '@aws-sdk/client-ec2'
 import cuid from 'cuid'
 import t from '../../properties/translations'
 import { AwsNetworkAcl } from '../../types/generated'

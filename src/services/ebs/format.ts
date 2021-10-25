@@ -1,4 +1,4 @@
-import { Volume } from 'aws-sdk/clients/ec2'
+import { Volume } from '@aws-sdk/client-ec2'
 
 import { AwsEbs } from '../../types/generated'
 import { TagMap } from '../../types'

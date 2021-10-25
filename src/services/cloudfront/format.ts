@@ -2,7 +2,7 @@ import {
   CacheBehavior,
   DefaultCacheBehavior,
   Origin,
-} from 'aws-sdk/clients/cloudfront'
+} from '@aws-sdk/client-cloudfront'
 import cuid from 'cuid'
 import isEmpty from 'lodash/isEmpty'
 

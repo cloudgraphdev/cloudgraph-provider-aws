@@ -2,17 +2,15 @@ import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import { AWSError } from 'aws-sdk/lib/error'
-
-import IAM, {
+import {
+  IAM,
   AttachedPolicy,
   ListAttachedRolePoliciesResponse,
   ListRolePoliciesResponse,
   ListRolesResponse,
   ListRoleTagsResponse,
   Role,
-} from 'aws-sdk/clients/iam'
-import { Config } from 'aws-sdk/lib/config'
+} from '@aws-sdk/client-iam'
 
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
@@ -52,7 +50,7 @@ const tagsByRoleName = async (
   new Promise(resolveUserPolicies => {
     iam.listRoleTags(
       { RoleName },
-      (err: AWSError, data: ListRoleTagsResponse) => {
+      (err: any, data: ListRoleTagsResponse) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'iam:listRoleTags', err)
         }
@@ -78,7 +76,7 @@ const policiesByRoleName = async (
   new Promise(resolveUserPolicies => {
     iam.listRolePolicies(
       { RoleName },
-      (err: AWSError, data: ListRolePoliciesResponse) => {
+      (err: any, data: ListRolePoliciesResponse) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'iam:listRolePolicies', err)
         }
@@ -101,7 +99,7 @@ const managedPoliciesByRoleName = async (
   new Promise(resolveUserPolicies => {
     iam.listAttachedRolePolicies(
       { RoleName },
-      (err: AWSError, data: ListAttachedRolePoliciesResponse) => {
+      (err: any, data: ListAttachedRolePoliciesResponse) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'iam:listAttachedRolePolicies', err)
         }
@@ -132,7 +130,7 @@ export const listIamRoles = async (
 
     iam.listRoles(
       { Marker: marker },
-      async (err: AWSError, data: ListRolesResponse) => {
+      async (err: any, data: ListRolesResponse) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'iam:listRoles', err)
         }
@@ -199,7 +197,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{
   [region: string]: RawAwsIamRole[]
 }> =>
@@ -210,7 +208,7 @@ export default async ({
       ...config,
       region: globalRegionName,
       endpoint,
-      ...customRetrySettings,
+      maxAttempts: 10,
     })
 
     logger.debug(lt.lookingForIamRoles)

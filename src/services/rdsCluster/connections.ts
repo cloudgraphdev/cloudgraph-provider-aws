@@ -1,7 +1,7 @@
 import { ServiceConnection } from '@cloudgraph/sdk'
 import { isEmpty } from 'lodash'
-import { SecurityGroup } from 'aws-sdk/clients/ec2'
-import { DBInstance, DBCluster } from 'aws-sdk/clients/rds'
+import { SecurityGroup } from '@aws-sdk/client-ec2'
+import { DBInstance, DBCluster } from '@aws-sdk/client-rds'
 
 import services from '../../enums/services'
 

@@ -1,17 +1,17 @@
 import CloudGraph from '@cloudgraph/sdk'
-import APIGW, {
+import {
+  APIGateway,
   RestApi,
   RestApis,
-  ListOfRestApi,
   GetRestApisRequest,
   Tags,
   GetDomainNamesRequest,
   DomainNames,
   BasePathMappings,
   DomainName,
-} from 'aws-sdk/clients/apigateway'
-import { AWSError } from 'aws-sdk/lib/error'
-import { Config } from 'aws-sdk/lib/config'
+} from '@aws-sdk/client-api-gateway'
+// import { AWSError } from 'aws-sdk/lib/error'
+// import { Config } from 'aws-sdk/lib/config'
 import isEmpty from 'lodash/isEmpty'
 import groupBy from 'lodash/groupBy'
 import { apiGatewayArn, apiGatewayRestApiArn } from '../../utils/generateArns'
@@ -35,9 +35,9 @@ export interface AwsApiGatewayRestApi extends Omit<RestApi, 'tags'> {
   region: string
 }
 
-const getRestApisForRegion = async (apiGw: APIGW) =>
-  new Promise<ListOfRestApi>(resolve => {
-    const restApiList: ListOfRestApi = []
+const getRestApisForRegion = async (apiGw: APIGateway) =>
+  new Promise<RestApi[]>(resolve => {
+    const restApiList: RestApi[] = []
     const getRestApisOpts: GetRestApisRequest = {}
     const listAllRestApis = (token?: string) => {
       getRestApisOpts.limit = MAX_REST_API
@@ -45,7 +45,7 @@ const getRestApisForRegion = async (apiGw: APIGW) =>
         getRestApisOpts.position = token
       }
       try {
-        apiGw.getRestApis(getRestApisOpts, (err: AWSError, data: RestApis) => {
+        apiGw.getRestApis(getRestApisOpts, (err: any, data: RestApis) => {
           const { position, items = [] } = data || {}
           if (err) {
             generateAwsErrorLog(serviceName, 'apiGw:getRestApis', err)
@@ -69,7 +69,7 @@ const getRestApisForRegion = async (apiGw: APIGW) =>
 const getTags = async ({ apiGw, arn }): Promise<TagMap> =>
   new Promise(resolve => {
     try {
-      apiGw.getTags({ resourceArn: arn }, (err: AWSError, data: Tags) => {
+      apiGw.getTags({ resourceArn: arn }, (err: any, data: Tags) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'apiGw:getTags', err)
           return resolve({})
@@ -82,12 +82,12 @@ const getTags = async ({ apiGw, arn }): Promise<TagMap> =>
     }
   })
 
-const getAPIMappings = (apiGw: APIGW, domainName: string) =>
+const getAPIMappings = (apiGw: APIGateway, domainName: string) =>
   new Promise<{ domainName: string; restApiData: string[] }>(
     resolveBasePathMapping =>
       apiGw.getBasePathMappings(
         { domainName },
-        (err: AWSError, data: BasePathMappings) => {
+        (err: any, data: BasePathMappings) => {
           /**
            * No Data for the region
            */
@@ -110,7 +110,7 @@ const getAPIMappings = (apiGw: APIGW, domainName: string) =>
   )
 
 export const getDomainNamesForRegion = async (
-  apiGw: APIGW
+  apiGw: APIGateway
 ): Promise<DomainName[]> =>
   new Promise(async resolve => {
     const getDomainNamesOpts: GetDomainNamesRequest = {
@@ -120,7 +120,7 @@ export const getDomainNamesForRegion = async (
     try {
       apiGw.getDomainNames(
         getDomainNamesOpts,
-        (err: AWSError, data: DomainNames) => {
+        (err: any, data: DomainNames) => {
           if (err) {
             generateAwsErrorLog(serviceName, 'apiGw:getDomainNames', err)
           }
@@ -150,7 +150,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{ [property: string]: AwsApiGatewayRestApi[] }> =>
   new Promise(async resolve => {
     const apiGatewayData = []
@@ -159,7 +159,7 @@ export default async ({
     const tagsPromises = []
 
     regions.split(',').map(region => {
-      const apiGw = new APIGW({ ...config, region, endpoint, ...customRetrySettings })
+      const apiGw = new APIGateway({ ...config, region, endpoint, ...customRetrySettings })
       const regionPromise = new Promise<void>(async resolveRegion => {
         domainNamesData = await getDomainNamesForRegion(apiGw)
         const mappingPromises = domainNamesData.map(({ domainName }) =>
@@ -193,7 +193,7 @@ export default async ({
 
     // get all tags for each rest api
     apiGatewayData.map(({ id, region }, idx) => {
-      const apiGw = new APIGW({ ...config, region, endpoint, ...customRetrySettings })
+      const apiGw = new APIGateway({ ...config, region, endpoint, ...customRetrySettings })
       const tagsPromise = new Promise<void>(async resolveTags => {
         const arn = apiGatewayRestApiArn({
           restApiArn: apiGatewayArn({ region }),

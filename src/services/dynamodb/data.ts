@@ -1,21 +1,20 @@
 import CloudGraph from '@cloudgraph/sdk'
-import DynamoDB, {
+import {
+  DynamoDB,
   ListTablesOutput,
-  TableName,
   DescribeTableOutput,
   ListTagsOfResourceInput,
-  TagList,
+  Tag,
   TimeToLiveDescription,
   ListTagsOfResourceOutput,
   DescribeTimeToLiveOutput,
   TableDescription,
   DescribeContinuousBackupsOutput,
-  TableNameList,
   ListTablesInput,
   ContinuousBackupsDescription,
-} from 'aws-sdk/clients/dynamodb'
-import { Config } from 'aws-sdk/lib/config'
-import { AWSError } from 'aws-sdk/lib/error'
+} from '@aws-sdk/client-dynamodb'
+// import { Config } from 'aws-sdk/lib/config'
+// import { AWSError } from 'aws-sdk/lib/error'
 import isEmpty from 'lodash/isEmpty'
 import groupBy from 'lodash/groupBy'
 
@@ -60,9 +59,9 @@ const backupInfoFormatter = (
 const listTableNamesForRegion = async ({
   dynamoDb,
   resolveRegion,
-}): Promise<TableName[]> =>
-  new Promise<TableName[]>(resolve => {
-    const tableList: TableNameList = []
+}: {dynamoDb: DynamoDB, resolveRegion: () => void}): Promise<string[]> =>
+  new Promise<string[]>(resolve => {
+    const tableList: string[] = []
     const listTableNameOpts: ListTablesInput = {}
     const listTables = (exclusiveStartTableName?: string): void => {
       if (exclusiveStartTableName) {
@@ -70,7 +69,7 @@ const listTableNamesForRegion = async ({
       }
       dynamoDb.listTables(
         listTableNameOpts,
-        (err: AWSError, listTablesOutput: ListTablesOutput) => {
+        (err: any, listTablesOutput: ListTablesOutput) => {
           if (err) {
             generateAwsErrorLog(serviceName, 'dynamodb:listTables', err)
           }
@@ -105,12 +104,12 @@ const listTableNamesForRegion = async ({
 
 const getTableDescription = async (
   dynamoDb: DynamoDB,
-  tableName: TableName
+  tableName: string
 ): Promise<TableDescription> =>
   new Promise(resolve => {
     dynamoDb.describeTable(
       { TableName: tableName },
-      (err: AWSError, tableInfoOutput: DescribeTableOutput) => {
+      (err: any, tableInfoOutput: DescribeTableOutput) => {
         if (err || !tableInfoOutput) {
           generateAwsErrorLog(serviceName, 'dynamodb:describeTable', err)
         }
@@ -127,7 +126,7 @@ const getTableTags = async (
   resourceArn: string
 ): Promise<TagMap> =>
   new Promise(resolveTags => {
-    const tags: TagList = []
+    const tags: Tag[] = []
 
     const listAllTagsOpts: ListTagsOfResourceInput = {
       ResourceArn: resourceArn,
@@ -139,7 +138,7 @@ const getTableTags = async (
       try {
         dynamoDb.listTagsOfResource(
           listAllTagsOpts,
-          (err: AWSError, data: ListTagsOfResourceOutput) => {
+          (err: any, data: ListTagsOfResourceOutput) => {
             const { Tags = [], NextToken: nextToken } = data || {}
             if (err) {
               generateAwsErrorLog(
@@ -168,14 +167,14 @@ const getTableTags = async (
 
 const getTableTTLDescription = async (
   dynamoDb: DynamoDB,
-  tableName: TableName
+  tableName: string
 ): Promise<TimeToLiveDescription> =>
   new Promise(resolve => {
     dynamoDb.describeTimeToLive(
       {
         TableName: tableName,
       },
-      (err: AWSError, data: DescribeTimeToLiveOutput) => {
+      (err: any, data: DescribeTimeToLiveOutput) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'dynamodb:describeTimeToLive', err)
         }
@@ -189,14 +188,14 @@ const getTableTTLDescription = async (
 
 const getTableBackupsDescription = async (
   dynamoDb: DynamoDB,
-  tableName: TableName
+  tableName: string
 ): Promise<ContinuousBackupsDescription> =>
   new Promise(resolve => {
     dynamoDb.describeContinuousBackups(
       {
         TableName: tableName,
       },
-      (err: AWSError, data: DescribeContinuousBackupsOutput) => {
+      (err: any, data: DescribeContinuousBackupsOutput) => {
         if (err) {
           generateAwsErrorLog(
             serviceName,
@@ -217,10 +216,10 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{ [property: string]: RawAwsDynamoDbTable[] }> =>
   new Promise(async resolve => {
-    const tableNames: Array<{ name: TableName; region: string }> = []
+    const tableNames: Array<{ name: string; region: string }> = []
     const tableData: Array<RawAwsDynamoDbTable> = []
     const regionPromises = []
     const tablePromises = []

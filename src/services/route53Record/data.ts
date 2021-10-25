@@ -3,13 +3,12 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 import flatMap from 'lodash/flatMap'
 
-import { AWSError } from 'aws-sdk/lib/error'
-import Route53, {
+import {
+  Route53,
   ListResourceRecordSetsRequest,
   ListResourceRecordSetsResponse,
   ResourceRecordSet,
-} from 'aws-sdk/clients/route53'
-import { Config } from 'aws-sdk/lib/config'
+} from '@aws-sdk/client-route-53'
 
 import awsLoggerText from '../../properties/logger'
 import {
@@ -65,7 +64,7 @@ const listRecordsForHostedZone = async ({
 
   return route53.listResourceRecordSets(
     args,
-    async (err: AWSError, data: ListResourceRecordSetsResponse) => {
+    async (err: any, data: ListResourceRecordSetsResponse) => {
       if (err) {
         generateAwsErrorLog(serviceName, 'route53:listResourceRecordSets', err)
       }
@@ -137,7 +136,7 @@ export default async ({
   rawData,
 }: {
   regions: string
-  config: Config
+  config: any
   rawData: any
 }): Promise<{
   [region: string]: RawAwsRoute53Record[]

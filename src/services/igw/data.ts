@@ -1,12 +1,13 @@
 import CloudGraph from '@cloudgraph/sdk'
-import { Request } from 'aws-sdk/lib/request'
-import { Config } from 'aws-sdk/lib/config'
-import EC2, {
+// import { Request } from 'aws-sdk/lib/request'
+// import { Config } from 'aws-sdk/lib/config'
+import {
+  EC2,
   DescribeInternetGatewaysRequest,
   DescribeInternetGatewaysResult,
   InternetGateway,
-} from 'aws-sdk/clients/ec2'
-import { AWSError } from 'aws-sdk/lib/error'
+} from '@aws-sdk/client-ec2'
+// import { AWSError } from 'aws-sdk/lib/error'
 
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
@@ -33,7 +34,7 @@ export default async ({
   config,
   regions,
 }: {
-  config: Config
+  config: any
   regions: string
 }): Promise<{ [property: string]: RawAwsIgw[] }> =>
   new Promise(async resolve => {
@@ -50,7 +51,7 @@ export default async ({
       region: string
       token?: string
       resolveRegion: () => void
-    }): Promise<Request<DescribeInternetGatewaysResult, AWSError>> => {
+    }): Promise<void> => {
       let args: DescribeInternetGatewaysRequest = {}
 
       if (NextToken) {
@@ -59,7 +60,7 @@ export default async ({
 
       return ec2.describeInternetGateways(
         args,
-        (err: AWSError, data: DescribeInternetGatewaysResult) => {
+        (err: any, data: DescribeInternetGatewaysResult) => {
           if (err) {
             generateAwsErrorLog(serviceName, 'ec2:describeInternetGateways', err)
           }

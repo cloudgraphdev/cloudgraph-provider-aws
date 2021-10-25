@@ -1,8 +1,8 @@
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
-import { AWSError } from 'aws-sdk/lib/error'
-import { Config } from 'aws-sdk/lib/config'
-import EC2, { Address, DescribeAddressesResult } from 'aws-sdk/clients/ec2'
+// import { AWSError } from 'aws-sdk/lib/error'
+// import { Config } from 'aws-sdk/lib/config'
+import { EC2, Address, DescribeAddressesResult } from '@aws-sdk/client-ec2'
 
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
@@ -30,7 +30,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{ [property: string]: RawAwsEip[] }> =>
   new Promise(async resolve => {
     const eipData: RawAwsEip[] = []
@@ -41,7 +41,7 @@ export default async ({
       return new Promise<void>(resolveRegion =>
         ec2.describeAddresses(
           {},
-          (err: AWSError, data: DescribeAddressesResult) => {
+          (err: any, data: DescribeAddressesResult) => {
             if (err) {
               generateAwsErrorLog(serviceName, 'ec2:describeAddresses', err)
             }

@@ -1,14 +1,12 @@
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import EC2, {
+import {
+  EC2,
   Subnet,
   DescribeSubnetsResult,
   DescribeSubnetsRequest,
-} from 'aws-sdk/clients/ec2'
-import { AWSError } from 'aws-sdk/lib/error'
-import { Config } from 'aws-sdk/lib/config'
-import { Request } from 'aws-sdk/lib/request'
+} from '@aws-sdk/client-ec2'
 
 import CloudGraph from '@cloudgraph/sdk'
 import { TagMap, AwsTag } from '../../types'
@@ -37,7 +35,7 @@ export default ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{ [property: string]: RawAwsSubnet[] }> =>
   new Promise(async resolve => {
     const subnetData: RawAwsSubnet[] = []
@@ -53,7 +51,7 @@ export default ({
       region: string
       token?: string
       resolveSubnet: () => void
-    }): Promise<Request<DescribeSubnetsResult, AWSError>> => {
+    }): Promise<void> => {
       let args: DescribeSubnetsRequest = {}
 
       if (NextToken) {
@@ -62,7 +60,7 @@ export default ({
 
       return ec2.describeSubnets(
         args,
-        (err: AWSError, data: DescribeSubnetsResult) => {
+        (err: any, data: DescribeSubnetsResult) => {
           if (err) {
             generateAwsErrorLog(serviceName, 'ec2:describeSubnets', err)
           }

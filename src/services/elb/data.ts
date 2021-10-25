@@ -2,16 +2,16 @@ import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import { AWSError } from 'aws-sdk/lib/error'
-import { Config } from 'aws-sdk/lib/config'
-import ELB, {
-  DescribeAccessPointsOutput,
+// import { AWSError } from 'aws-sdk/lib/error'
+// import { Config } from 'aws-sdk/lib/config'
+import {
+  ElasticLoadBalancing,
   DescribeLoadBalancerAttributesOutput,
   DescribeTagsOutput,
   LoadBalancerAttributes,
   LoadBalancerDescription,
-  TagList,
-} from 'aws-sdk/clients/elb'
+  Tag,
+} from '@aws-sdk/client-elastic-load-balancing'
 
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
@@ -22,15 +22,15 @@ const serviceName = 'ELB'
 const endpoint = initTestEndpoint(serviceName)
 
 const getElbTags = async (
-  elb: ELB,
+  elb: ElasticLoadBalancing,
   elbNames: string[]
-): Promise<{ LoadBalancerName: string; Tags: TagList }[]> =>
-  new Promise<{ LoadBalancerName: string; Tags: TagList }[]>(resolve => {
+): Promise<{ LoadBalancerName: string; Tags: Tag[] }[]> =>
+  new Promise<{ LoadBalancerName: string; Tags: Tag[] }[]>(resolve => {
     elb.describeTags(
       {
         LoadBalancerNames: elbNames,
       },
-      (err: AWSError, data: DescribeTagsOutput) => {
+      (err: any, data: DescribeTagsOutput) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'elb:describeTags', err)
         }
@@ -50,34 +50,32 @@ const getElbTags = async (
   })
 
 const listElbData = async (
-  elb: ELB,
+  elb: ElasticLoadBalancing,
   region: string
 ): Promise<(LoadBalancerDescription & { region: string })[]> =>
-  new Promise<(LoadBalancerDescription & { region: string })[]>(resolve => {
+  new Promise<(LoadBalancerDescription & { region: string })[]>(async resolve => {
     let loadBalancerData: (LoadBalancerDescription & { region: string })[] = []
-    elb.describeLoadBalancers(
-      (err: AWSError, data: DescribeAccessPointsOutput) => {
-        if (err) {
-          generateAwsErrorLog(serviceName, 'elb:describeLoadBalancers', err)
-        }
-        if (!isEmpty(data)) {
-          const { LoadBalancerDescriptions: loadBalancerDescriptions = [] } =
-            data
-          logger.debug(lt.fetchedElbs(loadBalancerDescriptions.length))
-          loadBalancerData = loadBalancerDescriptions.map(lbDescription => ({
-            ...lbDescription,
-            region,
-          }))
-          resolve(loadBalancerData)
-        }
-
-        resolve(loadBalancerData)
+    try {
+      const data = await elb.describeLoadBalancers({})
+      if (!isEmpty(data)) {
+        const { LoadBalancerDescriptions: loadBalancerDescriptions = [] } =
+              data
+            logger.debug(lt.fetchedElbs(loadBalancerDescriptions.length))
+            loadBalancerData = loadBalancerDescriptions.map(lbDescription => ({
+              ...lbDescription,
+              region,
+            }))
+            resolve(loadBalancerData)
       }
-    )
+      resolve(loadBalancerData)
+    } catch (error) {
+      generateAwsErrorLog(serviceName, 'elb:describeLoadBalancers', error)
+      resolve(loadBalancerData)
+    }
   })
 
 const listElbAttributes = async (
-  elb: ELB,
+  elb: ElasticLoadBalancing,
   elbName: string
 ): Promise<(LoadBalancerAttributes & { LoadBalancerName: string }) | unknown> =>
   new Promise<
@@ -87,7 +85,7 @@ const listElbAttributes = async (
       {
         LoadBalancerName: elbName,
       },
-      (err: AWSError, data: DescribeLoadBalancerAttributesOutput) => {
+      (err: any, data: DescribeLoadBalancerAttributesOutput) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'elb:describeLoadBalancerAttributes', err)
         }
@@ -119,7 +117,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{
   [region: string]: RawAwsElb[]
 }> =>
@@ -127,7 +125,7 @@ export default async ({
     let elbData: RawAwsElb[] = []
 
     const regionPromises = regions.split(',').map(region => {
-      const elbInstance = new ELB({ ...config, region, endpoint })
+      const elbInstance = new ElasticLoadBalancing({ ...config, region, endpoint })
       return new Promise<void>(async resolveElbData => {
         // Get Load Balancer Data
         elbData = await listElbData(elbInstance, region)

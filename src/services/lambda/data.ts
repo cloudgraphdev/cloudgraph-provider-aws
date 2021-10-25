@@ -1,17 +1,16 @@
 import isEmpty from 'lodash/isEmpty'
 import groupBy from 'lodash/groupBy'
-import Lambda, {
+import {
+  Lambda,
   FunctionConfiguration,
-  FunctionList,
   ListFunctionsRequest,
   ListFunctionsResponse,
   ListTagsResponse,
   GetFunctionConcurrencyRequest,
   GetFunctionConcurrencyResponse,
-  ReservedConcurrentExecutions,
-} from 'aws-sdk/clients/lambda'
-import { AWSError } from 'aws-sdk/lib/error'
-import { Config } from 'aws-sdk/lib/config'
+} from '@aws-sdk/client-lambda'
+// import { AWSError } from 'aws-sdk/lib/error'
+// import { Config } from 'aws-sdk/lib/config'
 import CloudGraph from '@cloudgraph/sdk'
 import awsLoggerText from '../../properties/logger'
 
@@ -27,7 +26,7 @@ const endpoint = initTestEndpoint(serviceName)
 export interface RawAwsLambdaFunction extends FunctionConfiguration {
   Tags?: TagMap
   region: string
-  reservedConcurrentExecutions: ReservedConcurrentExecutions
+  reservedConcurrentExecutions: number
 }
 
 const listFunctionsForRegion = async ({
@@ -36,9 +35,9 @@ const listFunctionsForRegion = async ({
 }: {
   lambda: Lambda
   resolveRegion: () => void
-}): Promise<FunctionList> =>
-  new Promise<FunctionList>(resolve => {
-    const functionsList: FunctionList = []
+}): Promise<FunctionConfiguration[]> =>
+  new Promise<FunctionConfiguration[]>(resolve => {
+    const functionsList: FunctionConfiguration[] = []
     const listFunctionsOpts: ListFunctionsRequest = {}
     const listAllFunctions = (token?: string): void => {
       listFunctionsOpts.MaxItems = MAX_ITEMS
@@ -48,7 +47,7 @@ const listFunctionsForRegion = async ({
       try {
         lambda.listFunctions(
           listFunctionsOpts,
-          (err: AWSError, data: ListFunctionsResponse) => {
+          (err: any, data: ListFunctionsResponse) => {
             const { NextMarker, Functions = [] } = data || {}
             if (err) {
               generateAwsErrorLog(serviceName, 'lambda:listFunctions', err)
@@ -80,7 +79,7 @@ const listFunctionsForRegion = async ({
 const getFunctionConcurrency = async (
   lambda: Lambda,
   FunctionName: string
-): Promise<ReservedConcurrentExecutions> =>
+): Promise<number> =>
   new Promise(resolve => {
     const getFunctionConcurrencyOpts: GetFunctionConcurrencyRequest = {
       FunctionName,
@@ -88,7 +87,7 @@ const getFunctionConcurrency = async (
     try {
       lambda.getFunctionConcurrency(
         getFunctionConcurrencyOpts,
-        (err: AWSError, data: GetFunctionConcurrencyResponse) => {
+        (err: any, data: GetFunctionConcurrencyResponse) => {
           const { ReservedConcurrentExecutions: reservedConcurrentExecutions } =
             data || {}
           if (err) {
@@ -107,7 +106,7 @@ const getResourceTags = async (lambda: Lambda, arn: string): Promise<TagMap> =>
     try {
       lambda.listTags(
         { Resource: arn },
-        (err: AWSError, data: ListTagsResponse) => {
+        (err: any, data: ListTagsResponse) => {
           if (err) {
             generateAwsErrorLog(serviceName, 'lambda:listTags', err)
             resolve({})
@@ -126,7 +125,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{ [property: string]: RawAwsLambdaFunction[] }> =>
   new Promise(async resolve => {
     const lambdaData: RawAwsLambdaFunction[] = []

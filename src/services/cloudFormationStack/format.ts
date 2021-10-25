@@ -38,7 +38,7 @@ export default ({
     stackDrifts,
   } = rawData
 
-  const parameterList = parameters.map(
+  const parameterList = parameters?.map(
     ({
       ParameterKey: parameterKey,
       ParameterValue: parameterValue,
@@ -53,7 +53,7 @@ export default ({
         resolvedValue,
       }
     }
-  )
+  ) || []
 
   const rollbackConfigurationRollbackTriggerList =
     rollbackConfiguration?.RollbackTriggers?.map(({ Arn: arn, Type: type }) => {

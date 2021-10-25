@@ -19,6 +19,6 @@ type awsCloudtrail @key(fields: "arn") {
   isOrganizationTrail: String @search(by: [hash, regexp])
   tags: [Tag],
   region: String @search(by: [hash, regexp])
-  s3: [awsS3] @hasInverse(field: cloudtrail)
-  kms: [awsKms] @hasInverse(field: cloudtrail)
+  # s3: [awsS3] @hasInverse(field: cloudtrail)
+  # kms: [awsKms] @hasInverse(field: cloudtrail)
 }

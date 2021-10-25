@@ -2,15 +2,15 @@ import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import CloudWatch, {
-  MetricAlarm,
+import {
+  CloudWatch,
   DescribeAlarmsInput,
   DescribeAlarmsOutput,
   ListTagsForResourceOutput,
-  MetricAlarms,
-} from 'aws-sdk/clients/cloudwatch'
-import { Config } from 'aws-sdk/lib/config'
-import { AWSError } from 'aws-sdk/lib/error'
+  MetricAlarm,
+} from '@aws-sdk/client-cloudwatch'
+// import { Config } from 'aws-sdk/lib/config'
+// import { AWSError } from 'aws-sdk/lib/error'
 
 import { TagMap, AwsTag } from '../../types'
 import awsLoggerText from '../../properties/logger'
@@ -40,8 +40,8 @@ const listMetricAlarmsForRegion = async ({
   cloudwatch: CloudWatch
   resolveRegion: () => void
 }): Promise<MetricAlarm[]> =>
-  new Promise<MetricAlarms>(resolve => {
-    const metricAlarmsList: MetricAlarms = []
+  new Promise<MetricAlarm[]>(resolve => {
+    const metricAlarmsList: MetricAlarm[] = []
     const listMetricAlarmsOpts: DescribeAlarmsInput = {}
     const listAllAlarms = (token?: string): void => {
       listMetricAlarmsOpts.MaxRecords = MAX_ITEMS
@@ -51,7 +51,7 @@ const listMetricAlarmsForRegion = async ({
       try {
         cloudwatch.describeAlarms(
           listMetricAlarmsOpts,
-          (err: AWSError, data: DescribeAlarmsOutput) => {
+          (err: any, data: DescribeAlarmsOutput) => {
             const { NextToken: nextToken, MetricAlarms: metricAlarms } =
               data || {}
             if (err) {
@@ -86,7 +86,7 @@ const getResourceTags = async (cloudwatch: CloudWatch, arn: string) =>
     try {
       cloudwatch.listTagsForResource(
         { ResourceARN: arn },
-        (err: AWSError, data: ListTagsForResourceOutput) => {
+        (err: any, data: ListTagsForResourceOutput) => {
           if (err) {
             generateAwsErrorLog(serviceName, 'cloudwatch:listTagsForResource', err)
             return resolve({})
@@ -105,7 +105,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{[property: string]: RawAwsCloudwatch[]}> =>
   new Promise(async resolve => {
     const cloudwatchData: Array<

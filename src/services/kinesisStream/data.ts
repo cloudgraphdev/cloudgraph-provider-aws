@@ -1,8 +1,7 @@
-import { Config } from 'aws-sdk/lib/config'
-import Kinesis, { Shard, StreamDescription } from 'aws-sdk/clients/kinesis'
+// import { Config } from 'aws-sdk/lib/config'
+import { Kinesis, Shard, StreamDescription } from '@aws-sdk/client-kinesis'
 import CloudGraph from '@cloudgraph/sdk'
 import { groupBy } from 'lodash'
-import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
@@ -28,7 +27,6 @@ const listShards = async (
 
     let shardsData = await kinesis
       .listShards({ StreamName: dataStreamName })
-      .promise()
     fullResources.push(...shardsData.Shards)
     let nextToken = shardsData.NextToken
 
@@ -38,7 +36,6 @@ const listShards = async (
           StreamName: dataStreamName,
           NextToken: nextToken,
         })
-        .promise()
       fullResources.push(...shardsData.Shards)
       nextToken = shardsData.NextToken
     }
@@ -55,11 +52,10 @@ const listStreamsData = async (
 ): Promise<StreamDescription[]> => {
   try {
     const fullResources = []
-    const dataStreamNames = await kinesis.listStreams().promise()
+    const dataStreamNames = await kinesis.listStreams({})
     for (const dataStreamName of dataStreamNames.StreamNames) {
       const dataStreams = await kinesis
         .describeStream({ StreamName: dataStreamName })
-        .promise()
       const shards = await listShards(kinesis, dataStreamName)
       dataStreams.StreamDescription.Shards = shards
 
@@ -79,7 +75,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{
   [region: string]: RawAwsKinesisStream[]
 }> => {

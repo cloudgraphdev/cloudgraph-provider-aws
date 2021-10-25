@@ -1,12 +1,12 @@
-import { Config } from 'aws-sdk'
-import { AWSError } from 'aws-sdk/lib/error'
-import ECR, {
+// import { Config } from 'aws-sdk'
+// import { AWSError } from 'aws-sdk/lib/error'
+import {
+  ECR,
   DescribeRepositoriesRequest,
   DescribeRepositoriesResponse,
   ListTagsForResourceResponse,
   Repository,
-  RepositoryList,
-} from 'aws-sdk/clients/ecr'
+} from '@aws-sdk/client-ecr'
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
@@ -27,9 +27,9 @@ export interface RawAwsEcr extends Repository {
   Tags?: TagMap
 }
 
-const listReposForRegion = async ({ ecr, resolveRegion }): Promise<RepositoryList> =>
-  new Promise<RepositoryList>(resolve => {
-    const repositoryList: RepositoryList = []
+const listReposForRegion = async ({ ecr, resolveRegion }): Promise<Repository[]> =>
+  new Promise<Repository[]>(resolve => {
+    const repositoryList: Repository[] = []
     const descRepositoryOpts: DescribeRepositoriesRequest = {}
     const listAllRepos = (token?: string): void => {
       descRepositoryOpts.maxResults = MAX_ITEMS
@@ -39,7 +39,7 @@ const listReposForRegion = async ({ ecr, resolveRegion }): Promise<RepositoryLis
       try {
         ecr.describeRepositories(
           descRepositoryOpts,
-          (err: AWSError, data: DescribeRepositoriesResponse) => {
+          (err: any, data: DescribeRepositoriesResponse) => {
             const { nextToken, repositories } = data || {}
             if (err) {
               generateAwsErrorLog(serviceName, 'ecr:describeRepositories', err)
@@ -74,7 +74,7 @@ const getResourceTags = async (ecr: ECR, arn: string): Promise<TagMap> =>
     try {
       ecr.listTagsForResource(
         { resourceArn: arn },
-        (err: AWSError, data: ListTagsForResourceResponse) => {
+        (err: any, data: ListTagsForResourceResponse) => {
           if (err) {
             generateAwsErrorLog(serviceName, 'ecr:listTagsForResource', err)
             return resolve({})
@@ -93,7 +93,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{
   [region: string]: RawAwsEcr[]
 }> =>

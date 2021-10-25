@@ -1,4 +1,4 @@
-import { Listener } from 'aws-sdk/clients/elbv2'
+import { Listener } from '@aws-sdk/client-elastic-load-balancing-v2'
 import startCase from 'lodash/startCase'
 
 import t from '../../properties/translations'

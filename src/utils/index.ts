@@ -1,10 +1,8 @@
-import AWS, { AWSError, ConfigurationOptions } from 'aws-sdk'
-import { APIVersions } from 'aws-sdk/lib/config'
-import CloudGraph, { Opts } from '@cloudgraph/sdk'
-import STS from 'aws-sdk/clients/sts'
+// import AWS, { AWSError, ConfigurationOptions } from 'aws-sdk'
+// import { APIVersions } from 'aws-sdk/lib/config'
+import CloudGraph from '@cloudgraph/sdk'
 import camelCase from 'lodash/camelCase'
 import environment from '../config/environment'
-import { Credentials } from '../types'
 import {
   BASE_CUSTOM_RETRY_DELAY,
   MAX_FAILED_AWS_REQUEST_RETRIES,
@@ -62,41 +60,41 @@ export const intersectStringArrays = (
   return Array.from(intersection)
 }
 
-export async function getAccountId({
-  credentials,
-}: // opts,
-{
-  credentials: Credentials
-  opts?: Opts
-}): Promise<any> {
-  try {
-    return new Promise((resolve, reject) =>
-      new STS({ credentials }).getCallerIdentity((err, data) => {
-        if (err) {
-          return reject(err)
-        }
-        return resolve({ accountId: data.Account })
-      })
-    )
-  } catch (e) {
-    return { accountId: '' }
-  }
-}
+// export async function getAccountId({
+//   credentials,
+// }: // opts,
+// {
+//   credentials: Credentials
+//   opts?: Opts
+// }): Promise<any> {
+//   try {
+//     return new Promise((resolve, reject) =>
+//       new STS({ credentials }).getCallerIdentity((err, data) => {
+//         if (err) {
+//           return reject(err)
+//         }
+//         return resolve({ accountId: data.Account })
+//       })
+//     )
+//   } catch (e) {
+//     return { accountId: '' }
+//   }
+// }
 
-export function getCredentials(opts: Opts): Promise<Credentials> {
-  return new Promise(resolve => {
-    AWS.config.getCredentials((err: any) => {
-      if (err) {
-        opts.logger.log(err)
-        throw new Error(
-          'Unable to find Credentials for AWS, They could be stored in env variables or .aws/credentials file'
-        )
-      } else {
-        resolve(AWS.config.credentials)
-      }
-    })
-  })
-}
+// export function getCredentials(opts: Opts): Promise<Credentials> {
+//   return new Promise(resolve => {
+//     AWS.config.getCredentials((err: any) => {
+//       if (err) {
+//         opts.logger.log(err)
+//         throw new Error(
+//           'Unable to find Credentials for AWS, They could be stored in env variables or .aws/credentials file'
+//         )
+//       } else {
+//         resolve(AWS.config.credentials)
+//       }
+//     })
+//   })
+// }
 
 /* Method to inject to set aws global config settings,
    logger utility or to use a particular aws config profile */
@@ -106,7 +104,7 @@ export const setAwsRetryOptions = (opts: {
   maxRetries?: number
   configObj?: any
   profile?: string
-}): void | (ConfigurationOptions & APIVersions) => {
+}): void | any => {
   const {
     global = false,
     maxRetries = MAX_FAILED_AWS_REQUEST_RETRIES,
@@ -116,7 +114,7 @@ export const setAwsRetryOptions = (opts: {
     ...rest
   } = opts
   // logger.log = logger.debug
-  const config: ConfigurationOptions & APIVersions = {
+  const config: any = {
     maxRetries,
     // logger,
     retryDelayOptions: {
@@ -127,7 +125,6 @@ export const setAwsRetryOptions = (opts: {
   if (profile && configObj) {
     configObj.profile = profile
   }
-  global && AWS.config.update(config)
   return config
 }
 
@@ -146,7 +143,7 @@ export function initTestConfig(): void {
 export function generateAwsErrorLog(
   service: string,
   functionName: string,
-  err?: AWSError
+  err?: any
 ): void {
   if (err.statusCode === 400) {
     err.retryable = true

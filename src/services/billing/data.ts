@@ -1,9 +1,10 @@
 import CloudGraph from '@cloudgraph/sdk'
-import { AWSError, Request, Config } from 'aws-sdk'
-import CE, {
-  GetCostAndUsageResponse,
-  GetDimensionValuesResponse,
-} from 'aws-sdk/clients/costexplorer'
+// import { AWSError, Request, Config } from 'aws-sdk'
+import {
+  CostExplorer,
+  GetCostAndUsageCommandInput,
+  Group,
+} from '@aws-sdk/client-cost-explorer'
 import isEmpty from 'lodash/isEmpty'
 import head from 'lodash/head'
 import get from 'lodash/get'
@@ -55,9 +56,9 @@ const listAvailabeServices = ({
   costExplorer,
   resolveServices,
 }: {
-  costExplorer: CE
+  costExplorer: CostExplorer
   resolveServices: (value: string[] | PromiseLike<string[]>) => void
-}): Request<GetDimensionValuesResponse, AWSError> => {
+}): void => {
   return costExplorer.getDimensionValues(
     {
       TimePeriod: { Start: getDaysAgo(30), End: getDaysAgo(0) },
@@ -94,7 +95,7 @@ const listAvailabeServices = ({
 export default async ({
   config,
 }: {
-  config: Config
+  config: any
 }): Promise<{ [key: string]: RawAwsBilling[] }> => {
   const startDate = new Date()
   const region = regionMap.usEast1
@@ -117,13 +118,13 @@ export default async ({
       groupBy = true,
       timePeriod: TimePeriod,
     }: {
-      costExplorer: CE
+      costExplorer: CostExplorer
       resolve: (value: void | PromiseLike<void>) => void
       type: string
       groupBy?: boolean
       timePeriod: { Start: string; End: string }
-    }): Request<GetCostAndUsageResponse, AWSError> => {
-      const params: CE.GetCostAndUsageRequest = {
+    }): void => {
+      const params: GetCostAndUsageCommandInput = {
         Metrics: ['BlendedCost'],
         TimePeriod,
         Granularity: 'MONTHLY',
@@ -161,8 +162,8 @@ export default async ({
            * { "Keys": [ "AWS CloudTrail"], "Metrics": { "BlendedCost": { "Amount": "0.1270885", "Unit": "USD" } } }
            */
 
-          const services: CE.Groups = head(resultsByTime).Groups || []
-          services.map(({ Keys, Metrics }: CE.Group) => {
+          const services: Group[] = head(resultsByTime).Groups || []
+          services.map(({ Keys, Metrics }: Group) => {
             const { Amount = '', Unit = '' } = get(Metrics, 'BlendedCost', {
               Amount: '',
               Unit: '',
@@ -215,11 +216,11 @@ export default async ({
       services,
       timePeriod: TimePeriod,
     }: {
-      costExplorer: CE
+      costExplorer: CostExplorer
       resolve: (value: void | PromiseLike<void>) => void
       services: string[]
       timePeriod: { Start: string; End: string }
-    }): Request<CE.GetCostAndUsageWithResourcesResponse, AWSError> => {
+    }): void => {
       logger.debug(lt.queryingIndividualFinOpsDataForRegion(region))
 
       /**
@@ -267,8 +268,8 @@ export default async ({
             return resolve()
           }
 
-          const resources: CE.Groups = head(resultsByTime).Groups || []
-          resources.map(({ Keys, Metrics }: CE.Group) => {
+          const resources: Group[] = head(resultsByTime).Groups || []
+          resources.map(({ Keys, Metrics }: Group) => {
             const { Amount, Unit } = get(Metrics, 'BlendedCost', {
               Amount: '',
               Unit: '',
@@ -291,7 +292,7 @@ export default async ({
      * Note that this API is only availavbe in the us-east-1
      */
 
-    const costExplorer = new CE({ ...config, region, endpoint })
+    const costExplorer = new CostExplorer({ ...config, region, endpoint })
     const today = new Date().toLocaleDateString('en-ca') // We use en-ca to ensure the correct date structure for CE
     const startOfMonth = getFirstDayOfMonth()
 

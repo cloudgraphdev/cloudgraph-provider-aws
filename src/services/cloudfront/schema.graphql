@@ -19,8 +19,8 @@ type awsCloudfront @key(fields: "id") {
   orderedCacheBehavior: [awsCloudfrontCacheBehavior]
   viewerCertificate: awsCloudfrontViewerCertificate
   origin: [awsCloudfrontOriginData]
-  elb: [awsElb] @hasInverse(field: cloudfrontDistribution)
-  s3: [awsS3]@hasInverse(field: cloudfrontDistribution)
+  # elb: [awsElb] @hasInverse(field: cloudfrontDistribution)
+  # s3: [awsS3]@hasInverse(field: cloudfrontDistribution)
   tags: [Tag]
 }
 

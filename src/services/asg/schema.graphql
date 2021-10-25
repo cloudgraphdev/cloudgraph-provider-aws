@@ -132,8 +132,8 @@ type awsAsg @key(fields: "arn") {
   context: String @search(by: [hash, regexp])
   tags: [Tag]
   launchConfiguration: awsLaunchConfiguration
-  ec2Instance: [awsEc2] @hasInverse(field: asg)
-  securityGroups: [awsSecurityGroup] @hasInverse(field: asg)
-  ebs: [awsEbs] @hasInverse(field: asg)
-  subnet: [awsSubnet] @hasInverse(field: asg)
+  # ec2Instance: [awsEc2] @hasInverse(field: asg)
+  # securityGroups: [awsSecurityGroup] @hasInverse(field: asg)
+  # ebs: [awsEbs] @hasInverse(field: asg)
+  # subnet: [awsSubnet] @hasInverse(field: asg)
 }

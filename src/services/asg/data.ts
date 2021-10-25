@@ -1,8 +1,10 @@
-import ASG, {
+import {
+  AutoScaling,
+  AutoScalingClient,
   AutoScalingGroup,
   LaunchConfiguration,
-} from 'aws-sdk/clients/autoscaling'
-import { Config } from 'aws-sdk/lib/config'
+} from '@aws-sdk/client-auto-scaling'
+// import { Config } from 'aws-sdk/lib/config'
 import { groupBy, isEmpty } from 'lodash'
 
 import CloudGraph from '@cloudgraph/sdk'
@@ -28,18 +30,17 @@ export interface RawAwsAsg extends Omit<AutoScalingGroup, 'Tags'> {
   LaunchConfiguration?: LaunchConfiguration
 }
 
-const listAsgData = async (asg: ASG): Promise<AutoScalingGroup[]> => {
+const listAsgData = async (asg: AutoScaling): Promise<AutoScalingGroup[]> => {
   try {
     const fullResources: AutoScalingGroup[] = []
 
-    let autoScalingGroups = await asg.describeAutoScalingGroups().promise()
+    let autoScalingGroups = await asg.describeAutoScalingGroups({})
     fullResources.push(...autoScalingGroups.AutoScalingGroups)
     let nextToken = autoScalingGroups.NextToken
 
     while (nextToken) {
       autoScalingGroups = await asg
         .describeAutoScalingGroups({ NextToken: nextToken })
-        .promise()
       fullResources.push(...autoScalingGroups.AutoScalingGroups)
       nextToken = autoScalingGroups.NextToken
     }
@@ -52,21 +53,19 @@ const listAsgData = async (asg: ASG): Promise<AutoScalingGroup[]> => {
 }
 
 const listLaunchConfigData = async (
-  asg: ASG
+  asg: AutoScaling
 ): Promise<LaunchConfiguration[]> => {
   try {
     const fullResources: LaunchConfiguration[] = []
 
     let launchConfigurations = await asg
-      .describeLaunchConfigurations()
-      .promise()
+      .describeLaunchConfigurations({})
     fullResources.push(...launchConfigurations.LaunchConfigurations)
     let nextToken = launchConfigurations.NextToken
 
     while (nextToken) {
       launchConfigurations = await asg
         .describeLaunchConfigurations({ NextToken: nextToken })
-        .promise()
       fullResources.push(...launchConfigurations.LaunchConfigurations)
       nextToken = launchConfigurations.NextToken
     }
@@ -85,7 +84,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{
   [region: string]: RawAwsAsg[]
 }> => {
@@ -93,7 +92,7 @@ export default async ({
   let launchConfigData
 
   for (const region of regions.split(',')) {
-    const asg = new ASG({ ...config, region, endpoint, ...customRetrySettings })
+    const asg = new AutoScaling({ ...config, region, endpoint, ...customRetrySettings })
 
     /**
      * Step 1) Get all the ASG data for each region

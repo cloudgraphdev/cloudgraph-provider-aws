@@ -2,15 +2,12 @@ import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import EC2, {
+import {
+  EC2,
   DescribeRouteTablesRequest,
   DescribeRouteTablesResult,
   RouteTable,
-} from 'aws-sdk/clients/ec2'
-import { Request } from 'aws-sdk/lib/request'
-import { AWSError } from 'aws-sdk/lib/error'
-import { Config } from 'aws-sdk/lib/config'
-
+} from '@aws-sdk/client-ec2'
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
@@ -33,7 +30,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{
   [region: string]: RawAwsRouteTable[]
 }> =>
@@ -51,7 +48,7 @@ export default async ({
       region: string
       token?: string
       resolveRegion: () => void
-    }): Promise<Request<EC2.Types.DescribeRouteTablesResult, AWSError>> => {
+    }): Promise<void> => {
       let args: DescribeRouteTablesRequest = {}
 
       if (NextToken) {
@@ -60,7 +57,7 @@ export default async ({
 
       return ec2.describeRouteTables(
         args,
-        (err: AWSError, data: DescribeRouteTablesResult) => {
+        (err: any, data: DescribeRouteTablesResult) => {
           if (err) {
             generateAwsErrorLog(serviceName, 'ec2:describeRouteTables', err)
           }

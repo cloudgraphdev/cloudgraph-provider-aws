@@ -16,11 +16,11 @@ type awsLambda @key(fields: "id") {
   version: String @search(by: [hash, regexp])
   environmentVariables: [awsLambdaEnvironmentVariable]
   tags: [Tag]
-  kms: [awsKms] @hasInverse(field: lambda)
-  securityGroups: [awsSecurityGroup] @hasInverse(field: lambda)
-  subnet: [awsSubnet] @hasInverse(field: lambda)
-  vpc: [awsVpc] @hasInverse(field: lambda)
-  cognitoUserPool: [awsCognitoUserPool] @hasInverse(field: lambda)
+  # kms: [awsKms] @hasInverse(field: lambda)
+  # securityGroups: [awsSecurityGroup] @hasInverse(field: lambda)
+  # subnet: [awsSubnet] @hasInverse(field: lambda)
+  # vpc: [awsVpc] @hasInverse(field: lambda)
+  # cognitoUserPool: [awsCognitoUserPool] @hasInverse(field: lambda)
 }
 
 type awsLambdaEnvironmentVariable

@@ -1,5 +1,5 @@
 import { ServiceConnection } from '@cloudgraph/sdk'
-import { SecurityGroup } from 'aws-sdk/clients/ec2'
+import { SecurityGroup } from '@aws-sdk/client-ec2'
 
 import services from '../../enums/services'
 import { RawAwsSubnet } from '../subnet/data'

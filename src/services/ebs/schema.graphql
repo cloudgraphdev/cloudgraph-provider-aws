@@ -14,8 +14,8 @@ type awsEbs @key(fields: "arn") {
   availabilityZone: String @search(by: [hash, regexp])
   multiAttachEnabled: Boolean @search
   tags: [Tag]
-  ec2Instance: [awsEc2] @hasInverse(field: ebs)
-  asg: [awsAsg] @hasInverse(field: ebs)
+  # ec2Instance: [awsEc2] @hasInverse(field: ebs)
+  # asg: [awsAsg] @hasInverse(field: ebs)
 }
 
 type awsEbsAttachment

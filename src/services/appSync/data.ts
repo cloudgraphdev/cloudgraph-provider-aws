@@ -1,6 +1,5 @@
 import CloudGraph from '@cloudgraph/sdk'
-import { AppSync } from 'aws-sdk'
-import { Config } from 'aws-sdk/lib/config'
+import { AppSync, Type, Resolver, GraphqlApi, ApiKey, DataSource, FunctionConfiguration } from '@aws-sdk/client-appsync'
 
 import { groupBy } from 'lodash'
 import { TagMap } from '../../types'
@@ -12,17 +11,17 @@ const { logger } = CloudGraph
 const serviceName = 'AppSync'
 const endpoint = initTestEndpoint(serviceName)
 
-export interface RawAwsFunction extends AppSync.FunctionConfiguration {
-  resolvers: AppSync.Resolver[]
+export interface RawAwsFunction extends FunctionConfiguration {
+  resolvers: Resolver[]
 }
 
-export interface RawAwsType extends AppSync.Type {
-  resolvers: AppSync.Resolver[]
+export interface RawAwsType extends Type {
+  resolvers: Resolver[]
 }
 
-export interface RawAwsAppSync extends Omit<AppSync.GraphqlApi, 'tags'> {
-  awsApiKeys: AppSync.ApiKeys
-  awsDataSources: AppSync.DataSources
+export interface RawAwsAppSync extends Omit<GraphqlApi, 'tags'> {
+  awsApiKeys: ApiKey[]
+  awsDataSources: DataSource[]
   awsFunctions: RawAwsFunction[]
   awsTypes: RawAwsType[]
   region: string
@@ -31,16 +30,16 @@ export interface RawAwsAppSync extends Omit<AppSync.GraphqlApi, 'tags'> {
 
 const listGraphqlApiData = async (
   appSync: AppSync
-): Promise<AppSync.GraphqlApis> => {
+): Promise<GraphqlApi[]> => {
   try {
-    const fullResources: AppSync.GraphqlApis = []
+    const fullResources: GraphqlApi[] = []
 
-    let graphqlApis = await appSync.listGraphqlApis().promise()
+    let graphqlApis = await appSync.listGraphqlApis({})
     fullResources.push(...graphqlApis.graphqlApis)
     let { nextToken } = graphqlApis
 
     while (nextToken) {
-      graphqlApis = await appSync.listGraphqlApis({ nextToken }).promise()
+      graphqlApis = await appSync.listGraphqlApis({ nextToken })
       fullResources.push(...graphqlApis.graphqlApis)
       nextToken = graphqlApis.nextToken
     }
@@ -57,16 +56,16 @@ const listGraphqlApiData = async (
 const listApiKeysData = async (
   appSync: AppSync,
   apiId: string
-): Promise<AppSync.ApiKeys> => {
+): Promise<ApiKey[]> => {
   try {
-    const fullResources: AppSync.ApiKeys = []
+    const fullResources: ApiKey[] = []
 
-    let apiKeys = await appSync.listApiKeys({ apiId }).promise()
+    let apiKeys = await appSync.listApiKeys({ apiId })
     fullResources.push(...apiKeys.apiKeys)
     let { nextToken } = apiKeys
 
     while (nextToken) {
-      apiKeys = await appSync.listApiKeys({ apiId, nextToken }).promise()
+      apiKeys = await appSync.listApiKeys({ apiId, nextToken })
       fullResources.push(...apiKeys.apiKeys)
       nextToken = apiKeys.nextToken
     }
@@ -81,18 +80,17 @@ const listApiKeysData = async (
 const listDataSourcesData = async (
   appSync: AppSync,
   apiId: string
-): Promise<AppSync.DataSources> => {
+): Promise<DataSource[]> => {
   try {
-    const fullResources: AppSync.DataSources = []
+    const fullResources: DataSource[] = []
 
-    let dataSources = await appSync.listDataSources({ apiId }).promise()
+    let dataSources = await appSync.listDataSources({ apiId })
     fullResources.push(...dataSources.dataSources)
     let { nextToken } = dataSources
 
     while (nextToken) {
       dataSources = await appSync
         .listDataSources({ apiId, nextToken })
-        .promise()
       fullResources.push(...dataSources.dataSources)
       nextToken = dataSources.nextToken
     }
@@ -107,16 +105,16 @@ const listDataSourcesData = async (
 const listFunctionsData = async (
   appSync: AppSync,
   apiId: string
-): Promise<AppSync.Functions> => {
+): Promise<FunctionConfiguration[]> => {
   try {
-    const fullResources: AppSync.Functions = []
+    const fullResources: FunctionConfiguration[] = []
 
-    let functions = await appSync.listFunctions({ apiId }).promise()
+    let functions = await appSync.listFunctions({ apiId })
     fullResources.push(...functions.functions)
     let { nextToken } = functions
 
     while (nextToken) {
-      functions = await appSync.listFunctions({ apiId, nextToken }).promise()
+      functions = await appSync.listFunctions({ apiId, nextToken })
       fullResources.push(...functions.functions)
       nextToken = functions.nextToken
     }
@@ -132,20 +130,18 @@ const listResolversByFunction = async (
   appSync: AppSync,
   apiId: string,
   functionId: string
-): Promise<AppSync.Resolvers> => {
+): Promise<Resolver[]> => {
   try {
-    const fullResources: AppSync.Resolvers = []
+    const fullResources: Resolver[] = []
 
     let resolvers = await appSync
       .listResolversByFunction({ apiId, functionId })
-      .promise()
     fullResources.push(...resolvers.resolvers)
     let { nextToken } = resolvers
 
     while (nextToken) {
       resolvers = await appSync
         .listResolversByFunction({ apiId, functionId })
-        .promise()
       fullResources.push(...resolvers.resolvers)
       nextToken = resolvers.nextToken
     }
@@ -160,16 +156,16 @@ const listResolversByFunction = async (
 const listTypesData = async (
   appSync: AppSync,
   apiId: string
-): Promise<AppSync.TypeList> => {
+): Promise<Type[]> => {
   try {
-    const fullResources: AppSync.TypeList = []
+    const fullResources: Type[] = []
 
-    let types = await appSync.listTypes({ apiId, format: 'JSON' }).promise()
+    let types = await appSync.listTypes({ apiId, format: 'JSON' })
     fullResources.push(...types.types)
     let { nextToken } = types
 
     while (nextToken) {
-      types = await appSync.listApiKeys({ apiId, nextToken }).promise()
+      types = await appSync.listApiKeys({ apiId, nextToken })
       fullResources.push(...types.types)
       nextToken = types.nextToken
     }
@@ -185,16 +181,16 @@ const listTypesResolverData = async (
   appSync: AppSync,
   apiId: string,
   typeName: string
-): Promise<AppSync.Resolvers> => {
+): Promise<Resolver[]> => {
   try {
-    const fullResources: AppSync.Resolvers = []
+    const fullResources: Resolver[] = []
 
-    let resolvers = await appSync.listResolvers({ apiId, typeName }).promise()
+    let resolvers = await appSync.listResolvers({ apiId, typeName })
     fullResources.push(...resolvers.resolvers)
     let { nextToken } = resolvers
 
     while (nextToken) {
-      resolvers = await appSync.listResolvers({ apiId, typeName }).promise()
+      resolvers = await appSync.listResolvers({ apiId, typeName })
       fullResources.push(...resolvers.resolvers)
       nextToken = resolvers.nextToken
     }
@@ -211,7 +207,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{
   [region: string]: RawAwsAppSync[]
 }> => {

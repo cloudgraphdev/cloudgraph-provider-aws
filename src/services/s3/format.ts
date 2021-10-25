@@ -3,10 +3,9 @@ import isEmpty from 'lodash/isEmpty'
 
 import {
   GetBucketVersioningOutput,
-  Policy,
   PolicyStatus,
   PublicAccessBlockConfiguration,
-} from 'aws-sdk/clients/s3'
+} from '@aws-sdk/client-s3'
 
 import { AwsS3 } from '../../types/generated'
 import t from '../../properties/translations'
@@ -78,7 +77,7 @@ export default ({
     }`
   }
 
-  const bucketPolicies: { id: string; policy: Policy }[] = []
+  const bucketPolicies: { id: string; policy: string }[] = []
 
   if (!isEmpty(policy)) {
     bucketPolicies.push({ id: cuid(), policy })

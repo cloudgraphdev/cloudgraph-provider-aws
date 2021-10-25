@@ -12,13 +12,13 @@ type awsSecurityGroup @key(fields: "id") {
   outboundRules: [awsSgOutboundRule]
   inboundRuleCount: Int @search
   outboundRuleCount: Int @search
-  alb: [awsAlb] @hasInverse(field: securityGroups)
-  lambda: [awsLambda] @hasInverse(field: securityGroups)
-  elb: [awsElb] @hasInverse(field: securityGroups)
-  ec2Instance: [awsEc2] @hasInverse(field: securityGroups)
-  asg: [awsAsg] @hasInverse(field: securityGroups)
-  rdsCluster: [awsRdsCluster] @hasInverse(field: securityGroups)
-  rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: securityGroups)
+  # alb: [awsAlb] @hasInverse(field: securityGroups)
+  # lambda: [awsLambda] @hasInverse(field: securityGroups)
+  # elb: [awsElb] @hasInverse(field: securityGroups)
+  # ec2Instance: [awsEc2] @hasInverse(field: securityGroups)
+  # asg: [awsAsg] @hasInverse(field: securityGroups)
+  # rdsCluster: [awsRdsCluster] @hasInverse(field: securityGroups)
+  # rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: securityGroups)
 }
 
 type awsSgOutboundRule

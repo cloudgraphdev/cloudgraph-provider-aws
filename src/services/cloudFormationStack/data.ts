@@ -1,16 +1,17 @@
-import { AWSError } from 'aws-sdk'
-import CloudFormation, {
+// import { AWSError } from 'aws-sdk'
+import {
+  CloudFormation,
   DescribeStackResourceDriftsInput,
   DescribeStackResourceDriftsOutput,
   DescribeStacksInput,
   DescribeStacksOutput,
   Stack,
   StackResourceDrift,
-} from 'aws-sdk/clients/cloudformation'
-import { Config } from 'aws-sdk/lib/config'
+} from '@aws-sdk/client-cloudformation'
+// import { Config } from 'aws-sdk/lib/config'
 import { groupBy, isEmpty } from 'lodash'
 
-import { Credentials, TagMap } from '../../types'
+import { TagMap } from '../../types'
 import {
   generateAwsErrorLog,
   initTestEndpoint,
@@ -44,7 +45,7 @@ const getAllStacks = async (cf: CloudFormation): Promise<Stack[]> =>
         opts.NextToken = token
       }
 
-      cf.describeStacks(opts, (err: AWSError, data: DescribeStacksOutput) => {
+      cf.describeStacks(opts, (err: any, data: DescribeStacksOutput) => {
         const { Stacks = [], NextToken } = data || {}
 
         if (err) {
@@ -81,7 +82,7 @@ const getStackResourceDrifts = async (
 
       cf.describeStackResourceDrifts(
         opts,
-        (err: AWSError, data: DescribeStackResourceDriftsOutput) => {
+        (err: any, data: DescribeStackResourceDriftsOutput) => {
           const { StackResourceDrifts = [], NextToken } = data || {}
 
           if (err) {
@@ -110,7 +111,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{
   [region: string]: RawAwsCloudFormationStack[]
 }> => {

@@ -2,28 +2,26 @@ import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import { AWSError } from 'aws-sdk/lib/error'
-
-import IAM, {
+import {
+  IAM,
   GetPolicyVersionResponse,
   ListPoliciesResponse,
   ListPolicyTagsResponse,
   Policy,
-} from 'aws-sdk/clients/iam'
-import { Config } from 'aws-sdk/lib/config'
+} from '@aws-sdk/client-iam'
 
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import {
   initTestEndpoint,
   generateAwsErrorLog,
-  setAwsRetryOptions,
+  // setAwsRetryOptions,
 } from '../../utils'
 import { globalRegionName } from '../../enums/regions'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 
 import {
-  IAM_CUSTOM_DELAY,
+  // IAM_CUSTOM_DELAY,
   MAX_FAILED_AWS_REQUEST_RETRIES,
   POLICY_SCOPE,
 } from '../../config/constants'
@@ -33,10 +31,10 @@ const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'IAM Policy'
 const endpoint = initTestEndpoint(serviceName)
-const customRetrySettings = setAwsRetryOptions({
-  maxRetries: MAX_FAILED_AWS_REQUEST_RETRIES,
-  baseDelay: IAM_CUSTOM_DELAY,
-})
+// const customRetrySettings = setAwsRetryOptions({
+//   maxRetries: MAX_FAILED_AWS_REQUEST_RETRIES,
+//   baseDelay: IAM_CUSTOM_DELAY,
+// })
 
 export interface RawAwsIamPolicy extends Omit<Policy, 'Tags'> {
   Document: string
@@ -51,8 +49,9 @@ const tagsByPolicyArn = async (
   new Promise(resolveUserPolicies => {
     iam.listPolicyTags(
       { PolicyArn: Arn },
-      (err: AWSError, data: ListPolicyTagsResponse) => {
+      (err: any, data: ListPolicyTagsResponse) => {
         if (err) {
+          console.log(err)
           generateAwsErrorLog(serviceName, 'iam:listPolicyTags', err)
         }
 
@@ -76,7 +75,7 @@ const policyVersionByPolicyArn = async (
   new Promise(resolveUserPolicies => {
     iam.getPolicyVersion(
       { PolicyArn: Arn, VersionId: DefaultVersionId },
-      (err: AWSError, data: GetPolicyVersionResponse) => {
+      (err: any, data: GetPolicyVersionResponse) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'iam:getPolicyVersion', err)
         }
@@ -110,7 +109,7 @@ export const listIamPolicies = async ({
 
     iam.listPolicies(
       { Marker: marker, Scope: POLICY_SCOPE },
-      async (err: AWSError, data: ListPoliciesResponse) => {
+      async (err: any, data: ListPoliciesResponse) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'iam:listPolicies', err)
         }
@@ -168,7 +167,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
   rawData: any
 }): Promise<{
   [region: string]: RawAwsIamPolicy[]
@@ -181,7 +180,7 @@ export default async ({
       ...config,
       region: globalRegionName,
       endpoint,
-      ...customRetrySettings,
+      maxAttempts: 15,
     })
 
     logger.debug(lt.lookingForIamPolicies)

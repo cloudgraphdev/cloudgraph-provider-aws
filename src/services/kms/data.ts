@@ -3,9 +3,9 @@ import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import { AWSError, Request } from 'aws-sdk'
-import { Config } from 'aws-sdk/lib/config'
-import KMS, { KeyListEntry, KeyMetadata, ListKeysRequest, ListKeysResponse } from 'aws-sdk/clients/kms'
+// import { AWSError, Request } from 'aws-sdk'
+// import { Config } from 'aws-sdk/lib/config'
+import { KMS, KeyListEntry, KeyMetadata, ListKeysRequest } from '@aws-sdk/client-kms'
 
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
@@ -33,7 +33,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{ [property: string]: AwsKms[] }> =>
   new Promise(async resolve => {
     const kmsIds = []
@@ -58,7 +58,7 @@ export default async ({
       region: string
       marker?: string
       resolveRegion: () => void
-    }): Promise<Request<ListKeysResponse, AWSError>> => {
+    }): Promise<void> => {
       let args: ListKeysRequest = {}
       if (Marker) {
         args = { ...args, Marker }

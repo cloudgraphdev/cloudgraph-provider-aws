@@ -1,5 +1,5 @@
-import CloudTrail, { ResourceTag, Trail, TrailInfo } from 'aws-sdk/clients/cloudtrail'
-import { Config } from 'aws-sdk/lib/config'
+import { CloudTrail, ResourceTag, Trail, TrailInfo } from '@aws-sdk/client-cloudtrail'
+// import { Config } from 'aws-sdk/lib/config'
 import groupBy from 'lodash/groupBy'
 
 import { TagMap } from '../../types'
@@ -24,13 +24,13 @@ const getTrailArnData = async (
   try {
     const trailList: TrailInfo[] = []
 
-    let trails = await cloudTrail.listTrails().promise()
+    let trails = await cloudTrail.listTrails({})
     trailList.push(...trails.Trails)
     let nextToken = trails.NextToken
     while (nextToken) {
       trails = await cloudTrail.listTrails({
         NextToken: nextToken,
-      }).promise()
+      })
       trailList.push(...trails.Trails)
       nextToken = trails.NextToken
     }
@@ -51,7 +51,7 @@ const listTrailData = async (
     const fullResources = await cloudTrail.describeTrails({
       trailNameList: trailArnList,
       includeShadowTrails: true,
-    }).promise()
+    })
     return fullResources.trailList
   } catch (err) {
     generateAwsErrorLog(serviceName, 'cloudTrail:listTrailData', err)
@@ -68,14 +68,14 @@ const listTrailTagData = async (
     try {
       let resourceTags = await cloudTrail.listTags(
         {ResourceIdList: [cloudTrailArn]}
-      ).promise()
+      )
       resourceTagList.push(...resourceTags.ResourceTagList)
       let nextToken = resourceTags.NextToken
       while (nextToken) {
         resourceTags = await cloudTrail.listTags({
           ResourceIdList: [cloudTrailArn],
           NextToken: nextToken,
-        }).promise()
+        })
         resourceTagList.push(...resourceTags.ResourceTagList)
         nextToken = resourceTags.NextToken
       }
@@ -91,7 +91,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{
   [region: string]: RawAwsCloudTrail[]
 }> => {
@@ -118,7 +118,7 @@ export default async ({
         region,
       }))
     )
-    cloudTrail.listPublicKeys()
+    cloudTrail.listPublicKeys({})
   }
 
   return groupBy(cloudTrailData, 'region')

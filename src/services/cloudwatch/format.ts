@@ -1,4 +1,4 @@
-import { MetricAlarm } from 'aws-sdk/clients/cloudwatch'
+import { MetricAlarm } from '@aws-sdk/client-cloudwatch'
 import cuid from 'cuid'
 import t from '../../properties/translations'
 import { TagMap } from '../../types'

@@ -1,16 +1,16 @@
 import CloudGraph from '@cloudgraph/sdk'
-import APIGW, {
+import {
+  APIGateway,
   RestApis,
-  ListOfRestApi,
+  RestApi,
   GetRestApisRequest,
   Stage,
   Stages,
-  ListOfStage,
   GetStagesRequest,
   Tags,
-} from 'aws-sdk/clients/apigateway'
-import { AWSError } from 'aws-sdk/lib/error'
-import { Config } from 'aws-sdk/lib/config'
+} from '@aws-sdk/client-api-gateway'
+// import { AWSError } from 'aws-sdk/lib/error'
+// import { Config } from 'aws-sdk/lib/config'
 import isEmpty from 'lodash/isEmpty'
 import groupBy from 'lodash/groupBy'
 import {
@@ -38,8 +38,8 @@ export interface AwsApiGatewayStage extends Omit<Stage, 'tags'> {
 }
 
 const getRestApisForRegion = async apiGw =>
-  new Promise<ListOfRestApi>(resolve => {
-    const restApiList: ListOfRestApi = []
+  new Promise<RestApi[]>(resolve => {
+    const restApiList: RestApi[] = []
     const getRestApisOpts: GetRestApisRequest = {}
     const listAllRestApis = (token?: string) => {
       getRestApisOpts.limit = MAX_REST_API
@@ -47,7 +47,7 @@ const getRestApisForRegion = async apiGw =>
         getRestApisOpts.position = token
       }
       try {
-        apiGw.getRestApis(getRestApisOpts, (err: AWSError, data: RestApis) => {
+        apiGw.getRestApis(getRestApisOpts, (err: any, data: RestApis) => {
           const { position, items = [] } = data || {}
           if (err) {
             generateAwsErrorLog(serviceName, 'apiGw:getRestApis', err)
@@ -69,14 +69,14 @@ const getRestApisForRegion = async apiGw =>
   })
 
 const getStages = async ({ apiGw, restApiId }) =>
-  new Promise<ListOfStage>(resolve => {
+  new Promise<Stage[]>(resolve => {
     const getFunctionConcurrencyOpts: GetStagesRequest = {
       restApiId,
     }
     try {
       apiGw.getStages(
         getFunctionConcurrencyOpts,
-        (err: AWSError, data: Stages) => {
+        (err: any, data: Stages) => {
           const { item = [] } = data || {}
           if (err) {
             generateAwsErrorLog(serviceName, 'apiGw:getStages', err)
@@ -92,7 +92,7 @@ const getStages = async ({ apiGw, restApiId }) =>
 const getTags = async ({ apiGw, arn }): Promise<TagMap> =>
   new Promise(resolve => {
     try {
-      apiGw.getTags({ resourceArn: arn }, (err: AWSError, data: Tags) => {
+      apiGw.getTags({ resourceArn: arn }, (err: any, data: Tags) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'apiGw:getTags', err)
           return resolve({})
@@ -110,7 +110,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{ [property: string]: AwsApiGatewayStage[] }> =>
   new Promise(async resolve => {
     const apiGatewayData = []
@@ -120,7 +120,7 @@ export default async ({
     const tagsPromises = []
 
     regions.split(',').map(region => {
-      const apiGw = new APIGW({ ...config, region, endpoint, ...customRetrySettings })
+      const apiGw = new APIGateway({ ...config, region, endpoint, ...customRetrySettings })
       const regionPromise = new Promise<void>(async resolveRegion => {
         const restApiList = await getRestApisForRegion(apiGw)
         if (!isEmpty(restApiList)) {
@@ -139,7 +139,7 @@ export default async ({
     await Promise.all(regionPromises)
 
     apiGatewayData.map(({ restApiId, region }) => {
-      const apiGw = new APIGW({ ...config, region, endpoint, ...customRetrySettings })
+      const apiGw = new APIGateway({ ...config, region, endpoint, ...customRetrySettings })
       const additionalPromise = new Promise<void>(async resolveAdditional => {
         const stages = await getStages({ apiGw, restApiId })
         apiGatewayStages.push(
@@ -161,7 +161,7 @@ export default async ({
     // get all tags for each stage
     apiGatewayStages.map(stage => {
       const { stageName, restApiId, region } = stage
-      const apiGw = new APIGW({ ...config, region, endpoint, ...customRetrySettings })
+      const apiGw = new APIGateway({ ...config, region, endpoint, ...customRetrySettings })
       const tagsPromise = new Promise<void>(async resolveTags => {
         const arn = apiGatewayRestApiArn({
           restApiArn: apiGatewayArn({ region }),

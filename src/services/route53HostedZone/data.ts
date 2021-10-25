@@ -2,16 +2,15 @@ import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import { AWSError } from 'aws-sdk/lib/error'
-import Route53, {
+import {
+  Route53,
   DelegationSet,
   GetHostedZoneResponse,
   HostedZone,
   ListHostedZonesRequest,
   ListHostedZonesResponse,
-  VPCs,
-} from 'aws-sdk/clients/route53'
-import { Config } from 'aws-sdk/lib/config'
+  VPC,
+} from '@aws-sdk/client-route-53'
 
 import awsLoggerText from '../../properties/logger'
 import {
@@ -31,14 +30,14 @@ const customRetrySettings = setAwsRetryOptions({
 
 export interface RawAwsRoute53HostedZone extends HostedZone {
   DelegationSet?: DelegationSet
-  VPCs?: VPCs
+  VPCs?: VPC[]
   region: string
 }
 
 export const listHostedZones = async (
   route53: Route53,
   hostedZonesIds: { Id: string }[]
-) =>
+): Promise<void> =>
   new Promise<void>(async resolveList => {
     const listZonesOpts: ListHostedZonesRequest = {}
     const listZones = (marker?: string) => {
@@ -47,7 +46,7 @@ export const listHostedZones = async (
       }
       route53.listHostedZones(
         listZonesOpts,
-        async (err: AWSError, data: ListHostedZonesResponse) => {
+        async (err: any, data: ListHostedZonesResponse) => {
           if (err) {
             generateAwsErrorLog(serviceName, 'route53:listHostedZones', err)
           }
@@ -98,13 +97,13 @@ export const getHostedZoneData = async (
   route53: Route53,
   hostedZonesIds: { Id: string }[],
   hostedZonesData: RawAwsRoute53HostedZone[]
-) =>
+): Promise<void[]> =>
   Promise.all(
     hostedZonesIds.map(({ Id }) => {
       const zonePromise = new Promise<void>(resolveZone =>
         route53.getHostedZone(
           { Id },
-          (err: AWSError, data: GetHostedZoneResponse) => {
+          (err: any, data: GetHostedZoneResponse) => {
             if (err) {
               generateAwsErrorLog(serviceName, 'route53:getHostedZone', err)
             }
@@ -143,7 +142,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{
   [region: string]: RawAwsRoute53HostedZone[]
 }> =>

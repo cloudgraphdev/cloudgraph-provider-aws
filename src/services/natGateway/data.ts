@@ -1,11 +1,12 @@
-import EC2, {
+import {
+  EC2,
   DescribeNatGatewaysRequest,
   DescribeNatGatewaysResult,
   NatGateway,
-} from 'aws-sdk/clients/ec2'
-import { AWSError } from 'aws-sdk/lib/error'
-import { Request } from 'aws-sdk/lib/request'
-import { Config } from 'aws-sdk/lib/config'
+} from '@aws-sdk/client-ec2'
+// import { AWSError } from 'aws-sdk/lib/error'
+// import { Request } from 'aws-sdk/lib/request'
+// import { Config } from 'aws-sdk/lib/config'
 
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
@@ -34,7 +35,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{ [property: string]: RawAwsNATGateway[] }> =>
   new Promise(async resolve => {
     const natGatewayData: RawAwsNATGateway[] = []
@@ -50,7 +51,7 @@ export default async ({
       region: string
       token?: string
       resolveRegion: () => void
-    }): Promise<Request<DescribeNatGatewaysResult, AWSError>> => {
+    }): Promise<void> => {
       let args: DescribeNatGatewaysRequest = {}
 
       if (NextToken) {
@@ -59,7 +60,7 @@ export default async ({
 
       return ec2.describeNatGateways(
         args,
-        (err: AWSError, data: DescribeNatGatewaysResult) => {
+        (err: any, data: DescribeNatGatewaysResult) => {
           if (err) {
             generateAwsErrorLog(serviceName, 'ec2:describeNatGateways', err)
           }

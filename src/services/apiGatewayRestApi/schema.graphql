@@ -16,7 +16,7 @@ type awsApiGatewayRestApi @key(fields: "arn") {
   minimumCompressionSize: Int @search
   tags: [Tag]
   binaryMediaTypes: [String] @search(by: [hash, regexp])
-  stages: [awsApiGatewayStage] @hasInverse(field: restApi)
+  # stages: [awsApiGatewayStage] @hasInverse(field: restApi)
   resources: [awsApiGatewayResource] @hasInverse(field: restApi)
-  route53Record: [awsRoute53Record] @hasInverse(field: restApi)
+  # route53Record: [awsRoute53Record] @hasInverse(field: restApi)
 }

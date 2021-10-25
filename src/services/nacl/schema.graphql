@@ -8,9 +8,9 @@ type awsNetworkAcl @key(fields: "id") {
   associatedSubnets: [awsNetworkAclAssociatedSubnet]
   region: String! @search(by: [hash, regexp])
   tags: [Tag]
-  vpc: [awsVpc] @hasInverse(field: nacl)
-  # subnet: [awsSubnet] @hasInverse(field: nacl)
   vpcId: String! @search(by: [hash, regexp])
+  # vpc: [awsVpc] @hasInverse(field: nacl)
+  # subnet: [awsSubnet] @hasInverse(field: nacl)
 }
 
 type awsNetworkAclRule

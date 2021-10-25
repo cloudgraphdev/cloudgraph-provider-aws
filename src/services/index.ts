@@ -1,10 +1,13 @@
 import CloudGraph, { Service, Opts, ProviderData } from '@cloudgraph/sdk'
 import { loadFilesSync } from '@graphql-tools/load-files'
 import { mergeTypeDefs } from '@graphql-tools/merge'
-import AWS, { Config } from 'aws-sdk'
+// import { Config } from 'aws-sdk'
 import chalk from 'chalk'
 import { print } from 'graphql'
-import STS from 'aws-sdk/clients/sts'
+import { STS } from '@aws-sdk/client-sts'
+import { defaultProvider } from '@aws-sdk/credential-provider-node'
+import { fromIni } from '@aws-sdk/credential-providers'
+import { loadSharedConfigFiles } from '@aws-sdk/shared-ini-file-loader'
 import { isEmpty, get, merge, unionBy } from 'lodash'
 import path from 'path'
 
@@ -43,6 +46,8 @@ export default class Provider extends CloudGraph.Client {
 
   private credentials: Credentials | undefined
 
+  private sdkConfig: any | undefined
+
   private profile: string | undefined
 
   private role: string | undefined
@@ -78,9 +83,9 @@ export default class Provider extends CloudGraph.Client {
     const result: { [key: string]: any } = {
       ...this.config,
     }
-    let profiles
+    let profiles: string[]
     try {
-      profiles = this.getProfilesFromSharedConfig()
+      profiles = await this.getProfilesFromSharedConfig()
     } catch (error: any) {
       this.logger.warn('No AWS profiles found')
     }
@@ -225,15 +230,10 @@ export default class Provider extends CloudGraph.Client {
   async getIdentity(account: Account): Promise<{ accountId: string }> {
     try {
       const config = await this.getAwsConfig(account)
-      return new Promise((resolve, reject) =>
-        new STS(config).getCallerIdentity((err, data) => {
-          if (err) {
-            return reject(err)
-          }
-          return resolve({ accountId: data.Account })
-        })
-      )
+      const { Account: accountId } = await new STS(config).getCallerIdentity(config)
+      return { accountId }
     } catch (e) {
+      console.log(e)
       this.logger.error('There was an error in function getIdentity')
       this.logger.debug(e)
       return { accountId: '' }
@@ -246,7 +246,7 @@ export default class Provider extends CloudGraph.Client {
     externalId,
     accessKeyId: configuredAccessKey,
     secretAccessKey: configuredSecretKey,
-  }: Account): Promise<Config> {
+  }: Account): Promise<any> {
     return new Promise(async resolveConfig => {
       // If we have keys set in the config file, just use them
       if (configuredAccessKey && configuredSecretKey) {
@@ -267,16 +267,16 @@ export default class Provider extends CloudGraph.Client {
             )}`
           )
         }
-        AWS.config.credentials = creds
-        this.credentials = creds
-        return resolveConfig(AWS.config)
+        // AWS.config.credentials = creds
+        this.sdkConfig = {...creds}
+        return resolveConfig(this.sdkConfig)
       }
       // If the client instance has creds set, weve gone through this function before.. just reuse them
       if (
         this.credentials &&
         (this.profile === profile || this.role === role)
       ) {
-        return resolveConfig(AWS.config)
+        return resolveConfig(this.sdkConfig)
       }
       /**
        * Tries to find creds in priority order
@@ -287,7 +287,7 @@ export default class Provider extends CloudGraph.Client {
       this.logger.info('Searching for AWS credentials...')
       switch (true) {
         case role && role !== '': {
-          const sts = new AWS.STS()
+          const sts = new STS({})
           await new Promise<void>(resolve => {
             const options = {
               RoleSessionName: 'CloudGraph',
@@ -311,8 +311,9 @@ export default class Provider extends CloudGraph.Client {
                   secretAccessKey,
                   sessionToken,
                 }
-                AWS.config.update({ credentials: creds })
+                // AWS.config.update({ credentials: creds })
                 this.credentials = creds
+                this.sdkConfig = {...creds}
                 this.profile = profile
                 resolve()
               }
@@ -323,19 +324,13 @@ export default class Provider extends CloudGraph.Client {
         case profile && profile !== 'default': {
           try {
             // TODO: how to catch the error from SharedIniFileCredentials when profile doent exist
-            const credentials = new AWS.SharedIniFileCredentials({
-              profile,
-              callback: (err: any) => {
-                if (err) {
-                  this.logger.error(
-                    `No credentials found for profile ${profile}`
-                  )
-                }
-              },
+            const credentials = fromIni({
+              profile
             })
             if (credentials) {
-              AWS.config.update({ credentials })
-              this.credentials = credentials
+              // AWS.config.update({ credentials })
+              this.credentials = await credentials()
+              this.sdkConfig = {...credentials}
               this.profile = profile
             }
             break
@@ -344,17 +339,13 @@ export default class Provider extends CloudGraph.Client {
           }
         }
         default: {
-          await new Promise<void>(resolve =>
-            AWS.config.getCredentials((err: any) => {
-              if (err) {
-                resolve()
-              } else {
-                this.credentials = AWS.config.credentials
-                this.profile = profile
-                resolve()
-              }
-            })
-          )
+          await new Promise<void>(async resolve => {
+            const credentialsPromise = defaultProvider()
+            this.credentials = await credentialsPromise()
+            this.sdkConfig = {...this.credentials}
+            this.profile = profile
+            resolve()
+          })
         }
       }
       if (!this.credentials) {
@@ -375,6 +366,7 @@ export default class Provider extends CloudGraph.Client {
         ])
         if (answers?.accessKeyId && answers?.secretAccessKey) {
           this.credentials = answers
+          this.config = {...this.credentials}
           this.profile = profile
         } else {
           this.logger.error('Cannot scan AWS without credentials')
@@ -404,7 +396,7 @@ export default class Provider extends CloudGraph.Client {
           obfuscateSensitiveString(this.credentials.secretAccessKey)
         )}`
       )
-      resolveConfig(AWS.config)
+      resolveConfig(this.sdkConfig)
     })
   }
 
@@ -426,17 +418,16 @@ export default class Provider extends CloudGraph.Client {
    * @returns Instance of an AWS service class to interact with that AWS service
    */
   private getService(service: string): Service {
-    if (serviceMap[service]) {
-      return new serviceMap[service](this)
+    if (this.serviceMap[service]) {
+      return new this.serviceMap[service](this)
     }
   }
 
-  private getProfilesFromSharedConfig(): string[] {
+  private async getProfilesFromSharedConfig(): Promise<string[]> {
     let profiles
     try {
-      profiles = Object.keys(
-        AWS['util'].getProfilesFromSharedConfig(AWS['util'].iniLoader)
-      )
+      const { configFile, credentialsFile } = await loadSharedConfigFiles()
+      profiles = [...new Set([...Object.keys(configFile), ...Object.keys(credentialsFile)])]
     } catch (error: any) {
       this.logger.warn('Unable to read AWS shared credential file')
       this.logger.debug(error)
@@ -463,7 +454,7 @@ export default class Provider extends CloudGraph.Client {
     const resourceNames: string[] = sortResourcesDependencies([
       ...new Set<string>(configuredResources.split(',')),
     ])
-
+    console.log('GOT HERE')
     const config = await this.getAwsConfig(account)
     const { accountId } = await this.getIdentity(account)
     try {
@@ -531,7 +522,7 @@ export default class Provider extends CloudGraph.Client {
       configuredRegions,
       configuredResources
     )
-
+    console.log('HERE WER ARE')
     // Leaving this here in case we need to test another service or to inject a logging function
     // setAwsRetryOptions({ global: true, configObj: this.config })
     let rawData = []
@@ -548,8 +539,9 @@ export default class Provider extends CloudGraph.Client {
       for (const account of configuredAccounts) {
         const { profile, roleArn: role } = account
         // verify that profile exists in the shared credential file
+        console.log('GOT HERE SOON TOO')
         if (profile) {
-          const profiles = this.getProfilesFromSharedConfig()
+          const profiles = await this.getProfilesFromSharedConfig()
           if (!profiles.includes(profile)) {
             this.logger.warn(
               `Profile: ${profile} not found in shared credentials file. Skipping...`
@@ -558,6 +550,7 @@ export default class Provider extends CloudGraph.Client {
             continue
           }
         }
+        console.log('HERE IS WHERE WERE AT')
         const { accountId } = await this.getIdentity(account)
         if (!crawledAccounts.find(val => val === accountId)) {
           crawledAccounts.push(accountId)

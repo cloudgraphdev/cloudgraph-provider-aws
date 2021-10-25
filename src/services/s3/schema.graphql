@@ -22,10 +22,10 @@ type awsS3 @key(fields: "arn") {
   versioning: String @search(by: [hash, regexp])
   staticWebsiteHosting: String @search(by: [hash, regexp])
   bucketPolicies: [awsBucketPolicy]
-  kinesisFirehose: [awsKinesisFirehose] @hasInverse(field: s3)
+  # kinesisFirehose: [awsKinesisFirehose] @hasInverse(field: s3)
   tags: [Tag]
-  cloudfrontDistribution: [awsCloudfront] @hasInverse(field: s3)
-  cloudtrail: [awsCloudtrail] @hasInverse(field: s3)
+  # cloudfrontDistribution: [awsCloudfront] @hasInverse(field: s3)
+  # cloudtrail: [awsCloudtrail] @hasInverse(field: s3)
 }
 
 type awsBucketPolicy

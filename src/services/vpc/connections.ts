@@ -10,11 +10,11 @@ import {
   SecurityGroup,
   // Subnet,
   Vpc,
-} from 'aws-sdk/clients/ec2'
+} from '@aws-sdk/client-ec2'
 // import { Cluster } from 'aws-sdk/clients/eks' // TODO: Uncomment when adding EKS
-import { DBInstance } from 'aws-sdk/clients/rds'
-import { LoadBalancer } from 'aws-sdk/clients/elbv2'
-import { FunctionConfiguration } from 'aws-sdk/clients/lambda'
+import { DBInstance } from '@aws-sdk/client-rds'
+import { LoadBalancer } from '@aws-sdk/client-elastic-load-balancing-v2'
+import { FunctionConfiguration } from '@aws-sdk/client-lambda'
 // import { LoadBalancerDescription } from 'aws-sdk/clients/elb' // TODO: Uncomment when adding ELB
 
 import services from '../../enums/services'

@@ -17,12 +17,7 @@ type awsAlb @key(fields: "arn") {
   createdAt: String @search(by: [hash, regexp])
   status: String @search(by: [hash])
   tags: [Tag]
-  securityGroups: [awsSecurityGroup] @hasInverse(field: alb)
-  ec2Instance: [awsEc2] @hasInverse(field: alb)
-  vpc: [awsVpc] @hasInverse(field: alb)
-  route53Record: [awsRoute53Record] @hasInverse(field: alb)
   listeners: [awsAlbListener]
-  subnet: [awsSubnet] @hasInverse(field: alb)
 }
 
 type awsAlbListener

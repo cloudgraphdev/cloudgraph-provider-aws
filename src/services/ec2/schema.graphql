@@ -66,11 +66,11 @@ type awsEc2 @key(fields: "arn") {
   ephemeralBlockDevice: [awsEc2Blockdevice]
   associatePublicIpAddress: String @search(by: [hash, regexp])
   tags: [Tag]
-  alb: [awsAlb] @hasInverse(field: ec2Instance)
-  asg: [awsAsg] @hasInverse(field: ec2Instance)
-  ebs: [awsEbs] @hasInverse(field: ec2Instance)
-  eip: [awsEip] @hasInverse(field: ec2Instance)
-  networkInterfaces: [awsNetworkInterface] @hasInverse(field: ec2Instance)
-  securityGroups: [awsSecurityGroup] @hasInverse(field: ec2Instance)
-  subnet: [awsSubnet] @hasInverse(field: ec2Instance)
+  # alb: [awsAlb] @hasInverse(field: ec2Instance)
+  # asg: [awsAsg] @hasInverse(field: ec2Instance)
+  # ebs: [awsEbs] @hasInverse(field: ec2Instance)
+  # eip: [awsEip] @hasInverse(field: ec2Instance)
+  # networkInterfaces: [awsNetworkInterface] @hasInverse(field: ec2Instance)
+  # securityGroups: [awsSecurityGroup] @hasInverse(field: ec2Instance)
+  # subnet: [awsSubnet] @hasInverse(field: ec2Instance)
 }

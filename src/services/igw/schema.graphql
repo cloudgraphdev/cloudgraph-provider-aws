@@ -5,7 +5,7 @@ type awsIgw @key(fields: "arn") {
   owner: String @search(by: [hash, regexp])
   attachments: [awsIgwAttachment]
   tags: [Tag]
-  vpc: [awsVpc] @hasInverse(field: igw)
+  # vpc: [awsVpc] @hasInverse(field: igw)
 }
 
 type awsIgwAttachment {

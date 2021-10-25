@@ -1,4 +1,4 @@
-import { ApiKey, DataSource, Resolver } from 'aws-sdk/clients/appsync'
+import { ApiKey, DataSource, Resolver } from '@aws-sdk/client-appsync'
 import cuid from 'cuid'
 import t from '../../properties/translations'
 import {

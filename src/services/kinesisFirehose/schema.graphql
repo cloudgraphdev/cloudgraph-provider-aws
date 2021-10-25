@@ -13,8 +13,8 @@ type awsKinesisFirehose @key(fields: "arn") {
     lastUpdateTimestamp: String @search(by: [hash, regexp])
     source: awsKinesisFirehoseSource
     region: String @search(by: [hash, regexp])
-    kinesisStream: [awsKinesisStream] @hasInverse(field: kinesisFirehose)
-    s3: [awsS3] @hasInverse(field: kinesisFirehose)
+    # kinesisStream: [awsKinesisStream] @hasInverse(field: kinesisFirehose)
+    # s3: [awsS3] @hasInverse(field: kinesisFirehose)
     tags: [Tag]
 }
 

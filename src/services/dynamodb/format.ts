@@ -2,7 +2,7 @@ import {
   KeySchemaElement,
   Projection,
   ProvisionedThroughputDescription,
-} from 'aws-sdk/clients/dynamodb'
+} from '@aws-sdk/client-dynamodb'
 import cuid from 'cuid'
 import { RawAwsDynamoDbTable } from './data'
 import { formatTagsFromMap } from '../../utils/format';

@@ -33,5 +33,5 @@ type awsApiGatewayStage @key(fields: "arn") {
   xrayTracing: Boolean @search
   variables: [awsApiGatewayStageVariable]
   tags: [Tag]
-  restApi: [awsApiGatewayRestApi] @hasInverse(field: stages)
+  # restApi: [awsApiGatewayRestApi] @hasInverse(field: stages)
 }

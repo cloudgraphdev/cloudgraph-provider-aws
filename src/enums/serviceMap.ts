@@ -22,6 +22,7 @@ import CognitoUserPool from '../services/cognitoUserPool'
 import DynamoDB from '../services/dynamodb'
 import EBS from '../services/ebs'
 import EC2 from '../services/ec2'
+import ECR from '../services/ecr'
 import EIP from '../services/eip'
 import ELB from '../services/elb'
 import Lambda from '../services/lambda'
@@ -38,7 +39,6 @@ import S3 from '../services/s3'
 import SES from '../services/ses'
 import SQS from '../services/sqs'
 import VPC from '../services/vpc'
-import ECR from '../services/ecr'
 import IamGroup from '../services/iamGroup'
 import IamUser from '../services/iamUser'
 import IamRole from '../services/iamRole'
@@ -64,12 +64,12 @@ export default {
   [services.cloudwatch]: CloudWatch,
   [services.cognitoIdentityPool]: CognitoIdentityPool,
   [services.cognitoUserPool]: CognitoUserPool,
+  [services.dynamodb]: DynamoDB,
   [services.ebs]: EBS,
   [services.ec2Instance]: EC2,
   [services.ecr]: ECR,
   [services.eip]: EIP,
   [services.elb]: ELB,
-  [services.dynamodb]: DynamoDB,
   [services.igw]: AwsInternetGateway,
   [services.kinesisFirehose]: AwsKinesisFirehose,
   [services.kinesisStream]: AwsKinesisStream,

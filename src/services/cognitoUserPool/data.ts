@@ -1,8 +1,9 @@
-import COGUSER, {
+import {
+  CognitoIdentityProvider,
   UserPoolDescriptionType,
   UserPoolType,
-} from 'aws-sdk/clients/cognitoidentityserviceprovider'
-import { Config } from 'aws-sdk/lib/config'
+} from '@aws-sdk/client-cognito-identity-provider'
+// import { Config } from 'aws-sdk/lib/config'
 
 import CloudGraph from '@cloudgraph/sdk'
 import { groupBy } from 'lodash'
@@ -26,13 +27,13 @@ export interface RawAwsCognitoUserPool extends Omit<UserPoolType, 'UserPoolTags'
   Tags: TagMap
 }
 
-const listUserPoolIds = async (cogUser: COGUSER): Promise<UserPoolDescriptionType[]> => {
+const listUserPoolIds = async (cogUser: CognitoIdentityProvider): Promise<UserPoolDescriptionType[]> => {
   try {
     const fullResources: UserPoolDescriptionType[] = []
   
     let userPools = await cogUser.listUserPools({
       MaxResults: MAX_RESULTS,
-    }).promise()
+    })
     fullResources.push(...userPools.UserPools)
     let nextToken = userPools.NextToken
 
@@ -40,7 +41,7 @@ const listUserPoolIds = async (cogUser: COGUSER): Promise<UserPoolDescriptionTyp
       userPools = await cogUser.listUserPools({
         MaxResults: MAX_RESULTS,
         NextToken: nextToken,
-      }).promise()
+      })
       fullResources.push(...userPools.UserPools)
       nextToken = userPools.NextToken
     }
@@ -55,11 +56,11 @@ const describeUserPool = async ({
   cogUser, 
   userPoolId: UserPoolId, 
 }: {
-  cogUser: COGUSER, 
+  cogUser: CognitoIdentityProvider, 
   userPoolId: string, 
 }): Promise<Omit<UserPoolType, 'UserPoolTags'> & {Tags?: TagMap}> => {
   try {
-    const userPool = await cogUser.describeUserPool({UserPoolId}).promise()
+    const userPool = await cogUser.describeUserPool({UserPoolId})
     logger.debug(lt.fetchedCognitoUserPool(UserPoolId))
     const Tags: TagMap = userPool.UserPool.UserPoolTags
     delete userPool.UserPool.UserPoolTags
@@ -78,7 +79,7 @@ const listUserPoolData = async ({
   cogUser,
   region,
 }: {
-  cogUser: COGUSER,
+  cogUser: CognitoIdentityProvider,
   region: string,
 }): Promise<RawAwsCognitoUserPool[]> => {
   const userPoolData = []
@@ -102,14 +103,14 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{
   [region: string]: RawAwsCognitoUserPool[]
 }> => {
   const cognitoData = []
   
   for (const region of regions.split(',')) {
-    const cogUser = new COGUSER({ ...config, region, endpoint })
+    const cogUser = new CognitoIdentityProvider({ ...config, region, endpoint })
 
     /**
      * Fetch all  User Pools

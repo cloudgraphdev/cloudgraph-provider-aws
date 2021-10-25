@@ -1,13 +1,14 @@
 import CloudGraph from '@cloudgraph/sdk'
-import { AWSError, Config } from 'aws-sdk'
-import Cloudfront, {
+// import { AWSError, Config } from 'aws-sdk'
+import {
+  CloudFront,
   DistributionConfig,
   DistributionSummary,
   GetDistributionConfigResult,
   ListDistributionsRequest,
   ListDistributionsResult,
   ListTagsForResourceResult,
-} from 'aws-sdk/clients/cloudfront'
+} from '@aws-sdk/client-cloudfront'
 import groupBy from 'lodash/groupBy';
 import isEmpty from 'lodash/isEmpty'
 
@@ -39,7 +40,7 @@ export interface RawAwsCloudfront extends CloudfrontDistributionConfig {
 }
 
 const listCloudfrontDistributions = async (
-  cloudFront: Cloudfront
+  cloudFront: CloudFront
 ): Promise<DistributionSummary[]> =>
   new Promise<DistributionSummary[]>(resolve => {
     const distributions: DistributionSummary[] = []
@@ -50,7 +51,7 @@ const listCloudfrontDistributions = async (
       }
       cloudFront.listDistributions(
         listDistOpts,
-        (err: AWSError, data: ListDistributionsResult) => {
+        (err: any, data: ListDistributionsResult) => {
           if (err) {
             generateAwsErrorLog(
               serviceName,
@@ -84,7 +85,7 @@ const listCloudfrontDistributions = async (
   })
 
 const getDistributionTags = async (
-  cloudfront: Cloudfront,
+  cloudfront: CloudFront,
   arn: string
 ): Promise<TagMap> =>
   new Promise<TagMap>(resolve => {
@@ -92,7 +93,7 @@ const getDistributionTags = async (
       {
         Resource: arn,
       },
-      (err: AWSError, data: ListTagsForResourceResult) => {
+      (err: any, data: ListTagsForResourceResult) => {
         if (err) {
           generateAwsErrorLog(
             serviceName,
@@ -114,7 +115,7 @@ const getDistributionTags = async (
   })
 
 const getDistributionConfig = async (
-  cloudfront: Cloudfront,
+  cloudfront: CloudFront,
   id: string
 ): Promise<CloudfrontDistributionConfig> =>
   new Promise<CloudfrontDistributionConfig>(resolve => {
@@ -122,7 +123,7 @@ const getDistributionConfig = async (
       {
         Id: id,
       },
-      (err: AWSError, data: GetDistributionConfigResult) => {
+      (err: any, data: GetDistributionConfigResult) => {
         if (err) {
           generateAwsErrorLog(
             serviceName,
@@ -145,9 +146,9 @@ const getDistributionConfig = async (
 export default async ({
   config,
 }: {
-  config: Config
+  config: any
 }): Promise<{[property: string]: RawAwsCloudfront[]}> => {
-  const cloudfront = new Cloudfront({ ...config, endpoint })
+  const cloudfront = new CloudFront({ ...config, endpoint })
   const distributionList: DistributionSummary[] =
     await listCloudfrontDistributions(cloudfront)
 
@@ -175,11 +176,11 @@ export default async ({
           ]
 
           const [Tags, distConfig] = await settleAllPromises(promises)
-          const { config, etag } = distConfig
+          const { config: cfConfig, etag } = distConfig
           cloudfrontData[distIndex] = {
             ...dist,
             Tags,
-            config,
+            config: cfConfig,
             etag,
           }
           resolveDistributionTags()

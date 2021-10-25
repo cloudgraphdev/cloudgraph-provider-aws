@@ -1,5 +1,5 @@
-import CloudFormation, { StackSet, StackSetSummary } from 'aws-sdk/clients/cloudformation'
-import { Config } from 'aws-sdk/lib/config'
+import { CloudFormation, StackSet, StackSetSummary } from '@aws-sdk/client-cloudformation'
+// import { Config } from 'aws-sdk/lib/config'
 import { groupBy, isEmpty } from 'lodash'
 
 import { TagMap } from '../../types'
@@ -22,12 +22,12 @@ const listStackSets = async (cf: CloudFormation): Promise<StackSetSummary[]> => 
   try {
     const fullStackSets: StackSetSummary[] = []
 
-    let stackSets = await cf.listStackSets().promise()
+    let stackSets = await cf.listStackSets({})
     fullStackSets.push(...stackSets.Summaries)
     let nextToken = stackSets.NextToken
 
     while (nextToken) {
-      stackSets = await cf.listStackSets({ NextToken: nextToken }).promise()
+      stackSets = await cf.listStackSets({ NextToken: nextToken })
       fullStackSets.push(...stackSets.Summaries)
       nextToken = stackSets.NextToken
     }
@@ -41,7 +41,7 @@ const listStackSets = async (cf: CloudFormation): Promise<StackSetSummary[]> => 
 
 const describeStackSet = async (cf: CloudFormation, StackSetName: string): Promise<StackSet> => {
   try {
-    const stackSetData = await cf.describeStackSet({StackSetName}).promise()
+    const stackSetData = await cf.describeStackSet({StackSetName})
     return stackSetData.StackSet
   } catch (err) {
     generateAwsErrorLog(serviceName, 'CloudFormationStackSet:describeStackSet', err)
@@ -54,7 +54,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{
   [region: string]: RawAwsCloudFormationStackSet[]
 }> => {

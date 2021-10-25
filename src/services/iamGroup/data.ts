@@ -2,15 +2,14 @@ import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import { AWSError } from 'aws-sdk/lib/error'
-import IAM, {
+import {
+  IAM,
   AttachedPolicy,
   Group,
   ListAttachedGroupPoliciesResponse,
   ListGroupsResponse,
   ListUserPoliciesResponse,
-} from 'aws-sdk/clients/iam'
-import { Config } from 'aws-sdk/lib/config'
+} from '@aws-sdk/client-iam'
 
 import awsLoggerText from '../../properties/logger'
 import {
@@ -47,7 +46,7 @@ const policiesByGroupName = async (
   new Promise(resolveUserPolicies => {
     iam.listGroupPolicies(
       { GroupName },
-      (err: AWSError, data: ListUserPoliciesResponse) => {
+      (err: any, data: ListUserPoliciesResponse) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'iam:listGroupPolicies', err)
         }
@@ -70,7 +69,7 @@ const managedPoliciesByGroupName = async (
   new Promise(resolveUserPolicies => {
     iam.listAttachedGroupPolicies(
       { GroupName },
-      (err: AWSError, data: ListAttachedGroupPoliciesResponse) => {
+      (err: any, data: ListAttachedGroupPoliciesResponse) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'iam:listAttachedGroupPolicies', err)
         }
@@ -100,7 +99,7 @@ export const listIamGroups = async (
 
     iam.listGroups(
       { Marker: marker },
-      async (err: AWSError, data: ListGroupsResponse) => {
+      async (err: any, data: ListGroupsResponse) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'iam:listGroups', err)
         }
@@ -159,7 +158,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
   rawData: any
 }): Promise<{
   [region: string]: RawAwsIamGroup[]

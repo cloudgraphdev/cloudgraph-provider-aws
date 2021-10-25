@@ -1,7 +1,7 @@
 import CloudGraph from '@cloudgraph/sdk'
-import { AWSError } from 'aws-sdk'
-import { Config } from 'aws-sdk/lib/config'
-import EC2, { DescribeNetworkAclsRequest, DescribeNetworkAclsResult, NetworkAcl } from 'aws-sdk/clients/ec2';
+// import { AWSError } from 'aws-sdk'
+// import { Config } from 'aws-sdk/lib/config'
+import { EC2, DescribeNetworkAclsRequest, DescribeNetworkAclsResult, NetworkAcl } from '@aws-sdk/client-ec2';
 import groupBy from 'lodash/groupBy';
 import isEmpty from 'lodash/isEmpty'
 
@@ -32,7 +32,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{ [property: string]: RawAwsNetworkAcl[] }> =>
   new Promise(async resolve => {
     const naclData = []
@@ -52,7 +52,7 @@ export default async ({
 
       return ec2.describeNetworkAcls(
         args,
-        (err: AWSError, data: DescribeNetworkAclsResult) => {
+        (err: any, data: DescribeNetworkAclsResult) => {
           if (err) {
             generateAwsErrorLog(serviceName, 'nacl:describeNetworkAcls',err)
           }

@@ -1,7 +1,8 @@
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import EC2, {
+import {
+  EC2,
   DescribeIamInstanceProfileAssociationsResult,
   DescribeInstancesRequest,
   DescribeInstancesResult,
@@ -11,9 +12,9 @@ import EC2, {
   IamInstanceProfile,
   Instance,
   InstanceAttribute,
-} from 'aws-sdk/clients/ec2'
-import { Config } from 'aws-sdk/lib/config'
-import { AWSError } from 'aws-sdk/lib/error'
+} from '@aws-sdk/client-ec2'
+// import { Config } from 'aws-sdk/lib/config'
+// import { AWSError } from 'aws-sdk/lib/error'
 
 import CloudGraph from '@cloudgraph/sdk'
 
@@ -43,7 +44,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{
   [region: string]: RawAwsEC2[]
 }> =>
@@ -73,7 +74,7 @@ export default async ({
 
       return ec2.describeInstances(
         args,
-        (err: AWSError, data: DescribeInstancesResult) => {
+        (err: any, data: DescribeInstancesResult) => {
           if (err) {
             generateAwsErrorLog(serviceName, 'ec2:describeInstances', err)
           }
@@ -148,7 +149,7 @@ export default async ({
       const keyPairPromise = new Promise<void>(resolveKeyPair =>
         ec2.describeKeyPairs(
           {},
-          (err: AWSError, data: DescribeKeyPairsResult) => {
+          (err: any, data: DescribeKeyPairsResult) => {
             if (err) {
               generateAwsErrorLog(serviceName, 'ec2:describeKeyPairs', err)
             }
@@ -198,7 +199,7 @@ export default async ({
           resolveDeletionProtection =>
             ec2.describeInstanceAttribute(
               { InstanceId, Attribute: 'disableApiTermination' },
-              (err: AWSError, data: InstanceAttribute) => {
+              (err: any, data: InstanceAttribute) => {
                 if (err) {
                   generateAwsErrorLog(serviceName, 'ec2:desrcibeInstanceAttributes', err)
                 }
@@ -254,7 +255,7 @@ export default async ({
 
       return ec2.describeTags(
         args,
-        (err: AWSError, data: DescribeTagsResult) => {
+        (err: any, data: DescribeTagsResult) => {
           if (err) {
             generateAwsErrorLog(serviceName, 'ec2:describeTags', err)
           }
@@ -347,7 +348,7 @@ export default async ({
         ec2.describeIamInstanceProfileAssociations(
           {},
           (
-            err: AWSError,
+            err: any,
             data: DescribeIamInstanceProfileAssociationsResult
           ) => {
             if (err) {

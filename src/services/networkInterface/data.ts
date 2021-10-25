@@ -2,13 +2,12 @@ import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import EC2, {
+import {
+  EC2,
   DescribeNetworkInterfacesRequest,
   DescribeNetworkInterfacesResult,
   NetworkInterface,
-} from 'aws-sdk/clients/ec2'
-import { AWSError } from 'aws-sdk/lib/error'
-import { Config } from 'aws-sdk/lib/config'
+} from '@aws-sdk/client-ec2'
 
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
@@ -48,7 +47,7 @@ const listNetworkInterfaces = async ({
 
   ec2.describeNetworkInterfaces(
     args,
-    (err: AWSError, data: DescribeNetworkInterfacesResult) => {
+    (err: any, data: DescribeNetworkInterfacesResult) => {
       if (err) {
         generateAwsErrorLog(serviceName, 'ec2:describeNetworkInterfaces', err)
       }
@@ -112,7 +111,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{
   [region: string]: RawNetworkInterface[]
 }> =>

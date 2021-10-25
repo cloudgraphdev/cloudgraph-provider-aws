@@ -1,16 +1,15 @@
-import SES, {
+import {
+  SES,
   ListIdentitiesResponse,
   IdentityVerificationAttributes,
   GetIdentityVerificationAttributesResponse,
-} from 'aws-sdk/clients/ses'
-import { AWSError } from 'aws-sdk/lib/error'
+} from '@aws-sdk/client-ses'
 
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
 import awsLoggerText from '../../properties/logger'
-import { Config } from 'aws-sdk/lib/config'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 const lt = { ...awsLoggerText }
@@ -31,7 +30,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{ [property: string]: RawAwsSes[] }> =>
   new Promise(async resolve => {
     const sesData: RawAwsSes[] = []
@@ -44,7 +43,7 @@ export default async ({
 
         ses.listIdentities(
           {},
-          (err: AWSError, data: ListIdentitiesResponse) => {
+          (err: any, data: ListIdentitiesResponse) => {
             /**
              * No Data for the region
              */
@@ -73,7 +72,7 @@ export default async ({
                 ses.getIdentityVerificationAttributes(
                   { Identities },
                   (
-                    err: AWSError,
+                    err: any,
                     {
                       VerificationAttributes: identities,
                     }: GetIdentityVerificationAttributesResponse

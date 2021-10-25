@@ -1,10 +1,11 @@
-import EC2, {
+import {
+  EC2,
   DescribeVolumesResult,
   DescribeVolumesRequest,
   Volume,
-} from 'aws-sdk/clients/ec2'
-import { Config } from 'aws-sdk/lib/config'
-import { AWSError } from 'aws-sdk/lib/error'
+} from '@aws-sdk/client-ec2'
+// import { Config } from 'aws-sdk/lib/config'
+// import { AWSError } from 'aws-sdk/lib/error'
 
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
@@ -33,7 +34,7 @@ const listEbsVolumes = async ({
   ebsData,
   resolveRegion,
 }: {
-  ec2: EC2
+  ec2: EC2,
   region: string
   nextToken?: string
   ebsData: Volume & { region: string }[]
@@ -45,7 +46,7 @@ const listEbsVolumes = async ({
     args = { ...args, NextToken }
   }
 
-  ec2.describeVolumes(args, (err: AWSError, data: DescribeVolumesResult) => {
+  ec2.describeVolumes(args, (err: any, data: DescribeVolumesResult) => {
     if (err) {
       generateAwsErrorLog(serviceName, 'ec2:describeVolumes', err)
     }
@@ -99,7 +100,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{
   [region: string]: Volume & { region: string }[]
 }> =>

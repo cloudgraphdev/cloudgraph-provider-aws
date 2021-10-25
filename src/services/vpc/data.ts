@@ -3,14 +3,12 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 import upperFirst from 'lodash/upperFirst'
 
-import { Request } from 'aws-sdk/lib/request'
-import { AWSError } from 'aws-sdk/lib/error'
-import { Config } from 'aws-sdk/lib/config'
-import EC2, {
+import {
+  EC2,
   DescribeVpcsRequest,
   DescribeVpcsResult,
   Vpc,
-} from 'aws-sdk/clients/ec2'
+} from '@aws-sdk/client-ec2'
 import CloudGraph from '@cloudgraph/sdk'
 
 import { AwsTag, TagMap } from '../../types'
@@ -38,7 +36,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{ [property: string]: RawAwsVpc[] }> =>
   new Promise(async resolve => {
     const vpcData: RawAwsVpc[] = []
@@ -59,7 +57,7 @@ export default async ({
       region: string
       token?: string
       resolveRegion: () => void
-    }): Promise<Request<DescribeVpcsResult, AWSError>> => {
+    }): Promise<void> => {
       let args: DescribeVpcsRequest = {}
 
       if (NextToken) {
@@ -68,7 +66,7 @@ export default async ({
 
       return ec2.describeVpcs(
         args,
-        (err: AWSError, data: DescribeVpcsResult) => {
+        (err: any, data: DescribeVpcsResult) => {
           if (err) {
             generateAwsErrorLog(serviceName, 'ec2:describeVpcs', err)
           }

@@ -18,7 +18,7 @@ type awsSubnet @key(fields: "id") {
   lambda: [awsLambda] @hasInverse(field: subnet)
   natGateway: [awsNatGateway] @hasInverse(field: subnet)
   networkInterface: [awsNetworkInterface] @hasInverse(field: subnet)
-  routeTable: [awsRouteTable] @hasInverse(field: subnet)
-  vpc: [awsVpc] @hasInverse(field: subnet)
+  # routeTable: [awsRouteTable] @hasInverse(field: subnet)
+  # vpc: [awsVpc] @hasInverse(field: subnet)
   rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: subnet)
 }

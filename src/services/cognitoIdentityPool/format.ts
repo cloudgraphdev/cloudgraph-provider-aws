@@ -1,4 +1,3 @@
-import { IdentityProviders } from 'aws-sdk/clients/cognitoidentity';
 import t from '../../properties/translations'
 
 import { AwsCognitoIdentityPool, AwsSupportedLoginProvider } from '../../types/generated';
@@ -9,7 +8,7 @@ import { RawAwsCognitoIdentityPool } from './data';
  * Cognito Identity Pool
  */
 
-const formatSupportedLoginProviders = (supportedLoginProviders: IdentityProviders): AwsSupportedLoginProvider[] => {
+const formatSupportedLoginProviders = (supportedLoginProviders: {[key: string]: string}): AwsSupportedLoginProvider[] => {
   const result: AwsSupportedLoginProvider[] = []
   if (supportedLoginProviders) {
     for (const [identityProvider, identityProviderId] of Object.entries(supportedLoginProviders)) {

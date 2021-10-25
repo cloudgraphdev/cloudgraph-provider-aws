@@ -1,14 +1,12 @@
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
-import EC2, {
+import {
+  EC2,
   SecurityGroup,
   DescribeSecurityGroupsResult,
   DescribeSecurityGroupsRequest,
-} from 'aws-sdk/clients/ec2'
-import { AWSError } from 'aws-sdk/lib/error'
-import { Config } from 'aws-sdk/lib/config'
-import { Request } from 'aws-sdk/lib/request'
+} from '@aws-sdk/client-ec2'
 
 import CloudGraph from '@cloudgraph/sdk'
 import { TagMap, AwsTag } from '../../types'
@@ -36,7 +34,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{ [property: string]: AwsSecurityGroup[] }> =>
   new Promise(async resolve => {
     const sgData: AwsSecurityGroup[] = []
@@ -52,7 +50,7 @@ export default async ({
       region: string
       token?: string
       resolveRegion: () => void
-    }): Promise<Request<EC2.Types.DescribeSecurityGroupsResult, AWSError>> => {
+    }): Promise<void> => {
       let args: DescribeSecurityGroupsRequest = {}
 
       if (NextToken) {
@@ -61,7 +59,7 @@ export default async ({
 
       return ec2.describeSecurityGroups(
         args,
-        (err: AWSError, data: DescribeSecurityGroupsResult) => {
+        (err: any, data: DescribeSecurityGroupsResult) => {
           if (err) {
             generateAwsErrorLog(serviceName, 'ec2:describeSecurityGroups', err)
           }

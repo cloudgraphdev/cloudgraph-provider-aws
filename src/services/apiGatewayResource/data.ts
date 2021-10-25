@@ -1,15 +1,13 @@
 import CloudGraph from '@cloudgraph/sdk'
-import APIGW, {
+import {
+  APIGateway,
   RestApis,
-  ListOfRestApi,
+  RestApi,
   GetRestApisRequest,
-  ListOfResource,
   GetResourcesRequest,
   Resources,
   Resource,
-} from 'aws-sdk/clients/apigateway'
-import { AWSError } from 'aws-sdk/lib/error'
-import { Config } from 'aws-sdk/lib/config'
+} from '@aws-sdk/client-api-gateway'
 import isEmpty from 'lodash/isEmpty'
 import groupBy from 'lodash/groupBy'
 import awsLoggerText from '../../properties/logger'
@@ -31,8 +29,8 @@ export interface AwsApiGatewayResource extends Resource {
 }
  
 const getRestApisForRegion = async apiGw =>
-  new Promise<ListOfRestApi>(resolve => {
-    const restApiList: ListOfRestApi = []
+  new Promise<RestApi[]>(resolve => {
+    const restApiList: RestApi[] = []
     const getRestApisOpts: GetRestApisRequest = {}
     const listAllRestApis = (token?: string) => {
       getRestApisOpts.limit = MAX_REST_API
@@ -40,7 +38,7 @@ const getRestApisForRegion = async apiGw =>
         getRestApisOpts.position = token
       }
       try {
-        apiGw.getRestApis(getRestApisOpts, (err: AWSError, data: RestApis) => {
+        apiGw.getRestApis(getRestApisOpts, (err: any, data: RestApis) => {
           const { position, items = [] } = data || {}
           if (err) {
             generateAwsErrorLog(serviceName, 'apiGw:getRestApis', err)
@@ -62,8 +60,8 @@ const getRestApisForRegion = async apiGw =>
   })
 
 const getResources = async ({ apiGw, restApiId }) =>
-  new Promise<ListOfResource>(resolve => {
-    const resourceList: ListOfResource = []
+  new Promise<Resource[]>(resolve => {
+    const resourceList: Resource[] = []
     const getResourcesOpts: GetResourcesRequest = {
       restApiId,
     }
@@ -76,7 +74,7 @@ const getResources = async ({ apiGw, restApiId }) =>
       try {
         apiGw.getResources(
           getResourcesOpts,
-          (err: AWSError, data: Resources) => {
+          (err: any, data: Resources) => {
             const { position, items = [] } = data || {}
             if (err) {
               generateAwsErrorLog(serviceName, 'apiGw:getResources', err)
@@ -107,7 +105,7 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{ [property: string]: AwsApiGatewayResource[] }> =>
   new Promise(async resolve => {
     const apiGatewayData = []
@@ -116,7 +114,7 @@ export default async ({
     const additionalPromises = []
 
     regions.split(',').map(region => {
-      const apiGw = new APIGW({ ...config, region, endpoint, ...customRetrySettings })
+      const apiGw = new APIGateway({ ...config, region, endpoint, ...customRetrySettings })
       const regionPromise = new Promise<void>(async resolveRegion => {
         const restApiList = await getRestApisForRegion(apiGw)
         if (!isEmpty(restApiList)) {
@@ -135,7 +133,7 @@ export default async ({
     await Promise.all(regionPromises)
 
     apiGatewayData.map(({ restApiId, region }) => {
-      const apiGw = new APIGW({ ...config, region, endpoint, ...customRetrySettings })
+      const apiGw = new APIGateway({ ...config, region, endpoint, ...customRetrySettings })
       const additionalPromise = new Promise<void>(async resolveAdditional => {
         const resources = await getResources({ apiGw, restApiId })
         apiGatewayResources.push(...resources.map(resource => ({

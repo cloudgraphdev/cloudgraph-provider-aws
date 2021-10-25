@@ -1,9 +1,9 @@
-import COGID, { IdentityPool, IdentityPoolShortDescription } from 'aws-sdk/clients/cognitoidentity'
-import { Config } from 'aws-sdk/lib/config'
+import { CognitoIdentity, IdentityPool, IdentityPoolShortDescription } from '@aws-sdk/client-cognito-identity'
+// import { Config } from 'aws-sdk/lib/config'
 
 import CloudGraph from '@cloudgraph/sdk'
 import { groupBy } from 'lodash'
-import { Credentials, TagMap } from '../../types'
+import { TagMap } from '../../types'
 import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
 import awsLoggerText from '../../properties/logger'
 
@@ -23,13 +23,13 @@ export interface RawAwsCognitoIdentityPool extends Omit<IdentityPool, 'IdentityP
   Tags: TagMap
 }
 
-const listIdentityPoolIds = async (cogId: COGID): Promise<IdentityPoolShortDescription[]> => {
+const listIdentityPoolIds = async (cogId: CognitoIdentity): Promise<IdentityPoolShortDescription[]> => {
   try {
     const fullResources: IdentityPoolShortDescription[] = []
   
     let identityPools = await cogId.listIdentityPools({
       MaxResults: MAX_RESULTS,
-    }).promise()
+    })
     fullResources.push(...identityPools.IdentityPools)
     let nextToken = identityPools.NextToken
 
@@ -37,7 +37,7 @@ const listIdentityPoolIds = async (cogId: COGID): Promise<IdentityPoolShortDescr
       identityPools = await cogId.listIdentityPools({
         MaxResults: MAX_RESULTS,
         NextToken: nextToken,
-      }).promise()
+      })
       fullResources.push(...identityPools.IdentityPools)
       nextToken = identityPools.NextToken
     }
@@ -52,11 +52,11 @@ const describeIdentityPool = async ({
   cogId, 
   IdentityPoolId, 
 }: {
-  cogId: COGID, 
+  cogId: CognitoIdentity, 
   IdentityPoolId: string, 
 }): Promise<Omit<IdentityPool, 'IdentityPoolTags'> & {Tags: TagMap}> => {
   try {
-    const identityPool = await cogId.describeIdentityPool({IdentityPoolId}).promise()
+    const identityPool = await cogId.describeIdentityPool({IdentityPoolId})
     logger.debug(lt.fetchedCognitoIdentityPool(IdentityPoolId))
     const Tags = identityPool.IdentityPoolTags || {}
     delete identityPool.IdentityPoolTags
@@ -75,7 +75,7 @@ const listIdentityPoolData = async ({
   cogId,
   region,
 }: {
-  cogId: COGID,
+  cogId: CognitoIdentity,
   region: string,
 }): Promise<RawAwsCognitoIdentityPool[]> => {
   const identityPoolData = []
@@ -99,14 +99,14 @@ export default async ({
   config,
 }: {
   regions: string
-  config: Config
+  config: any
 }): Promise<{
   [region: string]: RawAwsCognitoIdentityPool[]
 }> => {
   const cognitoData = []
   
   for (const region of regions.split(',')) {
-    const cogId = new COGID({ ...config, region, endpoint })
+    const cogId = new CognitoIdentity({ ...config, region, endpoint })
 
     /**
      * Fetch all Identity Pools

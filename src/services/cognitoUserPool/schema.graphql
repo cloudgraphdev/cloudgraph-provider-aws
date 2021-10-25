@@ -115,5 +115,5 @@ type awsCognitoUserPool @key(fields: "id") {
   accountRecoverySetting: [awsAccountRecoverySetting]
   region: String! @search(by: [hash, regexp])
   tags: [Tag]
-  lambda: [awsLambda] @hasInverse(field: cognitoUserPool)
+  # lambda: [awsLambda] @hasInverse(field: cognitoUserPool)
 }
