@@ -1,3 +1,10 @@
+# [0.37.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.36.1...0.37.0) (2021-10-25)
+
+
+### Features
+
+* **elasticBeanstalk:** add elasticBeanstalk service ([8c7cfea](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/8c7cfea00ee033002c2e62ab94a6a983251a95c9))
+
 ## [0.36.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.36.0...0.36.1) (2021-10-20)
 
 
