@@ -9,7 +9,7 @@ import { formatTagsFromMap } from '../../utils/format'
 export default ({ 
   service,
   account,
-  region,
+  region
 }:{
   service: RawAwsSecretsManager
   account: string
@@ -35,6 +35,7 @@ export default ({
     id: arn,
     accountId: account,
     arn,
+    region,
     name,
     description,
     kmsKeyId,

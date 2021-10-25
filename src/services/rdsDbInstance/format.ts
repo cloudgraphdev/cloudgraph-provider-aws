@@ -8,10 +8,12 @@ import { formatTagsFromMap } from '../../utils/format'
 export default ({
   service,
   account,
+  region
 }: 
 {
   service: RawAwsRdsDbInstance
   account: string
+  region: string
 }): AwsRdsDbInstance => {
   const {
     DBInstanceArn: arn,
@@ -57,6 +59,7 @@ export default ({
     id: arn,
     accountId: account,
     arn,
+    region,
     name: dBInstanceIdentifier,
     port: endpoint?.Port,
     address: endpoint?.Address,

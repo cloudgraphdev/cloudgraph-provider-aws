@@ -10,10 +10,12 @@ import {
 
 export default ({
   service,
+  region,
   account: accountId,
 }: 
 {
   service: AwsApiGatewayResource
+  region: string
   account: string
 }): AwsAGResourceType => {
   const {
@@ -39,6 +41,7 @@ export default ({
     id,
     accountId,
     arn,
+    region,
     path,
     methods,
   }

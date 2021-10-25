@@ -271,7 +271,7 @@ export default class Provider extends CloudGraph.Client {
         this.credentials = creds
         return resolveConfig(AWS.config)
       }
-      // If the client instance has creds set, weve gone through this function before.. just reuse them
+      // If the client instance has creds set, we've gone through this function before.. just reuse them
       if (
         this.credentials &&
         (this.profile === profile || this.role === role)
@@ -614,7 +614,7 @@ export default class Provider extends CloudGraph.Client {
      * 1. Format data with provider service format function
      * 2. build connections for data with provider service connections function
      * 3. spread new connections over result.connections
-     * 4. push the array of formatted entities into result.entites
+     * 4. push the array of formatted entities into result.entities
      */
     try {
       for (const serviceData of rawData) {
@@ -663,7 +663,7 @@ export default class Provider extends CloudGraph.Client {
           }
         }
         /**
-         * we have 2 things to check here, both dealing with multi-account senarios
+         * we have 2 things to check here, both dealing with multi-account scenarios
          * 1. Do we already have an entity by this name in the result (i.e. both accounts have vpcs)
          * 2. Do we already have the data for an entity that lives in multiple accounts
          * (i.e. a cloudtrail that appears in a master and sandbox account).
@@ -677,12 +677,12 @@ export default class Provider extends CloudGraph.Client {
         if (existingServiceIdx > -1) {
           const existingData = result.entities[existingServiceIdx].data
           for (const currentEntity of entities) {
-            const exisingEntityIdx = existingData.findIndex(
+            const existingEntityIdx = existingData.findIndex(
               ({ id }) => id === currentEntity.id
             )
-            if (exisingEntityIdx > -1) {
-              const entityToDelete = existingData[exisingEntityIdx]
-              existingData.splice(exisingEntityIdx, 1)
+            if (existingEntityIdx > -1) {
+              const entityToDelete = existingData[existingEntityIdx]
+              existingData.splice(existingEntityIdx, 1)
               const entityToMergeIdx = entities.findIndex(
                 ({ id }) => id === currentEntity.id
               )

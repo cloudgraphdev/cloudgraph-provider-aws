@@ -28,6 +28,7 @@ export default ({
     tags: formatTagsFromMap(Tags),
     accountId: account,
     arn: natGatewayArn({ region, account, id }),
+    region,
     state,
     createTime: createTime.toUTCString(),
   }

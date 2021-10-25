@@ -2,6 +2,7 @@ type awsElb @key(fields: "arn") {
   id: String! @search(by: [hash])
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
   dnsName: String @search(by: [hash, regexp])
   hostedZone: String @search(by: [hash, regexp])
   createdAt: String @search(by: [hash, regexp])

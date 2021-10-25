@@ -37,6 +37,8 @@ type awsTag @key(fields: "id") {
   iamPolicies: [awsIamPolicy]
   rdsCluster: [awsRdsCluster]
   rdsDbInstance: [awsRdsDbInstance]
+  elasticBeanstalkApp: [awsElasticBeanstalkApp]
+  elasticBeanstalkEnv: [awsElasticBeanstalkEnv]
 }
 
 # TODO: would this cause a collision with other providers? should we rename to like awsRawTag?

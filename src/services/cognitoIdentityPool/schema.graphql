@@ -22,6 +22,7 @@ type awsCognitoIdentityProviders
 type awsCognitoIdentityPool @key(fields: "id") {
   id: String! @id @search(by: [hash])
   accountId: String! @search(by: [hash])
+  region: String @search(by: [hash, regexp])
   identityPoolName: String @search(by: [hash, regexp])
   allowUnauthenticatedIdentities: String @search(by: [hash, regexp])
   allowClassicFlow: String @search(by: [hash, regexp])
@@ -30,6 +31,5 @@ type awsCognitoIdentityPool @key(fields: "id") {
   openIdConnectProviderARNs: [String] @search
   cognitoIdentityProviders: [awsCognitoIdentityProviders]
   samlProviderARNs: [String] @search
-  region: String @search(by: [hash, regexp])
   tags: [Tag]
 }

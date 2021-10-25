@@ -39,14 +39,14 @@ export default {
   /**
    * CloudFront
    */
-   fetchingCloudFrontData:
-     'Fetching CloudFront Distros for this AWS account via the AWS SDK...',
-   fetchedCloudFrontDistros: (num: number) =>
-     `Fetched ${num} CloudFront Distros`,
-   fetchingCloudFrontDistrosConfigAndTags:
-     'Fetching CloudFront Distros Config Data and Tags...',
-   doneFetchingCloudFrontDistrosConfigAndTags:
-     'Done fetching CloudFront Distros Config Data and Tags...',
+  fetchingCloudFrontData:
+    'Fetching CloudFront Distros for this AWS account via the AWS SDK...',
+  fetchedCloudFrontDistros: (num: number) =>
+    `Fetched ${num} CloudFront Distros`,
+  fetchingCloudFrontDistrosConfigAndTags:
+    'Fetching CloudFront Distros Config Data and Tags...',
+  doneFetchingCloudFrontDistrosConfigAndTags:
+    'Done fetching CloudFront Distros Config Data and Tags...',
   /**
    * Route53
    */
@@ -329,20 +329,20 @@ export default {
   /**
    * DynamoDb
    */
-   lookingForDynamoDb: 'Looking for DynamoDb Tables to add...',
-   fetchingDynamoDbData:
-     'Fetching DynamoDB data for this AWS account via the AWS SDK...',
-   doneFetchingDynamoDbData: (num: number) =>
-     `🕒 Done fetching DynamoDb Data in ${num} 🕘`,
-   fetchedDynamoDbTableNames: (num: number) =>
-     `Fetched ${num} DynamoDB table names`,
-   addingDynamoDbTables: (num: number) =>
-     `Found ${num} Dynamo DB tables, adding them to the Region`,
-   gettingTableDetails: 'Fetching details for each table...',
-   gettingTableTags: 'Fetching tags for each table...',
-   gettingTableTtlInfo: 'Fetching TTL description for each table...',
-   gettingTableBackupInfo:
-     'Fetching Continuous Backup description for each table...',
+  lookingForDynamoDb: 'Looking for DynamoDb Tables to add...',
+  fetchingDynamoDbData:
+    'Fetching DynamoDB data for this AWS account via the AWS SDK...',
+  doneFetchingDynamoDbData: (num: number) =>
+    `🕒 Done fetching DynamoDb Data in ${num} 🕘`,
+  fetchedDynamoDbTableNames: (num: number) =>
+    `Fetched ${num} DynamoDB table names`,
+  addingDynamoDbTables: (num: number) =>
+    `Found ${num} Dynamo DB tables, adding them to the Region`,
+  gettingTableDetails: 'Fetching details for each table...',
+  gettingTableTags: 'Fetching tags for each table...',
+  gettingTableTtlInfo: 'Fetching TTL description for each table...',
+  gettingTableBackupInfo:
+    'Fetching Continuous Backup description for each table...',
   /**
    * SNS
    */
@@ -412,11 +412,10 @@ export default {
   /**
    * Elastic Beanstalk
    */
-  lookingForEb: 'Looking for Elastic Beanstalk Applications to add...',
-  envWithNoVpcFound:
-    '⚠️  Found an Elastic Beanstalk Environment with no networking configuration but with EC2 Instances that live in this VPC ⚠️',
-  addingEb: (num: number): string =>
-    `Found ${num} Elastic Beanstalk Applications, adding them to the VPC`,
+  fetchedElasticBeanstalkApps: (num: number): string =>
+    `Fetched ${num} Elastic Beanstalk Applications`,
+  fetchedElasticBeanstalkEnvs: (num: number): string =>
+    `Fetched ${num} Elastic Beanstalk Environments`,
   /**
    * ElastiCache
    */
@@ -428,11 +427,11 @@ export default {
   /**
    * ECR
    */
-   fetchedECRRepos: (num: number): string => `Found ${num} ECR repos...`,
-   foundMoreECRRepos: (num: number) =>
-     `Found another ${num} ECR repos in this region...`,
-   gettingECRRepos: 'Fetching ECR repos...',
-   gettingECRRepoTags: 'Fetching tags for each ECR repo...',
+  fetchedECRRepos: (num: number): string => `Found ${num} ECR repos...`,
+  foundMoreECRRepos: (num: number) =>
+    `Found another ${num} ECR repos in this region...`,
+  gettingECRRepos: 'Fetching ECR repos...',
+  gettingECRRepoTags: 'Fetching tags for each ECR repo...',
   /**
    * Transit Gateway
    */
@@ -599,5 +598,5 @@ export default {
   /**
    * NACL
    */
-   fetchedNacls: (num: number): string => `Fetched ${num} NACLs`,
+  fetchedNacls: (num: number): string => `Fetched ${num} NACLs`,
 }

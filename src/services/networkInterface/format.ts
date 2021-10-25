@@ -43,8 +43,9 @@ export default ({
   const networkInterface = {
     id,
     accountId: account, 
-    arn: `arn:aws:ec2:${region}:${account}:network-interface/${id}`,
-    subnetId,
+    arn: `arn:aws:ec2:${region}:${account}:network-interface/${id}`, // TODO: move to generate arn util
+    region,
+    subnetId, // TODO: Add subnet connection to network interface
     macAddress,
     privateIps,
     description,

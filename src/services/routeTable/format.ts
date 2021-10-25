@@ -60,6 +60,7 @@ export default ({
     id,
     accountId: account,
     arn: routeTableArn({ region, account, id }),
+    region,
     vpcId,
     routes: formattedRoutes,
     mainRouteTable,

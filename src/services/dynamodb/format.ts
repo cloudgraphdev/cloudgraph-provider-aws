@@ -69,10 +69,12 @@ const formatProjection = (
  */
 export default ({
   service: dynamoDbTable,
-  account
+  account,
+  region
 }: {
   service: RawAwsDynamoDbTable
   account: string
+  region: string
 }): AwsDynamoDbTable => {
   const {
     TableId: id,
@@ -235,6 +237,7 @@ export default ({
   return {
     id,
     arn,
+    region,
     accountId: account,
     attributes,
     billingModeSummary,

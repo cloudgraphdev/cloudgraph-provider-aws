@@ -50,7 +50,8 @@ export default ({
   const ebs = {
     id,
     accountId: account,
-    arn: `arn:aws:ec2:${region}:${account}:volume/${id}`,
+    arn: `arn:aws:ec2:${region}:${account}:volume/${id}`, // TODO: move to a generate arn util
+    region,
     attachments: volumeAttachments,
     iops,
     size: `${size} ${t.gib}`,

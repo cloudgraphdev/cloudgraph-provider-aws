@@ -129,7 +129,8 @@ export default ({
     name,
     vpcId,
     accountId: account,
-    arn: `arn:aws:ec2:${region}:${account}:security-group/${id}`,
+    arn: `arn:aws:ec2:${region}:${account}:security-group/${id}`, // TODO: move to generate arn util
+    region,
     description,
     tags: formatTagsFromMap(Tags),
     owner,

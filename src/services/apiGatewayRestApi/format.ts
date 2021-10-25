@@ -11,10 +11,12 @@ import { formatTagsFromMap } from '../../utils/format'
 export default ({
   service,
   account: accountId,
+  region
 }: 
 {
   service: AwsApiGatewayRestApi
   account: string
+  region: string
 }): AwsAGRestApiType => {
   const {
     id,
@@ -36,6 +38,7 @@ export default ({
     id,
     accountId,
     arn,
+    region,
     description,
     policy,
     endpointConfiguration,
