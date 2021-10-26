@@ -8,7 +8,7 @@ import { RawAwsRoute53Record } from './data'
 import { RawAwsAlb } from '../alb/data'
 import { RawAwsElb } from '../elb/data'
 import { getHostedZoneId, getRecordId } from '../../utils/ids'
-import { AwsApiGatewayRestApi } from '../apiGatewayRestApi/data'
+import { RawAwsApiGatewayRestApi } from '../apiGatewayRestApi/data'
 
 /**
  * Route53 Record
@@ -95,7 +95,7 @@ export default ({
    * Find APIGWs
    * related to this Record
    */
-  const restApis: AwsApiGatewayRestApi[] =
+  const restApis: RawAwsApiGatewayRestApi[] =
     flatMap(
       data.find(
         ({ name: serviceName }) => serviceName === services.apiGatewayRestApi
@@ -104,7 +104,7 @@ export default ({
 
   if (!isEmpty(restApis)) {
     const restApisInRegion = restApis.filter(
-      ({ domainNames }: AwsApiGatewayRestApi) =>
+      ({ domainNames }: RawAwsApiGatewayRestApi) =>
         domainNames.find(({ domainName }) => name.includes(domainName))
     )
 

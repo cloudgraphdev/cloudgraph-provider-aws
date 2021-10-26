@@ -1,20 +1,14 @@
-import { AwsApiGatewayRestApi } from './data'
-import { 
-  AwsApiGatewayRestApi as AwsAGRestApiType, 
-} from '../../types/generated'
-import {
-  apiGatewayArn,
-  apiGatewayRestApiArn,
-} from '../../utils/generateArns'
+import { RawAwsApiGatewayRestApi } from './data'
+import { AwsApiGatewayRestApi as AwsAGRestApiType } from '../../types/generated'
+import { apiGatewayArn, apiGatewayRestApiArn } from '../../utils/generateArns'
 import { formatTagsFromMap } from '../../utils/format'
 
 export default ({
   service,
   account: accountId,
-  region
-}: 
-{
-  service: AwsApiGatewayRestApi
+  region,
+}: {
+  service: RawAwsApiGatewayRestApi
   account: string
   region: string
 }): AwsAGRestApiType => {

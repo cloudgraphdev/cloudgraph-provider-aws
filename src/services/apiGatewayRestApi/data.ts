@@ -17,7 +17,11 @@ import groupBy from 'lodash/groupBy'
 import { apiGatewayArn, apiGatewayRestApiArn } from '../../utils/generateArns'
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog, setAwsRetryOptions } from '../../utils'
+import {
+  initTestEndpoint,
+  generateAwsErrorLog,
+  setAwsRetryOptions,
+} from '../../utils'
 import { API_GATEWAY_CUSTOM_DELAY } from '../../config/constants'
 
 const lt = { ...awsLoggerText }
@@ -26,20 +30,24 @@ const MAX_REST_API = 500
 const MAX_DOMAIN_NAMES = 500
 const serviceName = 'API Gateway Rest API'
 const endpoint = initTestEndpoint(serviceName)
-const customRetrySettings = setAwsRetryOptions({ baseDelay: API_GATEWAY_CUSTOM_DELAY })
+const customRetrySettings = setAwsRetryOptions({
+  baseDelay: API_GATEWAY_CUSTOM_DELAY,
+})
 
-export interface AwsApiGatewayRestApi extends Omit<RestApi, 'tags'> {
+export interface RawAwsApiGatewayRestApi extends Omit<RestApi, 'tags'> {
   accountId: string
   tags: TagMap
   domainNames: (DomainName & { restApiData?: string[] })[]
   region: string
 }
 
-const getRestApisForRegion = async (apiGw: APIGW) =>
+export const getRestApisForRegion = async (
+  apiGw: APIGW
+): Promise<ListOfRestApi> =>
   new Promise<ListOfRestApi>(resolve => {
     const restApiList: ListOfRestApi = []
     const getRestApisOpts: GetRestApisRequest = {}
-    const listAllRestApis = (token?: string) => {
+    const listAllRestApis = (token?: string): void => {
       getRestApisOpts.limit = MAX_REST_API
       if (token) {
         getRestApisOpts.position = token
@@ -66,7 +74,13 @@ const getRestApisForRegion = async (apiGw: APIGW) =>
     listAllRestApis()
   })
 
-const getTags = async ({ apiGw, arn }): Promise<TagMap> =>
+export const getTags = async ({
+  apiGw,
+  arn,
+}: {
+  apiGw: APIGW
+  arn: string
+}): Promise<TagMap> =>
   new Promise(resolve => {
     try {
       apiGw.getTags({ resourceArn: arn }, (err: AWSError, data: Tags) => {
@@ -82,7 +96,10 @@ const getTags = async ({ apiGw, arn }): Promise<TagMap> =>
     }
   })
 
-const getAPIMappings = (apiGw: APIGW, domainName: string) =>
+const getAPIMappings = (
+  apiGw: APIGW,
+  domainName: string
+): Promise<{ domainName: string; restApiData: string[] }> =>
   new Promise<{ domainName: string; restApiData: string[] }>(
     resolveBasePathMapping =>
       apiGw.getBasePathMappings(
@@ -151,7 +168,7 @@ export default async ({
 }: {
   regions: string
   config: Config
-}): Promise<{ [property: string]: AwsApiGatewayRestApi[] }> =>
+}): Promise<{ [property: string]: RawAwsApiGatewayRestApi[] }> =>
   new Promise(async resolve => {
     const apiGatewayData = []
     let domainNamesData: (DomainName & { restApiData?: string[] })[] = []
@@ -159,7 +176,12 @@ export default async ({
     const tagsPromises = []
 
     regions.split(',').map(region => {
-      const apiGw = new APIGW({ ...config, region, endpoint, ...customRetrySettings })
+      const apiGw = new APIGW({
+        ...config,
+        region,
+        endpoint,
+        ...customRetrySettings,
+      })
       const regionPromise = new Promise<void>(async resolveRegion => {
         domainNamesData = await getDomainNamesForRegion(apiGw)
         const mappingPromises = domainNamesData.map(({ domainName }) =>
@@ -186,6 +208,7 @@ export default async ({
         resolveRegion()
       })
       regionPromises.push(regionPromise)
+      return null
     })
 
     await Promise.all(regionPromises)
@@ -193,7 +216,12 @@ export default async ({
 
     // get all tags for each rest api
     apiGatewayData.map(({ id, region }, idx) => {
-      const apiGw = new APIGW({ ...config, region, endpoint, ...customRetrySettings })
+      const apiGw = new APIGW({
+        ...config,
+        region,
+        endpoint,
+        ...customRetrySettings,
+      })
       const tagsPromise = new Promise<void>(async resolveTags => {
         const arn = apiGatewayRestApiArn({
           restApiArn: apiGatewayArn({ region }),
@@ -203,6 +231,7 @@ export default async ({
         resolveTags()
       })
       tagsPromises.push(tagsPromise)
+      return null
     })
 
     logger.debug(lt.gettingApiGatewayTags)
