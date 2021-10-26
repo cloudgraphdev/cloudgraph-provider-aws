@@ -465,7 +465,7 @@ export default class Provider extends CloudGraph.Client {
           const mergedData = {}
           for (const region in data) {
             if (newDataForEntity[region]) {
-              this.logger.debug(`Found old and new data for ${name} in ${region}, merging`)
+              this.logger.debug(`Found additional data for ${name} in ${region}, merging`)
               mergedData[region] = [...(data[region] ?? []), ...newDataForEntity[region]]
             } else {
               mergedData[region] = data[region]
