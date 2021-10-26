@@ -205,7 +205,7 @@ export default ({
   const ecsContainers: {
     name: string
     data: { [property: string]: any[] }
-  } = data.find(({ name }) => name === services.ecsService)
+  } = data.find(({ name }) => name === services.ecsContainer)
   if (ecsContainers?.data?.[region]) {
     const containersInRegion: RawAwsEcsContainer[] = ecsContainers.data[region].filter(
       ({ ec2InstanceId }) => ec2InstanceId === id

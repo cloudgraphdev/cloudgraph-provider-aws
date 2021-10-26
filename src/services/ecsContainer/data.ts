@@ -72,6 +72,7 @@ export default async ({
     const ecsContainerPromises = containerInstanceArns.map(
       async ({region, containerInstances}) =>
         new Promise<void>(resolveEcsData => {
+          if (isEmpty(containerInstances)) return resolveEcsData()
           new ECS({ ...config, region, endpoint }).describeContainerInstances(
             { containerInstances },
             (err, data) => {
