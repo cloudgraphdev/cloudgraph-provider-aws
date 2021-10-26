@@ -62,15 +62,12 @@ export default class Provider extends CloudGraph.Client {
   }
 
   logSelectedAccessRegionsAndResources(
-    accessType: string,
     profilesOrRolesToLog: string[],
     regionsToLog: string,
     resourcesToLog: string
   ): void {
     this.logger.info(
-      `${
-        accessType === 'profile' ? 'profiles' : 'roleARNs'
-      } configured: ${chalk.green(profilesOrRolesToLog.join(', '))}`
+      `Profiles and role ARNs configured: ${chalk.green(profilesOrRolesToLog.join(', '))}`
     )
     this.logger.info(
       `Regions configured: ${chalk.green(regionsToLog.replace(/,/g, ', '))}`
@@ -220,7 +217,6 @@ export default class Provider extends CloudGraph.Client {
       )} configuration successfully completed ${confettiBall}`
     )
     this.logSelectedAccessRegionsAndResources(
-      flags['use-roles'] || !profiles.length ? 'role' : 'profile',
       result.accounts.map(acct => acct.roleArn ?? acct.profile),
       result.regions,
       result.resources
@@ -326,7 +322,7 @@ export default class Provider extends CloudGraph.Client {
           })
           break
         }
-        case profile && profile !== 'default': {
+        case profile && profile !== '': {
           try {
             // TODO: how to catch the error from SharedIniFileCredentials when profile doent exist
             const credentials = new AWS.SharedIniFileCredentials({
@@ -460,15 +456,20 @@ export default class Provider extends CloudGraph.Client {
       try {
         const { name, data } = entity
         const newDataForEntity = newData.find(({name: serviceName}) => name === serviceName).data || {}
-        // if we have data for an entity (like vpc) in both data sets, merge their data
         if (newDataForEntity) {
-          const mergedData = {}
-          for (const region in data) {
-            if (newDataForEntity[region]) {
-              this.logger.debug(`Found additional data for ${name} in ${region}, merging`)
-              mergedData[region] = [...(data[region] ?? []), ...newDataForEntity[region]]
-            } else {
-              mergedData[region] = data[region]
+          let mergedData = {}
+          // if there is no old data for this service but there is new data, use the new data
+          if (isEmpty(data)) {
+            mergedData = newDataForEntity
+          } else {
+            // if we have data for an entity (like vpc) in both data sets, merge their data
+            for (const region in data) {
+              if (newDataForEntity[region]) {
+                this.logger.debug(`Found additional data for ${name} in ${region}, merging`)
+                mergedData[region] = [...(data[region] ?? []), ...newDataForEntity[region]]
+              } else {
+                mergedData[region] = data[region]
+              }
             }
           }
           result.push({
@@ -567,11 +568,10 @@ export default class Provider extends CloudGraph.Client {
     const usingEnvCreds = !!process.env.AWS_ACCESS_KEY_ID
 
     this.logSelectedAccessRegionsAndResources(
-      configuredAccounts[0].roleArn ? 'role' : 'profile',
       usingEnvCreds
         ? [ENV_VAR_CREDS_LOG]
         : configuredAccounts.map(acct => {
-            return acct.roleArn ?? acct.profile
+            return acct.roleArn || acct.profile
           }),
       configuredRegions,
       configuredResources
