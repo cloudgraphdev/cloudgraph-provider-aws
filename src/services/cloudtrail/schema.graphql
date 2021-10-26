@@ -1,6 +1,7 @@
-type awsCloudtrail @key(fields: "arn") {
-  id: String! @id @search(by: [hash, regexp])
-  arn: String! @id @search(by: [hash, regexp])
+type awsCloudtrail @key(fields: "cgId") {
+  id: String! @search(by: [hash, regexp])
+  cgId: String! @id @search(by: [hash, regexp])
+  arn: String! @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
   accountId: String! @search(by: [hash, regexp])
   name: String @search(by: [hash, regexp])

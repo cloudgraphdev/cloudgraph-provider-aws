@@ -1,3 +1,4 @@
+import cuid from 'cuid'
 import t from '../../properties/translations'
 import { AwsCloudtrail } from '../../types/generated';
 import { formatTagsFromMap } from '../../utils/format';
@@ -16,8 +17,6 @@ export default ({
     Name: name,
     S3BucketName: s3BucketName,
     S3KeyPrefix: s3KeyPrefix,
-    SnsTopicName: snsTopicName,
-    SnsTopicARN: snsTopicARN,
     IncludeGlobalServiceEvents: includeGlobalServiceEvents,
     IsMultiRegionTrail: isMultiRegionTrail,
     HomeRegion: homeRegion,
@@ -34,13 +33,12 @@ export default ({
 
   const cloudTrail = {
     id: arn,
+    cgId: cuid(),
     arn,
     accountId: account,
     name,
     s3BucketName,
     s3KeyPrefix,
-    snsTopicName,
-    snsTopicARN,
     includeGlobalServiceEvents: includeGlobalServiceEvents? t.yes : t.no,
     isMultiRegionTrail: isMultiRegionTrail? t.yes : t.no,
     homeRegion,
