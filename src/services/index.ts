@@ -692,15 +692,23 @@ export default class Provider extends CloudGraph.Client {
                     account: serviceData.accountId,
                     data: mergedRawData,
                   })
+                  // IF we have no pre existing connections for this entity, use new connections
+                  // otherwise, merge connections by unioning on id
                   if (!isEmpty(serviceConnections)) {
                     const entries: [string, any[]][] =
                       Object.entries(serviceConnections)
                     for (const [key, value] of entries) {
-                      serviceConnections[key] = unionBy(
-                        value,
-                        newConnections,
-                        'id'
-                      )
+                      // If there are no service connections for this entity i.e. { [serviceId]: [] }
+                      // use new connections for that key
+                      if (isEmpty(serviceConnections[key])) {
+                        serviceConnections[key] = newConnections[key] ?? []
+                      } else {
+                        serviceConnections[key] = unionBy(
+                          value,
+                          newConnections,
+                          'id'
+                        )
+                      }
                     }
                   } else {
                     serviceConnections = newConnections
