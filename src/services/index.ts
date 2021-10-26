@@ -322,7 +322,7 @@ export default class Provider extends CloudGraph.Client {
           })
           break
         }
-        case profile && profile !== '': {
+        case profile && profile !== 'default': {
           try {
             // TODO: how to catch the error from SharedIniFileCredentials when profile doent exist
             const credentials = new AWS.SharedIniFileCredentials({
@@ -346,6 +346,8 @@ export default class Provider extends CloudGraph.Client {
           }
         }
         default: {
+          // unset credentials before getting them for multi account scenarios
+          AWS.config.update({credentials: undefined})
           await new Promise<void>(resolve =>
             AWS.config.getCredentials((err: any) => {
               if (err) {
