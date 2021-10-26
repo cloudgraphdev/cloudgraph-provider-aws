@@ -34,6 +34,12 @@ interface Account {
   accessKeyId?: string
   secretAccessKey?: string
 }
+
+interface rawDataInterface {
+  name: string
+  accountId?: string
+  data: any 
+}
 export default class Provider extends CloudGraph.Client {
   constructor(config: any) {
     super(config)
@@ -271,7 +277,7 @@ export default class Provider extends CloudGraph.Client {
         this.credentials = creds
         return resolveConfig(AWS.config)
       }
-      // If the client instance has creds set, we've gone through this function before.. just reuse them
+      // If the client instance has creds set, weve gone through this function before.. just reuse them
       if (
         this.credentials &&
         (this.profile === profile || this.role === role)
@@ -445,13 +451,52 @@ export default class Provider extends CloudGraph.Client {
     return profiles || []
   }
 
+  private mergeRawData(oldData: rawDataInterface[], newData: rawDataInterface[]): rawDataInterface[] {
+    if (isEmpty(oldData)) {
+      return newData
+    }
+    const result: rawDataInterface[] = []
+    for (const entity of oldData) {
+      try {
+        const { name, data } = entity
+        const newDataForEntity = newData.find(({name: serviceName}) => name === serviceName).data || {}
+        // if we have data for an entity (like vpc) in both data sets, merge their data
+        if (newDataForEntity) {
+          const mergedData = {}
+          for (const region in data) {
+            if (newDataForEntity[region]) {
+              this.logger.debug(`Found old and new data for ${name} in ${region}, merging`)
+              mergedData[region] = [...(data[region] ?? []), ...newDataForEntity[region]]
+            } else {
+              mergedData[region] = data[region]
+            }
+          }
+          result.push({
+            name,
+            data: mergedData
+          })
+        // if not, just use the old data
+        } else {
+          result.push({
+            name,
+            data
+          })
+        }
+      } catch (error: any) {
+        this.logger.debug(error)
+        this.logger.error('There was an error merging raw data for AWS')
+      }
+    }
+    return result
+  }
+
   private async getRawData(
     account: Account,
     opts?: Opts
-  ): Promise<{ name: string; accountId: string; data: any }[]> {
+  ): Promise<rawDataInterface[]> {
     let { regions: configuredRegions, resources: configuredResources } =
       this.config
-    const result = []
+    const result: rawDataInterface[] = []
     if (!configuredRegions) {
       configuredRegions = this.properties.regions.join(',')
     } else {
@@ -534,7 +579,11 @@ export default class Provider extends CloudGraph.Client {
 
     // Leaving this here in case we need to test another service or to inject a logging function
     // setAwsRetryOptions({ global: true, configObj: this.config })
-    let rawData = []
+    let rawData: rawDataInterface[] = []
+    // We need to keep a merged copy of raw data so we can handle connections but keep a separate raw
+    // data so we can pass along accountId
+    // TODO: find a better way to handle this
+    let mergedRawData: rawDataInterface[] = []
     const tagRegion = 'aws-global'
     const tags = { name: 'tag', data: { [tagRegion]: [] } }
     // If the user has passed aws creds as env variables, dont use profile list
@@ -561,7 +610,9 @@ export default class Provider extends CloudGraph.Client {
         const { accountId } = await this.getIdentity(account)
         if (!crawledAccounts.find(val => val === accountId)) {
           crawledAccounts.push(accountId)
-          rawData = [...rawData, ...(await this.getRawData(account, opts))]
+          const newRawData = await this.getRawData(account, opts)
+          mergedRawData = this.mergeRawData(mergedRawData, newRawData)
+          rawData = [...rawData, ...newRawData]
         } else {
           this.logger.warn(
             // eslint-disable-next-line max-len
@@ -614,7 +665,7 @@ export default class Provider extends CloudGraph.Client {
      * 1. Format data with provider service format function
      * 2. build connections for data with provider service connections function
      * 3. spread new connections over result.connections
-     * 4. push the array of formatted entities into result.entities
+     * 4. push the array of formatted entities into result.entites
      */
     try {
       for (const serviceData of rawData) {
@@ -634,11 +685,12 @@ export default class Provider extends CloudGraph.Client {
                 // We need to loop through all configured regions here because services can be connected to things in another region
                 let serviceConnections = {}
                 for (const connectionRegion of configuredRegions.split(',')) {
+                  // Use merged raw data for connections so we can connect across accounts
                   const newConnections = serviceClass.getConnections({
                     service,
                     region: connectionRegion,
                     account: serviceData.accountId,
-                    data: rawData,
+                    data: mergedRawData,
                   })
                   if (!isEmpty(serviceConnections)) {
                     const entries: [string, any[]][] =
@@ -663,7 +715,7 @@ export default class Provider extends CloudGraph.Client {
           }
         }
         /**
-         * we have 2 things to check here, both dealing with multi-account scenarios
+         * we have 2 things to check here, both dealing with multi-account senarios
          * 1. Do we already have an entity by this name in the result (i.e. both accounts have vpcs)
          * 2. Do we already have the data for an entity that lives in multiple accounts
          * (i.e. a cloudtrail that appears in a master and sandbox account).
@@ -677,12 +729,12 @@ export default class Provider extends CloudGraph.Client {
         if (existingServiceIdx > -1) {
           const existingData = result.entities[existingServiceIdx].data
           for (const currentEntity of entities) {
-            const existingEntityIdx = existingData.findIndex(
+            const exisingEntityIdx = existingData.findIndex(
               ({ id }) => id === currentEntity.id
             )
-            if (existingEntityIdx > -1) {
-              const entityToDelete = existingData[existingEntityIdx]
-              existingData.splice(existingEntityIdx, 1)
+            if (exisingEntityIdx > -1) {
+              const entityToDelete = existingData[exisingEntityIdx]
+              existingData.splice(exisingEntityIdx, 1)
               const entityToMergeIdx = entities.findIndex(
                 ({ id }) => id === currentEntity.id
               )
@@ -709,7 +761,7 @@ export default class Provider extends CloudGraph.Client {
     try {
       result.entities = this.enrichInstanceWithBillingData(
         configuredRegions,
-        rawData,
+        mergedRawData,
         result.entities
       )
     } catch (error: any) {
@@ -723,85 +775,91 @@ export default class Provider extends CloudGraph.Client {
 
   enrichInstanceWithBillingData(
     configuredRegions: string,
-    rawData: any,
+    rawData: rawDataInterface[],
     entities: any
   ): any[] {
     const billingRegion = regionMap.usEast1
     let result = entities
     if (configuredRegions.includes(billingRegion)) {
-      const billing =
-        rawData.find(({ name }) => name === services.billing) ?? {}
-      const individualData: {
-        [key: string]: { cost: number; currency: string; formattedCost: string }
-      } = get(
-        billing,
-        ['data', billingRegion, '0', 'individualData'],
-        undefined
-      )
-      if (individualData) {
-        for (const [key, value] of Object.entries(individualData)) {
-          if (key.includes('natgateway') && !isEmpty()) {
-            // this billing data is for natgateway, search for the instance
-            const {
-              name,
-              mutation,
-              data: nats,
-            } = result.find(
-              ({ name: instanceName }: { name: string }) =>
-                instanceName === services.nat
-            ) ?? {}
-            if (!isEmpty(nats)) {
-              const natsWithBilling = nats.map(val => {
-                if (key.includes(val.id)) {
-                  return {
-                    ...val,
-                    dailyCost: {
-                      cost: value?.cost,
-                      currency: value?.currency,
-                      formattedCost: value?.formattedCost,
-                    },
-                  }
-                }
-                return val
-              })
-              result = result.filter(
-                ({ name: serviceName }) => serviceName !== services.nat
-              )
-              result.push({
+      const billingArray =
+        rawData.find(({ name }) => name === services.billing)?.data?.[billingRegion] ?? []
+      for (const billing of billingArray) {
+        const individualData: {
+          [key: string]: { cost: number; currency: string; formattedCost: string }
+        } = get(
+          billing,
+          ['individualData'],
+          undefined
+        )
+        if (individualData) {
+          for (const [key, value] of Object.entries(individualData)) {
+            if (key.includes('natgateway') && !isEmpty()) {
+              // this billing data is for natgateway, search for the instance
+              const {
                 name,
                 mutation,
-                data: natsWithBilling,
-              })
+                data: nats,
+              } = result.find(
+                ({ name: instanceName }: { name: string }) =>
+                  instanceName === services.nat
+              ) ?? {}
+              if (!isEmpty(nats)) {
+                const natsWithBilling = nats.map(val => {
+                  if (key.includes(val.id)) {
+                    return {
+                      ...val,
+                      dailyCost: {
+                        cost: value?.cost,
+                        currency: value?.currency,
+                        formattedCost: value?.formattedCost,
+                      },
+                    }
+                  }
+                  return val
+                })
+                result = result.filter(
+                  ({ name: serviceName }) => serviceName !== services.nat
+                )
+                result.push({
+                  name,
+                  mutation,
+                  data: natsWithBilling,
+                })
+              }
             }
-          }
-          if (key.includes('i-')) {
-            // this billing data is for ec2, search for the instance
-            const {
-              name,
-              mutation,
-              data: ec2s,
-            } = result.find(
-              ({ name: instanceName }: { name: string }) =>
-                instanceName === services.ec2Instance
-            ) ?? {}
-            if (!isEmpty(ec2s)) {
-              const ec2WithBilling = ec2s.map(val => {
-                if (key === val.id) {
-                  return {
-                    ...val,
-                    dailyCost: value,
-                  }
-                }
-                return val
-              })
-              result = result.filter(
-                ({ name: serviceName }) => serviceName !== services.ec2Instance
-              )
-              result.push({
+            if (key.includes('i-')) {
+              // this billing data is for ec2, search for the instance
+              const {
                 name,
                 mutation,
-                data: ec2WithBilling,
-              })
+                data: ec2s,
+              } = result.find(
+                ({ name: instanceName }: { name: string }) =>
+                  instanceName === services.ec2Instance
+              ) ?? {}
+              if (!isEmpty(ec2s)) {
+                const ec2WithBilling = ec2s.map(val => {
+                  if (key === val.id) {
+                    return {
+                      ...val,
+                      dailyCost: {
+                        cost: value?.cost,
+                        currency: value?.currency,
+                        formattedCost: value?.formattedCost,
+                      },
+                    }
+                  }
+                  return val
+                })
+                result = result.filter(
+                  ({ name: serviceName }) => serviceName !== services.ec2Instance
+                )
+                result.push({
+                  name,
+                  mutation,
+                  data: ec2WithBilling,
+                })
+              }
             }
           }
         }

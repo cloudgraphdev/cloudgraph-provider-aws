@@ -1,4 +1,5 @@
 type awsBilling {
+  id: String!
   account: String! @id @search(by: [hash])
   totalCostMonthToDate: awsTotalBillingInfo
   totalCostLast30Days: awsTotalBillingInfo
