@@ -18,4 +18,5 @@ type awsKms @key(fields: "id"){
   validTo: String @search(by: [hash, regexp])
   lambda: [awsLambda] @hasInverse(field: kms)
   cloudtrail: [awsCloudtrail] @hasInverse(field: kms)
+  redshiftCluster: [awsRedshiftCluster] @hasInverse(field: kms)
 }

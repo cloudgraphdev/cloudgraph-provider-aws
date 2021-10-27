@@ -93,13 +93,14 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | igw                      | vpc                                                                                                  |
 | kinesisFirehose          | kinesisStream, s3                                                                                    |
 | kinesisStream            |                                                                                                      |
-| kms                      | lambda                                                                                               |
+| kms                      | lambda, redshiftCluster                                                                              |
 | lambda                   | kms, securityGroups, subnet, vpc                                                                     |
 | nacl                     | vpc                                                                                                  |
 | natGateway               | networkInterface, subnet, vpc                                                                        |
 | networkInterface         | ec2, eip, natGateway, subnet, vpc                                                                    |
 | rdsCluster               | rdsDbInstance, securityGroups                                                                        |
 | rdsDbInstance            | rdsCluster, securityGroups, vpc, subnet                                                              |
+| redshiftCluster          | kms, vpc                                                                                             |
 | route53Record            | alb, apiGatewayRestApi, elb, route53HostedZone                                                       |
 | route53HostedZone        | route53Record, vpc                                                                                   |
 | routeTable               | subnet, vpc                                                                                          |

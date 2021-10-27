@@ -32,6 +32,7 @@ import NetworkAcl from '../services/nacl'
 import NetworkInterface from '../services/networkInterface'
 import RDSCluster from '../services/rdsCluster'
 import RDSDbInstance from '../services/rdsDbInstance'
+import RedshiftCluster from '../services/redshift'
 import Route53HostedZone from '../services/route53HostedZone'
 import Route53Record from '../services/route53Record'
 import RouteTable from '../services/routeTable'
@@ -92,6 +93,7 @@ export default {
   [services.sqs]: SQS,
   [services.rdsCluster]: RDSCluster,
   [services.rdsDbInstance]: RDSDbInstance,
+  [services.redshiftCluster]: RedshiftCluster,
   [services.route53HostedZone]: Route53HostedZone,
   [services.route53Record]: Route53Record,
   [services.routeTable]: RouteTable,

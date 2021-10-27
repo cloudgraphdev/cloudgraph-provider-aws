@@ -181,6 +181,15 @@ resource "aws_kms_key" "lambda_kms_key" {
   }
 }
 
+resource "aws_kms_key" "redshift_kms_key" {
+  description             = "KMS key 2"
+  deletion_window_in_days = 10
+
+  tags = {
+    Name = "Main"
+  }
+}
+
 resource "aws_api_gateway_rest_api" "example" {
   body = jsonencode({
     openapi = "3.0.1"
@@ -717,4 +726,21 @@ resource "aws_secretsmanager_secret" "example" {
 #   database_name      = "mydb"
 #   master_username    = "foo"
 #   master_password    = "barbut8chars"
+# }
+
+# │ Error: Error waiting for Redshift Cluster state to be "available": unexpected state 'destroyed', wanted target 'available'. last error: %!s(<nil>)
+# │ 
+# │   with aws_redshift_cluster.redshift_cluster,
+# │   on aws.tf line 851, in resource "aws_redshift_cluster" "redshift_cluster":
+# │  851: resource "aws_redshift_cluster" "redshift_cluster" {
+# │ 
+# resource "aws_redshift_cluster" "redshift_cluster" {
+#   cluster_identifier = "tf-redshift-cluster"
+#   database_name      = "mydb"
+#   encrypted          = true
+#   kms_key_id         = aws_kms_key.redshift_kms_key.arn
+#   master_username    = "foo"
+#   master_password    = "Mustbe8characters"
+#   node_type          = "dc1.large"
+#   cluster_type       = "single-node"
 # }
