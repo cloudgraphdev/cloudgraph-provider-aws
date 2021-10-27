@@ -310,6 +310,7 @@ export type AwsAsg = {
 };
 
 export type AwsBilling = {
+  id: Scalars['String'];
   account: Scalars['String'];
   totalCostMonthToDate?: Maybe<AwsTotalBillingInfo>;
   totalCostLast30Days?: Maybe<AwsTotalBillingInfo>;

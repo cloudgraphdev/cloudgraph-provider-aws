@@ -48,7 +48,6 @@ export default ({
 }): {
   [property: string]: ServiceConnection[]
 } => {
-  // console.log(`Searching for connections for tag ${JSON.stringify(tag)}`)
   const connections: ServiceConnection[] = []
   for (const region of regions) {
     /**

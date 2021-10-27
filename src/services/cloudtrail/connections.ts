@@ -80,8 +80,8 @@ export default ({
 
   // TODO add Sns Topic connection
 
-  const asgResult = {
+  const cloudTrailResult = {
     [id]: connections,
   }
-  return asgResult;
+  return cloudTrailResult;
 }

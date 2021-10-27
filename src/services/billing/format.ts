@@ -31,6 +31,7 @@ export default ({
   const formattedLast30DailyAverage = formatCostData(last30DaysDailyAverage)
   const formattedMonthToDateDailyAverage = formatCostData(monthToDateDailyAverage)
   return {
+    id: account,
     account,
     totalCostMonthToDate,
     totalCostLast30Days,
