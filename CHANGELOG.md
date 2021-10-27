@@ -1,3 +1,16 @@
+# [0.39.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.38.2...0.39.0) (2021-10-27)
+
+
+### Bug Fixes
+
+* **redshift:** use arn in connections key ([5eb33b2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/5eb33b20f78d72bcaf9143398f8de0b84c84e1d7))
+* **redshift:** use vpc type in connections ([297cc03](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/297cc0355ff368afbbef0363088c4fb7774bc5ba))
+
+
+### Features
+
+* **redshift:** add redshift service ([312f105](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/312f105e65e8e4e458bc196501e6411f755b7f30))
+
 ## [0.38.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.38.1...0.38.2) (2021-10-27)
 
 
