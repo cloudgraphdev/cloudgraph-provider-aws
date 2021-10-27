@@ -159,11 +159,13 @@ export function generateAwsErrorLog(
     logger.warn(
       `There was a problem getting data for service ${service}, CG encountered an error calling ${functionName}`
     )
+    if (err?.message?.includes(notAuthorized) || err?.code === accessDenied) {
+      logger.warn(err.message)
+    }
+    logger.debug(err)
+  } else {
+    logger.debug(`Rate exceeded for ${service}:${functionName}. Retrying...`)
   }
-  if (err?.message?.includes(notAuthorized) || err?.code === accessDenied) {
-    logger.warn(err.message)
-  }
-  logger.debug(err)
 }
 
 export const settleAllPromises = async (
