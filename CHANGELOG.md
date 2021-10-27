@@ -1,3 +1,13 @@
+## [0.38.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.38.1...0.38.2) (2021-10-27)
+
+
+### Bug Fixes
+
+* **config:** update getting aws config for default creds ([6dbdbb5](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/6dbdbb572850ceba2df0ceda7f7a24f166e314dc))
+* **getData:** fix connections merging to ensure we dont drop connections ([b2a6dc9](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b2a6dc905295942bf30994b5fb0e44d42d2fde65))
+* **getData:** update getting raw data to use merged raw data for connections ([dc88000](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/dc88000a077993616e53fc5e6c48fcf832a50280))
+* **getData:** update merge data to handle no data for a service ([6387419](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/6387419daa73b24591f0d7fa32ff8477a2c803e5))
+
 ## [0.38.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.38.0...0.38.1) (2021-10-25)
 
 
