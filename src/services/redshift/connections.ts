@@ -1,6 +1,6 @@
 import { ServiceConnection } from '@cloudgraph/sdk'
 import { isEmpty } from 'lodash'
-import { SecurityGroup } from 'aws-sdk/clients/ec2'
+import { RawAwsVpc } from '../vpc/data'
 import { RawAwsRedshiftCluster } from '../redshift/data'
 import { redshiftArn } from '../../utils/generateArns'
 import services from '../../enums/services'
@@ -53,7 +53,7 @@ export default ({
   
   if (vpcs?.data?.[region]) {
     const vpc = vpcs.data[region].find(
-      ({ VpcId }: SecurityGroup) => VpcId === vpcId
+      ({ VpcId }: RawAwsVpc) => VpcId === vpcId
     )
 
     if (vpc) {
