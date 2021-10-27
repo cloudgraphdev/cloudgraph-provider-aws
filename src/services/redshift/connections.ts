@@ -2,13 +2,16 @@ import { ServiceConnection } from '@cloudgraph/sdk'
 import { isEmpty } from 'lodash'
 import { SecurityGroup } from 'aws-sdk/clients/ec2'
 import { RawAwsRedshiftCluster } from '../redshift/data'
+import { redshiftArn } from '../../utils/generateArns'
 import services from '../../enums/services'
 
 export default ({
+  account,
   service,
   data,
   region,
 }: {
+  account: string
   service: RawAwsRedshiftCluster
   data: Array<{ name: string; data: { [property: string]: any[] } }>
   region: string
@@ -16,7 +19,8 @@ export default ({
   [property: string]: ServiceConnection[]
 } => {
   const connections: ServiceConnection[] = []
-  const { ClusterIdentifier: id, KmsKeyId: kmsKeyId, VpcId: vpcId } = service
+  const { ClusterIdentifier, KmsKeyId: kmsKeyId, VpcId: vpcId } = service
+  const id = redshiftArn({region, account, id: ClusterIdentifier})
 
   /**
    * Find KMS
