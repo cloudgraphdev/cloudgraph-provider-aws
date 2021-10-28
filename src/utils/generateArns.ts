@@ -52,11 +52,21 @@ export const sesArn = ({
 }): string => `arn:aws:ses:${region}:${account}:identity/${email}`
 
 export const redshiftArn = ({
-  region, 
-  account, 
+  region,
+  account,
   id,
 }: {
   region: string
   account: string
   id: string
 }): string => `arn:aws:redshift:${region}:${account}:cluster:${id}`
+
+export const kmsArn = ({
+  region,
+  account,
+  id,
+}: {
+  region: string
+  account: string
+  id: string
+}) : string => `arn:aws:kms:${region}:${account}:key/${id}`

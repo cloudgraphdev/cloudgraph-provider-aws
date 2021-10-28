@@ -1,0 +1,24 @@
+type awsSns @key(fields: "arn") {
+  id: String! @search(by: [hash])
+  accountId: String! @search(by: [hash])
+	arn: String! @id @search(by: [hash, regexp])
+  tags: [Tag]
+  policy: String @search(by: [hash, regexp])
+  displayName: String @search(by: [hash, regexp])
+  deliveryPolicy: String @search(by: [hash, regexp])
+  subscriptions: [awsSnsSubscription]
+  cloudtrail: [awsCloudtrail] @hasInverse(field: sns)
+  kms: [awsKms] @hasInverse(field: sns)
+}
+
+type awsSnsSubscription 
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id
+    arn: String @search(by: [hash, regexp])
+    endpoint: String @search(by: [hash, regexp])
+    protocol: String @search(by: [hash, regexp])
+  }

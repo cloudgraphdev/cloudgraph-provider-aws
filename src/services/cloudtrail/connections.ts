@@ -1,12 +1,11 @@
 import isEmpty from 'lodash/isEmpty'
 
-import { ServiceConnection } from '@cloudgraph/sdk';
-import { Trail } from 'aws-sdk/clients/cloudtrail';
+import { ServiceConnection } from '@cloudgraph/sdk'
+import { Trail } from 'aws-sdk/clients/cloudtrail'
 import { TagMap } from '../../types';
-import { s3BucketArn } from '../../utils/generateArns';
-
-import services from '../../enums/services';
-import { gets3BucketId } from '../../utils/ids';
+import { s3BucketArn } from '../../utils/generateArns'
+import { gets3BucketId } from '../../utils/ids'
+import services from '../../enums/services'
 
 /**
  * CloudTrail
@@ -29,7 +28,7 @@ export default ({
   const {
     TrailARN: id,
     S3BucketName: s3BucketName,
-    // SnsTopicARN: snsTopicARN,
+    SnsTopicARN: snsTopicARN,
     KmsKeyId: kmsKeyId,
   } = cloudTrail
 
@@ -57,6 +56,28 @@ export default ({
   }
 
   /**
+   * Find SNS topic
+   * related to the cloudTrail
+   */
+  const snsTopics = data.find(({ name }) => name === services.sns)
+  if (snsTopics?.data?.[region]) {
+    const snsTopicsInRegion = snsTopics.data[region].filter(topic =>
+      topic.TopicArn === snsTopicARN
+    )
+
+    if (!isEmpty(snsTopicsInRegion)) {
+      for (const topic of snsTopicsInRegion) {
+        connections.push({
+          id: topic.TopicArn,
+          resourceType: services.sns,
+          relation: 'child',
+          field: 'sns',
+        })
+      }
+    }
+  }
+
+  /**
    * Find KMS
    * related to the cloudTrail
    */
@@ -77,8 +98,6 @@ export default ({
       }
     }
   }
-
-  // TODO add Sns Topic connection
 
   const cloudTrailResult = {
     [id]: connections,

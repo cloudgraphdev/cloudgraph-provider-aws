@@ -527,14 +527,13 @@ export type AwsCloudfrontforwardedValues = {
 
 export type AwsCloudtrail = {
   id: Scalars['String'];
+  cgId: Scalars['String'];
   arn: Scalars['String'];
   region?: Maybe<Scalars['String']>;
   accountId: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   s3BucketName?: Maybe<Scalars['String']>;
   s3KeyPrefix?: Maybe<Scalars['String']>;
-  snsTopicName?: Maybe<Scalars['String']>;
-  snsTopicARN?: Maybe<Scalars['String']>;
   includeGlobalServiceEvents?: Maybe<Scalars['String']>;
   isMultiRegionTrail?: Maybe<Scalars['String']>;
   homeRegion?: Maybe<Scalars['String']>;
@@ -547,6 +546,7 @@ export type AwsCloudtrail = {
   isOrganizationTrail?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   s3?: Maybe<Array<Maybe<AwsS3>>>;
+  sns?: Maybe<Array<Maybe<AwsSns>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
 };
 
@@ -1224,6 +1224,7 @@ export type AwsKms = {
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
   redshiftCluster?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
+  sns?: Maybe<Array<Maybe<AwsSns>>>;
 };
 
 export type AwsLambda = {
@@ -1682,6 +1683,26 @@ export type AwsShards = {
   sequenceNumberRangeEnding?: Maybe<Scalars['String']>;
 };
 
+export type AwsSns = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  policy?: Maybe<Scalars['String']>;
+  displayName?: Maybe<Scalars['String']>;
+  deliveryPolicy?: Maybe<Scalars['String']>;
+  subscriptions?: Maybe<Array<Maybe<AwsSnsSubscription>>>;
+  cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
+};
+
+export type AwsSnsSubscription = {
+  id: Scalars['String'];
+  arn?: Maybe<Scalars['String']>;
+  endpoint?: Maybe<Scalars['String']>;
+  protocol?: Maybe<Scalars['String']>;
+};
+
 export type AwsSqs = {
   id: Scalars['String'];
   accountId: Scalars['String'];
@@ -1779,6 +1800,7 @@ export type AwsTag = {
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   elasticBeanstalkApp?: Maybe<Array<Maybe<AwsElasticBeanstalkApp>>>;
   elasticBeanstalkEnv?: Maybe<Array<Maybe<AwsElasticBeanstalkEnv>>>;
+  sns?: Maybe<Array<Maybe<AwsSns>>>;
 };
 
 export type AwsTotalBillingInfo = {

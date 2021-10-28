@@ -357,6 +357,10 @@ export default {
   /**
    * SNS
    */
+  fetchedSNSTopics: (num: number) => `Fetched ${num} SNS Topics`,
+  gettingSNSTopicAttributes: `Fetching attributes for each topic...`,
+  gettingSNSTopicTags: `Fetching tags for each topic...`,
+  gettingSNSTopicSubscriptions: `Fetching subscriptions for each topic...`,
   lookingForSns: 'Looking for SNS topics and subscriptions to add...',
   addingSns: (num: number): string =>
     `Found ${num} SNS topics, adding them to the Region`,

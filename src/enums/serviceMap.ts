@@ -50,6 +50,7 @@ import IamPasswordPolicy from '../services/iamPasswordPolicy'
 import IamSamlProvider from '../services/iamSamlProvider'
 import IamOpenIdConnectProvider from '../services/iamOpenIdConnectProvider'
 import IamServerCertificate from '../services/iamServerCertificate'
+import SNS from '../services/sns'
 import services from './services'
 
 /**
@@ -108,5 +109,6 @@ export default {
   [services.iamSamlProvider]: IamSamlProvider,
   [services.iamOpenIdConnectProvider]: IamOpenIdConnectProvider,
   [services.iamServerCertificate]: IamServerCertificate,
+  [services.sns]: SNS,
   tag: AwsTag,
 }
