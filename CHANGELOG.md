@@ -1,3 +1,17 @@
+# [0.40.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.39.2...0.40.0) (2021-10-28)
+
+
+### Bug Fixes
+
+* **sns:** add cgId, use bucket/kms arn in connection ([6148536](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/61485360afa06fbb2e1be7b2b6dabbdd4a44d66f))
+* **sns:** add cloudtrail/kms connections, schema updates ([8a46afe](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/8a46afe40efb036f6eaf3e4d8cf32391010d8f17))
+* **sns:** cleanup ([ec459fa](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/ec459fa8de9ba3cbdf14fe7b2bc1262686f5becf))
+
+
+### Features
+
+* **sns:** add sns service ([c268e98](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c268e9897409fb843229674e1465de75228adbbb))
+
 ## [0.39.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.39.1...0.39.2) (2021-10-28)
 
 
