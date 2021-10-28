@@ -4,7 +4,7 @@ import { ServiceConnection } from '@cloudgraph/sdk'
 import { Trail } from 'aws-sdk/clients/cloudtrail'
 import { TagMap } from '../../types';
 import { s3BucketArn } from '../../utils/generateArns'
-
+import { gets3BucketId } from '../../utils/ids'
 import services from '../../enums/services'
 
 /**
@@ -46,7 +46,7 @@ export default ({
     if (!isEmpty(s3BucketInRegion)) {
       for (const s3 of s3BucketInRegion) {
         connections.push({
-          id: s3BucketArn({name: s3.Name}),
+          id: gets3BucketId(s3.Name),
           resourceType: services.s3,
           relation: 'child',
           field: 's3',
@@ -90,12 +90,11 @@ export default ({
     if (!isEmpty(kmsKeyInRegion)) {
       for (const kms of kmsKeyInRegion) {
         connections.push({
-          id: kms.Arn,
+          id: kms.KeyId,
           resourceType: services.kms,
           relation: 'child',
           field: 'kms',
         })
-        console.log(connections)
       }
     }
   }
