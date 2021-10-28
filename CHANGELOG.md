@@ -1,3 +1,10 @@
+## [0.39.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.39.1...0.39.2) (2021-10-28)
+
+
+### Bug Fixes
+
+* **iamPolicies:** change scope to get user managed and attached aws policies ([28b6bdc](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/28b6bdcf71c572adfe9df0f021be9686ce9babd8))
+
 ## [0.39.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.39.0...0.39.1) (2021-10-28)
 
 
