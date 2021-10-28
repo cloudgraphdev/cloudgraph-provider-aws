@@ -32,8 +32,7 @@ export default ({
   } = rawData
 
   const cloudTrail = {
-    id: arn,
-    cgId: cuid(),
+    id: cuid(),
     arn,
     accountId: account,
     name,

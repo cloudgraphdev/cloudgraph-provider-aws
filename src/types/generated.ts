@@ -527,7 +527,6 @@ export type AwsCloudfrontforwardedValues = {
 
 export type AwsCloudtrail = {
   id: Scalars['String'];
-  cgId: Scalars['String'];
   arn: Scalars['String'];
   region?: Maybe<Scalars['String']>;
   accountId: Scalars['String'];
