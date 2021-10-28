@@ -1,3 +1,10 @@
+## [0.39.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.39.0...0.39.1) (2021-10-28)
+
+
+### Bug Fixes
+
+* **apiGateway:** share data between apiGw parent and children services ([a9186c4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a9186c4d4b1db708ffe7d093ecdc971462c4c9f5))
+
 # [0.39.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.38.2...0.39.0) (2021-10-27)
 
 
