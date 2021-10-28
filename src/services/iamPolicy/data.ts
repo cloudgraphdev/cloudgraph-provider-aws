@@ -1,6 +1,7 @@
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
+import unionBy from 'lodash/unionBy'
 
 import { AWSError } from 'aws-sdk/lib/error'
 
@@ -25,10 +26,11 @@ import { convertAwsTagsToTagMap } from '../../utils/format'
 import {
   IAM_CUSTOM_DELAY,
   MAX_FAILED_AWS_REQUEST_RETRIES,
-  POLICY_SCOPE,
 } from '../../config/constants'
 import MessageInterval from '../../utils/messageInterval'
 
+
+const MAX_ITEMS = 1000
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'IAM Policy'
@@ -98,9 +100,11 @@ export const listIamPolicies = async ({
   iam,
   marker,
   intervalMessage,
+  scope,
 }: {
   iam: IAM
   marker?: string
+  scope: 'All' | 'Local'
   intervalMessage: MessageInterval
 }): Promise<RawAwsIamPolicy[]> =>
   new Promise(resolve => {
@@ -109,7 +113,12 @@ export const listIamPolicies = async ({
     const policyDetailByArnePromises = []
 
     iam.listPolicies(
-      { Marker: marker, Scope: POLICY_SCOPE },
+      {
+        Marker: marker,
+        MaxItems: MAX_ITEMS,
+        OnlyAttached: scope === 'All',
+        Scope: scope,
+      },
       async (err: AWSError, data: ListPoliciesResponse) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'iam:listPolicies', err)
@@ -148,6 +157,7 @@ export const listIamPolicies = async ({
                 iam,
                 marker: Marker,
                 intervalMessage,
+                scope,
               }))
             )
           }
@@ -190,11 +200,21 @@ export default async ({
     )
 
     intervalMessage.start()
-
-    // Fetch IAM Policies
-    policiesData = await listIamPolicies({ iam: client, intervalMessage })
-
+    // Fetch IAM Policies (scope: All, Attached: true)
+    const allAttachedPolicies = await listIamPolicies({
+      iam: client,
+      intervalMessage,
+      scope: 'All',
+    })
+    // Fetch IAM Policies (scope: Local, Attached: false)
+    const localPolicies = await listIamPolicies({
+      iam: client,
+      intervalMessage,
+      scope: 'Local',
+    })
     intervalMessage.stop()
+
+    policiesData = unionBy(allAttachedPolicies, localPolicies, 'Arn')
 
     logger.debug(lt.foundPolicies(policiesData.length))
 
