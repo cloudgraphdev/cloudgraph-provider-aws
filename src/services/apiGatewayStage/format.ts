@@ -1,7 +1,5 @@
-import { AwsApiGatewayStage } from './data'
-import { 
-  AwsApiGatewayStage as AwsAGStageType, 
-} from '../../types/generated'
+import { RawAwsApiGatewayStage } from './data'
+import { AwsApiGatewayStage as AwsAGStageType } from '../../types/generated'
 import {
   apiGatewayArn,
   apiGatewayRestApiArn,
@@ -11,10 +9,9 @@ import { formatTagsFromMap } from '../../utils/format'
 
 export default ({
   service,
-  account: accountId
-}: 
-{
-  service: AwsApiGatewayStage
+  account: accountId,
+}: {
+  service: RawAwsApiGatewayStage
   account: string
 }): AwsAGStageType => {
   const {
@@ -40,8 +37,7 @@ export default ({
     name,
   })
 
-  const variables = Object.entries(vars)
-  .map(([k, v]) => ({key: k, value: v}))
+  const variables = Object.entries(vars).map(([k, v]) => ({ key: k, value: v }))
 
   return {
     id: arn,

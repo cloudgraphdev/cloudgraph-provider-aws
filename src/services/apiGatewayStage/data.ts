@@ -1,13 +1,9 @@
 import CloudGraph from '@cloudgraph/sdk'
 import APIGW, {
-  RestApis,
-  ListOfRestApi,
-  GetRestApisRequest,
   Stage,
   Stages,
   ListOfStage,
   GetStagesRequest,
-  Tags,
 } from 'aws-sdk/clients/apigateway'
 import { AWSError } from 'aws-sdk/lib/error'
 import { Config } from 'aws-sdk/lib/config'
@@ -20,55 +16,34 @@ import {
 } from '../../utils/generateArns'
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog, setAwsRetryOptions } from '../../utils'
+import {
+  initTestEndpoint,
+  generateAwsErrorLog,
+  setAwsRetryOptions,
+} from '../../utils'
 import { API_GATEWAY_CUSTOM_DELAY } from '../../config/constants'
+import {
+  getRestApisForRegion,
+  getTags,
+  RawAwsApiGatewayRestApi,
+} from '../apiGatewayRestApi/data'
+import services from '../../enums/services'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const MAX_REST_API = 500
 const serviceName = 'API Gateway Stage'
 const endpoint = initTestEndpoint(serviceName)
-const customRetrySettings = setAwsRetryOptions({ baseDelay: API_GATEWAY_CUSTOM_DELAY })
+const customRetrySettings = setAwsRetryOptions({
+  baseDelay: API_GATEWAY_CUSTOM_DELAY,
+})
 
-export interface AwsApiGatewayStage extends Omit<Stage, 'tags'> {
-  accountId: string
+export interface RawAwsApiGatewayStage extends Omit<Stage, 'tags'> {
   restApiId: string
-  tags: TagMap
+  tags?: TagMap
   region: string
 }
 
-const getRestApisForRegion = async apiGw =>
-  new Promise<ListOfRestApi>(resolve => {
-    const restApiList: ListOfRestApi = []
-    const getRestApisOpts: GetRestApisRequest = {}
-    const listAllRestApis = (token?: string) => {
-      getRestApisOpts.limit = MAX_REST_API
-      if (token) {
-        getRestApisOpts.position = token
-      }
-      try {
-        apiGw.getRestApis(getRestApisOpts, (err: AWSError, data: RestApis) => {
-          const { position, items = [] } = data || {}
-          if (err) {
-            generateAwsErrorLog(serviceName, 'apiGw:getRestApis', err)
-          }
-
-          restApiList.push(...items)
-
-          if (position) {
-            listAllRestApis(position)
-          }
-
-          resolve(restApiList)
-        })
-      } catch (error) {
-        resolve([])
-      }
-    }
-    listAllRestApis()
-  })
-
-const getStages = async ({ apiGw, restApiId }) =>
+const getStages = async ({ apiGw, restApiId }): Promise<ListOfStage> =>
   new Promise<ListOfStage>(resolve => {
     const getFunctionConcurrencyOpts: GetStagesRequest = {
       restApiId,
@@ -89,57 +64,72 @@ const getStages = async ({ apiGw, restApiId }) =>
     }
   })
 
-const getTags = async ({ apiGw, arn }): Promise<TagMap> =>
-  new Promise(resolve => {
-    try {
-      apiGw.getTags({ resourceArn: arn }, (err: AWSError, data: Tags) => {
-        if (err) {
-          generateAwsErrorLog(serviceName, 'apiGw:getTags', err)
-          return resolve({})
-        }
-        const { tags = {} } = data || {}
-        resolve(tags)
-      })
-    } catch (error) {
-      resolve({})
-    }
-  })
-
 export default async ({
   regions,
   config,
+  rawData,
 }: {
   regions: string
   config: Config
-}): Promise<{ [property: string]: AwsApiGatewayStage[] }> =>
+  rawData: any
+}): Promise<{ [property: string]: RawAwsApiGatewayStage[] }> =>
   new Promise(async resolve => {
     const apiGatewayData = []
-    const apiGatewayStages = []
-    const regionPromises = []
-    const additionalPromises = []
-    const tagsPromises = []
+    const apiGatewayStages: RawAwsApiGatewayStage[] = []
+    const regionPromises: Array<Promise<void>> = []
+    const additionalPromises: Array<Promise<void>> = []
+    const tagsPromises: Array<Promise<void>> = []
 
-    regions.split(',').map(region => {
-      const apiGw = new APIGW({ ...config, region, endpoint, ...customRetrySettings })
-      const regionPromise = new Promise<void>(async resolveRegion => {
-        const restApiList = await getRestApisForRegion(apiGw)
-        if (!isEmpty(restApiList)) {
+    const existingData: { [property: string]: RawAwsApiGatewayRestApi[] } =
+      rawData.find(({ name }) => name === services.apiGatewayRestApi)?.data ||
+      {}
+
+    if (isEmpty(existingData)) {
+      // Refresh data
+      regions.split(',').map(region => {
+        const apiGw = new APIGW({
+          ...config,
+          region,
+          endpoint,
+          ...customRetrySettings,
+        })
+        const regionPromise = new Promise<void>(async resolveRegion => {
+          const restApiList = await getRestApisForRegion(apiGw)
+          if (!isEmpty(restApiList)) {
+            apiGatewayData.push(
+              ...restApiList.map(restApi => ({
+                restApiId: restApi.id,
+                region,
+              }))
+            )
+          }
+          resolveRegion()
+        })
+        regionPromises.push(regionPromise)
+      })
+      await Promise.all(regionPromises)
+    } else {
+      // Uses existing data
+      regions.split(',').map(region => {
+        if (!isEmpty(existingData[region])) {
           apiGatewayData.push(
-            ...restApiList.map(restApi => ({
+            ...existingData[region].map(restApi => ({
               restApiId: restApi.id,
               region,
             }))
           )
         }
-        resolveRegion()
+        return null
       })
-      regionPromises.push(regionPromise)
-    })
-
-    await Promise.all(regionPromises)
+    }
 
     apiGatewayData.map(({ restApiId, region }) => {
-      const apiGw = new APIGW({ ...config, region, endpoint, ...customRetrySettings })
+      const apiGw = new APIGW({
+        ...config,
+        region,
+        endpoint,
+        ...customRetrySettings,
+      })
       const additionalPromise = new Promise<void>(async resolveAdditional => {
         const stages = await getStages({ apiGw, restApiId })
         apiGatewayStages.push(
@@ -153,6 +143,7 @@ export default async ({
         resolveAdditional()
       })
       additionalPromises.push(additionalPromise)
+      return null
     })
 
     await Promise.all(additionalPromises)
@@ -161,7 +152,12 @@ export default async ({
     // get all tags for each stage
     apiGatewayStages.map(stage => {
       const { stageName, restApiId, region } = stage
-      const apiGw = new APIGW({ ...config, region, endpoint, ...customRetrySettings })
+      const apiGw = new APIGW({
+        ...config,
+        region,
+        endpoint,
+        ...customRetrySettings,
+      })
       const tagsPromise = new Promise<void>(async resolveTags => {
         const arn = apiGatewayRestApiArn({
           restApiArn: apiGatewayArn({ region }),
@@ -177,6 +173,7 @@ export default async ({
         resolveTags()
       })
       tagsPromises.push(tagsPromise)
+      return null
     })
 
     logger.debug(lt.gettingApiGatewayStageTags)

@@ -1,8 +1,5 @@
 import CloudGraph from '@cloudgraph/sdk'
 import APIGW, {
-  RestApis,
-  ListOfRestApi,
-  GetRestApisRequest,
   ListOfResource,
   GetResourcesRequest,
   Resources,
@@ -13,61 +10,39 @@ import { Config } from 'aws-sdk/lib/config'
 import isEmpty from 'lodash/isEmpty'
 import groupBy from 'lodash/groupBy'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog, setAwsRetryOptions } from '../../utils'
+import {
+  initTestEndpoint,
+  generateAwsErrorLog,
+  setAwsRetryOptions,
+} from '../../utils'
 import { API_GATEWAY_CUSTOM_DELAY } from '../../config/constants'
+import {
+  getRestApisForRegion,
+  RawAwsApiGatewayRestApi,
+} from '../apiGatewayRestApi/data'
+import services from '../../enums/services'
 
 const lt = { ...awsLoggerText }
-const {logger} = CloudGraph
-const MAX_REST_API = 500
+const { logger } = CloudGraph
 const MAX_RESOURCES = 500
 const serviceName = 'API gateway Resource'
 const endpoint = initTestEndpoint(serviceName)
-const customRetrySettings = setAwsRetryOptions({ baseDelay: API_GATEWAY_CUSTOM_DELAY })
+const customRetrySettings = setAwsRetryOptions({
+  baseDelay: API_GATEWAY_CUSTOM_DELAY,
+})
 
-export interface AwsApiGatewayResource extends Resource {
-  accountId: string
+export interface RawAwsApiGatewayResource extends Resource {
   restApiId: string
   region: string
 }
- 
-const getRestApisForRegion = async apiGw =>
-  new Promise<ListOfRestApi>(resolve => {
-    const restApiList: ListOfRestApi = []
-    const getRestApisOpts: GetRestApisRequest = {}
-    const listAllRestApis = (token?: string) => {
-      getRestApisOpts.limit = MAX_REST_API
-      if (token) {
-        getRestApisOpts.position = token
-      }
-      try {
-        apiGw.getRestApis(getRestApisOpts, (err: AWSError, data: RestApis) => {
-          const { position, items = [] } = data || {}
-          if (err) {
-            generateAwsErrorLog(serviceName, 'apiGw:getRestApis', err)
-          }
 
-          restApiList.push(...items)
-
-          if (position) {
-            listAllRestApis(position)
-          }
-
-          resolve(restApiList)
-        })
-      } catch (error) {
-        resolve([])
-      }
-    }
-    listAllRestApis()
-  })
-
-const getResources = async ({ apiGw, restApiId }) =>
+const getResources = async ({ apiGw, restApiId }): Promise<ListOfResource> =>
   new Promise<ListOfResource>(resolve => {
     const resourceList: ListOfResource = []
     const getResourcesOpts: GetResourcesRequest = {
       restApiId,
     }
-    const listAllResources = (token?: string) => {
+    const listAllResources = (token?: string): void => {
       getResourcesOpts.limit = MAX_RESOURCES
       getResourcesOpts.embed = ['methods']
       if (token) {
@@ -105,48 +80,83 @@ const getResources = async ({ apiGw, restApiId }) =>
 export default async ({
   regions,
   config,
+  rawData,
 }: {
   regions: string
   config: Config
-}): Promise<{ [property: string]: AwsApiGatewayResource[] }> =>
+  rawData: any
+}): Promise<{ [property: string]: RawAwsApiGatewayResource[] }> =>
   new Promise(async resolve => {
-    const apiGatewayData = []
-    const apiGatewayResources = []
-    const regionPromises = []
-    const additionalPromises = []
+    const apiGatewayData: Array<{ region: string; restApiId: string }> = []
+    const apiGatewayResources: RawAwsApiGatewayResource[] = []
+    const regionPromises: Array<Promise<void>> = []
+    const additionalPromises: Array<Promise<void>> = []
 
-    regions.split(',').map(region => {
-      const apiGw = new APIGW({ ...config, region, endpoint, ...customRetrySettings })
-      const regionPromise = new Promise<void>(async resolveRegion => {
-        const restApiList = await getRestApisForRegion(apiGw)
-        if (!isEmpty(restApiList)) {
+    const existingData: { [property: string]: RawAwsApiGatewayRestApi[] } =
+      rawData.find(({ name }) => name === services.apiGatewayRestApi)?.data ||
+      {}
+
+    if (isEmpty(existingData)) {
+      // Refresh data
+      regions.split(',').map(region => {
+        const apiGw = new APIGW({
+          ...config,
+          region,
+          endpoint,
+          ...customRetrySettings,
+        })
+        const regionPromise = new Promise<void>(async resolveRegion => {
+          const restApiList = await getRestApisForRegion(apiGw)
+          if (!isEmpty(restApiList)) {
+            apiGatewayData.push(
+              ...restApiList.map(restApi => ({
+                restApiId: restApi.id,
+                region,
+              }))
+            )
+          }
+          resolveRegion()
+        })
+        regionPromises.push(regionPromise)
+        return null
+      })
+      await Promise.all(regionPromises)
+    } else {
+      // Uses existing data
+      regions.split(',').map(region => {
+        if (!isEmpty(existingData[region])) {
           apiGatewayData.push(
-            ...restApiList.map(restApi => ({
+            ...existingData[region].map(restApi => ({
               restApiId: restApi.id,
               region,
             }))
           )
         }
-        resolveRegion()
+        return null
       })
-      regionPromises.push(regionPromise)
-    })
-
-    await Promise.all(regionPromises)
+    }
 
     apiGatewayData.map(({ restApiId, region }) => {
-      const apiGw = new APIGW({ ...config, region, endpoint, ...customRetrySettings })
+      const apiGw = new APIGW({
+        ...config,
+        region,
+        endpoint,
+        ...customRetrySettings,
+      })
       const additionalPromise = new Promise<void>(async resolveAdditional => {
         const resources = await getResources({ apiGw, restApiId })
-        apiGatewayResources.push(...resources.map(resource => ({
-          ...resource,
-          restApiId,
-          region,
-        })))
+        apiGatewayResources.push(
+          ...resources.map(resource => ({
+            ...resource,
+            restApiId,
+            region,
+          }))
+        )
 
         resolveAdditional()
       })
       additionalPromises.push(additionalPromise)
+      return null
     })
 
     await Promise.all(additionalPromises)

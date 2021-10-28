@@ -2,8 +2,8 @@ import { ServiceConnection } from '@cloudgraph/sdk'
 import { RestApi } from 'aws-sdk/clients/apigateway'
 import { isEmpty } from 'lodash'
 
-import { AwsApiGatewayResource } from '../apiGatewayResource/data'
-import { AwsApiGatewayStage } from '../apiGatewayStage/data'
+import { RawAwsApiGatewayResource } from '../apiGatewayResource/data'
+import { RawAwsApiGatewayStage } from '../apiGatewayStage/data'
 import {
   apiGatewayRestApiArn,
   apiGatewayStageArn,
@@ -30,12 +30,12 @@ export default ({
    */
   const resources: {
     name: string
-    data: { [property: string]: AwsApiGatewayResource[] }
+    data: { [property: string]: RawAwsApiGatewayResource[] }
   } = data.find(({ name }) => name === services.apiGatewayResource)
   if (resources?.data?.[region]) {
-    const resourcesInRegion: AwsApiGatewayResource[] = resources.data[
+    const resourcesInRegion: RawAwsApiGatewayResource[] = resources.data[
       region
-    ].filter(({ restApiId }: AwsApiGatewayResource) => restApiId === id)
+    ].filter(({ restApiId }: RawAwsApiGatewayResource) => restApiId === id)
     if (!isEmpty(resourcesInRegion)) {
       for (const resource of resourcesInRegion) {
         const { id } = resource
@@ -54,11 +54,11 @@ export default ({
    */
   const stages: {
     name: string
-    data: { [property: string]: AwsApiGatewayStage[] }
+    data: { [property: string]: RawAwsApiGatewayStage[] }
   } = data.find(({ name }) => name === services.apiGatewayStage)
   if (stages?.data?.[region]) {
-    const stagesInRegion: AwsApiGatewayStage[] = stages.data[region].filter(
-      ({ restApiId }: AwsApiGatewayStage) => restApiId === id
+    const stagesInRegion: RawAwsApiGatewayStage[] = stages.data[region].filter(
+      ({ restApiId }: RawAwsApiGatewayStage) => restApiId === id
     )
     if (!isEmpty(stagesInRegion)) {
       for (const stage of stagesInRegion) {

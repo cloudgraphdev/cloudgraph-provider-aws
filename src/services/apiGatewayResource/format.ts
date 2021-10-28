@@ -1,7 +1,5 @@
-import { AwsApiGatewayResource } from './data'
-import { 
-  AwsApiGatewayResource as AwsAGResourceType, 
-} from '../../types/generated'
+import { RawAwsApiGatewayResource } from './data'
+import { AwsApiGatewayResource as AwsAGResourceType } from '../../types/generated'
 import {
   apiGatewayArn,
   apiGatewayResourceArn,
@@ -12,30 +10,27 @@ export default ({
   service,
   region,
   account: accountId,
-}: 
-{
-  service: AwsApiGatewayResource
+}: {
+  service: RawAwsApiGatewayResource
   region: string
   account: string
 }): AwsAGResourceType => {
-  const {
-    id,
-    path,
-    resourceMethods = {},
-  } = service
-  
+  const { id, path, resourceMethods = {} } = service
+
   const arn = apiGatewayResourceArn({
     restApiArn: apiGatewayArn({ region: service.region }),
     id,
   })
 
-  const methods = Object.values(resourceMethods).map(({ httpMethod, authorizationType, apiKeyRequired }) => ({
-    accountId,
-    arn: apiGatewayMethodArn({ resourceArn: arn, httpMethod }),
-    httpMethod,
-    authorization: authorizationType,
-    apiKeyRequired,
-  }))
+  const methods = Object.values(resourceMethods).map(
+    ({ httpMethod, authorizationType, apiKeyRequired }) => ({
+      accountId,
+      arn: apiGatewayMethodArn({ resourceArn: arn, httpMethod }),
+      httpMethod,
+      authorization: authorizationType,
+      apiKeyRequired,
+    })
+  )
 
   return {
     id,
