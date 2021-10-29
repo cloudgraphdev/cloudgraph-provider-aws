@@ -19,7 +19,8 @@ export interface RawAwsCloudTrail extends Trail {
 }
 
 const getTrailArnData = async (
-  cloudTrail: CloudTrail
+  cloudTrail: CloudTrail,
+  region: string
 ): Promise<string[]> => {
   try {
     const trailList: TrailInfo[] = []
@@ -34,8 +35,9 @@ const getTrailArnData = async (
       trailList.push(...trails.Trails)
       nextToken = trails.NextToken
     }
-    const trailNameList = trailList.map(trail => trail.TrailARN)
-    
+    const trailNameList = trailList
+      .filter(trail => trail.HomeRegion === region)
+      .map(trail => trail.TrailARN)
     return trailNameList
   } catch (err) {
     generateAwsErrorLog(serviceName, 'cloudTrail:getTrailArnData', err)
@@ -100,7 +102,7 @@ export default async ({
     try {
       const cloudTrail = new CloudTrail({ ...config, region, endpoint })
 
-      const trailArnList = await getTrailArnData(cloudTrail)
+      const trailArnList = await getTrailArnData(cloudTrail, region)
       const trailList = await listTrailData(cloudTrail, trailArnList)
       const trailTagList = await listTrailTagData(cloudTrail, trailArnList)
       if (trailList) {
