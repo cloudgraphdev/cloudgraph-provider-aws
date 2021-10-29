@@ -35,7 +35,7 @@ type awsEcsTask @key(fields: "arn") {
   version: Int @search
   ephemeralStorage: awsEcsEphemeralStorage
   tags: [Tag]
-  ecsContainer: [awsEcsContainer] @hasInverse(field: task)
+  ecsContainer: [awsEcsContainer] @hasInverse(field: ecsTask)
 }
 
 type awsEcsAttribute

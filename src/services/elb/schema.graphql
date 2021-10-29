@@ -25,6 +25,7 @@ type awsElb @key(fields: "arn") {
   vpc: [awsVpc] @hasInverse(field: elb)
   route53Record: [awsRoute53Record] @hasInverse(field: elb)
   subnet: [awsSubnet] @hasInverse(field: elb)
+  ecsService: [awsEcsService] @hasInverse(field: elb)
 }
 
 type awsElbSourceSecurityGroup

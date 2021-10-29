@@ -7,6 +7,7 @@ import { ServiceConnection } from '@cloudgraph/sdk'
 import services from '../../enums/services'
 import { RawAwsIamRole } from './data'
 import { RawAwsIamPolicy } from '../iamPolicy/data'
+import { RawAwsEcsService } from '../ecsService/data'
 import resources from '../../enums/resources'
 import { getIamId } from '../../utils/ids'
 
@@ -17,6 +18,7 @@ import { getIamId } from '../../utils/ids'
 export default ({
   service: role,
   data,
+  region,
 }: {
   account: string
   data: { name: string; data: { [property: string]: any[] } }[]
@@ -51,6 +53,31 @@ export default ({
         relation: 'child',
         field: 'iamAttachedPolicies',
       })
+    }
+  }
+
+  /**
+   * Find related ECS service
+   */
+  const ecsServices: {
+    name: string
+    data: { [property: string]: RawAwsEcsService[] }
+  } = data.find(({ name }) => name === services.ecsService)
+  if (ecsServices?.data?.[region]) {
+    const ecsServicesInRegion: RawAwsEcsService[] = ecsServices.data[region].filter(
+      ({ roleArn }: RawAwsEcsService) => roleArn === role.Arn
+    )
+    if (!isEmpty(ecsServicesInRegion)) {
+      for (const service of ecsServicesInRegion) {
+        const { serviceArn } = service
+
+        connections.push({
+          id: serviceArn,
+          resourceType: services.ecsService,
+          relation: 'child',
+          field: 'ecsService',
+        })
+      }
     }
   }
 

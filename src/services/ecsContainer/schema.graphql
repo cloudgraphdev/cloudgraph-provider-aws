@@ -19,7 +19,7 @@ type awsEcsContainer @key(fields: "arn") {
   attachments: [awsEcsAttachment]
   tags: [Tag]
   ec2Instance: [awsEc2] @hasInverse(field: ecsContainer)
-  task: [awsEcsTask] @hasInverse(field: ecsContainer)
+  ecsTask: [awsEcsTask] @hasInverse(field: ecsContainer)
 }
 
 type awsEcsversionInfo

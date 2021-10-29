@@ -973,6 +973,7 @@ export type AwsEcsCluster = {
   attachments?: Maybe<Array<Maybe<AwsEcsAttachment>>>;
   attachmentsStatus?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
 };
 
 export type AwsEcsClusterConfiguration = {
@@ -1007,7 +1008,7 @@ export type AwsEcsContainer = {
   attachments?: Maybe<Array<Maybe<AwsEcsAttachment>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
-  task?: Maybe<Array<Maybe<AwsEcsTask>>>;
+  ecsTask?: Maybe<Array<Maybe<AwsEcsTask>>>;
 };
 
 export type AwsEcsContainerOverride = {
@@ -1174,6 +1175,11 @@ export type AwsEcsService = {
   propagateTags?: Maybe<Scalars['String']>;
   enableExecuteCommand?: Maybe<Scalars['Boolean']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  ecsCluster?: Maybe<Array<Maybe<AwsEcsCluster>>>;
+  elb?: Maybe<Array<Maybe<AwsElb>>>;
+  iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
@@ -1445,6 +1451,7 @@ export type AwsElb = {
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   route53Record?: Maybe<Array<Maybe<AwsRoute53Record>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
+  ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
 };
 
 export type AwsElbHealthCheck = {
@@ -1554,6 +1561,7 @@ export type AwsIamRole = {
   inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
+  ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
 };
 
 export type AwsIamSamlProvider = {
@@ -2083,6 +2091,7 @@ export type AwsSecurityGroup = {
   rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
+  ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
 };
 
 export type AwsServiceBillingInfo = {
@@ -2201,6 +2210,7 @@ export type AwsSubnet = {
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
+  ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
 };
 
 export type AwsSupportedLoginProvider = {
