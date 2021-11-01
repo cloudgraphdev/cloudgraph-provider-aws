@@ -694,22 +694,30 @@ export default class Provider extends CloudGraph.Client {
                     account: serviceData.accountId,
                     data: mergedRawData,
                   })
-                  // IF we have no pre existing connections for this entity, use new connections
-                  // otherwise, merge connections by unioning on id
+                  // IF we have no pre existing connections for this service, use new connections
+                  // IF we have pre existing connections, check if its for the same serivce id, if so
+                  // check if the connections list for that id is empty, use new connections for that id if so.
+                  // otherwise, merge connections by unioning on id of the connections
                   if (!isEmpty(serviceConnections)) {
-                    const entries: [string, any[]][] =
-                      Object.entries(serviceConnections)
+                    const entries: [string, any][] = Object.values(newConnections)
                     for (const [key, value] of entries) {
                       // If there are no service connections for this entity i.e. { [serviceId]: [] }
                       // use new connections for that key
-                      if (isEmpty(serviceConnections[key])) {
-                        serviceConnections[key] = newConnections[key] ?? []
+                      if (serviceConnections[key]) {
+                        if (isEmpty(serviceConnections[key])) {
+                          serviceConnections[key] = newConnections[key] ?? []
+                        } else {
+                          serviceConnections[key] = unionBy(
+                            value,
+                            newConnections[key] ?? [],
+                            'id'
+                          )
+                        }
                       } else {
-                        serviceConnections[key] = unionBy(
-                          value,
-                          newConnections,
-                          'id'
-                        )
+                        serviceConnections = {
+                          ...serviceConnections,
+                          ...newConnections
+                        }
                       }
                     }
                   } else {

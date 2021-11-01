@@ -1801,6 +1801,7 @@ export type AwsTag = {
   elasticBeanstalkApp?: Maybe<Array<Maybe<AwsElasticBeanstalkApp>>>;
   elasticBeanstalkEnv?: Maybe<Array<Maybe<AwsElasticBeanstalkEnv>>>;
   sns?: Maybe<Array<Maybe<AwsSns>>>;
+  redshiftClusters?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
 };
 
 export type AwsTotalBillingInfo = {

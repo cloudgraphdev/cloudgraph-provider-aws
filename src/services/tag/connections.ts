@@ -27,6 +27,8 @@ import { RawAwsElasticBeanstalkEnv } from '../elasticBeanstalkEnvironment/data'
 import resources from '../../enums/resources'
 import { getIamId } from '../../utils/ids'
 import { RawAwsSns } from '../sns/data'
+import { RawAwsRedshiftCluster } from '../redshift/data'
+import { redshiftArn } from '../../utils/generateArns'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -961,6 +963,33 @@ export default ({
         }
       }
     }
+
+     /**
+     * Find related Redshift clusters
+     */
+      const redshift: {
+        name: string
+        data: { [property: string]: any[] }
+      } = data.find(({ name }) => name === services.redshiftCluster)
+      if (redshift?.data?.[region]) {
+        const dataAtRegion: RawAwsRedshiftCluster[] =
+          findServiceInstancesWithTag(tag, redshift.data[region])
+        if (!isEmpty(dataAtRegion)) {
+          for (const instance of dataAtRegion) {
+            const { ClusterIdentifier: id, ClusterNamespaceArn } = instance
+            // Hack to get the accountId for the cluster
+            // Namespace arn structure: arn:aws:redshift:{region}:{account}:namespace:{namespaceId}
+            const account = ClusterNamespaceArn.split(':')[4]
+            const arn = redshiftArn({region, account, id})
+            connections.push({
+              id: arn,
+              resourceType: services.redshiftCluster,
+              relation: 'child',
+              field: 'redshiftClusters',
+            })
+          }
+        }
+      }
   }
 
   const tagResult = {
