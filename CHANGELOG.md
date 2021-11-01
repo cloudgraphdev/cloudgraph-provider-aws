@@ -1,3 +1,10 @@
+## [0.40.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.40.0...0.40.1) (2021-11-01)
+
+
+### Bug Fixes
+
+* **redshift:** fix connections and add tag connection to redshift ([88298d1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/88298d145b6e96d86789376cde28fd1cfdadc9f9))
+
 # [0.40.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.39.2...0.40.0) (2021-10-28)
 
 
