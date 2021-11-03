@@ -1,3 +1,10 @@
+## [0.40.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.40.3...0.40.4) (2021-11-03)
+
+
+### Bug Fixes
+
+* use cuids instead of arns to identify globalSecondaryIndexes ([e889ae6](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/e889ae687a219cb10190c993f795ae54e253393a))
+
 ## [0.40.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.40.2...0.40.3) (2021-11-03)
 
 
