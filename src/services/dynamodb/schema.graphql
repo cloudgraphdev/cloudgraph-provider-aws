@@ -36,8 +36,8 @@ type awsDynamoDbTableLocalSecondaryIndexDescription
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-  name: String @search(by: [hash, regexp])
-  arn: String! @id @search(by: [hash, regexp])
+  name: String! @search(by: [hash, regexp])
+  arn: String! @search(by: [hash, regexp])
   itemCount: Int @search
   keySchema: [awsDynamoDbTableIndexKeySchema]
   projection: awsDynamoDbTableIndexProjection
@@ -63,8 +63,9 @@ type awsDynamoDbTableGlobalSecondaryIndexDescription
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-  name: String @search(by: [hash, regexp])
-  arn: String! @id @search(by: [hash, regexp])
+  id: String! @id @search(by: [hash])
+  name: String! @search(by: [hash, regexp])
+  arn: String! @search(by: [hash, regexp])
   itemCount: Int @search
   keySchema: [awsDynamoDbTableIndexKeySchema]
   projection: awsDynamoDbTableIndexProjection
