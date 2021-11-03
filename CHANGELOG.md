@@ -1,3 +1,10 @@
+## [0.40.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.40.2...0.40.3) (2021-11-03)
+
+
+### Bug Fixes
+
+* Added status and createDate fields to iamUser access key ([529c5f8](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/529c5f864fb1bbf1793dd240cc552cc4834bb979))
+
 ## [0.40.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.40.1...0.40.2) (2021-11-03)
 
 
