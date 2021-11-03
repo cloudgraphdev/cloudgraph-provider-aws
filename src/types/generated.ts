@@ -2818,6 +2818,7 @@ export type AwsTag = {
   cloud9Environment?: Maybe<Array<Maybe<AwsCloud9Environment>>>;
   efs?: Maybe<Array<Maybe<AwsEfs>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
+  emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
 };
 
 export type AwsTotalBillingInfo = {
