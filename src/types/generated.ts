@@ -1044,6 +1044,8 @@ export type AwsIamAccessKey = {
   lastUsedDate?: Maybe<Scalars['String']>;
   lastUsedRegion?: Maybe<Scalars['String']>;
   lastUsedService?: Maybe<Scalars['String']>;
+  createDate?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
 };
 
 export type AwsIamGroup = {
