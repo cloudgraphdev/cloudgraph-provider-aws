@@ -42,7 +42,7 @@ const listApplications = async (
         if (isEmpty(data)) {
           resolve([])
         }
-        const { Applications = [] } = data
+        const { Applications = [] } = data || {}
         if (isEmpty(Applications)) {
           resolve([])
         }
