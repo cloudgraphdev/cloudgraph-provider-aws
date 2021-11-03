@@ -1,3 +1,10 @@
+## [0.40.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.40.1...0.40.2) (2021-11-03)
+
+
+### Bug Fixes
+
+* **elasticBeanstalk:** update to match vsdapi changes ([8ec08e0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/8ec08e08209bba87218c2abda2fde20a60857c19))
+
 ## [0.40.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.40.0...0.40.1) (2021-11-01)
 
 
