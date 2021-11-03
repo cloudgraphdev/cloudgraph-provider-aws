@@ -5,7 +5,9 @@ import isEmpty from 'lodash/isEmpty'
 import { AWSError } from 'aws-sdk/lib/error'
 import IAM, {
   AccessKeyLastUsed,
+  AccessKeyMetadata,
   GetAccessKeyLastUsedResponse,
+  ListAccessKeysResponse,
   ListGroupsForUserResponse,
   ListMFADevicesResponse,
   ListUserPoliciesResponse,
@@ -39,8 +41,7 @@ const customRetrySettings = setAwsRetryOptions({
   baseDelay: IAM_CUSTOM_DELAY,
 })
 
-export interface RawAwsAccessKey {
-  AccessKeyId: string
+export interface RawAwsAccessKey extends AccessKeyMetadata {
   AccessKeyLastUsed: AccessKeyLastUsed
 }
 export interface RawAwsIamUser extends Omit<User, 'Tags'> {
@@ -137,42 +138,42 @@ const accessKeyByUsername = async (
       {
         UserName,
       },
-      async (err, { AccessKeyMetadata }) => {
+      async (err, { AccessKeyMetadata }: ListAccessKeysResponse) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'iam:listAccessKeys', err)
         }
         if (!isEmpty(AccessKeyMetadata)) {
-          AccessKeyMetadata.map(({ AccessKeyId }) => {
-            const lastUsedPromise = new Promise<{
-              AccessKeyId: string
-              AccessKeyLastUsed: AccessKeyLastUsed
-            }>(resolveLastUsedData => {
-              iam.getAccessKeyLastUsed(
-                {
-                  AccessKeyId,
-                },
-                (
-                  err: AWSError,
-                  { AccessKeyLastUsed }: GetAccessKeyLastUsedResponse
-                ) => {
-                  if (err) {
-                    generateAwsErrorLog(
-                      serviceName,
-                      'iam:getAccessKeyLastUsed',
-                      err
-                    )
-                  }
+          AccessKeyMetadata.map(({ AccessKeyId, ...Metadata }) => {
+            const lastUsedPromise = new Promise<RawAwsAccessKey>(
+              resolveLastUsedData => {
+                iam.getAccessKeyLastUsed(
+                  {
+                    AccessKeyId,
+                  },
+                  (
+                    err: AWSError,
+                    { AccessKeyLastUsed }: GetAccessKeyLastUsedResponse
+                  ) => {
+                    if (err) {
+                      generateAwsErrorLog(
+                        serviceName,
+                        'iam:getAccessKeyLastUsed',
+                        err
+                      )
+                    }
 
-                  if (!isEmpty(AccessKeyLastUsed)) {
-                    resolveLastUsedData({
-                      AccessKeyId,
-                      AccessKeyLastUsed,
-                    })
+                    if (!isEmpty(AccessKeyLastUsed)) {
+                      resolveLastUsedData({
+                        AccessKeyId,
+                        ...Metadata,
+                        AccessKeyLastUsed,
+                      })
+                    }
+                    resolveLastUsedData(null)
                   }
-                  resolveLastUsedData(null)
-                }
-              )
-            })
+                )
+              }
+            )
             promises.push(lastUsedPromise)
           })
           const accessKeys = await Promise.all(promises)

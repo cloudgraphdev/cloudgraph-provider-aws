@@ -40,6 +40,8 @@ export default ({
         lastUsedDate: key.AccessKeyLastUsed.LastUsedDate?.toISOString(),
         lastUsedRegion: key.AccessKeyLastUsed.Region,
         lastUsedService: key.AccessKeyLastUsed.ServiceName,
+        status: key.Status || 'Inactive',
+        createDate: key.CreateDate?.toISOString(),
       })
     })
   }

@@ -23,6 +23,8 @@ type awsIamAccessKey
   lastUsedDate: String @search(by: [hash, regexp])
   lastUsedRegion: String @search(by: [hash, regexp])
   lastUsedService: String @search(by: [hash, regexp])
+  createDate: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
 }
 
 type awsIamMfaDevice
