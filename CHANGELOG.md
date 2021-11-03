@@ -1,3 +1,10 @@
+## [0.40.5](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.40.4...0.40.5) (2021-11-03)
+
+
+### Bug Fixes
+
+* Use safe accessor to cloudfront-elb connections ([92bde75](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/92bde756d18e69e2efadba290f0b93e1322ffe36))
+
 ## [0.40.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.40.3...0.40.4) (2021-11-03)
 
 
