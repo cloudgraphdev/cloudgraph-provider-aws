@@ -730,7 +730,8 @@ export type AwsDynamoDbTableBillingSummary = {
 };
 
 export type AwsDynamoDbTableGlobalSecondaryIndexDescription = {
-  name?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  name: Scalars['String'];
   arn: Scalars['String'];
   itemCount?: Maybe<Scalars['Int']>;
   keySchema?: Maybe<Array<Maybe<AwsDynamoDbTableIndexKeySchema>>>;
@@ -753,7 +754,7 @@ export type AwsDynamoDbTableIndexProjection = {
 };
 
 export type AwsDynamoDbTableLocalSecondaryIndexDescription = {
-  name?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
   arn: Scalars['String'];
   itemCount?: Maybe<Scalars['Int']>;
   keySchema?: Maybe<Array<Maybe<AwsDynamoDbTableIndexKeySchema>>>;

@@ -146,6 +146,7 @@ export default ({
         Backfilling: backfilling,
         ProvisionedThroughput: globalIndexProvisionedThroughput = {},
       }) => ({
+        id: cuid(),
         name: IndexName,
         arn,
         itemCount: ItemCount,
