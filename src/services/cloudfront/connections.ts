@@ -13,7 +13,7 @@ import { RawAwsCloudfront } from './data'
 
 export default ({
   service: cloudfront,
-  data
+  data,
 }: {
   account: string
   data: { name: string; data: { [property: string]: any[] } }[]
@@ -72,7 +72,7 @@ export default ({
           data: { [property: string]: RawAwsElb[] }
         } = data.find(({ name }) => name === services.elb)
 
-        if (elbs.data) {
+        if (elbs?.data) {
           const allElbs = Object.values(elbs.data).flat()
           const elbsInRegion: RawAwsElb[] = allElbs.filter(
             ({ LoadBalancerName }: RawAwsElb) =>
