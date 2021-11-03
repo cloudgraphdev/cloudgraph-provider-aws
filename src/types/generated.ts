@@ -947,19 +947,26 @@ export type AwsElasticBeanstalkEnv = {
   id: Scalars['String'];
   accountId: Scalars['String'];
   arn: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
-  tier?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  versionLabel?: Maybe<Scalars['String']>;
-  solutionStackName?: Maybe<Scalars['String']>;
-  cname?: Maybe<Scalars['String']>;
   applicationName?: Maybe<Scalars['String']>;
+  cname?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
   endpointUrl?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
   platformArn?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
+  resources?: Maybe<Array<Maybe<AwsElasticBeanstalkEnvResource>>>;
   settings?: Maybe<Array<Maybe<AwsElasticBeanstalkEnvSetting>>>;
+  solutionStackName?: Maybe<Scalars['String']>;
+  tier?: Maybe<Scalars['String']>;
+  versionLabel?: Maybe<Scalars['String']>;
   elasticBeanstalkApp?: Maybe<Array<Maybe<AwsElasticBeanstalkApp>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
+export type AwsElasticBeanstalkEnvResource = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  value?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type AwsElasticBeanstalkEnvSetting = {

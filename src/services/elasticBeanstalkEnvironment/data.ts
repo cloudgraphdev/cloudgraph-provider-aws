@@ -21,6 +21,7 @@ const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'ElasticBeanstalkEnv'
 const endpoint = initTestEndpoint(serviceName)
+const MAX_ITEMS = 1000
 
 export interface RawAwsElasticBeanstalkEnv extends EnvironmentDescription {
   resources?: EnvironmentResourceDescription
@@ -34,7 +35,9 @@ const listEnvironments = async (
   new Promise(async resolve => {
     const environments: EnvironmentDescription[] = []
 
-    const listAllEnvironmentsOpts: DescribeEnvironmentsMessage = {}
+    const listAllEnvironmentsOpts: DescribeEnvironmentsMessage = {
+      MaxRecords: MAX_ITEMS,
+    }
     const listAllEnvironments = (token?: string): void => {
       if (token) {
         listAllEnvironmentsOpts.NextToken = token
@@ -43,7 +46,7 @@ const listEnvironments = async (
         eb.describeEnvironments(
           listAllEnvironmentsOpts,
           (err: AWSError, data: EnvironmentDescriptionsMessage) => {
-            const { Environments, NextToken: nextToken } = data || {}
+            const { Environments = [], NextToken: nextToken } = data || {}
             if (err) {
               generateAwsErrorLog(
                 serviceName,
