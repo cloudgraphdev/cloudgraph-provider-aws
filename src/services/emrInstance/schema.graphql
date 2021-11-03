@@ -1,0 +1,33 @@
+type awsEmrInstance @key(fields: "id") {
+  id: String! @id @search(by: [hash])
+  accountId: String! @search(by: [hash, regexp])
+  ec2InstanceId: String @search(by: [hash])
+  publicDnsName: String @search(by: [hash, regexp])
+  publicIpAddress: String @search(by: [hash, regexp])
+  privateDnsName: String @search(by: [hash, regexp])
+  privateIpAddress: String @search(by: [hash, regexp])
+  status: awsEmrInstanceStatus
+  instanceGroupId: String @search(by: [hash])
+  instanceFleetId: String @search(by: [hash, regexp])
+  market: String @search(by: [hash, regexp])
+  instanceType: String @search(by: [hash, regexp])
+  ebs: [awsEbs] @hasInverse(field: emrInstance)
+  ec2Instance: [awsEc2] @hasInverse(field: emrInstance)
+}
+
+type awsEmrInstanceStatus {
+  state: String @search(by: [hash, regexp])
+  stateChangeReason: awsEmrInstanceStateChangeReason
+  timeline: awsEmrInstanceTimeline
+}
+
+type awsEmrInstanceStateChangeReason {
+  code: String @search(by: [hash, regexp])
+  message: String @search(by: [hash, regexp])
+}
+
+type awsEmrInstanceTimeline {
+  creationDateTime: String @search(by: [hash, regexp])
+  readyDateTime: String @search(by: [hash, regexp])
+  endDateTime: String @search(by: [hash, regexp])
+}

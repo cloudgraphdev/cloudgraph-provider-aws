@@ -1,0 +1,120 @@
+type awsEmrCluster @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash, regexp])
+  status: AwsEmrClusterStatus
+  ec2InstanceAttributes: AwsEmrClusterEc2InstanceAttributes
+  instanceCollectionType: String @search(by: [hash, regexp])
+  logUri: String @search(by: [hash, regexp])
+  logEncryptionKmsKeyId: String @search(by: [hash])
+  requestedAmiVersion: String @search(by: [hash, regexp])
+  runningAmiVersion: String @search(by: [hash, regexp])
+  releaseLabel: String @search(by: [hash, regexp])
+  autoTerminate: Boolean @search
+  terminationProtected: Boolean @search
+  visibleToAllUsers: Boolean @search
+  applications: [AwsEmrClusterApplication]
+  serviceRole: String @search(by: [hash, regexp])
+  normalizedInstanceHours: Int @search
+  masterPublicDnsName: String @search(by: [hash, regexp])
+  configurations: [AwsEmrClusterConfiguration]
+  securityConfiguration: String @search(by: [hash, regexp])
+  autoScalingRole: String @search(by: [hash, regexp])
+  scaleDownBehavior: String @search(by: [hash, regexp])
+  customAmiId: String @search(by: [hash, regexp])
+  ebsRootVolumeSize: Int @search
+  repoUpgradeOnBoot: String @search(by: [hash, regexp])
+  kerberosAttributes: AwsEmrClusterKerberosAttributes
+  outpostArn: String @search(by: [hash, regexp])
+  stepConcurrencyLevel: Int @search
+  placementGroups: [AwsEmrClusterPlacementGroupConfig]
+  tags: [Tag]
+  kms: [awsKms] @hasInverse(field: emrCluster)
+  subnet: [awsSubnet] @hasInverse(field: emrCluster)
+}
+
+type AwsEmrClusterApplication 
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    name: String @search(by: [hash, regexp])
+    version: String @search(by: [hash, regexp])
+    args: [String] @search(by: [hash])
+    additionalInfo: [AwsStringMap]
+  }
+
+type AwsEmrClusterConfiguration 
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    classification: String @search(by: [hash, regexp])
+    configurations: [AwsEmrClusterConfiguration]
+    properties: [AwsStringMap]
+  }
+
+type AwsEmrClusterPlacementGroupConfig
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    instanceRole: String @search(by: [hash, regexp])
+    placementStrategy: String @search(by: [hash, regexp])
+  }
+
+type AwsStringMap
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    key: String @search(by: [hash, regexp])
+    value: String @search(by: [hash, regexp])
+  }
+
+type AwsEmrClusterStatus {
+  state: String @search(by: [hash, regexp])
+  stateChangeReason: AwsEmrClusterStateChangeReason
+  timeline: AwsEmrClusterTimeline
+}
+
+type AwsEmrClusterStateChangeReason {
+  code: String @search(by: [hash, regexp])
+  message: String @search(by: [hash, regexp])
+}
+
+type AwsEmrClusterTimeline {
+  creationDateTime: String @search(by: [hash, regexp])
+  readyDateTime: String @search(by: [hash, regexp])
+  endDateTime: String @search(by: [hash, regexp])
+}
+
+type AwsEmrClusterEc2InstanceAttributes {
+  ec2KeyName: String @search(by: [hash, regexp])
+  ec2SubnetId: String @search(by: [hash, regexp])
+  requestedEc2SubnetIds: [String] @search(by: [hash])
+  ec2AvailabilityZone: String @search(by: [hash, regexp])
+  requestedEc2AvailabilityZones: [String] @search(by: [hash])
+  iamInstanceProfile: String @search(by: [hash, regexp])
+  emrManagedMasterSecurityGroup: String @search(by: [hash, regexp])
+  emrManagedSlaveSecurityGroup: String @search(by: [hash, regexp])
+  serviceAccessSecurityGroup: String @search(by: [hash, regexp])
+  additionalMasterSecurityGroups: [String] @search(by: [hash])
+  additionalSlaveSecurityGroups: [String] @search(by: [hash])
+}
+
+type AwsEmrClusterKerberosAttributes {
+  realm: String @search(by: [hash, regexp])
+  kdcAdminPassword: String @search(by: [hash, regexp])
+  crossRealmTrustPrincipalPassword: String @search(by: [hash, regexp])
+  adDomainJoinUser: String @search(by: [hash, regexp])
+  adDomainJoinPassword: String @search(by: [hash, regexp])
+}

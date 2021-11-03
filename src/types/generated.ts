@@ -20,6 +20,72 @@ export type AwsEcsExecuteCommandLogConfiguration = {
   s3KeyPrefix?: Maybe<Scalars['String']>;
 };
 
+export type AwsEmrClusterApplication = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  version?: Maybe<Scalars['String']>;
+  args?: Maybe<Array<Maybe<Scalars['String']>>>;
+  additionalInfo?: Maybe<Array<Maybe<AwsStringMap>>>;
+};
+
+export type AwsEmrClusterConfiguration = {
+  id: Scalars['String'];
+  classification?: Maybe<Scalars['String']>;
+  configurations?: Maybe<Array<Maybe<AwsEmrClusterConfiguration>>>;
+  properties?: Maybe<Array<Maybe<AwsStringMap>>>;
+};
+
+export type AwsEmrClusterEc2InstanceAttributes = {
+  ec2KeyName?: Maybe<Scalars['String']>;
+  ec2SubnetId?: Maybe<Scalars['String']>;
+  requestedEc2SubnetIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  ec2AvailabilityZone?: Maybe<Scalars['String']>;
+  requestedEc2AvailabilityZones?: Maybe<Array<Maybe<Scalars['String']>>>;
+  iamInstanceProfile?: Maybe<Scalars['String']>;
+  emrManagedMasterSecurityGroup?: Maybe<Scalars['String']>;
+  emrManagedSlaveSecurityGroup?: Maybe<Scalars['String']>;
+  serviceAccessSecurityGroup?: Maybe<Scalars['String']>;
+  additionalMasterSecurityGroups?: Maybe<Array<Maybe<Scalars['String']>>>;
+  additionalSlaveSecurityGroups?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsEmrClusterKerberosAttributes = {
+  realm?: Maybe<Scalars['String']>;
+  kdcAdminPassword?: Maybe<Scalars['String']>;
+  crossRealmTrustPrincipalPassword?: Maybe<Scalars['String']>;
+  adDomainJoinUser?: Maybe<Scalars['String']>;
+  adDomainJoinPassword?: Maybe<Scalars['String']>;
+};
+
+export type AwsEmrClusterPlacementGroupConfig = {
+  id: Scalars['String'];
+  instanceRole?: Maybe<Scalars['String']>;
+  placementStrategy?: Maybe<Scalars['String']>;
+};
+
+export type AwsEmrClusterStateChangeReason = {
+  code?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']>;
+};
+
+export type AwsEmrClusterStatus = {
+  state?: Maybe<Scalars['String']>;
+  stateChangeReason?: Maybe<AwsEmrClusterStateChangeReason>;
+  timeline?: Maybe<AwsEmrClusterTimeline>;
+};
+
+export type AwsEmrClusterTimeline = {
+  creationDateTime?: Maybe<Scalars['String']>;
+  readyDateTime?: Maybe<Scalars['String']>;
+  endDateTime?: Maybe<Scalars['String']>;
+};
+
+export type AwsStringMap = {
+  id: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
 export type Tag = {
   id: Scalars['String'];
   key?: Maybe<Scalars['String']>;
@@ -878,6 +944,7 @@ export type AwsEbs = {
   tags?: Maybe<Array<Maybe<Tag>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   asg?: Maybe<Array<Maybe<AwsAsg>>>;
+  emrInstance?: Maybe<Array<Maybe<AwsEmrInstance>>>;
 };
 
 export type AwsEbsAttachment = {
@@ -929,6 +996,7 @@ export type AwsEc2 = {
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   ecsContainer?: Maybe<Array<Maybe<AwsEcsContainer>>>;
+  emrInstance?: Maybe<Array<Maybe<AwsEmrInstance>>>;
 };
 
 export type AwsEc2Blockdevice = {
@@ -1763,6 +1831,115 @@ export type AwsElbSourceSecurityGroup = {
   ownerAlias?: Maybe<Scalars['String']>;
 };
 
+export type AwsEmrCluster = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  status?: Maybe<AwsEmrClusterStatus>;
+  ec2InstanceAttributes?: Maybe<AwsEmrClusterEc2InstanceAttributes>;
+  instanceCollectionType?: Maybe<Scalars['String']>;
+  logUri?: Maybe<Scalars['String']>;
+  logEncryptionKmsKeyId?: Maybe<Scalars['String']>;
+  requestedAmiVersion?: Maybe<Scalars['String']>;
+  runningAmiVersion?: Maybe<Scalars['String']>;
+  releaseLabel?: Maybe<Scalars['String']>;
+  autoTerminate?: Maybe<Scalars['Boolean']>;
+  terminationProtected?: Maybe<Scalars['Boolean']>;
+  visibleToAllUsers?: Maybe<Scalars['Boolean']>;
+  applications?: Maybe<Array<Maybe<AwsEmrClusterApplication>>>;
+  serviceRole?: Maybe<Scalars['String']>;
+  normalizedInstanceHours?: Maybe<Scalars['Int']>;
+  masterPublicDnsName?: Maybe<Scalars['String']>;
+  configurations?: Maybe<Array<Maybe<AwsEmrClusterConfiguration>>>;
+  securityConfiguration?: Maybe<Scalars['String']>;
+  autoScalingRole?: Maybe<Scalars['String']>;
+  scaleDownBehavior?: Maybe<Scalars['String']>;
+  customAmiId?: Maybe<Scalars['String']>;
+  ebsRootVolumeSize?: Maybe<Scalars['Int']>;
+  repoUpgradeOnBoot?: Maybe<Scalars['String']>;
+  kerberosAttributes?: Maybe<AwsEmrClusterKerberosAttributes>;
+  outpostArn?: Maybe<Scalars['String']>;
+  stepConcurrencyLevel?: Maybe<Scalars['Int']>;
+  placementGroups?: Maybe<Array<Maybe<AwsEmrClusterPlacementGroupConfig>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
+  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
+};
+
+export type AwsEmrFailureDetails = {
+  reason?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']>;
+  logFile?: Maybe<Scalars['String']>;
+};
+
+export type AwsEmrHadoopStepConfig = {
+  jar?: Maybe<Scalars['String']>;
+  properties?: Maybe<Array<Maybe<AwsStringMap>>>;
+  mainClass?: Maybe<Scalars['String']>;
+  args?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsEmrInstance = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  ec2InstanceId?: Maybe<Scalars['String']>;
+  publicDnsName?: Maybe<Scalars['String']>;
+  publicIpAddress?: Maybe<Scalars['String']>;
+  privateDnsName?: Maybe<Scalars['String']>;
+  privateIpAddress?: Maybe<Scalars['String']>;
+  status?: Maybe<AwsEmrInstanceStatus>;
+  instanceGroupId?: Maybe<Scalars['String']>;
+  instanceFleetId?: Maybe<Scalars['String']>;
+  market?: Maybe<Scalars['String']>;
+  instanceType?: Maybe<Scalars['String']>;
+  ebs?: Maybe<Array<Maybe<AwsEbs>>>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
+};
+
+export type AwsEmrInstanceStateChangeReason = {
+  code?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']>;
+};
+
+export type AwsEmrInstanceStatus = {
+  state?: Maybe<Scalars['String']>;
+  stateChangeReason?: Maybe<AwsEmrInstanceStateChangeReason>;
+  timeline?: Maybe<AwsEmrInstanceTimeline>;
+};
+
+export type AwsEmrInstanceTimeline = {
+  creationDateTime?: Maybe<Scalars['String']>;
+  readyDateTime?: Maybe<Scalars['String']>;
+  endDateTime?: Maybe<Scalars['String']>;
+};
+
+export type AwsEmrStep = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  config?: Maybe<AwsEmrHadoopStepConfig>;
+  actionOnFailure?: Maybe<Scalars['String']>;
+  status?: Maybe<AwsEmrStepStatus>;
+};
+
+export type AwsEmrStepStateChangeReason = {
+  code?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']>;
+};
+
+export type AwsEmrStepStatus = {
+  state?: Maybe<Scalars['String']>;
+  stateChangeReason?: Maybe<AwsEmrStepStateChangeReason>;
+  failureDetails?: Maybe<AwsEmrFailureDetails>;
+  timeline?: Maybe<AwsEmrStepTimeline>;
+};
+
+export type AwsEmrStepTimeline = {
+  creationDateTime?: Maybe<Scalars['String']>;
+  startDateTime?: Maybe<Scalars['String']>;
+  endDateTime?: Maybe<Scalars['String']>;
+};
+
 export type AwsEnabledMetrics = {
   id: Scalars['String'];
   metric: Scalars['String'];
@@ -2041,6 +2218,7 @@ export type AwsKms = {
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   elastiCacheReplicationGroup?: Maybe<Array<Maybe<AwsElastiCacheReplicationGroup>>>;
   efs?: Maybe<Array<Maybe<AwsEfs>>>;
+  emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
 };
 
 export type AwsLambda = {
@@ -2571,6 +2749,7 @@ export type AwsSubnet = {
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
+  emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
 };
 
 export type AwsSupportedLoginProvider = {

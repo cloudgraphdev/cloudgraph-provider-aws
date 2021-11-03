@@ -1,0 +1,39 @@
+type awsEmrStep @key(fields: "id") {
+  id: String! @id @search(by: [hash])
+  accountId: String! @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  config: awsEmrHadoopStepConfig
+  actionOnFailure: String @search(by: [hash, regexp])
+  status: awsEmrStepStatus
+}
+
+type awsEmrHadoopStepConfig {
+  jar: String @search(by: [hash, regexp])
+  properties: [AwsStringMap]
+  mainClass: String @search(by: [hash, regexp])
+  args: [String] @search(by: [hash])
+}
+
+type awsEmrStepStatus {
+  state: String @search(by: [hash, regexp])
+  stateChangeReason: awsEmrStepStateChangeReason
+  failureDetails: awsEmrFailureDetails
+  timeline: awsEmrStepTimeline
+}
+
+type awsEmrStepStateChangeReason {
+  code: String @search(by: [hash, regexp])
+  message: String @search(by: [hash, regexp])
+}
+
+type awsEmrFailureDetails {
+  reason: String @search(by: [hash, regexp])
+  message: String @search(by: [hash, regexp])
+  logFile: String @search(by: [hash, regexp])
+}
+
+type awsEmrStepTimeline {
+  creationDateTime: String @search(by: [hash, regexp])
+  startDateTime: String @search(by: [hash, regexp])
+  endDateTime: String @search(by: [hash, regexp])
+}
