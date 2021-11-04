@@ -1,3 +1,15 @@
+# [0.41.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.40.5...0.41.0) (2021-11-04)
+
+
+### Bug Fixes
+
+* **sqs:** fix sqs tags formatting issue, update try/catch to not drop services if an error is hit ([33f1852](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/33f1852b27eac0d870a3b4b789560ec3b02a3c9a))
+
+
+### Features
+
+* **eks:** add eks cluster service ([2e29304](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/2e293048268f8b86e4e2064237c5bfe48303f5dc))
+
 ## [0.40.5](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.40.4...0.40.5) (2021-11-03)
 
 
