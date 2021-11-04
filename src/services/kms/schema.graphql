@@ -20,4 +20,5 @@ type awsKms @key(fields: "id"){
   cloudtrail: [awsCloudtrail] @hasInverse(field: kms)
   redshiftCluster: [awsRedshiftCluster] @hasInverse(field: kms)
   sns: [awsSns] @hasInverse(field: kms)
+  eksCluster: [awsEksCluster] @hasInverse(field: kms)
 }

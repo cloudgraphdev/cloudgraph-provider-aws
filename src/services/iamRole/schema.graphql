@@ -11,4 +11,5 @@ type awsIamRole @key(fields: "arn") {
   tags: [Tag]
   inlinePolicies: [String]
   iamAttachedPolicies: [awsIamPolicy] @hasInverse(field: iamRoles)
+  eksCluster: [awsEksCluster] @hasInverse(field: iamRoles)
 }

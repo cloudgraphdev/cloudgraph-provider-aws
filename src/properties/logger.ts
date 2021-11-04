@@ -424,6 +424,8 @@ export default {
     `Found ${num} EKS Clusters, adding them to the VPC`,
   canNotFindClusterForAsg:
     'ERROR: Can not find ECS/EKS cluster for ASG - it should have been added already',
+  foundMoreEKSClusters: (num: number) =>
+    `Found another ${num} EKS clusters in this region...`,
   /**
    * Elastic Beanstalk
    */

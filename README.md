@@ -79,6 +79,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | ec2                      | alb, asg, ebs, eip, networkInterface, securityGroups, subnet, vpc                                    |
 | ecr                      |                                                                                                      |
 | eip                      | ec2, networkInterface, vpc                                                                           |
+| eksCluster               | iamRole, kms, securityGroups, subnet, vpc                                                            |
 | elasticBeanstalkApp      | elasticBeanstalkEnv                                                                                  |
 | elasticBeanstalkEnv      | elasticBeanstalkApp                                                                                  |
 | elb                      | cloudfront, securityGroups, subnet, vpc                                                              |
@@ -88,12 +89,12 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | iamServerCertificate     |                                                                                                      |
 | iamUser                  | iamGroup                                                                                             |
 | iamPolicy                | iamRole, iamGroup                                                                                    |
-| iamRole                  | iamPolicy                                                                                            |
+| iamRole                  | iamPolicy, eksCluster                                                                                |
 | iamGroup                 | iamUser, iamPolicy                                                                                   |
 | igw                      | vpc                                                                                                  |
 | kinesisFirehose          | kinesisStream, s3                                                                                    |
 | kinesisStream            |                                                                                                      |
-| kms                      | lambda, redshiftCluster, sns                                                                         |
+| kms                      | lambda, redshiftCluster, sns, eksCluster                                                             |
 | lambda                   | kms, securityGroups, subnet, vpc                                                                     |
 | nacl                     | vpc                                                                                                  |
 | natGateway               | networkInterface, subnet, vpc                                                                        |
@@ -106,11 +107,11 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | routeTable               | subnet, vpc                                                                                          |
 | s3                       |                                                                                                      |
 | secretsManager           |                                                                                                      |
-| securityGroup            | asg, lambda, ec2, elb, rdsCluster, rdsDbInstance                                                     |
+| securityGroup            | asg, lambda, ec2, elb, rdsCluster, rdsDbInstance, eksCluster                                         |
 | ses                      |                                                                                                      |
 | sns                      | kms, cloudtrail                                                                                      |
 | sqs                      |                                                                                                      |
-| subnet                   | alb, asg, ec2, elb, lambda, natGateway, networkInterface, routeTable, vpc                            |
+| subnet                   | alb, asg, ec2, elb, lambda, natGateway, networkInterface, routeTable, vpc, eksCluster                |
 | vpc                      | alb, ec2, eip, elb, igw, lambda, natGateway, networkInterface, route53HostedZone, routeTable, subnet |
 
 <br />

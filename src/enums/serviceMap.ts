@@ -51,6 +51,7 @@ import IamSamlProvider from '../services/iamSamlProvider'
 import IamOpenIdConnectProvider from '../services/iamOpenIdConnectProvider'
 import IamServerCertificate from '../services/iamServerCertificate'
 import SNS from '../services/sns'
+import EKSCluster from '../services/eksCluster'
 import services from './services'
 
 /**
@@ -76,6 +77,7 @@ export default {
   [services.ec2Instance]: EC2,
   [services.ecr]: ECR,
   [services.eip]: EIP,
+  [services.eksCluster]: EKSCluster,
   [services.elasticBeanstalkApp]: ElasticBeanstalkApp,
   [services.elasticBeanstalkEnv]: ElasticBeanstalkEnv,
   [services.elb]: ELB,

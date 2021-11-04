@@ -22,4 +22,5 @@ type awsSubnet @key(fields: "id") {
   routeTable: [awsRouteTable] @hasInverse(field: subnet)
   vpc: [awsVpc] @hasInverse(field: subnet)
   rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: subnet)
+  eksCluster: [awsEksCluster] @hasInverse(field: subnet)
 }
