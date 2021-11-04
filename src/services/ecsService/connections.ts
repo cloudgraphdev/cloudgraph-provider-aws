@@ -83,19 +83,20 @@ export default ({
     name: string
     data: { [property: string]: any[] }
   } = data.find(({ name }) => name === services.vpc)
-
-  const vpcsInRegion: RawAwsVpc[] = vpcs.data[region].filter(
-    ({ VpcId }: SecurityGroup) => sgIds.includes(VpcId)
-  )
-
-  if (!isEmpty(vpcsInRegion)) {
-    for (const vpc of vpcsInRegion) {
-      connections.push({
-        id: vpc.VpcId,
-        resourceType: services.vpc,
-        relation: 'child',
-        field: 'vpc',
-      })
+  if (vpcs?.data?.[region]) {
+    const vpcsInRegion: RawAwsVpc[] = vpcs.data[region].filter(
+      ({ VpcId }: SecurityGroup) => sgIds.includes(VpcId)
+    )
+  
+    if (!isEmpty(vpcsInRegion)) {
+      for (const vpc of vpcsInRegion) {
+        connections.push({
+          id: vpc.VpcId,
+          resourceType: services.vpc,
+          relation: 'child',
+          field: 'vpc',
+        })
+      }
     }
   }
 
