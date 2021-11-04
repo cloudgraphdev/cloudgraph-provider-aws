@@ -19,7 +19,7 @@ export default ({
 }): AwsSqsType => {
   const {
     queueUrl,
-    Tags,
+    Tags = {},
   } = key
 
   const {
@@ -33,7 +33,7 @@ export default ({
     DelaySeconds: delaySeconds,
     Policy: policy,
     ReceiveMessageWaitTimeSeconds: receiveMessageWaitTimeSeconds,
-  } = key.sqsAttributes
+  } = key?.sqsAttributes || {}
 
   return {
     id: arn,

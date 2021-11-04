@@ -38,7 +38,7 @@ interface Account {
 interface rawDataInterface {
   name: string
   accountId?: string
-  data: any 
+  data: any
 }
 export default class Provider extends CloudGraph.Client {
   constructor(config: any) {
@@ -67,7 +67,9 @@ export default class Provider extends CloudGraph.Client {
     resourcesToLog: string
   ): void {
     this.logger.info(
-      `Profiles and role ARNs configured: ${chalk.green(profilesOrRolesToLog.join(', '))}`
+      `Profiles and role ARNs configured: ${chalk.green(
+        profilesOrRolesToLog.join(', ')
+      )}`
     )
     this.logger.info(
       `Regions configured: ${chalk.green(regionsToLog.replace(/,/g, ', '))}`
@@ -257,7 +259,9 @@ export default class Provider extends CloudGraph.Client {
           secretAccessKey: configuredSecretKey,
         }
         if (!this.credentials) {
-          this.logger.warn('Using hard coded accessKeyId and secretAccessKey, it is not advised to save these in config')
+          this.logger.warn(
+            'Using hard coded accessKeyId and secretAccessKey, it is not advised to save these in config'
+          )
           this.logger.success(
             `accessKeyId: ${chalk.underline.green(
               obfuscateSensitiveString(configuredAccessKey)
@@ -347,7 +351,7 @@ export default class Provider extends CloudGraph.Client {
         }
         default: {
           // unset credentials before getting them for multi account scenarios
-          AWS.config.update({credentials: undefined})
+          AWS.config.update({ credentials: undefined })
           await new Promise<void>(resolve =>
             AWS.config.getCredentials((err: any) => {
               if (err) {
@@ -449,7 +453,10 @@ export default class Provider extends CloudGraph.Client {
     return profiles || []
   }
 
-  private mergeRawData(oldData: rawDataInterface[], newData: rawDataInterface[]): rawDataInterface[] {
+  private mergeRawData(
+    oldData: rawDataInterface[],
+    newData: rawDataInterface[]
+  ): rawDataInterface[] {
     if (isEmpty(oldData)) {
       return newData
     }
@@ -457,7 +464,9 @@ export default class Provider extends CloudGraph.Client {
     for (const entity of oldData) {
       try {
         const { name, data } = entity
-        const newDataForEntity = newData.find(({name: serviceName}) => name === serviceName).data || {}
+        const newDataForEntity =
+          newData.find(({ name: serviceName }) => name === serviceName).data ||
+          {}
         if (newDataForEntity) {
           let mergedData = {}
           // if there is no old data for this service but there is new data, use the new data
@@ -467,8 +476,13 @@ export default class Provider extends CloudGraph.Client {
             // if we have data for an entity (like vpc) in both data sets, merge their data
             for (const region in data) {
               if (newDataForEntity[region]) {
-                this.logger.debug(`Found additional data for ${name} in ${region}, merging`)
-                mergedData[region] = [...(data[region] ?? []), ...newDataForEntity[region]]
+                this.logger.debug(
+                  `Found additional data for ${name} in ${region}, merging`
+                )
+                mergedData[region] = [
+                  ...(data[region] ?? []),
+                  ...newDataForEntity[region],
+                ]
               } else {
                 mergedData[region] = data[region]
               }
@@ -476,13 +490,13 @@ export default class Provider extends CloudGraph.Client {
           }
           result.push({
             name,
-            data: mergedData
+            data: mergedData,
           })
-        // if not, just use the old data
+          // if not, just use the old data
         } else {
           result.push({
             name,
-            data
+            data,
           })
         }
       } catch (error: any) {
@@ -669,8 +683,8 @@ export default class Provider extends CloudGraph.Client {
      * 3. spread new connections over result.connections
      * 4. push the array of formatted entities into result.entites
      */
-    try {
-      for (const serviceData of rawData) {
+    for (const serviceData of rawData) {
+      try {
         const serviceClass = this.getService(serviceData.name)
         const entities: any[] = []
         for (const region of Object.keys(serviceData.data)) {
@@ -699,7 +713,8 @@ export default class Provider extends CloudGraph.Client {
                   // check if the connections list for that id is empty, use new connections for that id if so.
                   // otherwise, merge connections by unioning on id of the connections
                   if (!isEmpty(serviceConnections)) {
-                    const entries: [string, any][] = Object.values(newConnections)
+                    const entries: [string, any][] =
+                      Object.values(newConnections)
                     for (const [key, value] of entries) {
                       // If there are no service connections for this entity i.e. { [serviceId]: [] }
                       // use new connections for that key
@@ -716,7 +731,7 @@ export default class Provider extends CloudGraph.Client {
                       } else {
                         serviceConnections = {
                           ...serviceConnections,
-                          ...newConnections
+                          ...newConnections,
                         }
                       }
                     }
@@ -771,10 +786,12 @@ export default class Provider extends CloudGraph.Client {
             data: entities,
           })
         }
+      } catch (error: any) {
+        this.logger.error(
+          `There was an error formatting/connecting service ${serviceData.name}`
+        )
+        this.logger.debug(error)
       }
-    } catch (error: any) {
-      this.logger.error('There was an error building connections for AWS data')
-      this.logger.debug(error)
     }
     try {
       result.entities = this.enrichInstanceWithBillingData(
@@ -800,15 +817,17 @@ export default class Provider extends CloudGraph.Client {
     let result = entities
     if (configuredRegions.includes(billingRegion)) {
       const billingArray =
-        rawData.find(({ name }) => name === services.billing)?.data?.[billingRegion] ?? []
+        rawData.find(({ name }) => name === services.billing)?.data?.[
+          billingRegion
+        ] ?? []
       for (const billing of billingArray) {
         const individualData: {
-          [key: string]: { cost: number; currency: string; formattedCost: string }
-        } = get(
-          billing,
-          ['individualData'],
-          undefined
-        )
+          [key: string]: {
+            cost: number
+            currency: string
+            formattedCost: string
+          }
+        } = get(billing, ['individualData'], undefined)
         if (individualData) {
           for (const [key, value] of Object.entries(individualData)) {
             if (key.includes('natgateway') && !isEmpty()) {
@@ -870,7 +889,8 @@ export default class Provider extends CloudGraph.Client {
                   return val
                 })
                 result = result.filter(
-                  ({ name: serviceName }) => serviceName !== services.ec2Instance
+                  ({ name: serviceName }) =>
+                    serviceName !== services.ec2Instance
                 )
                 result.push({
                   name,

@@ -33,7 +33,7 @@ import { RawAwsEksCluster } from '../eksCluster/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
-  return service.filter(({ Tags }) => {
+  return service.filter(({ Tags = {} }) => {
     for (const [key, value] of Object.entries(Tags)) {
       if (id === `${key}:${value}`) {
         return true

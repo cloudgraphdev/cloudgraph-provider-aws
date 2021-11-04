@@ -27,6 +27,7 @@ export default ({
   const connections: ServiceConnection[] = []
   const keyArns = encryptionConfig.map(({ provider }) => provider?.keyArn) || []
   const sgIds = resourcesVpcConfig.securityGroupIds || []
+  const clusterSgId = resourcesVpcConfig.clusterSecurityGroupId
   const subnetIds = resourcesVpcConfig.subnetIds || []
 
   /**
@@ -87,7 +88,7 @@ export default ({
 
   if (securityGroups?.data?.[region]) {
     const sgsInRegion: AwsSecurityGroup[] = securityGroups.data[region].filter(
-      ({ GroupId }: AwsSecurityGroup) => sgIds.includes(GroupId)
+      ({ GroupId }: AwsSecurityGroup) => sgIds.includes(GroupId) || GroupId === clusterSgId
     )
 
     if (!isEmpty(sgsInRegion)) {
