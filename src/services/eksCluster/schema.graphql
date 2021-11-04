@@ -1,0 +1,80 @@
+type awsEksCluster @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+  accountId: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  createdAt: String @search(by: [hash, regexp])
+  version: String @search(by: [hash, regexp])
+  endpoint: String @search(by: [hash, regexp])
+  resourcesVpcConfig: awsEksVpcConfigResponse
+  kubernetesNetworkConfig: awsEksKubernetesNetworkConfigResponse
+  logging: awsEksLogging
+  identity: awsEksIdentity
+  status: String
+  certificateAuthority: awsEksCertificate
+  clientRequestToken: String @search(by: [hash])
+  platformVersion: String @search(by: [hash, regexp])
+  encryptionConfig: [awsEksEncryptionConfig]
+  tags: [Tag]
+  iamRoles: [awsIamRole] @hasInverse(field: eksCluster)
+  kms: [awsKms] @hasInverse(field: eksCluster)
+  securityGroups: [awsSecurityGroup] @hasInverse(field: eksCluster)
+  subnet: [awsSubnet] @hasInverse(field: eksCluster)
+  vpc: [awsVpc] @hasInverse(field: eksCluster)
+}
+
+type awsEksVpcConfigResponse {
+  subnetIds: [String] @search(by: [hash])
+  securityGroupIds: [String] @search(by: [hash])
+  clusterSecurityGroupId: String @search(by: [hash])
+  vpcId: String @search(by: [hash])
+  endpointPublicAccess: Boolean @search
+  endpointPrivateAccess: Boolean @search
+  publicAccessCidrs: [String] @search(by: [hash])
+}
+
+type awsEksKubernetesNetworkConfigResponse {
+  serviceIpv4Cidr: String @search(by: [hash, regexp])
+}
+
+type awsEksLogging {
+  clusterLogging: [awsEksLogSetup]
+}
+
+type awsEksIdentity {
+  oidc: awsEksOIDC
+}
+
+type awsEksOIDC {
+  issuer: String @search(by: [hash, regexp])
+}
+
+type awsEksCertificate {
+  data: String @search(by: [hash, regexp])
+}
+
+type awsEksProvider {
+  keyArn: String @search(by: [hash, regexp])
+}
+
+type awsEksLogSetup 
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    types: [String] @search(by: [hash])
+    enabled: Boolean @search
+  }
+
+type awsEksEncryptionConfig 
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    resources: [String] @search(by: [hash])
+    provider: awsEksProvider
+  }

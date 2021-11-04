@@ -18,6 +18,7 @@ export default {
   ec2Instance: 'ec2Instance',
   ecr: 'ecr',
   eip: 'eip',
+  eksCluster: 'eksCluster',
   elasticBeanstalkApp: 'elasticBeanstalkApp',
   elasticBeanstalkEnv: 'elasticBeanstalkEnv',
   elb: 'elb',

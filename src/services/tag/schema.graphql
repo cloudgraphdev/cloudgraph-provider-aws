@@ -41,6 +41,7 @@ type awsTag @key(fields: "id") {
   elasticBeanstalkEnv: [awsElasticBeanstalkEnv]
   sns: [awsSns]
   redshiftClusters: [awsRedshiftCluster]
+  eksCluster: [awsEksCluster]
 }
 
 # TODO: would this cause a collision with other providers? should we rename to like awsRawTag?

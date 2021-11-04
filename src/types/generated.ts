@@ -933,6 +933,77 @@ export type AwsEip = {
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
 };
 
+export type AwsEksCertificate = {
+  data?: Maybe<Scalars['String']>;
+};
+
+export type AwsEksCluster = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['String']>;
+  version?: Maybe<Scalars['String']>;
+  endpoint?: Maybe<Scalars['String']>;
+  resourcesVpcConfig?: Maybe<AwsEksVpcConfigResponse>;
+  kubernetesNetworkConfig?: Maybe<AwsEksKubernetesNetworkConfigResponse>;
+  logging?: Maybe<AwsEksLogging>;
+  identity?: Maybe<AwsEksIdentity>;
+  status?: Maybe<Scalars['String']>;
+  certificateAuthority?: Maybe<AwsEksCertificate>;
+  clientRequestToken?: Maybe<Scalars['String']>;
+  platformVersion?: Maybe<Scalars['String']>;
+  encryptionConfig?: Maybe<Array<Maybe<AwsEksEncryptionConfig>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+};
+
+export type AwsEksEncryptionConfig = {
+  id: Scalars['String'];
+  resources?: Maybe<Array<Maybe<Scalars['String']>>>;
+  provider?: Maybe<AwsEksProvider>;
+};
+
+export type AwsEksIdentity = {
+  oidc?: Maybe<AwsEksOidc>;
+};
+
+export type AwsEksKubernetesNetworkConfigResponse = {
+  serviceIpv4Cidr?: Maybe<Scalars['String']>;
+};
+
+export type AwsEksLogSetup = {
+  id: Scalars['String'];
+  types?: Maybe<Array<Maybe<Scalars['String']>>>;
+  enabled?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsEksLogging = {
+  clusterLogging?: Maybe<Array<Maybe<AwsEksLogSetup>>>;
+};
+
+export type AwsEksOidc = {
+  issuer?: Maybe<Scalars['String']>;
+};
+
+export type AwsEksProvider = {
+  keyArn?: Maybe<Scalars['String']>;
+};
+
+export type AwsEksVpcConfigResponse = {
+  subnetIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  clusterSecurityGroupId?: Maybe<Scalars['String']>;
+  vpcId?: Maybe<Scalars['String']>;
+  endpointPublicAccess?: Maybe<Scalars['Boolean']>;
+  endpointPrivateAccess?: Maybe<Scalars['Boolean']>;
+  publicAccessCidrs?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
 export type AwsElasticBeanstalkApp = {
   id: Scalars['String'];
   accountId: Scalars['String'];
@@ -1112,6 +1183,7 @@ export type AwsIamRole = {
   tags?: Maybe<Array<Maybe<Tag>>>;
   inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
+  eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
 };
 
 export type AwsIamSamlProvider = {
@@ -1235,6 +1307,7 @@ export type AwsKms = {
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
   redshiftCluster?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
   sns?: Maybe<Array<Maybe<AwsSns>>>;
+  eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
 };
 
 export type AwsLambda = {
@@ -1639,6 +1712,7 @@ export type AwsSecurityGroup = {
   asg?: Maybe<Array<Maybe<AwsAsg>>>;
   rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
+  eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
 };
 
 export type AwsServiceBillingInfo = {
@@ -1756,6 +1830,7 @@ export type AwsSubnet = {
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
+  eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
 };
 
 export type AwsSupportedLoginProvider = {
@@ -1812,6 +1887,7 @@ export type AwsTag = {
   elasticBeanstalkEnv?: Maybe<Array<Maybe<AwsElasticBeanstalkEnv>>>;
   sns?: Maybe<Array<Maybe<AwsSns>>>;
   redshiftClusters?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
+  eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
 };
 
 export type AwsTotalBillingInfo = {
@@ -1847,6 +1923,7 @@ export type AwsVpc = {
   route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
+  eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
 };
 
 export type BlockDeviceEbs = {

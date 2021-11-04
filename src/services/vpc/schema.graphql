@@ -27,4 +27,5 @@ type awsVpc @key(fields: "id") {
   route53HostedZone: [awsRoute53HostedZone] @hasInverse(field: vpc)
   routeTable: [awsRouteTable] @hasInverse(field: vpc)
   subnet: [awsSubnet] @hasInverse(field: vpc)
+  eksCluster: [awsEksCluster] @hasInverse(field: vpc)
 }
