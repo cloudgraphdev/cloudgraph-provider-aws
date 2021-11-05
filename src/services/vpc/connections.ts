@@ -74,7 +74,7 @@ export default ({
   const ecsServices = data.find(({ name }) => name === services.ecsService)
   if (ecsServices?.data?.[region]) {
     const dataAtRegion: RawAwsEcsService[] = ecsServices.data[region].filter(({ networkConfiguration }) => {
-      const sgIds = networkConfiguration?.awsvpcConfiguration?.securityGroups
+      const sgIds = networkConfiguration?.awsvpcConfiguration?.securityGroups || []
       return sgIds.includes(id)
     })
 

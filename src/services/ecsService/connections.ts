@@ -37,7 +37,7 @@ export default ({
 
   if (securityGroups?.data?.[region]) {
     const sgsInRegion: SecurityGroup[] = securityGroups.data[region].filter(
-      ({ GroupId }: SecurityGroup) => sgIds.includes(GroupId)
+      ({ GroupId }: SecurityGroup) => sgIds?.includes(GroupId)
     )
 
     if (!isEmpty(sgsInRegion)) {
@@ -61,7 +61,7 @@ export default ({
   } = data.find(({ name }) => name === services.subnet)
   if (subnets?.data?.[region]) {
     const subnetsInRegion: RawAwsSubnet[] = subnets.data[region].filter(
-      ({ SubnetId }: RawAwsSubnet) => subnetIds.includes(SubnetId)
+      ({ SubnetId }: RawAwsSubnet) => subnetIds?.includes(SubnetId)
     )
 
     if (!isEmpty(subnetsInRegion)) {
@@ -85,7 +85,7 @@ export default ({
   } = data.find(({ name }) => name === services.vpc)
   if (vpcs?.data?.[region]) {
     const vpcsInRegion: RawAwsVpc[] = vpcs.data[region].filter(
-      ({ VpcId }: SecurityGroup) => sgIds.includes(VpcId)
+      ({ VpcId }: SecurityGroup) => sgIds?.includes(VpcId)
     )
   
     if (!isEmpty(vpcsInRegion)) {
@@ -107,7 +107,7 @@ export default ({
     data.find(({ name }) => name === services.elb)
   if (elbs?.data?.[region]) {
     const dataAtRegion: RawAwsElb[] = elbs.data[region].filter(
-      ({ LoadBalancerName }: RawAwsElb) => elbNames.includes(LoadBalancerName)
+      ({ LoadBalancerName }: RawAwsElb) => elbNames?.includes(LoadBalancerName)
     )
     if (!isEmpty(dataAtRegion)) {
       for (const instance of dataAtRegion) {
