@@ -384,6 +384,12 @@ export default class Provider extends CloudGraph.Client {
         if (answers?.accessKeyId && answers?.secretAccessKey) {
           this.credentials = answers
           this.profile = profile
+          AWS.config.update({
+            credentials: {
+              accessKeyId: answers.accessKeyId,
+              secretAccessKey: answers?.secretAccessKey,
+            },
+          })
         } else {
           this.logger.error('Cannot scan AWS without credentials')
           throw new Error()
