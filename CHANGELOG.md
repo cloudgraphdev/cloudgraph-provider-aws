@@ -1,3 +1,10 @@
+## [0.41.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.41.0...0.41.1) (2021-11-05)
+
+
+### Bug Fixes
+
+* Set aws credentials when they are input by the user ([8db4631](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/8db46315446fb8f7261db1b2d4f7664fc0e053cd))
+
 # [0.41.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.40.5...0.41.0) (2021-11-04)
 
 
