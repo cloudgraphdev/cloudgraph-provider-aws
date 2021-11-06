@@ -60,7 +60,7 @@ export default async ({
 
                 const { containerInstanceArns: containerInstances = [] } = data
 
-                resolveEcsData({region, containerInstances})
+                resolveEcsData({cluster, containerInstances, region})
               }
             )
           )
@@ -70,11 +70,11 @@ export default async ({
      * Get all of the containers for each instance arn
      */
     const ecsContainerPromises = containerInstanceArns.map(
-      async ({region, containerInstances}) =>
+      async ({cluster, containerInstances, region}) =>
         new Promise<void>(resolveEcsData => {
           if (isEmpty(containerInstances)) return resolveEcsData()
           new ECS({ ...config, region, endpoint }).describeContainerInstances(
-            { containerInstances },
+            { cluster, containerInstances },
             (err, data) => {
               if (err) {
                 generateAwsErrorLog(serviceName, 'ecs:describeContainerInstances', err)

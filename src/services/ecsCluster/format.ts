@@ -21,7 +21,7 @@ export default ({
     activeServicesCount,
     capacityProviders,
     attachmentsStatus,
-    Tags,
+    Tags = {},
   } = service
 
   const statistics = service.statistics?.map(stat => ({

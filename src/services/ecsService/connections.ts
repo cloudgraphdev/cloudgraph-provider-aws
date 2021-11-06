@@ -53,7 +53,7 @@ export default ({
   }
 
   /**
-   * Find Subnets
+   * Find Subnets AND vpcs
    */
   const subnets: {
     name: string
@@ -63,7 +63,7 @@ export default ({
     const subnetsInRegion: RawAwsSubnet[] = subnets.data[region].filter(
       ({ SubnetId }: RawAwsSubnet) => subnetIds?.includes(SubnetId)
     )
-
+    const vpcsFound = []
     if (!isEmpty(subnetsInRegion)) {
       for (const subnet of subnetsInRegion) {
         connections.push({
@@ -72,30 +72,14 @@ export default ({
           relation: 'child',
           field: 'subnet',
         })
-      }
-    }
-  }
-
-  /**
-   * Find VPCs
-   */
-  const vpcs: {
-    name: string
-    data: { [property: string]: any[] }
-  } = data.find(({ name }) => name === services.vpc)
-  if (vpcs?.data?.[region]) {
-    const vpcsInRegion: RawAwsVpc[] = vpcs.data[region].filter(
-      ({ VpcId }: SecurityGroup) => sgIds?.includes(VpcId)
-    )
-  
-    if (!isEmpty(vpcsInRegion)) {
-      for (const vpc of vpcsInRegion) {
-        connections.push({
-          id: vpc.VpcId,
-          resourceType: services.vpc,
-          relation: 'child',
-          field: 'vpc',
-        })
+        if (!vpcsFound.includes(subnet.VpcId)) {
+          connections.push({
+            id: subnet.VpcId,
+            resourceType: services.vpc,
+            relation: 'child',
+            field: 'vpc'
+          })
+        }
       }
     }
   }
