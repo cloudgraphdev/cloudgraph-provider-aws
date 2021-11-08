@@ -73,7 +73,7 @@ export const getEmrClusters = async (emr: EMR, region: string) =>
           )
 
           if (nextToken) {
-            logger.info(lt.foundAnotherFiftyClusters(region))
+            logger.debug(lt.foundAnotherFiftyClusters(region))
             listClusters(nextToken)
           }
 
@@ -121,7 +121,7 @@ export default async ({
           })
       )
     )
-    logger.info(lt.fetchedEmrClusters(numOfClusters))
+    logger.debug(lt.fetchedEmrClusters(numOfClusters))
 
     /**
      * Get the cluster description for each EMR cluster

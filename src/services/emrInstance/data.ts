@@ -45,7 +45,7 @@ const getInstancesPerCluster = async (emr: EMR, clusterId: string) =>
           instanceList.push(...Instances)
 
           if (nextToken) {
-            logger.info(lt.foundAnotherTwoThousandInstances(clusterId))
+            logger.debug(lt.foundAnotherTwoThousandInstances(clusterId))
             listInstances(nextToken)
           }
 
@@ -97,7 +97,7 @@ export default async ({
           })
       )
     )
-    logger.info(lt.fetchedEmrClusters(numOfClusters))
+    logger.debug(lt.fetchedEmrClusters(numOfClusters))
 
     /**
    * Get the instances for each EMR cluster
@@ -126,7 +126,7 @@ export default async ({
 
   await Promise.all(emrInstancePromises)
 
-  logger.info(lt.fetchedEmrClusterInstances(numOfInstances))
+  logger.debug(lt.fetchedEmrClusterInstances(numOfInstances))
 
   resolve(groupBy(emrInstances, 'region'))
 
