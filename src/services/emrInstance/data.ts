@@ -10,7 +10,6 @@ import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
-import { TagMap } from '../../types'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 import { RawAwsEmrCluster, getEmrClusters } from '../emrCluster/data'
 
@@ -58,7 +57,6 @@ const getInstancesPerCluster = async (emr: EMR, clusterId: string) =>
 
 export interface RawAwsEmrInstance extends Instance {
   region: string
-  Tags?: TagMap
 }
 
 export default async ({
