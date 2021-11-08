@@ -22,25 +22,25 @@ export default ({
     Properties: properties,
     MainClass: mainClass,
     Args: args,
-  } = config
+  } = config ?? {}
 
   const {
     State: state,
     StateChangeReason: stateChangeReason,
     FailureDetails: failureDetails,
     Timeline: timeline,
-  } = status
+  } = status ?? {}
 
   const { 
     Code: code, 
     Message: message 
-  } = stateChangeReason
+  } = stateChangeReason ?? {}
 
   const {
     CreationDateTime: creationDateTime,
     StartDateTime: startDateTime,
     EndDateTime: endDateTime,
-  } = timeline
+  } = timeline ?? {}
 
   return {
     id,

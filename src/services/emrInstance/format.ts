@@ -26,11 +26,11 @@ export default ({
     State: state ,
     StateChangeReason: stateChangeReason,
     Timeline: timeline,
-  } = status 
+  } = status ?? {}
 
   const {
     Code: code, Message: message
-  } = stateChangeReason
+  } = stateChangeReason ?? {}
 
   return {
     id,

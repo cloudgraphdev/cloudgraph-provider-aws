@@ -46,7 +46,7 @@ export default ({
     State: state,
     StateChangeReason: stateChangeReason,
     Timeline: timeline,
-  } = status
+  } = status ?? {}
 
   const { 
     Ec2KeyName: ec2KeyName,
@@ -60,7 +60,7 @@ export default ({
     ServiceAccessSecurityGroup: serviceAccessSecurityGroup,
     AdditionalMasterSecurityGroups: additionalMasterSecurityGroups,
     AdditionalSlaveSecurityGroups: additionalSlaveSecurityGroups,
-  } = ec2InstanceAttributes
+  } = ec2InstanceAttributes ?? {}
 
   const applications = service?.Applications?.map(app => ({
     id: cuid(),
@@ -80,7 +80,7 @@ export default ({
     CrossRealmTrustPrincipalPassword: crossRealmTrustPrincipalPassword,
     ADDomainJoinUser: adDomainJoinUser,
     ADDomainJoinPassword: adDomainJoinPassword,
-  } = kerberosAttributes 
+  } = kerberosAttributes ?? {}
 
   const configConverter = (config: Configuration) => ({
     id: cuid(),
