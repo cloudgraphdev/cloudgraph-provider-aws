@@ -1,3 +1,12 @@
+## [0.41.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.41.1...0.41.2) (2021-11-08)
+
+
+### Bug Fixes
+
+* **cloudtrail:** add/generate cgId as id ([c812892](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c8128922fae15c22d173b42c2302d28460bfe9e5))
+* **cloudtrail:** fix cloudtrail ids ([596db76](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/596db76edc7939b891de80e1824d40a9374b7c6a))
+* **cloudtrail:** generate unique id, drop cgId ([db32ce8](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/db32ce8ac97c3fa017b1c731f615000ccdeb1c19))
+
 ## [0.41.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.41.0...0.41.1) (2021-11-05)
 
 
