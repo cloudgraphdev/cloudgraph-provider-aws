@@ -1,0 +1,75 @@
+type awsEcsContainer @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+	arn: String! @id @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash, regexp])
+  ec2InstanceId: String @search(by: [hash])
+  capacityProviderName: String @search(by: [hash, regexp])
+  version: Int @search
+  versionInfo: awsEcsversionInfo
+  remainingResources: [awsEcsResource]
+  registeredResources: [awsEcsResource]
+  status: String @search(by: [hash, regexp])
+  statusReason: String @search(by: [hash, regexp])
+  agentConnected: Boolean @search
+  runningTasksCount: Int @search
+  pendingTasksCount: Int @search
+  agentUpdateStatus: String @search(by: [hash, regexp])
+  attributes: [awsEcsAttribute]
+  registeredAt: String @search(by: [hash, regexp])
+  attachments: [awsEcsAttachment]
+  tags: [Tag]
+  ec2Instance: [awsEc2] @hasInverse(field: ecsContainer)
+  ecsTask: [awsEcsTask] @hasInverse(field: ecsContainer)
+}
+
+type awsEcsversionInfo
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    agentVersion: String @search(by: [hash, regexp])
+    agentHash: String @search(by: [hash, regexp])
+    dockerVersion: String @search(by: [hash, regexp])
+  }
+
+type awsEcsResource
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    name: String @search(by: [hash, regexp])
+    type: String @search(by: [hash, regexp])
+    doubleValue: Float @search
+    longValue: Int @search
+    integerValue: Int @search
+    stringSetValue: [String] @search(by: [hash])
+  }
+
+type awsEcsAttribute
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    name: String @search(by: [hash, regexp])
+    value: String @search(by: [hash, regexp])
+    targetType: String @search(by: [hash, regexp])
+    targetId: String @search(by: [hash, regexp])
+  }
+
+type awsEcsAttachment
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    type: String @search(by: [hash, regexp])
+    status: String @search(by: [hash, regexp])
+    details: [awsEcsAttachmentDetail]
+  }

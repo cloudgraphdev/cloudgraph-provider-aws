@@ -23,4 +23,5 @@ type awsSubnet @key(fields: "id") {
   vpc: [awsVpc] @hasInverse(field: subnet)
   rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: subnet)
   eksCluster: [awsEksCluster] @hasInverse(field: subnet)
+  ecsService: [awsEcsService] @hasInverse(field: subnet)
 }

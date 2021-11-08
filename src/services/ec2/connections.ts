@@ -13,6 +13,7 @@ import { ServiceConnection } from '@cloudgraph/sdk'
 
 import services from '../../enums/services'
 import { RawAwsSubnet } from '../subnet/data'
+import { RawAwsEcsContainer } from '../ecsContainer/data'
 
 /**
  * EC2
@@ -198,10 +199,29 @@ export default ({
   // TODO: Implement when eks service is ready
 
   /**
-   * Find ECS
+   * Find ECS Container
    * related to this EC2 loadbalancer
    */
-  // TODO: Implement when ecs service is ready
+  const ecsContainers: {
+    name: string
+    data: { [property: string]: any[] }
+  } = data.find(({ name }) => name === services.ecsContainer)
+  if (ecsContainers?.data?.[region]) {
+    const containersInRegion: RawAwsEcsContainer[] = ecsContainers.data[region].filter(
+      ({ ec2InstanceId }) => ec2InstanceId === id
+    )
+
+    if (!isEmpty(containersInRegion)) {
+      for (const container of containersInRegion) {
+        connections.push({
+          id: container.containerInstanceArn,
+          resourceType: services.ecsContainer,
+          relation: 'child',
+          field: 'ecsContainer',
+        })
+      }
+    }
+  }
 
   /**
    * Find Elastic Beanstalk

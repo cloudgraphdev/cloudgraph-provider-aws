@@ -47,7 +47,7 @@ export default ({
   const { NetworkInterfaceId: networkInterfaceId = '' } =
     networkInterfaces.find(
       ({ Attachment: { DeviceIndex } }) => DeviceIndex === 0
-    )
+    ) || {}
 
   const ipv6Addresses = networkInterfaces
     .map(({ Ipv6Addresses }) => Ipv6Addresses)

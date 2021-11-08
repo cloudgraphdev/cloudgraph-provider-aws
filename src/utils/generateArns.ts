@@ -70,3 +70,13 @@ export const kmsArn = ({
   account: string
   id: string
 }) : string => `arn:aws:kms:${region}:${account}:key/${id}`
+
+export const ecsContainerArn = ({
+  region,
+  account,
+  name,
+}: {
+  region: string
+  account: string
+  name: string
+}): string => `arn:aws:ecs:${region}:${account}:container-definition/${name}`

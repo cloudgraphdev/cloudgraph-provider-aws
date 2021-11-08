@@ -1,0 +1,113 @@
+type awsEcsCluster @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+	arn: String! @id @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash, regexp])
+  clusterName: String @search(by: [hash, regexp])
+  configuration: awsEcsClusterConfiguration
+  status: String @search(by: [hash, regexp])
+  registeredContainerInstancesCount: Int @search
+  runningTasksCount: Int @search
+  pendingTasksCount: Int @search
+  activeServicesCount: Int @search
+  statistics: [awsEcsStatistics]
+  settings: [awsEcsClusterSettings]
+  capacityProviders: [String] @search(by: [hash, regexp])
+  defaultCapacityProviderStrategy: [awsEcsCapacityProviderStrategy]
+  attachments: [awsEcsAttachment]
+  attachmentsStatus: String @search(by: [hash, regexp])
+  tags: [Tag]
+  ecsService: [awsEcsService] @hasInverse(field: ecsCluster)
+}
+
+type AwsEcsExecuteCommandLogConfiguration 
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    cloudWatchLogGroupName: String @search(by: [hash, regexp])
+    cloudWatchEncryptionEnabled: Boolean @search
+    s3BucketName: String @search(by: [hash, regexp])
+    s3EncryptionEnabled: Boolean @search
+    s3KeyPrefix: String @search(by: [hash, regexp])
+  }
+
+type awsEcsExecuteCommandConfiguration
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    kmsKeyId: String @search(by: [hash])
+    logging: String @search(by: [hash, regexp])
+    logConfiguration: AwsEcsExecuteCommandLogConfiguration
+  }
+
+type awsEcsClusterConfiguration
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    executeCommandConfiguration: awsEcsExecuteCommandConfiguration
+  }
+
+type awsEcsStatistics
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    key: String @search(by: [hash, regexp])
+    value: String @search(by: [hash, regexp])
+  }
+
+type awsEcsClusterSettings
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    name: String @search(by: [hash, regexp])
+    value: String @search(by: [hash, regexp])
+  }
+
+type awsEcsCapacityProviderStrategy
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    capacityProvider: String @search(by: [hash, regexp])
+    weight: Int @search
+    base: Int @search
+  }
+
+type awsEcsAttachmentDetail
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    name: String @search(by: [hash, regexp])
+    value: String @search(by: [hash, regexp])
+  }
+
+type awsEcsAttachment
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    id: String! @id @search(by: [hash])
+    type: String @search(by: [hash, regexp])
+    status: String @search(by: [hash, regexp])
+    details: [awsEcsAttachmentDetail]
+  }

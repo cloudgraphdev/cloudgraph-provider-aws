@@ -22,6 +22,10 @@ import CognitoUserPool from '../services/cognitoUserPool'
 import DynamoDB from '../services/dynamodb'
 import EBS from '../services/ebs'
 import EC2 from '../services/ec2'
+import EcsCluster from '../services/ecsCluster'
+import EcsContainer from '../services/ecsContainer'
+import EcsService from '../services/ecsService'
+import EcsTask from '../services/ecsTask'
 import EIP from '../services/eip'
 import ElasticBeanstalkApp from '../services/elasticBeanstalkApplication'
 import ElasticBeanstalkEnv from '../services/elasticBeanstalkEnvironment'
@@ -112,5 +116,9 @@ export default {
   [services.iamOpenIdConnectProvider]: IamOpenIdConnectProvider,
   [services.iamServerCertificate]: IamServerCertificate,
   [services.sns]: SNS,
+  [services.ecsCluster]: EcsCluster,
+  [services.ecsContainer]: EcsContainer,
+  [services.ecsService]: EcsService,
+  [services.ecsTask]: EcsTask,
   tag: AwsTag,
 }
