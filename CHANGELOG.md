@@ -1,3 +1,20 @@
+# [0.42.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.41.2...0.42.0) (2021-11-08)
+
+
+### Bug Fixes
+
+* **ecs:** add ecsCluster,elb,iamRole,sg,subnet connections ([d4e5214](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d4e521419ab21a064259a9ac61e31117ac3f5ae5))
+* **ecs:** added optional chaining in connections ([e0e1f46](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/e0e1f464851d58fd7249c76aa004dd3a68c2cb96))
+* **ecs:** guard empty containerInstances, connection typo ([76d0b56](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/76d0b56afb67be69b58aac0cf13ceee1b05d3823))
+* **ecs:** guard empty vpc in connections ([e723d53](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/e723d5377fb3a15a3c1f1d2876487c58592af438))
+* **ecs:** use cluster name in describeContainerInstances, iterate subnetsInRegion for vpc connection ([e25626c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/e25626c096955520df0c0e32a9aeaefe7c1c11dc))
+* **readme:** services ([7a5baf6](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/7a5baf61155e0763caf343a6eeb3a69bf4d80c46))
+
+
+### Features
+
+* **ecs:** add ecs services ([b7a4209](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b7a420906b31a5ea6779a1842766e3bc15301c31))
+
 ## [0.41.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.41.1...0.41.2) (2021-11-08)
 
 
