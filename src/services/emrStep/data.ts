@@ -41,7 +41,7 @@ const listEmrClusterSteps = async (emr: EMR, clusterId: string) =>
         clusterStepList.push(...Steps)
 
         if (nextToken) {
-          logger.info(lt.foundAnotherFiftySteps(clusterId))
+          logger.debug(lt.foundAnotherFiftySteps(clusterId))
           listSteps(nextToken)
         }
 
@@ -92,7 +92,7 @@ export default async ({
           })
       )
     )
-    logger.info(lt.fetchedEmrClusters(numOfClusters))
+    logger.debug(lt.fetchedEmrClusters(numOfClusters))
 
     /**
      * Get the list of steps for each EMR cluster
@@ -118,7 +118,7 @@ export default async ({
 
     await Promise.all(stepPromises)
 
-    logger.info(lt.fetchedEmrClusterSteps(numOfSteps))
+    logger.debug(lt.fetchedEmrClusterSteps(numOfSteps))
 
     resolve(groupBy(emrSteps, 'region'))
 
