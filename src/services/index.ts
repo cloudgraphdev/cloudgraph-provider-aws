@@ -720,7 +720,7 @@ export default class Provider extends CloudGraph.Client {
                   // otherwise, merge connections by unioning on id of the connections
                   if (!isEmpty(serviceConnections)) {
                     const entries: [string, any][] =
-                      Object.values(newConnections)
+                      Object.entries(newConnections)
                     for (const [key, value] of entries) {
                       // If there are no service connections for this entity i.e. { [serviceId]: [] }
                       // use new connections for that key
@@ -729,7 +729,7 @@ export default class Provider extends CloudGraph.Client {
                           serviceConnections[key] = newConnections[key] ?? []
                         } else {
                           serviceConnections[key] = unionBy(
-                            value,
+                            serviceConnections[key],
                             newConnections[key] ?? [],
                             'id'
                           )
