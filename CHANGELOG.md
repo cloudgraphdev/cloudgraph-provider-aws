@@ -1,3 +1,10 @@
+## [0.42.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.42.0...0.42.1) (2021-11-09)
+
+
+### Bug Fixes
+
+* **regions:** update region list with latest from aws ([a1ffa52](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a1ffa52720ade135f2a37496f6887f7c0001745c))
+
 # [0.42.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.41.2...0.42.0) (2021-11-08)
 
 
