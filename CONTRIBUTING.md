@@ -3,6 +3,7 @@
 <!-- contributionguidelines -->
 
 <!-- toc -->
+
 - [Getting Started](#getting-started)
 
 - [Creating A new provider](#creating-a-new-provider)
@@ -76,6 +77,14 @@ export  default  abstract  class  Provider {
 	async  getData({ opts }: { opts: Opts }): Promise<any> {
 		throw  new  Error('Function getData has not been defined')
 	}
+}
+```
+
+To add a custom naming for the resources' schemas, export a schemasMap property at the provider. Following the structure:
+
+```
+{
+  [serviceName]: "schemaName",
 }
 ```
 
@@ -310,4 +319,5 @@ function format(rawData) => {
 And that's it! The CLI will now pick up the new data point and push it to the DB.
 
 If you have any ideas for how to make this contribution guide more effective or easier to work with please let us know, we would love to hear your feedback.
+
 <!-- contributionguidelinesstop -->
