@@ -13,14 +13,17 @@ export const regionMap = {
   apNortheast3: 'ap-northeast-3', // Osaka-Local
   apSoutheast1: 'ap-southeast-1', // Singapore
   apSoutheast2: 'ap-southeast-2', // Sydney
+  afSouth1: 'af-south-1', // Africa (cape town)
   euCentral1: 'eu-central-1', // Frankfurt
   euWest1: 'eu-west-1', // Ireland
   euWest2: 'eu-west-2', // London
   euWest3: 'eu-west-3', // Paris
-  euNorth3: 'eu-north-1', // Stockholm
+  euSouth1: 'eu-south-1', // Milan
+  euNorth1: 'eu-north-1', // Stockholm
   meSouth1: 'me-south-1', // Bahrain
   saEast1: 'sa-east-1', // Sao Paulo
   usGovEast1: 'us-gov-east-1', // US-East
+  usGovWest1: 'us-gov-west-1', // US-west
   cnNorthwest1: 'cn-northwest-1', // China Ningxia
   cnNorth1: 'cn-north-1', // China Beijing
 }
@@ -38,14 +41,17 @@ const {
   apNortheast3,
   apSoutheast1,
   apSoutheast2,
+  afSouth1,
   euCentral1,
   euWest1,
   euWest2,
   euWest3,
-  euNorth3,
+  euSouth1,
+  euNorth1,
   meSouth1,
   saEast1,
   usGovEast1,
+  usGovWest1,
   cnNorthwest1,
   cnNorth1,
 } = regionMap
@@ -63,14 +69,17 @@ export default [
   apNortheast3,
   apSoutheast1,
   apSoutheast2,
+  afSouth1,
   euCentral1,
   euWest1,
   euWest2,
   euWest3,
-  euNorth3,
+  euSouth1,
+  euNorth1,
   meSouth1,
   saEast1,
   usGovEast1,
+  usGovWest1,
   cnNorthwest1,
   cnNorth1,
 ]
