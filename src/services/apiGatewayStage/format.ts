@@ -25,7 +25,7 @@ export default ({
     tracingEnabled,
     variables: vars = {},
     restApiId,
-    tags,
+    tags = {},
     region,
   } = service
 
@@ -53,6 +53,6 @@ export default ({
     clientCertificateId,
     xrayTracing: tracingEnabled,
     variables,
-    tags: formatTagsFromMap(tags),
+    Tags: formatTagsFromMap(tags),
   }
 }

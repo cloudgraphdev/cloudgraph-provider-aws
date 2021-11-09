@@ -28,12 +28,19 @@ import resources from '../../enums/resources'
 import { getIamId } from '../../utils/ids'
 import { RawAwsSns } from '../sns/data'
 import { RawAwsRedshiftCluster } from '../redshift/data'
-import { redshiftArn } from '../../utils/generateArns'
+import { 
+  apiGatewayArn, 
+  apiGatewayRestApiArn,
+  apiGatewayStageArn, 
+  redshiftArn 
+} from '../../utils/generateArns'
 import { RawAwsEksCluster } from '../eksCluster/data'
 import { RawAwsEcsCluster } from '../ecsCluster/data'
 import { RawAwsEcsContainer } from '../ecsContainer/data'
 import { RawAwsEcsService } from '../ecsService/data'
 import { RawAwsEcsTask } from '../ecsTask/data'
+import { RawAwsApiGatewayRestApi } from '../apiGatewayRestApi/data'
+import { RawAwsApiGatewayStage } from '../apiGatewayStage/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -1108,6 +1115,55 @@ export default ({
       }
     }
 
+    /**
+     * Find related API Gateway RestApi
+     */
+    const apiGatewayRestApi: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.apiGatewayRestApi)
+    if (apiGatewayRestApi?.data?.[region]) {
+      const dataAtRegion: RawAwsApiGatewayRestApi[] =
+        findServiceInstancesWithTag(tag, apiGatewayRestApi.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.apiGatewayRestApi,
+            relation: 'child',
+            field: 'apiGatewayRestApi',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related API Gateway Stage
+     */
+    const apiGatewayStage: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.apiGatewayStage)
+    if (apiGatewayStage?.data?.[region]) {
+      const dataAtRegion: RawAwsApiGatewayStage[] =
+        findServiceInstancesWithTag(tag, apiGatewayStage.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { stageName: name, restApiId } = instance
+
+          connections.push({
+            id: apiGatewayStageArn({
+              restApiArn: apiGatewayRestApiArn({
+                restApiArn: apiGatewayArn({ region }),
+                id: restApiId,
+              }),
+              name,
+            }),
+            resourceType: services.apiGatewayStage,
+            relation: 'child',
+            field: 'apiGatewayStage',
+          })
+        }
+      }
+    }
   }
 
   const tagResult = {

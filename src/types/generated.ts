@@ -130,7 +130,7 @@ export type AwsApiGatewayRestApi = {
   apiKeySource?: Maybe<Scalars['String']>;
   createdDate?: Maybe<Scalars['String']>;
   minimumCompressionSize?: Maybe<Scalars['Int']>;
-  tags?: Maybe<Array<Maybe<Tag>>>;
+  Tags?: Maybe<Array<Maybe<Tag>>>;
   binaryMediaTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
   stages?: Maybe<Array<Maybe<AwsApiGatewayStage>>>;
   resources?: Maybe<Array<Maybe<AwsApiGatewayResource>>>;
@@ -151,7 +151,7 @@ export type AwsApiGatewayStage = {
   clientCertificateId?: Maybe<Scalars['String']>;
   xrayTracing?: Maybe<Scalars['Boolean']>;
   variables?: Maybe<Array<Maybe<AwsApiGatewayStageVariable>>>;
-  tags?: Maybe<Array<Maybe<Tag>>>;
+  Tags?: Maybe<Array<Maybe<Tag>>>;
   restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
 };
 
@@ -2272,6 +2272,8 @@ export type AwsTag = {
   ecsContainer?: Maybe<Array<Maybe<AwsEcsContainer>>>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   ecsTask?: Maybe<Array<Maybe<AwsEcsTask>>>;
+  apiGatewayRestApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
+  apiGatewayStage?: Maybe<Array<Maybe<AwsApiGatewayStage>>>;
 };
 
 export type AwsTotalBillingInfo = {
