@@ -1,3 +1,10 @@
+## [0.42.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.42.1...0.42.2) (2021-11-09)
+
+
+### Bug Fixes
+
+* Exported schemas names from provider ([fe0b350](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/fe0b350bf8a15ee092c299c0961558d3fbe8806d))
+
 ## [0.42.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.42.0...0.42.1) (2021-11-09)
 
 
