@@ -58,7 +58,7 @@ const listEnvironments = async (
             environments.push(...Environments)
 
             if (nextToken) {
-              logger.info(lt.foundAnotherThousand)
+              logger.debug(lt.foundAnotherThousand)
               listAllEnvironments(nextToken)
             } else {
               resolve(environments)

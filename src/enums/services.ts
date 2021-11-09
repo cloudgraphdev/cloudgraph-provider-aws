@@ -25,6 +25,8 @@ export default {
   eksCluster: 'eksCluster',
   elasticBeanstalkApp: 'elasticBeanstalkApp',
   elasticBeanstalkEnv: 'elasticBeanstalkEnv',
+  elastiCacheCluster: 'elastiCacheCluster',
+  elastiCacheReplicationGroup: 'elastiCacheReplicationGroup',
   elb: 'elb',
   iamUser: 'iamUser',
   iamGroup: 'iamGroup',

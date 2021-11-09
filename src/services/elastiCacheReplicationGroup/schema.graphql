@@ -1,0 +1,168 @@
+type awsElastiCacheReplicationGroup @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash, regexp])
+  replicationGroupId: String @search(by: [hash])
+  description: String @search(by: [hash, regexp])
+  globalReplicationGroupInfo: awsElastiCacheGlobalReplicationGroupInfo
+  status: String @search(by: [hash, regexp])
+  pendingModifiedValues: awsElastiCacheReplicationGroupPendingModifiedValues
+  memberClusters: [String] @search(by: [hash])
+  nodeGroups: [awsElastiCacheNodeGroup]
+  snapshottingClusterId: String @search(by: [hash])
+  automaticFailover: String @search(by: [hash, regexp])
+  multiAZ: String @search(by: [hash, regexp])
+  configurationEndpoint: awsElastiCacheEndpoint
+  snapshotRetentionLimit: Int @search
+  snapshotWindow: String @search(by: [hash, regexp])
+  clusterEnabled: Boolean @search
+  cacheNodeType: String @search(by: [hash, regexp])
+  authTokenEnabled: Boolean @search
+  authTokenLastModifiedDate: String @search(by: [hash, regexp])
+  transitEncryptionEnabled: Boolean @search
+  atRestEncryptionEnabled: Boolean @search
+  memberClustersOutpostArns: [String] @search(by: [hash])
+  userGroupIds: [String] @search(by: [hash])
+  logDeliveryConfigurations: [awsElastiCacheLogDeliveryConfiguration]
+  replicationGroupCreateTime: String @search(by: [hash, regexp])
+  tags: [Tag]
+  kms: [awsKms] @hasInverse(field: elastiCacheReplicationGroup)
+}
+
+type awsElastiCacheGlobalReplicationGroupInfo
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  globalReplicationGroupId: String @search(by: [hash])
+  globalReplicationGroupMemberRole: String @search(by: [hash, regexp])
+}
+
+type awsElastiCacheReplicationGroupPendingModifiedValues
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  primaryClusterId: String @search(by: [hash])
+  automaticFailoverStatus: String @search(by: [hash, regexp])
+  resharding: awsElastiCacheReshardingStatus
+  authTokenStatus: String @search(by: [hash, regexp])
+  userGroups: awsElastiCacheUserGroupsUpdateStatus
+  logDeliveryConfigurations: [awsElastiCachePendingLogDeliveryConfiguration]
+}
+
+type awsElastiCacheReshardingStatus
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  slotMigration: awsElastiCacheSlotMigration
+}
+
+type awsElastiCacheSlotMigration
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  progressPercentage: Float @search
+}
+
+type awsElastiCacheUserGroupsUpdateStatus
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  userGroupIdsToAdd: [String] @search(by: [hash])
+  userGroupIdsToRemove: [String] @search(by: [hash])
+}
+
+type awsElastiCachePendingLogDeliveryConfiguration 
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  logType: String @search(by: [hash, regexp])
+  destinationType: String @search(by: [hash, regexp])
+  destinationDetails: awsElastiCacheDestinationDetails
+  logFormat: String @search(by: [hash, regexp])
+}
+
+type awsElastiCacheNodeGroup 
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  nodeGroupId: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
+  primaryEndpoint: awsElastiCacheEndpoint
+  readerEndpoint: awsElastiCacheEndpoint
+  slots: String @search(by: [hash, regexp])
+  nodeGroupMembers: [awsElastiCacheNodeGroupMember]
+}
+
+type awsElastiCacheLogDeliveryConfiguration
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  logType: String @search(by: [hash, regexp])
+  destinationType: String @search(by: [hash, regexp])
+  destinationDetails: awsElastiCacheDestinationDetails
+  logFormat: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
+  message: String @search(by: [hash, regexp])
+}
+
+type awsElastiCacheDestinationDetails
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  cloudWatchLogsDetails: awsElastiCacheCloudWatchLogsDestinationDetails
+  kinesisFirehoseDetails: awsElastiCacheKinesisFirehoseDestinationDetails
+}
+
+type awsElastiCacheCloudWatchLogsDestinationDetails
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  logGroup: String @search(by: [hash, regexp])
+}
+
+type awsElastiCacheKinesisFirehoseDestinationDetails
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  deliveryStream: String @search(by: [hash, regexp])
+}
+
+type awsElastiCacheNodeGroupMember
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  cacheClusterId: String @search(by: [hash, regexp])
+  cacheNodeId: String @search(by: [hash, regexp])
+  readEndpoint: awsElastiCacheEndpoint
+  preferredAvailabilityZone: String @search(by: [hash, regexp])
+  preferredOutpostArn: String @search(by: [hash, regexp])
+  currentRole: String @search(by: [hash, regexp])
+  }
