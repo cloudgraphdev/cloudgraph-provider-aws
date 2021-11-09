@@ -12,6 +12,7 @@ import regions, { regionMap } from '../enums/regions'
 import resources from '../enums/resources'
 import services from '../enums/services'
 import serviceMap from '../enums/serviceMap'
+import schemasMap from '../enums/schemasMap'
 import { Credentials } from '../types'
 import { obfuscateSensitiveString } from '../utils/format'
 // import { setAwsRetryOptions } from '../utils'
@@ -25,6 +26,7 @@ export const enums = {
   services,
   regions,
   resources,
+  schemasMap,
 }
 
 interface Account {
