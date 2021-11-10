@@ -10,6 +10,7 @@ import { formatTagsFromMap } from '../../utils/format'
 export default ({
   service,
   account,
+  region,
 }: {
   service: RawAwsElastiCacheReplicationGroup
   account: string
@@ -47,6 +48,7 @@ export default ({
     id: arn,
     arn,
     accountId: account,
+    region,
     replicationGroupId,
     description,
     globalReplicationGroupInfo: {

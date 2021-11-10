@@ -1388,6 +1388,7 @@ export type AwsElastiCacheCluster = {
   id: Scalars['String'];
   arn: Scalars['String'];
   accountId: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
   cacheClusterId?: Maybe<Scalars['String']>;
   configurationEndpoint?: Maybe<AwsElastiCacheEndpoint>;
   clientDownloadLandingPage?: Maybe<Scalars['String']>;
@@ -1513,6 +1514,7 @@ export type AwsElastiCacheReplicationGroup = {
   id: Scalars['String'];
   arn: Scalars['String'];
   accountId: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
   replicationGroupId?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   globalReplicationGroupInfo?: Maybe<AwsElastiCacheGlobalReplicationGroupInfo>;

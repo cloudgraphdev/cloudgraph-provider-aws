@@ -10,6 +10,7 @@ import { formatTagsFromMap } from '../../utils/format'
 export default ({
   service,
   account,
+  region,
 }: {
   service: RawAwsElastiCacheCluster
   account: string
@@ -52,6 +53,7 @@ export default ({
     id: arn,
     arn,
     accountId: account,
+    region,
     cacheClusterId,
     configurationEndpoint: {
       address: configurationEndpoint?.Address,

@@ -2,7 +2,6 @@ import { ServiceConnection } from '@cloudgraph/sdk'
 import { isEmpty } from 'lodash'
 import { SecurityGroup } from 'aws-sdk/clients/ec2'
 import { RawAwsElastiCacheCluster } from './data'
-
 import services from '../../enums/services'
 
 export default ({
