@@ -15,18 +15,33 @@ type awsEmrInstance @key(fields: "id") {
   ec2Instance: [awsEc2] @hasInverse(field: emrInstance)
 }
 
-type awsEmrInstanceStatus {
+type awsEmrInstanceStatus
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   state: String @search(by: [hash, regexp])
   stateChangeReason: awsEmrInstanceStateChangeReason
   timeline: awsEmrInstanceTimeline
 }
 
-type awsEmrInstanceStateChangeReason {
+type awsEmrInstanceStateChangeReason
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   code: String @search(by: [hash, regexp])
   message: String @search(by: [hash, regexp])
 }
 
-type awsEmrInstanceTimeline {
+type awsEmrInstanceTimeline
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   creationDateTime: String @search(by: [hash, regexp])
   readyDateTime: String @search(by: [hash, regexp])
   endDateTime: String @search(by: [hash, regexp])

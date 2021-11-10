@@ -7,32 +7,57 @@ type awsEmrStep @key(fields: "id") {
   status: awsEmrStepStatus
 }
 
-type awsEmrHadoopStepConfig {
+type awsEmrHadoopStepConfig
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   jar: String @search(by: [hash, regexp])
   properties: [AwsStringMap]
   mainClass: String @search(by: [hash, regexp])
   args: [String] @search(by: [hash])
 }
 
-type awsEmrStepStatus {
+type awsEmrStepStatus
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   state: String @search(by: [hash, regexp])
   stateChangeReason: awsEmrStepStateChangeReason
   failureDetails: awsEmrFailureDetails
   timeline: awsEmrStepTimeline
 }
 
-type awsEmrStepStateChangeReason {
+type awsEmrStepStateChangeReason
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   code: String @search(by: [hash, regexp])
   message: String @search(by: [hash, regexp])
 }
 
-type awsEmrFailureDetails {
+type awsEmrFailureDetails
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   reason: String @search(by: [hash, regexp])
   message: String @search(by: [hash, regexp])
   logFile: String @search(by: [hash, regexp])
 }
 
-type awsEmrStepTimeline {
+type awsEmrStepTimeline
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   creationDateTime: String @search(by: [hash, regexp])
   startDateTime: String @search(by: [hash, regexp])
   endDateTime: String @search(by: [hash, regexp])

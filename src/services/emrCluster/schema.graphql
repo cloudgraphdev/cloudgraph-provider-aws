@@ -35,7 +35,7 @@ type awsEmrCluster @key(fields: "arn") {
 
 type AwsEmrClusterApplication 
   @generate(
-    query: { get: false, query: true, aggregate: false }
+    query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
@@ -48,7 +48,7 @@ type AwsEmrClusterApplication
 
 type AwsEmrClusterConfiguration 
   @generate(
-    query: { get: false, query: true, aggregate: false }
+    query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
@@ -60,7 +60,7 @@ type AwsEmrClusterConfiguration
 
 type AwsEmrClusterPlacementGroupConfig
   @generate(
-    query: { get: false, query: true, aggregate: false }
+    query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
@@ -71,7 +71,7 @@ type AwsEmrClusterPlacementGroupConfig
 
 type AwsStringMap
   @generate(
-    query: { get: false, query: true, aggregate: false }
+    query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
@@ -80,24 +80,44 @@ type AwsStringMap
     value: String @search(by: [hash, regexp])
   }
 
-type AwsEmrClusterStatus {
+type AwsEmrClusterStatus
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   state: String @search(by: [hash, regexp])
   stateChangeReason: AwsEmrClusterStateChangeReason
   timeline: AwsEmrClusterTimeline
 }
 
-type AwsEmrClusterStateChangeReason {
+type AwsEmrClusterStateChangeReason
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   code: String @search(by: [hash, regexp])
   message: String @search(by: [hash, regexp])
 }
 
-type AwsEmrClusterTimeline {
+type AwsEmrClusterTimeline
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   creationDateTime: String @search(by: [hash, regexp])
   readyDateTime: String @search(by: [hash, regexp])
   endDateTime: String @search(by: [hash, regexp])
 }
 
-type AwsEmrClusterEc2InstanceAttributes {
+type AwsEmrClusterEc2InstanceAttributes
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   ec2KeyName: String @search(by: [hash, regexp])
   ec2SubnetId: String @search(by: [hash, regexp])
   requestedEc2SubnetIds: [String] @search(by: [hash])
@@ -111,7 +131,12 @@ type AwsEmrClusterEc2InstanceAttributes {
   additionalSlaveSecurityGroups: [String] @search(by: [hash])
 }
 
-type AwsEmrClusterKerberosAttributes {
+type AwsEmrClusterKerberosAttributes
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   realm: String @search(by: [hash, regexp])
   kdcAdminPassword: String @search(by: [hash, regexp])
   crossRealmTrustPrincipalPassword: String @search(by: [hash, regexp])
