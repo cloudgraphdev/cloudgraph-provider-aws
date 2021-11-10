@@ -130,7 +130,7 @@ export type AwsApiGatewayRestApi = {
   apiKeySource?: Maybe<Scalars['String']>;
   createdDate?: Maybe<Scalars['String']>;
   minimumCompressionSize?: Maybe<Scalars['Int']>;
-  Tags?: Maybe<Array<Maybe<Tag>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
   binaryMediaTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
   stages?: Maybe<Array<Maybe<AwsApiGatewayStage>>>;
   resources?: Maybe<Array<Maybe<AwsApiGatewayResource>>>;
@@ -151,7 +151,7 @@ export type AwsApiGatewayStage = {
   clientCertificateId?: Maybe<Scalars['String']>;
   xrayTracing?: Maybe<Scalars['Boolean']>;
   variables?: Maybe<Array<Maybe<AwsApiGatewayStageVariable>>>;
-  Tags?: Maybe<Array<Maybe<Tag>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
   restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
 };
 

@@ -53,6 +53,6 @@ export default ({
     clientCertificateId,
     xrayTracing: tracingEnabled,
     variables,
-    Tags: formatTagsFromMap(tags),
+    tags: formatTagsFromMap(tags),
   }
 }

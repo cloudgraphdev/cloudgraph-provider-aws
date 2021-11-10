@@ -40,6 +40,6 @@ export default ({
     createdDate: createdDate.toISOString(),
     minimumCompressionSize,
     binaryMediaTypes,
-    Tags: formatTagsFromMap(tags),
+    tags: formatTagsFromMap(tags),
   }
 }

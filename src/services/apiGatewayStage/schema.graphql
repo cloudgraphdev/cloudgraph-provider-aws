@@ -33,6 +33,6 @@ type awsApiGatewayStage @key(fields: "arn") {
   clientCertificateId: String @search(by: [hash])
   xrayTracing: Boolean @search
   variables: [awsApiGatewayStageVariable]
-  Tags: [Tag]
+  tags: [Tag]
   restApi: [awsApiGatewayRestApi] @hasInverse(field: stages)
 }
