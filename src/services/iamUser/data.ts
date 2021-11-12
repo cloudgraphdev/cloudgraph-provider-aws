@@ -1,12 +1,14 @@
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
+import cuid from 'cuid'
 
 import { AWSError } from 'aws-sdk/lib/error'
 import IAM, {
   AccessKeyLastUsed,
   AccessKeyMetadata,
   GetAccessKeyLastUsedResponse,
+  GetCredentialReportResponse,
   ListAccessKeysResponse,
   ListGroupsForUserResponse,
   ListMFADevicesResponse,
@@ -26,7 +28,7 @@ import {
   setAwsRetryOptions,
 } from '../../utils'
 import { globalRegionName } from '../../enums/regions'
-import { convertAwsTagsToTagMap } from '../../utils/format'
+import { convertAwsTagsToTagMap, parseCSV } from '../../utils/format'
 import {
   IAM_CUSTOM_DELAY,
   MAX_FAILED_AWS_REQUEST_RETRIES,
@@ -44,11 +46,38 @@ const customRetrySettings = setAwsRetryOptions({
 export interface RawAwsAccessKey extends AccessKeyMetadata {
   AccessKeyLastUsed: AccessKeyLastUsed
 }
+
+export interface RawAwsIamUserReport {
+  User: string
+  Arn: string
+  UserCreationTime: string
+  PasswordEnabled: string
+  PasswordLastUsed: string
+  PasswordLastChanged: string
+  PasswordNextRotation: string
+  MfaActive: string
+  AccessKey1Active: string
+  AccessKey1LastRotated: string
+  AccessKey1LastUsedDate: string
+  AccessKey1LastUsedRegion: string
+  AccessKey1LastUsedService: string
+  AccessKey2Active: string
+  AccessKey2LastRotated: string
+  AccessKey2LastUsedDate: string
+  AccessKey2LastUsedRegion: string
+  AccessKey2LastUsedService: string
+  Cert1Active: string
+  Cert1LastRotated: string
+  Cert2Active: string
+  Cert2LastRotated: string
+}
+
 export interface RawAwsIamUser extends Omit<User, 'Tags'> {
   AccessKeyLastUsedData: RawAwsAccessKey[]
   MFADevices: MFADevice[]
   Groups: string[]
   Policies: string[]
+  ReportData?: RawAwsIamUserReport
   region: string
   Tags?: TagMap
 }
@@ -295,6 +324,33 @@ export const listIamUsers = async (
     )
   })
 
+export const getCredentialReportData = async (
+  iam: IAM
+): Promise<RawAwsIamUserReport[]> =>
+  new Promise(resolve => {
+    iam.generateCredentialReport((err: AWSError) => {
+      if (err) {
+        generateAwsErrorLog(serviceName, 'iam:generateCredentialReport', err)
+        return resolve([])
+      }
+
+      iam.getCredentialReport(
+        async (err: AWSError, data: GetCredentialReportResponse) => {
+          if (err) {
+            generateAwsErrorLog(serviceName, 'iam:getCredentialReport', err)
+          }
+          if (!isEmpty(data)) {
+            const report = await parseCSV(data.Content.toString())
+
+            resolve(report)
+          }
+
+          resolve([])
+        }
+      )
+    })
+  })
+
 /**
  * IAM User
  */
@@ -321,7 +377,41 @@ export default async ({
     logger.debug(lt.lookingForIamUsers)
 
     // Fetch IAM Users
-    usersData = await listIamUsers(client)
+    const iamUsers = await listIamUsers(client)
+
+    // Fetch IAM Report Credential
+    const credentialReport = await getCredentialReportData(client)
+
+    usersData = credentialReport
+      .map(userReport => {
+        const user = iamUsers.find(u => u.Arn === userReport.Arn)
+
+        if (userReport.User.includes('root')) {
+          return {
+            Path: '/',
+            UserName: 'root',
+            UserId: cuid(),
+            Arn: userReport.Arn,
+            CreateDate: new Date(),
+            AccessKeyLastUsedData: [],
+            MFADevices: [],
+            Groups: [],
+            Policies: [],
+            ReportData: userReport,
+            region: globalRegionName,
+          }
+        }
+
+        if (!user) {
+          return undefined
+        }
+
+        return {
+          ...user,
+          ReportData: userReport,
+        }
+      })
+      .filter(Boolean)
 
     logger.debug(lt.fetchedIamUsers(usersData.length))
 

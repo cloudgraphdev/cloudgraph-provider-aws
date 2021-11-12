@@ -6,6 +6,11 @@ type awsIamUser @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   creationTime: String @search(by: [hash, regexp])
   passwordLastUsed: String @search(by: [hash, regexp])
+  passwordLastChanged: String @search(by: [hash, regexp])
+  passwordNextRotation: String @search(by: [hash, regexp])
+  passwordEnabled: Boolean @search
+  mfaActive: Boolean @search
+  accessKeysActive: Boolean @search
   accessKeyData: [awsIamAccessKey]
   mfaDevices: [awsIamMfaDevice]
   groups: [String]
@@ -24,6 +29,7 @@ type awsIamAccessKey
   lastUsedRegion: String @search(by: [hash, regexp])
   lastUsedService: String @search(by: [hash, regexp])
   createDate: String @search(by: [hash, regexp])
+  lastRotated: String @search(by: [hash, regexp])
   status: String @search(by: [hash, regexp])
 }
 

@@ -27,6 +27,23 @@ export default ({
     AccessKeyLastUsedData: accessKeys = [],
     MFADevices: mfaDevices = [],
     Groups: groups = [],
+    ReportData: {
+      AccessKey1LastRotated: accessKey1LastRotated,
+      AccessKey2LastRotated: accessKey2LastRotated,
+      PasswordEnabled: passwordEnabled,
+      PasswordLastChanged,
+      PasswordNextRotation,
+      AccessKey1Active: accessKey1Active,
+      AccessKey2Active: accessKey2Active,
+      MfaActive: mfaActive,
+    } = {
+      PasswordEnabled: '',
+      PasswordLastChanged: 'N/A',
+      PasswordNextRotation: 'N/A',
+      MfaActive: '',
+      AccessKey1LastRotated: 'N/A',
+      AccessKey2LastRotated: 'N/A',
+    },
     Tags: tags = {},
   } = rawData
 
@@ -34,7 +51,9 @@ export default ({
   const accessKeyData = []
 
   if (!isEmpty(accessKeys)) {
-    accessKeys.map(key => {
+    accessKeys.map((key, index) => {
+      const lastRotated =
+        index === 0 ? accessKey1LastRotated : accessKey2LastRotated
       accessKeyData.push({
         accessKeyId: key.AccessKeyId,
         lastUsedDate: key.AccessKeyLastUsed.LastUsedDate?.toISOString(),
@@ -42,14 +61,17 @@ export default ({
         lastUsedService: key.AccessKeyLastUsed.ServiceName,
         status: key.Status || 'Inactive',
         createDate: key.CreateDate?.toISOString(),
+        lastRotated:
+          lastRotated !== 'N/A'
+            ? new Date(lastRotated)?.toISOString() || ''
+            : '',
       })
     })
   }
 
   // MFA Devices
   const mfaData = []
-
-  if (!isEmpty(accessKeys)) {
+  if (!isEmpty(mfaDevices)) {
     mfaDevices.map(({ SerialNumber, EnableDate }) => {
       mfaData.push({
         serialNumber: SerialNumber,
@@ -60,6 +82,23 @@ export default ({
 
   // Format User Tags
   const userTags = formatTagsFromMap(tags)
+
+  let passwordLastChanged = ''
+  let passwordNextRotation = ''
+
+  if (
+    PasswordLastChanged !== 'N/A' &&
+    PasswordLastChanged !== 'not_supported'
+  ) {
+    passwordLastChanged = new Date(PasswordLastChanged)?.toISOString()
+  }
+
+  if (
+    PasswordNextRotation !== 'N/A' &&
+    PasswordNextRotation !== 'not_supported'
+  ) {
+    passwordNextRotation = new Date(PasswordNextRotation)?.toISOString()
+  }
 
   const user = {
     id: getIamId({
@@ -74,7 +113,13 @@ export default ({
     creationTime: creationTime?.toISOString() || '',
     accessKeyData,
     mfaDevices: mfaData,
+    accessKeysActive:
+      accessKey1Active === 'true' || accessKey2Active === 'true',
     passwordLastUsed: passwordLastUsed?.toISOString() || '',
+    passwordLastChanged,
+    passwordNextRotation,
+    passwordEnabled: passwordEnabled === 'true',
+    mfaActive: mfaActive === 'true',
     groups,
     tags: userTags,
   }
