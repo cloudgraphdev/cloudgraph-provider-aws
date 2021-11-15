@@ -1,3 +1,11 @@
+## [0.42.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.42.3...0.42.4) (2021-11-15)
+
+
+### Bug Fixes
+
+* Added credential report data to iamUser ([dc01ee9](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/dc01ee9529e165eab5573efbd39c89e720a6065a))
+* Added new parseCsv util ([d5327e1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d5327e198a7e0858d9603e690e182e62fe0971d9))
+
 ## [0.42.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.42.2...0.42.3) (2021-11-15)
 
 
