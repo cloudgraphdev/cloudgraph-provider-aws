@@ -1,3 +1,11 @@
+## [0.42.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.42.2...0.42.3) (2021-11-15)
+
+
+### Bug Fixes
+
+* **apiGateway:** add tag connection ([f50a77b](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/f50a77b637f557f8769d1e3cc519fe789ccc7de6))
+* **apiGateway:** casing ([d6956b6](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d6956b6951ad6143fc4aa298572d9e4751590d97))
+
 ## [0.42.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.42.1...0.42.2) (2021-11-09)
 
 
