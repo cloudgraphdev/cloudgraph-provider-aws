@@ -21,7 +21,7 @@ export default ({
     createdDate,
     minimumCompressionSize,
     binaryMediaTypes,
-    tags,
+    tags = {},
   } = service
   const arn = apiGatewayRestApiArn({
     restApiArn: apiGatewayArn({ region: service.region }),

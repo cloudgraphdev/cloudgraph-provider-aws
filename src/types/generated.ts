@@ -2272,6 +2272,8 @@ export type AwsTag = {
   ecsContainer?: Maybe<Array<Maybe<AwsEcsContainer>>>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   ecsTask?: Maybe<Array<Maybe<AwsEcsTask>>>;
+  apiGatewayRestApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
+  apiGatewayStage?: Maybe<Array<Maybe<AwsApiGatewayStage>>>;
 };
 
 export type AwsTotalBillingInfo = {

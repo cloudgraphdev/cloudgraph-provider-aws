@@ -25,7 +25,7 @@ export default ({
     tracingEnabled,
     variables: vars = {},
     restApiId,
-    tags,
+    tags = {},
     region,
   } = service
 

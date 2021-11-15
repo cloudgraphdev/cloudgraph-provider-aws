@@ -37,9 +37,9 @@ const customRetrySettings = setAwsRetryOptions({
   baseDelay: API_GATEWAY_CUSTOM_DELAY,
 })
 
-export interface RawAwsApiGatewayStage extends Omit<Stage, 'tags'> {
+export interface RawAwsApiGatewayStage extends Omit<Stage, 'Tags'> {
   restApiId: string
-  tags?: TagMap
+  Tags?: TagMap
   region: string
 }
 
@@ -163,7 +163,7 @@ export default async ({
           restApiArn: apiGatewayArn({ region }),
           id: restApiId,
         })
-        stage.tags = await getTags({
+        stage.Tags = await getTags({
           apiGw,
           arn: apiGatewayStageArn({
             restApiArn: arn,
