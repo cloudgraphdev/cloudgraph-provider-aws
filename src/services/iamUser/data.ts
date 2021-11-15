@@ -7,9 +7,11 @@ import { AWSError } from 'aws-sdk/lib/error'
 import IAM, {
   AccessKeyLastUsed,
   AccessKeyMetadata,
+  AttachedPolicy,
   GetAccessKeyLastUsedResponse,
   GetCredentialReportResponse,
   ListAccessKeysResponse,
+  ListAttachedUserPoliciesResponse,
   ListGroupsForUserResponse,
   ListMFADevicesResponse,
   ListUserPoliciesResponse,
@@ -77,6 +79,7 @@ export interface RawAwsIamUser extends Omit<User, 'Tags'> {
   MFADevices: MFADevice[]
   Groups: string[]
   Policies: string[]
+  ManagedPolicies: AttachedPolicy[]
   ReportData?: RawAwsIamUserReport
   region: string
   Tags?: TagMap
@@ -146,6 +149,32 @@ const policiesByUsername = async (
           const { PolicyNames = [] } = data
 
           resolveUserPolicies({ UserName, Policies: PolicyNames })
+        }
+
+        resolveUserPolicies(null)
+      }
+    )
+  })
+
+const managedPoliciesByUsername = async (
+  iam: IAM,
+  { UserName }: User
+): Promise<{ UserName: string; ManagedPolicies: AttachedPolicy[] }> =>
+  new Promise(resolveUserPolicies => {
+    iam.listAttachedUserPolicies(
+      { UserName },
+      (err: AWSError, data: ListAttachedUserPoliciesResponse) => {
+        if (err) {
+          generateAwsErrorLog(serviceName, 'iam:listAttachedUserPolicies', err)
+        }
+
+        if (!isEmpty(data)) {
+          const { AttachedPolicies = [] } = data
+
+          resolveUserPolicies({
+            UserName,
+            ManagedPolicies: AttachedPolicies,
+          })
         }
 
         resolveUserPolicies(null)
@@ -249,6 +278,7 @@ export const listIamUsers = async (
     const result: RawAwsIamUser[] = []
     const groupsByNamePromises = []
     const policiesByNamePromise = []
+    const managedPoliciesByNamePromise = []
     const accessKeysByUser = []
     const mfaDevicesPromises = []
     const tagsByNamePromises = []
@@ -273,6 +303,9 @@ export const listIamUsers = async (
         users.map(user => {
           groupsByNamePromises.push(groupsByUsername(iam, user))
           policiesByNamePromise.push(policiesByUsername(iam, user))
+          managedPoliciesByNamePromise.push(
+            managedPoliciesByUsername(iam, user)
+          )
           accessKeysByUser.push(accessKeyByUsername(iam, user))
           mfaDevicesPromises.push(listMFADevicesByUsername(iam, user))
           tagsByNamePromises.push(tagsByUsername(iam, user))
@@ -280,6 +313,7 @@ export const listIamUsers = async (
 
         const groups = await Promise.all(groupsByNamePromises)
         const policies = await Promise.all(policiesByNamePromise)
+        const managedPolicies = await Promise.all(managedPoliciesByNamePromise)
         const accessKeys = await Promise.all(accessKeysByUser)
         const mfaDevices = await Promise.all(mfaDevicesPromises)
         const tags = await Promise.all(tagsByNamePromises)
@@ -299,6 +333,11 @@ export const listIamUsers = async (
                 policies
                   ?.filter(p => p?.UserName === UserName)
                   .map(p => p.Policies)
+                  .reduce((current, acc) => [...acc, ...current], []) || [],
+              ManagedPolicies:
+                managedPolicies
+                  ?.filter(p => p?.UserName === UserName)
+                  .map(p => p.ManagedPolicies)
                   .reduce((current, acc) => [...acc, ...current], []) || [],
               AccessKeyLastUsedData:
                 accessKeys
@@ -397,6 +436,7 @@ export default async ({
             MFADevices: [],
             Groups: [],
             Policies: [],
+            ManagedPolicies: [],
             ReportData: userReport,
             region: globalRegionName,
           }

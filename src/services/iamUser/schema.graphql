@@ -15,6 +15,8 @@ type awsIamUser @key(fields: "arn") {
   mfaDevices: [awsIamMfaDevice]
   groups: [String]
   tags: [Tag]
+  inlinePolicies: [String]
+  iamAttachedPolicies: [awsIamPolicy] @hasInverse(field: iamUsers)
   iamGroups: [awsIamGroup] @hasInverse(field: iamUsers)
 }
 

@@ -1546,6 +1546,7 @@ export type AwsIamPolicy = {
   tags?: Maybe<Array<Maybe<Tag>>>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   iamGroups?: Maybe<Array<Maybe<AwsIamGroup>>>;
+  iamUsers?: Maybe<Array<Maybe<AwsIamUser>>>;
 };
 
 export type AwsIamRole = {
@@ -1601,6 +1602,8 @@ export type AwsIamUser = {
   mfaDevices?: Maybe<Array<Maybe<AwsIamMfaDevice>>>;
   groups?: Maybe<Array<Maybe<Scalars['String']>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
+  iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   iamGroups?: Maybe<Array<Maybe<AwsIamGroup>>>;
 };
 

@@ -27,6 +27,7 @@ export default ({
     AccessKeyLastUsedData: accessKeys = [],
     MFADevices: mfaDevices = [],
     Groups: groups = [],
+    Policies: inlinePolicies = [],
     ReportData: {
       AccessKey1LastRotated: accessKey1LastRotated,
       AccessKey2LastRotated: accessKey2LastRotated,
@@ -121,6 +122,7 @@ export default ({
     passwordEnabled: passwordEnabled === 'true',
     mfaActive: mfaActive === 'true',
     groups,
+    inlinePolicies,
     tags: userTags,
   }
   return user

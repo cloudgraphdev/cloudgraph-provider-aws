@@ -5,35 +5,34 @@ import kebabCase from 'lodash/kebabCase'
 import { ServiceConnection } from '@cloudgraph/sdk'
 
 import services from '../../enums/services'
-import { RawAwsIamGroup } from './data'
+import { RawAwsIamUser } from './data'
 import { RawAwsIamPolicy } from '../iamPolicy/data'
-import { RawAwsIamUser } from '../iamUser/data'
 import resources from '../../enums/resources'
 import { getIamId } from '../../utils/ids'
 
 /**
- * IAM Group
+ * IAM User
  */
 
 export default ({
-  service: group,
+  service: user,
   data,
 }: {
   account: string
   data: { name: string; data: { [property: string]: any[] } }[]
-  service: RawAwsIamGroup
+  service: RawAwsIamUser
   region: string
 }): { [key: string]: ServiceConnection[] } => {
   const connections: ServiceConnection[] = []
   const {
-    GroupId: id,
-    GroupName: name,
+    UserId: id,
+    UserName: name,
     ManagedPolicies: managedPolicies = [],
-  } = group
+  } = user
 
   /**
    * Find Managed Policies
-   * related to this IAM Group
+   * related to this IAM User
    */
 
   const policies: RawAwsIamPolicy[] =
@@ -59,39 +58,11 @@ export default ({
     }
   }
 
-  /**
-   * Find Belonging Users
-   * related to this IAM User
-   */
-
-  const users: RawAwsIamUser[] =
-    flatMap(
-      data.find(({ name: serviceName }) => serviceName === services.iamUser)
-        ?.data
-    ) || []
-
-  const belonginUsers = users.filter(({ Groups: groups }: RawAwsIamUser) =>
-    groups.includes(id)
-  )
-
-  if (!isEmpty(belonginUsers)) {
-    for (const instance of belonginUsers) {
-      const { UserId: userId, UserName: userName } = instance
-
-      connections.push({
-        id: `${userName}-${userId}-${kebabCase(resources.iamUser)}`,
-        resourceType: services.iamUser,
-        relation: 'child',
-        field: 'iamUsers',
-      })
-    }
-  }
-
   return {
     [getIamId({
       resourceId: id,
       resourceName: name,
-      resourceType: resources.iamGroup,
+      resourceType: resources.iamUser,
     })]: connections,
   }
 }
