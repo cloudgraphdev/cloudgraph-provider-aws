@@ -1494,6 +1494,7 @@ export type AwsIamAccessKey = {
   lastUsedRegion?: Maybe<Scalars['String']>;
   lastUsedService?: Maybe<Scalars['String']>;
   createDate?: Maybe<Scalars['String']>;
+  lastRotated?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
 };
 
@@ -1591,6 +1592,11 @@ export type AwsIamUser = {
   name?: Maybe<Scalars['String']>;
   creationTime?: Maybe<Scalars['String']>;
   passwordLastUsed?: Maybe<Scalars['String']>;
+  passwordLastChanged?: Maybe<Scalars['String']>;
+  passwordNextRotation?: Maybe<Scalars['String']>;
+  passwordEnabled?: Maybe<Scalars['Boolean']>;
+  mfaActive?: Maybe<Scalars['Boolean']>;
+  accessKeysActive?: Maybe<Scalars['Boolean']>;
   accessKeyData?: Maybe<Array<Maybe<AwsIamAccessKey>>>;
   mfaDevices?: Maybe<Array<Maybe<AwsIamMfaDevice>>>;
   groups?: Maybe<Array<Maybe<Scalars['String']>>>;
