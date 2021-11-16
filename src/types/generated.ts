@@ -1380,6 +1380,196 @@ export type AwsEksVpcConfigResponse = {
   publicAccessCidrs?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
+export type AwsElastiCacheCloudWatchLogsDestinationDetails = {
+  logGroup?: Maybe<Scalars['String']>;
+};
+
+export type AwsElastiCacheCluster = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  cacheClusterId?: Maybe<Scalars['String']>;
+  configurationEndpoint?: Maybe<AwsElastiCacheEndpoint>;
+  clientDownloadLandingPage?: Maybe<Scalars['String']>;
+  cacheNodeType?: Maybe<Scalars['String']>;
+  engine?: Maybe<Scalars['String']>;
+  engineVersion?: Maybe<Scalars['String']>;
+  cacheClusterStatus?: Maybe<Scalars['String']>;
+  numCacheNodes?: Maybe<Scalars['Int']>;
+  preferredAvailabilityZone?: Maybe<Scalars['String']>;
+  preferredOutpostArn?: Maybe<Scalars['String']>;
+  cacheClusterCreateTime?: Maybe<Scalars['String']>;
+  preferredMaintenanceWindow?: Maybe<Scalars['String']>;
+  pendingModifiedValues?: Maybe<AwsElastiCachePendingModifiedValues>;
+  notificationConfiguration?: Maybe<AwsElastiCacheNotificationConfiguration>;
+  cacheSecurityGroups?: Maybe<Array<Maybe<AwsElastiCacheSecurityGroupMembership>>>;
+  cacheParameterGroup?: Maybe<AwsElastiCacheParameterGroupStatus>;
+  cacheSubnetGroupName?: Maybe<Scalars['String']>;
+  cacheNodes?: Maybe<Array<Maybe<AwsElastiCacheNode>>>;
+  autoMinorVersionUpgrade?: Maybe<Scalars['Boolean']>;
+  replicationGroupId?: Maybe<Scalars['String']>;
+  snapshotRetentionLimit?: Maybe<Scalars['Int']>;
+  snapshotWindow?: Maybe<Scalars['String']>;
+  authTokenEnabled?: Maybe<Scalars['Boolean']>;
+  authTokenLastModifiedDate?: Maybe<Scalars['String']>;
+  transitEncryptionEnabled?: Maybe<Scalars['Boolean']>;
+  atRestEncryptionEnabled?: Maybe<Scalars['Boolean']>;
+  replicationGroupLogDeliveryEnabled?: Maybe<Scalars['Boolean']>;
+  logDeliveryConfigurations?: Maybe<Array<Maybe<AwsElastiCacheLogDeliveryConfiguration>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+};
+
+export type AwsElastiCacheDestinationDetails = {
+  cloudWatchLogsDetails?: Maybe<AwsElastiCacheCloudWatchLogsDestinationDetails>;
+  kinesisFirehoseDetails?: Maybe<AwsElastiCacheKinesisFirehoseDestinationDetails>;
+};
+
+export type AwsElastiCacheEndpoint = {
+  address?: Maybe<Scalars['String']>;
+  port?: Maybe<Scalars['Int']>;
+};
+
+export type AwsElastiCacheGlobalReplicationGroupInfo = {
+  globalReplicationGroupId?: Maybe<Scalars['String']>;
+  globalReplicationGroupMemberRole?: Maybe<Scalars['String']>;
+};
+
+export type AwsElastiCacheKinesisFirehoseDestinationDetails = {
+  deliveryStream?: Maybe<Scalars['String']>;
+};
+
+export type AwsElastiCacheLogDeliveryConfiguration = {
+  id: Scalars['String'];
+  logType?: Maybe<Scalars['String']>;
+  destinationType?: Maybe<Scalars['String']>;
+  destinationDetails?: Maybe<AwsElastiCacheDestinationDetails>;
+  logFormat?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']>;
+};
+
+export type AwsElastiCacheNode = {
+  id: Scalars['String'];
+  cacheNodeId?: Maybe<Scalars['String']>;
+  cacheNodeStatus?: Maybe<Scalars['String']>;
+  cacheNodeCreateTime?: Maybe<Scalars['String']>;
+  endpoint?: Maybe<AwsElastiCacheEndpoint>;
+  parameterGroupStatus?: Maybe<Scalars['String']>;
+  sourceCacheNodeId?: Maybe<Scalars['String']>;
+  customerAvailabilityZone?: Maybe<Scalars['String']>;
+  customerOutpostArn?: Maybe<Scalars['String']>;
+};
+
+export type AwsElastiCacheNodeGroup = {
+  id: Scalars['String'];
+  nodeGroupId?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  primaryEndpoint?: Maybe<AwsElastiCacheEndpoint>;
+  readerEndpoint?: Maybe<AwsElastiCacheEndpoint>;
+  slots?: Maybe<Scalars['String']>;
+  nodeGroupMembers?: Maybe<Array<Maybe<AwsElastiCacheNodeGroupMember>>>;
+};
+
+export type AwsElastiCacheNodeGroupMember = {
+  id: Scalars['String'];
+  cacheClusterId?: Maybe<Scalars['String']>;
+  cacheNodeId?: Maybe<Scalars['String']>;
+  readEndpoint?: Maybe<AwsElastiCacheEndpoint>;
+  preferredAvailabilityZone?: Maybe<Scalars['String']>;
+  preferredOutpostArn?: Maybe<Scalars['String']>;
+  currentRole?: Maybe<Scalars['String']>;
+};
+
+export type AwsElastiCacheNotificationConfiguration = {
+  topicArn?: Maybe<Scalars['String']>;
+  topicStatus?: Maybe<Scalars['String']>;
+};
+
+export type AwsElastiCacheParameterGroupStatus = {
+  cacheParameterGroupName?: Maybe<Scalars['String']>;
+  parameterApplyStatus?: Maybe<Scalars['String']>;
+  cacheNodeIdsToReboot?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsElastiCachePendingLogDeliveryConfiguration = {
+  id: Scalars['String'];
+  logType?: Maybe<Scalars['String']>;
+  destinationType?: Maybe<Scalars['String']>;
+  destinationDetails?: Maybe<AwsElastiCacheDestinationDetails>;
+  logFormat?: Maybe<Scalars['String']>;
+};
+
+export type AwsElastiCachePendingModifiedValues = {
+  numCacheNodes?: Maybe<Scalars['Int']>;
+  cacheNodeIdsToRemove?: Maybe<Array<Maybe<Scalars['String']>>>;
+  engineVersion?: Maybe<Scalars['String']>;
+  cacheNodeType?: Maybe<Scalars['String']>;
+  authTokenStatus?: Maybe<Scalars['String']>;
+  logDeliveryConfigurations?: Maybe<Array<Maybe<AwsElastiCachePendingLogDeliveryConfiguration>>>;
+};
+
+export type AwsElastiCacheReplicationGroup = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  replicationGroupId?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  globalReplicationGroupInfo?: Maybe<AwsElastiCacheGlobalReplicationGroupInfo>;
+  status?: Maybe<Scalars['String']>;
+  pendingModifiedValues?: Maybe<AwsElastiCacheReplicationGroupPendingModifiedValues>;
+  memberClusters?: Maybe<Array<Maybe<Scalars['String']>>>;
+  nodeGroups?: Maybe<Array<Maybe<AwsElastiCacheNodeGroup>>>;
+  snapshottingClusterId?: Maybe<Scalars['String']>;
+  automaticFailover?: Maybe<Scalars['String']>;
+  multiAZ?: Maybe<Scalars['String']>;
+  configurationEndpoint?: Maybe<AwsElastiCacheEndpoint>;
+  snapshotRetentionLimit?: Maybe<Scalars['Int']>;
+  snapshotWindow?: Maybe<Scalars['String']>;
+  clusterEnabled?: Maybe<Scalars['Boolean']>;
+  cacheNodeType?: Maybe<Scalars['String']>;
+  authTokenEnabled?: Maybe<Scalars['Boolean']>;
+  authTokenLastModifiedDate?: Maybe<Scalars['String']>;
+  transitEncryptionEnabled?: Maybe<Scalars['Boolean']>;
+  atRestEncryptionEnabled?: Maybe<Scalars['Boolean']>;
+  memberClustersOutpostArns?: Maybe<Array<Maybe<Scalars['String']>>>;
+  userGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  logDeliveryConfigurations?: Maybe<Array<Maybe<AwsElastiCacheLogDeliveryConfiguration>>>;
+  replicationGroupCreateTime?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
+};
+
+export type AwsElastiCacheReplicationGroupPendingModifiedValues = {
+  primaryClusterId?: Maybe<Scalars['String']>;
+  automaticFailoverStatus?: Maybe<Scalars['String']>;
+  resharding?: Maybe<AwsElastiCacheReshardingStatus>;
+  authTokenStatus?: Maybe<Scalars['String']>;
+  userGroups?: Maybe<AwsElastiCacheUserGroupsUpdateStatus>;
+  logDeliveryConfigurations?: Maybe<Array<Maybe<AwsElastiCachePendingLogDeliveryConfiguration>>>;
+};
+
+export type AwsElastiCacheReshardingStatus = {
+  slotMigration?: Maybe<AwsElastiCacheSlotMigration>;
+};
+
+export type AwsElastiCacheSecurityGroupMembership = {
+  id: Scalars['String'];
+  securityGroupId?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+};
+
+export type AwsElastiCacheSlotMigration = {
+  progressPercentage?: Maybe<Scalars['Float']>;
+};
+
+export type AwsElastiCacheUserGroupsUpdateStatus = {
+  userGroupIdsToAdd?: Maybe<Array<Maybe<Scalars['String']>>>;
+  userGroupIdsToRemove?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
 export type AwsElasticBeanstalkApp = {
   id: Scalars['String'];
   accountId: Scalars['String'];
@@ -1692,6 +1882,7 @@ export type AwsKms = {
   redshiftCluster?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
   sns?: Maybe<Array<Maybe<AwsSns>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
+  elastiCacheReplicationGroup?: Maybe<Array<Maybe<AwsElastiCacheReplicationGroup>>>;
 };
 
 export type AwsLambda = {
@@ -2098,6 +2289,7 @@ export type AwsSecurityGroup = {
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
+  elastiCacheCluster?: Maybe<Array<Maybe<AwsElastiCacheCluster>>>;
 };
 
 export type AwsServiceBillingInfo = {
@@ -2280,6 +2472,8 @@ export type AwsTag = {
   ecsTask?: Maybe<Array<Maybe<AwsEcsTask>>>;
   apiGatewayRestApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
   apiGatewayStage?: Maybe<Array<Maybe<AwsApiGatewayStage>>>;
+  elastiCacheCluster?: Maybe<Array<Maybe<AwsElastiCacheCluster>>>;
+  elastiCacheReplicationGroup?: Maybe<Array<Maybe<AwsElastiCacheReplicationGroup>>>;
 };
 
 export type AwsTotalBillingInfo = {

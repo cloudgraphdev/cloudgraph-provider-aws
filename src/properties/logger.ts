@@ -441,6 +441,8 @@ export default {
     `Found ${num} ElastiCache Clusters, adding them to the VPC`,
   missingReplicationGroup: (is: string): string =>
     `Missing replication group for ${is} ElastiCache Cluster! Not adding ElastiCache Data`,
+  fetchedElasticacheClusters: (num: number) =>
+    `Fetched ${num} Elasticache clusters...`,
   /**
    * ECR
    */

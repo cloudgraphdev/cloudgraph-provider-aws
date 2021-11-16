@@ -29,6 +29,8 @@ import EcsTask from '../services/ecsTask'
 import EIP from '../services/eip'
 import ElasticBeanstalkApp from '../services/elasticBeanstalkApplication'
 import ElasticBeanstalkEnv from '../services/elasticBeanstalkEnvironment'
+import ElastiCacheCluster from '../services/elastiCacheCluster'
+import ElastiCacheReplicationGroup from '../services/elastiCacheReplicationGroup'
 import ELB from '../services/elb'
 import Lambda from '../services/lambda'
 import NATGateway from '../services/natGateway'
@@ -84,6 +86,8 @@ export default {
   [services.eksCluster]: EKSCluster,
   [services.elasticBeanstalkApp]: ElasticBeanstalkApp,
   [services.elasticBeanstalkEnv]: ElasticBeanstalkEnv,
+  [services.elastiCacheCluster]: ElastiCacheCluster,
+  [services.elastiCacheReplicationGroup]: ElastiCacheReplicationGroup,
   [services.elb]: ELB,
   [services.dynamodb]: DynamoDB,
   [services.igw]: AwsInternetGateway,

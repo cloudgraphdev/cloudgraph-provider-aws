@@ -24,6 +24,8 @@ import { RawAwsRdsCluster } from '../rdsCluster/data'
 import { RawAwsRdsDbInstance } from '../rdsDbInstance/data'
 import { RawAwsElasticBeanstalkApp } from '../elasticBeanstalkApplication/data'
 import { RawAwsElasticBeanstalkEnv } from '../elasticBeanstalkEnvironment/data'
+import { RawAwsElastiCacheCluster } from '../elastiCacheCluster/data'
+import { RawAwsElastiCacheReplicationGroup } from '../elastiCacheReplicationGroup/data'
 import resources from '../../enums/resources'
 import { getIamId } from '../../utils/ids'
 import { RawAwsSns } from '../sns/data'
@@ -1160,6 +1162,52 @@ export default ({
             resourceType: services.apiGatewayStage,
             relation: 'child',
             field: 'apiGatewayStage',
+          })
+        }
+      }
+    }
+  
+    /**
+     * Find related ElastiCache clusters
+     */
+    const elastiCacheCluster: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.elastiCacheCluster)
+    if (elastiCacheCluster?.data?.[region]) {
+      const dataAtRegion: RawAwsElastiCacheCluster[] =
+        findServiceInstancesWithTag(tag, elastiCacheCluster.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { ARN: arn } = instance
+          connections.push({
+            id: arn,
+            resourceType: services.elastiCacheCluster,
+            relation: 'child',
+            field: 'elastiCacheCluster',
+          })
+        }
+      }
+    }
+
+    /** 
+     * Find related ElastiCache replication groups
+     */
+    const elastiCacheReplicationGroup: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.elastiCacheReplicationGroup)
+    if (elastiCacheReplicationGroup?.data?.[region]) {
+      const dataAtRegion: RawAwsElastiCacheReplicationGroup[] =
+        findServiceInstancesWithTag(tag, elastiCacheReplicationGroup.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { ARN: arn } = instance
+          connections.push({
+            id: arn,
+            resourceType: services.elastiCacheReplicationGroup,
+            relation: 'child',
+            field: 'elastiCacheReplicationGroup',
           })
         }
       }
