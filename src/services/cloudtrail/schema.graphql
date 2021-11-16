@@ -17,8 +17,35 @@ type awsCloudtrail @key(fields: "cgId") {
   hasCustomEventSelectors: String @search(by: [hash, regexp])
   hasInsightSelectors: String @search(by: [hash, regexp])
   isOrganizationTrail: String @search(by: [hash, regexp])
+  status: awsCloudtrailStatus
+  eventSelectors: [awsCloudtrailEventSelector]
   tags: [Tag]
   s3: [awsS3] @hasInverse(field: cloudtrail)
   sns: [awsSns] @hasInverse(field: cloudtrail)
   kms: [awsKms] @hasInverse(field: cloudtrail)
+}
+
+type awsCloudtrailStatus {
+  isLogging: Boolean @search
+  latestDeliveryTime: String @search(by: [hash, regexp])
+  latestNotificationTime: String @search(by: [hash, regexp])
+  startLoggingTime: String @search(by: [hash, regexp])
+  latestDigestDeliveryTime: String @search(by: [hash, regexp])
+  latestDeliveryAttemptTime: String @search(by: [hash, regexp])
+  latestNotificationAttemptTime: String @search(by: [hash, regexp])
+  latestNotificationAttemptSucceeded: String @search(by: [hash, regexp])
+  latestDeliveryAttemptSucceeded: String @search(by: [hash, regexp])
+  timeLoggingStarted: String @search(by: [hash, regexp])
+  timeLoggingStopped: String @search(by: [hash, regexp])
+}
+
+type awsCloudtrailEventSelector
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: ID
+  readWriteType: String @search(by: [hash, regexp])
+  includeManagementEvents: Boolean @search
 }

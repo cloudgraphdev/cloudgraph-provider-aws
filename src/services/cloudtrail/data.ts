@@ -1,6 +1,13 @@
-import CloudTrail, { ResourceTag, Trail, TrailInfo } from 'aws-sdk/clients/cloudtrail'
+import CloudTrail, {
+  EventSelector,
+  GetTrailStatusResponse,
+  ResourceTag,
+  Trail,
+  TrailInfo,
+} from 'aws-sdk/clients/cloudtrail'
 import { Config } from 'aws-sdk/lib/config'
 import groupBy from 'lodash/groupBy'
+import isEmpty from 'lodash/isEmpty'
 
 import { TagMap } from '../../types'
 import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
@@ -14,6 +21,8 @@ const endpoint = initTestEndpoint(serviceName)
  */
 
 export interface RawAwsCloudTrail extends Trail {
+  TrailStatus: GetTrailStatusResponse
+  EventSelectors: EventSelector[]
   Tags: TagMap
   region: string
 }
@@ -29,9 +38,11 @@ const getTrailArnData = async (
     trailList.push(...trails.Trails)
     let nextToken = trails.NextToken
     while (nextToken) {
-      trails = await cloudTrail.listTrails({
-        NextToken: nextToken,
-      }).promise()
+      trails = await cloudTrail
+        .listTrails({
+          NextToken: nextToken,
+        })
+        .promise()
       trailList.push(...trails.Trails)
       nextToken = trails.NextToken
     }
@@ -47,14 +58,16 @@ const getTrailArnData = async (
 
 const listTrailData = async (
   cloudTrail: CloudTrail,
-  trailArnList: string[],
+  trailArnList: string[]
 ): Promise<Trail[]> => {
   try {
-    const fullResources = await cloudTrail.describeTrails({
-      trailNameList: trailArnList,
-      includeShadowTrails: true,
-    }).promise()
-    return fullResources.trailList
+    const { trailList = [] } = await cloudTrail
+      .describeTrails({
+        trailNameList: trailArnList,
+        includeShadowTrails: true,
+      })
+      .promise()
+    return trailList
   } catch (err) {
     generateAwsErrorLog(serviceName, 'cloudTrail:listTrailData', err)
   }
@@ -63,29 +76,59 @@ const listTrailData = async (
 
 const listTrailTagData = async (
   cloudTrail: CloudTrail,
-  ResourceIdList: string[], 
+  ResourceIdList: string[]
 ): Promise<ResourceTag[]> => {
   const resourceTagList: ResourceTag[] = []
   for (const cloudTrailArn of ResourceIdList) {
     try {
-      let resourceTags = await cloudTrail.listTags(
-        {ResourceIdList: [cloudTrailArn]}
-      ).promise()
+      let resourceTags = await cloudTrail
+        .listTags({ ResourceIdList: [cloudTrailArn] })
+        .promise()
       resourceTagList.push(...resourceTags.ResourceTagList)
       let nextToken = resourceTags.NextToken
       while (nextToken) {
-        resourceTags = await cloudTrail.listTags({
-          ResourceIdList: [cloudTrailArn],
-          NextToken: nextToken,
-        }).promise()
+        resourceTags = await cloudTrail
+          .listTags({
+            ResourceIdList: [cloudTrailArn],
+            NextToken: nextToken,
+          })
+          .promise()
         resourceTagList.push(...resourceTags.ResourceTagList)
         nextToken = resourceTags.NextToken
       }
     } catch (err) {
       generateAwsErrorLog(serviceName, 'cloudTrail:listTrailTagData', err)
     }
-  }  
+  }
   return resourceTagList
+}
+
+const getTrailStatus = async (
+  cloudTrail: CloudTrail,
+  { Name }: Trail
+): Promise<GetTrailStatusResponse | null> => {
+  try {
+    const data = await cloudTrail.getTrailStatus({ Name }).promise()
+    return data
+  } catch (err) {
+    generateAwsErrorLog(serviceName, 'cloudTrail:getTrailStatus', err)
+  }
+  return null
+}
+
+const getEventSelectors = async (
+  cloudTrail: CloudTrail,
+  { Name }: Trail
+): Promise<EventSelector[]> => {
+  try {
+    const { EventSelectors: eventSelectors = [] } = await cloudTrail
+      .getEventSelectors({ TrailName: Name })
+      .promise()
+    return eventSelectors
+  } catch (err) {
+    generateAwsErrorLog(serviceName, 'cloudTrail:getEventSelectors', err)
+  }
+  return []
 }
 
 export default async ({
@@ -105,24 +148,30 @@ export default async ({
       const trailArnList = await getTrailArnData(cloudTrail, region)
       const trailList = await listTrailData(cloudTrail, trailArnList)
       const trailTagList = await listTrailTagData(cloudTrail, trailArnList)
-      if (trailList) {
-        cloudTrailData.push(
-          ...trailList.map((trail: Trail) => ({
+
+      if (!isEmpty(trailList)) {
+        for (const trail of trailList) {
+          const trailStatus = await getTrailStatus(cloudTrail, trail)
+          const trailEvents = await getEventSelectors(cloudTrail, trail)
+
+          cloudTrailData.push({
             ...trail,
+            TrailStatus: trailStatus || {},
+            EventSelectors: trailEvents,
             Tags: convertAwsTagsToTagMap(
-              (trailTagList
-                .find((trailTag: ResourceTag) =>
-                  trailTag.ResourceId === trail.TrailARN))?.TagsList
-                    .map(tag => ({
-                      Key: tag.Key,
-                      Value:tag.Value || '',
-                    })
-              )
+              trailTagList
+                .find(
+                  (trailTag: ResourceTag) =>
+                    trailTag.ResourceId === trail.TrailARN
+                )
+                ?.TagsList.map(tag => ({
+                  Key: tag.Key,
+                  Value: tag.Value || '',
+                }))
             ),
             region,
-          }))
-        )
-        cloudTrail.listPublicKeys()
+          })
+        }
       }
     } catch (err) {
       generateAwsErrorLog(serviceName, 'cloudTrail:listTrail', err)
