@@ -29,4 +29,5 @@ type awsVpc @key(fields: "id") {
   subnet: [awsSubnet] @hasInverse(field: vpc)
   eksCluster: [awsEksCluster] @hasInverse(field: vpc)
   ecsService: [awsEcsService] @hasInverse(field: vpc)
+  efsMountTarget: [awsEfsMountTarget] @hasInverse(field: vpc)
 }

@@ -22,4 +22,5 @@ type awsKms @key(fields: "id"){
   sns: [awsSns] @hasInverse(field: kms)
   eksCluster: [awsEksCluster] @hasInverse(field: kms)
   elastiCacheReplicationGroup: [awsElastiCacheReplicationGroup] @hasInverse(field: kms)
+  efs: [awsEfs] @hasInverse(field: kms)
 }

@@ -22,6 +22,8 @@ export default {
   ecsContainer: 'ecsContainer',
   ecsService: 'ecsService',
   ecsTask: 'ecsTask',
+  efs: 'efs',
+  efsMountTarget: 'efsMountTarget',
   eip: 'eip',
   eksCluster: 'eksCluster',
   elasticBeanstalkApp: 'elasticBeanstalkApp',

@@ -1,0 +1,34 @@
+type awsEfs @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+	arn: String! @id @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
+  ownerId: String @search(by: [hash])
+  creationToken: String @search(by: [hash])
+  fileSystemId: String @search(by: [hash])
+  creationTime: String @search(by: [hash, regexp])
+  lifeCycleState: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  numberOfMountTargets: Int @search
+  sizeInBytes: awsEfsFileSystemSize
+  performanceMode: String @search(by: [hash, regexp])
+  encrypted: Boolean @search
+  throughputMode: String @search(by: [hash, regexp])
+  provisionedThroughputInMibps: Int @search
+  availabilityZoneName: String @search(by: [hash, regexp])
+  availabilityZoneId: String @search(by: [hash])
+  tags: [Tag]
+  kms: [awsKms] @hasInverse(field: efs)
+}
+
+type awsEfsFileSystemSize
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  value: Int @search
+  timestamp: String @search(by: [hash, regexp])
+  valueInIA: Int @search
+  valueInStandard: Int @search
+}

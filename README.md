@@ -83,6 +83,8 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | ecsContainer             | ecsTask, ec2                                                                                         |
 | ecsService               | ecsCluster, elb, iamRole, securityGroup, subnet, vpc                                                 |
 | ecsTask                  | ecsContainer                                                                                         |
+| efs                      | kms                                                                                                  |
+| efsMountTarget           | networkInterface, subnet, vpc                                                                        |
 | eip                      | ec2, networkInterface, vpc                                                                           |
 | eksCluster               | iamRole, kms, securityGroups, subnet, vpc                                                            |
 | elastiCacheCluster       | securityGroup                                                                                        |
@@ -101,11 +103,11 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | igw                      | vpc                                                                                                  |
 | kinesisFirehose          | kinesisStream, s3                                                                                    |
 | kinesisStream            |                                                                                                      |
-| kms                      | lambda, redshiftCluster, sns, eksCluster, elastiCacheReplicationGroup                                |
+| kms                      | lambda, redshiftCluster, sns, eksCluster, efs, elastiCacheReplicationGroup                           |
 | lambda                   | kms, securityGroups, subnet, vpc                                                                     |
 | nacl                     | vpc                                                                                                  |
 | natGateway               | networkInterface, subnet, vpc                                                                        |
-| networkInterface         | ec2, eip, natGateway, subnet, vpc                                                                    |
+| networkInterface         | ec2, efsMountTarget, eip, natGateway, subnet, vpc                                                    |
 | rdsCluster               | rdsDbInstance, securityGroups                                                                        |
 | rdsDbInstance            | rdsCluster, securityGroups, vpc, subnet                                                              |
 | redshiftCluster          | kms, vpc                                                                                             |
@@ -118,8 +120,8 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | ses                      |                                                                                                      |
 | sns                      | kms, cloudtrail                                                                                      |
 | sqs                      |                                                                                                      |
-| subnet                   | alb, asg, ec2, ecsService, elb, lambda, natGateway, networkInterface, routeTable, vpc, eksCluster    |
-| vpc                      | alb, ec2, eip, elb, igw, lambda, natGateway, networkInterface, route53HostedZone, routeTable, subnet |
+| subnet                   | alb, asg, ec2, ecsService, elb, lambda, natGateway, networkInterface, routeTable, vpc, eksCluster, efsMountTarget |
+| vpc                      | alb, ec2, eip, elb, igw, lambda, natGateway, networkInterface, route53HostedZone, routeTable, subnet, efsMountTarget |
 
 <br />
 

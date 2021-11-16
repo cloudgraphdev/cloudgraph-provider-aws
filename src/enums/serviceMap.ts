@@ -26,6 +26,8 @@ import EcsCluster from '../services/ecsCluster'
 import EcsContainer from '../services/ecsContainer'
 import EcsService from '../services/ecsService'
 import EcsTask from '../services/ecsTask'
+import EFS from '../services/efs'
+import EfsMountTarget from '../services/efsMountTarget'
 import EIP from '../services/eip'
 import ElasticBeanstalkApp from '../services/elasticBeanstalkApplication'
 import ElasticBeanstalkEnv from '../services/elasticBeanstalkEnvironment'
@@ -84,6 +86,8 @@ export default {
   [services.ebs]: EBS,
   [services.ec2Instance]: EC2,
   [services.ecr]: ECR,
+  [services.efs]: EFS,
+  [services.efsMountTarget]: EfsMountTarget,
   [services.eip]: EIP,
   [services.eksCluster]: EKSCluster,
   [services.elasticBeanstalkApp]: ElasticBeanstalkApp,
