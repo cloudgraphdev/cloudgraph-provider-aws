@@ -1,3 +1,16 @@
+# [0.43.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.42.4...0.43.0) (2021-11-16)
+
+
+### Bug Fixes
+
+* **elastiCache:** add region ([c155b7c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c155b7c0328c32311ac702e34794dde751554a73))
+* **elastiCache:** readme ([3837601](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/38376017f1a7cb9ae010a1b89c8296d0381bd943))
+
+
+### Features
+
+* **elastiCache:** add elastiCache cluster/replication group service ([ca5b685](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/ca5b68505385d5ca9b8801d1a22219198e32df47))
+
 ## [0.42.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.42.3...0.42.4) (2021-11-15)
 
 
