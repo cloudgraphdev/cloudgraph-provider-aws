@@ -9,4 +9,5 @@ type awsIamPolicy @key(fields: "arn") {
   tags: [Tag]
   iamRoles: [awsIamRole] @hasInverse(field: iamAttachedPolicies)
   iamGroups: [awsIamGroup] @hasInverse(field: iamAttachedPolicies)
+  iamUsers: [awsIamUser] @hasInverse(field: iamAttachedPolicies)
 }

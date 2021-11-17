@@ -93,8 +93,8 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | iamSamlProvider          |                                                                                                      |
 | iamOpenIdConnectProvider |                                                                                                      |
 | iamServerCertificate     |                                                                                                      |
-| iamUser                  | iamGroup                                                                                             |
-| iamPolicy                | iamRole, iamGroup                                                                                    |
+| iamUser                  | iamGroup, iamPolicy                                                                                  |
+| iamPolicy                | iamRole, iamGroup, iamUser                                                                           |
 | iamRole                  | iamPolicy, eksCluster, ecsService                                                                    |
 | iamGroup                 | iamUser, iamPolicy                                                                                   |
 | igw                      | vpc                                                                                                  |
