@@ -36,6 +36,7 @@ export default {
   [services.elasticBeanstalkApp]: 'awsElasticBeanstalkApp',
   [services.elasticBeanstalkEnv]: 'awsElasticBeanstalkEnv',
   [services.elb]: 'awsElb',
+  [services.flowLog]: 'awsFlowLog',
   [services.iamGroup]: 'awsIamGroup',
   [services.iamOpenIdConnectProvider]: 'awsIamOpenIdConnectProvider',
   [services.iamPasswordPolicy]: 'awsIamPasswordPolicy',
