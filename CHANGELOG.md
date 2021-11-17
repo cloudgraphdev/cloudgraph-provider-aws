@@ -1,3 +1,10 @@
+## [0.43.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.43.0...0.43.1) (2021-11-17)
+
+
+### Bug Fixes
+
+* Included policies for iamUser ([a9d757f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a9d757f23d7174ecb5563e6c6a38a9dd28919de6))
+
 # [0.43.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.42.4...0.43.0) (2021-11-16)
 
 
