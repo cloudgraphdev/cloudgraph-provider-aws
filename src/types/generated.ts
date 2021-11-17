@@ -1927,6 +1927,24 @@ export type AwsIgwAttachment = {
   vpcId: Scalars['String'];
 };
 
+export type AwsIotAttribute = {
+  id: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+export type AwsIotThingAttribute = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  thingName?: Maybe<Scalars['String']>;
+  thingTypeName?: Maybe<Scalars['String']>;
+  attributes?: Maybe<Array<Maybe<AwsIotAttribute>>>;
+  version?: Maybe<Scalars['Int']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
 export type AwsKinesisFirehose = {
   id: Scalars['String'];
   accountId: Scalars['String'];

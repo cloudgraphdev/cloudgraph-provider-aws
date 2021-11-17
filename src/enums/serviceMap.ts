@@ -62,6 +62,7 @@ import IamServerCertificate from '../services/iamServerCertificate'
 import SNS from '../services/sns'
 import EKSCluster from '../services/eksCluster'
 import Cloud9Environment from '../services/cloud9'
+import IotThingAttribute from '../services/iot'
 import services from './services'
 
 /**
@@ -99,6 +100,7 @@ export default {
   [services.flowLog]: FlowLog,
   [services.dynamodb]: DynamoDB,
   [services.igw]: AwsInternetGateway,
+  [services.iot]: IotThingAttribute,
   [services.kinesisFirehose]: AwsKinesisFirehose,
   [services.kinesisStream]: AwsKinesisStream,
   [services.kms]: AwsKms,

@@ -41,6 +41,7 @@ export default {
   iamOpenIdConnectProvider: 'iamOpenIdConnectProvider',
   iamServerCertificate: 'iamServerCertificate',
   igw: 'igw',
+  iot: 'iot',
   kinesisFirehose: 'kinesisFirehose',
   kinesisStream: 'kinesisStream',
   kms: 'kms',

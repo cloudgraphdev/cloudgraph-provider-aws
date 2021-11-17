@@ -102,6 +102,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | iamRole                  | iamPolicy, eksCluster, ecsService, flowLog                                                                                                                                                       |
 | iamGroup                 | iamUser, iamPolicy                                                                                                                                                                               |
 | igw                      | vpc                                                                                                                                                                                              |
+| iot                      |                                                                                                      |
 | kinesisFirehose          | kinesisStream, s3                                                                                                                                                                                |
 | kinesisStream            | kinesisFirehose                                                                                                                                                                                  |
 | kms                      | cloudtrail, efs, eksCluster, elastiCacheReplicationGroup, lambda, sns, redshiftCluster                                                                                                           |
