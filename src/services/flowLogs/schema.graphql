@@ -1,20 +1,20 @@
 type awsFlowLog {
-  id: String!
-  accountId: String!
-  region: String!
-  creationTime: String
-  deliverLogsErrorMessage: String
-  deliverLogsPermissionArn: String
-  deliverLogsStatus: String
-  logStatus: String
-  groupName: String
-  resourceId: String
-  trafficType: String
-  destinationType: String
-  destination: String
-  format: String
+  id: String! @id @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash, regexp])
+  region: String! @search(by: [hash, regexp])
+  creationTime: String @search(by: [hash, regexp])
+  deliverLogsErrorMessage: String @search(by: [hash, regexp, fulltext])
+  deliverLogsPermissionArn: String @search(by: [hash, regexp])
+  deliverLogsStatus: String @search(by: [hash, regexp])
+  logStatus: String @search(by: [hash, regexp])
+  groupName: String @search(by: [hash, regexp, fulltext])
+  resourceId: String @search(by: [hash, regexp])
+  trafficType: String @search(by: [hash, regexp])
+  destinationType: String @search(by: [hash, regexp])
+  destination: String @search(by: [hash, regexp])
+  format: String @search(by: [hash, regexp, fulltext])
+  maxAggregationInterval: Int @search
   tags: [Tag]
-  maxAggregationInterval: Int
   vpc: [awsVpc] @hasInverse(field: flowLogs)
   iamRole: [awsIamRole] @hasInverse(field: flowLogs)
   networkInterface: [awsNetworkInterface] @hasInverse(field: flowLogs)
