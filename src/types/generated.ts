@@ -334,6 +334,27 @@ export type AwsBucketPolicy = {
   policy?: Maybe<Scalars['String']>;
 };
 
+export type AwsCloud9Environment = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  accountId: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  connectionType?: Maybe<Scalars['String']>;
+  ownerArn?: Maybe<Scalars['String']>;
+  lifecycle?: Maybe<AwsCloud9EnvironmentLifecycle>;
+  managedCredentialsStatus?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
+export type AwsCloud9EnvironmentLifecycle = {
+  status?: Maybe<Scalars['String']>;
+  reason?: Maybe<Scalars['String']>;
+  failureResource?: Maybe<Scalars['String']>;
+};
+
 export type AwsCloudFormationStack = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -2499,6 +2520,7 @@ export type AwsTag = {
   apiGatewayStage?: Maybe<Array<Maybe<AwsApiGatewayStage>>>;
   elastiCacheCluster?: Maybe<Array<Maybe<AwsElastiCacheCluster>>>;
   elastiCacheReplicationGroup?: Maybe<Array<Maybe<AwsElastiCacheReplicationGroup>>>;
+  cloud9Environment?: Maybe<Array<Maybe<AwsCloud9Environment>>>;
 };
 
 export type AwsTotalBillingInfo = {

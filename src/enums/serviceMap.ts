@@ -58,6 +58,7 @@ import IamOpenIdConnectProvider from '../services/iamOpenIdConnectProvider'
 import IamServerCertificate from '../services/iamServerCertificate'
 import SNS from '../services/sns'
 import EKSCluster from '../services/eksCluster'
+import Cloud9Environment from '../services/cloud9'
 import services from './services'
 
 /**
@@ -72,6 +73,7 @@ export default {
   [services.apiGatewayStage]: APIGatewayStage,
   [services.asg]: ASG,
   [services.billing]: Billing,
+  [services.cloud9]: Cloud9Environment,
   [services.cloudfront]: CloudFront,
   [services.cloudtrail]: CloudTrail,
   [services.cloudFormationStack]: CloudFormationStack,

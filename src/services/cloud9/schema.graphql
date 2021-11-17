@@ -1,0 +1,25 @@
+type awsCloud9Environment @key(fields: "arn") {
+  id: String! @search(by: [hash, regexp])
+  arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  type: String @search(by: [hash, regexp])
+  connectionType: String @search(by: [hash, regexp])
+  ownerArn: String @search(by: [hash, regexp])
+  lifecycle: awsCloud9EnvironmentLifecycle
+  managedCredentialsStatus: String @search(by: [hash, regexp])
+  tags: [Tag]
+}
+
+type awsCloud9EnvironmentLifecycle
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  status: String @search(by: [hash, regexp])
+  reason: String @search(by: [hash, regexp])
+  failureResource: String @search(by: [hash, regexp])
+}
