@@ -45,7 +45,7 @@ type awsCloudtrailEventSelector
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-  id: ID
+  id: String! @id @search(by: [hash])
   readWriteType: String @search(by: [hash, regexp])
   includeManagementEvents: Boolean @search
 }

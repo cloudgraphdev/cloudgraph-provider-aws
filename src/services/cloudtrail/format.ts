@@ -50,6 +50,7 @@ export default ({
   if (!isEmpty(EventSelectors)) {
     eventSelectors = EventSelectors.map(
       ({ ReadWriteType, IncludeManagementEvents }) => ({
+        id: cuid(),
         readWriteType: ReadWriteType,
         includeManagementEvents: IncludeManagementEvents,
       })

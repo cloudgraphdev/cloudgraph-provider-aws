@@ -562,7 +562,7 @@ export type AwsCloudtrail = {
 };
 
 export type AwsCloudtrailEventSelector = {
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['String'];
   readWriteType?: Maybe<Scalars['String']>;
   includeManagementEvents?: Maybe<Scalars['Boolean']>;
 };
