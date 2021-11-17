@@ -1768,6 +1768,29 @@ export type AwsEnabledMetrics = {
   granularity?: Maybe<Scalars['String']>;
 };
 
+export type AwsFlowLog = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  region: Scalars['String'];
+  creationTime?: Maybe<Scalars['String']>;
+  deliverLogsErrorMessage?: Maybe<Scalars['String']>;
+  deliverLogsPermissionArn?: Maybe<Scalars['String']>;
+  deliverLogsStatus?: Maybe<Scalars['String']>;
+  logStatus?: Maybe<Scalars['String']>;
+  groupName?: Maybe<Scalars['String']>;
+  resourceId?: Maybe<Scalars['String']>;
+  trafficType?: Maybe<Scalars['String']>;
+  destinationType?: Maybe<Scalars['String']>;
+  destination?: Maybe<Scalars['String']>;
+  format?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  maxAggregationInterval?: Maybe<Scalars['Int']>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
+  networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
+};
+
 export type AwsIamAccessKey = {
   accessKeyId: Scalars['String'];
   lastUsedDate?: Maybe<Scalars['String']>;
@@ -1844,6 +1867,7 @@ export type AwsIamRole = {
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
+  flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
 };
 
 export type AwsIamSamlProvider = {
@@ -2130,6 +2154,7 @@ export type AwsNetworkInterface = {
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
+  flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
 };
 
 export type AwsNetworkInterfaceAttachment = {
@@ -2505,6 +2530,7 @@ export type AwsSubnet = {
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
+  flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
 };
 
 export type AwsSupportedLoginProvider = {
@@ -2572,6 +2598,7 @@ export type AwsTag = {
   elastiCacheReplicationGroup?: Maybe<Array<Maybe<AwsElastiCacheReplicationGroup>>>;
   cloud9Environment?: Maybe<Array<Maybe<AwsCloud9Environment>>>;
   efs?: Maybe<Array<Maybe<AwsEfs>>>;
+  flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
 };
 
 export type AwsTotalBillingInfo = {
@@ -2610,6 +2637,7 @@ export type AwsVpc = {
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
+  flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
 };
 
 export type BlockDeviceEbs = {

@@ -8,6 +8,7 @@ import services from '../../enums/services'
 import { RawAwsIamRole } from './data'
 import { RawAwsIamPolicy } from '../iamPolicy/data'
 import { RawAwsEcsService } from '../ecsService/data'
+import { RawFlowLog } from '../flowLogs/data'
 import resources from '../../enums/resources'
 import { getIamId } from '../../utils/ids'
 
@@ -80,6 +81,25 @@ export default ({
       }
     }
   }
+
+  /**
+   * Find any FlowLog related data
+   */
+   const flowLogs = data.find(({ name }) => name === services.flowLog)
+   if (flowLogs?.data?.[region]) {
+     const dataAtRegion: RawFlowLog[] = flowLogs.data[region].filter(
+       ({ DeliverLogsPermissionArn }: RawFlowLog) =>
+       DeliverLogsPermissionArn === role.Arn
+     )
+     for (const flowLog of dataAtRegion) {
+       connections.push({
+         id: flowLog.FlowLogId,
+         resourceType: services.flowLog,
+         relation: 'child',
+         field: 'flowLogs',
+       })
+     }
+   }
 
   return {
     [getIamId({
