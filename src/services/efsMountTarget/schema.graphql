@@ -1,0 +1,15 @@
+type awsEfsMountTarget @key(fields: "id") {
+  id: String! @id @search(by: [hash])
+  accountId: String! @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
+  ownerId: String @search(by: [hash])
+  fileSystemId: String @search(by: [hash])
+  lifeCycleState: String @search(by: [hash, regexp])
+  ipAddress: String @search(by: [hash, regexp])
+  availabilityZoneId: String @search(by: [hash])
+  availabilityZoneName: String @search(by: [hash, regexp])
+  efs: [awsEfs] @hasInverse(field: efsMountTarget)
+  networkInterface: [awsNetworkInterface] @hasInverse(field: efsMountTarget)
+  subnet: [awsSubnet] @hasInverse(field: efsMountTarget)
+  vpc: [awsVpc] @hasInverse(field: efsMountTarget)
+}

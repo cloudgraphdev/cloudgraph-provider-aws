@@ -20,6 +20,7 @@ type awsNetworkInterface @key(fields: "arn") {
   natGateway: [awsNatGateway] @hasInverse(field: networkInterface)
   subnet: [awsSubnet] @hasInverse(field: networkInterface)
   vpc: [awsVpc] @hasInverse(field: networkInterface)
+  efsMountTarget: [awsEfsMountTarget] @hasInverse(field: networkInterface)
 }
 
 type awsNetworkInterfaceAttachment

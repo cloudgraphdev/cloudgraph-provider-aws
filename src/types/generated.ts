@@ -1329,6 +1329,53 @@ export type AwsEcsversionInfo = {
   dockerVersion?: Maybe<Scalars['String']>;
 };
 
+export type AwsEfs = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  ownerId?: Maybe<Scalars['String']>;
+  creationToken?: Maybe<Scalars['String']>;
+  fileSystemId?: Maybe<Scalars['String']>;
+  creationTime?: Maybe<Scalars['String']>;
+  lifeCycleState?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  numberOfMountTargets?: Maybe<Scalars['Int']>;
+  sizeInBytes?: Maybe<AwsEfsFileSystemSize>;
+  performanceMode?: Maybe<Scalars['String']>;
+  encrypted?: Maybe<Scalars['Boolean']>;
+  throughputMode?: Maybe<Scalars['String']>;
+  provisionedThroughputInMibps?: Maybe<Scalars['Int']>;
+  availabilityZoneName?: Maybe<Scalars['String']>;
+  availabilityZoneId?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
+};
+
+export type AwsEfsFileSystemSize = {
+  value?: Maybe<Scalars['Int']>;
+  timestamp?: Maybe<Scalars['String']>;
+  valueInIA?: Maybe<Scalars['Int']>;
+  valueInStandard?: Maybe<Scalars['Int']>;
+};
+
+export type AwsEfsMountTarget = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  ownerId?: Maybe<Scalars['String']>;
+  fileSystemId?: Maybe<Scalars['String']>;
+  lifeCycleState?: Maybe<Scalars['String']>;
+  ipAddress?: Maybe<Scalars['String']>;
+  availabilityZoneId?: Maybe<Scalars['String']>;
+  availabilityZoneName?: Maybe<Scalars['String']>;
+  efs?: Maybe<Array<Maybe<AwsEfs>>>;
+  networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+};
+
 export type AwsEip = {
   id: Scalars['String'];
   accountId: Scalars['String'];
@@ -1929,6 +1976,7 @@ export type AwsKms = {
   sns?: Maybe<Array<Maybe<AwsSns>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   elastiCacheReplicationGroup?: Maybe<Array<Maybe<AwsElastiCacheReplicationGroup>>>;
+  efs?: Maybe<Array<Maybe<AwsEfs>>>;
 };
 
 export type AwsLambda = {
@@ -2081,6 +2129,7 @@ export type AwsNetworkInterface = {
   natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
 };
 
 export type AwsNetworkInterfaceAttachment = {
@@ -2455,6 +2504,7 @@ export type AwsSubnet = {
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
+  efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
 };
 
 export type AwsSupportedLoginProvider = {
@@ -2521,6 +2571,7 @@ export type AwsTag = {
   elastiCacheCluster?: Maybe<Array<Maybe<AwsElastiCacheCluster>>>;
   elastiCacheReplicationGroup?: Maybe<Array<Maybe<AwsElastiCacheReplicationGroup>>>;
   cloud9Environment?: Maybe<Array<Maybe<AwsCloud9Environment>>>;
+  efs?: Maybe<Array<Maybe<AwsEfs>>>;
 };
 
 export type AwsTotalBillingInfo = {
@@ -2558,6 +2609,7 @@ export type AwsVpc = {
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
+  efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
 };
 
 export type BlockDeviceEbs = {

@@ -44,6 +44,7 @@ import { RawAwsEcsTask } from '../ecsTask/data'
 import { RawAwsApiGatewayRestApi } from '../apiGatewayRestApi/data'
 import { RawAwsApiGatewayStage } from '../apiGatewayStage/data'
 import { RawAwsCloud9Environment } from '../cloud9/data'
+import { RawAwsEfs } from '../efs/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -1135,6 +1136,28 @@ export default ({
             resourceType: services.apiGatewayRestApi,
             relation: 'child',
             field: 'apiGatewayRestApi',
+          })
+        }
+      }
+    }
+    
+    /**
+     * Find related EFS file systems
+     */
+    const efsFileSystems: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.efs)
+    if (efsFileSystems?.data?.[region]) {
+      const dataAtRegion: RawAwsEfs[] =
+        findServiceInstancesWithTag(tag, efsFileSystems.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { FileSystemArn: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.efs,
+            relation: 'child',
+            field: 'efs',
           })
         }
       }
