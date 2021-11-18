@@ -718,6 +718,7 @@ resource "aws_sns_topic" "user_updates" {
 
 resource "aws_flow_log" "flowlog" {
   traffic_type    = "ALL"
+  log_destination = aws_s3_bucket.source.arn
   vpc_id          = aws_vpc.vpc.id
 }
 
