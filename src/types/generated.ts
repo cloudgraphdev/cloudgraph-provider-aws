@@ -553,10 +553,32 @@ export type AwsCloudtrail = {
   hasCustomEventSelectors?: Maybe<Scalars['String']>;
   hasInsightSelectors?: Maybe<Scalars['String']>;
   isOrganizationTrail?: Maybe<Scalars['String']>;
+  status?: Maybe<AwsCloudtrailStatus>;
+  eventSelectors?: Maybe<Array<Maybe<AwsCloudtrailEventSelector>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   s3?: Maybe<Array<Maybe<AwsS3>>>;
   sns?: Maybe<Array<Maybe<AwsSns>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
+};
+
+export type AwsCloudtrailEventSelector = {
+  id: Scalars['String'];
+  readWriteType?: Maybe<Scalars['String']>;
+  includeManagementEvents?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsCloudtrailStatus = {
+  isLogging?: Maybe<Scalars['Boolean']>;
+  latestDeliveryTime?: Maybe<Scalars['String']>;
+  latestNotificationTime?: Maybe<Scalars['String']>;
+  startLoggingTime?: Maybe<Scalars['String']>;
+  latestDigestDeliveryTime?: Maybe<Scalars['String']>;
+  latestDeliveryAttemptTime?: Maybe<Scalars['String']>;
+  latestNotificationAttemptTime?: Maybe<Scalars['String']>;
+  latestNotificationAttemptSucceeded?: Maybe<Scalars['String']>;
+  latestDeliveryAttemptSucceeded?: Maybe<Scalars['String']>;
+  timeLoggingStarted?: Maybe<Scalars['String']>;
+  timeLoggingStopped?: Maybe<Scalars['String']>;
 };
 
 export type AwsCloudwatch = {
