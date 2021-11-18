@@ -1,3 +1,15 @@
+# [0.44.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.43.2...0.44.0) (2021-11-18)
+
+
+### Bug Fixes
+
+* **cloud9:** add schema name in schemaMap ([353b7b1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/353b7b14a293ef2ef5a8af85fc04a958799acd0c))
+
+
+### Features
+
+* **cloud9:** add cloud9 environment service ([8fe27d3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/8fe27d3d81f4d287b268eaf3f9ef5703c52bc691))
+
 ## [0.43.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.43.1...0.43.2) (2021-11-18)
 
 
