@@ -1942,7 +1942,6 @@ export type AwsIotThingAttribute = {
   thingTypeName?: Maybe<Scalars['String']>;
   attributes?: Maybe<Array<Maybe<AwsIotAttribute>>>;
   version?: Maybe<Scalars['Int']>;
-  tags?: Maybe<Array<Maybe<Tag>>>;
 };
 
 export type AwsKinesisFirehose = {

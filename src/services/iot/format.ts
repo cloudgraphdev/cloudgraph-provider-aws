@@ -18,7 +18,6 @@ export default ({
     thingTypeName,
     attributes = {},
     version,
-    Tags: tags = {},
   } = service
 
   return {
@@ -34,6 +33,5 @@ export default ({
       value: attributes[key]
     })),
     version,
-    tags: formatTagsFromMap(tags),
   }
 }

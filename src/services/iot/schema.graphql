@@ -7,7 +7,6 @@ type awsIotThingAttribute @key(fields: "arn") {
   thingTypeName: String
   attributes: [awsIotAttribute]
   version: Int
-  tags: [Tag]
 }
 
 type awsIotAttribute

@@ -63,30 +63,7 @@ const listThingsForRegion = async ({ iot, resolveRegion }) =>
     listAllThings()
   })
 
-const getResourceTags = async (iot: IoT, arn: string): Promise<TagMap> =>
-  new Promise(resolve => {
-    try {
-      iot.listTagsForResource(
-        { resourceArn: arn },
-        (err: AWSError, data: ListTagsForResourceResponse) => {
-          if (err) {
-            generateAwsErrorLog(serviceName, 'iot:listTagsForResource', err)
-            return resolve({})
-          }
-
-          const { tags } = data || {}
-          resolve(convertAwsTagsToTagMap(tags as AwsTag[]))
-        }
-      )
-    } catch (error) {
-      resolve({})
-    }
-  })
-
-
-
 export interface RawAwsIotThingAttribute extends ThingAttribute {
-  Tags?: TagMap
   region: string
 }
 
@@ -101,7 +78,6 @@ export default async ({
     const iotData: RawAwsIotThingAttribute[] = []
     const regionPromises = []
     const descriptionPromises = []
-    const tagsPromises = []
 
     // get all things for all regions
     regions.split(',').map(region => {
@@ -150,21 +126,8 @@ export default async ({
       descriptionPromises.push(descriptionPromise)
     })
 
-    // get all tags for each environment
-    iotData.map(({ thingArn, region }, idx) => {
-      const iot = new IoT({ ...config, region, endpoint })
-      const tagsPromise = new Promise<void>(async resolveTags => {
-        const envTags: TagMap = await getResourceTags(iot, thingArn)
-        iotData[idx].Tags = envTags
-        resolveTags()
-      })
-      tagsPromises.push(tagsPromise)
-    })
-
     logger.debug(lt.gettingIoTThings)
     await Promise.all(descriptionPromises)
-    logger.debug(lt.gettingIoTThingTags)
-    await Promise.all(tagsPromises)
 
     resolve(groupBy(iotData, 'region'))
   })

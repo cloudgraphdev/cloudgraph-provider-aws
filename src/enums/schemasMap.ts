@@ -46,6 +46,7 @@ export default {
   [services.iamSamlProvider]: 'awsIamSamlProvider',
   [services.iamServerCertificate]: 'awsIamServerCertificate',
   [services.igw]: 'awsIgw',
+  [services.iot]: 'awsIotThingAttribute',
   [services.kinesisFirehose]: 'awsKinesisFirehose',
   [services.kinesisStream]: 'awsKinesisStream',
   [services.kms]: 'awsKms',

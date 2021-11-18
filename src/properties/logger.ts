@@ -110,7 +110,6 @@ export default {
   foundMoreIoTThings: (num: number) =>
     `Found another ${num} IoT things in this region...`,
   gettingIoTThings: 'Fetching IoT things...',
-  gettingIoTThingTags: 'Fetching tags for each IoT thing...',
   /**
    * Api Gateway
    */
