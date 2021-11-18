@@ -18,6 +18,7 @@ type awsEfs @key(fields: "arn") {
   availabilityZoneName: String @search(by: [hash, regexp])
   availabilityZoneId: String @search(by: [hash])
   tags: [Tag]
+  efsMountTarget: [awsEfsMountTarget] @hasInverse(field: efs)
   kms: [awsKms] @hasInverse(field: efs)
 }
 

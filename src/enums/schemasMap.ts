@@ -27,6 +27,8 @@ export default {
   [services.ecsContainer]: 'awsEcsContainer',
   [services.ecsService]: 'awsEcsService',
   [services.ecsTask]: 'awsEcsTask',
+  [services.efs]: 'awsEfs',
+  [services.efsMountTarget]: 'awsEfsMountTarget',
   [services.eip]: 'awsEip',
   [services.eksCluster]: 'awsEksCluster',
   [services.elastiCacheCluster]: 'awsElastiCacheCluster',

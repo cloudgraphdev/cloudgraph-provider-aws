@@ -8,6 +8,7 @@ type awsEfsMountTarget @key(fields: "id") {
   ipAddress: String @search(by: [hash, regexp])
   availabilityZoneId: String @search(by: [hash])
   availabilityZoneName: String @search(by: [hash, regexp])
+  efs: [awsEfs] @hasInverse(field: efsMountTarget)
   networkInterface: [awsNetworkInterface] @hasInverse(field: efsMountTarget)
   subnet: [awsSubnet] @hasInverse(field: efsMountTarget)
   vpc: [awsVpc] @hasInverse(field: efsMountTarget)

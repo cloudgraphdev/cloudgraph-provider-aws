@@ -1349,6 +1349,7 @@ export type AwsEfs = {
   availabilityZoneName?: Maybe<Scalars['String']>;
   availabilityZoneId?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
 };
 
@@ -1369,6 +1370,7 @@ export type AwsEfsMountTarget = {
   ipAddress?: Maybe<Scalars['String']>;
   availabilityZoneId?: Maybe<Scalars['String']>;
   availabilityZoneName?: Maybe<Scalars['String']>;
+  efs?: Maybe<Array<Maybe<AwsEfs>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;

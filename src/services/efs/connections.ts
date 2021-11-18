@@ -16,7 +16,7 @@ export default ({
 }): {
   [property: string]: ServiceConnection[]
 } => {
-  const { FileSystemArn: id, KmsKeyId: kmsKeyId } = service
+  const { FileSystemArn: id, KmsKeyId: kmsKeyId, FileSystemId: fileSystemId } = service
   const connections: ServiceConnection[] = []
 
   /**
@@ -32,6 +32,24 @@ export default ({
           resourceType: services.kms,
           relation: 'child',
           field: 'kms',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find EFS mount target
+   */
+  const efsMountTarget = data.find(({ name }) => name === services.efsMountTarget)
+  if (efsMountTarget?.data?.[region]) {
+    const mountTargetInRegion = efsMountTarget.data[region].filter(mt => mt.FileSystemId === fileSystemId)
+    if (!isEmpty(mountTargetInRegion)) {
+      for (const mountTarget of mountTargetInRegion) {
+        connections.push({
+          id: mountTarget.MountTargetId,
+          resourceType: services.efsMountTarget,
+          relation: 'child',
+          field: 'efsMountTarget',
         })
       }
     }
