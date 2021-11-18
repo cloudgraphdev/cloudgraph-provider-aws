@@ -1783,8 +1783,8 @@ export type AwsFlowLog = {
   destinationType?: Maybe<Scalars['String']>;
   destination?: Maybe<Scalars['String']>;
   format?: Maybe<Scalars['String']>;
-  tags?: Maybe<Array<Maybe<Tag>>>;
   maxAggregationInterval?: Maybe<Scalars['Int']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;

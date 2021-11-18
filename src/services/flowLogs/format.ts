@@ -3,7 +3,7 @@ import { formatTagsFromMap } from '../../utils/format'
 import { RawFlowLog } from './data'
 
 /**
- * ELB
+ * Flow Log
  */
 
 export default ({
