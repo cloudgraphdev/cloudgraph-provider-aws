@@ -43,6 +43,7 @@ import { RawAwsEcsService } from '../ecsService/data'
 import { RawAwsEcsTask } from '../ecsTask/data'
 import { RawAwsApiGatewayRestApi } from '../apiGatewayRestApi/data'
 import { RawAwsApiGatewayStage } from '../apiGatewayStage/data'
+import { RawAwsCloud9Environment } from '../cloud9/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -1208,6 +1209,29 @@ export default ({
             resourceType: services.elastiCacheReplicationGroup,
             relation: 'child',
             field: 'elastiCacheReplicationGroup',
+          })
+        }
+      }
+    }
+
+    /** 
+     * Find related Cloud9 environments
+     */
+    const cloud9Environment: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.cloud9)
+    if (cloud9Environment?.data?.[region]) {
+      const dataAtRegion: RawAwsCloud9Environment[] =
+        findServiceInstancesWithTag(tag, cloud9Environment.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { arn } = instance
+          connections.push({
+            id: arn,
+            resourceType: services.cloud9,
+            relation: 'child',
+            field: 'cloud9Environment',
           })
         }
       }

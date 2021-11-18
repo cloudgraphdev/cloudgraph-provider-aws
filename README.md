@@ -67,6 +67,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | apiGatewayResource       | apiGatewayRestApi                                                                                    |
 | appSync                  |                                                                                                      |
 | asg                      | ebs, ec2, securityGroups, subnet                                                                     |
+| cloud9                   |                                                                                                      |
 | cloudformationStack      | cloudformationStack                                                                                  |
 | cloudformationStackSet   |                                                                                                      |
 | cloudfront               | elb, s3                                                                                              |

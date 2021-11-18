@@ -577,6 +577,10 @@ export default {
   lookingForCloud9: 'Looking for Cloud9 to add to Region...',
   addingCloud9: (num: number): string =>
     `Created and added ${num} Cloud9 to this region`,
+  foundMoreCloud9Environments: (num: number) =>
+    `Found another ${num} Cloud9 environments in this region...`,
+  gettingCloud9Environments: 'Fetching Cloud9 environments...',
+  gettingCloud9EnvironmentTags: 'Fetching tags for each Cloud9 environment...',
   /**
    * VPC
    */
