@@ -1,3 +1,11 @@
+## [0.43.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.43.1...0.43.2) (2021-11-18)
+
+
+### Bug Fixes
+
+* Added event selectors and status to Cloudtrail ([2f2202a](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/2f2202af8f2cd7d7c4b2f05e5df5dc62062d333f))
+* Updated schemaMap ([04feb3d](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/04feb3dce5c114c81f2a59e92c0c7f50cfa7165c))
+
 ## [0.43.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.43.0...0.43.1) (2021-11-17)
 
 
