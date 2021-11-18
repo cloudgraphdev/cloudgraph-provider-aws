@@ -1,3 +1,15 @@
+# [0.45.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.44.0...0.45.0) (2021-11-18)
+
+
+### Bug Fixes
+
+* **efs:** add schema names in schemasMap, connected efs <--> efsMountTarget ([233d590](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/233d59039b866074928b7e8806f9f090a49b4aa1))
+
+
+### Features
+
+* **efs:** add efs file system/mount target service ([28deb0b](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/28deb0b28603a17a88e9751f4a0ff7cb54e05f6b))
+
 # [0.44.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.43.2...0.44.0) (2021-11-18)
 
 
