@@ -1,7 +1,6 @@
 import cuid from 'cuid'
 import { RawAwsIotThingAttribute } from './data'
 import { AwsIotThingAttribute } from '../../types/generated'
-import { formatTagsFromMap } from '../../utils/format'
 
 export default ({
   service,

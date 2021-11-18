@@ -4,7 +4,6 @@ import IoT, {
   ThingAttributeList,
   ListThingsRequest,
   ListThingsResponse,
-  ListTagsForResourceResponse,
   DescribeThingRequest,
   DescribeThingResponse,
 } from 'aws-sdk/clients/iot'
@@ -13,8 +12,6 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 import { Config } from 'aws-sdk/lib/config'
 import awsLoggerText from '../../properties/logger'
-import { TagMap, AwsTag } from '../../types'
-import { convertAwsTagsToTagMap } from '../../utils/format'
 import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
 const lt = { ...awsLoggerText }
 const {logger} = CloudGraph
