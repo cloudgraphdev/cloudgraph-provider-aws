@@ -1,3 +1,16 @@
+## [0.45.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.45.0...0.45.1) (2021-11-19)
+
+
+### Bug Fixes
+
+* **enum:** add flowLog to the schemasMap ([bef5129](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/bef5129ccae3cee9699a703e33cd5bc27e5ae6e8))
+* **rebase:** rebase on master, fix readme ([a851a90](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a851a90df1712284979a76b9b0ee3851b9b2745f))
+* **service:** add tf resource for flow log ([2c55838](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/2c55838eef6d90b84954f8c3871cb6932b5ab75f))
+* **service:** update flow log schema with directives ([a94b23d](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a94b23d238186a1dc20f5cc39319a19f991f2163))
+* **service:** update flow log schema with key, write test for flow log ([fb35bc3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/fb35bc3f6aa96bc4166b82885e0c1caebed7b2b1))
+* **service:** update flow log test with iam role ([ff1f7ed](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/ff1f7ed9f3ec9376db885fe962ac5dfa484b9133))
+* **service:** update flow log test with log destination ([599c1c8](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/599c1c803b10fee0f98722714c2f10f5da062ef8))
+
 # [0.45.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.44.0...0.45.0) (2021-11-18)
 
 
