@@ -1,3 +1,16 @@
+# [0.46.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.45.1...0.46.0) (2021-11-19)
+
+
+### Bug Fixes
+
+* **iot:** drop tags on thing attributes ([cecfc17](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/cecfc171f96ce646e88be66d45cb39e7d06a5996))
+* **iot:** drop tags on thing attributes, add schema name to schemasMap ([d41e34b](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d41e34bf0ec7d80802981b974726eb6b70fde998))
+
+
+### Features
+
+* **iot:** add iot thing service ([b0e391f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b0e391fca4feeb1c5ff81a019d58c5584d0e8be7))
+
 ## [0.45.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.45.0...0.45.1) (2021-11-19)
 
 
