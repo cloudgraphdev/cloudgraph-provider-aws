@@ -107,6 +107,9 @@ export default {
   lookingForIotThing: 'Looking for IoT Things to add to Region...',
   addingIotThing: (num: number): string =>
     `Created and added ${num} IoT Things to this region`,
+  foundMoreIoTThings: (num: number) =>
+    `Found another ${num} IoT things in this region...`,
+  gettingIoTThings: 'Fetching IoT things...',
   /**
    * Api Gateway
    */

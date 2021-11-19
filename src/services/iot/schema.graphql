@@ -1,0 +1,21 @@
+type awsIotThingAttribute @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+  accountId: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
+  thingName: String
+  thingTypeName: String
+  attributes: [awsIotAttribute]
+  version: Int
+}
+
+type awsIotAttribute
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  key: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
+}
