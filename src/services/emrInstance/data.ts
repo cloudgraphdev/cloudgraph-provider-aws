@@ -9,9 +9,11 @@ import EMR, {
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
+import flatMap from 'lodash/flatMap'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 import { RawAwsEmrCluster, getEmrClusters } from '../emrCluster/data'
+import services from '../../enums/services'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
@@ -62,20 +64,25 @@ export interface RawAwsEmrInstance extends Instance {
 export default async ({
   regions,
   config,
+  rawData,
 }: {
   regions: string
   config: Config
+  rawData: any
 }): Promise<{
   [region: string]: RawAwsEmrInstance[]
-}> =>
-  new Promise(async resolve => {
-    const emrInstances: RawAwsEmrInstance[] = []
-    const emrClusters: RawAwsEmrCluster[] = []
+}> => new Promise(async resolve => {
+  const emrInstances: RawAwsEmrInstance[] = []
+  let emrClusters: RawAwsEmrCluster[] = []
+  const existingData: RawAwsEmrCluster[] =
+  flatMap(
+    rawData.find(({ name }) => name === services.emrCluster)?.data
+  ) || []
 
+  if (isEmpty(existingData)) {
     /**
      * Get all the EMR clusters for this region
      */
-    let numOfClusters = 0
     await Promise.all(
       regions.split(',').map(
         region =>
@@ -84,7 +91,6 @@ export default async ({
             const clusterList: Cluster[] = await getEmrClusters(emr, region)
 
             if (!isEmpty(clusterList)) {
-              numOfClusters += clusterList.length
               emrClusters.push(...clusterList.map(cluster => ({
                 Id: cluster.Id,
                 region,
@@ -95,9 +101,14 @@ export default async ({
           })
       )
     )
-    logger.debug(lt.fetchedEmrClusters(numOfClusters))
+  } else {
+    // Uses existing data
+    emrClusters = existingData
+  }
 
-    /**
+  logger.debug(lt.fetchedEmrClusters(emrClusters.length))
+
+  /**
    * Get the instances for each EMR cluster
    */
   let numOfInstances = 0
