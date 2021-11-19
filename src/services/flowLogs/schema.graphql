@@ -1,0 +1,29 @@
+type awsFlowLog @key(fields: "id") {
+  id: String! @id @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash, regexp])
+  region: String! @search(by: [hash, regexp])
+  creationTime: String @search(by: [hash, regexp])
+  deliverLogsErrorMessage: String @search(by: [hash, regexp, fulltext])
+  deliverLogsPermissionArn: String @search(by: [hash, regexp])
+  deliverLogsStatus: String @search(by: [hash, regexp])
+  logStatus: String @search(by: [hash, regexp])
+  groupName: String @search(by: [hash, regexp, fulltext])
+  resourceId: String @search(by: [hash, regexp])
+  trafficType: String @search(by: [hash, regexp])
+  destinationType: String @search(by: [hash, regexp])
+  destination: String @search(by: [hash, regexp])
+  format: String @search(by: [hash, regexp, fulltext])
+  maxAggregationInterval: Int @search
+  tags: [Tag]
+  vpc: [awsVpc] @hasInverse(field: flowLogs)
+  iamRole: [awsIamRole] @hasInverse(field: flowLogs)
+  networkInterface: [awsNetworkInterface] @hasInverse(field: flowLogs)
+  subnet: [awsSubnet] @hasInverse(field: flowLogs)
+  # destinationOptions: awsDestinationOptions Cant find in the aws SDK flow log type but is in docs, investigate later
+}
+
+# type awsDestinationOptions {
+#   fileFormat: String
+#   hiveCompatiblePartitions: Boolean
+#   perHourPartition: Boolean
+# }

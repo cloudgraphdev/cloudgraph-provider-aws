@@ -26,6 +26,7 @@ import { RawAwsElasticBeanstalkApp } from '../elasticBeanstalkApplication/data'
 import { RawAwsElasticBeanstalkEnv } from '../elasticBeanstalkEnvironment/data'
 import { RawAwsElastiCacheCluster } from '../elastiCacheCluster/data'
 import { RawAwsElastiCacheReplicationGroup } from '../elastiCacheReplicationGroup/data'
+import { RawFlowLog } from '../flowLogs/data'
 import resources from '../../enums/resources'
 import { getIamId } from '../../utils/ids'
 import { RawAwsSns } from '../sns/data'
@@ -951,6 +952,30 @@ export default ({
             resourceType: services.elasticBeanstalkEnv,
             relation: 'child',
             field: 'elasticBeanstalkEnv',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related Flow Logs
+     */
+     const flowLogs: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.flowLog)
+    if (flowLogs?.data?.[region]) {
+      const dataAtRegion: RawFlowLog[] =
+        findServiceInstancesWithTag(tag, flowLogs.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { FlowLogId: id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.flowLog,
+            relation: 'child',
+            field: 'flowLogs',
           })
         }
       }

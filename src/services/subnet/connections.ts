@@ -1,47 +1,22 @@
 import { ServiceConnection } from '@cloudgraph/sdk'
-import { isEmpty } from 'lodash'
 
 import services from '../../enums/services'
 import { RawAwsSubnet } from '../subnet/data'
 import { RawFlowLog } from '../flowLogs/data'
-import { RawNetworkInterface } from './data'
 
 export default ({
-  service: networkInterface,
+  service: subnet,
   data,
   region,
 }: {
-  service: RawNetworkInterface
+  service: RawAwsSubnet
   data: Array<{ name: string; data: { [property: string]: any[] } }>
   region: string
 }): {
   [property: string]: ServiceConnection[]
 } => {
-  const { NetworkInterfaceId, SubnetId } = networkInterface
+  const { SubnetId } = subnet
   const connections: ServiceConnection[] = []
-  /**
-   * Find Subnets used in Network Interface
-   */
-  const subnets: {
-    name: string
-    data: { [property: string]: any[] }
-  } = data.find(({ name }) => name === services.subnet)
-  if (subnets?.data?.[region]) {
-    const subnetsInRegion: RawAwsSubnet[] = subnets.data[region].filter(
-      ({ SubnetId: sId }: RawAwsSubnet) => sId === SubnetId
-    )
-    if (!isEmpty(subnetsInRegion)) {
-      for (const subnet of subnetsInRegion) {
-        const { SubnetId: id } = subnet
-        connections.push({
-          id,
-          resourceType: services.subnet,
-          relation: 'child',
-          field: 'subnet',
-        })
-      }
-    }
-  }
 
   /**
    * Find any FlowLog related data
@@ -50,7 +25,7 @@ export default ({
    if (flowLogs?.data?.[region]) {
      const dataAtRegion: RawFlowLog[] = flowLogs.data[region].filter(
        ({ ResourceId }: RawFlowLog) =>
-         ResourceId === NetworkInterfaceId
+         ResourceId === SubnetId
      )
      for (const flowLog of dataAtRegion) {
        connections.push({
@@ -63,7 +38,7 @@ export default ({
    }
 
   const natResult = {
-    [NetworkInterfaceId]: connections,
+    [SubnetId]: connections,
   }
   return natResult
 }

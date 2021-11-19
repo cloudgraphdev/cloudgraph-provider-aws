@@ -9,6 +9,7 @@ import { Config } from 'aws-sdk/lib/config'
 import EC2, {
   DescribeVpcsRequest,
   DescribeVpcsResult,
+  FlowLog,
   Vpc,
 } from 'aws-sdk/clients/ec2'
 import CloudGraph from '@cloudgraph/sdk'
@@ -31,6 +32,7 @@ export interface RawAwsVpc extends Omit<Vpc, 'Tags'> {
   enableDnsSupport?: boolean
   region: string
   Tags: TagMap
+  flowLogs: any
 }
 
 export default async ({
@@ -68,7 +70,7 @@ export default async ({
 
       return ec2.describeVpcs(
         args,
-        (err: AWSError, data: DescribeVpcsResult) => {
+        async (err: AWSError, data: DescribeVpcsResult) => {
           if (err) {
             generateAwsErrorLog(serviceName, 'ec2:describeVpcs', err)
           }
@@ -99,17 +101,43 @@ export default async ({
           if (token) {
             listVpcData({ region, token, ec2, resolveRegion })
           }
-
-          /**
+           /**
+           * Get flow log data for the vpcs in the region
+           */
+          const vpcIds = vpcs.map(({ VpcId }) => VpcId)
+          const flowLogsResult: FlowLog[] = []
+          try {
+            let nextTokenWatcher = true
+            while(nextTokenWatcher) {
+              const flowLogs = await ec2.describeFlowLogs({ Filter: [{ Name: 'resource-id', Values: vpcIds }], MaxResults: 100}).promise()
+              if (flowLogs?.FlowLogs) {
+                for (const flowLog of flowLogs.FlowLogs) {
+                  flowLogsResult.push(flowLog)
+                }
+              }
+              if (!flowLogs.NextToken) {
+                nextTokenWatcher = false
+              }
+            }
+          } catch (e) {
+            logger.debug('There was an issue getting vpc flow log data')
+            logger.debug(e)
+          }
+           /**
            * Add the found Vpcs to the vpcData
            */
-
           vpcData.push(
             ...vpcs.map(vpc => {
+              const vpcFlowLogSet = flowLogsResult.filter(flowLog => flowLog.ResourceId === vpc.VpcId)
+              const flowLogTags = []
+              for (const flowLog of vpcFlowLogSet) {
+                flowLogTags.push(...flowLog.Tags)
+              }
               return {
                 ...vpc,
                 region,
-                Tags: convertAwsTagsToTagMap(vpc.Tags as AwsTag[]),
+                Tags: convertAwsTagsToTagMap(vpc.Tags.concat(flowLogTags) as AwsTag[]),
+                flowLogs: flowLogsResult.find(flowLog => flowLog.ResourceId === vpc.VpcId)
               }
             })
           )
@@ -172,7 +200,6 @@ export default async ({
 
         additionalAttrPromises.push(additionalAttrPromise)
       })
-
     logger.debug(lt.fetchingVpcDnsSupportData)
     fetchVpcAttribute('enableDnsSupport')
     await Promise.all(additionalAttrPromises)

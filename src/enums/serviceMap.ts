@@ -34,6 +34,7 @@ import ElasticBeanstalkEnv from '../services/elasticBeanstalkEnvironment'
 import ElastiCacheCluster from '../services/elastiCacheCluster'
 import ElastiCacheReplicationGroup from '../services/elastiCacheReplicationGroup'
 import ELB from '../services/elb'
+import FlowLog from '../services/flowLogs'
 import Lambda from '../services/lambda'
 import NATGateway from '../services/natGateway'
 import NetworkAcl from '../services/nacl'
@@ -95,6 +96,7 @@ export default {
   [services.elastiCacheCluster]: ElastiCacheCluster,
   [services.elastiCacheReplicationGroup]: ElastiCacheReplicationGroup,
   [services.elb]: ELB,
+  [services.flowLog]: FlowLog,
   [services.dynamodb]: DynamoDB,
   [services.igw]: AwsInternetGateway,
   [services.kinesisFirehose]: AwsKinesisFirehose,

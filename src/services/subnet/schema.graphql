@@ -25,4 +25,5 @@ type awsSubnet @key(fields: "id") {
   eksCluster: [awsEksCluster] @hasInverse(field: subnet)
   ecsService: [awsEcsService] @hasInverse(field: subnet)
   efsMountTarget: [awsEfsMountTarget] @hasInverse(field: subnet)
+  flowLogs: [awsFlowLog] @hasInverse(field: subnet)
 }

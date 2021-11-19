@@ -715,6 +715,14 @@ resource "aws_sns_topic" "user_updates" {
   name              = "user-updates-topic"
   kms_master_key_id = aws_kms_key.lambda_kms_key.id
 }
+
+resource "aws_flow_log" "flowlog" {
+  traffic_type         = "ALL"
+  log_destination      = aws_s3_bucket.source.arn
+  log_destination_type = "s3"
+  vpc_id               = aws_vpc.vpc.id
+}
+
 # Localstack Pro Tier
 # resource "aws_rds_cluster_instance" "cluster_instances" {
 #   count              = 2

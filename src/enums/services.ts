@@ -31,6 +31,7 @@ export default {
   elastiCacheCluster: 'elastiCacheCluster',
   elastiCacheReplicationGroup: 'elastiCacheReplicationGroup',
   elb: 'elb',
+  flowLog: 'flowLog',
   iamUser: 'iamUser',
   iamGroup: 'iamGroup',
   iamRole: 'iamRole',

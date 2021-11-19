@@ -59,69 +59,70 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 
 # Supported Services
 
-| Service                  | Relations                                                                                            |
-| ------------------------ | ---------------------------------------------------------------------------------------------------- |
-| alb                      | ec2, sg, subnet, vpc                                                                                 |
-| apiGatewayRestApi        | apiGatewayResource, apiGatewayStage, route53Record                                                   |
-| apiGatewayStage          | apiGatewayRestApi                                                                                    |
-| apiGatewayResource       | apiGatewayRestApi                                                                                    |
-| appSync                  |                                                                                                      |
-| asg                      | ebs, ec2, securityGroups, subnet                                                                     |
-| cloud9                   |                                                                                                      |
-| cloudformationStack      | cloudformationStack                                                                                  |
-| cloudformationStackSet   |                                                                                                      |
-| cloudfront               | elb, s3                                                                                              |
-| cloudtrail               | kms, s3, sns                                                                                         |
-| cloudwatch               |                                                                                                      |
-| cognitoIdentityPool      |                                                                                                      |
-| cognitoUserPool          | lambda                                                                                               |
-| dynamodb                 |                                                                                                      |
-| ebs                      | ec2, asg                                                                                             |
-| ec2                      | alb, asg, ebs, eip, networkInterface, securityGroups, subnet, vpc, ecsContainer                      |
-| ecr                      |                                                                                                      |
-| ecsCluster               | ecsService                                                                                           |
-| ecsContainer             | ecsTask, ec2                                                                                         |
-| ecsService               | ecsCluster, elb, iamRole, securityGroup, subnet, vpc                                                 |
-| ecsTask                  | ecsContainer                                                                                         |
-| efs                      | kms                                                                                                  |
-| efsMountTarget           | networkInterface, subnet, vpc                                                                        |
-| eip                      | ec2, networkInterface, vpc                                                                           |
-| eksCluster               | iamRole, kms, securityGroups, subnet, vpc                                                            |
-| elastiCacheCluster       | securityGroup                                                                                        |
-| elastiCacheReplicationGroup | kms                                                                                               |
-| elasticBeanstalkApp      | elasticBeanstalkEnv                                                                                  |
-| elasticBeanstalkEnv      | elasticBeanstalkApp                                                                                  |
-| elb                      | cloudfront, ecsService, securityGroups, subnet, vpc                                                  |
-| iamPasswordPolicy        |                                                                                                      |
-| iamSamlProvider          |                                                                                                      |
-| iamOpenIdConnectProvider |                                                                                                      |
-| iamServerCertificate     |                                                                                                      |
-| iamUser                  | iamGroup, iamPolicy                                                                                  |
-| iamPolicy                | iamRole, iamGroup, iamUser                                                                           |
-| iamRole                  | iamPolicy, eksCluster, ecsService                                                                    |
-| iamGroup                 | iamUser, iamPolicy                                                                                   |
-| igw                      | vpc                                                                                                  |
-| kinesisFirehose          | kinesisStream, s3                                                                                    |
-| kinesisStream            |                                                                                                      |
-| kms                      | lambda, redshiftCluster, sns, eksCluster, efs, elastiCacheReplicationGroup                           |
-| lambda                   | kms, securityGroups, subnet, vpc                                                                     |
-| nacl                     | vpc                                                                                                  |
-| natGateway               | networkInterface, subnet, vpc                                                                        |
-| networkInterface         | ec2, efsMountTarget, eip, natGateway, subnet, vpc                                                    |
-| rdsCluster               | rdsDbInstance, securityGroups                                                                        |
-| rdsDbInstance            | rdsCluster, securityGroups, vpc, subnet                                                              |
-| redshiftCluster          | kms, vpc                                                                                             |
-| route53Record            | alb, apiGatewayRestApi, elb, route53HostedZone                                                       |
-| route53HostedZone        | route53Record, vpc                                                                                   |
-| routeTable               | subnet, vpc                                                                                          |
-| s3                       |                                                                                                      |
-| secretsManager           |                                                                                                      |
-| securityGroup            | asg, ecsService, lambda, ec2, elb, rdsCluster, rdsDbInstance, eksCluster, elastiCacheCluster         |
-| ses                      |                                                                                                      |
-| sns                      | kms, cloudtrail                                                                                      |
-| sqs                      |                                                                                                      |
-| subnet                   | alb, asg, ec2, ecsService, elb, lambda, natGateway, networkInterface, routeTable, vpc, eksCluster, efsMountTarget |
-| vpc                      | alb, ec2, eip, elb, igw, lambda, natGateway, networkInterface, route53HostedZone, routeTable, subnet, efsMountTarget |
+| Service                  | Relations                                                                                                                                                                                        |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| alb                      | ec2, route53Record, securityGroup, subnet, vpc                                                                                                                                                   |
+| apiGatewayRestApi        | apiGatewayResource, apiGatewayStage, route53Record                                                                                                                                               |
+| apiGatewayStage          | apiGatewayRestApi                                                                                                                                                                                |
+| apiGatewayResource       | apiGatewayRestApi                                                                                                                                                                                |
+| appSync                  |                                                                                                                                                                                                  |
+| asg                      | ebs, ec2, securityGroup, subnet                                                                                                                                                                  |
+| cloud9                   |                                                                                                                                                                                                  |
+| cloudformationStack      |                                                                                                                                                                                                  |
+| cloudformationStackSet   |                                                                                                                                                                                                  |
+| cloudfront               | elb, s3                                                                                                                                                                                          |
+| cloudtrail               | kms, s3, sns                                                                                                                                                                                     |
+| cloudwatch               |                                                                                                                                                                                                  |
+| cognitoIdentityPool      |                                                                                                                                                                                                  |
+| cognitoUserPool          | lambda                                                                                                                                                                                           |
+| dynamodb                 |                                                                                                                                                                                                  |
+| ebs                      | asg, ec2                                                                                                                                                                                         |
+| ec2                      | alb, asg, ebs, eip, networkInterface, securityGroup, subnet, vpc, ecsContainer                                                                                                                   |
+| ecr                      |                                                                                                                                                                                                  |
+| ecsCluster               | ecsService                                                                                                                                                                                       |
+| ecsContainer             | ecsTask, ec2                                                                                                                                                                                     |
+| ecsService               | ecsCluster, elb, iamRole, securityGroup, subnet, vpc                                                                                                                                             |
+| ecsTask                  | ecsContainer                                                                                                                                                                                     |
+| efs                      | kms                                                                                                                                                                                              |
+| efsMountTarget           | networkInterface, subnet, vpc                                                                                                                                                                    |
+| eip                      | ec2, networkInterface, vpc                                                                                                                                                                       |
+| eksCluster               | iamRole, kms, securityGroup, subnet, vpc                                                                                                                                                         |
+| elastiCacheCluster       | securityGroup                                                                                                                                                                                    |
+| elastiCacheReplicationGroup | kms                                                                                                                                                                                           |
+| elasticBeanstalkApp      | elasticBeanstalkEnv                                                                                                                                                                              |
+| elasticBeanstalkEnv      | elasticBeanstalkApp                                                                                                                                                                              |
+| elb                      | cloudfront, ecsService, securityGroup, subnet, vpc                                                                                                                                               |
+| flowLog                  | vpc, iamRole, subnet, networkInterface                                                                                                                                                           |
+| iamPasswordPolicy        |                                                                                                                                                                                                  |
+| iamSamlProvider          |                                                                                                                                                                                                  |
+| iamOpenIdConnectProvider |                                                                                                                                                                                                  |
+| iamServerCertificate     |                                                                                                                                                                                                  |
+| iamUser                  | iamGroup                                                                                                                                                                                         |
+| iamPolicy                | iamRole, iamGroup                                                                                                                                                                                |
+| iamRole                  | iamPolicy, eksCluster, ecsService, flowLog                                                                                                                                                       |
+| iamGroup                 | iamUser, iamPolicy                                                                                                                                                                               |
+| igw                      | vpc                                                                                                                                                                                              |
+| kinesisFirehose          | kinesisStream, s3                                                                                                                                                                                |
+| kinesisStream            | kinesisFirehose                                                                                                                                                                                  |
+| kms                      | cloudtrail, efs, eksCluster, elastiCacheReplicationGroup, lambda, sns, redshiftCluster                                                                                                           |
+| lambda                   | cognitoUserPool, kms, securityGroup, subnet, vpc                                                                                                                                                 |
+| nacl                     | vpc                                                                                                                                                                                              |
+| natGateway               | networkInterface, subnet, vpc                                                                                                                                                                    |
+| networkInterface         | ec2, eip, efsMountTarget, natGateway, subnet, vpc, flowLog                                                                                                                                       |
+| rdsCluster               | rdsDbInstance, securityGroup                                                                                                                                                                     |
+| rdsDbInstance            | rdsCluster, securityGroup, vpc, subnet                                                                                                                                                           |
+| redshiftCluster          | kms, vpc                                                                                                                                                                                         |
+| route53Record            | alb, apiGatewayRestApi, elb, route53HostedZone                                                                                                                                                   |
+| route53HostedZone        | route53Record, vpc                                                                                                                                                                               |
+| routeTable               | subnet, vpc                                                                                                                                                                                      |
+| s3                       | cloudfront, cloudtrail, kinesisFirehose                                                                                                                                                          |
+| secretsManager           |                                                                                                                                                                                                  |
+| securityGroup            | alb, asg, ecsService, lambda, ec2, elb, rdsCluster, rdsDbInstance, eksCluster, elastiCacheCluster                                                                                                |
+| ses                      |                                                                                                                                                                                                  |
+| sns                      | kms, cloudtrail                                                                                                                                                                                  |
+| sqs                      |                                                                                                                                                                                                  |
+| subnet                   | alb, asg, ec2, ecsService, efsMountTarget, elb, lambda, natGateway, networkInterface, routeTable, vpc, eksCluster, flowLog                                                                       |
+| vpc                      | alb, ec2, eip, elb, ecsService, efsMountTarget, eksCluster igw, lambda, nacl, natGateway, networkInterface, rdsDbInstance, redshiftCluster, route53HostedZone, routeTable, subnet, flowLog       |
 
 <br />
 

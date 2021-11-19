@@ -20,6 +20,7 @@ import { FunctionConfiguration } from 'aws-sdk/clients/lambda'
 import services from '../../enums/services'
 import { intersectStringArrays } from '../../utils/index'
 import { RawAwsSubnet } from '../subnet/data'
+import { RawFlowLog } from '../flowLogs/data'
 import { RawAwsEcsService } from '../ecsService/data'
 /**
  * ALBs
@@ -123,6 +124,26 @@ export default ({
   //     })
   //   }
   // }
+
+  /**
+   * Find any FlowLog related data
+   */
+   const flowLogs = data.find(({ name }) => name === services.flowLog)
+   if (flowLogs?.data?.[region]) {
+     const dataAtRegion: RawFlowLog[] = flowLogs.data[region].filter(
+       ({ ResourceId }: RawFlowLog) =>
+         ResourceId === id
+     )
+     for (const flowLog of dataAtRegion) {
+       connections.push({
+         id: flowLog.FlowLogId,
+         resourceType: services.flowLog,
+         relation: 'child',
+         field: 'flowLogs',
+       })
+     }
+   }
+
   /**
    * Find any IGW related data
    */
