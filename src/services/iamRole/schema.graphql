@@ -4,7 +4,7 @@ type awsIamRole @key(fields: "arn") {
   accountId: String! @search(by: [hash, regexp])
   name: String @search(by: [hash, regexp])
   path: String @search(by: [hash, regexp])
-  assumeRolePolicy: String
+  assumeRolePolicy: awsIamJSONPolicy
   description: String @search(by: [hash, regexp])
   createdAt: String @search(by: [hash, regexp])
   maxSessionDuration: Int @search

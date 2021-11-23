@@ -58,7 +58,17 @@ describe('SQS Service Test: ', () => {
             arn: expect.any(String),
             queueUrl: expect.any(String),
             queueType: expect.any(String),
-            policy: expect.any(String),
+            policy: expect.objectContaining({
+              id: expect.any(String),
+              statement: expect.arrayContaining([
+                expect.objectContaining({
+                  action: expect.arrayContaining([expect.any(String)]),
+                  effect: expect.any(String),
+                  resource: expect.arrayContaining([expect.any(String)]),
+                }),
+              ]),
+              version: expect.any(String),
+            }),
           }),
         ])
       )

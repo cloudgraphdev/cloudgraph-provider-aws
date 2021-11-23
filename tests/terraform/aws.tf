@@ -548,6 +548,34 @@ resource "aws_s3_bucket" "bucket" {
   acl    = "public-read"
 }
 
+resource "aws_s3_bucket_policy" "b" {
+  bucket = aws_s3_bucket.source.id
+
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression's result to valid JSON syntax.
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Id      = "MYBUCKETPOLICY"
+    Statement = [
+      {
+        Sid       = "IPAllow"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = "s3:*"
+        Resource = [
+          aws_s3_bucket.source.arn,
+          "${aws_s3_bucket.source.arn}/*",
+        ]
+        Condition = {
+          NotIpAddress = {
+            "aws:SourceIp" = "8.8.8.8/32"
+          }
+        }
+      },
+    ]
+  })
+}
+
 resource "aws_s3_bucket_object" "cf-template" {
   bucket = aws_s3_bucket.destination.bucket
   key    = "EC2ChooseAMI.template"

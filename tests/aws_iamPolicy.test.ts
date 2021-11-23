@@ -71,7 +71,17 @@ describe('IAM Policy Service Test: ', () => {
             arn: expect.any(String),
             description: expect.any(String),
             path: expect.any(String),
-            policyContent: expect.any(String),
+            policyContent: expect.objectContaining({
+              id: expect.any(String),
+              statement: expect.arrayContaining([
+                expect.objectContaining({
+                  action: expect.arrayContaining([expect.any(String)]),
+                  effect: expect.any(String),
+                  resource: expect.arrayContaining([expect.any(String)]),
+                }),
+              ]),
+              version: expect.any(String),
+            }),
           }),
         ])
       )
@@ -92,7 +102,7 @@ describe('IAM Policy Service Test: ', () => {
           arn: '',
           description: '',
           path: '',
-          policyContent: '',
+          policyContent: null,
           tags: [],
         })
       )

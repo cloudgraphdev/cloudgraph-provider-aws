@@ -86,7 +86,7 @@ export const getTags = async ({
       apiGw.getTags({ resourceArn: arn }, (err: AWSError, data: Tags) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'apiGw:getTags', err)
-          return resolve({})
+          resolve({})
         }
         const { tags = {} } = data || {}
         resolve(tags)
@@ -208,7 +208,6 @@ export default async ({
         resolveRegion()
       })
       regionPromises.push(regionPromise)
-      return null
     })
 
     await Promise.all(regionPromises)
@@ -231,11 +230,10 @@ export default async ({
         resolveTags()
       })
       tagsPromises.push(tagsPromise)
-      return null
     })
 
     logger.debug(lt.gettingApiGatewayTags)
     await Promise.all(tagsPromises)
-
+    
     resolve(groupBy(apiGatewayData, 'region'))
   })

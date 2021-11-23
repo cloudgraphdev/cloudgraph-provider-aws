@@ -17,6 +17,7 @@ describe('APIGatewayStage Service Test: ', () => {
           })
           getDataResult = await classInstance.getData({
             credentials,
+            rawData: [],
             regions: region,
           })
           formatResult = getDataResult[region].map((item: ApiGatewayStage) =>

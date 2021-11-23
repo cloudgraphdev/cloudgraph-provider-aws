@@ -12,7 +12,7 @@ type awsSqs @key(fields: "arn"){
   maximumMessageSize: Int @search
   messageRetentionPeriod: String @search(by: [hash, regexp])
   delaySeconds: String @search(by: [hash, regexp])
-  policy: String @search(by: [hash, regexp])
+  policy: awsIamJSONPolicy
   receiveMessageWaitTimeSeconds: String @search(by: [hash, regexp])
   tags: [Tag]
 }

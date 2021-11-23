@@ -2,7 +2,7 @@ import { AwsSqs } from './data'
 import { AwsSqs as AwsSqsType } from '../../types/generated'
 import t from '../../properties/translations'
 import getTime from '../../utils/dateutils'
-import { formatTagsFromMap } from '../../utils/format'
+import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 
 /**
  * SQS
@@ -51,7 +51,7 @@ export default ({
     ),
     messageRetentionPeriod: getTime(messageRetentionPeriod),
     delaySeconds: `${delaySeconds} ${t.seconds}`,
-    policy,
+    policy: formatIamJsonPolicy(policy),
     receiveMessageWaitTimeSeconds: getTime(receiveMessageWaitTimeSeconds),
     tags: formatTagsFromMap(Tags),
   }

@@ -35,5 +35,5 @@ type awsBucketPolicy
     subscription: false
   ) {
   id: String! @id
-  policy: String
+  policy: awsIamJSONPolicy
 }

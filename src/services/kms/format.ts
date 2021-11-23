@@ -1,7 +1,7 @@
 import t from '../../properties/translations'
 import { AwsKms } from './data'
 import { AwsKms as AwsKmsType } from '../../types/generated'
-import { formatTagsFromMap } from '../../utils/format'
+import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 
 /**
  * KMS
@@ -42,7 +42,7 @@ export default ({
     description,
     keyRotationEnabled: keyRotationEnabled ? t.yes : t.no,
     usage,
-    policy,
+    policy: formatIamJsonPolicy(policy),
     enabled: enabled ? t.yes : t.no,
     keyState,
     customerMasterKeySpec,

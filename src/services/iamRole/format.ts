@@ -1,6 +1,6 @@
 import resources from '../../enums/resources'
 import { AwsIamRole } from '../../types/generated'
-import { formatTagsFromMap } from '../../utils/format'
+import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 import { getIamId } from '../../utils/ids'
 import { RawAwsIamRole } from './data'
 
@@ -44,7 +44,7 @@ export default ({
     path,
     createdAt: createdAt?.toISOString() || '',
     description,
-    assumeRolePolicy,
+    assumeRolePolicy: formatIamJsonPolicy(assumeRolePolicy),
     maxSessionDuration,
     inlinePolicies,
     tags: roleTags,
