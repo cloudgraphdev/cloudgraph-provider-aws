@@ -598,6 +598,7 @@ export type AwsCloudtrailStatus = {
   latestNotificationAttemptTime?: Maybe<Scalars['String']>;
   latestNotificationAttemptSucceeded?: Maybe<Scalars['String']>;
   latestDeliveryAttemptSucceeded?: Maybe<Scalars['String']>;
+  latestCloudWatchLogsDeliveryTime?: Maybe<Scalars['String']>;
   timeLoggingStarted?: Maybe<Scalars['String']>;
   timeLoggingStopped?: Maybe<Scalars['String']>;
 };

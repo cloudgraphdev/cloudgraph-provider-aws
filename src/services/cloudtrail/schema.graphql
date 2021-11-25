@@ -35,6 +35,7 @@ type awsCloudtrailStatus {
   latestNotificationAttemptTime: String @search(by: [hash, regexp])
   latestNotificationAttemptSucceeded: String @search(by: [hash, regexp])
   latestDeliveryAttemptSucceeded: String @search(by: [hash, regexp])
+  latestCloudWatchLogsDeliveryTime: String @search(by: [hash, regexp])
   timeLoggingStarted: String @search(by: [hash, regexp])
   timeLoggingStopped: String @search(by: [hash, regexp])
 }

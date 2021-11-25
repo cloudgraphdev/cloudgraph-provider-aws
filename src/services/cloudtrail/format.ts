@@ -30,6 +30,7 @@ export default ({
     HasInsightSelectors: hasInsightSelectors,
     IsOrganizationTrail: isOrganizationTrail,
     TrailStatus: {
+      LatestCloudWatchLogsDeliveryTime: latestCloudWatchLogsDeliveryTime,
       IsLogging: isLogging,
       LatestDeliveryTime: latestDeliveryTime,
       LatestNotificationTime: latestNotificationTime,
@@ -81,6 +82,8 @@ export default ({
       latestNotificationTime: latestNotificationTime?.toISOString() || '',
       startLoggingTime: startLoggingTime?.toISOString() || '',
       latestDigestDeliveryTime: latestDigestDeliveryTime?.toISOString() || '',
+      latestCloudWatchLogsDeliveryTime:
+        latestCloudWatchLogsDeliveryTime?.toISOString() || '',
       latestDeliveryAttemptTime,
       latestNotificationAttemptTime,
       latestNotificationAttemptSucceeded,
