@@ -80,7 +80,24 @@ describe('SNS Service Test: ', () => {
         expect.arrayContaining([
           expect.objectContaining({
             arn: expect.any(String),
-            policy: expect.any(String),
+            policy: expect.objectContaining({
+              id: expect.any(String),
+              statement: expect.arrayContaining([
+                expect.objectContaining({
+                  action: expect.arrayContaining([expect.any(String)]),
+                  condition: expect.arrayContaining([
+                    expect.objectContaining({
+                      key: expect.any(String),
+                      operator: expect.any(String),
+                      value: expect.arrayContaining([expect.any(String)]),
+                    }),
+                  ]),
+                  effect: expect.any(String),
+                  resource: expect.arrayContaining([expect.any(String)]),
+                }),
+              ]),
+              version: expect.any(String),
+            }),
             displayName: expect.any(String),
           }),
         ])

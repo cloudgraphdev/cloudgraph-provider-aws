@@ -1,7 +1,7 @@
 import cuid from 'cuid'
 import { RawAwsSns } from './data'
 import { AwsSns, AwsSnsSubscription } from '../../types/generated'
-import { formatTagsFromMap } from '../../utils/format'
+import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 import { Subscription } from 'aws-sdk/clients/sns'
 
 /**
@@ -40,7 +40,7 @@ export default ({
     accountId: account,
     arn,
     tags: formatTagsFromMap(Tags),
-    policy,
+    policy: formatIamJsonPolicy(policy),
     displayName,
     deliveryPolicy,
     subscriptions: subscriptions.map(awsSNSSubscriptionConverter),

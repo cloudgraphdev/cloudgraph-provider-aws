@@ -10,7 +10,7 @@ type awsApiGatewayRestApi @key(fields: "arn") {
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp, fulltext])
-  policy: String @search(by: [hash, regexp])
+  policy: awsIamJSONPolicy
   endpointConfiguration: awsApiGatewayEndpointConfiguration
   apiKeySource: String @search(by: [hash])
   createdDate: String @search(by: [hash])
@@ -21,3 +21,5 @@ type awsApiGatewayRestApi @key(fields: "arn") {
   resources: [awsApiGatewayResource] @hasInverse(field: restApi)
   route53Record: [awsRoute53Record] @hasInverse(field: restApi)
 }
+
+

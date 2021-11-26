@@ -1,7 +1,9 @@
+import cuid from 'cuid'
 import { parseString } from '@fast-csv/parse'
 import CloudGraph from '@cloudgraph/sdk'
-
-import { Tag } from '../types/generated'
+import isArray from 'lodash/isArray'
+import toString from 'lodash/toString'
+import { Tag, AwsIamJsonPolicy } from '../types/generated'
 import { AwsTag, TagMap } from '../types'
 
 const { logger } = CloudGraph
@@ -62,3 +64,38 @@ export const parseCSV = (csv: string): Promise<any[]> =>
         resolve(credentialReportData)
       })
   })
+
+export const formatIamJsonPolicy = (json: string): AwsIamJsonPolicy => {
+  let object
+  try {
+    object = JSON.parse(json.replace(/\\"/g, '"'))
+  } catch (err) {
+    return null
+  }
+
+  const statement = isArray(object.Statement) ? object.Statement : [object.Statement]
+  const formatCondition = (condition) => {
+    if (!condition) return null
+    return Object.entries(condition).map(([key, value = {}]) => {
+      const entry = Object.entries(value)[0] || []
+      const conVal = (isArray(entry[1]) ? entry[1] : [entry[1]]) || []
+      return {
+        operator: key,
+        key: entry[0],
+        value: conVal.map(val => toString(val))
+      }
+    })
+  }
+
+  return {
+    id: cuid(),
+    version: object.Version,
+    statement: statement.map(el => ({
+      action: isArray(el.Action) ? el.Action : [toString(el.Action)],
+      condition: formatCondition(el.Condition),
+      effect: el.Effect,
+      principle: el.Principle,
+      resource: isArray(el.Resource) ? el.Resource : [toString(el.Resource)],
+    })),
+  }
+}

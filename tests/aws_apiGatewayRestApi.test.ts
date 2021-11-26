@@ -34,11 +34,11 @@ describe('APIGatewayRestApi Service Test: ', () => {
         },
         {
           name: services.apiGatewayResource,
-          data: await apiGWResource.getData({ credentials, regions: region }),
+          data: await apiGWResource.getData({ credentials, rawData: [], regions: region }),
         },
         {
           name: services.apiGatewayStage,
-          data: await apiGWStage.getData({ credentials, regions: region }),
+          data: await apiGWStage.getData({ credentials, rawData: [], regions: region }),
         },
       ]
       initiatorGetConnectionsResult = initiatorTestData[0].data[region].map(
@@ -62,7 +62,17 @@ describe('APIGatewayRestApi Service Test: ', () => {
             id: expect.any(String),
             arn: expect.any(String),
             description: expect.any(String),
-            policy: expect.any(String),
+            policy: expect.objectContaining({
+              id: expect.any(String),
+              statement: expect.arrayContaining([
+                expect.objectContaining({
+                  action: expect.arrayContaining([expect.any(String)]),
+                  effect: expect.any(String),
+                  resource: expect.arrayContaining([expect.any(String)]),
+                }),
+              ]),
+              version: expect.any(String),
+            }),
             endpointConfiguration: expect.objectContaining({
               types: expect.arrayContaining([expect.any(String)]),
             }),

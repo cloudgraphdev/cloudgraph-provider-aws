@@ -10,7 +10,7 @@ import {
 
 import { AwsS3 } from '../../types/generated'
 import t from '../../properties/translations'
-import { formatTagsFromMap } from '../../utils/format'
+import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 import { s3BucketArn } from '../../utils/generateArns'
 import { awsBucketItemsLimit, publicBucketGrant, RawAwsS3 } from './data'
 
@@ -189,7 +189,10 @@ export default ({
     accountId: account,
     arn: s3BucketArn({ name }),
     bucketOwnerName,
-    bucketPolicies,
+    bucketPolicies: bucketPolicies.map(bp => ({
+      id: cuid(),
+      policy: formatIamJsonPolicy(bp.policy)
+    })),
     region,
     requesterPays: reqPaymentConfig === 'Requester' ? t.enabled : t.disabled,
     size,

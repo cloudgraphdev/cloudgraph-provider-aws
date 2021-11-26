@@ -1,7 +1,7 @@
 import { RawAwsApiGatewayRestApi } from './data'
 import { AwsApiGatewayRestApi as AwsAGRestApiType } from '../../types/generated'
 import { apiGatewayArn, apiGatewayRestApiArn } from '../../utils/generateArns'
-import { formatTagsFromMap } from '../../utils/format'
+import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 
 export default ({
   service,
@@ -34,7 +34,7 @@ export default ({
     arn,
     region,
     description,
-    policy,
+    policy: formatIamJsonPolicy(policy),
     endpointConfiguration,
     apiKeySource,
     createdDate: createdDate.toISOString(),

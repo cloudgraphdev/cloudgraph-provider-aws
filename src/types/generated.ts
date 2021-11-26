@@ -125,7 +125,7 @@ export type AwsApiGatewayRestApi = {
   arn: Scalars['String'];
   region?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  policy?: Maybe<Scalars['String']>;
+  policy?: Maybe<AwsIamJsonPolicy>;
   endpointConfiguration?: Maybe<AwsApiGatewayEndpointConfiguration>;
   apiKeySource?: Maybe<Scalars['String']>;
   createdDate?: Maybe<Scalars['String']>;
@@ -331,7 +331,7 @@ export type AwsBilling = {
 
 export type AwsBucketPolicy = {
   id: Scalars['String'];
-  policy?: Maybe<Scalars['String']>;
+  policy?: Maybe<AwsIamJsonPolicy>;
 };
 
 export type AwsCloud9Environment = {
@@ -1812,6 +1812,28 @@ export type AwsIamGroup = {
   iamUsers?: Maybe<Array<Maybe<AwsIamUser>>>;
 };
 
+export type AwsIamJsonPolicy = {
+  id: Scalars['String'];
+  version?: Maybe<Scalars['String']>;
+  statement?: Maybe<Array<Maybe<AwsIamJsonPolicyStatement>>>;
+};
+
+export type AwsIamJsonPolicyCondition = {
+  id?: Maybe<Scalars['ID']>;
+  operator?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+  value?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsIamJsonPolicyStatement = {
+  id?: Maybe<Scalars['ID']>;
+  action?: Maybe<Array<Maybe<Scalars['String']>>>;
+  condition?: Maybe<Array<Maybe<AwsIamJsonPolicyCondition>>>;
+  effect?: Maybe<Scalars['String']>;
+  principle?: Maybe<Scalars['String']>;
+  resource?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
 export type AwsIamMfaDevice = {
   serialNumber: Scalars['String'];
   enableDate?: Maybe<Scalars['String']>;
@@ -1845,7 +1867,7 @@ export type AwsIamPolicy = {
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  policyContent?: Maybe<Scalars['String']>;
+  policyContent?: Maybe<AwsIamJsonPolicy>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   iamGroups?: Maybe<Array<Maybe<AwsIamGroup>>>;
@@ -1858,7 +1880,7 @@ export type AwsIamRole = {
   accountId: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
-  assumeRolePolicy?: Maybe<Scalars['String']>;
+  assumeRolePolicy?: Maybe<AwsIamJsonPolicy>;
   description?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['String']>;
   maxSessionDuration?: Maybe<Scalars['Int']>;
@@ -2001,7 +2023,7 @@ export type AwsKms = {
   description?: Maybe<Scalars['String']>;
   keyRotationEnabled?: Maybe<Scalars['String']>;
   usage?: Maybe<Scalars['String']>;
-  policy?: Maybe<Scalars['String']>;
+  policy?: Maybe<AwsIamJsonPolicy>;
   enabled?: Maybe<Scalars['String']>;
   keyState?: Maybe<Scalars['String']>;
   customerMasterKeySpec?: Maybe<Scalars['String']>;
@@ -2486,7 +2508,7 @@ export type AwsSns = {
   accountId: Scalars['String'];
   arn: Scalars['String'];
   tags?: Maybe<Array<Maybe<Tag>>>;
-  policy?: Maybe<Scalars['String']>;
+  policy?: Maybe<AwsIamJsonPolicy>;
   displayName?: Maybe<Scalars['String']>;
   deliveryPolicy?: Maybe<Scalars['String']>;
   subscriptions?: Maybe<Array<Maybe<AwsSnsSubscription>>>;
@@ -2515,7 +2537,7 @@ export type AwsSqs = {
   maximumMessageSize?: Maybe<Scalars['Int']>;
   messageRetentionPeriod?: Maybe<Scalars['String']>;
   delaySeconds?: Maybe<Scalars['String']>;
-  policy?: Maybe<Scalars['String']>;
+  policy?: Maybe<AwsIamJsonPolicy>;
   receiveMessageWaitTimeSeconds?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
 };

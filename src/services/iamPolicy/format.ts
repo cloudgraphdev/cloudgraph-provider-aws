@@ -1,6 +1,6 @@
 import resources from '../../enums/resources'
 import { AwsIamPolicy } from '../../types/generated'
-import { formatTagsFromMap } from '../../utils/format'
+import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 import { getIamId } from '../../utils/ids'
 import { RawAwsIamPolicy } from './data'
 
@@ -39,7 +39,7 @@ export default ({
     arn,
     accountId: account,
     path,
-    policyContent,
+    policyContent: formatIamJsonPolicy(policyContent),
     description,
     tags: policyTags,
   }

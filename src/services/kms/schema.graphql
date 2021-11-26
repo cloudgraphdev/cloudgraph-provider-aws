@@ -6,7 +6,7 @@ type awsKms @key(fields: "id"){
   description: String @search(by: [hash, regexp, fulltext])
   keyRotationEnabled: String @search(by: [hash, regexp])
   usage: String @search(by: [hash, regexp])
-  policy: String @search(by: [hash, regexp])
+  policy: awsIamJSONPolicy
   enabled: String @search(by: [hash, regexp])
   keyState: String @search(by: [hash, regexp])
   customerMasterKeySpec: String @search(by: [hash, regexp])

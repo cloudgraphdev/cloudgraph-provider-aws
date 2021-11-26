@@ -144,7 +144,29 @@ describe('S3 Service Test: ', () => {
           totalNumberOfObjectsInBucket: expect.any(String),
           transferAcceleration: expect.any(String),
           versioning: expect.any(String),
-          bucketPolicies: expect.arrayContaining<String>([]),
+          bucketPolicies: expect.arrayContaining([
+            expect.objectContaining({
+              id: expect.any(String),
+              policy: expect.objectContaining({
+                id: expect.any(String),
+                statement: expect.arrayContaining([
+                  expect.objectContaining({
+                    action: expect.arrayContaining([expect.any(String)]),
+                    condition: expect.arrayContaining([
+                      expect.objectContaining({
+                        key: expect.any(String),
+                        operator: expect.any(String),
+                        value: expect.arrayContaining([expect.any(String)]),
+                      }),
+                    ]),
+                    effect: expect.any(String),
+                    resource: expect.arrayContaining([expect.any(String)]),
+                  }),
+                ]),
+                version: expect.any(String),
+              }),
+            }),
+          ]),
           tags: expect.arrayContaining([
             expect.objectContaining({
               id: expect.any(String),
