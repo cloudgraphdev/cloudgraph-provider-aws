@@ -1,3 +1,10 @@
+## [0.46.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.46.0...0.46.1) (2021-11-26)
+
+
+### Bug Fixes
+
+* **policy:** add IAM JSON policy types, format json policies, updated tests ([823b1de](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/823b1deacf24c3d6a5921300d02f4cc33305f1ad))
+
 # [0.46.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.45.1...0.46.0) (2021-11-19)
 
 
