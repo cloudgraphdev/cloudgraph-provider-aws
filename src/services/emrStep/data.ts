@@ -26,6 +26,9 @@ const listEmrClusterSteps = async (emr: EMR, clusterId: string) =>
     const clusterStepList: ClusterSummary[] = []
     const listStepsOpts: ListStepsInput = { ClusterId: clusterId }
     const listSteps = (marker?: string) => {
+      if (marker) {
+        listStepsOpts.Marker = marker
+      }
       emr.listSteps(listStepsOpts, (err: AWSError, data: ListStepsOutput) => {
         if (err) {
           generateAwsErrorLog(serviceName, 'emr:listSteps', err)
