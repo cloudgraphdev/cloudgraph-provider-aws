@@ -76,8 +76,8 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | cognitoIdentityPool      |                                                                                                                                                                                                  |
 | cognitoUserPool          | lambda                                                                                                                                                                                           |
 | dynamodb                 |                                                                                                                                                                                                  |
-| ebs                      | asg, ec2                                                                                                                                                                                         |
-| ec2                      | alb, asg, ebs, eip, networkInterface, securityGroup, subnet, vpc, ecsContainer                                                                                                                   |
+| ebs                      | asg, ec2, emrInstance                                                                                                                                                                                         |
+| ec2                      | alb, asg, ebs, eip, emrInstance, networkInterface, securityGroup, subnet, vpc, ecsContainer                                                                                                                   |
 | ecr                      |                                                                                                                                                                                                  |
 | ecsCluster               | ecsService                                                                                                                                                                                       |
 | ecsContainer             | ecsTask, ec2                                                                                                                                                                                     |
@@ -92,6 +92,9 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | elasticBeanstalkApp      | elasticBeanstalkEnv                                                                                                                                                                              |
 | elasticBeanstalkEnv      | elasticBeanstalkApp                                                                                                                                                                              |
 | elb                      | cloudfront, ecsService, securityGroup, subnet, vpc                                                                                                                                               |
+| emrCluster               | kms, subnet                                                                                          |
+| emrInstance              | ebs, ec2                                                                                             |
+| emrStep                  |                                                                                                      |
 | flowLog                  | vpc, iamRole, subnet, networkInterface                                                                                                                                                           |
 | iamPasswordPolicy        |                                                                                                                                                                                                  |
 | iamSamlProvider          |                                                                                                                                                                                                  |
@@ -105,7 +108,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | iot                      |                                                                                                      |
 | kinesisFirehose          | kinesisStream, s3                                                                                                                                                                                |
 | kinesisStream            | kinesisFirehose                                                                                                                                                                                  |
-| kms                      | cloudtrail, efs, eksCluster, elastiCacheReplicationGroup, lambda, sns, redshiftCluster                                                                                                           |
+| kms                      | cloudtrail, efs, eksCluster, elastiCacheReplicationGroup, emrCluster, lambda, sns, redshiftCluster                                                                                                           |
 | lambda                   | cognitoUserPool, kms, securityGroup, subnet, vpc                                                                                                                                                 |
 | nacl                     | vpc                                                                                                                                                                                              |
 | natGateway               | networkInterface, subnet, vpc                                                                                                                                                                    |
@@ -122,7 +125,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | ses                      |                                                                                                                                                                                                  |
 | sns                      | kms, cloudtrail                                                                                                                                                                                  |
 | sqs                      |                                                                                                                                                                                                  |
-| subnet                   | alb, asg, ec2, ecsService, efsMountTarget, elb, lambda, natGateway, networkInterface, routeTable, vpc, eksCluster, flowLog                                                                       |
+| subnet                   | alb, asg, ec2, ecsService, efsMountTarget, elb, lambda, natGateway, networkInterface, routeTable, vpc, eksCluster, emrCluster, flowLog                                                                       |
 | vpc                      | alb, ec2, eip, elb, ecsService, efsMountTarget, eksCluster igw, lambda, nacl, natGateway, networkInterface, rdsDbInstance, redshiftCluster, route53HostedZone, routeTable, subnet, flowLog       |
 
 <br />

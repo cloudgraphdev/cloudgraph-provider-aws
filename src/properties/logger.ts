@@ -294,6 +294,13 @@ export default {
   fetchedEmrClusters: (num: number): string => `Fetched ${num} EMR Clusters`,
   fetchedEmrClusterInstances: (num: number): string =>
     `Fetched ${num} EMR Clusters Instances`,
+  foundAnotherFiftyClusters: (region: string) =>
+    `Found another 50 EMR clusters for the ${region} region...`,
+  foundAnotherTwoThousandInstances: (cluster: string) =>
+    `Found another 2000 EMR instances for the ${cluster} cluster...`,
+  foundAnotherFiftySteps: (cluster: string) =>
+    `Found another 50 EMR steps for the ${cluster} cluster...`,
+  fetchedEmrClusterSteps: (num: number) => `Fetched ${num} EMR Cluster Steps`,
   addingEmrEc2Connection: (
     clusterName: string,
     ec2InstanceName: string

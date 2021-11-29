@@ -35,6 +35,9 @@ import ElastiCacheCluster from '../services/elastiCacheCluster'
 import ElastiCacheReplicationGroup from '../services/elastiCacheReplicationGroup'
 import ELB from '../services/elb'
 import FlowLog from '../services/flowLogs'
+import EmrCluster from '../services/emrCluster'
+import EmrInstance from '../services/emrInstance'
+import EmrStep from '../services/emrStep'
 import Lambda from '../services/lambda'
 import NATGateway from '../services/natGateway'
 import NetworkAcl from '../services/nacl'
@@ -98,6 +101,9 @@ export default {
   [services.elastiCacheReplicationGroup]: ElastiCacheReplicationGroup,
   [services.elb]: ELB,
   [services.flowLog]: FlowLog,
+  [services.emrCluster]: EmrCluster,
+  [services.emrInstance]: EmrInstance,
+  [services.emrStep]: EmrStep,
   [services.dynamodb]: DynamoDB,
   [services.igw]: AwsInternetGateway,
   [services.iot]: IotThingAttribute,

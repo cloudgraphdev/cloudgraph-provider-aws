@@ -46,6 +46,7 @@ import { RawAwsApiGatewayRestApi } from '../apiGatewayRestApi/data'
 import { RawAwsApiGatewayStage } from '../apiGatewayStage/data'
 import { RawAwsCloud9Environment } from '../cloud9/data'
 import { RawAwsEfs } from '../efs/data'
+import { RawAwsEmrCluster } from '../emrCluster/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -1073,6 +1074,29 @@ export default ({
             resourceType: services.ecsCluster,
             relation: 'child',
             field: 'ecsCluster',
+          })
+        }
+      }
+    }
+  
+    /**
+     * Find related EMR clusters
+     */
+    const emrClusters: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.emrCluster)
+    if (emrClusters?.data?.[region]) {
+      const dataAtRegion: RawAwsEmrCluster[] =
+        findServiceInstancesWithTag(tag, emrClusters.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { ClusterArn: arn } = instance
+          connections.push({
+            id: arn,
+            resourceType: services.emrCluster,
+            relation: 'child',
+            field: 'emrCluster',
           })
         }
       }
