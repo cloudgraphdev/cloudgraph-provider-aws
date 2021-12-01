@@ -23,8 +23,8 @@ type awsElb @key(fields: "arn") {
   cloudfrontDistribution: [awsCloudfront] @hasInverse(field: elb)
   securityGroups: [awsSecurityGroup] @hasInverse(field: elb)
   vpc: [awsVpc] @hasInverse(field: elb)
-  route53Record: [awsRoute53Record] @hasInverse(field: elb)
-  subnet: [awsSubnet] @hasInverse(field: elb)
+  route53Record: [awsRoute53Record] @hasInverse(field: elb) #change to plural
+  subnet: [awsSubnet] @hasInverse(field: elb) #change to plural
   ecsService: [awsEcsService] @hasInverse(field: elb)
 }
 

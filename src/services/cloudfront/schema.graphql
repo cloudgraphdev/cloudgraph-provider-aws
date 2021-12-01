@@ -1,3 +1,4 @@
+# TODO: add region to this
 type awsCloudfront @key(fields: "id") {
   id: String! @id @search(by: [hash])
   accountId: String! @search(by: [hash])
@@ -14,13 +15,13 @@ type awsCloudfront @key(fields: "id") {
   defaultRootObject: String @search(by: [hash])
   webAclId: String @search(by: [hash])
   geoRestrictions: String @search(by: [hash, regexp])
-  customErrorResponse: [awsCloudfrontCustomErrorResponse]
+  customErrorResponse: [awsCloudfrontCustomErrorResponse] #change to plural
   defaultCacheBehavior: awsCloudfrontCacheBehavior
-  orderedCacheBehavior: [awsCloudfrontCacheBehavior]
+  orderedCacheBehavior: [awsCloudfrontCacheBehavior] #change to plural
   viewerCertificate: awsCloudfrontViewerCertificate
-  origin: [awsCloudfrontOriginData]
+  origin: [awsCloudfrontOriginData] #change to plural
   elb: [awsElb] @hasInverse(field: cloudfrontDistribution)
-  s3: [awsS3]@hasInverse(field: cloudfrontDistribution)
+  s3: [awsS3] @hasInverse(field: cloudfrontDistribution)
   tags: [Tag]
 }
 

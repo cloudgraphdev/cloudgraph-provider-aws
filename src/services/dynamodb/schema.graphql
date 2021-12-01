@@ -157,7 +157,7 @@ type awsDynamoDbTable @key(fields: "arn") {
   globalIndexes: [awsDynamoDbTableGlobalSecondaryIndexDescription]
   globalTableVersion: String @search(by: [hash, regexp])
   itemCount: Int @search
-  keySchema: [awsDynamoDbTableIndexKeySchema]
+  keySchema: [awsDynamoDbTableIndexKeySchema] #change to plural
   latestStreamArn: String @search(by: [hash, regexp])
   latestStreamLabel: String @search(by: [hash, regexp])
   localIndexes: [awsDynamoDbTableLocalSecondaryIndexDescription]

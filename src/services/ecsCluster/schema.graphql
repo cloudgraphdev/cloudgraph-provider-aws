@@ -16,7 +16,7 @@ type awsEcsCluster @key(fields: "arn") {
   attachments: [awsEcsAttachment]
   attachmentsStatus: String @search(by: [hash, regexp])
   tags: [Tag]
-  ecsService: [awsEcsService] @hasInverse(field: ecsCluster)
+  ecsService: [awsEcsService] @hasInverse(field: ecsCluster) #change to plural
 }
 
 type AwsEcsExecuteCommandLogConfiguration 

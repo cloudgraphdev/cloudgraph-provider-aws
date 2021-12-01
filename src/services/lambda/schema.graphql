@@ -19,9 +19,9 @@ type awsLambda @key(fields: "arn") {
   tags: [Tag]
   kms: [awsKms] @hasInverse(field: lambda)
   securityGroups: [awsSecurityGroup] @hasInverse(field: lambda)
-  subnet: [awsSubnet] @hasInverse(field: lambda)
+  subnet: [awsSubnet] @hasInverse(field: lambda) #change to plural
   vpc: [awsVpc] @hasInverse(field: lambda)
-  cognitoUserPool: [awsCognitoUserPool] @hasInverse(field: lambda)
+  cognitoUserPool: [awsCognitoUserPool] @hasInverse(field: lambda) #change to plural
 }
 
 type awsLambdaEnvironmentVariable

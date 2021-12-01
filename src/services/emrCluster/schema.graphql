@@ -30,7 +30,7 @@ type awsEmrCluster @key(fields: "arn") {
   placementGroups: [AwsEmrClusterPlacementGroupConfig]
   tags: [Tag]
   kms: [awsKms] @hasInverse(field: emrCluster)
-  subnet: [awsSubnet] @hasInverse(field: emrCluster)
+  subnet: [awsSubnet] @hasInverse(field: emrCluster) #change to plural
 }
 
 type AwsEmrClusterApplication 

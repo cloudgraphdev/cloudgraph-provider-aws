@@ -118,6 +118,12 @@ describe('EC2 Service Test: ', () => {
             InstanceType: expect.any(String),
             SourceDestCheck: expect.any(Boolean),
             region: expect.any(String),
+            cloudWatchMetricData: expect.objectContaining({
+              last6Hours: expect.any(Object),
+              last24Hours: expect.any(Object),
+              lastWeek: expect.any(Object),
+              lastMonth: expect.any(Object)
+            })
           }),
         ])
       )
@@ -158,6 +164,12 @@ describe('EC2 Service Test: ', () => {
                 deviceName: expect.any(String),
               }),
             ]),
+            cloudWatchMetricData: expect.objectContaining({
+              last6Hours: expect.any(Object),
+              last24Hours: expect.any(Object),
+              lastWeek: expect.any(Object),
+              lastMonth: expect.any(Object)
+            })
           }),
         ])
       )

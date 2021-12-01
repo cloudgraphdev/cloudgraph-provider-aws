@@ -9,7 +9,7 @@ type awsRouteTable @key(fields: "arn") {
   explicitlyAssociatedWithSubnets: Int @search
   subnetAssociations: [String]
   tags: [Tag]
-  subnet: [awsSubnet] @hasInverse(field: routeTable)
+  subnet: [awsSubnet] @hasInverse(field: routeTable) #change to plural
   vpc: [awsVpc] @hasInverse(field: routeTable)
 }
 

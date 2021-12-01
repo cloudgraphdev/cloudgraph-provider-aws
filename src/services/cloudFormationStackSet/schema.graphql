@@ -40,10 +40,11 @@ type awsCloudFormationStackAutoDeploymentConfig {
   enabled: String @search(by: [hash, regexp])
   retainStacksOnAccountRemoval: String @search(by: [hash, regexp])
 }
-
+# add accountId to cloudFormationStackSet
 type awsCloudFormationStackSet @key(fields: "arn") {
   id: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
+  region: String! @search(by: [hash, regexp])
   name: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp])
   status: String @search(by: [hash, regexp])
@@ -57,5 +58,4 @@ type awsCloudFormationStackSet @key(fields: "arn") {
   autoDeploymentConfig: awsCloudFormationStackAutoDeploymentConfig
   permissionModel: String @search(by: [hash, regexp])
   organizationalUnitIds: [String] @search
-  region: String! @search(by: [hash, regexp])
 }

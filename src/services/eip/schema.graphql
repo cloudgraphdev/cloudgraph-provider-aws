@@ -16,7 +16,7 @@ type awsEip @key(fields: "arn") {
   networkBorderGroup: String @search(by: [hash, regexp])
   customerOwnedIp: String @search(by: [hash])
   customerOwnedIpv4Pool: String @search(by: [hash, regexp])
-  vpcs: [awsVpc] @hasInverse(field: eip)
+  vpcs: [awsVpc] @hasInverse(field: eip) #change to singular
   ec2Instance: [awsEc2] @hasInverse(field: eip)
   networkInterface: [awsNetworkInterface] @hasInverse(field: eip)
 }

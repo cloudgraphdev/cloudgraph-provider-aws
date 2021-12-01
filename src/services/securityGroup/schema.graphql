@@ -13,16 +13,16 @@ type awsSecurityGroup @key(fields: "id") {
   outboundRules: [awsSgOutboundRule]
   inboundRuleCount: Int @search
   outboundRuleCount: Int @search
-  alb: [awsAlb] @hasInverse(field: securityGroups)
-  lambda: [awsLambda] @hasInverse(field: securityGroups)
-  elb: [awsElb] @hasInverse(field: securityGroups)
-  ec2Instance: [awsEc2] @hasInverse(field: securityGroups)
-  asg: [awsAsg] @hasInverse(field: securityGroups)
-  rdsCluster: [awsRdsCluster] @hasInverse(field: securityGroups)
-  rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: securityGroups)
-  eksCluster: [awsEksCluster] @hasInverse(field: securityGroups)
-  ecsService: [awsEcsService] @hasInverse(field: securityGroups)
-  elastiCacheCluster: [awsElastiCacheCluster] @hasInverse(field: securityGroups)
+  alb: [awsAlb] @hasInverse(field: securityGroups) #change to plural
+  lambda: [awsLambda] @hasInverse(field: securityGroups) #change to plural
+  elb: [awsElb] @hasInverse(field: securityGroups) #change to plural
+  ec2Instance: [awsEc2] @hasInverse(field: securityGroups) #change to plural
+  asg: [awsAsg] @hasInverse(field: securityGroups) #change to plural
+  rdsCluster: [awsRdsCluster] @hasInverse(field: securityGroups) #change to plural
+  rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: securityGroups) #change to plural
+  eksCluster: [awsEksCluster] @hasInverse(field: securityGroups) #change to plural
+  ecsService: [awsEcsService] @hasInverse(field: securityGroups) #change to plural
+  elastiCacheCluster: [awsElastiCacheCluster] @hasInverse(field: securityGroups) #change to plural
 }
 
 type awsSgOutboundRule

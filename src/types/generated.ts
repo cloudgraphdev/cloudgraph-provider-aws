@@ -492,6 +492,7 @@ export type AwsCloudFormationStackRollbackConfiguration = {
 export type AwsCloudFormationStackSet = {
   id: Scalars['String'];
   arn: Scalars['String'];
+  region: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
@@ -505,7 +506,6 @@ export type AwsCloudFormationStackSet = {
   autoDeploymentConfig?: Maybe<AwsCloudFormationStackAutoDeploymentConfig>;
   permissionModel?: Maybe<Scalars['String']>;
   organizationalUnitIds?: Maybe<Array<Maybe<Scalars['String']>>>;
-  region: Scalars['String'];
 };
 
 export type AwsCloudFormationStackSetDriftDetectionDetail = {
@@ -987,6 +987,7 @@ export type AwsEc2 = {
   securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
   ephemeralBlockDevice?: Maybe<Array<Maybe<AwsEc2Blockdevice>>>;
   associatePublicIpAddress?: Maybe<Scalars['String']>;
+  cloudWatchMetricData?: Maybe<AwsEc2CloudWatchMetricsTimePeriods>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
   asg?: Maybe<Array<Maybe<AwsAsg>>>;
@@ -1002,6 +1003,28 @@ export type AwsEc2 = {
 export type AwsEc2Blockdevice = {
   deviceName: Scalars['String'];
   ebs?: Maybe<BlockDeviceEbs>;
+};
+
+export type AwsEc2CloudWatchMetrics = {
+  cpuUtilizationAverage?: Maybe<Scalars['Float']>;
+  networkInAverage?: Maybe<Scalars['Float']>;
+  networkOutAverage?: Maybe<Scalars['Float']>;
+  networkPacketsInAverage?: Maybe<Scalars['Float']>;
+  networkPacketsOutAverage?: Maybe<Scalars['Float']>;
+  statusCheckFailedSum?: Maybe<Scalars['Float']>;
+  statusCheckFailedInstanceSum?: Maybe<Scalars['Float']>;
+  statusCheckFailedSystemSum?: Maybe<Scalars['Float']>;
+  diskReadOpsAverage?: Maybe<Scalars['Float']>;
+  diskWriteOpsAverage?: Maybe<Scalars['Float']>;
+  diskReadBytesAverage?: Maybe<Scalars['Float']>;
+  diskWriteBytesAverage?: Maybe<Scalars['Float']>;
+};
+
+export type AwsEc2CloudWatchMetricsTimePeriods = {
+  last6Hours?: Maybe<AwsEc2CloudWatchMetrics>;
+  last24Hours?: Maybe<AwsEc2CloudWatchMetrics>;
+  lastWeek?: Maybe<AwsEc2CloudWatchMetrics>;
+  lastMonth?: Maybe<AwsEc2CloudWatchMetrics>;
 };
 
 export type AwsEc2MetadataOptions = {
@@ -2323,11 +2346,11 @@ export type AwsNetworkAcl = {
   id: Scalars['String'];
   arn: Scalars['String'];
   accountId: Scalars['String'];
+  region: Scalars['String'];
   default?: Maybe<Scalars['Boolean']>;
   inboundRules?: Maybe<Array<Maybe<AwsNetworkAclRule>>>;
   outboundRules?: Maybe<Array<Maybe<AwsNetworkAclRule>>>;
   associatedSubnets?: Maybe<Array<Maybe<AwsNetworkAclAssociatedSubnet>>>;
-  region: Scalars['String'];
   tags?: Maybe<Array<Maybe<Tag>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   vpcId: Scalars['String'];
@@ -2415,8 +2438,8 @@ export type AwsRdsCluster = {
   httpEndpointEnabled?: Maybe<Scalars['Boolean']>;
   copyTagsToSnapshot?: Maybe<Scalars['Boolean']>;
   crossAccountClone?: Maybe<Scalars['Boolean']>;
-  tags?: Maybe<Array<Maybe<Tag>>>;
   globalWriteForwardingRequested?: Maybe<Scalars['Boolean']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
   instances?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
 };
