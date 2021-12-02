@@ -1,3 +1,15 @@
+# [0.48.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.47.0...0.48.0) (2021-12-02)
+
+
+### Bug Fixes
+
+* **tests:** update ec2 and sns tests with new fields/names ([ec1a8c7](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/ec1a8c7f8682eeca192c0a7d35c14114a75f82a2))
+
+
+### Features
+
+* **services:** update route53 services with search directives, update multiple services with region field, some naming and format changes ([b34962e](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b34962eed46c72858f02b6d51f5f1b979d4ed9b6))
+
 # [0.47.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.46.1...0.47.0) (2021-12-02)
 
 
