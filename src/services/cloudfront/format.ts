@@ -147,13 +147,14 @@ export default ({
     Tags = {},
   }: RawAwsCloudfront = service
 
-  const customErrorResponse: AwsCloudfrontCustomErrorResponse[] = cer.map(
+  const customErrorResponses: AwsCloudfrontCustomErrorResponse[] = cer.map(
     ({
       ErrorCachingMinTTL: errorCachingMinTtl,
       ErrorCode: errorCode,
       ResponseCode: responseCode,
       ResponsePagePath: responsePagePath,
     }) => ({
+      id: cuid(),
       errorCachingMinTtl: `${errorCachingMinTtl} ${t.seconds}`,
       errorCode,
       responseCode,
@@ -169,7 +170,7 @@ export default ({
     sslSupportMethod,
   }
 
-  const origin: AwsCloudfrontOriginData[] = originData.map(
+  const origins: AwsCloudfrontOriginData[] = originData.map(
     ({
       CustomHeaders: { Items: customHeader = [] },
       CustomOriginConfig: {
@@ -191,7 +192,8 @@ export default ({
       Id: originId,
       OriginPath: originPath,
     }: Origin) => ({
-      customHeader: customHeader.map(({ HeaderName, HeaderValue }) => ({
+      id: cuid(),
+      customHeaders: customHeader.map(({ HeaderName, HeaderValue }) => ({
         id: cuid(),
         name: HeaderName,
         value: HeaderValue,
@@ -215,8 +217,8 @@ export default ({
     accountId: account,
     arn,
     callerReference,
-    customErrorResponse,
-    orderedCacheBehavior: orderedCacheBehavior.map(item =>
+    customErrorResponses,
+    orderedCacheBehaviors: orderedCacheBehavior.map(item =>
       createCacheBehavior(item)
     ),
     defaultCacheBehavior: createDefaultCacheBehavior(defaultCacheBehavior),
@@ -230,7 +232,7 @@ export default ({
     httpVersion,
     ipv6Enabled: isIpv6Enabled ? t.yes : t.no,
     lastModified: lastModified.toISOString(),
-    origin,
+    origins,
     priceClass,
     status,
     tags: formatTagsFromMap(Tags),

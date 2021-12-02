@@ -1,11 +1,11 @@
 type awsRoute53Record @key(fields: "id") {
   id: String! @id @search(by: [hash])
   accountId: String! @search(by: [hash])
-  zoneId: String
+  zoneId: String @search(by: [hash])
   alias: awsRoute53Alias
-  type: String
-  ttl: Int
-  records: [String]
+  type: String @search(by: [hash, regexp])
+  ttl: Int @search
+  records: [String] @search(by: [hash, regexp])
   route53HostedZone: [awsRoute53HostedZone] @hasInverse(field: route53Record)
   elb: [awsElb] @hasInverse(field: route53Record)
   alb: [awsAlb] @hasInverse(field: route53Record)

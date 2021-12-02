@@ -2,6 +2,7 @@ type awsAlb @key(fields: "arn") {
   id: String!
   accountId: String!
   arn: String! @id
+  region: String @search(by: [hash, regexp])
   dnsName: String @search(by: [hash, regexp])
   scheme: String @search(by: [hash, regexp])
   type: String @search(by: [hash, regexp])
@@ -16,14 +17,13 @@ type awsAlb @key(fields: "arn") {
   dropInvalidHeaderFields: String @search(by: [hash])
   createdAt: String @search(by: [hash, regexp])
   status: String @search(by: [hash])
-  region: String @search(by: [hash, regexp])
   tags: [Tag]
   securityGroups: [awsSecurityGroup] @hasInverse(field: alb)
-  ec2Instance: [awsEc2] @hasInverse(field: alb)
+  ec2Instance: [awsEc2] @hasInverse(field: alb) #change to plural
   vpc: [awsVpc] @hasInverse(field: alb)
-  route53Record: [awsRoute53Record] @hasInverse(field: alb)
+  route53Record: [awsRoute53Record] @hasInverse(field: alb) #change to plural
   listeners: [awsAlbListener]
-  subnet: [awsSubnet] @hasInverse(field: alb)
+  subnet: [awsSubnet] @hasInverse(field: alb) #change to plural
 }
 
 type awsAlbListener

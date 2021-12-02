@@ -159,7 +159,7 @@ describe('EC2 Service Test: ', () => {
               httpPutResponseHopLimit: expect.any(Number),
               httpEndpoint: expect.any(String),
             }),
-            ephemeralBlockDevice: expect.arrayContaining([
+            ephemeralBlockDevices: expect.arrayContaining([
               expect.objectContaining({
                 deviceName: expect.any(String),
               }),

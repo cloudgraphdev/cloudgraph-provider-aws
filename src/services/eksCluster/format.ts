@@ -6,9 +6,11 @@ import { RawAwsEksCluster } from './data'
 export default ({
   service,
   account,
+  region
 }: {
   service: RawAwsEksCluster
   account: string
+  region: string
 }): AwsEksCluster => {
   const {
     arn,
@@ -32,6 +34,7 @@ export default ({
     id: arn,
     arn,
     accountId: account,
+    region,
     name,
     createdAt: createdAt?.toISOString(),
     version,

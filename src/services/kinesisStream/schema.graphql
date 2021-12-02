@@ -26,6 +26,7 @@ type awsKinesisStream @key(fields: "arn") {
   id: String! @search(by: [hash])
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
+  region: String! @search(by: [hash, regexp])
   streamName: String! @search(by: [hash, regexp])
   streamStatus: String! @search(by: [hash, regexp])
   shards: [awsShards]!
@@ -33,6 +34,5 @@ type awsKinesisStream @key(fields: "arn") {
   enhancedMonitoring: [awsShardLevelMetrics!]!
   encryptionType: String @search(by: [hash, regexp])
   keyId: String @search(by: [hash, regexp])
-  region: String! @search(by: [hash, regexp])
   kinesisFirehose: [awsKinesisFirehose] @hasInverse(field: kinesisStream) #change to plural
 }

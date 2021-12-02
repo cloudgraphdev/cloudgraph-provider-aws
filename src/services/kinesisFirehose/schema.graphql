@@ -2,6 +2,7 @@ type awsKinesisFirehose @key(fields: "arn") {
     id: String! @id @search(by: [hash])
     accountId: String! @search(by: [hash])
     arn: String! @id @search(by: [hash, regexp])
+    region: String @search(by: [hash, regexp])
     name: String! @search(by: [hash, regexp])
     deliveryStreamStatus: String! @search(by: [hash, regexp])
     failureDescriptionType: String! @search(by: [hash, regexp])
@@ -12,7 +13,6 @@ type awsKinesisFirehose @key(fields: "arn") {
     createTimestamp: String @search(by: [hash, regexp])
     lastUpdateTimestamp: String @search(by: [hash, regexp])
     source: awsKinesisFirehoseSource
-    region: String @search(by: [hash, regexp])
     kinesisStream: [awsKinesisStream] @hasInverse(field: kinesisFirehose)
     s3: [awsS3] @hasInverse(field: kinesisFirehose)
     tags: [Tag]

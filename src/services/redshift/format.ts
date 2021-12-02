@@ -45,6 +45,7 @@ export default ({
     id: arn,
     accountId: account,
     arn,
+    region,
     allowVersionUpgrade,
     automatedSnapshotRetentionPeriod,
     availabilityZone,

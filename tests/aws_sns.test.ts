@@ -80,6 +80,7 @@ describe('SNS Service Test: ', () => {
         expect.arrayContaining([
           expect.objectContaining({
             arn: expect.any(String),
+            region: expect.any(String),
             policy: expect.objectContaining({
               id: expect.any(String),
               statement: expect.arrayContaining([

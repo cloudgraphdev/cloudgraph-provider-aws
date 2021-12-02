@@ -80,6 +80,6 @@ type awsCloudFormationStack @key(fields: "arn") {
   rootId: String @search(by: [hash, regexp])
   stackDriftInfo: awsCloudFormationStackDriftInfo
   stackDriftList: [awsCloudFormationStackDriftList]
-  # parentStack: awsCloudFormationStack
-  # rootStack: awsCloudFormationStack
+  # parentStack: awsCloudFormationStack TODO: requires work for CG-210 to be complete
+  # rootStack: awsCloudFormationStack TODO: requires work for CG-210 to be complete
 }

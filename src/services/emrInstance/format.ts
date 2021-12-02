@@ -4,9 +4,11 @@ import { RawAwsEmrInstance } from './data'
 export default ({
   service,
   account,
+  region
 }: {
   service: RawAwsEmrInstance
   account: string
+  region
 }): AwsEmrInstance => {
   const {
     Id: id,
@@ -35,6 +37,7 @@ export default ({
   return {
     id,
     accountId: account,
+    region,
     ec2InstanceId,
     publicDnsName,
     publicIpAddress,
