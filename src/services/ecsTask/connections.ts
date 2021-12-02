@@ -30,7 +30,6 @@ export default ({
     data: { [property: string]: RawAwsEcsContainer[] }
   } = data.find(({ name }) => name === services.ecsContainer)
   if (containers?.data?.[region]) {
-    //const containerArns = service?.containers?.map(({ containerArn }) => containerArn)
     const containersInRegion: RawAwsEcsContainer[] = containers.data[region].filter(
       ({ containerInstanceArn }) => containerInstanceArn === service.containerInstanceArn
     )
