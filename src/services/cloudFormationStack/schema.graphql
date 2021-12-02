@@ -53,7 +53,7 @@ type awsCloudFormationStackDriftList {
   resourceType: String @search(by: [hash, regexp])
   timestamp: String @search(by: [hash, regexp])
 }
-
+# add an accountId
 type awsCloudFormationStack @key(fields: "arn") {
   id: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
@@ -73,7 +73,7 @@ type awsCloudFormationStack @key(fields: "arn") {
   timeoutInMinutes: Int @search
   capabilities: [String] @search(by: [hash])
   outputs: [awsCloudFormationStackOutputList]
-  roleARN: String @search(by: [hash, regexp])
+  roleARN: String @search(by: [hash, regexp]) # TODO: make a connection here and update casing
   tags: [Tag]
   enableTerminationProtection: String @search(by: [hash, regexp])
   parentId: String @search(by: [hash, regexp])

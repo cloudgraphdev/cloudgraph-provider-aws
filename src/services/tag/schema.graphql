@@ -1,11 +1,12 @@
+#change to plural for ALL SERVICE FIELDS
 type awsTag @key(fields: "id") {
   id: String! @id @search(by: [hash])
   key: String! @search(by: [hash, regexp])
   value: String! @search(by: [hash, regexp])
-  alb: [awsAlb]
-  asg: [awsAsg]
-  cloudwatch: [awsCloudwatch]
-  cloudfront: [awsCloudfront]
+  alb: [awsAlb] #change to plural
+  asg: [awsAsg] #change to plural
+  cloudwatch: [awsCloudwatch] #change to plural
+  cloudfront: [awsCloudfront] #change to plural
   ebs: [awsEbs]
   eip: [awsEip]
   elb: [awsElb]

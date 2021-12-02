@@ -38,6 +38,7 @@ export default ({
     Tags: tags = {},
     KeyPairName: keyPairName,
     IamInstanceProfile: iamInstanceProfile,
+    cloudWatchMetricData
   } = rawData
 
   const securityGroupIds = securityGroups.map(({ GroupId }) => GroupId)
@@ -96,7 +97,7 @@ export default ({
     },
     securityGroupIds,
     ephemeralBlockDevice,
-    // associatePublicIpAddress: !isEmpty(ipv4PublicIp) ? t.yes : t.no, TODO: Can't be calculated without EIP data
+    cloudWatchMetricData,
     tags: instanceTags,
   }
   return ec2

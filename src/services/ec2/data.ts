@@ -1,5 +1,7 @@
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
+import camelCase from 'lodash/camelCase'
+import cuid from 'cuid'
 
 import EC2, {
   DescribeIamInstanceProfileAssociationsResult,
@@ -12,11 +14,17 @@ import EC2, {
   Instance,
   InstanceAttribute,
 } from 'aws-sdk/clients/ec2'
+import CloudWatch, {
+  GetMetricDataInput,
+  MetricDataQueries,
+  Timestamps,
+} from 'aws-sdk/clients/cloudwatch'
 import { Config } from 'aws-sdk/lib/config'
 import { AWSError } from 'aws-sdk/lib/error'
 
 import CloudGraph from '@cloudgraph/sdk'
 
+import metricsTypes, { metricStats } from './metrics'
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
@@ -32,6 +40,7 @@ export interface RawAwsEC2 extends Omit<Instance, 'Tags'> {
   KeyPairName?: string
   Tags?: TagMap
   IamInstanceProfile?: IamInstanceProfile
+  cloudWatchMetricData?: any
 }
 
 /**
@@ -200,7 +209,11 @@ export default async ({
               { InstanceId, Attribute: 'disableApiTermination' },
               (err: AWSError, data: InstanceAttribute) => {
                 if (err) {
-                  generateAwsErrorLog(serviceName, 'ec2:desrcibeInstanceAttributes', err)
+                  generateAwsErrorLog(
+                    serviceName,
+                    'ec2:desrcibeInstanceAttributes',
+                    err
+                  )
                 }
 
                 /**
@@ -351,25 +364,140 @@ export default async ({
             data: DescribeIamInstanceProfileAssociationsResult
           ) => {
             if (err) {
-              generateAwsErrorLog(serviceName, 'ec2:describeIamInstanceProfileAssociations', err)
+              generateAwsErrorLog(
+                serviceName,
+                'ec2:describeIamInstanceProfileAssociations',
+                err
+              )
             }
 
             const {
               IamInstanceProfileAssociations: iamProfileAssociations = [],
             } = data || {}
 
-            iamProfileAssociations.map(({ InstanceId, IamInstanceProfile: curr }) => {
-              if (!iamInstanceProfile[InstanceId]) {
-                iamInstanceProfile[InstanceId] = {}
+            iamProfileAssociations.map(
+              ({ InstanceId, IamInstanceProfile: curr }) => {
+                if (!iamInstanceProfile[InstanceId]) {
+                  iamInstanceProfile[InstanceId] = {}
+                }
+                iamInstanceProfile[InstanceId] = curr
               }
-              iamInstanceProfile[InstanceId] = curr
-            })
+            )
 
             resolveRegion()
           }
         )
       )
     })
+
+    const metricQueries: MetricDataQueries = ec2Instances
+      .map(({ InstanceId }) => {
+        return metricsTypes.map(metricName => ({
+          Id: `${cuid()}_${metricName}`, // Must be unique across all metrics
+          Label: `${metricName}:${InstanceId}`,
+          MetricStat: {
+            Metric: {
+              Dimensions: [{ Name: 'InstanceId', Value: InstanceId }],
+              Namespace: 'AWS/EC2',
+              MetricName: metricName,
+            },
+            Stat: metricStats[metricName],
+            Period: 60 * 25,
+          },
+        }))
+      })
+      .flat()
+    
+    const getMeticsForTimePeriod = async ({ minsAgo, end = new Date()}): Promise<any> => {
+      const metrics: {
+        metric: string
+        label: string
+        values: number[]
+        timestamps: Timestamps
+      }[] = []
+      const startTime = new Date(Date.now() - 60000 * minsAgo)
+      for (const region of regions.split(',')) {
+        const client = new CloudWatch({ ...config, region })
+        let loopBreak = false
+        let token
+        while (!loopBreak) {
+          const params: GetMetricDataInput = {
+            MetricDataQueries: metricQueries,
+            StartTime: startTime,
+            EndTime: end,
+            NextToken: token,
+          }
+          try {
+            const data = await client.getMetricData(params).promise()
+            if (data && data.MetricDataResults) {
+              for (const result of data.MetricDataResults) {
+                metrics.push({
+                  metric: result.Label.split(':')[0],
+                  label: result.Label.split(':')[1],
+                  values: result.Values,
+                  timestamps: result.Timestamps,
+                })
+              }
+            }
+            if (!data?.NextToken) {
+              loopBreak = true
+            } else {
+              token = data.NextToken
+            }
+          } catch (e: any) {
+            generateAwsErrorLog(
+              serviceName,
+              'cloudwatch:getMetricData',
+              e
+            )
+          }
+        }
+      }
+      return metrics
+    }
+    const timePeriod = {
+      last6Hours: { minsAgo: 360, metrics: []},
+      last24Hours: { minsAgo: 1440, metrics: []},
+      lastWeek: { minsAgo: 10080, metrics: []},
+      lastMonth: { minsAgo: 43800, metrics: []}
+    }
+    // First populate the time periods with the corresponding metrics
+    try {
+      for (const [key, periodObj] of Object.entries(timePeriod)) {
+        const metrics = await getMeticsForTimePeriod({ minsAgo: periodObj.minsAgo })
+        timePeriod[key].metrics = metrics
+      }
+      // Now populate the ec2Instances with the metric data
+      ec2Instances.map(({ InstanceId }, idx) => {
+        ec2Instances[idx].cloudWatchMetricData = {}
+        for (const [key, { metrics }] of Object.entries(timePeriod)) {
+          ec2Instances[idx].cloudWatchMetricData[key] = {}
+          const instanceMetrics = metrics.filter(
+            ({ label }) => label === InstanceId
+          )
+          const groupedMetrics = groupBy(instanceMetrics, 'metric')
+          Object.keys(groupedMetrics).map(metricKey => {
+            const camelKey = camelCase(metricKey)
+            const operator = metricStats[metricKey]
+            ec2Instances[idx].cloudWatchMetricData[key][`${camelKey}${operator}`] = 0
+            const metric = groupedMetrics[metricKey]
+            const filteredMetric: {values: number[], timestamps: Date[]}[] = metric.filter(({ values }) => values.length > 1)
+            let valuesSumOrAverage
+            for (const { values } of filteredMetric) {
+              if (operator === 'Average') {
+                valuesSumOrAverage = values.reduce((prev, curr, _, self) => (curr + prev)/self.length)
+              } else {
+                valuesSumOrAverage = values.reduce((prev, curr) => prev + curr)
+              }
+            }
+            ec2Instances[idx].cloudWatchMetricData[key][`${camelKey}${operator}`] = valuesSumOrAverage
+          })
+        }
+      })
+    } catch (e: unknown) {
+      logger.debug(e)
+      logger.error('There was an issue adding CW metric data to ec2 instances')
+    }
 
     await Promise.all(iamProfileAssociationsPromises)
 

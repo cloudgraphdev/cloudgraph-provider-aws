@@ -19,7 +19,7 @@ type awsApiGatewayRestApi @key(fields: "arn") {
   binaryMediaTypes: [String] @search(by: [hash, regexp])
   stages: [awsApiGatewayStage] @hasInverse(field: restApi)
   resources: [awsApiGatewayResource] @hasInverse(field: restApi)
-  route53Record: [awsRoute53Record] @hasInverse(field: restApi)
+  route53Record: [awsRoute53Record] @hasInverse(field: restApi) #change to plural
 }
 
 

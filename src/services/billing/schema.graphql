@@ -1,3 +1,4 @@
+# TODO: change to accountId
 type awsBilling {
   id: String!
   account: String! @id @search(by: [hash])

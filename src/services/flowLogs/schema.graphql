@@ -17,8 +17,8 @@ type awsFlowLog @key(fields: "id") {
   tags: [Tag]
   vpc: [awsVpc] @hasInverse(field: flowLogs)
   iamRole: [awsIamRole] @hasInverse(field: flowLogs)
-  networkInterface: [awsNetworkInterface] @hasInverse(field: flowLogs)
-  subnet: [awsSubnet] @hasInverse(field: flowLogs)
+  networkInterface: [awsNetworkInterface] @hasInverse(field: flowLogs) #change to plural
+  subnet: [awsSubnet] @hasInverse(field: flowLogs) #change to plural
   # destinationOptions: awsDestinationOptions Cant find in the aws SDK flow log type but is in docs, investigate later
 }
 

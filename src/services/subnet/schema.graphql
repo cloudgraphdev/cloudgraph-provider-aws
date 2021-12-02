@@ -12,19 +12,19 @@ type awsSubnet @key(fields: "id") {
   ipV6Cidr: String @search(by: [hash, regexp])
   state: String @search(by: [hash, regexp])
   tags: [Tag]
-  alb: [awsAlb] @hasInverse(field: subnet)
-  asg: [awsAsg] @hasInverse(field: subnet)
-  ec2Instance: [awsEc2] @hasInverse(field: subnet)
-  elb: [awsElb] @hasInverse(field: subnet)
-  lambda: [awsLambda] @hasInverse(field: subnet)
-  natGateway: [awsNatGateway] @hasInverse(field: subnet)
-  networkInterface: [awsNetworkInterface] @hasInverse(field: subnet)
+  alb: [awsAlb] @hasInverse(field: subnet) #change to plural
+  asg: [awsAsg] @hasInverse(field: subnet) #change to plural
+  ec2Instance: [awsEc2] @hasInverse(field: subnet) #change to plural
+  elb: [awsElb] @hasInverse(field: subnet) #change to plural
+  lambda: [awsLambda] @hasInverse(field: subnet) #change to plural
+  natGateway: [awsNatGateway] @hasInverse(field: subnet) #change to plural
+  networkInterface: [awsNetworkInterface] @hasInverse(field: subnet) #change to plural
   routeTable: [awsRouteTable] @hasInverse(field: subnet)
   vpc: [awsVpc] @hasInverse(field: subnet)
-  rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: subnet)
-  eksCluster: [awsEksCluster] @hasInverse(field: subnet)
-  ecsService: [awsEcsService] @hasInverse(field: subnet)
-  efsMountTarget: [awsEfsMountTarget] @hasInverse(field: subnet)
-  flowLogs: [awsFlowLog] @hasInverse(field: subnet)
-  emrCluster: [awsEmrCluster] @hasInverse(field: subnet)
+  rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: subnet) #change to plural
+  eksCluster: [awsEksCluster] @hasInverse(field: subnet) #change to plural
+  ecsService: [awsEcsService] @hasInverse(field: subnet) #change to plural
+  efsMountTarget: [awsEfsMountTarget] @hasInverse(field: subnet) #change to plural
+  flowLogs: [awsFlowLog] @hasInverse(field: subnet) #change to singular
+  emrCluster: [awsEmrCluster] @hasInverse(field: subnet) #change to plural
 }
