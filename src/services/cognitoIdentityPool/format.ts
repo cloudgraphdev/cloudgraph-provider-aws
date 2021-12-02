@@ -1,4 +1,5 @@
 import { IdentityProviders } from 'aws-sdk/clients/cognitoidentity';
+import cuid from 'cuid';
 import t from '../../properties/translations'
 
 import { AwsCognitoIdentityPool, AwsSupportedLoginProvider } from '../../types/generated';
@@ -45,12 +46,12 @@ export default ({
     ProviderName: providerName,
     ClientId: clientId,
     ServerSideTokenCheck: serverSideTokenCheck,
-  }) => { return {
+  }) => ({
+    id: cuid(),
     providerName,
     clientId,
     serverSideTokenCheck: serverSideTokenCheck? t.yes : t.no,
-  }
-  }) || []
+  })) || []
 
   const identityPool  = {
     id: identityPoolId,

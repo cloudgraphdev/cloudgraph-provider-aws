@@ -55,7 +55,7 @@ export default ({
     .reduce((current, acc) => [...acc, ...current], [])
     .map(({ Ipv6Address }) => Ipv6Address)
 
-  const ephemeralBlockDevice = blockDeviceMappings
+  const ephemeralBlockDevices = blockDeviceMappings
     .filter(({ Ebs: { DeleteOnTermination } }) => DeleteOnTermination)
     .map(({ DeviceName }) => ({ deviceName: DeviceName }))
 
@@ -69,7 +69,6 @@ export default ({
     region,
     ami,
     tenancy: placement?.Tenancy || '',
-    // elasticIps: eips.map(({ AllocationId }) => AllocationId).join(', '),  TODO: Can't be calculated without EIP data
     publicDns,
     privateDns,
     monitoring: monitoring?.State || '',
@@ -78,7 +77,6 @@ export default ({
     cpuCoreCount: cpuOptions?.CoreCount || 0,
     hibernation: hibernationOptions?.Configured ? t.yes : t.no,
     ebsOptimized: ebsOptimized ? t.yes : t.no,
-    // ipv4PublicIp,  TODO: Can't be calculated without EIP data
     instanceType,
     ipv6Addresses,
     placementGroup: placement?.GroupName || '',
@@ -96,7 +94,7 @@ export default ({
       httpEndpoint: metadata?.HttpEndpoint || '',
     },
     securityGroupIds,
-    ephemeralBlockDevice,
+    ephemeralBlockDevices,
     cloudWatchMetricData,
     tags: instanceTags,
   }

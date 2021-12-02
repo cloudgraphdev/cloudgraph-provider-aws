@@ -39,6 +39,7 @@ export default ({
     id: arn,
     accountId: account,
     arn,
+    region,
     tags: formatTagsFromMap(Tags),
     policy: formatIamJsonPolicy(policy),
     displayName,

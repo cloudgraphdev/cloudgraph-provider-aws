@@ -157,7 +157,7 @@ export default ({
     adminCreateUserConfigInviteMessageTemplateEmailSubject: adminCreateUserConfig?.InviteMessageTemplate?.EmailSubject || '',
     userPoolAddOnsAdvancedSecurityMode: userPoolAddOns?.AdvancedSecurityMode || '',
     usernameConfigurationCaseSensitive: usernameConfiguration?.CaseSensitive? t.yes : t.no,
-    accountRecoverySetting: accountRecoverySettings,
+    accountRecoverySettings,
     region,
     tags: formatTagsFromMap(userPoolTags),
   }

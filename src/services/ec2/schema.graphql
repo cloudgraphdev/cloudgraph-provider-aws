@@ -95,7 +95,7 @@ type awsEc2 @key(fields: "arn") {
   metadataOptions: awsEc2MetadataOptions
   metadatasecurityGroupIdsOptions: [String] @search(by: [hash])
   securityGroupIds: [String] @search(by: [hash])
-  ephemeralBlockDevice: [awsEc2Blockdevice]
+  ephemeralBlockDevices: [awsEc2Blockdevice]
   associatePublicIpAddress: String @search(by: [hash, regexp])
   cloudWatchMetricData: awsEc2CloudWatchMetricsTimePeriods
   tags: [Tag]

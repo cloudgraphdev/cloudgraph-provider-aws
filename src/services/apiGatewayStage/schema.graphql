@@ -4,7 +4,7 @@ type awsAccessLogSettings
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-  id: ID
+  id: ID #TODO: update to use String! @id to avoid duplicates
   format: String @search(by: [hash])
   destinationArn: String @search(by: [hash, regexp])
 }

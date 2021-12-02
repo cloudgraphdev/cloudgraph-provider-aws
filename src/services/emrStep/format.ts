@@ -5,9 +5,11 @@ import { RawAwsEmrStep } from './data'
 export default ({
   service,
   account,
+  region
 }: {
   service: RawAwsEmrStep
   account: string
+  region: string
 }): AwsEmrStep => {
   const {
     Id: id,
@@ -45,6 +47,7 @@ export default ({
   return {
     id,
     accountId: account,
+    region,
     name,
     config: {
       jar,

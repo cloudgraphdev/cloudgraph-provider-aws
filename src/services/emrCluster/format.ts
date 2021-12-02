@@ -9,9 +9,11 @@ import { RawAwsEmrCluster } from './data'
 export default ({
   service,
   account,
+  region
 }: {
   service: RawAwsEmrCluster
   account: string
+  region: string
 }): AwsEmrCluster => {
   const {
     ClusterArn: arn,
@@ -103,6 +105,7 @@ export default ({
     id: arn,
     arn,
     accountId: account,
+    region,
     status: {
       state,
       stateChangeReason: {

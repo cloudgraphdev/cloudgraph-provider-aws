@@ -1,4 +1,3 @@
-# TODO: add region to this
 type awsCloudfront @key(fields: "id") {
   id: String! @id @search(by: [hash])
   accountId: String! @search(by: [hash])
@@ -15,18 +14,19 @@ type awsCloudfront @key(fields: "id") {
   defaultRootObject: String @search(by: [hash])
   webAclId: String @search(by: [hash])
   geoRestrictions: String @search(by: [hash, regexp])
-  customErrorResponse: [awsCloudfrontCustomErrorResponse] #change to plural
+  customErrorResponses: [awsCloudfrontCustomErrorResponse]
   defaultCacheBehavior: awsCloudfrontCacheBehavior
-  orderedCacheBehavior: [awsCloudfrontCacheBehavior] #change to plural
+  orderedCacheBehaviors: [awsCloudfrontCacheBehavior]
   viewerCertificate: awsCloudfrontViewerCertificate
-  origin: [awsCloudfrontOriginData] #change to plural
+  origins: [awsCloudfrontOriginData]
   elb: [awsElb] @hasInverse(field: cloudfrontDistribution)
   s3: [awsS3] @hasInverse(field: cloudfrontDistribution)
   tags: [Tag]
 }
 
 type awsCloudfrontOriginData {
-  customHeader: [awsCloudfrontOriginCustomHeader]
+  id: String! @id @search(by: [hash])
+  customHeaders: [awsCloudfrontOriginCustomHeader]
   customOriginConfig: awsCloudfrontCustomOriginConfig
   domainName: String @search(by: [hash, regexp])
   originId: String! @id @search(by: [hash])
@@ -48,7 +48,7 @@ type awsCloudfrontCustomOriginConfig {
 }
 
 type awsCloudfrontOriginCustomHeader {
-  id: String! @search(by: [hash])
+  id: String! @id @search(by: [hash])
   name: String @search(by: [hash, regexp])
   value: String @search(by: [hash, regexp])
 }
@@ -67,7 +67,7 @@ type awsCloudfrontViewerCertificate {
 }
 
 type awsCloudfrontCacheBehavior {
-  id: String! @search(by: [hash])
+  id: String! @id @search(by: [hash])
   allowedMethods: [String] @search(by: [hash])
   cachedMethods: [String] @search(by: [hash])
   compress: String @search(by: [hash])
@@ -83,7 +83,7 @@ type awsCloudfrontCacheBehavior {
 
 
 type awsCloudfrontCustomErrorResponse {
-  # id: String! @search(by: [hash])
+  id: String! @id @search(by: [hash])
   errorCachingMinTtl: String @search(by: [hash])
   errorCode: Int @search
   responseCode: String @search(by: [hash, regexp])

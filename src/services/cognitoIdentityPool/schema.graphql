@@ -4,8 +4,8 @@ type awsSupportedLoginProvider
     mutation: { add: false, delete: false }
     subscription: false
   ) {
+    identityProviderId: String! @id @search(by: [hash, regexp])
     identityProvider: String @search(by: [hash, regexp])
-    identityProviderId: String @search(by: [hash, regexp])
   }
 
 type awsCognitoIdentityProviders
@@ -14,6 +14,7 @@ type awsCognitoIdentityProviders
     mutation: { add: false, delete: false }
     subscription: false
   ) {
+    id: String! @id
     providerName: String @search(by: [hash, regexp])
     clientId: String @search(by: [hash, regexp])
     serverSideTokenCheck: String @search(by: [hash, regexp])
