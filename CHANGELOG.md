@@ -1,3 +1,24 @@
+# [0.47.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.46.1...0.47.0) (2021-12-02)
+
+
+### Bug Fixes
+
+* **emr:** add generate directive disable query subtypes ([160515a](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/160515a78cc2a0228d789ce34b9a3e492ee7cec3))
+* **emr:** add pagination marker on listSteps options ([bbef283](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/bbef283e61cd27262fb14e21296312024a6e7206))
+* **emr:** add safety to attribute destructing ([1e9ff29](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/1e9ff294abd32635bc808a5dd50ac6c674632d5d))
+* **emr:** add tag connection ([ae8184f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/ae8184f311fdc637e21eb1794a0cfbab98b7c315))
+* **emr:** remove unused Tags on raw types ([c9f98e7](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c9f98e742c667eb3e446e9e87223cf5f63e20358))
+* **emr:** replace logger.info with logger.debug ([3d7ee4d](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/3d7ee4d0741695e8632d18938c77462ba81c99ea))
+* **emr:** replace logger.info with logger.debug ([bd1efc7](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/bd1efc7cd3923f45dcf1a09ca3a7bcfaab563caf))
+* **emr:** use relations, check for existing clusters, add schema names to schemasMap ([a7d6474](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a7d6474691f639d251e55cd46a1fc51b1a779d8a))
+* Included latest delivery time for cloudwatch logs ([eb22da8](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/eb22da81ac2de4e883827071a65fcb70affe6383))
+
+
+### Features
+
+* **emr:** add emr cluster/instance/step service ([5b52041](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/5b52041e40fe542681b516e7e8a85f703d2e5030))
+* **services:** add cw metrics to ec2 data, add todos to schemas for updating naming ([7e32b74](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/7e32b742c310edccd55729b0204dfcebc5a24b5e))
+
 ## [0.46.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.46.0...0.46.1) (2021-11-26)
 
 
