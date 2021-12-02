@@ -49,19 +49,6 @@ type awsEcsResource
     stringSetValue: [String] @search(by: [hash])
   }
 
-type awsEcsAttribute
-  @generate(
-    query: { get: false, query: true, aggregate: false }
-    mutation: { add: false, delete: false }
-    subscription: false
-  ) {
-    id: String! @id @search(by: [hash])
-    name: String @search(by: [hash, regexp])
-    value: String @search(by: [hash, regexp])
-    targetType: String @search(by: [hash, regexp])
-    targetId: String @search(by: [hash, regexp])
-  }
-
 type awsEcsAttachment
   @generate(
     query: { get: false, query: true, aggregate: false }

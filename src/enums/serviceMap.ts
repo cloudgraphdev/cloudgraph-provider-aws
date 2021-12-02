@@ -26,6 +26,8 @@ import EcsCluster from '../services/ecsCluster'
 import EcsContainer from '../services/ecsContainer'
 import EcsService from '../services/ecsService'
 import EcsTask from '../services/ecsTask'
+import EcsTaskDefinition from '../services/ecsTaskDefinition'
+import EcsTaskSet from '../services/ecsTaskSet'
 import EFS from '../services/efs'
 import EfsMountTarget from '../services/efsMountTarget'
 import EIP from '../services/eip'
@@ -140,5 +142,7 @@ export default {
   [services.ecsContainer]: EcsContainer,
   [services.ecsService]: EcsService,
   [services.ecsTask]: EcsTask,
+  [services.ecsTaskDefinition]: EcsTaskDefinition,
+  [services.ecsTaskSet]: EcsTaskSet,
   tag: AwsTag,
 }

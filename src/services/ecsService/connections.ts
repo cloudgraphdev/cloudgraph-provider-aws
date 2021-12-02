@@ -3,9 +3,10 @@ import { isEmpty } from 'lodash'
 import { SecurityGroup } from 'aws-sdk/clients/ec2'
 import { RawAwsEcsService } from '../ecsService/data'
 import { RawAwsSubnet } from '../subnet/data' 
-import { RawAwsVpc } from '../vpc/data'
 import { RawAwsElb } from '../elb/data'
 import { RawAwsEcsCluster } from '../ecsCluster/data'
+import { RawAwsEcsTaskSet } from '../ecsTaskSet/data'
+import { RawAwsEcsTaskDefinition } from '../ecsTaskDefinition/data'
 import services from '../../enums/services'
 
 export default ({
@@ -26,6 +27,7 @@ export default ({
   const sgIds = service?.networkConfiguration?.awsvpcConfiguration?.securityGroups
   const subnetIds = service?.networkConfiguration?.awsvpcConfiguration?.subnets
   const elbNames = service?.loadBalancers?.map(({loadBalancerName}) => loadBalancerName)
+  const taskSetArns = service?.taskSets?.map(({taskSetArn}) => taskSetArn)
 
   /**
    * Find Security Groups 
@@ -123,6 +125,48 @@ export default ({
           resourceType: services.ecsCluster,
           relation: 'child',
           field: 'ecsCluster',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find related ECS task set
+   */
+  const ecsTaskSets: { name: string; data: { [property: string]: any[] } } =
+    data.find(({ name }) => name === services.ecsTaskSet)
+  if (ecsTaskSets?.data?.[region]) {
+    const dataAtRegion: RawAwsEcsTaskSet[] = ecsTaskSets.data[region].filter(
+      ({ taskSetArn }: RawAwsEcsTaskSet) => taskSetArns.includes(taskSetArn)
+    )
+    if (!isEmpty(dataAtRegion)) {
+      for (const instance of dataAtRegion) {
+        connections.push({
+          id: instance.taskSetArn,
+          resourceType: services.ecsTaskSet,
+          relation: 'child',
+          field: 'ecsTaskSet',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find related ECS task definition
+   */
+  const ecsTaskDefinitions: { name: string; data: { [property: string]: any[] } } =
+    data.find(({ name }) => name === services.ecsTaskDefinition)
+  if (ecsTaskDefinitions?.data?.[region]) {
+    const dataAtRegion: RawAwsEcsTaskDefinition[] = ecsTaskDefinitions.data[region].filter(
+      ({ taskDefinitionArn }: RawAwsEcsTaskDefinition) => taskDefinitionArn === service.taskDefinition
+    )
+    if (!isEmpty(dataAtRegion)) {
+      for (const instance of dataAtRegion) {
+        connections.push({
+          id: instance.taskDefinitionArn,
+          resourceType: services.ecsTaskDefinition,
+          relation: 'child',
+          field: 'ecsTaskDefinition',
         })
       }
     }

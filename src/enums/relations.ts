@@ -7,4 +7,5 @@ export default {
   apiGatewayRestApi: ['apiGatewayResource', 'apiGatewayStage'],
   route53HostedZone: ['route53Record'],
   emrCluster: ['emrInstance', 'emrStep'],
+  ecsService: ['ecsTaskSet', 'ecsTaskDefinition'],
 }

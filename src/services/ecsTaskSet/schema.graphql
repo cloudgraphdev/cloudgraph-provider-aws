@@ -1,0 +1,27 @@
+type awsEcsTaskSet @key(fields: "arn") {
+  id: String! @search(by: [hash])
+  accountId: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
+  startedBy: String @search(by: [hash, regexp])
+  externalId: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
+  computedDesiredCount: Int @search
+  pendingCount: Int @search
+  runningCount: Int @search
+  createdAt: String @search(by: [hash, regexp])
+  updatedAt: String @search(by: [hash, regexp])
+  launchType: String @search(by: [hash, regexp])
+  capacityProviderStrategy: [awsEcsCapacityProviderStrategyItem]
+  platformVersion: String @search(by: [hash, regexp])
+  networkConfiguration: awsEcsNetworkConfiguration
+  loadBalancers: [awsEcsLoadBalancer]
+  serviceRegistries: [awsEcsServiceRegistry]
+  scale: awsEcsScale
+  stabilityStatus: String @search(by: [hash, regexp])
+  stabilityStatusAt: String @search(by: [hash, regexp])
+  tags: [Tag]
+  ecsService: [awsEcsService] @hasInverse(field: ecsTaskSet)
+  ecsCluster: [awsEcsCluster] @hasInverse(field: ecsTaskSet)
+  ecsTaskDefinition: [awsEcsTaskDefinition] @hasInverse(field: ecsTaskSet)
+}

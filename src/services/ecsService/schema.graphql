@@ -3,7 +3,6 @@ type awsEcsService @key(fields: "arn") {
 	arn: String! @id @search(by: [hash, regexp])
   accountId: String! @search(by: [hash, regexp])
   serviceName: String @search(by: [hash, regexp])
-  clusterArn: String @search(by: [hash, regexp])
   loadBalancers: [awsEcsLoadBalancer]
   serviceRegistries: [awsEcsServiceRegistry]
   status: String @search(by: [hash, regexp])
@@ -11,11 +10,9 @@ type awsEcsService @key(fields: "arn") {
   runningCount: Int @search
   pendingCount: Int @search
   launchType: String @search(by: [hash, regexp])
-  capacityProviderStrategy: awsEcsCapacityProviderStrategy
+  capacityProviderStrategy: [awsEcsCapacityProviderStrategyItem]
   platformVersion: String @search(by: [hash, regexp])
-  taskDefinition: String @search(by: [hash, regexp])
   deploymentConfiguration: awsEcsDeploymentConfiguration
-  taskSets: [awsEcsTaskSet]
   deployments: [awsEcsDeployment]
   roleArn: String @search(by: [hash, regexp])
   events: [awsEcsServiceEvent]
@@ -32,6 +29,8 @@ type awsEcsService @key(fields: "arn") {
   enableExecuteCommand: Boolean @search
   tags: [Tag]
   ecsCluster: [awsEcsCluster] @hasInverse(field: ecsService)
+  ecsTaskDefinition: [awsEcsTaskDefinition] @hasInverse(field: ecsService)
+  ecsTaskSet: [awsEcsTaskSet] @hasInverse(field: ecsService)
   elb: [awsElb] @hasInverse(field: ecsService)
   iamRoles: [awsIamRole] @hasInverse(field: ecsService)
   securityGroups: [awsSecurityGroup] @hasInverse(field: ecsService)
@@ -54,7 +53,7 @@ type awsEcsDeployment
     failedTasks: Int @search
     createdAt: String @search(by: [hash, regexp])
     updatedAt: String @search(by: [hash, regexp])
-    capacityProviderStrategy: awsEcsCapacityProviderStrategy
+    capacityProviderStrategy: [awsEcsCapacityProviderStrategyItem]
     launchType: String @search(by: [hash, regexp])
     platformVersion: String @search(by: [hash, regexp])
     networkConfiguration: awsEcsNetworkConfiguration
@@ -68,39 +67,8 @@ type awsEcsScale
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
     value: Int @search
     unit: String @search(by: [hash, regexp])
-  }
-
-type awsEcsTaskSet
-  @generate(
-    query: { get: false, query: true, aggregate: false }
-    mutation: { add: false, delete: false }
-    subscription: false
-  ) {
-    id: String! @id @search(by: [hash])
-    taskSetArn: String @search(by: [hash, regexp])
-    serviceArn: String @search(by: [hash, regexp])
-    clusterArn: String @search(by: [hash, regexp])
-    startedBy: String @search(by: [hash, regexp])
-    externalId: String @search(by: [hash])
-    status: String @search(by: [hash, regexp])
-    taskDefinition: String @search(by: [hash, regexp])
-    computedDesiredCount: Int @search
-    pendingCount: Int @search
-    runningCount: Int @search
-    createdAt: String @search(by: [hash, regexp])
-    updatedAt: String @search(by: [hash, regexp])
-    launchType: String @search(by: [hash, regexp])
-    capacityProviderStrategy: awsEcsCapacityProviderStrategy
-    platformVersion: String @search(by: [hash, regexp])
-    networkConfiguration: awsEcsNetworkConfiguration
-    loadBalancers: [awsEcsLoadBalancer]
-    serviceRegistries: [awsEcsServiceRegistry]
-    scale: awsEcsScale
-    stabilityStatus: String @search(by: [hash, regexp])
-    stabilityStatusAt: String @search(by: [hash, regexp])
   }
 
 type awsEcsServiceEvent
@@ -142,7 +110,6 @@ type awsEcsAwsVpcConfiguration
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
     subnets: [String] @search(by: [hash])
     securityGroups: [String] @search(by: [hash])
     assignPublicIp: String @search(by: [hash, regexp])
@@ -154,7 +121,6 @@ type awsEcsNetworkConfiguration
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
     awsvpcConfiguration: awsEcsAwsVpcConfiguration
   }
 

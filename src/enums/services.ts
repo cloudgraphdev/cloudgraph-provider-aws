@@ -22,6 +22,8 @@ export default {
   ecsContainer: 'ecsContainer',
   ecsService: 'ecsService',
   ecsTask: 'ecsTask',
+  ecsTaskDefinition: 'ecsTaskDefinition',
+  ecsTaskSet: 'ecsTaskSet',
   efs: 'efs',
   efsMountTarget: 'efsMountTarget',
   eip: 'eip',

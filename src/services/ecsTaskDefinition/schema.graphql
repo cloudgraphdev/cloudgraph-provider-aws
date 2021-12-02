@@ -1,0 +1,419 @@
+type awsEcsTaskDefinition @key(fields: "arn") {
+  id: String! @search(by: [hash])
+  accountId: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
+  containerDefinitions: [awsEcsContainerDefinition]
+  family: String @search(by: [hash, regexp])
+  taskRoleArn: String @search(by: [hash, regexp])
+  executionRoleArn: String @search(by: [hash, regexp])
+  networkMode: String @search(by: [hash, regexp])
+  revision: Int @search
+  volumes: [awsEcsVolume]
+  status: String @search(by: [hash, regexp])
+  requiresAttributes: [awsEcsAttribute]
+  placementConstraints: [awsEcsTaskDefinitionPlacementConstraint]
+  compatibilities: [String] @search(by: [hash])
+  requiresCompatibilities: [String] @search(by: [hash])
+  cpu: String @search(by: [hash, regexp])
+  memory: String @search(by: [hash, regexp])
+  inferenceAccelerators: [awsEcsInferenceAccelerator]
+  pidMode: String @search(by: [hash, regexp])
+  ipcMode: String @search(by: [hash, regexp])
+  proxyConfiguration: awsEcsProxyConfiguration
+  registeredAt: String @search(by: [hash, regexp])
+  deregisteredAt: String @search(by: [hash, regexp])
+  registeredBy: String @search(by: [hash, regexp])
+  ephemeralStorage: awsEcsEphemeralStorage
+  ecsService: [awsEcsService] @hasInverse(field: ecsTaskDefinition)
+  ecsTask: [awsEcsTask] @hasInverse(field: ecsTaskDefinition)
+  ecsTaskSet: [awsEcsTaskSet] @hasInverse(field: ecsTaskDefinition)
+}
+
+type awsEcsContainerDefinition
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  name: String @search(by: [hash, regexp])
+  image: String @search(by: [hash, regexp])
+  repositoryCredentials: awsEcsRepositoryCredentials
+  cpu: Int @search
+  memory: Int @search
+  memoryReservation: Int @search
+  links: [String] @search(by: [hash])
+  portMappings: [awsEcsPortMapping]
+  essential: Boolean @search
+  entryPoint: [String] @search(by: [hash])
+  command: [String] @search(by: [hash])
+  environment: [awsEcsEnvironmentVariables]
+  environmentFiles: [awsEcsEnvironmentFile]
+  mountPoints: [awsEcsMountPoint]
+  volumesFrom: [awsEcsVolumeFrom]
+  linuxParameters: awsEcsLinuxParameters
+  secrets: [awsEcsSecret]
+  dependsOn: [awsEcsContainerDependency]
+  startTimeout: Int @search
+  stopTimeout: Int @search
+  hostname: String @search(by: [hash, regexp])
+  user: String @search(by: [hash, regexp])
+  workingDirectory: String @search(by: [hash, regexp])
+  disableNetworking: Boolean @search
+  privileged: Boolean @search
+  readonlyRootFilesystem: Boolean @search
+  dnsServers: [String] @search(by: [hash])
+  dnsSearchDomains: [String] @search(by: [hash])
+  extraHosts: [awsEcsHostEntry]
+  dockerSecurityOptions: [String] @search(by: [hash])
+  interactive: Boolean @search
+  pseudoTerminal: Boolean @search
+  dockerLabels: [awsEcsDockerLabel]
+  ulimits: [awsEcsUlimit]
+  logConfiguration: awsEcsLogConfiguration
+  healthCheck: awsEcsHealthCheck
+  systemControls: [awsEcsSystemControl]
+  resourceRequirements: [awsEcsResourceRequirement]
+  firelensConfiguration: awsEcsFirelensConfiguration
+}
+
+type awsEcsVolume
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  name: String @search(by: [hash, regexp])
+  host: awsEcsHostVolumeProperty
+  dockerVolumeConfiguration: awsEcsDockerVolumeConfiguration
+  efsVolumeConfiguration: awsEcsEfsVolumeConfiguration
+  fsxWindowsFileServerVolumeConfiguration: awsEcsFSxWindowsFileServerVolumeConfiguration
+}
+
+type awsEcsTaskDefinitionPlacementConstraint
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  type: String @search(by: [hash, regexp])
+  expression: String @search(by: [hash, regexp])
+}
+
+type awsEcsProxyConfiguration
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  type: String @search(by: [hash, regexp])
+  containerName: String @search(by: [hash, regexp])
+  properties: [awsEcsProxyConfigurationProperty]
+}
+
+type awsEcsRepositoryCredentials
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  credentialsParameter: String @search(by: [hash, regexp])
+}
+
+type awsEcsPortMapping
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  containerPort: Int @search
+  hostPort: Int @search
+  protocol: String @search(by: [hash, regexp])
+}
+
+type awsEcsMountPoint
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  sourceVolume: String @search(by: [hash, regexp])
+  containerPath: String @search(by: [hash, regexp])
+  readOnly: Boolean @search
+}
+
+type awsEcsVolumeFrom
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  sourceContainer: String @search(by: [hash, regexp])
+  readOnly: Boolean @search
+}
+
+type awsEcsLinuxParameters
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  capabilities: awsEcsKernelCapabilities
+  devices: [awsEcsDevice]
+  initProcessEnabled: Boolean @search
+  sharedMemorySize: Int @search
+  tmpfs: [awsEcsTmpfs]
+  maxSwap: Int @search
+  swappiness: Int @search
+}
+
+type awsEcsContainerDependency
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  containerName: String @search(by: [hash, regexp])
+  condition: String @search(by: [hash, regexp])
+}
+
+type awsEcsHostEntry
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  hostname: String @search(by: [hash, regexp])
+  ipAddress: String @search(by: [hash, regexp])
+}
+
+type awsEcsDockerLabel
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  key: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
+}
+
+type awsEcsUlimit
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  name: String @search(by: [hash, regexp])
+  softLimit: Int @search
+  hardLimit: Int @search
+}
+
+type awsEcsLogConfiguration
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  logDriver: String @search(by: [hash, regexp])
+  options: [awsEcsLogConfigurationOption]
+  secretOptions: [awsEcsSecret]
+}
+
+type awsEcsHealthCheck
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  command: [String] @search(by: [hash])
+  interval: Int @search
+  timeout: Int @search
+  retries: Int @search
+  startPeriod: Int @search
+}
+
+type awsEcsSystemControl
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  namespace: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
+}
+
+type awsEcsFirelensConfiguration
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  type: String @search(by: [hash, regexp])
+  options: [awsEcsFirelensConfigurationOption]
+}
+
+type awsEcsFirelensConfigurationOption
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  key: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
+}
+
+type awsEcsKernelCapabilities
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  add: [String] @search(by: [hash])
+  drop: [String] @search(by: [hash])
+}
+
+type awsEcsDevice
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  hostPath: String @search(by: [hash, regexp])
+  containerPath: String @search(by: [hash, regexp])
+  permissions: [String] @search(by: [hash])
+}
+
+type awsEcsTmpfs
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  containerPath: String @search(by: [hash, regexp])
+  size: Int @search
+  mountOptions: [String] @search(by: [hash])
+}
+
+type awsEcsLogConfigurationOption
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  key: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
+}
+
+type awsEcsSecret
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  name: String @search(by: [hash, regexp])
+  valueFrom: String @search(by: [hash, regexp])
+}
+
+type awsEcsProxyConfigurationProperty
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  key: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
+}
+
+type awsEcsHostVolumeProperty
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  sourcePath: String @search(by: [hash, regexp])
+}
+
+type awsEcsDockerVolumeConfiguration
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  scope: String @search(by: [hash, regexp])
+  autoprovision: Boolean @search
+  driver: String @search(by: [hash, regexp])
+  driverOpts: [awsEcsStringMap]
+  labels: [awsEcsStringMap]
+}
+
+type awsEcsStringMap
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  key: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
+}
+
+type awsEcsEfsVolumeConfiguration
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  fileSystemId: String @search(by: [hash, regexp])
+  rootDirectory: String @search(by: [hash, regexp])
+  transitEncryption: String @search(by: [hash, regexp])
+  transitEncryptionPort: Int @search
+  authorizationConfig: awsEfsEFSAuthorizationConfig
+}
+
+type awsEcsFSxWindowsFileServerVolumeConfiguration
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  fileSystemId: String @search(by: [hash])
+  rootDirectory: String @search(by: [hash, regexp])
+  authorizationConfig: awsEcsFSxWindowsFileServerAuthorizationConfig
+}
+
+type awsEcsFSxWindowsFileServerAuthorizationConfig
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  credentialsParameter: String @search(by: [hash, regexp])
+  domain: String @search(by: [hash, regexp])
+}
+
+type awsEfsEFSAuthorizationConfig
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  accessPointId: String @search(by: [hash, regexp])
+  iam: String @search(by: [hash, regexp])
+}
