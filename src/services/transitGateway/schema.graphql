@@ -1,0 +1,35 @@
+type awsTransitGateway @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+  accountId: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
+  ownerId: String! @search(by: [hash])
+  description: String @search(by: [hash, regexp])
+  dnsSupport: String @search(by: [hash, regexp])
+  vpnEcmpSupport: String @search(by: [hash, regexp])
+  amazonSideAsn: String @search(by: [hash, regexp])
+  autoAcceptSharedAttachments: String @search(by: [hash, regexp])
+  defaultRouteTableAssociation: String @search(by: [hash, regexp])
+  defaultRouteTablePropagation: String @search(by: [hash, regexp])
+  associationDefaultRouteTableId: String @search(by: [hash, regexp])
+  propagationDefaultRouteTableId: String @search(by: [hash, regexp])
+  tags: [Tag]
+  children: [awsVpcAttachment]
+}
+
+type awsVpcAttachment
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  vpcId: String! @id
+  vpcOwnerId: String
+  dnsSupport: String
+  ipv6Support: String
+  transitGatewayId: String
+  transitGatewayDefaultRouteTableAssociation: Boolean
+  transitGatewayDefaultRouteTablePropagation: Boolean
+  subnetIds: [String]
+  tags: [Tag]
+}

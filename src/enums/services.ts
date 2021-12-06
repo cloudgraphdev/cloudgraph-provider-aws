@@ -68,4 +68,5 @@ export default {
   sqs: 'sqs',
   subnet: 'subnet',
   vpc: 'vpc',
+  transitGateway: 'transitGateway',
 }

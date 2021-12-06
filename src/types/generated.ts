@@ -3125,6 +3125,25 @@ export type AwsTotalBillingInfo = {
   formattedCost?: Maybe<Scalars['String']>;
 };
 
+export type AwsTransitGateway = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  ownerId: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  dnsSupport?: Maybe<Scalars['String']>;
+  vpnEcmpSupport?: Maybe<Scalars['String']>;
+  amazonSideAsn?: Maybe<Scalars['String']>;
+  autoAcceptSharedAttachments?: Maybe<Scalars['String']>;
+  defaultRouteTableAssociation?: Maybe<Scalars['String']>;
+  defaultRouteTablePropagation?: Maybe<Scalars['String']>;
+  associationDefaultRouteTableId?: Maybe<Scalars['String']>;
+  propagationDefaultRouteTableId?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  children?: Maybe<Array<Maybe<AwsVpcAttachment>>>;
+};
+
 export type AwsVpc = {
   accountId: Scalars['String'];
   arn: Scalars['String'];
@@ -3156,6 +3175,18 @@ export type AwsVpc = {
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
+};
+
+export type AwsVpcAttachment = {
+  vpcId: Scalars['String'];
+  vpcOwnerId?: Maybe<Scalars['String']>;
+  dnsSupport?: Maybe<Scalars['String']>;
+  ipv6Support?: Maybe<Scalars['String']>;
+  transitGatewayId?: Maybe<Scalars['String']>;
+  transitGatewayDefaultRouteTableAssociation?: Maybe<Scalars['Boolean']>;
+  transitGatewayDefaultRouteTablePropagation?: Maybe<Scalars['Boolean']>;
+  subnetIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
 };
 
 export type BlockDeviceEbs = {

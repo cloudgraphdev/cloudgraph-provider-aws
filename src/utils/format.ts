@@ -3,6 +3,7 @@ import { parseString } from '@fast-csv/parse'
 import CloudGraph from '@cloudgraph/sdk'
 import isArray from 'lodash/isArray'
 import toString from 'lodash/toString'
+import { TagList } from 'aws-sdk/clients/ec2'
 import { Tag, AwsIamJsonPolicy } from '../types/generated'
 import { AwsTag, TagMap } from '../types'
 
@@ -98,4 +99,12 @@ export const formatIamJsonPolicy = (json: string): AwsIamJsonPolicy => {
       resource: isArray(el.Resource) ? el.Resource : [toString(el.Resource)],
     })),
   }
+}
+export const convertTagListToTagMap = (tags: TagList): TagMap => {
+  const tagsMap = {}
+  for (const tag of tags) {
+    const { Key, Value } = tag
+    tagsMap[Key] = Value
+  }
+  return tagsMap
 }

@@ -45,4 +45,5 @@ export default {
   bucketSizeDisclaimer: (num: number): string =>
     `(limited to the first ${num} objects)`,
   accountFor: (org: string): string => `AWS Account for ${org}`,
+  enable: 'enable',
 }
