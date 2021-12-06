@@ -12,11 +12,13 @@ type awsEcsCluster @key(fields: "arn") {
   statistics: [awsEcsStatistics]
   settings: [awsEcsClusterSettings]
   capacityProviders: [String] @search(by: [hash, regexp])
-  defaultCapacityProviderStrategy: [awsEcsCapacityProviderStrategy]
+  defaultCapacityProviderStrategy: [awsEcsCapacityProviderStrategyItem]
   attachments: [awsEcsAttachment]
   attachmentsStatus: String @search(by: [hash, regexp])
   tags: [Tag]
-  ecsService: [awsEcsService] @hasInverse(field: ecsCluster) #change to plural
+  ecsService: [awsEcsService] @hasInverse(field: ecsCluster)
+  ecsTask: [awsEcsTask] @hasInverse(field: ecsCluster)
+  ecsTaskSet: [awsEcsTaskSet] @hasInverse(field: ecsCluster)
 }
 
 type AwsEcsExecuteCommandLogConfiguration 
@@ -77,7 +79,7 @@ type awsEcsClusterSettings
     value: String @search(by: [hash, regexp])
   }
 
-type awsEcsCapacityProviderStrategy
+type awsEcsCapacityProviderStrategyItem
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }

@@ -79,10 +79,12 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | ebs                      | asg, ec2, emrInstance                                                                                                                                                                                         |
 | ec2                      | alb, asg, ebs, eip, emrInstance, networkInterface, securityGroup, subnet, vpc, ecsContainer                                                                                                                   |
 | ecr                      |                                                                                                                                                                                                  |
-| ecsCluster               | ecsService                                                                                                                                                                                       |
+| ecsCluster               | ecsService, ecsTask, ecsTaskSet     |
 | ecsContainer             | ecsTask, ec2                                                                                                                                                                                     |
-| ecsService               | ecsCluster, elb, iamRole, securityGroup, subnet, vpc                                                                                                                                             |
-| ecsTask                  | ecsContainer                                                                                                                                                                                     |
+| ecsService               | ecsCluster, ecsTaskDefinition, ecsTaskSet, elb, iamRole, securityGroup, subnet, vpc                                                                                                                                             |
+| ecsTask                  | ecsContainer, ecsCluster, ecsTaskDefinition                     |
+| ecsTaskDefinition        | ecsService, ecsTask, ecsTaskSet                      |
+| ecsTaskSet               | ecsCluster, ecsService, ecsTaskDefinition                      |
 | efs                      | kms                                                                                                                                                                                              |
 | efsMountTarget           | networkInterface, subnet, vpc                                                                                                                                                                    |
 | eip                      | ec2, networkInterface, vpc                                                                                                                                                                       |

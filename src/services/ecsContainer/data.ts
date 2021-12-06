@@ -88,7 +88,7 @@ export default async ({
 
               logger.debug(lt.fetchedEcsContainers(containerInstances.length))
 
-              ecsContainers.push(...ecsContainers.map(container => ({
+              ecsContainers.push(...containerInstances.map(container => ({
                 region,
                 ...container,
                 Tags: convertAwsTagsToTagMap(container.tags as AwsTag[]),

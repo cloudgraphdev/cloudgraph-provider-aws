@@ -1,3 +1,6 @@
+import CloudGraph from '@cloudgraph/sdk'
+const { logger } = CloudGraph
+
 import cuid from 'cuid'
 import { AwsEcsService } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
@@ -13,7 +16,6 @@ export default ({
   const {
     serviceArn: arn,
     serviceName,
-    clusterArn,
     status,
     desiredCount,
     runningCount,
@@ -21,7 +23,6 @@ export default ({
     launchType,
     capacityProviderStrategy,
     platformVersion,
-    taskDefinition,
     deploymentConfiguration,
     roleArn,
     createdAt,
@@ -46,54 +47,16 @@ export default ({
     ...sr,
   }))
 
-  const taskSets = service.taskSets?.map(({ capacityProviderStrategy, createdAt, updatedAt, loadBalancers, serviceRegistries, scale, stabilityStatusAt, ...ts }) => ({
-    id: cuid(),
-    ...ts,
-    capacityProviderStrategy: {
-      id: cuid(),
-      ...capacityProviderStrategy,
-    },
-    createdAt: createdAt?.toISOString(),
-    updatedAt: updatedAt?.toISOString(),
-    networkConfiguration: {
-      id: cuid(),
-      ...networkConfiguration,
-      awsvpcConfiguration: {
-        id: cuid(),
-        ...networkConfiguration?.awsvpcConfiguration
-      },
-    },
-    loadBalancers: loadBalancers?.map(lb => ({
-      id: cuid(),
-      ...loadBalancers,
-    })),
-    serviceRegistries: serviceRegistries?.map(sr => ({
-      id: cuid(),
-      ...sr,
-    })),
-    scale: {
-      id: cuid(),
-      ...scale,
-    },
-    stabilityStatusAt: stabilityStatusAt?.toISOString(),
-  }))
-
   const deployments = service.deployments?.map(({ capacityProviderStrategy, networkConfiguration, createdAt, updatedAt, ...deployment}) => ({
     id: cuid(),
-    capacityProviderStrategy: {
+    ...deployment,
+    capacityProviderStrategy: capacityProviderStrategy?.map(strat => ({
       id: cuid(),
-      ...capacityProviderStrategy,
-    },
-    networkConfiguration: {
-      id: cuid(),
-      awsvpcConfiguration: {
-        id: cuid(),
-        ...networkConfiguration?.awsvpcConfiguration
-      },
-    },
+      ...strat,
+    })),
+    networkConfiguration,
     createdAt: createdAt?.toISOString(),
     updatedAt: updatedAt?.toISOString(),
-    ...deployment,
   }))
 
   const events = service.events?.map(({ createdAt, ...event}) => ({
@@ -117,7 +80,6 @@ export default ({
     arn,
     accountId: account,
     serviceName,
-    clusterArn,
     loadBalancers,
     serviceRegistries,
     status,
@@ -125,12 +87,11 @@ export default ({
     runningCount,
     pendingCount,
     launchType,
-    capacityProviderStrategy: {
+    capacityProviderStrategy: capacityProviderStrategy?.map(strat => ({
       id: cuid(),
-      ...capacityProviderStrategy,
-    },
+      ...strat,
+    })),
     platformVersion,
-    taskDefinition,
     deploymentConfiguration: {
       id: cuid(),
       ...deploymentConfiguration,
@@ -139,20 +100,20 @@ export default ({
         ...deploymentConfiguration?.deploymentCircuitBreaker,
       },
     },
-    taskSets,
-    deployments,
+    deployments: deployments?.map(deployment => ({
+      id: cuid(),
+      ...deployment,
+      capacityProviderStrategy: deployment.capacityProviderStrategy?.map(strat => ({
+        id: cuid(),
+        ...strat,
+      })),
+    })),
     roleArn,
     events,
     createdAt: createdAt?.toISOString(),
     placementConstraints,
     placementStrategy,
-    networkConfiguration: {
-      id: cuid(),
-      awsvpcConfiguration: {
-        id: cuid(),
-        ...networkConfiguration?.awsvpcConfiguration,
-      },
-    },
+    networkConfiguration,
     healthCheckGracePeriodSeconds,
     schedulingStrategy,
     deploymentController: {

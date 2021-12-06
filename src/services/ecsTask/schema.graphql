@@ -31,11 +31,12 @@ type awsEcsTask @key(fields: "arn") {
   stoppedAt: String @search(by: [hash, regexp])
   stoppedReason: String @search(by: [hash, regexp])
   stoppingAt: String @search(by: [hash, regexp])
-  taskDefinitionArn: String @search(by: [hash, regexp])
   version: Int @search
   ephemeralStorage: awsEcsEphemeralStorage
   tags: [Tag]
-  ecsContainer: [awsEcsContainer] @hasInverse(field: ecsTask) #change to plural
+  ecsCluster: [awsEcsCluster] @hasInverse(field: ecsTask)
+  ecsContainer: [awsEcsContainer] @hasInverse(field: ecsTask)
+  ecsTaskDefinition: [awsEcsTaskDefinition] @hasInverse(field: ecsTask)
 }
 
 type awsEcsAttribute
@@ -141,10 +142,9 @@ type awsEcsInferenceAccelerator
 
 type awsEcsEphemeralStorage 
   @generate(
-    query: { get: false, query: true, aggregate: false }
+    query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
     sizeInGiB: Int @search
   }

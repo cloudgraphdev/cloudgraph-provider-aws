@@ -112,10 +112,7 @@ export default ({
       ...overrides,
       containerOverrides,
       inferenceAcceleratorOverrides,
-      ephemeralStorage: {
-        id: cuid(),
-        ...overrides?.ephemeralStorage,
-      }
+      ephemeralStorage,
     },
     platformVersion,
     pullStartedAt: pullStartedAt?.toISOString(),
@@ -126,12 +123,8 @@ export default ({
     stoppedAt: stoppedAt?.toISOString(),
     stoppedReason,
     stoppingAt: stoppingAt?.toISOString(),
-    taskDefinitionArn,
     version,
-    ephemeralStorage: {
-      id: cuid(),
-      ...ephemeralStorage,
-    },
+    ephemeralStorage,
     tags: formatTagsFromMap(Tags),
   }
 }
