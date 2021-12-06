@@ -1,3 +1,11 @@
+## [0.48.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.48.0...0.48.1) (2021-12-06)
+
+
+### Bug Fixes
+
+* **ecs:** add task set/definition and connections ([f935dc6](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/f935dc6413bc5b19dcfe7637a51862b1d5e4177c))
+* **ecs:** cleanup comment ([b9bf104](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b9bf1041ea350bd22b10354e015984c913d05fb1))
+
 # [0.48.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.47.0...0.48.0) (2021-12-02)
 
 
