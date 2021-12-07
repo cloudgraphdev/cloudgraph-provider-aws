@@ -46,7 +46,6 @@ describe('Transit Gateway Service Test: ', () => {
                 DefaultRouteTableAssociation: expect.any(String),
                 DefaultRouteTablePropagation: expect.any(String),
                 DnsSupport: expect.any(String),
-                MulticastSupport: expect.any(String),
                 PropagationDefaultRouteTableId: expect.any(String),
                 TransitGatewayCidrBlocks: expect.any(Array),
                 VpnEcmpSupport: expect.any(String)
@@ -75,7 +74,7 @@ describe('Transit Gateway Service Test: ', () => {
         expect.arrayContaining([
           expect.objectContaining({
             id: expect.any(String),
-            accountId: undefined,
+            accountId: expect.any(String),
             arn: expect.any(String),
             region: expect.any(String),
             ownerId: expect.any(String),

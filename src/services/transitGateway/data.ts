@@ -17,7 +17,6 @@ import { AWSError } from 'aws-sdk/lib/error'
 
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
-import { TagMap } from '../../types'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
@@ -33,7 +32,7 @@ const getTransitGatewayVpcAttachments = async ({
 }): Promise<TransitGatewayVpcAttachmentList> =>
   new Promise<TransitGatewayVpcAttachmentList>(resolve => {
 
-    let transitGatewayVpcAttachmentList : TransitGatewayVpcAttachmentList = []
+    const transitGatewayVpcAttachmentList : TransitGatewayVpcAttachmentList = []
     let args: DescribeTransitGatewayVpcAttachmentsRequest = {}
 
     if (NextToken) {
@@ -89,7 +88,7 @@ const listTransitGatewaysData = async ({
   new Promise<(TransitGateway & { region: string })[]>(resolve => {
 
     let transitGatewayData: (TransitGateway & { region: string })[] = []
-    let transitGatewayList: TransitGatewayList = []
+    const transitGatewayList: TransitGatewayList = []
     let args: DescribeTransitGatewaysRequest = {}
 
     if (NextToken) {
@@ -115,7 +114,6 @@ const listTransitGatewaysData = async ({
           logger.info(lt.fetchedTransitGateways(transitGateways.length))
 
           if (nextToken) {
-            region = 'us-west-2'
             listTransitGatewaysData({ ec2, region, nextToken })
           }
 
@@ -160,7 +158,7 @@ export default async ({
         transitGateways = await listTransitGatewaysData({ ec2, region })
     
         // Get Transit Gateway Vpc Attachments
-        let vpcAttachments = await getTransitGatewayVpcAttachments({ ec2 })
+        const vpcAttachments = await getTransitGatewayVpcAttachments({ ec2 })
         if (!isEmpty(vpcAttachments)) {
           transitGateways = transitGateways.map(gateway => {
             const transitGatewayVpcAttachments = vpcAttachments.filter(

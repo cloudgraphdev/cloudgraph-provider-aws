@@ -1,8 +1,8 @@
+import { TransitGatewayVpcAttachmentList, TransitGatewayOptions } from 'aws-sdk/clients/ec2'
 import { formatTagsFromMap, convertTagListToTagMap } from '../../utils/format'
 import { RawAwsTransitGateway } from './data'
 import { AwsTransitGateway, AwsVpcAttachment }  from '../../types/generated'
 import t from '../../properties/translations'
-import { TransitGatewayVpcAttachmentList, TransitGatewayOptions } from 'aws-sdk/clients/ec2'
 
 /**
  * Transit Gateway
@@ -16,7 +16,7 @@ const awsTransitGatewayVpcAttachmentConverter = ({
   options: TransitGatewayOptions
 }): AwsVpcAttachment[] => {
 
-  let attachments: AwsVpcAttachment[] = []
+  const attachments: AwsVpcAttachment[] = []
   for (const vpc of vpcAttachments) {
     const tagsMap = convertTagListToTagMap(vpc.Tags)
     const vpcAttachmentTags = formatTagsFromMap(tagsMap)
@@ -27,8 +27,8 @@ const awsTransitGatewayVpcAttachmentConverter = ({
       dnsSupport: vpc.Options?.DnsSupport,
       ipv6Support: vpc.Options?.Ipv6Support,
       transitGatewayId: vpc.TransitGatewayId,
-      transitGatewayDefaultRouteTableAssociation: options?.DefaultRouteTableAssociation === t.enable ? true : false,
-      transitGatewayDefaultRouteTablePropagation: options?.DefaultRouteTablePropagation === t.enable ? true : false,
+      transitGatewayDefaultRouteTableAssociation: options?.DefaultRouteTableAssociation === t.enable,
+      transitGatewayDefaultRouteTablePropagation: options?.DefaultRouteTablePropagation === t.enable,
       subnetIds: vpc.SubnetIds,
       tags: vpcAttachmentTags
     }
