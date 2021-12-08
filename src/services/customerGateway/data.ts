@@ -41,7 +41,7 @@ const listCustomerGatewaysData = async ({
         if (!isEmpty(data)) {
           const { CustomerGateways: customerGateways = [] } = data
 
-          logger.info(lt.fetchedCustomerGateways(customerGateways.length))
+          logger.debug(lt.fetchedCustomerGateways(customerGateways.length))
 
           customerGatewayData = customerGateways.map(gateway => ({
             ...gateway,

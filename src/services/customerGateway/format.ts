@@ -1,7 +1,6 @@
-
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsCustomerGateway } from './data'
-import { AwsCustomerGateway }  from '../../types/generated'
+import { AwsCustomerGateway } from '../../types/generated'
 
 /**
  * Customer Gateway
@@ -24,18 +23,18 @@ export default ({
     Tags: tags,
   } = rawData
 
-   // Customer Gateway Tags
+  // Customer Gateway Tags
   const customerGatewayTags = formatTagsFromMap(tags)
 
   const customerGateway = {
     id: customerGatewayId,
     arn: `arn:aws:ec2:${region}:${account}:customer-gateway/${customerGatewayId}`,
+    region,
     type,
     bgpAsn,
     ipAddress,
-    vpcIds: [],
+    vpcIds: [], // TODO: map this when transit gateway service is done
     tags: customerGatewayTags,
-    region
   }
 
   return customerGateway
