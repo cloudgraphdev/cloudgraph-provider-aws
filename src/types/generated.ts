@@ -812,6 +812,16 @@ export type AwsCognitoUserPoolSchemaAttribute = {
   stringAttributeConstraintsMaxValue?: Maybe<Scalars['String']>;
 };
 
+export type AwsCustomerGateway = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  type?: Maybe<Scalars['String']>;
+  bgpAsn?: Maybe<Scalars['String']>;
+  ipAddress?: Maybe<Scalars['String']>;
+  vpcIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
 export type AwsDynamoDbTable = {
   id: Scalars['String'];
   arn: Scalars['String'];

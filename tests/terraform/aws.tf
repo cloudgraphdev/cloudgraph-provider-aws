@@ -765,6 +765,16 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "cg_gateway_vpc_attachment_tes
   vpc_id             = aws_vpc.vpc.id
 }
 
+resource "aws_customer_gateway" "main" {
+  bgp_asn    = 65000
+  ip_address = "172.83.124.10"
+  type       = "ipsec.1"
+
+  tags = {
+    Name = "main-customer-gateway"
+  }
+}
+
 # Localstack Pro Tier
 # resource "aws_rds_cluster_instance" "cluster_instances" {
 #   count              = 2

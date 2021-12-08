@@ -634,4 +634,8 @@ export default {
    * NACL
    */
   fetchedNacls: (num: number): string => `Fetched ${num} NACLs`,
+   /**
+   * Customer Gateway
+   */
+  fetchedCustomerGateways: (num: number): string => `Fetched ${num} Customer Gateways`,
 }

@@ -70,6 +70,7 @@ import Cloud9Environment from '../services/cloud9'
 import IotThingAttribute from '../services/iot'
 import services from './services'
 import TransitGateway from '../services/transitGateway'
+import CustomerGateway from '../services/customerGateway'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -146,5 +147,6 @@ export default {
   [services.ecsTaskDefinition]: EcsTaskDefinition,
   [services.ecsTaskSet]: EcsTaskSet,
   [services.transitGateway]: TransitGateway,
+  [services.customerGateway]: CustomerGateway,
   tag: AwsTag,
 }
