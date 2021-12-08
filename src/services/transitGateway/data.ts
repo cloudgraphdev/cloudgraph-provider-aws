@@ -8,15 +8,17 @@ import EC2, {
   DescribeTransitGatewayVpcAttachmentsRequest,
   DescribeTransitGatewayVpcAttachmentsResult,
   TransitGatewayVpcAttachmentList,
+  TransitGatewayVpcAttachment,
   TransitGateway,
   TransitGatewayList,
 } from 'aws-sdk/clients/ec2'
 
 import { Config } from 'aws-sdk/lib/config'
 import { AWSError } from 'aws-sdk/lib/error'
-
+import { AwsTag, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
@@ -31,8 +33,7 @@ const getTransitGatewayVpcAttachments = async ({
   nextToken?: string
 }): Promise<TransitGatewayVpcAttachmentList> =>
   new Promise<TransitGatewayVpcAttachmentList>(resolve => {
-
-    const transitGatewayVpcAttachmentList : TransitGatewayVpcAttachmentList = []
+    const transitGatewayVpcAttachmentList: TransitGatewayVpcAttachmentList = []
     let args: DescribeTransitGatewayVpcAttachmentsRequest = {}
 
     if (NextToken) {
@@ -42,7 +43,6 @@ const getTransitGatewayVpcAttachments = async ({
     ec2.describeTransitGatewayVpcAttachments(
       args,
       (err: AWSError, data: DescribeTransitGatewayVpcAttachmentsResult) => {
-
         if (err) {
           generateAwsErrorLog(
             serviceName,
@@ -68,7 +68,6 @@ const getTransitGatewayVpcAttachments = async ({
           if (nextToken) {
             getTransitGatewayVpcAttachments({ ec2, nextToken })
           }
-          
         }
 
         resolve(transitGatewayVpcAttachmentList)
@@ -86,7 +85,6 @@ const listTransitGatewaysData = async ({
   nextToken?: string
 }): Promise<(TransitGateway & { region: string })[]> =>
   new Promise<(TransitGateway & { region: string })[]>(resolve => {
-
     let transitGatewayData: (TransitGateway & { region: string })[] = []
     const transitGatewayList: TransitGatewayList = []
     let args: DescribeTransitGatewaysRequest = {}
@@ -98,7 +96,6 @@ const listTransitGatewaysData = async ({
     ec2.describeTransitGateways(
       args,
       (err: AWSError, data: DescribeTransitGatewaysResult) => {
-
         if (err) {
           generateAwsErrorLog(serviceName, 'ec2:describeTransitGateways', err)
         }
@@ -121,7 +118,6 @@ const listTransitGatewaysData = async ({
             ...gateway,
             region,
           }))
-  
         }
 
         resolve(transitGatewayData)
@@ -133,8 +129,14 @@ const listTransitGatewaysData = async ({
  * Transit Gateway
  */
 
-export interface RawAwsTransitGateway extends TransitGateway {
-  VpcAttachments?: TransitGatewayVpcAttachmentList
+export interface RawAwsTransitGatewayVpcAttachment
+  extends Omit<TransitGatewayVpcAttachment, 'Tags'> {
+  Tags?: TagMap
+}
+
+export interface RawAwsTransitGateway extends Omit<TransitGateway, 'Tags'> {
+  Tags?: TagMap
+  VpcAttachments?: RawAwsTransitGatewayVpcAttachment[]
 }
 
 export default async ({
@@ -147,38 +149,48 @@ export default async ({
   [region: string]: RawAwsTransitGateway[]
 }> =>
   new Promise(async resolve => {
-
-    let transitGateways: RawAwsTransitGateway[] = []
+    let transitGatewaysResult: RawAwsTransitGateway[] = []
+    let vpcAttachmentsResult: RawAwsTransitGatewayVpcAttachment[] = []
 
     const regionPromises = regions.split(',').map(region => {
       const ec2 = new EC2({ ...config, region, endpoint })
 
       return new Promise<void>(async resolveTransitGatewayData => {
         // Get Transit Gateway Data
-        transitGateways = await listTransitGatewaysData({ ec2, region })
-    
+        const transitGateways = await listTransitGatewaysData({ ec2, region })
+
         // Get Transit Gateway Vpc Attachments
         const vpcAttachments = await getTransitGatewayVpcAttachments({ ec2 })
-        if (!isEmpty(vpcAttachments)) {
-          transitGateways = transitGateways.map(gateway => {
+
+        transitGatewaysResult = transitGateways.map(gateway => {
+          if (!isEmpty(vpcAttachments)) {
             const transitGatewayVpcAttachments = vpcAttachments.filter(
               vpcAttachment =>
                 vpcAttachment.TransitGatewayId === gateway.TransitGatewayId
             )
 
-            return {
-              ...gateway,
-              VpcAttachments: transitGatewayVpcAttachments,
+            if (!isEmpty(transitGatewayVpcAttachments)) {
+              vpcAttachmentsResult = transitGatewayVpcAttachments.map(vpc => {
+                return {
+                  ...vpc,
+                  Tags: convertAwsTagsToTagMap(vpc.Tags as AwsTag[]),
+                }
+              })
             }
-          })
-        }
+          }
+
+          return {
+            ...gateway,
+            Tags: convertAwsTagsToTagMap(gateway.Tags as AwsTag[]),
+            VpcAttachments: vpcAttachmentsResult,
+          }
+        })
 
         resolveTransitGatewayData()
       })
     })
 
-    logger.debug(lt.fetchingEip)
     await Promise.all(regionPromises)
 
-    resolve(groupBy(transitGateways, 'region'))
+    resolve(groupBy(transitGatewaysResult, 'region'))
   })

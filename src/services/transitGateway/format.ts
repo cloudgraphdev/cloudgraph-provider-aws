@@ -1,7 +1,7 @@
-import { TransitGatewayVpcAttachmentList, TransitGatewayOptions } from 'aws-sdk/clients/ec2'
+import { TransitGatewayOptions } from 'aws-sdk/clients/ec2'
 import isEmpty from 'lodash/isEmpty'
-import { formatTagsFromMap, convertTagListToTagMap } from '../../utils/format'
-import { RawAwsTransitGateway } from './data'
+import { formatTagsFromMap } from '../../utils/format'
+import { RawAwsTransitGateway, RawAwsTransitGatewayVpcAttachment } from './data'
 import { AwsTransitGateway, AwsVpcAttachment }  from '../../types/generated'
 import t from '../../properties/translations'
 
@@ -13,15 +13,14 @@ const awsTransitGatewayVpcAttachmentConverter = ({
   vpcAttachments,
   options
 }: {
-  vpcAttachments: TransitGatewayVpcAttachmentList
+  vpcAttachments: RawAwsTransitGatewayVpcAttachment[]
   options: TransitGatewayOptions
 }): AwsVpcAttachment[] => {
 
   const attachments: AwsVpcAttachment[] = []
   if (!isEmpty(vpcAttachments)) {
     for (const vpc of vpcAttachments) {
-      const tagsMap = convertTagListToTagMap(vpc.Tags)
-      const vpcAttachmentTags = formatTagsFromMap(tagsMap)
+      const vpcAttachmentTags = formatTagsFromMap(vpc.Tags)
 
       const attachment: AwsVpcAttachment = {
         vpcId: vpc.VpcId,
@@ -57,13 +56,12 @@ export default ({
     OwnerId: ownerId,
     Description: description,
     Options: options,
-    Tags: tagList,
+    Tags: tags,
     VpcAttachments: vpcAttachments
   } = rawData
 
    // Transit Gateway Tags
-  const tagsMap = convertTagListToTagMap(tagList)
-  const transitGatewayTags = formatTagsFromMap(tagsMap)
+  const transitGatewayTags = formatTagsFromMap(tags)
 
   const transitGateway = {
     id,

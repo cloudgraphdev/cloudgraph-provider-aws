@@ -52,12 +52,7 @@ describe('Transit Gateway Service Test: ', () => {
               }),
             OwnerId: expect.any(String),
             State: expect.any(String),
-            Tags: expect.arrayContaining([
-                expect.objectContaining({
-                  Key: expect.any(String),
-                  Value: expect.any(String),
-                }),
-              ]),
+            Tags: expect.any(Object),
             TransitGatewayArn: expect.any(String),
             TransitGatewayId: expect.any(String),
             VpcAttachments: expect.any(Array),
