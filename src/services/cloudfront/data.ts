@@ -103,7 +103,7 @@ const getDistributionTags = async (
 
         const {
           Tags: { Items: tags = [] },
-        } = data
+        } = data || { Tags: {} }
 
         if (!isEmpty(data)) {
           resolve(convertAwsTagsToTagMap(tags as AwsTag[]))
