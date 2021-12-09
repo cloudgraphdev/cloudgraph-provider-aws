@@ -55,7 +55,6 @@ describe('Transit Gateway Service Test: ', () => {
             Tags: expect.any(Object),
             TransitGatewayArn: expect.any(String),
             TransitGatewayId: expect.any(String),
-            VpcAttachments: expect.any(Array),
             region: expect.any(String)
           })
         ])
@@ -88,8 +87,7 @@ describe('Transit Gateway Service Test: ', () => {
                 key: expect.any(String),
                 value: expect.any(String),
               }),
-            ]),
-            children: expect.any(Array)                   
+            ]),             
           }),
         ])
       )

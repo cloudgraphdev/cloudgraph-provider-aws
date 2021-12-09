@@ -3141,7 +3141,6 @@ export type AwsTransitGateway = {
   associationDefaultRouteTableId?: Maybe<Scalars['String']>;
   propagationDefaultRouteTableId?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
-  children?: Maybe<Array<Maybe<AwsVpcAttachment>>>;
 };
 
 export type AwsVpc = {
@@ -3175,18 +3174,6 @@ export type AwsVpc = {
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
-};
-
-export type AwsVpcAttachment = {
-  vpcId: Scalars['String'];
-  vpcOwnerId?: Maybe<Scalars['String']>;
-  dnsSupport?: Maybe<Scalars['String']>;
-  ipv6Support?: Maybe<Scalars['String']>;
-  transitGatewayId?: Maybe<Scalars['String']>;
-  transitGatewayDefaultRouteTableAssociation?: Maybe<Scalars['Boolean']>;
-  transitGatewayDefaultRouteTablePropagation?: Maybe<Scalars['Boolean']>;
-  subnetIds?: Maybe<Array<Maybe<Scalars['String']>>>;
-  tags?: Maybe<Array<Maybe<Tag>>>;
 };
 
 export type BlockDeviceEbs = {

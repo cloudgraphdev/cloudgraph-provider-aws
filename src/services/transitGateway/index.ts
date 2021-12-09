@@ -5,10 +5,12 @@ import getData from './data'
 import mutation from './mutation'
 
 export default class TransitGateway extends BaseService implements Service {
-
   format = format.bind(this)
 
   getData = getData.bind(this)
+
+  // TODO: Connections are added when related services are implemented
+  // getConnections = getConnections.bind(this)
 
   mutation = mutation
 }

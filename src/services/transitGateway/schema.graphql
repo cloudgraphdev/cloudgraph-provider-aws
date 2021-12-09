@@ -14,22 +14,4 @@ type awsTransitGateway @key(fields: "arn") {
   associationDefaultRouteTableId: String @search(by: [hash, regexp])
   propagationDefaultRouteTableId: String @search(by: [hash, regexp])
   tags: [Tag]
-  children: [awsVpcAttachment]
-}
-
-type awsVpcAttachment
-  @generate(
-    query: { get: false, query: true, aggregate: false }
-    mutation: { add: false, delete: false }
-    subscription: false
-  ) {
-  vpcId: String! @id
-  vpcOwnerId: String
-  dnsSupport: String
-  ipv6Support: String
-  transitGatewayId: String
-  transitGatewayDefaultRouteTableAssociation: Boolean
-  transitGatewayDefaultRouteTablePropagation: Boolean
-  subnetIds: [String]
-  tags: [Tag]
 }
