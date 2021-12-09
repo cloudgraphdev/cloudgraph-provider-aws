@@ -81,10 +81,10 @@ export default class Provider extends CloudGraph.Client {
     )
   }
 
-  async configure(flags: any): Promise<{ [key: string]: any }> {
-    const result: { [key: string]: any } = {
-      ...this.config,
-    }
+  // TODO: update to also support ignorePrompts config
+  async configure(): Promise<{ [key: string]: any }> {
+    const result: { [key: string]: any } = {}
+    const { flags = {} } = this.config
     let profiles
     try {
       profiles = this.getProfilesFromSharedConfig()
@@ -253,6 +253,12 @@ export default class Provider extends CloudGraph.Client {
     accessKeyId: configuredAccessKey,
     secretAccessKey: configuredSecretKey,
   }: Account): Promise<Config> {
+    const {
+      cloudGraphConfig: { ignorePrompts, ignoreEnvVariables } = {
+        ignorePrompts: false,
+        ignoreEnvVariables: false,
+      },
+    } = this.config
     return new Promise(async resolveConfig => {
       // If we have keys set in the config file, just use them
       if (configuredAccessKey && configuredSecretKey) {
@@ -367,7 +373,7 @@ export default class Provider extends CloudGraph.Client {
           )
         }
       }
-      if (!this.credentials) {
+      if (!this.credentials && !ignorePrompts) {
         this.logger.info('No AWS Credentials found, please enter them manually')
         // when pausing the ora spinner the position of this call must come after any logger output
         const msg = this.logger.stopSpinner()
@@ -399,7 +405,11 @@ export default class Provider extends CloudGraph.Client {
         this.logger.startSpinner(msg)
       }
       const profileName = profile || 'default'
-      const usingEnvCreds = !!process.env.AWS_ACCESS_KEY_ID
+      const usingEnvCreds =
+        !!process.env.AWS_ACCESS_KEY_ID && !ignoreEnvVariables
+      if (!this.credentials) {
+        throw new Error('No Credentials found for AWS')
+      }
       if (usingEnvCreds) {
         this.logger.success('Using credentials set by ENV variables')
       } else {
@@ -578,8 +588,10 @@ export default class Provider extends CloudGraph.Client {
     }
     let { regions: configuredRegions, resources: configuredResources } =
       this.config
-    const { accounts: configuredAccounts }: { accounts: Account[] } =
-      this.config
+    const {
+      accounts: configuredAccounts,
+      cloudGraphConfig: { ignoreEnvVariables } = { ignoreEnvVariables: false },
+    }: { accounts: Account[], cloudGraphConfig: { ignoreEnvVariables: boolean } } = this.config
     if (!configuredRegions) {
       configuredRegions = this.properties.regions.join(',')
     } else {
@@ -589,7 +601,7 @@ export default class Provider extends CloudGraph.Client {
       configuredResources = Object.values(this.properties.services).join(',')
     }
 
-    const usingEnvCreds = !!process.env.AWS_ACCESS_KEY_ID
+    const usingEnvCreds = !!process.env.AWS_ACCESS_KEY_ID && !ignoreEnvVariables
 
     this.logSelectedAccessRegionsAndResources(
       usingEnvCreds
@@ -611,7 +623,7 @@ export default class Provider extends CloudGraph.Client {
     const tagRegion = 'aws-global'
     const tags = { name: 'tag', data: { [tagRegion]: [] } }
     // If the user has passed aws creds as env variables, dont use profile list
-    if (process.env.AWS_ACCESS_KEY_ID) {
+    if (usingEnvCreds) {
       rawData = await this.getRawData(
         { profile: 'default', roleArn: undefined, externalId: undefined },
         opts
