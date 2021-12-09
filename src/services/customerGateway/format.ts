@@ -33,7 +33,6 @@ export default ({
     type,
     bgpAsn,
     ipAddress,
-    vpcIds: [], // TODO: map this when transit gateway service is done
     tags: customerGatewayTags,
   }
 

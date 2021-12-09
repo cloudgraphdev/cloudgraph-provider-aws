@@ -5,6 +5,5 @@ type awsCustomerGateway @key(fields: "arn") {
   type: String @search(by: [hash, regexp])
   bgpAsn: String @search(by: [hash, regexp])
   ipAddress: String @search(by: [hash, regexp])
-  vpcIds: [String] @search(by: [hash])
   tags: [Tag]
 }

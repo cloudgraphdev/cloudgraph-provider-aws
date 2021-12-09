@@ -39,9 +39,7 @@ describe('Customer Gateway Service Test: ', () => {
         expect.arrayContaining([
           expect.objectContaining({           
             BgpAsn: expect.any(String),
-            //CertificateArn: expect.any(String),
             CustomerGatewayId: expect.any(String),
-            //DeviceName: expect.any(String),
             IpAddress: expect.any(String),
             State: expect.any(String),
             Tags: expect.any(Object),
@@ -63,7 +61,6 @@ describe('Customer Gateway Service Test: ', () => {
             type: expect.any(String),
             bgpAsn: expect.any(String),
             ipAddress: expect.any(String),
-            vpcIds: expect.any(Array),
             region: expect.any(String),
             tags: expect.arrayContaining([
               expect.objectContaining({

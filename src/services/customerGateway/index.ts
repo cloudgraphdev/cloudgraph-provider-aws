@@ -10,5 +10,8 @@ export default class CustomerGateway extends BaseService implements Service {
 
   getData = getData.bind(this)
 
+  // TODO: Connections are added when related services are implemented
+  // getConnections = getConnections.bind(this)
+
   mutation = mutation
 }

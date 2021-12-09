@@ -819,7 +819,6 @@ export type AwsCustomerGateway = {
   type?: Maybe<Scalars['String']>;
   bgpAsn?: Maybe<Scalars['String']>;
   ipAddress?: Maybe<Scalars['String']>;
-  vpcIds?: Maybe<Array<Maybe<Scalars['String']>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
 };
 
