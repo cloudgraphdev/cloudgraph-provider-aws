@@ -783,6 +783,20 @@ resource "aws_vpn_gateway" "vpn_gategay" {
   }
 }
 
+resource "aws_ec2_transit_gateway" "vpn_transit_gateway" {}
+
+resource "aws_customer_gateway" "vpn_customer_gateway" {
+  bgp_asn    = 65000
+  ip_address = "172.0.0.1"
+  type       = "ipsec.1"
+}
+
+resource "aws_vpn_connection" "vpn_connection" {
+  customer_gateway_id = aws_customer_gateway.vpn_customer_gateway.id
+  transit_gateway_id  = aws_ec2_transit_gateway.vpn_transit_gateway.id
+  type                = aws_customer_gateway.vpn_customer_gateway.type
+}
+
 # Client Vpn Endpoint
 # │ Error: Error requesting certificate: UnrecognizedClientException: The security token included in the request is invalid.
 # │       status code: 400, request id: 4c10656a-3d88-482d-9833-d8caf17ff063
