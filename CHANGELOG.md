@@ -1,3 +1,11 @@
+## [0.48.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.48.1...0.48.2) (2021-12-09)
+
+
+### Bug Fixes
+
+* **creds:** update creds flow to allow bypassing env and prompts ([71579ff](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/71579ffa3037e4238f4dada7c82f99fd2eed9c05))
+* **service:** fix cloudfront bug on missing data ([befe9a9](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/befe9a95d8a9c05b2da3ab427530b6ac81c7aa6b))
+
 ## [0.48.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.48.0...0.48.1) (2021-12-06)
 
 
