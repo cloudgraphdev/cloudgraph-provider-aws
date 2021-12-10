@@ -1,6 +1,7 @@
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsCustomerGateway } from './data'
 import { AwsCustomerGateway } from '../../types/generated'
+import { customerGatewayArn } from '../../utils/generateArns'
 
 /**
  * Customer Gateway
@@ -28,7 +29,7 @@ export default ({
 
   const customerGateway = {
     id: customerGatewayId,
-    arn: `arn:aws:ec2:${region}:${account}:customer-gateway/${customerGatewayId}`,
+    arn: customerGatewayArn({ region, account, id: customerGatewayId }),
     region,
     type,
     bgpAsn,
