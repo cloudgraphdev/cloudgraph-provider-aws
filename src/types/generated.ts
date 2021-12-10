@@ -3186,6 +3186,19 @@ export type AwsVpc = {
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
+  vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
+};
+
+export type AwsVpnGateway = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  amazonSideAsn?: Maybe<Scalars['Int']>;
+  vpcIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
 export type BlockDeviceEbs = {

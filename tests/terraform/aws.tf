@@ -775,6 +775,14 @@ resource "aws_customer_gateway" "main" {
   }
 }
 
+resource "aws_vpn_gateway" "vpn_gategay" {
+  vpc_id = aws_vpc.vpc.id
+
+  tags = {
+    Name = "test"
+  }
+}
+
 # Localstack Pro Tier
 # resource "aws_rds_cluster_instance" "cluster_instances" {
 #   count              = 2
