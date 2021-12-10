@@ -3223,6 +3223,7 @@ export type AwsTransitGateway = {
   associationDefaultRouteTableId?: Maybe<Scalars['String']>;
   propagationDefaultRouteTableId?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
 };
 
 export type AwsTunelOptions = {
@@ -3303,6 +3304,7 @@ export type AwsVpnConnection = {
   routes?: Maybe<Array<Maybe<AwsVpnStaticRoute>>>;
   vgwTelemetry?: Maybe<Array<Maybe<AwsVgwTelemetry>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
 };
 
 export type AwsVpnConnectionOptions = {
