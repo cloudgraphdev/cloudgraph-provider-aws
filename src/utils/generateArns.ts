@@ -89,4 +89,4 @@ export const customerGatewayArn = ({
   region: string
   account: string
   id: string
-}): string => `arn:aws:ec2:${region}:${account}:customer-gateway/${id}`
+}): string => `arn:aws:ec2:${region}:${account}:customergateway/${id}`

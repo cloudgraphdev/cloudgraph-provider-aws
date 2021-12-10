@@ -19,7 +19,7 @@ export default {
   [services.cloudwatch]: 'awsCloudwatch',
   [services.cognitoIdentityPool]: 'awsCognitoIdentityPool',
   [services.cognitoUserPool]: 'awsCognitoUserPool',
-  [services.customerGateway]: 'customerGateway',
+  [services.customerGateway]: 'awsCustomerGateway',
   [services.dynamodb]: 'awsDynamoDbTable',
   [services.ebs]: 'awsEbs',
   [services.ec2Instance]: 'awsEc2',
