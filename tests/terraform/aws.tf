@@ -795,6 +795,10 @@ resource "aws_vpn_connection" "vpn_connection" {
   customer_gateway_id = aws_customer_gateway.vpn_customer_gateway.id
   transit_gateway_id  = aws_ec2_transit_gateway.vpn_transit_gateway.id
   type                = aws_customer_gateway.vpn_customer_gateway.type
+
+  tags = {
+    Environment = "test"
+  }
 }
 
 # Client Vpn Endpoint

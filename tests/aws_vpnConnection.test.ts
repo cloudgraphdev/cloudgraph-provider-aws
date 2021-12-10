@@ -53,14 +53,14 @@ describe('Vpn Connection Service Test: ', () => {
     })
   })
 
-  describe.skip('format', () => {
+  describe('format', () => {
     test('should return data in the correct format matching the schema type', () => {
       expect(formatResult).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             id: expect.any(String),
             arn: expect.any(String),
-            category: expect.any(String),
+            category: undefined,
             customerGatewayId: expect.any(String),
             state: expect.any(String),
             type: expect.any(String),
