@@ -3125,6 +3125,24 @@ export type AwsTotalBillingInfo = {
   formattedCost?: Maybe<Scalars['String']>;
 };
 
+export type AwsTransitGateway = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  ownerId: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  dnsSupport?: Maybe<Scalars['String']>;
+  vpnEcmpSupport?: Maybe<Scalars['String']>;
+  amazonSideAsn?: Maybe<Scalars['String']>;
+  autoAcceptSharedAttachments?: Maybe<Scalars['String']>;
+  defaultRouteTableAssociation?: Maybe<Scalars['String']>;
+  defaultRouteTablePropagation?: Maybe<Scalars['String']>;
+  associationDefaultRouteTableId?: Maybe<Scalars['String']>;
+  propagationDefaultRouteTableId?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
 export type AwsVpc = {
   accountId: Scalars['String'];
   arn: Scalars['String'];

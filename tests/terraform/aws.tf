@@ -751,6 +751,20 @@ resource "aws_flow_log" "flowlog" {
   vpc_id               = aws_vpc.vpc.id
 }
 
+resource "aws_ec2_transit_gateway" "cg_transit_gateway_test" {
+  description = "cg_transit_gateway_test"
+
+  tags = {
+    Environment = "test"
+  }
+}
+
+resource "aws_ec2_transit_gateway_vpc_attachment" "cg_gateway_vpc_attachment_test" {
+  subnet_ids         = [aws_subnet.subnet.id]
+  transit_gateway_id = aws_ec2_transit_gateway.cg_transit_gateway_test.id
+  vpc_id             = aws_vpc.vpc.id
+}
+
 # Localstack Pro Tier
 # resource "aws_rds_cluster_instance" "cluster_instances" {
 #   count              = 2

@@ -73,5 +73,6 @@ export default {
   [services.secretsManager]: 'awsSecretsManager',
   [services.ses]: 'awsSes',
   [services.sns]: 'awsSns',
+  [services.transitGateway]: 'awsTransitGateway',
   tag: 'awsTag',
 }
