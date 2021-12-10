@@ -136,6 +136,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | sqs                         |                                                                                                                                                                                            |
 | subnet                      | alb, asg, ec2, ecsService, efsMountTarget, elb, lambda, natGateway, networkInterface, routeTable, vpc, eksCluster, emrCluster, flowLog                                                     |
 | vpc                         | alb, ec2, eip, elb, ecsService, efsMountTarget, eksCluster igw, lambda, nacl, natGateway, networkInterface, rdsDbInstance, redshiftCluster, route53HostedZone, routeTable, subnet, flowLog |
+| vpnGateway                  | vpc                                                                                                                                                                                        |
 | transitGateway              |                                                                                                                                                                                            |
 
 <br />

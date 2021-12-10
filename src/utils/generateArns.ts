@@ -90,3 +90,13 @@ export const customerGatewayArn = ({
   account: string
   id: string
 }): string => `arn:aws:ec2:${region}:${account}:customergateway/${id}`
+
+export const vpnGatewayArn = ({
+  region,
+  account,
+  id,
+}: {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:vpngateway/${id}`

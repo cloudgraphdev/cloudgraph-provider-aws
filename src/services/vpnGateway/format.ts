@@ -1,6 +1,7 @@
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsVpnGateway } from './data'
 import { AwsVpnGateway } from '../../types/generated'
+import { vpnGatewayArn } from '../../utils/generateArns'
 
 /**
  * Vpn Gateway
@@ -29,7 +30,7 @@ export default ({
 
   const vpnGateway = {
     id: vpnGatewayId,
-    arn: `arn:aws:ec2:${region}:${account}:vpn-gateway/${vpnGatewayId}`,
+    arn: vpnGatewayArn({ region, account, id: vpnGatewayId }),
     region,
     type,
     state,
