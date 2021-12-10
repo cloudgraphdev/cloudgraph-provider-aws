@@ -1,3 +1,15 @@
+# [0.49.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.48.2...0.49.0) (2021-12-10)
+
+
+### Features
+
+* **service:** fixed tag mapping issue ([dba7923](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/dba792320fbe29f457e67f2899db4ad695f76c86))
+* **service:** Removed vpc attachments implementation (Will be implemented on a separate service) ([937d3fc](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/937d3fcec95122c95f0b292a1e9698ab6fd89149))
+* **services:** Add validations for vpc attachments ([a160236](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a1602360c471eae72eb496de5f16109417cfdf80))
+* **services:** fixed unit tests and eslint errors ([ccc984c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/ccc984cf3338854b0882a9fce5497a90731e401b))
+* **services:** New service transitGateway ([d3d45da](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d3d45da2f2cd060570ffc19b89a7b87204015829))
+* **services:** Update README ([03fb7e3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/03fb7e308b77c516ce0468ff5b6e42e91f03ec45))
+
 ## [0.48.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.48.1...0.48.2) (2021-12-09)
 
 
