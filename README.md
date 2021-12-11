@@ -31,6 +31,8 @@ Authenticate the CloudGraph AWS Provider any of the following ways:
 - Credentials from env variables: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`
 - Credentials found in the `credentials` under `~/.aws` (any profile, defaults to `default`)
 
+CloudGraph needs read permissions in order to ingest your data. To keep things easy you can use the same permissions that we use internally when we run CloudGraph to power AutoCloud. Here are the [AWS Docs](https://docs.autocloud.dev/connect-an-environment/aws) for generating the correct Role (feel free to leave out AutoCloud specific configuration).
+
 # Multi Account
 
 CloudGraph is able to scan multiple AWS accounts at once. This is done by setting up multiple profiles in your `~/.aws/credentials` file and then selecting all the profiles you want to crawl when running `cg init`. All resources will be tagged with an `accountId` so you can query resources specific to an account or query resources **across** accounts!
