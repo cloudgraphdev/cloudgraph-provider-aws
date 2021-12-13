@@ -1,6 +1,11 @@
 import { ServiceConnection } from '@cloudgraph/sdk'
 import { MetricAlarm } from 'aws-sdk/clients/cloudwatch'
-import { NatGateway, Vpc } from 'aws-sdk/clients/ec2'
+import {
+  NatGateway,
+  Vpc,
+  CustomerGateway,
+  TransitGateway,
+} from 'aws-sdk/clients/ec2'
 import { isEmpty } from 'lodash'
 import regions, { globalRegionName } from '../../enums/regions'
 import services from '../../enums/services'
@@ -1304,6 +1309,58 @@ export default ({
             resourceType: services.cloud9,
             relation: 'child',
             field: 'cloud9Environment',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related Customer Gateways
+     */
+     const customerGateways: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.customerGateway)
+    if (customerGateways?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        customerGateways.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { CustomerGatewayId: id }: CustomerGateway = instance
+
+          connections.push({
+            id,
+            resourceType: services.customerGateway,
+            relation: 'child',
+            field: 'customerGateway',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related Transit Gateways
+     */
+    const transitGateways: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.transitGateway)
+    if (transitGateways?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        transitGateways.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { TransitGatewayId: id }: TransitGateway = instance
+
+          connections.push({
+            id,
+            resourceType: services.transitGateway,
+            relation: 'child',
+            field: 'transitGateway',
           })
         }
       }
