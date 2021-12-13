@@ -1,3 +1,12 @@
+## [0.50.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.50.0...0.50.1) (2021-12-13)
+
+
+### Bug Fixes
+
+* **creds:** unset creds after each account is crawled to avoid any reuse ([d2b0467](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d2b0467b3aca91e9dd136f52a3961839adb1bd60))
+* **creds:** update creds function to reject promise with error ([c6799cc](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c6799cc90412ecd1fd4542d21700ee48af8a5440))
+* **service:** fix api gateway rest api service ([0139197](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/01391970d13bb36221b98c9f2eec134f3d87172a))
+
 # [0.50.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.49.0...0.50.0) (2021-12-13)
 
 
