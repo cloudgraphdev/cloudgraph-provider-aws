@@ -3127,6 +3127,8 @@ export type AwsTag = {
   efs?: Maybe<Array<Maybe<AwsEfs>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
+  customerGateway?: Maybe<Array<Maybe<AwsCustomerGateway>>>;
+  transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
 };
 
 export type AwsTotalBillingInfo = {
