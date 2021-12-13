@@ -495,7 +495,6 @@ export default async ({
     try {
       for (const [key, periodObj] of Object.entries(timePeriod)) {
         const metrics = await getMeticsForTimePeriod({ minsAgo: periodObj.minsAgo })
-        console.log(metrics)
         timePeriod[key].metrics = metrics
       }
       // Now populate the ec2Instances with the metric data
