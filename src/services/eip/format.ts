@@ -2,6 +2,7 @@ import t from '../../properties/translations'
 import { AwsEip } from '../../types/generated'
 import { RawAwsEip } from './data'
 import { formatTagsFromMap } from '../../utils/format'
+import { eipAllocationArn } from '../../utils/generateArns'
 
 /**
  * EIP
@@ -38,7 +39,7 @@ export default ({
   return {
     id,
     accountId: account,
-    arn: `arn:aws:ec2:${region}:${account}:eip-allocation/${id}`, // TODO: move to generate arn util
+    arn: eipAllocationArn({region, account, id}),
     region,
     vpc: domain === 'vpc' ? t.yes : t.no,
     customerOwnedIp,

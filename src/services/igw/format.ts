@@ -1,5 +1,6 @@
 import { AwsIgw } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
+import { igwArn } from '../../utils/generateArns'
 import { RawAwsIgw } from './data'
 
 /**
@@ -23,7 +24,7 @@ export default ({
 
   return {
     accountId: account,
-    arn: `arn:aws:ec2:${region}:${account}:internet-gateway/${id}`, // TODO: move to generate arn util
+    arn: igwArn({region, account, id}),
     region,
     attachments: attachments.map(({ VpcId: vpcId, State: state }) => ({
       vpcId,

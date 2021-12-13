@@ -3,6 +3,7 @@ import { kebabCase } from 'lodash'
 import { AwsElb } from '../../types/generated'
 import t from '../../properties/translations'
 import { formatTagsFromMap } from '../../utils/format'
+import { elbArn } from '../../utils/generateArns'
 import resources from '../../enums/resources'
 import { RawAwsElb } from './data'
 
@@ -83,7 +84,7 @@ export default ({
   const elb = {
     id: loadBalancerName,
     accountId: account,
-    arn: `arn:aws:elasticloadbalancing:${region}:${account}:loadbalancer/${loadBalancerName}`, // TODO: move to generate arn util
+    arn: elbArn({region, account, name: loadBalancerName}),
     region,
     dnsName,
     createdAt: createdAt.toISOString(),

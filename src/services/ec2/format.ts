@@ -1,6 +1,7 @@
 import t from '../../properties/translations'
 import { AwsEc2 } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
+import { ec2InstanceArn } from '../../utils/generateArns'
 import { RawAwsEC2 } from './data'
 
 /**
@@ -64,7 +65,7 @@ export default ({
 
   const ec2 = {
     accountId: account,
-    arn: `arn:aws:ec2:${region}:${account}:instance/${id}`,
+    arn: ec2InstanceArn({region, account, id}),
     id,
     region,
     ami,

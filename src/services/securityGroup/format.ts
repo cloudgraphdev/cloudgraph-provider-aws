@@ -4,6 +4,7 @@ import { AwsSecurityGroup } from './data'
 import { AwsSecurityGroup as AwsSgType } from '../../types/generated'
 import { toCamel } from '../../utils'
 import { formatTagsFromMap } from '../../utils/format'
+import { securityGroupArn } from '../../utils/generateArns'
 
 /**
  * Security Group
@@ -129,7 +130,7 @@ export default ({
     name,
     vpcId,
     accountId: account,
-    arn: `arn:aws:ec2:${region}:${account}:security-group/${id}`, // TODO: move to generate arn util
+    arn: securityGroupArn({region, account, id}),
     region,
     description,
     tags: formatTagsFromMap(Tags),

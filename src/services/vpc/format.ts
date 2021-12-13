@@ -1,5 +1,6 @@
 import { AwsVpc } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
+import { vpcArn } from '../../utils/generateArns'
 import { RawAwsVpc } from './data'
 
 /**
@@ -30,7 +31,7 @@ export default ({
   return {
     id,
     accountId: account,
-    arn: `arn:aws:ec2:${region}:${account}:vpc/${id}`, // TODO: move to generate arn util
+    arn: vpcArn({region, account, id}),
     region,
     tags: formatTagsFromMap(Tags),
     ipV4Cidr: CidrBlock,

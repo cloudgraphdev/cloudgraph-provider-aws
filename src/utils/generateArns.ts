@@ -100,3 +100,83 @@ export const vpnGatewayArn = ({
   account: string
   id: string
 }): string => `arn:aws:ec2:${region}:${account}:vpngateway/${id}`
+
+export const ebsVolumeArn = ({
+  region,
+  account,
+  id,
+} : {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:volume/${id}`
+
+export const ec2InstanceArn = ({
+  region,
+  account,
+  id,
+} : {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:instance/${id}`
+
+export const eipAllocationArn = ({
+  region,
+  account,
+  id,
+} : {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:eip-allocation/${id}`
+
+export const elbArn = ({
+  region,
+  account,
+  name,
+} : {
+  region: string
+  account: string
+  name: string
+}): string => `arn:aws:elasticloadbalancing:${region}:${account}:loadbalancer/${name}`
+
+export const igwArn = ({
+  region,
+  account,
+  id,
+} : {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:internet-gateway/${id}`
+
+export const networkInterfaceArn = ({
+  region,
+  account,
+  id,
+} : {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:network-interface/${id}`
+
+export const securityGroupArn = ({
+  region,
+  account,
+  id,
+} : {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:security-group/${id}`
+
+export const vpcArn = ({
+  region,
+  account,
+  id,
+} : {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:vpc/${id}`
