@@ -246,6 +246,11 @@ export default class Provider extends CloudGraph.Client {
     }
   }
 
+  private unsetAwsCredentials(): void {
+    AWS.config.update({ credentials: undefined })
+    this.credentials = undefined
+  }
+
   private getAwsConfig({
     profile,
     roleArn: role,
@@ -359,7 +364,7 @@ export default class Provider extends CloudGraph.Client {
         }
         default: {
           // unset credentials before getting them for multi account scenarios
-          AWS.config.update({ credentials: undefined })
+          this.unsetAwsCredentials()
           await new Promise<void>(resolve =>
             AWS.config.getCredentials((err: any) => {
               if (err) {
@@ -658,6 +663,7 @@ export default class Provider extends CloudGraph.Client {
             } returned accountId ${accountId} which has already been crawled, skipping...`
           )
         }
+        this.unsetAwsCredentials()
       }
     }
     // Handle global tag entities
