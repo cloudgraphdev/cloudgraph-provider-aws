@@ -3129,6 +3129,7 @@ export type AwsTag = {
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
   customerGateway?: Maybe<Array<Maybe<AwsCustomerGateway>>>;
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
+  vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
 };
 
 export type AwsTotalBillingInfo = {
