@@ -14,6 +14,7 @@ export default {
   cloudwatch: 'cloudwatch',
   cognitoIdentityPool: 'cognitoIdentityPool',
   cognitoUserPool: 'cognitoUserPool',
+  customerGateway: 'customerGateway',
   dynamodb: 'dynamodb',
   ebs: 'ebs',
   ec2Instance: 'ec2Instance',

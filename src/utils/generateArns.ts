@@ -80,3 +80,13 @@ export const ecsContainerArn = ({
   account: string
   name: string
 }): string => `arn:aws:ecs:${region}:${account}:container-definition/${name}`
+
+export const customerGatewayArn = ({
+  region,
+  account,
+  id,
+}: {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:customergateway/${id}`

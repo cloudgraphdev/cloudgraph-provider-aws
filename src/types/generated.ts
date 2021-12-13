@@ -812,6 +812,16 @@ export type AwsCognitoUserPoolSchemaAttribute = {
   stringAttributeConstraintsMaxValue?: Maybe<Scalars['String']>;
 };
 
+export type AwsCustomerGateway = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  bgpAsn?: Maybe<Scalars['String']>;
+  ipAddress?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
 export type AwsDynamoDbTable = {
   id: Scalars['String'];
   arn: Scalars['String'];
@@ -3117,6 +3127,8 @@ export type AwsTag = {
   efs?: Maybe<Array<Maybe<AwsEfs>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
+  customerGateway?: Maybe<Array<Maybe<AwsCustomerGateway>>>;
+  transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
 };
 
 export type AwsTotalBillingInfo = {
