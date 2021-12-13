@@ -259,7 +259,7 @@ export default class Provider extends CloudGraph.Client {
         ignoreEnvVariables: false,
       },
     } = this.config
-    return new Promise(async resolveConfig => {
+    return new Promise(async (resolveConfig, rejectConfig) => {
       // If we have keys set in the config file, just use them
       if (configuredAccessKey && configuredSecretKey) {
         const creds = {
@@ -399,8 +399,9 @@ export default class Provider extends CloudGraph.Client {
             },
           })
         } else {
-          this.logger.error('Cannot scan AWS without credentials')
-          throw new Error()
+          const errText = 'Cannot scan AWS without credentials'
+          this.logger.error(errText)
+          rejectConfig(new Error(errText))
         }
         this.logger.startSpinner(msg)
       }
@@ -408,7 +409,7 @@ export default class Provider extends CloudGraph.Client {
       const usingEnvCreds =
         !!process.env.AWS_ACCESS_KEY_ID && !ignoreEnvVariables
       if (!this.credentials) {
-        throw new Error('No Credentials found for AWS')
+        rejectConfig(new Error('No Credentials found for AWS'))
       }
       if (usingEnvCreds) {
         this.logger.success('Using credentials set by ENV variables')
