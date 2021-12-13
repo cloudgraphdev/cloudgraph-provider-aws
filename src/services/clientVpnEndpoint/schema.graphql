@@ -1,9 +1,9 @@
 type awsClientVpnEndpoint @key(fields: "arn") {
   id: String! @id @search(by: [hash])
   accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
+  arn: String! @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
-  status: String! @search(by: [hash, regexp]) #
+  status: String @search(by: [hash, regexp])
   creationTime: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp])
   deletionTime: String @search(by: [hash, regexp])
@@ -15,14 +15,42 @@ type awsClientVpnEndpoint @key(fields: "arn") {
   transportProtocol: String @search(by: [hash, regexp])
   vpnPort: Int @search
   tags: [Tag]
+  # associatedTargetNetworks: [awsAssociatedTargetNetworks]
+  serverCertificateArn: String @search(by: [hash, regexp])
+  # authenticationOptions: awsClientVpnAuthentication
+  # connectionLogOptions: awsConnectionLogResponseOptions
+  securityGroupIds: [String] @search(by: [hash])
 }
 
-# type awsAssociatedTargetNetworks
-#   @generate(
-#     query: { get: true, query: true, aggregate: false }
-#     mutation: { add: false, delete: false }
-#     subscription: false
-#   ) {
-#   NetworkId: String! @id @search(by: [hash])
-#   NetworkType: String @search(by: [hash, regexp])
-# }
+type awsAssociatedTargetNetworks
+  @generate(
+    query: { get: true, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  networkId: String @search(by: [hash])
+  networkType: String @search(by: [hash, regexp])
+}
+
+type awsClientVpnAuthentication
+  @generate(
+    query: { get: true, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  type: String @search(by: [hash, regexp])
+  activeDirectory: String @search(by: [hash, regexp])
+  mutualAuthentication: String @search(by: [hash, regexp])
+  federatedAuthentication: String @search(by: [hash, regexp])
+}
+
+type awsConnectionLogResponseOptions
+  @generate(
+    query: { get: true, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  enabled: Boolean @search
+  cloudwatchLogGroup: String @search(by: [hash, regexp])
+  cloudwatchLogStream: String @search(by: [hash, regexp])
+}

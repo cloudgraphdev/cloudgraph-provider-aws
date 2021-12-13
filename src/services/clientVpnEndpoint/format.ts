@@ -1,6 +1,7 @@
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsClientVpnEndpoint } from './data'
 import { AwsClientVpnEndpoint } from '../../types/generated'
+import { clientVpnEndpointArn } from '../../utils/generateArns'
 
 /**
  * Transit Gateway
@@ -29,10 +30,10 @@ export default ({
     VpnProtocol: vpnProtocol,
     TransportProtocol: transportProtocol,
     VpnPort: vpnPort,
-    AssociatedTargetNetworks: associatedTargetNetworks,
+    // AssociatedTargetNetworks: associatedTargetNetworks,
     ServerCertificateArn: serverCertificateArn,
-    AuthenticationOptions: authenticationOptions,
-    ConnectionLogOptions: connectionLogOptions,
+   // AuthenticationOptions: authenticationOptions,
+   // ConnectionLogOptions: connectionLogOptions,
     SecurityGroupIds: securityGroupIds,
   } = rawData
 
@@ -42,7 +43,7 @@ export default ({
   const clientVpnEndpoint = {
     id,
     accountId: account,
-    arn: `arn:aws:ec2:${region}:${account}:clientvpnendpoint/${id}`,
+    arn: clientVpnEndpointArn({ region, account, id }),
     region,
     status,
     creationTime,
@@ -55,10 +56,10 @@ export default ({
     vpnProtocol,
     transportProtocol,
     vpnPort,
-    associatedTargetNetworks,
+    // associatedTargetNetworks,
     serverCertificateArn,
-    authenticationOptions,
-    connectionLogOptions,
+    // authenticationOptions,
+    // connectionLogOptions,
     securityGroupIds,
     tags: clientVpnEndpointTags
   }
