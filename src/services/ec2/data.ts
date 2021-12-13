@@ -34,6 +34,8 @@ const { logger } = CloudGraph
 const serviceName = 'EC2'
 const endpoint = initTestEndpoint(serviceName)
 
+const cwGetMetricDataLimit = 500
+
 export interface RawAwsEC2 extends Omit<Instance, 'Tags'> {
   region: string
   DisableApiTermination?: boolean
@@ -416,43 +418,71 @@ export default async ({
         timestamps: Timestamps
       }[] = []
       const startTime = new Date(Date.now() - 60000 * minsAgo)
-      for (const region of regions.split(',')) {
-        const client = new CloudWatch({ ...config, region })
-        let loopBreak = false
-        let token
-        while (!loopBreak) {
-          const params: GetMetricDataInput = {
-            MetricDataQueries: metricQueries,
-            StartTime: startTime,
-            EndTime: end,
-            NextToken: token,
-          }
-          try {
-            const data = await client.getMetricData(params).promise()
-            if (data && data.MetricDataResults) {
-              for (const result of data.MetricDataResults) {
-                metrics.push({
-                  metric: result.Label.split(':')[0],
-                  label: result.Label.split(':')[1],
-                  values: result.Values,
-                  timestamps: result.Timestamps,
-                })
+      await new Promise<void>(async resolveTimePeriod => {
+        for (const region of regions.split(',')) {
+          const client = new CloudWatch({ ...config, region })
+          let loopBreak = false
+          let token
+          let metricsToFetch = [metricQueries]
+          if (metricQueries.length > cwGetMetricDataLimit) {
+            logger.debug('EC2:getMetricData has more than 500 requests, chunking the requests...')
+            metricsToFetch = metricQueries.reduce((resultArray, item, index) => { 
+              const chunkIndex = Math.floor(index/cwGetMetricDataLimit)
+            
+              if(!resultArray[chunkIndex]) {
+                // eslint-disable-next-line no-param-reassign
+                resultArray[chunkIndex] = [] // start a new chunk
               }
-            }
-            if (!data?.NextToken) {
-              loopBreak = true
-            } else {
-              token = data.NextToken
-            }
-          } catch (e: any) {
-            generateAwsErrorLog(
-              serviceName,
-              'cloudwatch:getMetricData',
-              e
-            )
+            
+              resultArray[chunkIndex].push(item)
+            
+              return resultArray
+            }, [])
           }
+          const promises = []
+          metricsToFetch.forEach(async metricSet => {
+            const metricPromise = new Promise<void>(async resolveMetric => {
+              while (!loopBreak) {
+                const params: GetMetricDataInput = {
+                  MetricDataQueries: metricSet,
+                  StartTime: startTime,
+                  EndTime: end,
+                  NextToken: token,
+                }
+                try {
+                  const data = await client.getMetricData(params).promise()
+                  if (data && data.MetricDataResults) {
+                    for (const result of data.MetricDataResults) {
+                      metrics.push({
+                        metric: result.Label.split(':')[0],
+                        label: result.Label.split(':')[1],
+                        values: result.Values,
+                        timestamps: result.Timestamps,
+                      })
+                    }
+                  }
+                  if (!data?.NextToken) {
+                    loopBreak = true
+                  } else {
+                    token = data.NextToken
+                  }
+                } catch (e: any) {
+                  generateAwsErrorLog(
+                    serviceName,
+                    'cloudwatch:getMetricData',
+                    e
+                  )
+                  resolveMetric()
+                }
+              }
+              resolveMetric()
+            })
+            promises.push(metricPromise)
+          })
+          await Promise.all(promises)
+          resolveTimePeriod()
         }
-      }
+      })
       return metrics
     }
     const timePeriod = {
@@ -465,6 +495,7 @@ export default async ({
     try {
       for (const [key, periodObj] of Object.entries(timePeriod)) {
         const metrics = await getMeticsForTimePeriod({ minsAgo: periodObj.minsAgo })
+        console.log(metrics)
         timePeriod[key].metrics = metrics
       }
       // Now populate the ec2Instances with the metric data
