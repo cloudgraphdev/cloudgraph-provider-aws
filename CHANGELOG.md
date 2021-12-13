@@ -1,3 +1,17 @@
+# [0.50.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.49.0...0.50.0) (2021-12-13)
+
+
+### Features
+
+* **service:** Add Tags connections ([df87ada](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/df87adaf3f5e1aab89ee6a87d07f6558811fa48f))
+* **service:** migrate service customer gateway ([21097a2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/21097a2b22d85da7a95232fb4f05d39d284a5c46))
+* **service:** migrate service customer gateway ([5624757](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/5624757e053f0aa319f31e2172ad44e861073e02))
+* **service:** migrate service customer gateway ([db6e827](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/db6e827a974971283ebe440d38adfe0e57e091be))
+* **service:** migrate service customer gateway ([96c868d](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/96c868d08eb2ae730eb2b6ec12bd765fffe4bfbc))
+* **service:** migrate service customer gateway ([aa60349](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/aa60349018a813c489d97c3cf87627eba681668c))
+* **service:** Update readme ([277911a](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/277911a30e1dcd33bee9d96b599ba4eb31adbc1a))
+* **service:** Update tags schema ([2b92b48](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/2b92b48677fb46aeaf8d4203f1de66132def55f2))
+
 # [0.49.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.48.2...0.49.0) (2021-12-10)
 
 
