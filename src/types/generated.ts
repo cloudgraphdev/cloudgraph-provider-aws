@@ -3192,6 +3192,7 @@ export type AwsVpc = {
 
 export type AwsVpnGateway = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   region?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;

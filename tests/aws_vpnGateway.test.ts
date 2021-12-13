@@ -82,6 +82,7 @@ describe('Vpn Gateway Service Test: ', () => {
         expect.arrayContaining([
           expect.objectContaining({
             id: expect.any(String),
+            accountId: expect.any(String),
             arn: expect.any(String),
             region: expect.any(String),
             type: expect.any(String),

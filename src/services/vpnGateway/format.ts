@@ -30,6 +30,7 @@ export default ({
 
   const vpnGateway = {
     id: vpnGatewayId,
+    accountId: account,
     arn: vpnGatewayArn({ region, account, id: vpnGatewayId }),
     region,
     type,
