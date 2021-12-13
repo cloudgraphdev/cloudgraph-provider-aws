@@ -109,7 +109,10 @@ const getAPIMappings = (
            * No Data for the region
            */
           if (isEmpty(data)) {
-            return
+            resolveBasePathMapping({
+              domainName,
+              restApiData: []
+            })
           }
 
           if (err) {
