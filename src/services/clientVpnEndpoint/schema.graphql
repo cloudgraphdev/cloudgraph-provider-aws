@@ -1,0 +1,28 @@
+type awsClientVpnEndpoint @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+  accountId: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
+  status: String! @search(by: [hash, regexp]) #
+  creationTime: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  deletionTime: String @search(by: [hash, regexp])
+  dnsName: String @search(by: [hash, regexp])
+  clientCidrBlock: String @search(by: [hash, regexp])
+  dnsServers: [String] @search(by: [hash])
+  splitTunnel: Boolean @search
+  vpnProtocol: String @search(by: [hash, regexp])
+  transportProtocol: String @search(by: [hash, regexp])
+  vpnPort: Int @search
+  tags: [Tag]
+}
+
+# type awsAssociatedTargetNetworks
+#   @generate(
+#     query: { get: true, query: true, aggregate: false }
+#     mutation: { add: false, delete: false }
+#     subscription: false
+#   ) {
+#   NetworkId: String! @id @search(by: [hash])
+#   NetworkType: String @search(by: [hash, regexp])
+# }

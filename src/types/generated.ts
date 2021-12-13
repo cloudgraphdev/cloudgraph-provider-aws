@@ -400,6 +400,25 @@ export type AwsBucketPolicy = {
   policy?: Maybe<AwsIamJsonPolicy>;
 };
 
+export type AwsClientVpnEndpoint = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  status: Scalars['String'];
+  creationTime?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  deletionTime?: Maybe<Scalars['String']>;
+  dnsName?: Maybe<Scalars['String']>;
+  clientCidrBlock?: Maybe<Scalars['String']>;
+  dnsServers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  splitTunnel?: Maybe<Scalars['Boolean']>;
+  vpnProtocol?: Maybe<Scalars['String']>;
+  transportProtocol?: Maybe<Scalars['String']>;
+  vpnPort?: Maybe<Scalars['Int']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
 export type AwsCloud9Environment = {
   id: Scalars['String'];
   arn: Scalars['String'];
