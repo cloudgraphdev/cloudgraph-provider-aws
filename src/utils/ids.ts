@@ -12,12 +12,16 @@ export const getRecordId = ({
   hostedZoneId,
   name,
   type,
+  identifier,
 }: {
   hostedZoneId: string
   name: string
   type: string
+  identifier: string
 }): string =>
-  `${hostedZoneId}_${name}-${type}-${kebabCase(resources.route53ZRecord)}`
+  `${hostedZoneId}_${name}-${type}${identifier}-${kebabCase(
+    resources.route53ZRecord
+  )}`
 
 export const gets3BucketId = (id: string): string =>
   `${id}-${kebabCase(resources.s3Bucket)}`

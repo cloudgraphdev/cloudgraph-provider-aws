@@ -21,10 +21,11 @@ export default ({
     Type: type,
     AliasTarget: alias,
     ResourceRecords: records = [],
+    SetIdentifier: identifier = '',
   } = rawData
 
   const hostedZoneId = getHostedZoneId(Id)
-  const id = getRecordId({ hostedZoneId, name, type })
+  const id = getRecordId({ hostedZoneId, name, type, identifier })
 
   // Resource records
   const resourceRecords = records.map(({ Value }) => Value)
