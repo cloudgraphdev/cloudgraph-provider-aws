@@ -871,6 +871,7 @@ export type AwsCustomerGateway = {
   bgpAsn?: Maybe<Scalars['String']>;
   ipAddress?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
 };
 
 export type AwsConnectionLogResponseOptions = {
@@ -3199,6 +3200,7 @@ export type AwsTag = {
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
   vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
   clientVpnEndpoint?: Maybe<Array<Maybe<AwsClientVpnEndpoint>>>;
+  vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
 };
 
 export type AwsTotalBillingInfo = {
@@ -3292,6 +3294,7 @@ export type AwsVpnGateway = {
 
 export type AwsVpnConnection = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   region?: Maybe<Scalars['String']>;
   category?: Maybe<Scalars['String']>;
@@ -3305,6 +3308,7 @@ export type AwsVpnConnection = {
   vgwTelemetry?: Maybe<Array<Maybe<AwsVgwTelemetry>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
+  customerGateway?: Maybe<Array<Maybe<AwsCustomerGateway>>>;
 };
 
 export type AwsVpnConnectionOptions = {

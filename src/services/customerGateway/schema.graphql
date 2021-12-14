@@ -7,4 +7,5 @@ type awsCustomerGateway @key(fields: "arn") {
   bgpAsn: String @search(by: [hash, regexp])
   ipAddress: String @search(by: [hash, regexp])
   tags: [Tag]
+  vpnConnection: [awsVpnConnection] @hasInverse(field: customerGateway)
 }

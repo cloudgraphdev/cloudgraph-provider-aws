@@ -1,6 +1,8 @@
 import CloudGraph from '@cloudgraph/sdk'
+import CustomerGateway from '../src/services/customerGateway'
 import TransitGateway from '../src/services/transitGateway'
 import VpnConnection from '../src/services/vpnConnection'
+// import VpnGateway from '../src/services/vpnGateway'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
 import services from '../src/enums/services'
@@ -9,7 +11,7 @@ describe('Vpn Connection Service Test: ', () => {
   let getDataResult
   let formatResult
   let vpnConnections
-  let transitGatewayId
+  let vpnConnectionId
   initTestConfig()
   beforeAll(async () => {
     getDataResult = {}
@@ -18,6 +20,12 @@ describe('Vpn Connection Service Test: ', () => {
       const transitGatewayService = new TransitGateway({
         logger: CloudGraph.logger,
       })
+      const customerGatewayService = new CustomerGateway({
+        logger: CloudGraph.logger,
+      })
+      // const vpnGatewayService = new VpnGateway({
+      //   logger: CloudGraph.logger,
+      // })
       const classInstance = new VpnConnection({ logger: CloudGraph.logger })
       getDataResult = await classInstance.getData({
         credentials,
@@ -34,18 +42,42 @@ describe('Vpn Connection Service Test: ', () => {
         regions: region,
       })
 
+      // Get Customer Gateway data
+      const customerGatewayData = await customerGatewayService.getData({
+        credentials,
+        regions: region,
+      })
+
+      // Get Vpn Gateway data
+      // const vpnGatewayData = await vpnGatewayService.getData({
+      //   credentials,
+      //   regions: region,
+      // })
+
       const [vpnConnection] = getDataResult[region]
-      transitGatewayId = vpnConnection.VpnConnectionId
+      vpnConnectionId = vpnConnection.VpnConnectionId
 
       vpnConnections = classInstance.getConnections({
         service: vpnConnection,
         data: [
+          {
+            name: services.customerGateway,
+            data: customerGatewayData,
+            account,
+            region,
+          },
           {
             name: services.transitGateway,
             data: transitGatewayData,
             account,
             region,
           },
+          // {
+          //   name: services.vpnGateway,
+          //   data: vpnGatewayData,
+          //   account,
+          //   region,
+          // },
         ],
         region,
         account,
@@ -87,6 +119,7 @@ describe('Vpn Connection Service Test: ', () => {
         expect.arrayContaining([
           expect.objectContaining({
             id: expect.any(String),
+            accountId: expect.any(String),
             arn: expect.any(String),
             category: undefined,
             customerGatewayId: expect.any(String),
@@ -111,15 +144,33 @@ describe('Vpn Connection Service Test: ', () => {
   })
 
   describe('connections', () => {
-    test('should verify the connection to transit gateway', () => {
-      const transitGatewayConnections = vpnConnections[
-        transitGatewayId
+    test('should verify the connection to customer gateway', () => {
+      const customerGatewayConnections = vpnConnections[
+        vpnConnectionId
       ]?.filter(
+        connection => connection.resourceType === services.customerGateway
+      )
+
+      expect(customerGatewayConnections).toBeDefined()
+      expect(customerGatewayConnections.length).toBe(1)
+    })
+
+    test('should verify the connection to transit gateway', () => {
+      const transitGatewayConnections = vpnConnections[vpnConnectionId]?.filter(
         connection => connection.resourceType === services.transitGateway
       )
 
       expect(transitGatewayConnections).toBeDefined()
       expect(transitGatewayConnections.length).toBe(1)
     })
+
+    // test('should verify the connection to vpn gateway', () => {
+    //   const vpnGatewayConnections = vpnConnections[vpnConnectionId]?.filter(
+    //     connection => connection.resourceType === services.vpnGateway
+    //   )
+
+    //   expect(vpnGatewayConnections).toBeDefined()
+    //   expect(vpnGatewayConnections.length).toBe(1)
+    // })
   })
 })

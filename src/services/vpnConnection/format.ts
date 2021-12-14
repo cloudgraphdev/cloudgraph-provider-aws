@@ -2,6 +2,7 @@ import cuid from 'cuid'
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsVpnConnection } from './data'
 import { AwsVpnConnection } from '../../types/generated'
+import { vpnConnectionArn } from '../../utils/generateArns'
 
 /**
  * Vpn Connections
@@ -93,7 +94,8 @@ export default ({
 
   const vpnConnection = {
     id,
-    arn: `arn:aws:ec2:${region}:${account}:vpn-connection/${id}`,
+    accountId: account,
+    arn: vpnConnectionArn({ region, account, id}),
     tags: vpnConnectionTags,
     category,
     customerGatewayId: cgwId,

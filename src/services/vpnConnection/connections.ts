@@ -4,7 +4,8 @@ import { VpnConnection, TagList } from 'aws-sdk/clients/ec2'
 
 import services from '../../enums/services'
 import { RawAwsTransitGateway } from '../transitGateway/data'
-// import { RawAwsCustomerGateway } from '../customerGateway/data'
+import { RawAwsCustomerGateway } from '../customerGateway/data'
+// import { RawAwsVpnGateway } from '../vpnGateway/data'
 
 /**
  * Vpn Connection
@@ -26,7 +27,8 @@ export default ({
   const {
     VpnConnectionId: id,
     TransitGatewayId: transitGatewayId,
-    // CustomerGatewayId: customerGatewayId
+    CustomerGatewayId: customerGatewayId,
+    // VpnGatewayId: vpnGatewayId,
   } = vpn
 
   /**
@@ -62,27 +64,61 @@ export default ({
    * Find Customer Gateway
    * related to this Vpn Connection
    */
-  // TODO: Uncomment when customerGateway is available
-  //   const customerGateways: {
-  //     name: string
-  //     data: { [property: string]: any[] }
-  //   } = data.find(({ name }) => name === services.customerGateway)
 
-  //   if (customerGateways?.data?.[region]) {
-  //     const customerGateway: RawAwsCustomerGateway[] = customerGateways.data[region].filter(
-  //         ({ CustomerGatewayId }: RawAwsCustomerGateway) =>
-  //         CustomerGatewayId === customerGatewayId
-  //     )
+  const customerGateways: {
+    name: string
+    data: { [property: string]: any[] }
+  } = data.find(({ name }) => name === services.customerGateway)
 
-  //     if (customerGateway) {
+  if (customerGateways?.data?.[region]) {
+    const awsCustomerGateways: RawAwsCustomerGateway[] = customerGateways.data[
+      region
+    ].filter(
+      ({ CustomerGatewayId }: RawAwsCustomerGateway) =>
+        CustomerGatewayId === customerGatewayId
+    )
+
+    if (awsCustomerGateways) {
+      for (const customerGateway of awsCustomerGateways) {
+        connections.push({
+          id: customerGateway.CustomerGatewayId,
+          resourceType: services.customerGateway,
+          relation: 'child',
+          field: 'customerGateway',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find Vpn Gateway
+   * related to this Vpn Connection
+   */
+  // TODO: Uncomment when vpnGateway is available
+  // const vpnGateways: {
+  //   name: string
+  //   data: { [property: string]: any[] }
+  // } = data.find(({ name }) => name === services.vpnGateway)
+
+  // if (vpnGateways?.data?.[region]) {
+  //   const awsVpnGateways: RawAwsVpnGateway[] = vpnGateways.data[
+  //     region
+  //   ].filter(
+  //     ({ VpnGatewayId }: RawAwsVpnGateway) =>
+  //     VpnGatewayId === vpnGatewayId
+  //   )
+
+  //   if (awsVpnGateways) {
+  //     for (const vpnGateway of awsVpnGateways) {
   //       connections.push({
-  //         id: customerGateway.CustomerGatewayId,
-  //         resourceType: services.customerGateway,
+  //         id: vpnGateway.VpnGatewayId,
+  //         resourceType: services.vpnGateway,
   //         relation: 'child',
-  //         field: 'customerGateway',
+  //         field: 'vpnGateway',
   //       })
   //     }
   //   }
+  // }
 
   const vpnConnectionResult = {
     [id]: connections,

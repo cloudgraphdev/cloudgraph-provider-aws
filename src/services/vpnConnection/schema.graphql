@@ -1,5 +1,6 @@
 type awsVpnConnection @key(fields: "arn") {
   id: String! @id @search(by: [hash])
+  accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
   category: String @search(by: [hash, regexp])
@@ -13,7 +14,8 @@ type awsVpnConnection @key(fields: "arn") {
   vgwTelemetry: [awsVgwTelemetry]
   tags: [Tag]
   transitGateway: [awsTransitGateway] @hasInverse(field: vpnConnection)
-  # customerGateway: [awsCustomerGateway] @hasInverse(field: vpnConnection)
+  customerGateway: [awsCustomerGateway] @hasInverse(field: vpnConnection)
+  # vpnGateway: [awsVpnGateway] @hasInverse(field: vpnConnection)
 }
 
 type awsVpnConnectionOptions
