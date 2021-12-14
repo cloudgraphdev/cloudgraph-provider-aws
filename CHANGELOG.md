@@ -1,3 +1,10 @@
+## [0.51.5](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.51.4...0.51.5) (2021-12-14)
+
+
+### Bug Fixes
+
+* Avoid error on destructuring accesskeylastused ([7682eb1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/7682eb14db8da4ff7a6f16fc04bfaca0b93b874f))
+
 ## [0.51.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.51.3...0.51.4) (2021-12-14)
 
 
