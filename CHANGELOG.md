@@ -1,3 +1,10 @@
+## [0.51.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.51.1...0.51.2) (2021-12-14)
+
+
+### Bug Fixes
+
+* **utils:** move arn generators into utils ([e8e5dff](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/e8e5dff5e04b3c4def0e72bba49664e051cdc8d6))
+
 ## [0.51.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.51.0...0.51.1) (2021-12-14)
 
 
