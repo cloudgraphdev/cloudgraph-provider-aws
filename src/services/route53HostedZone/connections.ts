@@ -47,6 +47,7 @@ export default ({
           hostedZoneId,
           name: record.Name,
           type: record.Type,
+          identifier: record.SetIdentifier || '',
         })
         connections.push({
           id: recordId,

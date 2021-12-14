@@ -29,9 +29,10 @@ export default ({
     Name: name,
     Type: type,
     AliasTarget: alias,
+    SetIdentifier: identifier = '',
   } = record
   const hostedZoneId = getHostedZoneId(Id)
-  const id = getRecordId({ hostedZoneId, name, type })
+  const id = getRecordId({ hostedZoneId, name, type, identifier })
 
   /**
    * Find ELBs
