@@ -36,6 +36,7 @@ export default ({
     AuthenticationOptions: clientVpnAuthenticationList,
     ConnectionLogOptions: connectionLogOptions,
     SecurityGroupIds: securityGroupIds,
+    ClientConnectOptions: clientConnectOptions
   } = rawData
 
   // Client Vpn Endpoint Tags
@@ -105,6 +106,11 @@ export default ({
     },
     securityGroupIds,
     tags: clientVpnEndpointTags,
+    clientConnectOptions: {
+      enabled: clientConnectOptions?.Enabled,
+      cloudwatchLogGroup: clientConnectOptions?.LambdaFunctionArn,
+      status: clientConnectOptions?.Status?.Code,
+    },
   }
 
   return clientVpnEndpoint

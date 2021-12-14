@@ -36,11 +36,21 @@ describe('Client Vpn Endpoint Service Test: ', () => {
         expect.arrayContaining([
           expect.objectContaining({
             AssociatedTargetNetworks: expect.any(Array),
-            AuthenticationOptions: expect.any(Array),
+            AuthenticationOptions: expect.arrayContaining([
+              expect.objectContaining({
+                Type: expect.any(String),
+                MutualAuthentication: expect.any(Object),
+              }),
+            ]),
             ClientCidrBlock: expect.any(String),
-            ClientConnectOptions: expect.any(Object),
+            ClientConnectOptions: expect.objectContaining({
+              Enabled: expect.any(Boolean),
+              Status: expect.any(Object),
+            }),
             ClientVpnEndpointId: expect.any(String),
-            ConnectionLogOptions: expect.any(Object),
+            ConnectionLogOptions: expect.objectContaining({
+              Enabled: expect.any(Boolean),
+            }),
             CreationTime: expect.any(String),
             Description: expect.any(String),
             DnsName: expect.any(String),
@@ -48,7 +58,9 @@ describe('Client Vpn Endpoint Service Test: ', () => {
             SecurityGroupIds: expect.any(Array),
             ServerCertificateArn: expect.any(String),
             SplitTunnel: expect.any(Boolean),
-            Status: expect.any(Object),
+            Status: expect.objectContaining({
+              Code: expect.any(String),
+            }),
             Tags: expect.any(Object),
             TransportProtocol: expect.any(String),
             VpcId: expect.any(String),
@@ -69,9 +81,20 @@ describe('Client Vpn Endpoint Service Test: ', () => {
             accountId: undefined,
             arn: expect.any(String),
             associatedTargetNetworks: expect.any(Array),
-            authenticationOptions: expect.any(Array),
+            authenticationOptions: expect.arrayContaining([
+              expect.objectContaining({
+                type: expect.any(String),
+                mutualAuthentication: expect.any(Object),
+              }),
+            ]),
             clientCidrBlock: expect.any(String),
-            connectionLogOptions: expect.any(Object),
+            clientConnectOptions: expect.objectContaining({
+              enabled: expect.any(Boolean),
+              status: expect.any(String),
+            }),
+            connectionLogOptions: expect.objectContaining({
+              enabled: expect.any(Boolean),
+            }),
             creationTime: expect.any(String),
             deletionTime: undefined,
             description: expect.any(String),

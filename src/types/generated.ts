@@ -410,6 +410,12 @@ export type AwsCertificateAuthenticationRequest = {
   clientRootCertificateChain?: Maybe<Scalars['String']>;
 };
 
+export type AwsClientConnectResponseOptions = {
+  enabled?: Maybe<Scalars['Boolean']>;
+  lambdaFunctionArn?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+};
+
 export type AwsClientVpnAuthentication = {
   id: Scalars['String'];
   type?: Maybe<Scalars['String']>;
@@ -440,6 +446,7 @@ export type AwsClientVpnEndpoint = {
   authenticationOptions?: Maybe<Array<Maybe<AwsClientVpnAuthentication>>>;
   connectionLogOptions?: Maybe<AwsConnectionLogResponseOptions>;
   securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  clientConnectOptions?: Maybe<AwsClientConnectResponseOptions>;
 };
 
 export type AwsCloud9Environment = {

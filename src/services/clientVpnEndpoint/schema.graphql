@@ -1,7 +1,7 @@
 type awsClientVpnEndpoint @key(fields: "arn") {
   id: String! @id @search(by: [hash])
   accountId: String! @search(by: [hash])
-  arn: String! @search(by: [hash, regexp])
+  arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
   status: String @search(by: [hash, regexp])
   creationTime: String @search(by: [hash, regexp])
@@ -20,6 +20,7 @@ type awsClientVpnEndpoint @key(fields: "arn") {
   authenticationOptions: [awsClientVpnAuthentication]
   connectionLogOptions: awsConnectionLogResponseOptions
   securityGroupIds: [String] @search(by: [hash])
+  clientConnectOptions: awsClientConnectResponseOptions
 }
 
 type awsAssociatedTargetNetworks
@@ -83,6 +84,17 @@ type awsConnectionLogResponseOptions
   enabled: Boolean @search
   cloudwatchLogGroup: String @search(by: [hash, regexp])
   cloudwatchLogStream: String @search(by: [hash, regexp])
+}
+
+type awsClientConnectResponseOptions
+  @generate(
+    query: { get: true, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  enabled: Boolean @search
+  lambdaFunctionArn: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
 }
 
 
