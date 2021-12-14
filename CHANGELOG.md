@@ -1,3 +1,15 @@
+# [0.51.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.50.2...0.51.0) (2021-12-14)
+
+
+### Features
+
+* **service:** Add accountId property ([505e07d](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/505e07d936ad269640b8c6b0f65c51f734076e72))
+* **service:** Add accountId property ([6894919](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/6894919113b34a550a5eeb3b66712cb101a183ef))
+* **service:** Add Tags connections ([3b3fbc0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/3b3fbc0d0758f178d642ab37f4f087de9ff60ab4))
+* **service:** migrate service customer gateway ([f16ebd0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/f16ebd0de96cdb47a264363c47fee3d7b5f03e25))
+* **service:** migrate service VPN gateway ([161977c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/161977c4650e928c7160efa673f5384385717e2f))
+* **service:** Update tags schema ([ecfc6d6](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/ecfc6d6596e1c3846008af06db631f91058aff7e))
+
 ## [0.50.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.50.1...0.50.2) (2021-12-14)
 
 
