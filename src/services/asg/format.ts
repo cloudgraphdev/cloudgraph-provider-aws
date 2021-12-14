@@ -91,6 +91,7 @@ export default ({
     NoDevice: noDevice,
   })=> {
     return {
+      id: cuid(),
       virtualName,
       deviceName,
       noDevice: noDevice? t.yes : t.no,

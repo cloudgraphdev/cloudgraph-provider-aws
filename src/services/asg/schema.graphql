@@ -1,6 +1,6 @@
 type awsMixedInstancesPolicy
   @generate(
-    query: { get: false, query: true, aggregate: false }
+    query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
@@ -18,7 +18,7 @@ type awsMixedInstancesPolicy
 
 type awsLaunchTemplateOverrides
   @generate(
-    query: { get: false, query: true, aggregate: false }
+    query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
@@ -32,12 +32,12 @@ type awsLaunchTemplateOverrides
 
 type awsSuspendedProcess
   @generate(
-    query: { get: false, query: true, aggregate: false }
+    query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
     id: String! @id
-    processName: String! @id @search(by: [hash, regexp])
+    processName: String! @search(by: [hash, regexp])
     suspensionReason: String @search(by: [hash, regexp])
   }
 
@@ -54,10 +54,11 @@ type awsEnabledMetrics
 
 type  awsLcBlockDeviceMapping
   @generate(
-    query: { get: false, query: true, aggregate: false }
+    query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
+    id: String! @id
     virtualName: String @search(by: [hash, regexp])
     deviceName: String @search(by: [hash, regexp])
     noDevice: String @search(by: [hash, regexp])
@@ -65,7 +66,7 @@ type  awsLcBlockDeviceMapping
 
 type awsLaunchConfiguration
   @generate(
-    query: { get: false, query: true, aggregate: false }
+    query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
