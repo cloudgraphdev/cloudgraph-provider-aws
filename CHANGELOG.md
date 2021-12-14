@@ -1,3 +1,10 @@
+## [0.51.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.51.0...0.51.1) (2021-12-14)
+
+
+### Bug Fixes
+
+* **service:** fix asg for uniqueness ([d5c2890](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d5c28908e2b6437fd2c0ce8745ad7ad04b13dfe5))
+
 # [0.51.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.50.2...0.51.0) (2021-12-14)
 
 
