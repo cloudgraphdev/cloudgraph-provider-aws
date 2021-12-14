@@ -814,6 +814,7 @@ export type AwsCognitoUserPoolSchemaAttribute = {
 
 export type AwsCustomerGateway = {
   id: Scalars['String'];
+  accountId: Scalars['String'];
   arn: Scalars['String'];
   region?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
