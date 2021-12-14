@@ -208,10 +208,8 @@ const accessKeyByUsername = async (
                   {
                     AccessKeyId,
                   },
-                  (
-                    err: AWSError,
-                    { AccessKeyLastUsed }: GetAccessKeyLastUsedResponse
-                  ) => {
+                  (err: AWSError, data: GetAccessKeyLastUsedResponse) => {
+                    const { AccessKeyLastUsed: accessKeyLastUsed } = data || {}
                     if (err) {
                       generateAwsErrorLog(
                         serviceName,
@@ -220,11 +218,11 @@ const accessKeyByUsername = async (
                       )
                     }
 
-                    if (!isEmpty(AccessKeyLastUsed)) {
+                    if (!isEmpty(accessKeyLastUsed)) {
                       resolveLastUsedData({
                         AccessKeyId,
                         ...Metadata,
-                        AccessKeyLastUsed,
+                        AccessKeyLastUsed: accessKeyLastUsed,
                       })
                     }
                     resolveLastUsedData(null)
