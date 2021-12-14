@@ -1,3 +1,10 @@
+## [0.51.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.51.3...0.51.4) (2021-12-14)
+
+
+### Bug Fixes
+
+* Avoid route53 records duplication ([bafacbe](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/bafacbed87a661443c2b6105f3b9efad29560855))
+
 ## [0.51.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.51.2...0.51.3) (2021-12-14)
 
 
