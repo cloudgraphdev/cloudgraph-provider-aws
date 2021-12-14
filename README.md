@@ -82,7 +82,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | cloudwatch                  |                                                                                                                                                                                            |
 | cognitoIdentityPool         |                                                                                                                                                                                            |
 | cognitoUserPool             | lambda                                                                                                                                                                                     |
-| customerGateway             |                                                                                                                                                                                            |
+| customerGateway             | vpnConnection                                                                                                                                                                                |
 | dynamodb                    |                                                                                                                                                                                            |
 | ebs                         | asg, ec2, emrInstance                                                                                                                                                                      |
 | ec2                         | alb, asg, ebs, eip, emrInstance, networkInterface, securityGroup, subnet, vpc, ecsContainer                                                                                                |
@@ -136,9 +136,10 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | sns                         | kms, cloudtrail                                                                                                                                                                            |
 | sqs                         |                                                                                                                                                                                            |
 | subnet                      | alb, asg, ec2, ecsService, efsMountTarget, elb, lambda, natGateway, networkInterface, routeTable, vpc, eksCluster, emrCluster, flowLog                                                     |
-| vpc                         | alb, ec2, eip, elb, ecsService, efsMountTarget, eksCluster igw, lambda, nacl, natGateway, networkInterface, rdsDbInstance, redshiftCluster, route53HostedZone, routeTable, subnet, flowLog |
-| vpnGateway                  | vpc                                                                                                                                                                                        |
-| transitGateway              |                                                                                                                                                                                            |
+| vpc                         | alb, ec2, eip, elb, ecsService, efsMountTarget, eksCluster igw, lambda, nacl, natGateway, networkInterface, rdsDbInstance, redshiftCluster, route53HostedZone, routeTable, subnet, flowLog, vpnGateway |
+| vpnConnection               | customerGateway, transitGateway, vpnGateway                                                                                                                                                                              |
+| vpnGateway                  | vpc, vpnConnection                                                                                                                                                                                        |
+| transitGateway              | vpnConnection                                                                                                                                                                                           |
 
 <br />
 
