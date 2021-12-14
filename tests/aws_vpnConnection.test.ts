@@ -2,7 +2,7 @@ import CloudGraph from '@cloudgraph/sdk'
 import CustomerGateway from '../src/services/customerGateway'
 import TransitGateway from '../src/services/transitGateway'
 import VpnConnection from '../src/services/vpnConnection'
-// import VpnGateway from '../src/services/vpnGateway'
+import VpnGateway from '../src/services/vpnGateway'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
 import services from '../src/enums/services'
@@ -23,17 +23,17 @@ describe('Vpn Connection Service Test: ', () => {
       const customerGatewayService = new CustomerGateway({
         logger: CloudGraph.logger,
       })
-      // const vpnGatewayService = new VpnGateway({
-      //   logger: CloudGraph.logger,
-      // })
+      const vpnGatewayService = new VpnGateway({
+        logger: CloudGraph.logger,
+      })
       const classInstance = new VpnConnection({ logger: CloudGraph.logger })
       getDataResult = await classInstance.getData({
         credentials,
         regions: region,
       })
 
-      formatResult = getDataResult[region].map(elbData =>
-        classInstance.format({ service: elbData, region, account })
+      formatResult = getDataResult[region].map(data =>
+        classInstance.format({ service: data, region, account })
       )
 
       // Get Transit Gateway data
@@ -49,10 +49,10 @@ describe('Vpn Connection Service Test: ', () => {
       })
 
       // Get Vpn Gateway data
-      // const vpnGatewayData = await vpnGatewayService.getData({
-      //   credentials,
-      //   regions: region,
-      // })
+      const vpnGatewayData = await vpnGatewayService.getData({
+        credentials,
+        regions: region,
+      })
 
       const [vpnConnection] = getDataResult[region]
       vpnConnectionId = vpnConnection.VpnConnectionId
@@ -72,12 +72,12 @@ describe('Vpn Connection Service Test: ', () => {
             account,
             region,
           },
-          // {
-          //   name: services.vpnGateway,
-          //   data: vpnGatewayData,
-          //   account,
-          //   region,
-          // },
+          {
+            name: services.vpnGateway,
+            data: vpnGatewayData,
+            account,
+            region,
+          },
         ],
         region,
         account,
@@ -164,13 +164,13 @@ describe('Vpn Connection Service Test: ', () => {
       expect(transitGatewayConnections.length).toBe(1)
     })
 
-    // test('should verify the connection to vpn gateway', () => {
-    //   const vpnGatewayConnections = vpnConnections[vpnConnectionId]?.filter(
-    //     connection => connection.resourceType === services.vpnGateway
-    //   )
+    test('should verify the connection to vpn gateway', () => {
+      const vpnGatewayConnections = vpnConnections[vpnConnectionId]?.filter(
+        connection => connection.resourceType === services.vpnGateway
+      )
 
-    //   expect(vpnGatewayConnections).toBeDefined()
-    //   expect(vpnGatewayConnections.length).toBe(1)
-    // })
+      expect(vpnGatewayConnections).toBeDefined()
+      expect(vpnGatewayConnections.length).toBe(0)
+    })
   })
 })

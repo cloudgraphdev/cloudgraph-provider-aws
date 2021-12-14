@@ -15,7 +15,7 @@ type awsVpnConnection @key(fields: "arn") {
   tags: [Tag]
   transitGateway: [awsTransitGateway] @hasInverse(field: vpnConnection)
   customerGateway: [awsCustomerGateway] @hasInverse(field: vpnConnection)
-  # vpnGateway: [awsVpnGateway] @hasInverse(field: vpnConnection)
+  vpnGateway: [awsVpnGateway] @hasInverse(field: vpnConnection)
 }
 
 type awsVpnConnectionOptions

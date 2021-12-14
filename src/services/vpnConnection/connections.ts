@@ -5,7 +5,7 @@ import { VpnConnection, TagList } from 'aws-sdk/clients/ec2'
 import services from '../../enums/services'
 import { RawAwsTransitGateway } from '../transitGateway/data'
 import { RawAwsCustomerGateway } from '../customerGateway/data'
-// import { RawAwsVpnGateway } from '../vpnGateway/data'
+import { RawAwsVpnGateway } from '../vpnGateway/data'
 
 /**
  * Vpn Connection
@@ -28,7 +28,7 @@ export default ({
     VpnConnectionId: id,
     TransitGatewayId: transitGatewayId,
     CustomerGatewayId: customerGatewayId,
-    // VpnGatewayId: vpnGatewayId,
+    VpnGatewayId: vpnGatewayId,
   } = vpn
 
   /**
@@ -94,31 +94,27 @@ export default ({
    * Find Vpn Gateway
    * related to this Vpn Connection
    */
-  // TODO: Uncomment when vpnGateway is available
-  // const vpnGateways: {
-  //   name: string
-  //   data: { [property: string]: any[] }
-  // } = data.find(({ name }) => name === services.vpnGateway)
+  const vpnGateways: {
+    name: string
+    data: { [property: string]: any[] }
+  } = data.find(({ name }) => name === services.vpnGateway)
 
-  // if (vpnGateways?.data?.[region]) {
-  //   const awsVpnGateways: RawAwsVpnGateway[] = vpnGateways.data[
-  //     region
-  //   ].filter(
-  //     ({ VpnGatewayId }: RawAwsVpnGateway) =>
-  //     VpnGatewayId === vpnGatewayId
-  //   )
+  if (vpnGateways?.data?.[region]) {
+    const awsVpnGateways: RawAwsVpnGateway[] = vpnGateways.data[region].filter(
+      ({ VpnGatewayId }: RawAwsVpnGateway) => VpnGatewayId === vpnGatewayId
+    )
 
-  //   if (awsVpnGateways) {
-  //     for (const vpnGateway of awsVpnGateways) {
-  //       connections.push({
-  //         id: vpnGateway.VpnGatewayId,
-  //         resourceType: services.vpnGateway,
-  //         relation: 'child',
-  //         field: 'vpnGateway',
-  //       })
-  //     }
-  //   }
-  // }
+    if (awsVpnGateways) {
+      for (const vpnGateway of awsVpnGateways) {
+        connections.push({
+          id: vpnGateway.VpnGatewayId,
+          resourceType: services.vpnGateway,
+          relation: 'child',
+          field: 'vpnGateway',
+        })
+      }
+    }
+  }
 
   const vpnConnectionResult = {
     [id]: connections,

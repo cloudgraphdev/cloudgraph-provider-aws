@@ -3279,19 +3279,6 @@ export type AwsVpc = {
   vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
 };
 
-export type AwsVpnGateway = {
-  id: Scalars['String'];
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
-  region?: Maybe<Scalars['String']>;
-  type?: Maybe<Scalars['String']>;
-  state?: Maybe<Scalars['String']>;
-  amazonSideAsn?: Maybe<Scalars['Int']>;
-  vpcIds?: Maybe<Array<Maybe<Scalars['String']>>>;
-  tags?: Maybe<Array<Maybe<Tag>>>;
-  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
-};
-
 export type AwsVpnConnection = {
   id: Scalars['String'];
   accountId: Scalars['String'];
@@ -3309,6 +3296,7 @@ export type AwsVpnConnection = {
   tags?: Maybe<Array<Maybe<Tag>>>;
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
   customerGateway?: Maybe<Array<Maybe<AwsCustomerGateway>>>;
+  vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
 };
 
 export type AwsVpnConnectionOptions = {
@@ -3320,6 +3308,20 @@ export type AwsVpnConnectionOptions = {
   tunnelInsideIpVersion?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
   tunnelOptions?: Maybe<Array<Maybe<AwsTunelOptions>>>;
+};
+
+export type AwsVpnGateway = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  amazonSideAsn?: Maybe<Scalars['Int']>;
+  vpcIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
 };
 
 export type AwsVpnStaticRoute = {

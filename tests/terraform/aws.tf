@@ -775,7 +775,7 @@ resource "aws_customer_gateway" "main" {
   }
 }
 
-resource "aws_vpn_gateway" "vpn_gategay" {
+resource "aws_vpn_gateway" "vpn_gateway" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
