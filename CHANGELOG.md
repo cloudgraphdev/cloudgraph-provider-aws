@@ -1,3 +1,10 @@
+## [0.50.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.50.1...0.50.2) (2021-12-14)
+
+
+### Bug Fixes
+
+* **service:** fix ec2 metric data when over 500 requests ([0afc46c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/0afc46c48bde869860fe5a3a6f49c3a2d6bcda5a))
+
 ## [0.50.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.50.0...0.50.1) (2021-12-13)
 
 
