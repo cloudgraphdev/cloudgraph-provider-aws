@@ -15,10 +15,10 @@ type awsClientVpnEndpoint @key(fields: "arn") {
   transportProtocol: String @search(by: [hash, regexp])
   vpnPort: Int @search
   tags: [Tag]
-  # associatedTargetNetworks: [awsAssociatedTargetNetworks]
+  associatedTargetNetworks: [awsAssociatedTargetNetworks]
   serverCertificateArn: String @search(by: [hash, regexp])
-  # authenticationOptions: awsClientVpnAuthentication
-  # connectionLogOptions: awsConnectionLogResponseOptions
+  authenticationOptions: [awsClientVpnAuthentication]
+  connectionLogOptions: awsConnectionLogResponseOptions
   securityGroupIds: [String] @search(by: [hash])
 }
 
@@ -28,6 +28,7 @@ type awsAssociatedTargetNetworks
     mutation: { add: false, delete: false }
     subscription: false
   ) {
+  id: String! @id
   networkId: String @search(by: [hash])
   networkType: String @search(by: [hash, regexp])
 }
@@ -38,10 +39,39 @@ type awsClientVpnAuthentication
     mutation: { add: false, delete: false }
     subscription: false
   ) {
+  id: String! @id
   type: String @search(by: [hash, regexp])
-  activeDirectory: String @search(by: [hash, regexp])
-  mutualAuthentication: String @search(by: [hash, regexp])
-  federatedAuthentication: String @search(by: [hash, regexp])
+  activeDirectory: awsDirectoryServiceAuthenticationRequest
+  mutualAuthentication: awsCertificateAuthenticationRequest
+  federatedAuthentication: awsFederatedAuthentication
+}
+
+type awsDirectoryServiceAuthenticationRequest
+  @generate(
+    query: { get: true, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  directoryId: String @search(by: [hash, regexp])
+}
+
+type awsCertificateAuthenticationRequest
+  @generate(
+    query: { get: true, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  clientRootCertificateChain: String @search(by: [hash, regexp])
+}
+
+type awsFederatedAuthentication
+  @generate(
+    query: { get: true, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  samlProviderArn: String @search(by: [hash, regexp])
+  selfServiceSamlProviderArn: String @search(by: [hash, regexp])
 }
 
 type awsConnectionLogResponseOptions
@@ -54,3 +84,5 @@ type awsConnectionLogResponseOptions
   cloudwatchLogGroup: String @search(by: [hash, regexp])
   cloudwatchLogStream: String @search(by: [hash, regexp])
 }
+
+

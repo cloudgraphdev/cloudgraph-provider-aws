@@ -385,6 +385,7 @@ export type AwsAsg = {
 };
 
 export type AwsAssociatedTargetNetworks = {
+  id: Scalars['String'];
   networkId?: Maybe<Scalars['String']>;
   networkType?: Maybe<Scalars['String']>;
 };
@@ -405,11 +406,16 @@ export type AwsBucketPolicy = {
   policy?: Maybe<AwsIamJsonPolicy>;
 };
 
+export type AwsCertificateAuthenticationRequest = {
+  clientRootCertificateChain?: Maybe<Scalars['String']>;
+};
+
 export type AwsClientVpnAuthentication = {
+  id: Scalars['String'];
   type?: Maybe<Scalars['String']>;
-  activeDirectory?: Maybe<Scalars['String']>;
-  mutualAuthentication?: Maybe<Scalars['String']>;
-  federatedAuthentication?: Maybe<Scalars['String']>;
+  activeDirectory?: Maybe<AwsDirectoryServiceAuthenticationRequest>;
+  mutualAuthentication?: Maybe<AwsCertificateAuthenticationRequest>;
+  federatedAuthentication?: Maybe<AwsFederatedAuthentication>;
 };
 
 export type AwsClientVpnEndpoint = {
@@ -429,7 +435,10 @@ export type AwsClientVpnEndpoint = {
   transportProtocol?: Maybe<Scalars['String']>;
   vpnPort?: Maybe<Scalars['Int']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  associatedTargetNetworks?: Maybe<Array<Maybe<AwsAssociatedTargetNetworks>>>;
   serverCertificateArn?: Maybe<Scalars['String']>;
+  authenticationOptions?: Maybe<Array<Maybe<AwsClientVpnAuthentication>>>;
+  connectionLogOptions?: Maybe<AwsConnectionLogResponseOptions>;
   securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
@@ -860,6 +869,10 @@ export type AwsConnectionLogResponseOptions = {
   enabled?: Maybe<Scalars['Boolean']>;
   cloudwatchLogGroup?: Maybe<Scalars['String']>;
   cloudwatchLogStream?: Maybe<Scalars['String']>;
+};
+
+export type AwsDirectoryServiceAuthenticationRequest = {
+  directoryId?: Maybe<Scalars['String']>;
 };
 
 export type AwsDynamoDbTable = {
@@ -2290,6 +2303,11 @@ export type AwsEnabledMetrics = {
   id: Scalars['String'];
   metric: Scalars['String'];
   granularity?: Maybe<Scalars['String']>;
+};
+
+export type AwsFederatedAuthentication = {
+  samlProviderArn?: Maybe<Scalars['String']>;
+  selfServiceSamlProviderArn?: Maybe<Scalars['String']>;
 };
 
 export type AwsFlowLog = {

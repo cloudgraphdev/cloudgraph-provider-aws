@@ -1,10 +1,11 @@
+import cuid from 'cuid'
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsClientVpnEndpoint } from './data'
 import { AwsClientVpnEndpoint } from '../../types/generated'
 import { clientVpnEndpointArn } from '../../utils/generateArns'
 
 /**
- * Transit Gateway
+ * Client Vpn Endpoint
  */
 
 export default ({
@@ -30,15 +31,53 @@ export default ({
     VpnProtocol: vpnProtocol,
     TransportProtocol: transportProtocol,
     VpnPort: vpnPort,
-    // AssociatedTargetNetworks: associatedTargetNetworks,
+    AssociatedTargetNetworks: associatedTargetNetworkSet,
     ServerCertificateArn: serverCertificateArn,
-   // AuthenticationOptions: authenticationOptions,
-   // ConnectionLogOptions: connectionLogOptions,
+    AuthenticationOptions: clientVpnAuthenticationList,
+    ConnectionLogOptions: connectionLogOptions,
     SecurityGroupIds: securityGroupIds,
   } = rawData
 
   // Client Vpn Endpoint Tags
   const clientVpnEndpointTags = formatTagsFromMap(tags)
+
+  // Associated Target Networks
+  const associatedTargetNetworks =
+    associatedTargetNetworkSet?.map(
+      ({ NetworkId: networkId, NetworkType: networkType }) => {
+        return {
+          id: cuid(),
+          networkId,
+          networkType,
+        }
+      }
+    ) || []
+
+  // Authentication Options
+  const authenticationOptions =
+    clientVpnAuthenticationList?.map(
+      ({
+        Type: type,
+        ActiveDirectory: activeDirectory,
+        MutualAuthentication: mutualAuthentication,
+        FederatedAuthentication: federatedAuthentication,
+      }) => {
+        return {
+          id: cuid(),
+          type: type?.toString(),
+          activeDirectory: {
+            directoryId: activeDirectory?.DirectoryId,
+          },
+          mutualAuthentication: {
+            clientRootCertificateChain: mutualAuthentication?.ClientRootCertificateChain,
+          },
+          federatedAuthentication: {
+            samlProviderArn: federatedAuthentication?.SamlProviderArn,
+            selfServiceSamlProviderArn: federatedAuthentication?.SelfServiceSamlProviderArn,
+          },
+        }
+      }
+    ) || []
 
   const clientVpnEndpoint = {
     id,
@@ -56,12 +95,16 @@ export default ({
     vpnProtocol,
     transportProtocol,
     vpnPort,
-    // associatedTargetNetworks,
+    associatedTargetNetworks,
     serverCertificateArn,
-    // authenticationOptions,
-    // connectionLogOptions,
+    authenticationOptions,
+    connectionLogOptions: {
+      enabled: connectionLogOptions?.Enabled,
+      cloudwatchLogGroup: connectionLogOptions?.CloudwatchLogGroup,
+      cloudwatchLogStream: connectionLogOptions?.CloudwatchLogStream,
+    },
     securityGroupIds,
-    tags: clientVpnEndpointTags
+    tags: clientVpnEndpointTags,
   }
 
   return clientVpnEndpoint
