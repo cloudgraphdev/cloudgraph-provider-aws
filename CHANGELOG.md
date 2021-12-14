@@ -1,3 +1,10 @@
+## [0.51.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.51.2...0.51.3) (2021-12-14)
+
+
+### Bug Fixes
+
+* add accountId, arn and id missing search filters ([df7b8ef](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/df7b8efbca9287c05fe3e12a1938b69d7d05c5bc))
+
 ## [0.51.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.51.1...0.51.2) (2021-12-14)
 
 
