@@ -2594,6 +2594,7 @@ export type AwsLaunchTemplateOverrides = {
 };
 
 export type AwsLcBlockDeviceMapping = {
+  id: Scalars['String'];
   virtualName?: Maybe<Scalars['String']>;
   deviceName?: Maybe<Scalars['String']>;
   noDevice?: Maybe<Scalars['String']>;
