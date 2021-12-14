@@ -1,5 +1,6 @@
 import { AwsNetworkInterface } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
+import { networkInterfaceArn } from '../../utils/generateArns'
 import { RawNetworkInterface } from './data'
 
 /**
@@ -43,7 +44,7 @@ export default ({
   const networkInterface = {
     id,
     accountId: account, 
-    arn: `arn:aws:ec2:${region}:${account}:network-interface/${id}`, // TODO: move to generate arn util
+    arn: networkInterfaceArn({region, account, id}),
     region,
     subnetId, // TODO: Add subnet connection to network interface
     macAddress,

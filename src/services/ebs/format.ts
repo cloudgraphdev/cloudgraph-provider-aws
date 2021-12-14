@@ -4,6 +4,7 @@ import { AwsEbs } from '../../types/generated'
 import { TagMap } from '../../types'
 import t from '../../properties/translations'
 import { formatTagsFromMap } from '../../utils/format'
+import { ebsVolumeArn } from '../../utils/generateArns'
 
 /**
  * EBS
@@ -50,7 +51,7 @@ export default ({
   const ebs = {
     id,
     accountId: account,
-    arn: `arn:aws:ec2:${region}:${account}:volume/${id}`, // TODO: move to a generate arn util
+    arn: ebsVolumeArn({ region, account, id}),
     region,
     attachments: volumeAttachments,
     iops,
