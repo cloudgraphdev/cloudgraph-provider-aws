@@ -31,4 +31,5 @@ type awsVpc @key(fields: "id") {
   ecsService: [awsEcsService] @hasInverse(field: vpc) #change to plural
   efsMountTarget: [awsEfsMountTarget] @hasInverse(field: vpc) #change to plural
   flowLogs: [awsFlowLog] @hasInverse(field: vpc) #change to singular
+  vpnGateway: [awsVpnGateway] @hasInverse(field: vpc)
 }

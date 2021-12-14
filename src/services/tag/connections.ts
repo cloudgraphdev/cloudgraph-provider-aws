@@ -5,6 +5,7 @@ import {
   Vpc,
   CustomerGateway,
   TransitGateway,
+  VpnGateway,
 } from 'aws-sdk/clients/ec2'
 import { isEmpty } from 'lodash'
 import regions, { globalRegionName } from '../../enums/regions'
@@ -1361,6 +1362,32 @@ export default ({
             resourceType: services.transitGateway,
             relation: 'child',
             field: 'transitGateway',
+          })
+        }
+      }
+    }
+   
+    /**
+     * Find related Vpn Gateways
+     */
+     const vpnGateways: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.vpnGateway)
+    if (vpnGateways?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        vpnGateways.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { VpnGatewayId: id }: VpnGateway = instance
+
+          connections.push({
+            id,
+            resourceType: services.vpnGateway,
+            relation: 'child',
+            field: 'vpnGateway',
           })
         }
       }

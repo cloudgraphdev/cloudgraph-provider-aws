@@ -478,6 +478,8 @@ export default {
   lookingForVpnGateway: 'Looking for Vpn Gateways to add...',
   addingVpnGatewayToVpc: (num: number): string =>
     `Adding ${num} Vpn Gateways to the VPC`,
+  fetchedVpnGateways: (num: number): string =>
+    `Fetched ${num} Vpn Gateways`,
   /**
    * Customer Gateway
    */

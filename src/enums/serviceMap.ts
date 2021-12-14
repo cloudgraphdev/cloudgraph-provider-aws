@@ -71,6 +71,7 @@ import IotThingAttribute from '../services/iot'
 import services from './services'
 import TransitGateway from '../services/transitGateway'
 import CustomerGateway from '../services/customerGateway'
+import VpnGateway from '../services/vpnGateway'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -148,5 +149,6 @@ export default {
   [services.ecsTaskSet]: EcsTaskSet,
   [services.transitGateway]: TransitGateway,
   [services.customerGateway]: CustomerGateway,
+  [services.vpnGateway]: VpnGateway,
   tag: AwsTag,
 }

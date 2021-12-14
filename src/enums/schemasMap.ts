@@ -63,6 +63,7 @@ export default {
   [services.sg]: 'awsSecurityGroup',
   [services.subnet]: 'awsSubnet',
   [services.vpc]: 'awsVpc',
+  [services.vpnGateway]: 'awsVpnGateway',
   [services.sqs]: 'awsSqs',
   [services.rdsCluster]: 'awsRdsCluster',
   [services.rdsDbInstance]: 'awsRdsDbInstance',
