@@ -29,6 +29,7 @@ export default ({
 
   const customerGateway = {
     id: customerGatewayId,
+    accountId: account,
     arn: customerGatewayArn({ region, account, id: customerGatewayId }),
     region,
     type,
