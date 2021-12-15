@@ -1,3 +1,10 @@
+## [0.51.6](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.51.5...0.51.6) (2021-12-15)
+
+
+### Bug Fixes
+
+* Changed wording on not valid role message ([f16af25](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/f16af25bf952fc5428d884fecb8c195a43116bd4))
+
 ## [0.51.5](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.51.4...0.51.5) (2021-12-14)
 
 
