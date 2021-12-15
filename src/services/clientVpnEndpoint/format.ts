@@ -35,8 +35,8 @@ export default ({
     ServerCertificateArn: serverCertificateArn,
     AuthenticationOptions: clientVpnAuthenticationList,
     ConnectionLogOptions: connectionLogOptions,
-    SecurityGroupIds: securityGroupIds,
-    ClientConnectOptions: clientConnectOptions
+    SecurityGroupIds: securityGroupIds = [],
+    ClientConnectOptions: clientConnectOptions,
   } = rawData
 
   // Client Vpn Endpoint Tags

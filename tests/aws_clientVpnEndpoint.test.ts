@@ -1,16 +1,22 @@
 import CloudGraph from '@cloudgraph/sdk'
 import ClientVpnEndpoint from '../src/services/clientVpnEndpoint'
+import SecurityGroup from '../src/services/securityGroup'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
+import services from '../src/enums/services'
 
-describe('Client Vpn Endpoint Service Test: ', () => {
+// TODO: Test when error requesting certificate on is fixed.
+describe.skip('Client Vpn Endpoint Service Test: ', () => {
   let getDataResult
   let formatResult
+  let clientVpnEndpointConnections
+  let clientVpnEndpointId
   initTestConfig()
   beforeAll(async () => {
     getDataResult = {}
     formatResult = {}
     try {
+      const securityGroupService = new SecurityGroup({ logger: CloudGraph.logger })
       const classInstance = new ClientVpnEndpoint({ logger: CloudGraph.logger })
       getDataResult = await classInstance.getData({
         credentials,
@@ -20,13 +26,36 @@ describe('Client Vpn Endpoint Service Test: ', () => {
       formatResult = getDataResult[region].map(data =>
         classInstance.format({ service: data, region, account })
       )
+
+      // Get Security Group data
+      const securityGroupData = await securityGroupService.getData({
+        credentials,
+        regions: region,
+      })
+
+      const [clientVpnEndpoint] = getDataResult[region]
+      clientVpnEndpointId = clientVpnEndpoint.ClientVpnEndpointId
+
+      clientVpnEndpointConnections = classInstance.getConnections({
+        service: clientVpnEndpoint,
+        data: [
+          {
+            name: services.sg,
+            data: securityGroupData,
+            account,
+            region,
+          },
+        ],
+        region,
+        account,
+      })
     } catch (error) {
       console.error(error) // eslint-disable-line no-console
     }
     return Promise.resolve()
   })
 
-  describe.skip('getData', () => {
+  describe('getData', () => {
     test('should return a truthy value ', () => {
       expect(getDataResult).toBeTruthy()
     })
@@ -73,7 +102,7 @@ describe('Client Vpn Endpoint Service Test: ', () => {
     })
   })
 
-  describe.skip('format', () => {
+  describe('format', () => {
     test('should return data in the correct format matching the schema type', () => {
       expect(formatResult).toEqual(
         expect.arrayContaining([
@@ -119,6 +148,19 @@ describe('Client Vpn Endpoint Service Test: ', () => {
           }),
         ])
       )
+    })
+  })
+  
+  describe('connections', () => {
+    test('should verify the connection to the security group', () => {
+      const securityGroupConnections = clientVpnEndpointConnections[
+        clientVpnEndpointId
+      ]?.filter(
+        connection => connection.resourceType === services.sg
+      )
+
+      expect(securityGroupConnections).toBeDefined()
+      expect(securityGroupConnections.length).toBe(1)
     })
   })
 })

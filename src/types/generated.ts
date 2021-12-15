@@ -447,6 +447,7 @@ export type AwsClientVpnEndpoint = {
   connectionLogOptions?: Maybe<AwsConnectionLogResponseOptions>;
   securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
   clientConnectOptions?: Maybe<AwsClientConnectResponseOptions>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
 };
 
 export type AwsCloud9Environment = {
@@ -3001,6 +3002,7 @@ export type AwsSecurityGroup = {
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   elastiCacheCluster?: Maybe<Array<Maybe<AwsElastiCacheCluster>>>;
+  clientVpnEndpoint?: Maybe<Array<Maybe<AwsClientVpnEndpoint>>>;
 };
 
 export type AwsServiceBillingInfo = {
@@ -3196,6 +3198,7 @@ export type AwsTag = {
   customerGateway?: Maybe<Array<Maybe<AwsCustomerGateway>>>;
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
   vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
+  clientVpnEndpoint?: Maybe<Array<Maybe<AwsClientVpnEndpoint>>>;
 };
 
 export type AwsTotalBillingInfo = {

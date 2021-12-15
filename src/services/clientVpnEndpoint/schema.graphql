@@ -21,6 +21,7 @@ type awsClientVpnEndpoint @key(fields: "arn") {
   connectionLogOptions: awsConnectionLogResponseOptions
   securityGroupIds: [String] @search(by: [hash])
   clientConnectOptions: awsClientConnectResponseOptions
+  securityGroups: [awsSecurityGroup] @hasInverse(field: clientVpnEndpoint)
 }
 
 type awsAssociatedTargetNetworks

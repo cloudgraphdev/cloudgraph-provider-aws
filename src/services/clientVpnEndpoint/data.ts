@@ -17,7 +17,7 @@ import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const serviceName = 'TransitGateway'
+const serviceName = 'ClientVpnEndpoint'
 const endpoint = initTestEndpoint(serviceName)
 
 /**
