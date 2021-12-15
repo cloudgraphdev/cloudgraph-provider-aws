@@ -862,6 +862,12 @@ export type AwsCognitoUserPoolSchemaAttribute = {
   stringAttributeConstraintsMaxValue?: Maybe<Scalars['String']>;
 };
 
+export type AwsConnectionLogResponseOptions = {
+  enabled?: Maybe<Scalars['Boolean']>;
+  cloudwatchLogGroup?: Maybe<Scalars['String']>;
+  cloudwatchLogStream?: Maybe<Scalars['String']>;
+};
+
 export type AwsCustomerGateway = {
   id: Scalars['String'];
   accountId: Scalars['String'];
@@ -872,12 +878,6 @@ export type AwsCustomerGateway = {
   ipAddress?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
-};
-
-export type AwsConnectionLogResponseOptions = {
-  enabled?: Maybe<Scalars['Boolean']>;
-  cloudwatchLogGroup?: Maybe<Scalars['String']>;
-  cloudwatchLogStream?: Maybe<Scalars['String']>;
 };
 
 export type AwsDirectoryServiceAuthenticationRequest = {
@@ -2922,6 +2922,8 @@ export type AwsRouteTable = {
   tags?: Maybe<Array<Maybe<Tag>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
+  transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
 };
 
 export type AwsS3 = {
@@ -3226,6 +3228,27 @@ export type AwsTransitGateway = {
   propagationDefaultRouteTableId?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
+  routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
+  transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
+};
+
+export type AwsTransitGatewayAttachment = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  transitGatewayId: Scalars['String'];
+  transitGatewayOwnerId?: Maybe<Scalars['String']>;
+  resourceOwnerId?: Maybe<Scalars['String']>;
+  resourceType?: Maybe<Scalars['String']>;
+  resourceId?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  transitGatewayRouteTableId?: Maybe<Scalars['String']>;
+  creationTime?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
+  routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
 export type AwsTunelOptions = {
@@ -3277,6 +3300,7 @@ export type AwsVpc = {
   efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
   vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
+  transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
 };
 
 export type AwsVpnConnection = {

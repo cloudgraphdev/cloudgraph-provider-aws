@@ -5,6 +5,7 @@ import {
   Vpc,
   CustomerGateway,
   TransitGateway,
+  TransitGatewayAttachment,
   VpnGateway,
   VpnConnection,
 } from 'aws-sdk/clients/ec2'
@@ -1466,6 +1467,33 @@ export default ({
             resourceType: services.vpnConnection,
             relation: 'child',
             field: 'vpnConnection',
+          })
+        }
+      }
+    }
+    
+    /**
+     * Find related Transit Gateway Attachments
+     */
+    const transitGatewayAttachments: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.transitGatewayAttachment)
+    if (transitGatewayAttachments?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        transitGatewayAttachments.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { TransitGatewayAttachmentId: id }: TransitGatewayAttachment =
+            instance
+
+          connections.push({
+            id,
+            resourceType: services.transitGatewayAttachment,
+            relation: 'child',
+            field: 'transitGatewayAttachment',
           })
         }
       }

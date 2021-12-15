@@ -11,6 +11,8 @@ type awsRouteTable @key(fields: "arn") {
   tags: [Tag]
   subnet: [awsSubnet] @hasInverse(field: routeTable) #change to plural
   vpc: [awsVpc] @hasInverse(field: routeTable)
+  transitGateway: [awsTransitGateway] @hasInverse(field: routeTable)
+  transitGatewayAttachment: [awsTransitGatewayAttachment] @hasInverse(field: routeTable)
 }
 
 type awsRoute

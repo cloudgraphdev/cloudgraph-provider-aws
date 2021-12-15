@@ -128,7 +128,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | redshiftCluster             | kms, vpc                                                                                                                                                                                   |
 | route53Record               | alb, apiGatewayRestApi, elb, route53HostedZone                                                                                                                                             |
 | route53HostedZone           | route53Record, vpc                                                                                                                                                                         |
-| routeTable                  | subnet, vpc                                                                                                                                                                                |
+| routeTable                  | subnet, transitGateway, transitGatewayAttachment,vpc                                                                                                                                                                                |
 | s3                          | cloudfront, cloudtrail, kinesisFirehose                                                                                                                                                    |
 | secretsManager              |                                                                                                                                                                                            |
 | securityGroup               | alb, asg, clientVpnEndpoint, ecsService, lambda, ec2, elb, rdsCluster, rdsDbInstance, eksCluster, elastiCacheCluster                                                                                          |
@@ -136,11 +136,11 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | sns                         | kms, cloudtrail                                                                                                                                                                            |
 | sqs                         |                                                                                                                                                                                            |
 | subnet                      | alb, asg, ec2, ecsService, efsMountTarget, elb, lambda, natGateway, networkInterface, routeTable, vpc, eksCluster, emrCluster, flowLog                                                     |
-| vpc                         | alb, ec2, eip, elb, ecsService, efsMountTarget, eksCluster igw, lambda, nacl, natGateway, networkInterface, rdsDbInstance, redshiftCluster, route53HostedZone, routeTable, subnet, flowLog, vpnGateway |
-| vpnConnection               | customerGateway, transitGateway, vpnGateway                                                                                                                                                                              |
+| vpc                         | alb, ec2, eip, elb, ecsService, efsMountTarget, eksCluster igw, lambda, nacl, natGateway, networkInterface, rdsDbInstance, redshiftCluster, route53HostedZone, routeTable, subnet, flowLog, vpnGateway, transitGatewayAttachment |
+| vpnConnection               | customerGateway, transitGateway, transitGatewayAttachment, vpnGateway                                                                                                                                                                              |
 | vpnGateway                  | vpc, vpnConnection                                                                                                                                                                                        |
-| transitGateway              | vpnConnection                                                                                                                                                                                           |
-
+| transitGateway              | routeTable, transitGatewayAttachment, vpnConnection                                                                                                                                                                                           |
+| transitGatewayAttachment    | routeTable, transitGateway, vpc, vpnConnection                                                                                                                                                                            |
 <br />
 
 # Query Examples

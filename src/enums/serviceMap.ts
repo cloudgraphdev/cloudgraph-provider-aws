@@ -70,6 +70,7 @@ import Cloud9Environment from '../services/cloud9'
 import IotThingAttribute from '../services/iot'
 import services from './services'
 import TransitGateway from '../services/transitGateway'
+import TransitGatewayAttachment from '../services/transitGatewayAttachment'
 import CustomerGateway from '../services/customerGateway'
 import VpnGateway from '../services/vpnGateway'
 import ClientVpnEndpoint from '../services/clientVpnEndpoint'
@@ -151,6 +152,7 @@ export default {
   [services.ecsTaskDefinition]: EcsTaskDefinition,
   [services.ecsTaskSet]: EcsTaskSet,
   [services.transitGateway]: TransitGateway,
+  [services.transitGatewayAttachment]: TransitGatewayAttachment,
   [services.customerGateway]: CustomerGateway,
   [services.vpnGateway]: VpnGateway,
   [services.vpnConnection]: VpnConnection,

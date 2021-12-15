@@ -15,4 +15,6 @@ type awsTransitGateway @key(fields: "arn") {
   propagationDefaultRouteTableId: String @search(by: [hash, regexp])
   tags: [Tag]
   vpnConnection: [awsVpnConnection] @hasInverse(field: transitGateway)
+  routeTable: [awsRouteTable] @hasInverse(field: transitGateway)
+  transitGatewayAttachment: [awsTransitGatewayAttachment] @hasInverse(field: transitGateway)
 }

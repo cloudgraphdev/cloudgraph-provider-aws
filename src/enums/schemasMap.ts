@@ -77,6 +77,7 @@ export default {
   [services.ses]: 'awsSes',
   [services.sns]: 'awsSns',
   [services.transitGateway]: 'awsTransitGateway',
+  [services.transitGatewayAttachment]: 'awsTransitGatewayAttachment',
   [services.vpnConnection]: 'awsVpnConnection',
   tag: 'awsTag',
 }

@@ -1,17 +1,23 @@
 import CloudGraph from '@cloudgraph/sdk'
+import RouteTable from '../src/services/routeTable'
 import TransitGateway from '../src/services/transitGateway'
+import services from '../src/enums/services'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
-
 
 describe('Transit Gateway Service Test: ', () => {
   let getDataResult
   let formatResult
+  let transitGatewayConnections
+  let transitGatewayId
   initTestConfig()
   beforeAll(async () => {
     getDataResult = {}
     formatResult = {}
     try {
+      const routeTableService = new RouteTable({
+        logger: CloudGraph.logger,
+      })
       const classInstance = new TransitGateway({ logger: CloudGraph.logger })
       getDataResult = await classInstance.getData({
         credentials,
@@ -22,6 +28,28 @@ describe('Transit Gateway Service Test: ', () => {
         classInstance.format({ service: elbData, region, account })
       )
 
+      const [transitGateway] = getDataResult[region]
+      transitGatewayId = transitGateway.TransitGatewayId
+      console.log(`transitGateway: ${JSON.stringify(transitGateway)}`)
+      // Get Route Table data
+      const routeTableData = await routeTableService.getData({
+        credentials,
+        regions: region,
+      })
+      console.log(`routeTableData: ${JSON.stringify(routeTableData)}`)
+      transitGatewayConnections = classInstance.getConnections({
+        service: transitGateway,
+        data: [
+          {
+            name: services.routeTable,
+            data: routeTableData,
+            account,
+            region,
+          },
+        ],
+        region,
+        account,
+      })
     } catch (error) {
       console.error(error) // eslint-disable-line no-console
     }
@@ -32,31 +60,31 @@ describe('Transit Gateway Service Test: ', () => {
     test('should return a truthy value ', () => {
       expect(getDataResult).toBeTruthy()
     })
-    
+
     test('should return data from a region in the correct format', async () => {
       expect(getDataResult[region]).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({           
+          expect.objectContaining({
             CreationTime: expect.any(Date),
             Description: expect.any(String),
             Options: expect.objectContaining({
-                AmazonSideAsn: expect.any(Number),
-                AssociationDefaultRouteTableId: expect.any(String),
-                AutoAcceptSharedAttachments: expect.any(String),
-                DefaultRouteTableAssociation: expect.any(String),
-                DefaultRouteTablePropagation: expect.any(String),
-                DnsSupport: expect.any(String),
-                PropagationDefaultRouteTableId: expect.any(String),
-                TransitGatewayCidrBlocks: expect.any(Array),
-                VpnEcmpSupport: expect.any(String)
-              }),
+              AmazonSideAsn: expect.any(Number),
+              AssociationDefaultRouteTableId: expect.any(String),
+              AutoAcceptSharedAttachments: expect.any(String),
+              DefaultRouteTableAssociation: expect.any(String),
+              DefaultRouteTablePropagation: expect.any(String),
+              DnsSupport: expect.any(String),
+              PropagationDefaultRouteTableId: expect.any(String),
+              TransitGatewayCidrBlocks: expect.any(Array),
+              VpnEcmpSupport: expect.any(String),
+            }),
             OwnerId: expect.any(String),
             State: expect.any(String),
             Tags: expect.any(Object),
             TransitGatewayArn: expect.any(String),
             TransitGatewayId: expect.any(String),
-            region: expect.any(String)
-          })
+            region: expect.any(String),
+          }),
         ])
       )
     })
@@ -87,10 +115,21 @@ describe('Transit Gateway Service Test: ', () => {
                 key: expect.any(String),
                 value: expect.any(String),
               }),
-            ]),             
+            ]),
           }),
         ])
       )
+    })
+  })
+
+  describe('connections', () => {
+    test('should verify the connection to route table', () => {
+      const routeTableConnections = transitGatewayConnections[
+        transitGatewayId
+      ]?.filter(connection => connection.resourceType === services.routeTable)
+
+      expect(routeTableConnections).toBeDefined()
+      expect(routeTableConnections.length).toBe(0)
     })
   })
 })

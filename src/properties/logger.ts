@@ -473,6 +473,10 @@ export default {
     `Transit Gateway not attached to a VPC, adding Transit Gateway ${name} to the region level`,
   fetchedTransitGateways: (num: number): string => `Found ${num} Transit Gateways`,
   /**
+   * Transit Gateway Attachment
+   */
+   fetchedTransitGatewayAttachments: (num: number): string => `Found ${num} Transit Gateway Attachments`,
+  /**
    * VPN Gateway
    */
   lookingForVpnGateway: 'Looking for Vpn Gateways to add...',
