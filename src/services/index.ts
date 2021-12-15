@@ -315,7 +315,9 @@ export default class Provider extends CloudGraph.Client {
             }
             sts.assumeRole(options, (err, data) => {
               if (err) {
-                this.logger.error(`No credentials found for roleARN: ${role}`)
+                this.logger.error(
+                  `No valid credentials found for roleARN: ${role}`
+                )
                 this.logger.debug(err)
                 resolve()
               } else {
@@ -379,7 +381,9 @@ export default class Provider extends CloudGraph.Client {
         }
       }
       if (!this.credentials && !ignorePrompts) {
-        this.logger.info('No AWS Credentials found, please enter them manually')
+        this.logger.info(
+          'No AWS Credentials found for scan, please enter them manually'
+        )
         // when pausing the ora spinner the position of this call must come after any logger output
         const msg = this.logger.stopSpinner()
         const answers = await this.interface.prompt([
@@ -597,7 +601,10 @@ export default class Provider extends CloudGraph.Client {
     const {
       accounts: configuredAccounts,
       cloudGraphConfig: { ignoreEnvVariables } = { ignoreEnvVariables: false },
-    }: { accounts: Account[], cloudGraphConfig: { ignoreEnvVariables: boolean } } = this.config
+    }: {
+      accounts: Account[]
+      cloudGraphConfig: { ignoreEnvVariables: boolean }
+    } = this.config
     if (!configuredRegions) {
       configuredRegions = this.properties.regions.join(',')
     } else {
