@@ -384,6 +384,12 @@ export type AwsAsg = {
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
 };
 
+export type AwsAssociatedTargetNetworks = {
+  id: Scalars['String'];
+  networkId?: Maybe<Scalars['String']>;
+  networkType?: Maybe<Scalars['String']>;
+};
+
 export type AwsBilling = {
   id: Scalars['String'];
   account: Scalars['String'];
@@ -398,6 +404,50 @@ export type AwsBilling = {
 export type AwsBucketPolicy = {
   id: Scalars['String'];
   policy?: Maybe<AwsIamJsonPolicy>;
+};
+
+export type AwsCertificateAuthenticationRequest = {
+  clientRootCertificateChain?: Maybe<Scalars['String']>;
+};
+
+export type AwsClientConnectResponseOptions = {
+  enabled?: Maybe<Scalars['Boolean']>;
+  lambdaFunctionArn?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+};
+
+export type AwsClientVpnAuthentication = {
+  id: Scalars['String'];
+  type?: Maybe<Scalars['String']>;
+  activeDirectory?: Maybe<AwsDirectoryServiceAuthenticationRequest>;
+  mutualAuthentication?: Maybe<AwsCertificateAuthenticationRequest>;
+  federatedAuthentication?: Maybe<AwsFederatedAuthentication>;
+};
+
+export type AwsClientVpnEndpoint = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  creationTime?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  deletionTime?: Maybe<Scalars['String']>;
+  dnsName?: Maybe<Scalars['String']>;
+  clientCidrBlock?: Maybe<Scalars['String']>;
+  dnsServers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  splitTunnel?: Maybe<Scalars['Boolean']>;
+  vpnProtocol?: Maybe<Scalars['String']>;
+  transportProtocol?: Maybe<Scalars['String']>;
+  vpnPort?: Maybe<Scalars['Int']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  associatedTargetNetworks?: Maybe<Array<Maybe<AwsAssociatedTargetNetworks>>>;
+  serverCertificateArn?: Maybe<Scalars['String']>;
+  authenticationOptions?: Maybe<Array<Maybe<AwsClientVpnAuthentication>>>;
+  connectionLogOptions?: Maybe<AwsConnectionLogResponseOptions>;
+  securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  clientConnectOptions?: Maybe<AwsClientConnectResponseOptions>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
 };
 
 export type AwsCloud9Environment = {
@@ -821,6 +871,16 @@ export type AwsCustomerGateway = {
   bgpAsn?: Maybe<Scalars['String']>;
   ipAddress?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
+export type AwsConnectionLogResponseOptions = {
+  enabled?: Maybe<Scalars['Boolean']>;
+  cloudwatchLogGroup?: Maybe<Scalars['String']>;
+  cloudwatchLogStream?: Maybe<Scalars['String']>;
+};
+
+export type AwsDirectoryServiceAuthenticationRequest = {
+  directoryId?: Maybe<Scalars['String']>;
 };
 
 export type AwsDynamoDbTable = {
@@ -2253,6 +2313,11 @@ export type AwsEnabledMetrics = {
   granularity?: Maybe<Scalars['String']>;
 };
 
+export type AwsFederatedAuthentication = {
+  samlProviderArn?: Maybe<Scalars['String']>;
+  selfServiceSamlProviderArn?: Maybe<Scalars['String']>;
+};
+
 export type AwsFlowLog = {
   id: Scalars['String'];
   accountId: Scalars['String'];
@@ -2937,6 +3002,7 @@ export type AwsSecurityGroup = {
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   elastiCacheCluster?: Maybe<Array<Maybe<AwsElastiCacheCluster>>>;
+  clientVpnEndpoint?: Maybe<Array<Maybe<AwsClientVpnEndpoint>>>;
 };
 
 export type AwsServiceBillingInfo = {
@@ -3132,6 +3198,7 @@ export type AwsTag = {
   customerGateway?: Maybe<Array<Maybe<AwsCustomerGateway>>>;
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
   vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
+  clientVpnEndpoint?: Maybe<Array<Maybe<AwsClientVpnEndpoint>>>;
 };
 
 export type AwsTotalBillingInfo = {

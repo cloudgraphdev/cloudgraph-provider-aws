@@ -37,11 +37,11 @@ import resources from '../../enums/resources'
 import { getIamId } from '../../utils/ids'
 import { RawAwsSns } from '../sns/data'
 import { RawAwsRedshiftCluster } from '../redshift/data'
-import { 
-  apiGatewayArn, 
+import {
+  apiGatewayArn,
   apiGatewayRestApiArn,
-  apiGatewayStageArn, 
-  redshiftArn 
+  apiGatewayStageArn,
+  redshiftArn,
 } from '../../utils/generateArns'
 import { RawAwsEksCluster } from '../eksCluster/data'
 import { RawAwsEcsCluster } from '../ecsCluster/data'
@@ -53,6 +53,7 @@ import { RawAwsApiGatewayStage } from '../apiGatewayStage/data'
 import { RawAwsCloud9Environment } from '../cloud9/data'
 import { RawAwsEfs } from '../efs/data'
 import { RawAwsEmrCluster } from '../emrCluster/data'
+import { RawAwsClientVpnEndpoint } from '../clientVpnEndpoint/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -967,13 +968,15 @@ export default ({
     /**
      * Find related Flow Logs
      */
-     const flowLogs: {
+    const flowLogs: {
       name: string
       data: { [property: string]: any[] }
     } = data.find(({ name }) => name === services.flowLog)
     if (flowLogs?.data?.[region]) {
-      const dataAtRegion: RawFlowLog[] =
-        findServiceInstancesWithTag(tag, flowLogs.data[region])
+      const dataAtRegion: RawFlowLog[] = findServiceInstancesWithTag(
+        tag,
+        flowLogs.data[region]
+      )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
           const { FlowLogId: id } = instance
@@ -987,10 +990,10 @@ export default ({
         }
       }
     }
-    
+
     /**
-    * Find related SNS
-    */
+     * Find related SNS
+     */
     const sns: { name: string; data: { [property: string]: any[] } } =
       data.find(({ name }) => name === services.sns)
     if (sns?.data?.[region]) {
@@ -1020,15 +1023,17 @@ export default ({
       data: { [property: string]: any[] }
     } = data.find(({ name }) => name === services.redshiftCluster)
     if (redshift?.data?.[region]) {
-      const dataAtRegion: RawAwsRedshiftCluster[] =
-        findServiceInstancesWithTag(tag, redshift.data[region])
+      const dataAtRegion: RawAwsRedshiftCluster[] = findServiceInstancesWithTag(
+        tag,
+        redshift.data[region]
+      )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
           const { ClusterIdentifier: id, ClusterNamespaceArn } = instance
           // Hack to get the accountId for the cluster
           // Namespace arn structure: arn:aws:redshift:{region}:{account}:namespace:{namespaceId}
           const account = ClusterNamespaceArn.split(':')[4]
-          const arn = redshiftArn({region, account, id})
+          const arn = redshiftArn({ region, account, id })
           connections.push({
             id: arn,
             resourceType: services.redshiftCluster,
@@ -1040,8 +1045,8 @@ export default ({
     }
 
     /**
-    * Find related EKS clusters
-    */
+     * Find related EKS clusters
+     */
     const eksClusters: { name: string; data: { [property: string]: any[] } } =
       data.find(({ name }) => name === services.eksCluster)
     if (eksClusters?.data?.[region]) {
@@ -1069,8 +1074,10 @@ export default ({
     const ecsClusters: { name: string; data: { [property: string]: any[] } } =
       data.find(({ name }) => name === services.ecsCluster)
     if (ecsClusters?.data?.[region]) {
-      const dataAtRegion: RawAwsEcsCluster[] =
-        findServiceInstancesWithTag(tag, ecsClusters.data[region])
+      const dataAtRegion: RawAwsEcsCluster[] = findServiceInstancesWithTag(
+        tag,
+        ecsClusters.data[region]
+      )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
           const { clusterArn: id } = instance
@@ -1084,7 +1091,7 @@ export default ({
         }
       }
     }
-  
+
     /**
      * Find related EMR clusters
      */
@@ -1093,8 +1100,10 @@ export default ({
       data: { [property: string]: any[] }
     } = data.find(({ name }) => name === services.emrCluster)
     if (emrClusters?.data?.[region]) {
-      const dataAtRegion: RawAwsEmrCluster[] =
-        findServiceInstancesWithTag(tag, emrClusters.data[region])
+      const dataAtRegion: RawAwsEmrCluster[] = findServiceInstancesWithTag(
+        tag,
+        emrClusters.data[region]
+      )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
           const { ClusterArn: arn } = instance
@@ -1114,8 +1123,10 @@ export default ({
     const ecsContainers: { name: string; data: { [property: string]: any[] } } =
       data.find(({ name }) => name === services.ecsContainer)
     if (ecsContainers?.data?.[region]) {
-      const dataAtRegion: RawAwsEcsContainer[] =
-        findServiceInstancesWithTag(tag, ecsContainers.data[region])
+      const dataAtRegion: RawAwsEcsContainer[] = findServiceInstancesWithTag(
+        tag,
+        ecsContainers.data[region]
+      )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
           const { containerInstanceArn: id } = instance
@@ -1136,8 +1147,10 @@ export default ({
     const ecsServices: { name: string; data: { [property: string]: any[] } } =
       data.find(({ name }) => name === services.ecsService)
     if (ecsServices?.data?.[region]) {
-      const dataAtRegion: RawAwsEcsService[] =
-        findServiceInstancesWithTag(tag, ecsServices.data[region])
+      const dataAtRegion: RawAwsEcsService[] = findServiceInstancesWithTag(
+        tag,
+        ecsServices.data[region]
+      )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
           const { serviceArn: id } = instance
@@ -1158,8 +1171,10 @@ export default ({
     const ecsTasks: { name: string; data: { [property: string]: any[] } } =
       data.find(({ name }) => name === services.ecsTask)
     if (ecsTasks?.data?.[region]) {
-      const dataAtRegion: RawAwsEcsTask[] =
-        findServiceInstancesWithTag(tag, ecsTasks.data[region])
+      const dataAtRegion: RawAwsEcsTask[] = findServiceInstancesWithTag(
+        tag,
+        ecsTasks.data[region]
+      )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
           const { taskArn: id } = instance
@@ -1177,8 +1192,10 @@ export default ({
     /**
      * Find related API Gateway RestApi
      */
-    const apiGatewayRestApi: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.apiGatewayRestApi)
+    const apiGatewayRestApi: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.apiGatewayRestApi)
     if (apiGatewayRestApi?.data?.[region]) {
       const dataAtRegion: RawAwsApiGatewayRestApi[] =
         findServiceInstancesWithTag(tag, apiGatewayRestApi.data[region])
@@ -1195,15 +1212,19 @@ export default ({
         }
       }
     }
-    
+
     /**
      * Find related EFS file systems
      */
-    const efsFileSystems: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.efs)
+    const efsFileSystems: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.efs)
     if (efsFileSystems?.data?.[region]) {
-      const dataAtRegion: RawAwsEfs[] =
-        findServiceInstancesWithTag(tag, efsFileSystems.data[region])
+      const dataAtRegion: RawAwsEfs[] = findServiceInstancesWithTag(
+        tag,
+        efsFileSystems.data[region]
+      )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
           const { FileSystemArn: id } = instance
@@ -1221,11 +1242,15 @@ export default ({
     /**
      * Find related API Gateway Stage
      */
-    const apiGatewayStage: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.apiGatewayStage)
+    const apiGatewayStage: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.apiGatewayStage)
     if (apiGatewayStage?.data?.[region]) {
-      const dataAtRegion: RawAwsApiGatewayStage[] =
-        findServiceInstancesWithTag(tag, apiGatewayStage.data[region])
+      const dataAtRegion: RawAwsApiGatewayStage[] = findServiceInstancesWithTag(
+        tag,
+        apiGatewayStage.data[region]
+      )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
           const { stageName: name, restApiId } = instance
@@ -1245,7 +1270,7 @@ export default ({
         }
       }
     }
-  
+
     /**
      * Find related ElastiCache clusters
      */
@@ -1269,7 +1294,7 @@ export default ({
       }
     }
 
-    /** 
+    /**
      * Find related ElastiCache replication groups
      */
     const elastiCacheReplicationGroup: {
@@ -1278,7 +1303,10 @@ export default ({
     } = data.find(({ name }) => name === services.elastiCacheReplicationGroup)
     if (elastiCacheReplicationGroup?.data?.[region]) {
       const dataAtRegion: RawAwsElastiCacheReplicationGroup[] =
-        findServiceInstancesWithTag(tag, elastiCacheReplicationGroup.data[region])
+        findServiceInstancesWithTag(
+          tag,
+          elastiCacheReplicationGroup.data[region]
+        )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
           const { ARN: arn } = instance
@@ -1292,7 +1320,7 @@ export default ({
       }
     }
 
-    /** 
+    /**
      * Find related Cloud9 environments
      */
     const cloud9Environment: {
@@ -1318,7 +1346,7 @@ export default ({
     /**
      * Find related Customer Gateways
      */
-     const customerGateways: {
+    const customerGateways: {
       name: string
       data: { [property: string]: any[] }
     } = data.find(({ name }) => name === services.customerGateway)
@@ -1366,11 +1394,11 @@ export default ({
         }
       }
     }
-   
+
     /**
      * Find related Vpn Gateways
      */
-     const vpnGateways: {
+    const vpnGateways: {
       name: string
       data: { [property: string]: any[] }
     } = data.find(({ name }) => name === services.vpnGateway)
@@ -1388,6 +1416,29 @@ export default ({
             resourceType: services.vpnGateway,
             relation: 'child',
             field: 'vpnGateway',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related Client vpn endpoints
+     */
+    const clientVpnEndpoints: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.clientVpnEndpoint)
+    if (clientVpnEndpoints?.data?.[region]) {
+      const dataAtRegion: RawAwsClientVpnEndpoint[] =
+        findServiceInstancesWithTag(tag, clientVpnEndpoints.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { ClientVpnEndpointId } = instance
+          connections.push({
+            id: ClientVpnEndpointId,
+            resourceType: services.clientVpnEndpoint,
+            relation: 'child',
+            field: 'clientVpnEndpoint',
           })
         }
       }

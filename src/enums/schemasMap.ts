@@ -11,6 +11,7 @@ export default {
   [services.appSync]: 'awsAppSync',
   [services.asg]: 'awsAsg',
   [services.billing]: 'awsBilling',
+  [services.clientVpnEndpoint]: 'awsClientVpnEndpoint',
   [services.cloud9]: 'awsCloud9Environment',
   [services.cloudFormationStack]: 'awsCloudFormationStack',
   [services.cloudFormationStackSet]: 'awsCloudFormationStackSet',

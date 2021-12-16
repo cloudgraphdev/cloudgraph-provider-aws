@@ -783,6 +783,46 @@ resource "aws_vpn_gateway" "vpn_gategay" {
   }
 }
 
+# Client Vpn Endpoint
+# │ Error: Error requesting certificate: UnrecognizedClientException: The security token included in the request is invalid.
+# │       status code: 400, request id: 4c10656a-3d88-482d-9833-d8caf17ff063
+# │ 
+# │   with aws_acm_certificate.cert,
+# │   on aws.tf line 768, in resource "aws_acm_certificate" "cert":
+# │  768: resource "aws_acm_certificate" "cert" {
+# 
+# resource "aws_acm_certificate" "cert" {
+#   domain_name       = "example.com"
+#   validation_method = "DNS"
+
+#   options {
+#     certificate_transparency_logging_preference = "DISABLED"
+#   }
+
+#   tags = {
+#     Environment = "test"
+#   }
+
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
+
+# resource "aws_ec2_client_vpn_endpoint" "example" {
+#   description            = "terraform-clientvpn-example"
+#   server_certificate_arn = aws_acm_certificate.cert.arn
+#   client_cidr_block      = "10.0.0.0/16"
+
+#   authentication_options {
+#     type                       = "certificate-authentication"
+#     root_certificate_chain_arn = aws_acm_certificate.cert.arn
+#   }
+
+#   connection_log_options {
+#     enabled               = false
+#   }
+# }
+
 # Localstack Pro Tier
 # resource "aws_rds_cluster_instance" "cluster_instances" {
 #   count              = 2

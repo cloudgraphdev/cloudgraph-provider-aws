@@ -6,6 +6,7 @@ export default {
   appSync: 'appSync',
   asg: 'asg',
   billing: 'billing',
+  clientVpnEndpoint: 'clientVpnEndpoint',
   cloud9: 'cloud9',
   cloudFormationStack: 'cloudFormationStack',
   cloudFormationStackSet: 'cloudFormationStackSet',

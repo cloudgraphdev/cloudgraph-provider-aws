@@ -72,6 +72,7 @@ import services from './services'
 import TransitGateway from '../services/transitGateway'
 import CustomerGateway from '../services/customerGateway'
 import VpnGateway from '../services/vpnGateway'
+import ClientVpnEndpoint from '../services/clientVpnEndpoint'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -85,6 +86,7 @@ export default {
   [services.apiGatewayStage]: APIGatewayStage,
   [services.asg]: ASG,
   [services.billing]: Billing,
+  [services.clientVpnEndpoint]: ClientVpnEndpoint,
   [services.cloud9]: Cloud9Environment,
   [services.cloudfront]: CloudFront,
   [services.cloudtrail]: CloudTrail,
