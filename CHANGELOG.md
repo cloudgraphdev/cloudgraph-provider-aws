@@ -1,3 +1,15 @@
+# [0.53.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.52.0...0.53.0) (2021-12-16)
+
+
+### Features
+
+* **service:** Add transit gateway connection ([b4cc56b](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b4cc56b035264bc835a15069fde77fa9a4957cad))
+* **service:** Added customer gateway connection ([4b3d2fb](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/4b3d2fbe4ad592c6b495ffb9eb6bb68267e1e04a))
+* **service:** Added vpn gateway connection ([0dfbdb7](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/0dfbdb7c64a992a299e4d05b9c66c9f730a391c0))
+* **service:** migrate service VPN Connection ([6b9ac29](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/6b9ac29964b187a5aac31bc0f61bdceb7109b67b))
+* **service:** migrate service VPN Connection ([7eb4039](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/7eb4039b180441f4f2cd8b9f13770a31730004a4))
+* **service:** Update readme file ([b516e08](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b516e089c173a2c6fc7bb841b165f34792293e34))
+
 # [0.52.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.51.7...0.52.0) (2021-12-16)
 
 
