@@ -1,3 +1,10 @@
+## [0.51.7](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.51.6...0.51.7) (2021-12-16)
+
+
+### Bug Fixes
+
+* Fixed error on empty hosted zones ([5edae93](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/5edae9357719ca8fa78a105be26eb4a67a122109))
+
 ## [0.51.6](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.51.5...0.51.6) (2021-12-15)
 
 
