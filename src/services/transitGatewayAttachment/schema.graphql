@@ -3,7 +3,7 @@ type awsTransitGatewayAttachment @key(fields: "arn") {
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
-  transitGatewayId: String! @search(by: [hash])
+  transitGatewayId: String @search(by: [hash])
   transitGatewayOwnerId: String @search(by: [hash])
   resourceOwnerId: String @search(by: [hash])
   resourceType: String @search(by: [hash, regexp])

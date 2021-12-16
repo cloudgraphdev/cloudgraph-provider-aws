@@ -26,7 +26,7 @@ export default ({
     State: state,
     Association: association,
     CreationTime: creationTime,
-    Tags: tags,
+    Tags: tags = {},
   } = rawData
 
   // Transit Gateway Attachment Tags
@@ -40,11 +40,11 @@ export default ({
     transitGatewayId,
     transitGatewayOwnerId,
     resourceOwnerId,
-    resourceType,
+    resourceType: resourceType?.toString() || '',
     resourceId,
-    state,
-    transitGatewayRouteTableId: association?.TransitGatewayRouteTableId,
-    creationTime: creationTime?.toISOString(),
+    state: state?.toString() || '',
+    transitGatewayRouteTableId: association?.TransitGatewayRouteTableId || '',
+    creationTime: creationTime?.toISOString() || '',
     tags: transitGatewayAttachmentTags,
   }
 

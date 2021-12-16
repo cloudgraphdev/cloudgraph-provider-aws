@@ -3200,6 +3200,7 @@ export type AwsTag = {
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
   customerGateway?: Maybe<Array<Maybe<AwsCustomerGateway>>>;
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
+  transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
   vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
   clientVpnEndpoint?: Maybe<Array<Maybe<AwsClientVpnEndpoint>>>;
   vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
@@ -3237,7 +3238,7 @@ export type AwsTransitGatewayAttachment = {
   accountId: Scalars['String'];
   arn: Scalars['String'];
   region?: Maybe<Scalars['String']>;
-  transitGatewayId: Scalars['String'];
+  transitGatewayId?: Maybe<Scalars['String']>;
   transitGatewayOwnerId?: Maybe<Scalars['String']>;
   resourceOwnerId?: Maybe<Scalars['String']>;
   resourceType?: Maybe<Scalars['String']>;

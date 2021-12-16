@@ -107,7 +107,7 @@ describe('Transit Gateway Attachment Service Test: ', () => {
     return Promise.resolve()
   })
 
-  describe.skip('getData', () => {
+  describe('getData', () => {
     test('should return a truthy value ', () => {
       expect(getDataResult).toBeTruthy()
     })
@@ -135,7 +135,7 @@ describe('Transit Gateway Attachment Service Test: ', () => {
     })
   })
 
-  describe.skip('format', () => {
+  describe('format', () => {
     test('should return data in the correct format matching the schema type', () => {
       expect(formatResult).toEqual(
         expect.arrayContaining([

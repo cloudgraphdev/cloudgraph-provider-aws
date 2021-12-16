@@ -18,7 +18,7 @@ import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const serviceName = 'TransitGateway'
+const serviceName = 'TransitGatewayAttachment'
 const endpoint = initTestEndpoint(serviceName)
 
 const listTransitGatewayAttachmentsData = async ({

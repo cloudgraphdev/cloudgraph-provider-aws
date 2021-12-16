@@ -57,6 +57,7 @@ type awsTag @key(fields: "id") {
   emrCluster: [awsEmrCluster]
   customerGateway: [awsCustomerGateway]
   transitGateway: [awsTransitGateway]
+  transitGatewayAttachment: [awsTransitGatewayAttachment]
   vpnGateway: [awsVpnGateway]
   clientVpnEndpoint: [awsClientVpnEndpoint]
   vpnConnection: [awsVpnConnection]
