@@ -64,7 +64,7 @@ export const listHostedZones = async (
             HostedZones: zones = [],
             NextMarker: marker,
             IsTruncated: truncated,
-          } = data
+          } = data || {}
 
           logger.debug(lt.fetchedRoute53Zones(zones.length))
 
@@ -86,7 +86,7 @@ export const listHostedZones = async (
            */
 
           if (!truncated) {
-            resolveList()
+            return resolveList()
           }
         }
       )
@@ -127,7 +127,7 @@ export const getHostedZoneData = async (
               region: 'global',
             })
 
-            resolveZone()
+            return resolveZone()
           }
         )
       )

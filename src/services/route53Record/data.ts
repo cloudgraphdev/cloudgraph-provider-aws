@@ -122,7 +122,7 @@ const listRecordsForHostedZone = async ({
        */
 
       if (!truncated) {
-        resolveRecords()
+        return resolveRecords()
       }
     }
   )
