@@ -12,7 +12,7 @@ import { RawAwsRouteTable } from '../routeTable/data'
  */
 
 export default ({
-  service: transitGatewayAttachment,
+  service: transitGateway,
   data,
   region,
 }: {
@@ -24,7 +24,7 @@ export default ({
   region: string
 }): { [key: string]: ServiceConnection[] } => {
   const connections: ServiceConnection[] = []
-  const { TransitGatewayId: id, Options: options } = transitGatewayAttachment
+  const { TransitGatewayId: id, Options: options } = transitGateway
 
   /**
    * Find Route Tables

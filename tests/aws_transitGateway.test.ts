@@ -30,13 +30,13 @@ describe('Transit Gateway Service Test: ', () => {
 
       const [transitGateway] = getDataResult[region]
       transitGatewayId = transitGateway.TransitGatewayId
-      console.log(`transitGateway: ${JSON.stringify(transitGateway)}`)
+
       // Get Route Table data
       const routeTableData = await routeTableService.getData({
         credentials,
         regions: region,
       })
-      console.log(`routeTableData: ${JSON.stringify(routeTableData)}`)
+
       transitGatewayConnections = classInstance.getConnections({
         service: transitGateway,
         data: [
