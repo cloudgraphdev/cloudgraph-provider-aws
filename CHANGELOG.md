@@ -1,3 +1,15 @@
+# [0.52.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.51.7...0.52.0) (2021-12-16)
+
+
+### Features
+
+* **service:** migrate service clientVpnEndpoint ([c909d77](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c909d7734c83ca10559c5332abd2a16a15face0e))
+* **service:** migrate service clientVpnEndpoint ([c569f97](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c569f970b77913d24a868bcac29d6630047128dc))
+* **service:** migrate service clientVpnEndpoint ([26f85ed](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/26f85ed0aea2bc70c061b22fa61a4423d30382c4))
+* **service:** migrate service clientVpnEndpoint ([240deb4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/240deb4b06acdb6a7dfcdaf5315ef2e3605d8726))
+* **service:** migrate service clientVpnEndpoint ([b8464b4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b8464b4c40030b8bb1a2d2f15337bad7f3a5d6bd))
+* **service:** Update readme file ([70e6c1e](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/70e6c1e168124882d42eecbf732a4f8810a03b10))
+
 ## [0.51.7](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.51.6...0.51.7) (2021-12-16)
 
 
