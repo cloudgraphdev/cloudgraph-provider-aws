@@ -2,6 +2,7 @@ type awsIamUser @key(fields: "arn") {
   id: String! @id @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   accountId: String! @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "IAM User"})
   path: String @search(by: [hash, regexp])
   name: String @search(by: [hash, regexp])
   creationTime: String @search(by: [hash, regexp])

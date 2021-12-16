@@ -2,6 +2,7 @@ type awsEcsCluster @key(fields: "arn") {
   id: String! @id @search(by: [hash])
 	arn: String! @id @search(by: [hash, regexp])
   accountId: String! @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "ECS Cluster"})
   clusterName: String @search(by: [hash, regexp])
   configuration: awsEcsClusterConfiguration
   status: String @search(by: [hash, regexp])

@@ -3,6 +3,7 @@ type awsSubnet @key(fields: "id") {
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "Subnet"})
   autoAssignPublicIpv4Address: String @search(by: [hash, regexp])
   autoAssignPublicIpv6Address: String @search(by: [hash, regexp])
   availabilityZone: String @search(by: [hash, regexp])

@@ -11,6 +11,7 @@ type awsApiGatewayResource @key(fields: "arn") {
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "Api Gateway Resource"})
   restApi: [awsApiGatewayRestApi] @hasInverse(field: resources) #change to plural
   path: String @search(by: [hash, regexp])
   methods: [awsApiGatewayMethod]

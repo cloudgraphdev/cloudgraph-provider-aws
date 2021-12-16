@@ -3,6 +3,7 @@ type awsElastiCacheReplicationGroup @key(fields: "arn") {
   arn: String! @id @search(by: [hash, regexp])
   accountId: String! @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "ElastiCache Replication Group"})
   replicationGroupId: String @search(by: [hash])
   description: String @search(by: [hash, regexp])
   globalReplicationGroupInfo: awsElastiCacheGlobalReplicationGroupInfo

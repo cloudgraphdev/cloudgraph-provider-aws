@@ -3,6 +3,7 @@ type awsLambda @key(fields: "arn") {
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "Lambda"})
   description: String @search(by: [hash, regexp, fulltext])
   handler: String @search(by: [hash, regexp])
   kmsKeyArn: String @search(by: [hash, regexp])

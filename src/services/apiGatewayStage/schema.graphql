@@ -24,6 +24,7 @@ type awsApiGatewayStage @key(fields: "arn") {
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "Api Gateway Stage"})
   name: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp, fulltext])
   cacheCluster: Boolean @search

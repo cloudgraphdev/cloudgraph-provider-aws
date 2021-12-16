@@ -3,6 +3,7 @@ type awsElastiCacheCluster @key(fields: "arn") {
   arn: String! @id @search(by: [hash, regexp])
   accountId: String! @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "ElastiCache Cluster"})
   cacheClusterId: String @search(by: [hash, regexp])
   configurationEndpoint: awsElastiCacheEndpoint
   clientDownloadLandingPage: String @search(by: [hash, regexp])

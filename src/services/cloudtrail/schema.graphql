@@ -3,6 +3,7 @@ type awsCloudtrail @key(fields: "cgId") {
   cgId: String! @id @search(by: [hash, regexp])
   arn: String! @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "CloudTrail"})
   accountId: String! @search(by: [hash, regexp])
   name: String @search(by: [hash, regexp])
   s3BucketName: String @search(by: [hash, regexp])

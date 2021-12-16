@@ -2,6 +2,7 @@ type awsEcsService @key(fields: "arn") {
   id: String! @id @search(by: [hash])
 	arn: String! @id @search(by: [hash, regexp])
   accountId: String! @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "ECS Service"})
   serviceName: String @search(by: [hash, regexp])
   clusterArn: String @search(by: [hash, regexp])
   loadBalancers: [awsEcsLoadBalancer]

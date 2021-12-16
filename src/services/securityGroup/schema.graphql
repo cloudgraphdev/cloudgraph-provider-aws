@@ -3,6 +3,7 @@ type awsSecurityGroup @key(fields: "id") {
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "Security Group"})
   name: String! @search(by: [hash, regexp])
   vpcId: String @search(by: [hash])
   description: String @search(by: [hash, regexp, fulltext])

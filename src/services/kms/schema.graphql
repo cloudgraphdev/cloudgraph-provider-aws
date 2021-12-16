@@ -3,6 +3,7 @@ type awsKms @key(fields: "id"){
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "KMS"})
   description: String @search(by: [hash, regexp, fulltext])
   keyRotationEnabled: String @search(by: [hash, regexp])
   usage: String @search(by: [hash, regexp])

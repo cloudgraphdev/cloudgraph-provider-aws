@@ -1,6 +1,7 @@
 type awsRoute53Record @key(fields: "id") {
   id: String! @id @search(by: [hash])
   accountId: String! @search(by: [hash])
+  serviceDisplayName: String @default(add: { value: "Route 53 Record"})
   zoneId: String @search(by: [hash])
   alias: awsRoute53Alias
   type: String @search(by: [hash, regexp])

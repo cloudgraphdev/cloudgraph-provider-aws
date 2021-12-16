@@ -3,6 +3,7 @@ type awsSes @key(fields: "arn") {
   accountId: String! @search(by: [hash])
 	arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "Simple Email Service"})
   email: String @search(by: [hash, regexp])
   verificationStatus: String @search(by: [hash, regexp])
 }

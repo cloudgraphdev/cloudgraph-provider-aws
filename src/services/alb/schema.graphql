@@ -3,6 +3,7 @@ type awsAlb @key(fields: "arn") {
   accountId: String!
   arn: String! @id
   region: String @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "Application Load Balancer"})
   dnsName: String @search(by: [hash, regexp])
   scheme: String @search(by: [hash, regexp])
   type: String @search(by: [hash, regexp])

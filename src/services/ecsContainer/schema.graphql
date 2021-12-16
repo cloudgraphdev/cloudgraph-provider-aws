@@ -2,6 +2,7 @@ type awsEcsContainer @key(fields: "arn") {
   id: String! @id @search(by: [hash])
 	arn: String! @id @search(by: [hash, regexp])
   accountId: String! @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "ECS Container"})
   ec2InstanceId: String @search(by: [hash])
   capacityProviderName: String @search(by: [hash, regexp])
   version: Int @search

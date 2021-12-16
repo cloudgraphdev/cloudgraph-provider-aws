@@ -58,6 +58,7 @@ type awsCloudFormationStack @key(fields: "arn") {
   id: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String! @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "Cloud Formation Stack"})
   name: String @search(by: [hash, regexp])
   changeSetId: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp])

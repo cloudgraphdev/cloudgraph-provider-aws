@@ -1,6 +1,7 @@
 type awsIamPasswordPolicy @key(fields: "id") {
   id: String! @id @search(by: [hash])
   accountId: String! @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "IAM Password Policy"})
   minimumPasswordLength: Int @search
   maxPasswordAge: Int @search
   passwordReusePrevention: Int @search

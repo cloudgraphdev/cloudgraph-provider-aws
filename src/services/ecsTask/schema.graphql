@@ -2,6 +2,7 @@ type awsEcsTask @key(fields: "arn") {
   id: String! @id @search(by: [hash])
 	arn: String! @id @search(by: [hash, regexp])
   accountId: String! @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "ECS Task"})
   attachments: [awsEcsAttachment]
   attributes: [awsEcsAttribute]
   availabilityZone: String @search(by: [hash, regexp])

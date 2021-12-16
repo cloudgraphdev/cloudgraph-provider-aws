@@ -2,6 +2,7 @@ type awsEfsMountTarget @key(fields: "id") {
   id: String! @id @search(by: [hash])
   accountId: String! @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "EFS Mount Target"})
   ownerId: String @search(by: [hash])
   fileSystemId: String @search(by: [hash])
   lifeCycleState: String @search(by: [hash, regexp])

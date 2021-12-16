@@ -69,6 +69,7 @@ type awsEc2 @key(fields: "arn") {
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "EC2"})
   ami: String @search(by: [hash, regexp])
   tenancy: String @search(by: [hash, regexp])
   elasticIps: String @search(by: [hash, regexp])

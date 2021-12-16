@@ -3,6 +3,7 @@ type awsEmrCluster @key(fields: "arn") {
   arn: String! @id @search(by: [hash, regexp])
   accountId: String! @search(by: [hash, regexp])
   region: String! @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "EMR Cluster"})
   status: AwsEmrClusterStatus
   ec2InstanceAttributes: AwsEmrClusterEc2InstanceAttributes
   instanceCollectionType: String @search(by: [hash, regexp])

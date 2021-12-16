@@ -130,6 +130,7 @@ type awsAppSync @key(fields: "arn") {
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String! @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "AppSync"})
   name: String! @search(by: [hash, regexp])
   authenticationType: String @search(by: [hash, regexp])
   logFieldLogLevel: String @search(by: [hash, regexp])

@@ -3,6 +3,7 @@ type awsNetworkInterface @key(fields: "arn") {
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "Network Interface"})
   subnetId: String @search(by: [hash])
   macAddress: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp, fulltext])

@@ -2,6 +2,7 @@ type awsNetworkAcl @key(fields: "id") {
   id: String! @id @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   accountId: String! @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "Network ACL"})
   region: String! @search(by: [hash, regexp])
   default: Boolean
   inboundRules: [awsNetworkAclRule]

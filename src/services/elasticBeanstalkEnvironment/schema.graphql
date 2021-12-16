@@ -3,6 +3,7 @@ type awsElasticBeanstalkEnv @key(fields: "arn") {
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "Elastic beanstalk Environment"})
   applicationName: String @search(by: [hash, regexp])
   cname: String @search(by: [hash])
   description: String @search(by: [hash, regexp])

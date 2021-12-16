@@ -2,6 +2,7 @@ type awsIamSamlProvider @key(fields: "arn") {
   id: String! @id @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   accountId: String! @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "IAM SAML Provider"})
   validUntil: String @search(by: [hash, regexp])
   createdDate: String @search(by: [hash, regexp])
 }

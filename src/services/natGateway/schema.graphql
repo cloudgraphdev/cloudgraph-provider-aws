@@ -3,6 +3,7 @@ type awsNatGateway @key(fields: "id") {
   accountId: String! @search(by: [hash])
 	arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "NAT Gateway"})
 	state: String @search(by: [hash, regexp])
   createTime: String @search(by: [hash, regexp])
   dailyCost: awsTotalBillingInfo

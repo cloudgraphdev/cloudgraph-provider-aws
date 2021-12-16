@@ -42,7 +42,8 @@ export default ({
     NetworkInterfaces: instanceNetworkInterfaces = [],
     SubnetId: subnetId,
   } = instance
-
+  console.log('subnet id is:')
+  console.log(subnetId)
   /**
    * Find Security Groups VPC Security Groups
    * related to this EC2 instance
@@ -179,7 +180,8 @@ export default ({
     const subnetsInRegion: RawAwsSubnet[] = subnets.data[region].filter(
       ({ SubnetId }: RawAwsSubnet) => subnetId === SubnetId
     )
-
+    console.log('subnets in region')
+    console.log(subnetsInRegion)
     if (!isEmpty(subnetsInRegion)) {
       for (const subnet of subnetsInRegion) {
         connections.push({

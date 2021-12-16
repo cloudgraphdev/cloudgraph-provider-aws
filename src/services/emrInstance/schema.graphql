@@ -2,6 +2,7 @@ type awsEmrInstance @key(fields: "id") {
   id: String! @id @search(by: [hash])
   accountId: String! @search(by: [hash, regexp])
   region: String! @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "EMR Instance"})
   ec2InstanceId: String @search(by: [hash])
   publicDnsName: String @search(by: [hash, regexp])
   publicIpAddress: String @search(by: [hash, regexp])

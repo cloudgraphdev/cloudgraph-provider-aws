@@ -3,6 +3,7 @@ type awsIgw @key(fields: "arn") {
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "Internet Gateway"})
   owner: String @search(by: [hash, regexp])
   attachments: [awsIgwAttachment]
   tags: [Tag]

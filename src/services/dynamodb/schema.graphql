@@ -151,6 +151,7 @@ type awsDynamoDbTable @key(fields: "arn") {
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
   accountId: String! @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "DynamoDB"})
   attributes: [awsDynamoDbTableAttributes]
   billingModeSummary: awsDynamoDbTableBillingSummary
   creationDate: String! @search(by: [hash, regexp])

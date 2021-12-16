@@ -4,22 +4,57 @@ type awsBilling {
   account: String! @id @search(by: [hash])
   totalCostMonthToDate: awsTotalBillingInfo
   totalCostLast30Days: awsTotalBillingInfo
-  monthToDateDailyAverage: [awsServiceBillingInfo]
-  last30DaysDailyAverage: [awsServiceBillingInfo]
-  monthToDate: [awsServiceBillingInfo]
-  last30Days: [awsServiceBillingInfo]
+  monthToDateDailyAverage: [awsMonthToDateServiceBillingInfoDailyAvg]
+  last30DaysDailyAverage: [awsLast30DaysServiceBillingInfoDailyAvg]
+  monthToDate: [awsMonthToDateServiceBillingInfo]
+  last30Days: [awsLast30DaysServiceBillingInfo]
 }
 
-type awsServiceBillingInfo 
+interface awsServiceBillingInfo 
   @generate(
     query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    name: String! @search(by: [hash])
     cost: Float @search
     currency: String @search(by: [hash, regexp])
     formattedCost: String @search(by: [hash, regexp])
+  }
+
+type awsMonthToDateServiceBillingInfo implements awsServiceBillingInfo
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    name: String! @search(by: [hash])
+  }
+
+type awsLast30DaysServiceBillingInfo implements awsServiceBillingInfo
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    name: String! @search(by: [hash])
+  }
+
+  type awsLast30DaysServiceBillingInfoDailyAvg implements awsServiceBillingInfo
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    name: String! @search(by: [hash])
+  }
+
+  type awsMonthToDateServiceBillingInfoDailyAvg implements awsServiceBillingInfo
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    name: String! @search(by: [hash])
   }
 
 type awsTotalBillingInfo

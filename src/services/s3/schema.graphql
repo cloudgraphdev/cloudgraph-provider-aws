@@ -3,6 +3,7 @@ type awsS3 @key(fields: "arn") {
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
+  serviceDisplayName: String @default(add: { value: "S3"})
   access: String @search(by: [hash, regexp])
   bucketOwnerName: String @search(by: [hash, regexp])
   requesterPays: String @search(by: [hash, regexp])
