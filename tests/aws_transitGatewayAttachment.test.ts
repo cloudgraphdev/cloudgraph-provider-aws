@@ -2,7 +2,7 @@ import CloudGraph from '@cloudgraph/sdk'
 import RouteTable from '../src/services/routeTable'
 import TransitGateway from '../src/services/transitGateway'
 import TransitGatewayAttachment from '../src/services/transitGatewayAttachment'
-// import VpnConnection from '../src/services/vpnConnection'
+import VpnConnection from '../src/services/vpnConnection'
 import Vpc from '../src/services/vpc'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
@@ -27,9 +27,9 @@ describe('Transit Gateway Attachment Service Test: ', () => {
       const vpcService = new Vpc({
         logger: CloudGraph.logger,
       })
-      // const vpnConnectionService = new VpnConnection({
-      //   logger: CloudGraph.logger,
-      // })
+      const vpnConnectionService = new VpnConnection({
+        logger: CloudGraph.logger,
+      })
       const classInstance = new TransitGatewayAttachment({
         logger: CloudGraph.logger,
       })
@@ -65,10 +65,10 @@ describe('Transit Gateway Attachment Service Test: ', () => {
       })
 
       // Get Vpn Connection data
-      // const vpnConnectionData = await vpnConnectionService.getData({
-      //   credentials,
-      //   regions: region,
-      // })
+      const vpnConnectionData = await vpnConnectionService.getData({
+        credentials,
+        regions: region,
+      })
 
       transitGatewayAttachmentConnections = classInstance.getConnections({
         service: transitGatewayAttachment,
@@ -91,12 +91,12 @@ describe('Transit Gateway Attachment Service Test: ', () => {
             account,
             region,
           },
-          // {
-          //   name: services.vpnConnection,
-          //   data: vpnConnectionData,
-          //   account,
-          //   region,
-          // },
+          {
+            name: services.vpnConnection,
+            data: vpnConnectionData,
+            account,
+            region,
+          },
         ],
         region,
         account,
@@ -195,15 +195,15 @@ describe('Transit Gateway Attachment Service Test: ', () => {
       expect(vpcConnections.length).toBe(1)
     })
 
-    // test('should verify the connection to vpn connection', () => {
-    //   const vpnConnections = transitGatewayAttachmentConnections[
-    //     transitGatewayAttachmentId
-    //   ]?.filter(
-    //     connection => connection.resourceType === services.vpnConnection
-    //   )
+    test('should verify the connection to vpn connection', () => {
+      const vpnConnections = transitGatewayAttachmentConnections[
+        transitGatewayAttachmentId
+      ]?.filter(
+        connection => connection.resourceType === services.vpnConnection
+      )
 
-    //   expect(vpnConnections).toBeDefined()
-    //   expect(vpnConnections.length).toBe(0)
-    // })
+      expect(vpnConnections).toBeDefined()
+      expect(vpnConnections.length).toBe(0)
+    })
   })
 })

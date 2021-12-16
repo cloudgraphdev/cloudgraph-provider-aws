@@ -15,5 +15,5 @@ type awsTransitGatewayAttachment @key(fields: "arn") {
   transitGateway: [awsTransitGateway] @hasInverse(field: transitGatewayAttachment)
   routeTable: [awsRouteTable] @hasInverse(field: transitGatewayAttachment)
   vpc: [awsVpc] @hasInverse(field: transitGatewayAttachment)
-  # vpnConnection: [awsVpnConnection] @hasInverse(field: transitGatewayAttachment)
+  vpnConnection: [awsVpnConnection] @hasInverse(field: transitGatewayAttachment)
 }

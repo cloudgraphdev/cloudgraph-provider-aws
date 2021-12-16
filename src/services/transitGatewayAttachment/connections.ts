@@ -5,7 +5,7 @@ import { ServiceConnection } from '@cloudgraph/sdk'
 import { TransitGatewayAttachment, TagList } from 'aws-sdk/clients/ec2'
 
 import services from '../../enums/services'
-// import { RawAwsVpnConnection } from '../customerGateway/vpnConnection'
+import { RawAwsVpnConnection } from '../vpnConnection/data'
 import { RawAwsVpc } from '../vpc/data'
 import { RawAwsTransitGateway } from '../transitGateway/data'
 import { RawAwsRouteTable } from '../routeTable/data'
@@ -122,30 +122,30 @@ export default ({
    * Find Vpn Connections
    * related to this Transit Gateway Attachment
    */
-  // TODO: uncomment when vpn connection service is available
-  //   const vpnConnections: {
-  //     name: string
-  //     data: { [property: string]: any[] }
-  //   } = data.find(({ name }) => name === services.vpnConnection)
+  const vpnConnections: {
+    name: string
+    data: { [property: string]: any[] }
+  } = data.find(({ name }) => name === services.vpnConnection)
 
-  //   if (vpnConnections?.data?.[region]) {
-  //     const associatedVpnConnections: RawAwsVpnConnection[] =
-  //     vpnConnections.data[region].filter(
-  //         ({ VpnConnectionId }: RawAwsVpnConnection) =>
-  //         VpnConnectionId === resourceId
-  //       )
+  if (vpnConnections?.data?.[region]) {
+    const associatedVpnConnections: RawAwsVpnConnection[] = vpnConnections.data[
+      region
+    ].filter(
+      ({ VpnConnectionId }: RawAwsVpnConnection) =>
+        VpnConnectionId === resourceId
+    )
 
-  //     if (!isEmpty(associatedVpnConnections)) {
-  //       for (const vpnConnection of associatedVpnConnections) {
-  //         connections.push({
-  //           id: vpnConnection.VpnConnectionId,
-  //           resourceType: services.vpnConnection,
-  //           relation: 'child',
-  //           field: 'vpnConnection',
-  //         })
-  //       }
-  //     }
-  //   }
+    if (!isEmpty(associatedVpnConnections)) {
+      for (const vpnConnection of associatedVpnConnections) {
+        connections.push({
+          id: vpnConnection.VpnConnectionId,
+          resourceType: services.vpnConnection,
+          relation: 'child',
+          field: 'vpnConnection',
+        })
+      }
+    }
+  }
 
   const transitGatewayAttachmentResult = {
     [id]: connections,

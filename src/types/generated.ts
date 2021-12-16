@@ -3250,6 +3250,7 @@ export type AwsTransitGatewayAttachment = {
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
 };
 
 export type AwsTunelOptions = {
@@ -3322,6 +3323,7 @@ export type AwsVpnConnection = {
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
   customerGateway?: Maybe<Array<Maybe<AwsCustomerGateway>>>;
   vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
+  transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
 };
 
 export type AwsVpnConnectionOptions = {
