@@ -9,4 +9,5 @@ type awsVpnGateway @key(fields: "arn") {
   vpcIds: [String] @search(by: [hash])
   tags: [Tag]
   vpc: [awsVpc] @hasInverse(field: vpnGateway)
+  vpnConnection: [awsVpnConnection] @hasInverse(field: vpnGateway)
 }

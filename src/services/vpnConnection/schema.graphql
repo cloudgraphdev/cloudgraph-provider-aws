@@ -1,0 +1,74 @@
+type awsVpnConnection @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+  accountId: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
+  category: String @search(by: [hash, regexp])
+  customerGatewayId: String @search(by: [hash, regexp])
+  state: String @search(by: [hash, regexp])
+  type: String @search(by: [hash, regexp])
+  vpnGatewayId: String @search(by: [hash, regexp])
+  transitGatewayId: String @search(by: [hash, regexp])
+  options: awsVpnConnectionOptions
+  routes: [awsVpnStaticRoute]
+  vgwTelemetry: [awsVgwTelemetry]
+  tags: [Tag]
+  transitGateway: [awsTransitGateway] @hasInverse(field: vpnConnection)
+  customerGateway: [awsCustomerGateway] @hasInverse(field: vpnConnection)
+  vpnGateway: [awsVpnGateway] @hasInverse(field: vpnConnection)
+}
+
+type awsVpnConnectionOptions
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  enableAcceleration: Boolean
+  staticRoutesOnly: Boolean
+  localIpv4NetworkCidr: String
+  remoteIpv4NetworkCidr: String
+  tunnelInsideIpVersion: String
+  type: String
+  tunnelOptions: [awsTunelOptions]
+}
+
+type awsTunelOptions
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  outsideIpAddress: String
+  tunnelInsideCidr: String
+  preSharedKey: String
+}
+
+type awsVpnStaticRoute
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  destinationCidrBlock: String
+  source: String
+  state: String
+}
+
+type awsVgwTelemetry
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  acceptedRouteCount: Int
+  lastStatusChange: String
+  certificateArn: String
+  outsideIpAddress: String
+  status: String
+  statusMessage: String
+}

@@ -775,11 +775,29 @@ resource "aws_customer_gateway" "main" {
   }
 }
 
-resource "aws_vpn_gateway" "vpn_gategay" {
+resource "aws_vpn_gateway" "vpn_gateway" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
     Name = "test"
+  }
+}
+
+resource "aws_ec2_transit_gateway" "vpn_transit_gateway" {}
+
+resource "aws_customer_gateway" "vpn_customer_gateway" {
+  bgp_asn    = 65000
+  ip_address = "172.0.0.1"
+  type       = "ipsec.1"
+}
+
+resource "aws_vpn_connection" "vpn_connection" {
+  customer_gateway_id = aws_customer_gateway.vpn_customer_gateway.id
+  transit_gateway_id  = aws_ec2_transit_gateway.vpn_transit_gateway.id
+  type                = aws_customer_gateway.vpn_customer_gateway.type
+
+  tags = {
+    Environment = "test"
   }
 }
 

@@ -871,6 +871,7 @@ export type AwsCustomerGateway = {
   bgpAsn?: Maybe<Scalars['String']>;
   ipAddress?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
 };
 
 export type AwsConnectionLogResponseOptions = {
@@ -3199,6 +3200,7 @@ export type AwsTag = {
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
   vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
   clientVpnEndpoint?: Maybe<Array<Maybe<AwsClientVpnEndpoint>>>;
+  vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
 };
 
 export type AwsTotalBillingInfo = {
@@ -3223,6 +3225,24 @@ export type AwsTransitGateway = {
   associationDefaultRouteTableId?: Maybe<Scalars['String']>;
   propagationDefaultRouteTableId?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
+};
+
+export type AwsTunelOptions = {
+  id: Scalars['String'];
+  outsideIpAddress?: Maybe<Scalars['String']>;
+  tunnelInsideCidr?: Maybe<Scalars['String']>;
+  preSharedKey?: Maybe<Scalars['String']>;
+};
+
+export type AwsVgwTelemetry = {
+  id: Scalars['String'];
+  acceptedRouteCount?: Maybe<Scalars['Int']>;
+  lastStatusChange?: Maybe<Scalars['String']>;
+  certificateArn?: Maybe<Scalars['String']>;
+  outsideIpAddress?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  statusMessage?: Maybe<Scalars['String']>;
 };
 
 export type AwsVpc = {
@@ -3259,6 +3279,37 @@ export type AwsVpc = {
   vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
 };
 
+export type AwsVpnConnection = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  category?: Maybe<Scalars['String']>;
+  customerGatewayId?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  vpnGatewayId?: Maybe<Scalars['String']>;
+  transitGatewayId?: Maybe<Scalars['String']>;
+  options?: Maybe<AwsVpnConnectionOptions>;
+  routes?: Maybe<Array<Maybe<AwsVpnStaticRoute>>>;
+  vgwTelemetry?: Maybe<Array<Maybe<AwsVgwTelemetry>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
+  customerGateway?: Maybe<Array<Maybe<AwsCustomerGateway>>>;
+  vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
+};
+
+export type AwsVpnConnectionOptions = {
+  id: Scalars['String'];
+  enableAcceleration?: Maybe<Scalars['Boolean']>;
+  staticRoutesOnly?: Maybe<Scalars['Boolean']>;
+  localIpv4NetworkCidr?: Maybe<Scalars['String']>;
+  remoteIpv4NetworkCidr?: Maybe<Scalars['String']>;
+  tunnelInsideIpVersion?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  tunnelOptions?: Maybe<Array<Maybe<AwsTunelOptions>>>;
+};
+
 export type AwsVpnGateway = {
   id: Scalars['String'];
   accountId: Scalars['String'];
@@ -3270,6 +3321,14 @@ export type AwsVpnGateway = {
   vpcIds?: Maybe<Array<Maybe<Scalars['String']>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
+};
+
+export type AwsVpnStaticRoute = {
+  id: Scalars['String'];
+  destinationCidrBlock?: Maybe<Scalars['String']>;
+  source?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
 };
 
 export type BlockDeviceEbs = {

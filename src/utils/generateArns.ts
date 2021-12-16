@@ -190,3 +190,13 @@ export const clientVpnEndpointArn = ({
   account: string
   id: string
 }): string => `arn:aws:ec2:${region}:${account}:clientvpnendpoint/${id}`
+
+export const vpnConnectionArn = ({
+  region,
+  account,
+  id,
+} : {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:vpn-connection/${id}`

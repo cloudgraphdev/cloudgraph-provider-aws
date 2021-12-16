@@ -73,6 +73,7 @@ import TransitGateway from '../services/transitGateway'
 import CustomerGateway from '../services/customerGateway'
 import VpnGateway from '../services/vpnGateway'
 import ClientVpnEndpoint from '../services/clientVpnEndpoint'
+import VpnConnection from '../services/vpnConnection'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -152,5 +153,6 @@ export default {
   [services.transitGateway]: TransitGateway,
   [services.customerGateway]: CustomerGateway,
   [services.vpnGateway]: VpnGateway,
+  [services.vpnConnection]: VpnConnection,
   tag: AwsTag,
 }
