@@ -1,3 +1,10 @@
+## [0.53.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.53.0...0.53.1) (2021-12-17)
+
+
+### Bug Fixes
+
+* **config:** update config flow for ecs/ec2 metadata credentials to inform user to keep roleArn blank ([45e24b7](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/45e24b76f2f7545f9f941308bd4169ccd471dcdd))
+
 # [0.53.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.52.0...0.53.0) (2021-12-16)
 
 
