@@ -247,7 +247,6 @@ export default class Provider extends CloudGraph.Client {
   }
 
   private unsetAwsCredentials(): void {
-    AWS.config.update({ credentials: undefined })
     this.credentials = undefined
   }
 
@@ -264,6 +263,7 @@ export default class Provider extends CloudGraph.Client {
         ignoreEnvVariables: false,
       },
     } = this.config
+    let configCopy
     return new Promise(async (resolveConfig, rejectConfig) => {
       // If we have keys set in the config file, just use them
       if (configuredAccessKey && configuredSecretKey) {
@@ -286,16 +286,17 @@ export default class Provider extends CloudGraph.Client {
             )}`
           )
         }
-        AWS.config.credentials = creds
         this.credentials = creds
-        return resolveConfig(AWS.config)
+        configCopy = { ...AWS.config, credentials: this.credentials }
+        return resolveConfig(configCopy)
       }
       // If the client instance has creds set, weve gone through this function before.. just reuse them
       if (
         this.credentials &&
         (this.profile === profile || this.role === role)
       ) {
-        return resolveConfig(AWS.config)
+        configCopy = { ...AWS.config, credentials: this.credentials }
+        return resolveConfig(configCopy)
       }
       /**
        * Tries to find creds in priority order
@@ -332,7 +333,7 @@ export default class Provider extends CloudGraph.Client {
                   secretAccessKey,
                   sessionToken,
                 }
-                AWS.config.update({ credentials: creds })
+                configCopy = { ...AWS.config, credentials: this.credentials }
                 this.credentials = creds
                 this.profile = profile
                 resolve()
@@ -355,8 +356,8 @@ export default class Provider extends CloudGraph.Client {
               },
             })
             if (credentials) {
-              AWS.config.update({ credentials })
               this.credentials = credentials
+              configCopy = { ...AWS.config, credentials }
               this.profile = profile
             }
             break
@@ -373,6 +374,7 @@ export default class Provider extends CloudGraph.Client {
                 resolve()
               } else {
                 this.credentials = AWS.config.credentials
+                configCopy = { ...AWS.config, credentials: this.credentials }
                 this.profile = profile
                 resolve()
               }
@@ -401,12 +403,7 @@ export default class Provider extends CloudGraph.Client {
         if (answers?.accessKeyId && answers?.secretAccessKey) {
           this.credentials = answers
           this.profile = profile
-          AWS.config.update({
-            credentials: {
-              accessKeyId: answers.accessKeyId,
-              secretAccessKey: answers?.secretAccessKey,
-            },
-          })
+          configCopy = { ...AWS.config, credentials: this.credentials }
         } else {
           const errText = 'Cannot scan AWS without credentials'
           this.logger.error(errText)
@@ -440,7 +437,7 @@ export default class Provider extends CloudGraph.Client {
           obfuscateSensitiveString(this.credentials.secretAccessKey)
         )}`
       )
-      resolveConfig(AWS.config)
+      resolveConfig(configCopy)
     })
   }
 
