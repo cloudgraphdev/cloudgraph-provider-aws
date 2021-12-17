@@ -129,6 +129,10 @@ export default class Provider extends CloudGraph.Client {
           },
         ])
         profile = profileAnswer
+      } else {
+        this.logger.info(
+          '** NOTE: if you want to use the "built in" (metadata) credentials for ec2/ecs, leave the roleArn blank for that account.'
+        )
       }
       const { addRoleArn } = await this.interface.prompt([
         {
