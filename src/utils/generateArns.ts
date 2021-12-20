@@ -200,3 +200,13 @@ export const vpnConnectionArn = ({
   account: string
   id: string
 }): string => `arn:aws:ec2:${region}:${account}:vpn-connection/${id}`
+
+export const transitGatewayAttachmentArn = ({
+  region,
+  account,
+  id,
+} : {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:transit-gateway-attachment/${id}`

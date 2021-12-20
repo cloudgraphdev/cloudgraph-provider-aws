@@ -763,6 +763,10 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "cg_gateway_vpc_attachment_tes
   subnet_ids         = [aws_subnet.subnet.id]
   transit_gateway_id = aws_ec2_transit_gateway.cg_transit_gateway_test.id
   vpc_id             = aws_vpc.vpc.id
+
+  tags = {
+    Environment = "test"
+  }
 }
 
 resource "aws_customer_gateway" "main" {

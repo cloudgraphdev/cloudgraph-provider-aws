@@ -69,8 +69,9 @@ export default {
   sns: 'sns',
   sqs: 'sqs',
   subnet: 'subnet',
+  transitGateway: 'transitGateway',
+  transitGatewayAttachment: 'transitGatewayAttachment',
   vpc: 'vpc',
   vpnConnection: 'vpnConnection',
-  transitGateway: 'transitGateway',
   vpnGateway: 'vpnGateway',
 }
