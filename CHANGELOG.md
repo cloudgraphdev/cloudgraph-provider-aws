@@ -1,3 +1,10 @@
+## [0.53.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.53.1...0.53.2) (2021-12-20)
+
+
+### Bug Fixes
+
+* **config:** update config flow to use a copy of aws config obj instead of directly modifying it ([5a8171f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/5a8171fe02ad1ecb0228c0a87a7b3514579c9002))
+
 ## [0.53.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.53.0...0.53.1) (2021-12-17)
 
 
