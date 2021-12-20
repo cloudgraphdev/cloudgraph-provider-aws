@@ -1,3 +1,14 @@
+# [0.54.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.53.2...0.54.0) (2021-12-20)
+
+
+### Features
+
+* **service:** Add connection to vpn connection service ([0f96500](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/0f96500bd49963920c6640d69f30987ef0deb138))
+* **service:** Create transitGatewayAttachment service ([dff077b](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/dff077be4ad7872b4931a8f2fc5c332bb264e57e))
+* **service:** Create transitGatewayAttachment service ([e05a4c1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/e05a4c19ba106dc93065697744a20a493349b257))
+* **service:** Create transitGatewayAttachment service ([c6b8307](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c6b830734c5cb67bfdea229865230106c53ca589))
+* **service:** Fixed error to list data for multiple regions ([07acb0b](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/07acb0bae8a71a6364a1f9d50e33a9d688578510))
+
 ## [0.53.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.53.1...0.53.2) (2021-12-20)
 
 
