@@ -85,7 +85,8 @@ const listTransitGatewayAttachmentsData = async ({
 
 export interface RawAwsTransitGatewayAttachment
   extends Omit<TransitGatewayAttachment, 'Tags'> {
-  Tags?: TagMap
+    region: string
+    Tags?: TagMap
 }
 
 export default async ({
@@ -98,24 +99,27 @@ export default async ({
   [region: string]: RawAwsTransitGatewayAttachment[]
 }> =>
   new Promise(async resolve => {
-    let transitGatewayAttachmentsResult: RawAwsTransitGatewayAttachment[] = []
+    const transitGatewayAttachmentsResult: RawAwsTransitGatewayAttachment[] = []
 
     const regionPromises = regions.split(',').map(region => {
       const ec2 = new EC2({ ...config, region, endpoint })
 
       return new Promise<void>(async resolveTransitGatewayAttachmentData => {
         // Get Transit Gateway Attachment Data
-        const transitGateways = await listTransitGatewayAttachmentsData({
+        const transitGatewayAttachments = await listTransitGatewayAttachmentsData({
           ec2,
           region,
         })
 
-        transitGatewayAttachmentsResult = transitGateways.map(attachment => {
-          return {
-            ...attachment,
-            Tags: convertAwsTagsToTagMap(attachment.Tags as AwsTag[]),
+        if (!isEmpty(transitGatewayAttachments)) {
+          for (const attachment of transitGatewayAttachments) {
+            transitGatewayAttachmentsResult.push({
+              ...attachment,
+              region,
+              Tags: convertAwsTagsToTagMap(attachment.Tags as AwsTag[]),
+            })
           }
-        })
+        }
 
         resolveTransitGatewayAttachmentData()
       })

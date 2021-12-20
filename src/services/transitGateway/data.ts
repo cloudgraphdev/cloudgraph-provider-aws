@@ -75,6 +75,7 @@ const listTransitGatewaysData = async ({
  * Transit Gateway
  */
 export interface RawAwsTransitGateway extends Omit<TransitGateway, 'Tags'> {
+  region: string,
   Tags?: TagMap
 }
 
@@ -88,7 +89,7 @@ export default async ({
   [region: string]: RawAwsTransitGateway[]
 }> =>
   new Promise(async resolve => {
-    let transitGatewaysResult: RawAwsTransitGateway[] = []
+    const transitGatewaysResult: RawAwsTransitGateway[] = []
 
     const regionPromises = regions.split(',').map(region => {
       const ec2 = new EC2({ ...config, region, endpoint })
@@ -97,12 +98,15 @@ export default async ({
         // Get Transit Gateway Data
         const transitGateways = await listTransitGatewaysData({ ec2, region })
 
-        transitGatewaysResult = transitGateways.map(gateway => {
-          return {
-            ...gateway,
-            Tags: convertAwsTagsToTagMap(gateway.Tags as AwsTag[]),
+        if (!isEmpty(transitGateways)) {
+          for (const gateway of transitGateways) {
+            transitGatewaysResult.push({
+              ...gateway,
+              region,
+              Tags: convertAwsTagsToTagMap(gateway.Tags as AwsTag[]),
+            })
           }
-        })
+        }
 
         resolveTransitGatewayData()
       })
