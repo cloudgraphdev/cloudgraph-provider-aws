@@ -1,3 +1,11 @@
+## [0.54.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.54.0...0.54.1) (2021-12-21)
+
+
+### Bug Fixes
+
+* Make that assumeRole function use the right profile credentials ([c427793](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c427793de668dbef95881a191f976ecb3cb03b1c))
+* Make that assumeRole function use the right profile credentials ([02e819f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/02e819faf7af68377f37b2990295f40fb7942b65))
+
 # [0.54.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.53.2...0.54.0) (2021-12-20)
 
 
