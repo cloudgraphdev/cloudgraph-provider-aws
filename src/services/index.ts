@@ -311,13 +311,20 @@ export default class Provider extends CloudGraph.Client {
       this.logger.info('Searching for AWS credentials...')
       switch (true) {
         case role && role !== '': {
-          const sts = new AWS.STS()
+          let sts = new AWS.STS()
           await new Promise<void>(resolve => {
+            if (profile && profile !== 'default') {
+              const creds = this.getSharedIniFileCredentials(profile)
+              if (creds) {
+                sts = new AWS.STS({ credentials: creds })
+              }
+            }
             const options = {
               RoleSessionName: 'CloudGraph',
               RoleArn: role,
               ...(externalId && { ExternalId: externalId }),
             }
+
             sts.assumeRole(options, (err, data) => {
               if (err) {
                 this.logger.error(
@@ -348,17 +355,7 @@ export default class Provider extends CloudGraph.Client {
         }
         case profile && profile !== 'default': {
           try {
-            // TODO: how to catch the error from SharedIniFileCredentials when profile doent exist
-            const credentials = new AWS.SharedIniFileCredentials({
-              profile,
-              callback: (err: any) => {
-                if (err) {
-                  this.logger.error(
-                    `No credentials found for profile ${profile}`
-                  )
-                }
-              },
-            })
+            const credentials = this.getSharedIniFileCredentials(profile)
             if (credentials) {
               this.credentials = credentials
               configCopy = { ...AWS.config, credentials }
@@ -466,6 +463,27 @@ export default class Provider extends CloudGraph.Client {
     if (serviceMap[service]) {
       return new serviceMap[service](this)
     }
+  }
+
+  private getSharedIniFileCredentials(
+    profile: string
+  ): AWS.SharedIniFileCredentials {
+    let credentials
+    try {
+      // TODO: how to catch the error from SharedIniFileCredentials when profile doent exist
+      credentials = new AWS.SharedIniFileCredentials({
+        profile,
+        callback: (err: any) => {
+          if (err) {
+            this.logger.error(`No credentials found for profile ${profile}`)
+          }
+        },
+      })
+    } catch (error: any) {
+      this.logger.debug(error)
+    }
+
+    return credentials
   }
 
   private getProfilesFromSharedConfig(): string[] {
