@@ -311,21 +311,21 @@ export default class Provider extends CloudGraph.Client {
       this.logger.info('Searching for AWS credentials...')
       switch (true) {
         case role && role !== '': {
+          let sts = new AWS.STS()
           await new Promise<void>(resolve => {
             if (profile && profile !== 'default') {
-              const credentials = this.getSharedIniFileCredentials(profile)
-              if (credentials) {
-                AWS.config.credentials = credentials
+              const creds = this.getSharedIniFileCredentials(profile)
+              if (creds) {
+                sts = new AWS.STS({ credentials: creds })
               }
             }
-
             const options = {
               RoleSessionName: 'CloudGraph',
               RoleArn: role,
               ...(externalId && { ExternalId: externalId }),
             }
 
-            new STS().assumeRole(options, (err, data) => {
+            sts.assumeRole(options, (err, data) => {
               if (err) {
                 this.logger.error(
                   `No valid credentials found for roleARN: ${role}`
