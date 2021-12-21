@@ -1,3 +1,10 @@
+## [0.54.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.54.1...0.54.2) (2021-12-21)
+
+
+### Bug Fixes
+
+* **creds:** update creds flow for sts to fix issue ([35ea0ee](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/35ea0eedb10bb05123be53f483af632ed19efd06))
+
 ## [0.54.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.54.0...0.54.1) (2021-12-21)
 
 
