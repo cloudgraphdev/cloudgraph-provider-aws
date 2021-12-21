@@ -344,8 +344,8 @@ export default class Provider extends CloudGraph.Client {
                   secretAccessKey,
                   sessionToken,
                 }
-                configCopy = { ...AWS.config, credentials: this.credentials }
                 this.credentials = creds
+                configCopy = { ...AWS.config, credentials: creds }
                 this.profile = profile
                 resolve()
               }
