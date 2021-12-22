@@ -56,6 +56,7 @@ export default {
   nacl: 'nacl',
   nat: 'nat',
   networkInterface: 'networkInterface',
+  organization: 'organization',
   rdsCluster: 'rdsCluster',
   rdsDbInstance: 'rdsDbInstance',
   redshiftCluster: 'redshiftCluster',

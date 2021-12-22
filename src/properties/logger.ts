@@ -223,7 +223,7 @@ export default {
   /**
    * Organization
    */
-  orgFound: '✅ Terraformer org data found, adding data org ✅',
+  orgFound: '✅ Org data found, adding data org✅',
   noOrgFound:
     '❎ No org found or multiple orgs found which we currently do not support. Adding data to bare bones org ❎',
   /**

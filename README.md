@@ -123,6 +123,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | nacl                        | vpc                                                                                                                                                                                        |
 | natGateway                  | networkInterface, subnet, vpc                                                                                                                                                              |
 | networkInterface            | ec2, eip, efsMountTarget, natGateway, subnet, vpc, flowLog                                                                                                                                 |
+| organization                |  
 | rdsCluster                  | appSync, rdsDbInstance, securityGroup                                                                                                                                                               |
 | rdsDbInstance               | rdsCluster, securityGroup, vpc, subnet                                                                                                                                                     |
 | redshiftCluster             | kms, vpc                                                                                                                                                                                   |
@@ -136,11 +137,12 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | sns                         | kms, cloudtrail                                                                                                                                                                            |
 | sqs                         |                                                                                                                                                                                            |
 | subnet                      | alb, asg, ec2, ecsService, efsMountTarget, elb, lambda, natGateway, networkInterface, routeTable, vpc, eksCluster, emrCluster, flowLog                                                     |
+| transitGateway              | routeTable, transitGatewayAttachment, vpnConnection                                                                                                                                                                                           |
+| transitGatewayAttachment    | routeTable, transitGateway, vpc, vpnConnection                                                                                                                                                                            |
 | vpc                         | alb, ec2, eip, elb, ecsService, efsMountTarget, eksCluster igw, lambda, nacl, natGateway, networkInterface, rdsDbInstance, redshiftCluster, route53HostedZone, routeTable, subnet, flowLog, vpnGateway, transitGatewayAttachment |
 | vpnConnection               | customerGateway, transitGateway, transitGatewayAttachment, vpnGateway                                                                                                                                                                              |
 | vpnGateway                  | vpc, vpnConnection                                                                                                                                                                                        |
-| transitGateway              | routeTable, transitGatewayAttachment, vpnConnection                                                                                                                                                                                           |
-| transitGatewayAttachment    | routeTable, transitGateway, vpc, vpnConnection                                                                                                                                                                            |
+
 <br />
 
 # Query Examples

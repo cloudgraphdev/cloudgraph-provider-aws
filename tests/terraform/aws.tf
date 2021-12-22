@@ -805,6 +805,16 @@ resource "aws_vpn_connection" "vpn_connection" {
   }
 }
 
+# Localstack Pro Tier
+# resource "aws_organizations_organization" "org" {
+#   aws_service_access_principals = [
+#     "cloudtrail.amazonaws.com",
+#     "config.amazonaws.com",
+#   ]
+
+#   feature_set = "ALL"
+# }
+
 # Client Vpn Endpoint
 # │ Error: Error requesting certificate: UnrecognizedClientException: The security token included in the request is invalid.
 # │       status code: 400, request id: 4c10656a-3d88-482d-9833-d8caf17ff063

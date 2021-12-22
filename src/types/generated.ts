@@ -2761,6 +2761,23 @@ export type AwsRawTag = {
   id: Scalars['String'];
   key?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
+}
+
+export type AwsOrganization = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  masterAccountArn?: Maybe<Scalars['String']>;
+  masterAccountId?: Maybe<Scalars['String']>;
+  masterAccountEmail?: Maybe<Scalars['String']>;
+  featureSet?: Maybe<Scalars['String']>;
+  availablePolicyTypes?: Maybe<Array<Maybe<AwsPolicyTypes>>>;
+};
+
+export type AwsPolicyTypes = {
+  id: Scalars['String'];
+  status?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
 };
 
 export type AwsRdsCluster = {
