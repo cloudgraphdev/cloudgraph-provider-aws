@@ -1,3 +1,10 @@
+# [0.55.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.54.2...0.55.0) (2021-12-22)
+
+
+### Features
+
+* **service:** Add additional connections for appSync service ([45a1acd](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/45a1acddff09274e4274170d48486543fbe4c924))
+
 ## [0.54.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.54.1...0.54.2) (2021-12-21)
 
 
