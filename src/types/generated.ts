@@ -256,6 +256,10 @@ export type AwsAppSync = {
   dataSources?: Maybe<Array<Maybe<AwsAppSyncDataSource>>>;
   functions?: Maybe<Array<Maybe<AwsAppSyncFunction>>>;
   types?: Maybe<Array<Maybe<AwsAppSyncType>>>;
+  cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
+  dynamodb?: Maybe<Array<Maybe<AwsDynamoDbTable>>>;
+  lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
 };
 
 export type AwsAppSyncApiKey = {
@@ -818,6 +822,7 @@ export type AwsCognitoUserPool = {
   accountRecoverySettings?: Maybe<Array<Maybe<AwsAccountRecoverySetting>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
 };
 
 export type AwsCognitoUserPoolLambdaConfig = {
@@ -910,6 +915,7 @@ export type AwsDynamoDbTable = {
   streamSpecification?: Maybe<AwsDynamoDbTableStreamSpecification>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   ttlEnabled?: Maybe<Scalars['Boolean']>;
+  appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
 };
 
 export type AwsDynamoDbTableAttributes = {
@@ -2618,6 +2624,7 @@ export type AwsLambda = {
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
+  appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
 };
 
 export type AwsLambdaEnvironmentVariable = {
@@ -2793,6 +2800,7 @@ export type AwsRdsCluster = {
   tags?: Maybe<Array<Maybe<Tag>>>;
   instances?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
 };
 
 export type AwsRdsDbInstance = {

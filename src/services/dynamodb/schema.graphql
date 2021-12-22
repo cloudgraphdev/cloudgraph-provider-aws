@@ -172,4 +172,5 @@ type awsDynamoDbTable @key(fields: "arn") {
   streamSpecification: awsDynamoDbTableStreamSpecification
   tags: [Tag]
   ttlEnabled: Boolean @search
+  appSync: [awsAppSync] @hasInverse(field: dynamodb)
 }
