@@ -1,7 +1,6 @@
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
-
 import AWS, {
   Organization,
   DescribeOrganizationResponse,
@@ -9,6 +8,7 @@ import AWS, {
 
 import { Config } from 'aws-sdk/lib/config'
 import { AWSError } from 'aws-sdk/lib/error'
+import { regionMap } from '../../enums/regions'
 
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
@@ -18,12 +18,12 @@ const { logger } = CloudGraph
 const serviceName = 'Organization'
 const endpoint = initTestEndpoint(serviceName)
 
+const DEFAULT_REGION = regionMap.usEast1
+
 const getOrganizationData = async ({
   aws,
-  region,
 }: {
   aws: AWS
-  region: string
 }): Promise<Organization> =>
   new Promise<Organization>(resolve => {
     let organizationData
@@ -41,7 +41,6 @@ const getOrganizationData = async ({
 
           organizationData = {
             ...organization,
-            region,
           }
         }
 
@@ -55,10 +54,8 @@ const getOrganizationData = async ({
  */
 
 export default async ({
-  regions,
   config,
 }: {
-  regions: string
   config: Config
 }): Promise<{
   [region: string]: Organization[]
@@ -66,25 +63,17 @@ export default async ({
   new Promise(async resolve => {
     const organizationResult: (Organization & { region: string })[] = []
 
-    const regionPromises = regions.split(',').map(region => {
-      const aws = new AWS({ ...config, region, endpoint })
+    const aws = new AWS({ ...config, region: DEFAULT_REGION, endpoint })
 
-      return new Promise<void>(async resolveOrganizationData => {
-        // Get Organization Data
-        const organization = await getOrganizationData({ aws, region })
+    // Get Organization Data
+    const organization = await getOrganizationData({ aws })
 
-        if (!isEmpty(organization)) {
-          organizationResult.push({
-            ...organization,
-            region,
-          })
-        }
-
-        resolveOrganizationData()
+    if (!isEmpty(organization)) {
+      organizationResult.push({
+        ...organization,
+        region: DEFAULT_REGION,
       })
-    })
-
-    await Promise.all(regionPromises)
+    }
 
     resolve(groupBy(organizationResult, 'region'))
   })
