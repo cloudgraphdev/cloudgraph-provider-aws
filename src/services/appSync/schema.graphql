@@ -155,4 +155,8 @@ type awsAppSync @key(fields: "arn") {
   dataSources: [awsAppSyncDataSource]
   functions: [awsAppSyncFunction]
   types: [awsAppSyncType]
+  cognitoUserPool: [awsCognitoUserPool] @hasInverse(field: appSync)
+  dynamodb: [awsDynamoDbTable] @hasInverse(field: appSync)
+  lambda: [awsLambda] @hasInverse(field: appSync)
+  rdsCluster: [awsRdsCluster] @hasInverse(field: appSync)
 }

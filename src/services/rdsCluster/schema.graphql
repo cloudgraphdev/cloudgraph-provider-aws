@@ -35,5 +35,6 @@ type awsRdsCluster @key(fields: "arn") {
   tags: [Tag]
   instances: [awsRdsDbInstance] @hasInverse(field: cluster)
   securityGroups: [awsSecurityGroup] @hasInverse(field: rdsCluster)
+  appSync: [awsAppSync] @hasInverse(field: rdsCluster)
 }
  

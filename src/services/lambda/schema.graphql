@@ -22,6 +22,7 @@ type awsLambda @key(fields: "arn") {
   subnet: [awsSubnet] @hasInverse(field: lambda) #change to plural
   vpc: [awsVpc] @hasInverse(field: lambda)
   cognitoUserPool: [awsCognitoUserPool] @hasInverse(field: lambda) #change to plural
+  appSync: [awsAppSync] @hasInverse(field: lambda)
 }
 
 type awsLambdaEnvironmentVariable

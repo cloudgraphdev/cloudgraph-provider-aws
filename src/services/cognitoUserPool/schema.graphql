@@ -116,4 +116,5 @@ type awsCognitoUserPool @key(fields: "id") {
   accountRecoverySettings: [awsAccountRecoverySetting]
   tags: [Tag]
   lambda: [awsLambda] @hasInverse(field: cognitoUserPool) #change to plural
+  appSync: [awsAppSync] @hasInverse(field: cognitoUserPool)
 }
