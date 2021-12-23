@@ -1,3 +1,10 @@
+## [0.55.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.55.1...0.55.2) (2021-12-23)
+
+
+### Bug Fixes
+
+* change Tag type naming to awsRawTag ([04926a0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/04926a0ac8efd3329ac304dad44cfad2a9bc279b))
+
 ## [0.55.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.55.0...0.55.1) (2021-12-23)
 
 
