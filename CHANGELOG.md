@@ -1,3 +1,10 @@
+## [0.55.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.55.0...0.55.1) (2021-12-23)
+
+
+### Bug Fixes
+
+* Added missing return to reject ([b447f62](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b447f621260fd2f1d1522d046f58ce0d9bfa95ed))
+
 # [0.55.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.54.2...0.55.0) (2021-12-22)
 
 
