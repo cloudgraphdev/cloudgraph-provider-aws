@@ -6,5 +6,5 @@ type awsElasticBeanstalkApp @key(fields: "arn") {
   name: String! @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp])
   elasticBeanstalkEnv: [awsElasticBeanstalkEnv] #change to plural
-  tags: [Tag]
+  tags: [awsRawTag]
 }

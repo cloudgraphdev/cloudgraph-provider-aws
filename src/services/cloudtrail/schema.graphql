@@ -19,7 +19,7 @@ type awsCloudtrail @key(fields: "cgId") {
   isOrganizationTrail: String @search(by: [hash, regexp])
   status: awsCloudtrailStatus
   eventSelectors: [awsCloudtrailEventSelector]
-  tags: [Tag]
+  tags: [awsRawTag]
   s3: [awsS3] @hasInverse(field: cloudtrail)
   sns: [awsSns] @hasInverse(field: cloudtrail)
   kms: [awsKms] @hasInverse(field: cloudtrail)

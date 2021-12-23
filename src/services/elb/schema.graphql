@@ -19,7 +19,7 @@ type awsElb @key(fields: "arn") {
   instances: awsElbInstances
   healthCheck: awsElbHealthCheck
   listeners: [awsElbListener]
-  tags: [Tag]
+  tags: [awsRawTag]
   cloudfrontDistribution: [awsCloudfront] @hasInverse(field: elb)
   securityGroups: [awsSecurityGroup] @hasInverse(field: elb)
   vpc: [awsVpc] @hasInverse(field: elb)

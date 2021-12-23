@@ -15,7 +15,7 @@ type awsElasticBeanstalkEnv @key(fields: "arn") {
   tier: String @search(by: [hash])
   versionLabel: String @search(by: [hash, regexp])
   elasticBeanstalkApp: [awsElasticBeanstalkApp] @hasInverse(field: elasticBeanstalkEnv)
-  tags: [Tag]
+  tags: [awsRawTag]
 }
 
 type awsElasticBeanstalkEnvSetting {

@@ -51,7 +51,7 @@ type awsCloudFormationStackSet @key(fields: "arn") {
   templateBody: String @search(by: [hash, regexp])
   parameters: [awsCloudFormationStackSetParameter]
   capabilities: [String] @search
-  tags:  [Tag]
+  tags:  [awsRawTag]
   administrationRoleARN: String @search(by: [hash, regexp])
   executionRoleName: String @search(by: [hash, regexp])
   driftDetectionDetail: awsCloudFormationStackSetDriftDetectionDetail

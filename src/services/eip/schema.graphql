@@ -3,7 +3,7 @@ type awsEip @key(fields: "arn") {
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
-  tags: [Tag]
+  tags: [awsRawTag]
   vpc: String @search(by: [hash])
   domain: String @search(by: [hash, regexp])
   publicIp: String @search(by: [hash, regexp])

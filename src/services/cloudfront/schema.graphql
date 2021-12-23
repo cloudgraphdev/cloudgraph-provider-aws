@@ -21,7 +21,7 @@ type awsCloudfront @key(fields: "id") {
   origins: [awsCloudfrontOriginData]
   elb: [awsElb] @hasInverse(field: cloudfrontDistribution)
   s3: [awsS3] @hasInverse(field: cloudfrontDistribution)
-  tags: [Tag]
+  tags: [awsRawTag]
 }
 
 type awsCloudfrontOriginData {

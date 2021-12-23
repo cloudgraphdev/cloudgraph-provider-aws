@@ -17,7 +17,7 @@ type awsEcsContainer @key(fields: "arn") {
   attributes: [awsEcsAttribute]
   registeredAt: String @search(by: [hash, regexp])
   attachments: [awsEcsAttachment]
-  tags: [Tag]
+  tags: [awsRawTag]
   ec2Instance: [awsEc2] @hasInverse(field: ecsContainer)
   ecsTask: [awsEcsTask] @hasInverse(field: ecsContainer)
 }

@@ -16,7 +16,7 @@ type awsSecretsManager @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp])
   kmsKeyId: String @search(by: [hash])
-  tags: [Tag]
+  tags: [awsRawTag]
   rotationEnabled: Boolean @search
   rotationLambdaARN: String @search(by: [hash, regexp])
   rotationRules: awsSecretsManagerRotationRule

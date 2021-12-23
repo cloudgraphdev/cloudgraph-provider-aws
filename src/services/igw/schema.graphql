@@ -5,7 +5,7 @@ type awsIgw @key(fields: "arn") {
   region: String @search(by: [hash, regexp])
   owner: String @search(by: [hash, regexp])
   attachments: [awsIgwAttachment]
-  tags: [Tag]
+  tags: [awsRawTag]
   vpc: [awsVpc] @hasInverse(field: igw)
 }
 

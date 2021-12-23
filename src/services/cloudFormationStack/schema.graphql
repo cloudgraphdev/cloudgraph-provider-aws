@@ -74,7 +74,7 @@ type awsCloudFormationStack @key(fields: "arn") {
   capabilities: [String] @search(by: [hash])
   outputs: [awsCloudFormationStackOutputList]
   roleARN: String @search(by: [hash, regexp]) # TODO: make a connection here and update casing
-  tags: [Tag]
+  tags: [awsRawTag]
   enableTerminationProtection: String @search(by: [hash, regexp])
   parentId: String @search(by: [hash, regexp])
   rootId: String @search(by: [hash, regexp])

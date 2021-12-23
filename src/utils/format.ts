@@ -3,7 +3,7 @@ import { parseString } from '@fast-csv/parse'
 import CloudGraph from '@cloudgraph/sdk'
 import isArray from 'lodash/isArray'
 import toString from 'lodash/toString'
-import { Tag, AwsIamJsonPolicy } from '../types/generated'
+import { AwsRawTag, AwsIamJsonPolicy } from '../types/generated'
 import { AwsTag, TagMap } from '../types'
 
 const { logger } = CloudGraph
@@ -20,8 +20,8 @@ export const convertAwsTagsToTagMap = (tags: AwsTag[] = []): TagMap => {
   return tagsMap
 }
 
-export const formatTagsFromMap = (tags: TagMap): Tag[] => {
-  const result: Tag[] = []
+export const formatTagsFromMap = (tags: TagMap): AwsRawTag[] => {
+  const result: AwsRawTag[] = []
   for (const [key, value] of Object.entries(tags)) {
     // We need an id here to enfore uniqueness for Dgraph, otherwise we get duplicate tags
     result.push({ id: `${key}:${value}`, key, value })
@@ -73,8 +73,10 @@ export const formatIamJsonPolicy = (json: string): AwsIamJsonPolicy => {
     return null
   }
 
-  const statement = isArray(object.Statement) ? object.Statement : [object.Statement]
-  const formatCondition = (condition) => {
+  const statement = isArray(object.Statement)
+    ? object.Statement
+    : [object.Statement]
+  const formatCondition = condition => {
     if (!condition) return null
     return Object.entries(condition).map(([key, value = {}]) => {
       const entry = Object.entries(value)[0] || []
@@ -82,7 +84,7 @@ export const formatIamJsonPolicy = (json: string): AwsIamJsonPolicy => {
       return {
         operator: key,
         key: entry[0],
-        value: conVal.map(val => toString(val))
+        value: conVal.map(val => toString(val)),
       }
     })
   }

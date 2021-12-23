@@ -32,5 +32,5 @@ type awsCognitoIdentityPool @key(fields: "id") {
   openIdConnectProviderARNs: [String] @search
   cognitoIdentityProviders: [awsCognitoIdentityProviders]
   samlProviderARNs: [String] @search
-  tags: [Tag]
+  tags: [awsRawTag]
 }

@@ -32,7 +32,7 @@ type awsRdsCluster @key(fields: "arn") {
   copyTagsToSnapshot: Boolean @search
   crossAccountClone: Boolean @search
   globalWriteForwardingRequested: Boolean @search
-  tags: [Tag]
+  tags: [awsRawTag]
   instances: [awsRdsDbInstance] @hasInverse(field: cluster)
   securityGroups: [awsSecurityGroup] @hasInverse(field: rdsCluster)
   appSync: [awsAppSync] @hasInverse(field: rdsCluster)

@@ -17,7 +17,7 @@ type awsAlb @key(fields: "arn") {
   dropInvalidHeaderFields: String @search(by: [hash])
   createdAt: String @search(by: [hash, regexp])
   status: String @search(by: [hash])
-  tags: [Tag]
+  tags: [awsRawTag]
   securityGroups: [awsSecurityGroup] @hasInverse(field: alb)
   ec2Instance: [awsEc2] @hasInverse(field: alb) #change to plural
   vpc: [awsVpc] @hasInverse(field: alb)

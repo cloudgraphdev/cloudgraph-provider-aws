@@ -14,7 +14,7 @@ type awsClientVpnEndpoint @key(fields: "arn") {
   vpnProtocol: String @search(by: [hash, regexp])
   transportProtocol: String @search(by: [hash, regexp])
   vpnPort: Int @search
-  tags: [Tag]
+  tags: [awsRawTag]
   associatedTargetNetworks: [awsAssociatedTargetNetworks]
   serverCertificateArn: String @search(by: [hash, regexp])
   authenticationOptions: [awsClientVpnAuthentication]

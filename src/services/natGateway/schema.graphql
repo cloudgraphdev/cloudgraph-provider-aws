@@ -6,7 +6,7 @@ type awsNatGateway @key(fields: "id") {
 	state: String @search(by: [hash, regexp])
   createTime: String @search(by: [hash, regexp])
   dailyCost: awsTotalBillingInfo
-	tags: [Tag]
+	tags: [awsRawTag]
   networkInterface: [awsNetworkInterface] @hasInverse(field: natGateway) #change to plural
   subnet: [awsSubnet] @hasInverse(field: natGateway) #change to plural
   vpc: [awsVpc] @hasInverse(field: natGateway)

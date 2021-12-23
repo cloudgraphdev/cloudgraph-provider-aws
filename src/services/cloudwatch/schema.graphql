@@ -14,7 +14,7 @@ type awsCloudwatch @key(fields: "arn") {
   period: String @search(by: [hash, regexp])
   evaluationPeriods: Int @search
   dimensions: [awsCloudwatchDimensions]
-  tags: [Tag]
+  tags: [awsRawTag]
 }
 
 type awsCloudwatchDimensions

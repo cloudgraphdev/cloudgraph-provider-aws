@@ -10,7 +10,7 @@ type awsKms @key(fields: "id"){
   enabled: String @search(by: [hash, regexp])
   keyState: String @search(by: [hash, regexp])
   customerMasterKeySpec: String @search(by: [hash, regexp])
-  tags: [Tag]
+  tags: [awsRawTag]
   creationDate: String @search(by: [hash, regexp])
   keyManager: String @search(by: [hash, regexp])
   origin: String @search(by: [hash, regexp])

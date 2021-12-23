@@ -29,7 +29,7 @@ type awsEmrCluster @key(fields: "arn") {
   outpostArn: String @search(by: [hash, regexp])
   stepConcurrencyLevel: Int @search
   placementGroups: [AwsEmrClusterPlacementGroupConfig]
-  tags: [Tag]
+  tags: [awsRawTag]
   kms: [awsKms] @hasInverse(field: emrCluster)
   subnet: [awsSubnet] @hasInverse(field: emrCluster) #change to plural
 }

@@ -16,7 +16,7 @@ type awsLambda @key(fields: "arn") {
   tracingConfig: String @search(by: [hash, regexp])
   version: String @search(by: [hash, regexp])
   environmentVariables: [awsLambdaEnvironmentVariable]
-  tags: [Tag]
+  tags: [awsRawTag]
   kms: [awsKms] @hasInverse(field: lambda)
   securityGroups: [awsSecurityGroup] @hasInverse(field: lambda)
   subnet: [awsSubnet] @hasInverse(field: lambda) #change to plural

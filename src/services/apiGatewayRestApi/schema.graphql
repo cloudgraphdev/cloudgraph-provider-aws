@@ -15,7 +15,7 @@ type awsApiGatewayRestApi @key(fields: "arn") {
   apiKeySource: String @search(by: [hash])
   createdDate: String @search(by: [hash])
   minimumCompressionSize: Int @search
-  tags: [Tag]
+  tags: [awsRawTag]
   binaryMediaTypes: [String] @search(by: [hash, regexp])
   stages: [awsApiGatewayStage] @hasInverse(field: restApi)
   resources: [awsApiGatewayResource] @hasInverse(field: restApi)
