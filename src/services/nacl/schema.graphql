@@ -7,7 +7,7 @@ type awsNetworkAcl @key(fields: "id") {
   inboundRules: [awsNetworkAclRule]
   outboundRules: [awsNetworkAclRule]
   associatedSubnets: [awsNetworkAclAssociatedSubnet]
-  tags: [Tag]
+  tags: [awsRawTag]
   vpc: [awsVpc] @hasInverse(field: nacl)
   # subnet: [awsSubnet] @hasInverse(field: nacl) #change to plural
   vpcId: String! @search(by: [hash, regexp])

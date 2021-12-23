@@ -14,5 +14,5 @@ type awsSqs @key(fields: "arn"){
   delaySeconds: String @search(by: [hash, regexp])
   policy: awsIamJSONPolicy
   receiveMessageWaitTimeSeconds: String @search(by: [hash, regexp])
-  tags: [Tag]
+  tags: [awsRawTag]
 }

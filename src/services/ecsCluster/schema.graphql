@@ -15,7 +15,7 @@ type awsEcsCluster @key(fields: "arn") {
   defaultCapacityProviderStrategy: [awsEcsCapacityProviderStrategyItem]
   attachments: [awsEcsAttachment]
   attachmentsStatus: String @search(by: [hash, regexp])
-  tags: [Tag]
+  tags: [awsRawTag]
   ecsService: [awsEcsService] @hasInverse(field: ecsCluster)
   ecsTask: [awsEcsTask] @hasInverse(field: ecsCluster)
   ecsTaskSet: [awsEcsTaskSet] @hasInverse(field: ecsCluster)

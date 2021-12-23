@@ -33,7 +33,7 @@ type awsEcsTask @key(fields: "arn") {
   stoppingAt: String @search(by: [hash, regexp])
   version: Int @search
   ephemeralStorage: awsEcsEphemeralStorage
-  tags: [Tag]
+  tags: [awsRawTag]
   ecsCluster: [awsEcsCluster] @hasInverse(field: ecsTask)
   ecsContainer: [awsEcsContainer] @hasInverse(field: ecsTask)
   ecsTaskDefinition: [awsEcsTaskDefinition] @hasInverse(field: ecsTask)

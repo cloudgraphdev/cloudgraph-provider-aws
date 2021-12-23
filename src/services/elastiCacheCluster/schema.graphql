@@ -31,7 +31,7 @@ type awsElastiCacheCluster @key(fields: "arn") {
   atRestEncryptionEnabled: Boolean @search
   replicationGroupLogDeliveryEnabled: Boolean @search
   logDeliveryConfigurations: [awsElastiCacheLogDeliveryConfiguration]
-  tags: [Tag]
+  tags: [awsRawTag]
   securityGroups: [awsSecurityGroup] @hasInverse(field: elastiCacheCluster)
 }
 

@@ -11,7 +11,7 @@ type awsEcr @key(fields: "arn") {
   registryAccountId: String @search(by: [hash, regexp])
   repositoryUri: String @search(by: [hash, regexp])
   scanOnPush: Boolean @search
-  tags: [Tag]
+  tags: [awsRawTag]
 }
 
 type awsEcrEncryptionConfiguration

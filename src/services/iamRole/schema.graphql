@@ -8,7 +8,7 @@ type awsIamRole @key(fields: "arn") {
   description: String @search(by: [hash, regexp])
   createdAt: String @search(by: [hash, regexp])
   maxSessionDuration: Int @search
-  tags: [Tag]
+  tags: [awsRawTag]
   inlinePolicies: [String]
   iamAttachedPolicies: [awsIamPolicy] @hasInverse(field: iamRoles)
   eksCluster: [awsEksCluster] @hasInverse(field: iamRoles) #change to plural

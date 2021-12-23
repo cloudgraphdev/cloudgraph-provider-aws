@@ -14,7 +14,7 @@ type awsNetworkInterface @key(fields: "arn") {
   privateDnsName: String @search(by: [hash, regexp])
   privateIps: [String] @search(by: [hash, regexp])
   attachment: awsNetworkInterfaceAttachment
-  tags: [Tag]
+  tags: [awsRawTag]
   ec2Instance: [awsEc2] @hasInverse(field: networkInterfaces)
   eip: [awsEip] @hasInverse(field: networkInterface)
   natGateway: [awsNatGateway] @hasInverse(field: networkInterface)

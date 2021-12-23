@@ -131,7 +131,7 @@ type awsAsg @key(fields: "arn") {
   warmPoolConfigStatus: String @search(by: [hash, regexp])
   warmPoolSize: Int @search
   context: String @search(by: [hash, regexp])
-  tags: [Tag]
+  tags: [awsRawTag]
   launchConfiguration: awsLaunchConfiguration
   ec2Instance: [awsEc2] @hasInverse(field: asg) #change to plural
   securityGroups: [awsSecurityGroup] @hasInverse(field: asg)

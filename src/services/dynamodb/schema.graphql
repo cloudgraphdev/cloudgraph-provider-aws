@@ -170,7 +170,7 @@ type awsDynamoDbTable @key(fields: "arn") {
   sseDescription: awsDynamoDbTableSseDescription
   status: String @search(by: [hash, regexp])
   streamSpecification: awsDynamoDbTableStreamSpecification
-  tags: [Tag]
+  tags: [awsRawTag]
   ttlEnabled: Boolean @search
   appSync: [awsAppSync] @hasInverse(field: dynamodb)
 }

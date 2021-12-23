@@ -10,7 +10,7 @@ type awsCloud9Environment @key(fields: "arn") {
   ownerArn: String @search(by: [hash, regexp])
   lifecycle: awsCloud9EnvironmentLifecycle
   managedCredentialsStatus: String @search(by: [hash, regexp])
-  tags: [Tag]
+  tags: [awsRawTag]
 }
 
 type awsCloud9EnvironmentLifecycle

@@ -6,6 +6,6 @@ type awsCustomerGateway @key(fields: "arn") {
   type: String @search(by: [hash, regexp])
   bgpAsn: String @search(by: [hash, regexp])
   ipAddress: String @search(by: [hash, regexp])
-  tags: [Tag]
+  tags: [awsRawTag]
   vpnConnection: [awsVpnConnection] @hasInverse(field: customerGateway)
 }

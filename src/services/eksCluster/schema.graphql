@@ -16,7 +16,7 @@ type awsEksCluster @key(fields: "arn") {
   clientRequestToken: String @search(by: [hash])
   platformVersion: String @search(by: [hash, regexp])
   encryptionConfig: [awsEksEncryptionConfig]
-  tags: [Tag]
+  tags: [awsRawTag]
   iamRoles: [awsIamRole] @hasInverse(field: eksCluster)
   kms: [awsKms] @hasInverse(field: eksCluster)
   securityGroups: [awsSecurityGroup] @hasInverse(field: eksCluster)

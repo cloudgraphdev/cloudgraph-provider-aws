@@ -11,7 +11,7 @@ type awsVpc @key(fields: "id") {
   ipV4Cidr: String @search(by: [hash, regexp])
   ipV6Cidr: String @search(by: [hash, regexp])
   state: String @search(by: [hash, regexp])
-  tags: [Tag]
+  tags: [awsRawTag]
   alb: [awsAlb] @hasInverse(field: vpc) #change to plural
   # ecs: [awsEcs] @hasInverse(field: vpc) TODO: Uncomment when ECS is added
   eip: [awsEip] @hasInverse(field: vpcs) #change to plural

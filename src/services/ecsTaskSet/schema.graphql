@@ -20,7 +20,7 @@ type awsEcsTaskSet @key(fields: "arn") {
   scale: awsEcsScale
   stabilityStatus: String @search(by: [hash, regexp])
   stabilityStatusAt: String @search(by: [hash, regexp])
-  tags: [Tag]
+  tags: [awsRawTag]
   ecsService: [awsEcsService] @hasInverse(field: ecsTaskSet)
   ecsCluster: [awsEcsCluster] @hasInverse(field: ecsTaskSet)
   ecsTaskDefinition: [awsEcsTaskDefinition] @hasInverse(field: ecsTaskSet)

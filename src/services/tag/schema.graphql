@@ -63,8 +63,7 @@ type awsTag @key(fields: "id") {
   vpnConnection: [awsVpnConnection]
 }
 
-# TODO: would this cause a collision with other providers? should we rename to like awsRawTag?
-type Tag
+type awsRawTag
   @generate(
     query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }

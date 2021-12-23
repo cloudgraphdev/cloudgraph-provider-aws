@@ -26,7 +26,7 @@ type awsElastiCacheReplicationGroup @key(fields: "arn") {
   userGroupIds: [String] @search(by: [hash])
   logDeliveryConfigurations: [awsElastiCacheLogDeliveryConfiguration]
   replicationGroupCreateTime: String @search(by: [hash, regexp])
-  tags: [Tag]
+  tags: [awsRawTag]
   kms: [awsKms] @hasInverse(field: elastiCacheReplicationGroup)
 }
 

@@ -11,7 +11,7 @@ type awsTransitGatewayAttachment @key(fields: "arn") {
   state: String @search(by: [hash, regexp])
   transitGatewayRouteTableId: String @search(by: [hash])
   creationTime: String @search(by: [hash, regexp])
-  tags: [Tag]
+  tags: [awsRawTag]
   transitGateway: [awsTransitGateway] @hasInverse(field: transitGatewayAttachment)
   routeTable: [awsRouteTable] @hasInverse(field: transitGatewayAttachment)
   vpc: [awsVpc] @hasInverse(field: transitGatewayAttachment)

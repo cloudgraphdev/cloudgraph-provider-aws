@@ -114,7 +114,7 @@ type awsCognitoUserPool @key(fields: "id") {
   userPoolAddOnsAdvancedSecurityMode: String @search(by: [hash, regexp])
   usernameConfigurationCaseSensitive: String @search(by: [hash, regexp])
   accountRecoverySettings: [awsAccountRecoverySetting]
-  tags: [Tag]
+  tags: [awsRawTag]
   lambda: [awsLambda] @hasInverse(field: cognitoUserPool) #change to plural
   appSync: [awsAppSync] @hasInverse(field: cognitoUserPool)
 }

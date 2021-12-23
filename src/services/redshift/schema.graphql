@@ -22,7 +22,7 @@ type awsRedshiftCluster @key(fields: "arn") {
   numberOfNodes: Int @search
   preferredMaintenanceWindow: String @search(by: [hash, regexp])
   publiclyAccessible: Boolean @search
-  tags: [Tag]
+  tags: [awsRawTag]
   kms: [awsKms] @hasInverse(field: redshiftCluster)
   vpc: [awsVpc] @hasInverse(field: redshiftCluster)
 }

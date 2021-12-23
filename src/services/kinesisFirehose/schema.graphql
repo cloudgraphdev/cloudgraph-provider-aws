@@ -15,7 +15,7 @@ type awsKinesisFirehose @key(fields: "arn") {
     source: awsKinesisFirehoseSource
     kinesisStream: [awsKinesisStream] @hasInverse(field: kinesisFirehose)
     s3: [awsS3] @hasInverse(field: kinesisFirehose)
-    tags: [Tag]
+    tags: [awsRawTag]
 }
 
 type awsKinesisFirehoseEncryptionConfig {

@@ -27,7 +27,7 @@ type awsEcsService @key(fields: "arn") {
   enableECSManagedTags: Boolean @search
   propagateTags: String @search(by: [hash, regexp])
   enableExecuteCommand: Boolean @search
-  tags: [Tag]
+  tags: [awsRawTag]
   ecsCluster: [awsEcsCluster] @hasInverse(field: ecsService)
   ecsTaskDefinition: [awsEcsTaskDefinition] @hasInverse(field: ecsService)
   ecsTaskSet: [awsEcsTaskSet] @hasInverse(field: ecsService)

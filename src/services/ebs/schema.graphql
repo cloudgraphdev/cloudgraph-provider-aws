@@ -14,7 +14,7 @@ type awsEbs @key(fields: "arn") {
   volumeType: String @search(by: [hash, regexp])
   availabilityZone: String @search(by: [hash, regexp])
   multiAttachEnabled: Boolean @search
-  tags: [Tag]
+  tags: [awsRawTag]
   ec2Instance: [awsEc2] @hasInverse(field: ebs)
   asg: [awsAsg] @hasInverse(field: ebs)
   emrInstance: [awsEmrInstance] @hasInverse(field: ebs)

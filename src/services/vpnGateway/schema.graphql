@@ -7,7 +7,7 @@ type awsVpnGateway @key(fields: "arn") {
   state: String @search(by: [hash, regexp])
   amazonSideAsn: Int @search
   vpcIds: [String] @search(by: [hash])
-  tags: [Tag]
+  tags: [awsRawTag]
   vpc: [awsVpc] @hasInverse(field: vpnGateway)
   vpnConnection: [awsVpnConnection] @hasInverse(field: vpnGateway)
 }
