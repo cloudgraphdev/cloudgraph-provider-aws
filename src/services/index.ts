@@ -408,7 +408,7 @@ export default class Provider extends CloudGraph.Client {
         } else {
           const errText = 'Cannot scan AWS without credentials'
           this.logger.error(errText)
-          rejectConfig(new Error(errText))
+          return rejectConfig(new Error(errText))
         }
         this.logger.startSpinner(msg)
       }
@@ -416,7 +416,7 @@ export default class Provider extends CloudGraph.Client {
       const usingEnvCreds =
         !!process.env.AWS_ACCESS_KEY_ID && !ignoreEnvVariables
       if (!this.credentials) {
-        rejectConfig(new Error('No Credentials found for AWS'))
+        return rejectConfig(new Error('No Credentials found for AWS'))
       }
       if (usingEnvCreds) {
         this.logger.success('Using credentials set by ENV variables')
