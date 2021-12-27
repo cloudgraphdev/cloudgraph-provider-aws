@@ -39,7 +39,8 @@ export default ({
     Tags: tags = {},
     KeyPairName: keyPairName,
     IamInstanceProfile: iamInstanceProfile,
-    cloudWatchMetricData
+    cloudWatchMetricData,
+    PlatformDetails : platformDetails
   } = rawData
 
   const securityGroupIds = securityGroups.map(({ GroupId }) => GroupId)
@@ -98,6 +99,7 @@ export default ({
     ephemeralBlockDevices,
     cloudWatchMetricData,
     tags: instanceTags,
+    platformDetails: platformDetails || ''
   }
   return ec2
 }

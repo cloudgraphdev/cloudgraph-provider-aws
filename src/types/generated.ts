@@ -1062,6 +1062,7 @@ export type AwsEc2 = {
   securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
   ephemeralBlockDevices?: Maybe<Array<Maybe<AwsEc2Blockdevice>>>;
   associatePublicIpAddress?: Maybe<Scalars['String']>;
+  platformDetails?: Maybe<Scalars['String']>;
   cloudWatchMetricData?: Maybe<AwsEc2CloudWatchMetricsTimePeriods>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   alb?: Maybe<Array<Maybe<AwsAlb>>>;

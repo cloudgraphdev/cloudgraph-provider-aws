@@ -169,7 +169,8 @@ describe('EC2 Service Test: ', () => {
               last24Hours: expect.any(Object),
               lastWeek: expect.any(Object),
               lastMonth: expect.any(Object)
-            })
+            }),
+            platformDetails: expect.any(String),
           }),
         ])
       )
