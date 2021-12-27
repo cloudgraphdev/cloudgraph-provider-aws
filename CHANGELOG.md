@@ -1,3 +1,10 @@
+# [0.57.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.56.0...0.57.0) (2021-12-27)
+
+
+### Features
+
+* **service:** Add platformDetails to ec2 instances for AWS ([5d8d7ca](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/5d8d7ca8bb67d3f93d849e027546ab8694a0de95))
+
 # [0.56.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.55.2...0.56.0) (2021-12-27)
 
 
