@@ -13,6 +13,7 @@ import EC2, {
   IamInstanceProfile,
   Instance,
   InstanceAttribute,
+  DescribeImagesResult
 } from 'aws-sdk/clients/ec2'
 import CloudWatch, {
   GetMetricDataInput,
@@ -43,6 +44,7 @@ export interface RawAwsEC2 extends Omit<Instance, 'Tags'> {
   Tags?: TagMap
   IamInstanceProfile?: IamInstanceProfile
   cloudWatchMetricData?: any
+  PlatformDetails?: string
 }
 
 /**
@@ -353,6 +355,44 @@ export default async ({
         .map(({ Key, Value }) => ({ [Key]: Value }))
         .reduce((acc, curr) => ({ ...acc, ...curr }), {})
     })
+
+    /**
+     * Step 5) Get the platform details associated with the billing code of the AMI for all instances
+     */
+
+     const describeImagesPromises = ec2Instances.map(
+      ({ region, ImageId }, ec2Idx) => {
+        const ec2 = new EC2({ ...config, region, endpoint })
+
+        const describeImagesPromise = new Promise<void>(resolveImage =>
+          ec2.describeImages(
+            { ImageIds: [ImageId] },
+            (err: AWSError, data: DescribeImagesResult) => {
+              if (err) {
+                generateAwsErrorLog(serviceName, 'ec2:describeImages', err)
+              }
+
+              /**
+               * No data
+               */
+              if (isEmpty(data)) {
+                return resolveImage()
+              }
+
+              const { Images: images } = data || {}
+
+              ec2Instances[ec2Idx].PlatformDetails = images[0]?.PlatformDetails
+
+              resolveImage()
+            }
+          )
+        )
+
+        return describeImagesPromise
+      }
+    )
+
+    await Promise.all(describeImagesPromises)
 
     const iamInstanceProfile = {}
 

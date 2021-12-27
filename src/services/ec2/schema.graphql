@@ -97,6 +97,7 @@ type awsEc2 @key(fields: "arn") {
   securityGroupIds: [String] @search(by: [hash])
   ephemeralBlockDevices: [awsEc2Blockdevice]
   associatePublicIpAddress: String @search(by: [hash, regexp])
+  platformDetails: String @search(by: [hash, regexp])
   cloudWatchMetricData: awsEc2CloudWatchMetricsTimePeriods
   tags: [awsRawTag]
   alb: [awsAlb] @hasInverse(field: ec2Instance)
