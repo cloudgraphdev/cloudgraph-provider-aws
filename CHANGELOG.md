@@ -1,3 +1,11 @@
+# [0.56.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.55.2...0.56.0) (2021-12-27)
+
+
+### Features
+
+* **service:** migrate service Organization ([a693a54](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a693a54af5b5af1ca3c7d59833996bbdbccb8132))
+* **service:** migrate service Organization ([d021fd3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d021fd3a2e11f280aba2d96eb04eecc316119799))
+
 ## [0.55.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.55.1...0.55.2) (2021-12-23)
 
 
