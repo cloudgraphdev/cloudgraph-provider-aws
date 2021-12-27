@@ -1,0 +1,21 @@
+type awsOrganization @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+  accountId: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  masterAccountArn: String @search(by: [hash, regexp])
+  masterAccountId: String @search(by: [hash])
+  masterAccountEmail: String @search(by: [hash, regexp])
+  featureSet: String @search(by: [hash, regexp])
+  availablePolicyTypes: [awsPolicyTypes]
+}
+
+type awsPolicyTypes
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  status: String
+  type: String
+}
