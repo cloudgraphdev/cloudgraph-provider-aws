@@ -47,6 +47,7 @@ export default class Provider extends CloudGraph.Client {
     super(config)
     this.properties = enums
     this.serviceMap = serviceMap
+    this.policies = config.provider.policies
   }
 
   private credentials: Credentials | undefined
@@ -62,6 +63,8 @@ export default class Provider extends CloudGraph.Client {
     regions: string[]
     resources: { [key: string]: string }
   }
+
+  private policies: string [] | undefined
 
   logSelectedAccessRegionsAndResources(
     profilesOrRolesToLog: string[],
@@ -229,6 +232,9 @@ export default class Provider extends CloudGraph.Client {
       result.regions,
       result.resources
     )
+
+    result.policies = this.policies || []
+
     return result
   }
 
