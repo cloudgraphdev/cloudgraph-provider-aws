@@ -1,3 +1,10 @@
+## [0.57.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.57.0...0.57.1) (2021-12-27)
+
+
+### Bug Fixes
+
+* Fixed small issue overwriting policies configon init command ([40dc47a](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/40dc47ad5b75a758ce8eba8c84b263d8592428d7))
+
 # [0.57.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.56.0...0.57.0) (2021-12-27)
 
 
