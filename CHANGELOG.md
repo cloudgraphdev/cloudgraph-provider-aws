@@ -1,3 +1,10 @@
+# [0.58.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.57.1...0.58.0) (2021-12-29)
+
+
+### Features
+
+* **service:** Add cloudwatchLog service ([88a9d27](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/88a9d278619be2a8de3f49e89fc5cf4070e9fadc))
+
 ## [0.57.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.57.0...0.57.1) (2021-12-27)
 
 
