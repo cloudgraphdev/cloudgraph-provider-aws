@@ -744,6 +744,20 @@ export type AwsCloudwatchDimensions = {
   value?: Maybe<Scalars['String']>;
 };
 
+export type AwsCloudwatchLog = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  creationTime?: Maybe<Scalars['String']>;
+  retentionInDays?: Maybe<Scalars['Int']>;
+  metricFilterCount?: Maybe<Scalars['Int']>;
+  storedBytes?: Maybe<Scalars['String']>;
+  kmsKeyId?: Maybe<Scalars['String']>;
+  metricFilters?: Maybe<Array<Maybe<AwsMetricFilter>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
+};
+
 export type AwsCognitoIdentityPool = {
   id: Scalars['String'];
   accountId: Scalars['String'];
@@ -2593,6 +2607,7 @@ export type AwsKms = {
   elastiCacheReplicationGroup?: Maybe<Array<Maybe<AwsElastiCacheReplicationGroup>>>;
   efs?: Maybe<Array<Maybe<AwsEfs>>>;
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
+  cloudwatchLog?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
 };
 
 export type AwsLambda = {
@@ -2666,6 +2681,24 @@ export type AwsLcBlockDeviceMapping = {
   virtualName?: Maybe<Scalars['String']>;
   deviceName?: Maybe<Scalars['String']>;
   noDevice?: Maybe<Scalars['String']>;
+};
+
+export type AwsMetricFilter = {
+  id: Scalars['String'];
+  filterName?: Maybe<Scalars['String']>;
+  filterPattern?: Maybe<Scalars['String']>;
+  creationTime?: Maybe<Scalars['String']>;
+  logGroupName?: Maybe<Scalars['String']>;
+  metricTransformations?: Maybe<Array<Maybe<AwsMetricTransformation>>>;
+};
+
+export type AwsMetricTransformation = {
+  id: Scalars['String'];
+  metricName?: Maybe<Scalars['String']>;
+  metricNamespace?: Maybe<Scalars['String']>;
+  metricValue?: Maybe<Scalars['String']>;
+  defaultValue?: Maybe<Scalars['Int']>;
+  unit?: Maybe<Scalars['String']>;
 };
 
 export type AwsMixedInstancesPolicy = {
@@ -2758,12 +2791,6 @@ export type AwsNetworkInterfaceAttachment = {
   status?: Maybe<Scalars['String']>;
 };
 
-export type AwsRawTag = {
-  id: Scalars['String'];
-  key?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
-}
-
 export type AwsOrganization = {
   id: Scalars['String'];
   accountId: Scalars['String'];
@@ -2779,6 +2806,12 @@ export type AwsPolicyTypes = {
   id: Scalars['String'];
   status?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
+};
+
+export type AwsRawTag = {
+  id: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
 };
 
 export type AwsRdsCluster = {

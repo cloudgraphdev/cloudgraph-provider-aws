@@ -18,6 +18,7 @@ export default {
   [services.cloudfront]: 'awsCloudfront',
   [services.cloudtrail]: 'awsCloudtrail',
   [services.cloudwatch]: 'awsCloudwatch',
+  [services.cloudwatchLog]: 'awsCloudwatchLog',
   [services.cognitoIdentityPool]: 'awsCognitoIdentityPool',
   [services.cognitoUserPool]: 'awsCognitoUserPool',
   [services.customerGateway]: 'awsCustomerGateway',

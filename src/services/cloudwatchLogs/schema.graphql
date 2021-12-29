@@ -1,0 +1,41 @@
+type awsCloudwatchLog @key(fields: "arn") {
+  id: String! @search(by: [hash])
+  accountId: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
+  creationTime: String @search(by: [hash])
+  retentionInDays: Int @search
+  metricFilterCount: Int @search
+  storedBytes: String @search(by: [hash])
+  kmsKeyId: String @search(by: [hash])
+  metricFilters: [awsMetricFilter]
+  kms: [awsKms] @hasInverse(field: cloudwatchLog)
+}
+
+type awsMetricFilter
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  filterName: String @search(by: [hash, regexp])
+  filterPattern: String @search(by: [hash, regexp])
+  creationTime: String @search(by: [hash])
+  logGroupName: String @search(by: [hash, regexp])
+  metricTransformations: [awsMetricTransformation]
+}
+
+type awsMetricTransformation
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  metricName: String @search(by: [hash, regexp])
+  metricNamespace: String @search(by: [hash, regexp])
+  metricValue: String @search(by: [hash, regexp])
+  defaultValue: Int @search
+  unit: String @search(by: [hash, regexp])
+}

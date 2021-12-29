@@ -644,4 +644,17 @@ export default {
    * Customer Gateway
    */
   fetchedCustomerGateways: (num: number): string => `Fetched ${num} Customer Gateways`,
+  /**
+   * CloudWatch Logs
+   */
+   lookingForCloudwatchLogGroups: 'Looking for CloudWatch Log groups to add to Region...',
+   fetchingCloudwatchLogGroupsData:
+     'Fetching CloudWatch Log groups for this AWS account via the AWS SDK...',
+   doneFetchingCloudwatchLogGroupsData: (num: number): string =>
+     `🕒 Done fetching CloudWatch Log groups in ${num} 🕘`,
+   foundMoreCloudwatchLogGroups: (num: number): string =>
+     `Found another ${num} CloudWatch Log groups in this region...`,
+   gettingCloudwatchLogGroups: 'Fetching CloudWatch Log groups...',
+   foundMoreCloudwatchMetricFilters: (num: number): string =>
+   `Found another ${num} CloudWatch Metric filters in this region...`,
 }

@@ -249,7 +249,9 @@ resource "aws_lambda_function" "lambda_function" {
 }
 
 resource "aws_cloudwatch_log_group" "yada" {
-  name = "yada"
+  name              = "yada"
+  kms_key_id        = aws_kms_key.lambda_kms_key.arn
+  retention_in_days = 7
 }
 
 resource "aws_api_gateway_client_certificate" "demo" {
