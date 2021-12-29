@@ -36,6 +36,8 @@ type awsSgOutboundRule
   description: String
   destination: String
   portRange: String
+  fromPort: Int
+  toPort: Int
   protocol: String
   userId: String
   groupName: String
@@ -51,6 +53,8 @@ type awsSgInboundRule
   id: String! @id
   description: String
   portRange: String
+  fromPort: Int
+  toPort: Int
   protocol: String
   source: String
   userId: String

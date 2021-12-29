@@ -23,6 +23,8 @@ type awsNetworkAclRule
   ruleNumber: Int
   protocol: String @search(by: [hash, regexp])
   portRange: String @search(by: [hash, regexp])
+  fromPort: Int
+  toPort: Int
   source: String @search(by: [hash, regexp])
   destination: String @search(by: [hash, regexp])
   allowOrDeny: String @search(by: [hash, regexp])
