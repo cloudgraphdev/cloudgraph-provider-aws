@@ -76,6 +76,7 @@ import VpnGateway from '../services/vpnGateway'
 import ClientVpnEndpoint from '../services/clientVpnEndpoint'
 import VpnConnection from '../services/vpnConnection'
 import Organization from '../services/organization'
+import CloudWatchLog from '../services/cloudwatchLogs'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -96,6 +97,7 @@ export default {
   [services.cloudFormationStack]: CloudFormationStack,
   [services.cloudFormationStackSet]: CloudFormationStackSet,
   [services.cloudwatch]: CloudWatch,
+  [services.cloudwatchLog]: CloudWatchLog,
   [services.cognitoIdentityPool]: CognitoIdentityPool,
   [services.cognitoUserPool]: CognitoUserPool,
   [services.ebs]: EBS,

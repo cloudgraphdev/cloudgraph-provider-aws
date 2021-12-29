@@ -13,6 +13,7 @@ export default {
   cloudfront: 'cloudfront',
   cloudtrail: 'cloudtrail',
   cloudwatch: 'cloudwatch',
+  cloudwatchLog: 'cloudwatchLog',
   cognitoIdentityPool: 'cognitoIdentityPool',
   cognitoUserPool: 'cognitoUserPool',
   customerGateway: 'customerGateway',
