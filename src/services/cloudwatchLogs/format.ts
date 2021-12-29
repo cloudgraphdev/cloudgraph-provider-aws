@@ -37,7 +37,7 @@ export default ({
         id: cuid(),
         filterName,
         filterPattern,
-        creationTime: filterCreationDate.toString(),
+        creationTime: filterCreationDate?.toString() || '',
         logGroupName: filterLogGroupName,
         metricTransformations:
           metricTransformations?.map(
