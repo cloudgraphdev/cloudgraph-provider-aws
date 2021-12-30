@@ -117,6 +117,8 @@ export default ({
       return allRules.flatMap(allRulesRule => ({
         protocol,
         portRange,
+        toPort,
+        fromPort,
         ...allRulesRule,
       }))
     })
@@ -130,7 +132,7 @@ export default ({
     name,
     vpcId,
     accountId: account,
-    arn: securityGroupArn({region, account, id}),
+    arn: securityGroupArn({ region, account, id }),
     region,
     description,
     tags: formatTagsFromMap(Tags),

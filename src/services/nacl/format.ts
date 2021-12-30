@@ -24,7 +24,7 @@ export default ({
     Entries: entries,
     VpcId: vpcId,
     IsDefault: isDefault,
-    Tags
+    Tags,
   } = rawData
 
   const associatedSubnets = (associations || []).map(
@@ -66,6 +66,8 @@ export default ({
         ruleNumber,
         protocol: protocol === '-1' ? t.all : protocol,
         portRange,
+        toPort,
+        fromPort,
         source:
           direction === t.source ? cidrBlock || ipv6CidrBlock || '' : undefined,
         destination:

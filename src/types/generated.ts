@@ -2753,6 +2753,8 @@ export type AwsNetworkAclRule = {
   ruleNumber?: Maybe<Scalars['Int']>;
   protocol?: Maybe<Scalars['String']>;
   portRange?: Maybe<Scalars['String']>;
+  fromPort?: Maybe<Scalars['Int']>;
+  toPort?: Maybe<Scalars['Int']>;
   source?: Maybe<Scalars['String']>;
   destination?: Maybe<Scalars['String']>;
   allowOrDeny?: Maybe<Scalars['String']>;
@@ -3087,6 +3089,8 @@ export type AwsSgInboundRule = {
   id: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   portRange?: Maybe<Scalars['String']>;
+  fromPort?: Maybe<Scalars['Int']>;
+  toPort?: Maybe<Scalars['Int']>;
   protocol?: Maybe<Scalars['String']>;
   source?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
@@ -3099,6 +3103,8 @@ export type AwsSgOutboundRule = {
   description?: Maybe<Scalars['String']>;
   destination?: Maybe<Scalars['String']>;
   portRange?: Maybe<Scalars['String']>;
+  fromPort?: Maybe<Scalars['Int']>;
+  toPort?: Maybe<Scalars['Int']>;
   protocol?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
   groupName?: Maybe<Scalars['String']>;
