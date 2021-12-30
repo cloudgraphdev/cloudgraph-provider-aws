@@ -696,6 +696,7 @@ export type AwsCloudtrail = {
   s3?: Maybe<Array<Maybe<AwsS3>>>;
   sns?: Maybe<Array<Maybe<AwsSns>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
+  cloudwatchLog?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
 };
 
 export type AwsCloudtrailEventSelector = {
@@ -737,6 +738,7 @@ export type AwsCloudwatch = {
   dimensions?: Maybe<Array<Maybe<AwsCloudwatchDimensions>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   cloudwatchLog?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
+  sns?: Maybe<Array<Maybe<AwsSns>>>;
 };
 
 export type AwsCloudwatchDimensions = {
@@ -758,6 +760,7 @@ export type AwsCloudwatchLog = {
   metricFilters?: Maybe<Array<Maybe<AwsMetricFilter>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
+  cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
 };
 
 export type AwsCognitoIdentityPool = {
@@ -3133,6 +3136,7 @@ export type AwsSns = {
   subscriptions?: Maybe<Array<Maybe<AwsSnsSubscription>>>;
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
+  cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
 };
 
 export type AwsSnsSubscription = {

@@ -1,6 +1,7 @@
 import CloudGraph from '@cloudgraph/sdk'
 
 import CloudTrailClass from '../src/services/cloudtrail'
+import CloudwatchLog from '../src/services/cloudwatchLogs'
 import S3Service from '../src/services/s3'
 import KmsClass from '../src/services/kms'
 import { initTestConfig } from '../src/utils'
@@ -15,6 +16,7 @@ describe.skip('CloudTrail Service Test: ', () => {
   let kmsResult
   let cloudTrailConnections
   let cloudTrailId
+  let cloudwatchLogResult
 
   initTestConfig()
 
@@ -27,6 +29,9 @@ describe.skip('CloudTrail Service Test: ', () => {
           })
           const s3Service = new S3Service({ logger: CloudGraph.logger })
           const kmsClass = new KmsClass({ logger: CloudGraph.logger })
+          const cloudwatchLogService = new CloudwatchLog({
+            logger: CloudGraph.logger,
+          })
 
           getDataResult = await cloudTrailClass.getData({
             credentials,
@@ -48,6 +53,12 @@ describe.skip('CloudTrail Service Test: ', () => {
             regions: region,
           })
 
+          // Get cloudwatch log data
+          cloudwatchLogResult = await cloudwatchLogService.getData({
+            credentials,
+            regions: region,
+          })
+
           const [cloudTrail] = getDataResult[region]
           cloudTrailId = cloudTrail.TrailARN
 
@@ -62,6 +73,11 @@ describe.skip('CloudTrail Service Test: ', () => {
               {
                 name: services.kms,
                 data: kmsResult,
+                region,
+              },
+              {
+                name: services.cloudwatchLog,
+                data: cloudwatchLogResult,
                 region,
               },
             ],
@@ -120,6 +136,13 @@ describe.skip('CloudTrail Service Test: ', () => {
         kms => kms.resourceType === services.kms
       )
       expect(kmsConnections).toBeDefined()
+    })
+
+    test('should verify the connections to cloudwatchLog', () => {
+      const cloudwatchLogConnections = cloudTrailConnections[
+        cloudTrailId
+      ]?.find(kms => kms.resourceType === services.cloudwatchLog)
+      expect(cloudwatchLogConnections).toBeDefined()
     })
 
     test.todo('should verify the connections to SNS Topic')
