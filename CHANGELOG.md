@@ -1,3 +1,11 @@
+## [0.58.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.58.1...0.58.2) (2021-12-30)
+
+
+### Bug Fixes
+
+* adding fromPort and toPort schemas updates ([01d042a](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/01d042abc1dc0e59280afe35b1b407a87bc9de5e))
+* adding toPort and fromPort to security group rules and nacls ([1687e7f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/1687e7f120c027e941b83f87d829375842fca8af))
+
 ## [0.58.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.58.0...0.58.1) (2021-12-29)
 
 
