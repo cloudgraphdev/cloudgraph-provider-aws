@@ -736,6 +736,7 @@ export type AwsCloudwatch = {
   evaluationPeriods?: Maybe<Scalars['Int']>;
   dimensions?: Maybe<Array<Maybe<AwsCloudwatchDimensions>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  cloudwatchLog?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
 };
 
 export type AwsCloudwatchDimensions = {
@@ -756,6 +757,7 @@ export type AwsCloudwatchLog = {
   kmsKeyId?: Maybe<Scalars['String']>;
   metricFilters?: Maybe<Array<Maybe<AwsMetricFilter>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
+  cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
 };
 
 export type AwsCognitoIdentityPool = {
