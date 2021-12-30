@@ -15,6 +15,8 @@ type awsCloudwatch @key(fields: "arn") {
   evaluationPeriods: Int @search
   dimensions: [awsCloudwatchDimensions]
   tags: [awsRawTag]
+  cloudwatchLog: [awsCloudwatchLog] @hasInverse(field: cloudwatch)
+  sns: [awsSns] @hasInverse(field: cloudwatch)
 }
 
 type awsCloudwatchDimensions

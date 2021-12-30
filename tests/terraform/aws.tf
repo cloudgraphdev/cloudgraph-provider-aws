@@ -254,6 +254,18 @@ resource "aws_cloudwatch_log_group" "yada" {
   retention_in_days = 7
 }
 
+resource "aws_cloudwatch_log_metric_filter" "yada" {
+  name           = "MyAppAccessCount"
+  pattern        = ""
+  log_group_name = aws_cloudwatch_log_group.yada.name
+
+  metric_transformation {
+    name      = "CPUUtilization"
+    namespace = "YourNamespace"
+    value     = "1"
+  }
+}
+
 resource "aws_api_gateway_client_certificate" "demo" {
   description = "client certificate"
 }

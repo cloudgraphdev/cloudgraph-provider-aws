@@ -2,9 +2,10 @@ import isEmpty from 'lodash/isEmpty'
 
 import { ServiceConnection } from '@cloudgraph/sdk'
 import { Trail } from 'aws-sdk/clients/cloudtrail'
-import { TagMap } from '../../types';
+import { TagMap } from '../../types'
 import { s3BucketArn } from '../../utils/generateArns'
 import { gets3BucketId } from '../../utils/ids'
+import { RawAwsLogGroup } from '../cloudwatchLogs/data'
 import services from '../../enums/services'
 
 /**
@@ -30,6 +31,7 @@ export default ({
     S3BucketName: s3BucketName,
     SnsTopicARN: snsTopicARN,
     KmsKeyId: kmsKeyId,
+    CloudWatchLogsLogGroupArn: cloudWatchLogsLogGroupArn,
   } = cloudTrail
 
   /**
@@ -37,10 +39,10 @@ export default ({
    * related to the cloudTrail
    */
   const s3Buckets = data.find(({ name }) => name === services.s3)
-  const s3Arn = s3BucketArn({name: s3BucketName})
+  const s3Arn = s3BucketArn({ name: s3BucketName })
   if (s3Buckets?.data?.[region]) {
-    const s3BucketInRegion = s3Buckets.data[region].filter(bucket => 
-      s3BucketArn({name: bucket.Name}) === s3Arn
+    const s3BucketInRegion = s3Buckets.data[region].filter(
+      bucket => s3BucketArn({ name: bucket.Name }) === s3Arn
     )
 
     if (!isEmpty(s3BucketInRegion)) {
@@ -61,8 +63,8 @@ export default ({
    */
   const snsTopics = data.find(({ name }) => name === services.sns)
   if (snsTopics?.data?.[region]) {
-    const snsTopicsInRegion = snsTopics.data[region].filter(topic =>
-      topic.TopicArn === snsTopicARN
+    const snsTopicsInRegion = snsTopics.data[region].filter(
+      topic => topic.TopicArn === snsTopicARN
     )
 
     if (!isEmpty(snsTopicsInRegion)) {
@@ -83,8 +85,8 @@ export default ({
    */
   const kmsKeys = data.find(({ name }) => name === services.kms)
   if (kmsKeys?.data?.[region]) {
-    const kmsKeyInRegion = kmsKeys.data[region].filter(kmsKey => 
-      kmsKey.Arn === kmsKeyId
+    const kmsKeyInRegion = kmsKeys.data[region].filter(
+      kmsKey => kmsKey.Arn === kmsKeyId
     )
 
     if (!isEmpty(kmsKeyInRegion)) {
@@ -99,8 +101,30 @@ export default ({
     }
   }
 
+  /**
+   * Find Cloudwatch Log Groups
+   * related to the cloudTrail
+   */
+  const logGroups = data.find(({ name }) => name === services.cloudwatchLog)
+  if (logGroups?.data?.[region]) {
+    const logGroupsInRegion: RawAwsLogGroup[] = logGroups.data[region].filter(
+      logGroup => logGroup.Arn === cloudWatchLogsLogGroupArn
+    )
+
+    if (!isEmpty(logGroupsInRegion)) {
+      for (const logGroup of logGroupsInRegion) {
+        connections.push({
+          id: logGroup.logGroupName,
+          resourceType: services.cloudwatchLog,
+          relation: 'child',
+          field: 'cloudwatchLog',
+        })
+      }
+    }
+  }
+
   const cloudTrailResult = {
     [id]: connections,
   }
-  return cloudTrailResult;
+  return cloudTrailResult
 }

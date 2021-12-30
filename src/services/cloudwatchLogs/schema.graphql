@@ -10,6 +10,8 @@ type awsCloudwatchLog @key(fields: "arn") {
   kmsKeyId: String @search(by: [hash])
   metricFilters: [awsMetricFilter]
   kms: [awsKms] @hasInverse(field: cloudwatchLog)
+  cloudwatch: [awsCloudwatch] @hasInverse(field: cloudwatchLog)
+  cloudtrail: [awsCloudtrail] @hasInverse(field: cloudwatchLog)
 }
 
 type awsMetricFilter

@@ -1,17 +1,22 @@
 import CloudGraph from '@cloudgraph/sdk'
 
 import Cloudwatch from '../src/services/cloudwatch'
+import Sns from '../src/services/sns'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
+import services from '../src/enums/services'
 
 describe('Cloudwatch Service Test: ', () => {
   let getDataResult
   let formatResult
+  let cloudwatchConnections
+  let cloudwatchId
   initTestConfig()
   beforeAll(async () => {
     getDataResult = {}
     formatResult = {}
     try {
+      const snsService = new Sns({ logger: CloudGraph.logger })
       const classInstance = new Cloudwatch({ logger: CloudGraph.logger })
       getDataResult = await classInstance.getData({
         credentials,
@@ -21,6 +26,29 @@ describe('Cloudwatch Service Test: ', () => {
       formatResult = getDataResult[region].map(cloudwatchData =>
         classInstance.format({ service: cloudwatchData, region, account })
       )
+
+      // Get SNS data
+      const snsData = await snsService.getData({
+        credentials,
+        regions: region,
+      })
+
+      const [cloudwatch] = getDataResult[region]
+      cloudwatchId = cloudwatch.AlarmName
+
+      cloudwatchConnections = classInstance.getConnections({
+        service: cloudwatch,
+        data: [
+          {
+            name: services.sns,
+            data: snsData,
+            account,
+            region,
+          },
+        ],
+        region,
+        account,
+      })
     } catch (error) {
       console.error(error) // eslint-disable-line no-console
     }
@@ -102,6 +130,15 @@ describe('Cloudwatch Service Test: ', () => {
           }),
         ])
       )
+    })
+  })
+
+  describe('connections', () => {
+    test('should verify the connections to SNS Topic', () => {
+      const snsConnections = cloudwatchConnections[cloudwatchId]?.find(
+        connection => connection.resourceType === services.sns
+      )
+      expect(snsConnections).toBeDefined()
     })
   })
 })

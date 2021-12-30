@@ -4,6 +4,7 @@ import CloudwatchLog from '../src/services/cloudwatchLogs'
 import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
 import Kms from '../src/services/kms'
+import CloudWatch from '../src/services/cloudwatch'
 import services from '../src/enums/services'
 
 describe('Cloudwatch Logs Service Test: ', () => {
@@ -17,6 +18,7 @@ describe('Cloudwatch Logs Service Test: ', () => {
     formatResult = {}
     try {
       const kmsService = new Kms({ logger: CloudGraph.logger })
+      const cloudWatchService = new CloudWatch({ logger: CloudGraph.logger })
       const classInstance = new CloudwatchLog({ logger: CloudGraph.logger })
       getDataResult = await classInstance.getData({
         credentials,
@@ -33,6 +35,12 @@ describe('Cloudwatch Logs Service Test: ', () => {
         regions: region,
       })
 
+      // Get Metric Alrams data
+      const metricAlarmsData = await cloudWatchService.getData({
+        credentials,
+        regions: region,
+      })
+
       const [logGroup] = getDataResult[region]
       cloudwatchLogsId = logGroup.logGroupName
 
@@ -42,6 +50,12 @@ describe('Cloudwatch Logs Service Test: ', () => {
           {
             name: services.kms,
             data: kmsData,
+            account,
+            region,
+          },
+          {
+            name: services.cloudwatch,
+            data: metricAlarmsData,
             account,
             region,
           },
@@ -102,12 +116,21 @@ describe('Cloudwatch Logs Service Test: ', () => {
 
   describe('connections', () => {
     test('should verify the connection to kms', () => {
-      const kmsConnections = cloudwatchLogsConnections[cloudwatchLogsId]?.filter(
-        connection => connection.resourceType === services.kms
-      )
+      const kmsConnections = cloudwatchLogsConnections[
+        cloudwatchLogsId
+      ]?.filter(connection => connection.resourceType === services.kms)
 
       expect(kmsConnections).toBeDefined()
       expect(kmsConnections.length).toBe(1)
+    })
+
+    test('should verify the connection to metric alarms', () => {
+      const metricAlarmsConnections = cloudwatchLogsConnections[
+        cloudwatchLogsId
+      ]?.filter(connection => connection.resourceType === services.cloudwatch)
+
+      expect(metricAlarmsConnections).toBeDefined()
+      expect(metricAlarmsConnections.length).toBe(1)
     })
   })
 })
