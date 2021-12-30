@@ -1,3 +1,11 @@
+# [0.59.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.58.2...0.59.0) (2021-12-30)
+
+
+### Features
+
+* **service:** Add cloudTrail to cloudwatchLog and sns to cloudwatch connections ([0c13561](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/0c13561eab2faac2aa1d39507b62ab99612049fc))
+* **service:** Add cloudwatch connection to cloudwatchLog service ([8530f2f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/8530f2f393c56056e66bebca85e91229222dc55f))
+
 ## [0.58.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.58.1...0.58.2) (2021-12-30)
 
 
