@@ -1,3 +1,10 @@
+## [0.59.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.59.0...0.59.1) (2022-01-03)
+
+
+### Bug Fixes
+
+* **service:** cloudtrail to cloudwatchLog connection ([2cfe654](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/2cfe6545a9267176d3a82989a44d45e2629c9b93))
+
 # [0.59.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.58.2...0.59.0) (2021-12-30)
 
 
