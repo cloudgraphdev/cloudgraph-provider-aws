@@ -108,7 +108,7 @@ export default ({
   const logGroups = data.find(({ name }) => name === services.cloudwatchLog)
   if (logGroups?.data?.[region]) {
     const logGroupsInRegion: RawAwsLogGroup[] = logGroups.data[region].filter(
-      logGroup => logGroup.Arn === cloudWatchLogsLogGroupArn
+      logGroup => logGroup.arn === cloudWatchLogsLogGroupArn
     )
 
     if (!isEmpty(logGroupsInRegion)) {
