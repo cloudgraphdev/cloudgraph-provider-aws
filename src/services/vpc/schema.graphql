@@ -33,4 +33,5 @@ type awsVpc @key(fields: "id") {
   flowLogs: [awsFlowLog] @hasInverse(field: vpc) #change to singular
   vpnGateway: [awsVpnGateway] @hasInverse(field: vpc)
   transitGatewayAttachment: [awsTransitGatewayAttachment] @hasInverse(field: vpc)
+  elastiCacheCluster: [awsElastiCacheCluster] @hasInverse(field: vpc)
 }

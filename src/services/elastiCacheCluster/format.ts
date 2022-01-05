@@ -47,6 +47,7 @@ export default ({
     ReplicationGroupLogDeliveryEnabled: replicationGroupLogDeliveryEnabled,
     LogDeliveryConfigurations: logDeliveryConfigurations,
     Tags = {},
+    CacheSubnetGroup: cacheSubnetGroup,
   } = service
 
   return {
@@ -75,20 +76,24 @@ export default ({
       engineVersion: pendingModifiedValues?.EngineVersion,
       cacheNodeType: pendingModifiedValues?.CacheNodeType,
       authTokenStatus: pendingModifiedValues?.AuthTokenStatus,
-      logDeliveryConfigurations: pendingModifiedValues?.LogDeliveryConfigurations?.map(config => ({
-        id: cuid(),
-        logType: config.LogType,
-        destinationType: config.DestinationType,
-        destinationDetails: {
-          cloudWatchLogsDetails: {
-            logGroup: config.DestinationDetails?.CloudWatchLogsDetails?.LogGroup,
+      logDeliveryConfigurations:
+        pendingModifiedValues?.LogDeliveryConfigurations?.map(config => ({
+          id: cuid(),
+          logType: config.LogType,
+          destinationType: config.DestinationType,
+          destinationDetails: {
+            cloudWatchLogsDetails: {
+              logGroup:
+                config.DestinationDetails?.CloudWatchLogsDetails?.LogGroup,
+            },
+            kinesisFirehoseDetails: {
+              deliveryStream:
+                config.DestinationDetails?.KinesisFirehoseDetails
+                  ?.DeliveryStream,
+            },
           },
-          kinesisFirehoseDetails: {
-            deliveryStream: config.DestinationDetails?.KinesisFirehoseDetails?.DeliveryStream,
-          },
-        },
-        logFormat: config.LogFormat,
-      })),
+          logFormat: config.LogFormat,
+        })),
     },
     notificationConfiguration: {
       topicArn: notificationConfiguration?.TopicArn,
@@ -137,7 +142,8 @@ export default ({
           logGroup: config.DestinationDetails?.CloudWatchLogsDetails?.LogGroup,
         },
         kinesisFirehoseDetails: {
-          deliveryStream: config.DestinationDetails?.KinesisFirehoseDetails?.DeliveryStream,
+          deliveryStream:
+            config.DestinationDetails?.KinesisFirehoseDetails?.DeliveryStream,
         },
       },
       logFormat: config.LogFormat,
@@ -145,5 +151,16 @@ export default ({
       message: config.Message,
     })),
     tags: formatTagsFromMap(Tags),
+    cacheSubnetGroup: {
+      cacheSubnetGroupName: cacheSubnetGroup?.CacheSubnetGroupName,
+      cacheSubnetGroupDescription:
+        cacheSubnetGroup?.CacheSubnetGroupDescription,
+      vpcId: cacheSubnetGroup?.VpcId,
+      subnets:
+        cacheSubnetGroup?.Subnets?.map(subnet => ({
+          subnetIdentifier: subnet?.SubnetIdentifier,
+          subnetAvailabilityZone: subnet?.SubnetAvailabilityZone?.Name || '',
+        })) || [],
+    },
   }
 }

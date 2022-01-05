@@ -820,6 +820,21 @@ resource "aws_vpn_connection" "vpn_connection" {
 }
 
 # Localstack Pro Tier
+# resource "aws_elasticache_subnet_group" "bar" {
+#   name       = "tf-test-cache-subnet"
+#   subnet_ids = [aws_subnet.subnet.id]
+# }
+
+# resource "aws_elasticache_cluster" "example" {
+#   cluster_id           = "cluster-example"
+#   engine               = "memcached"
+#   node_type            = "cache.m4.large"
+#   num_cache_nodes      = 2
+#   parameter_group_name = aws_elasticache_subnet_group.bar.name
+#   port                 = 11211
+# }
+
+# Localstack Pro Tier
 # resource "aws_organizations_organization" "org" {
 #   aws_service_access_principals = [
 #     "cloudtrail.amazonaws.com",

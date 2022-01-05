@@ -3,6 +3,9 @@ import Elasticache, {
   CacheCluster,
   CacheClusterMessage,
   TagListMessage,
+  DescribeCacheSubnetGroupsMessage,
+  CacheSubnetGroupMessage,
+  CacheSubnetGroup,
 } from 'aws-sdk/clients/elasticache'
 import { AWSError } from 'aws-sdk/lib/error'
 import groupBy from 'lodash/groupBy'
@@ -12,8 +15,9 @@ import awsLoggerText from '../../properties/logger'
 import { TagMap, AwsTag } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
+
 const lt = { ...awsLoggerText }
-const {logger} = CloudGraph
+const { logger } = CloudGraph
 const serviceName = 'ElastiCache cluster'
 const endpoint = initTestEndpoint(serviceName)
 
@@ -31,7 +35,11 @@ const getElasticacheClusters = async elastiCache =>
           (err: AWSError, data: CacheClusterMessage) => {
             const { Marker, CacheClusters = [] } = data || {}
             if (err) {
-              generateAwsErrorLog(serviceName, 'elastiCache:describeCacheClusters', err)
+              generateAwsErrorLog(
+                serviceName,
+                'elastiCache:describeCacheClusters',
+                err
+              )
             }
 
             clusterList.push(...CacheClusters)
@@ -50,14 +58,21 @@ const getElasticacheClusters = async elastiCache =>
     listAllClusters()
   })
 
-const getResourceTags = async (elastiCache: Elasticache, arn: string): Promise<TagMap> =>
+const getResourceTags = async (
+  elastiCache: Elasticache,
+  arn: string
+): Promise<TagMap> =>
   new Promise(resolve => {
     try {
       elastiCache.listTagsForResource(
         { ResourceName: arn },
         (err: AWSError, data: TagListMessage) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'elastiCache:listTagsForResource', err)
+            generateAwsErrorLog(
+              serviceName,
+              'elastiCache:listTagsForResource',
+              err
+            )
             return resolve({})
           }
           const { TagList: tags = [] } = data || {}
@@ -69,9 +84,50 @@ const getResourceTags = async (elastiCache: Elasticache, arn: string): Promise<T
     }
   })
 
+const getCacheSubnetGroup = async ({
+  elastiCache,
+  cacheSubnetGroupName,
+}: {
+  elastiCache: Elasticache
+  cacheSubnetGroupName: string
+}): Promise<CacheSubnetGroup | unknown> =>
+  new Promise<CacheSubnetGroup | unknown>(resolve => {
+    const args: DescribeCacheSubnetGroupsMessage = {
+      CacheSubnetGroupName: cacheSubnetGroupName,
+    }
+
+    try {
+      elastiCache.describeCacheSubnetGroups(
+        args,
+        (err: AWSError, data: CacheSubnetGroupMessage) => {
+          if (err) {
+            generateAwsErrorLog(
+              serviceName,
+              'elastiCache:describeCacheSubnetGroups',
+              err
+            )
+          }
+
+          /**
+           * No cache subnet group for this region
+           */
+          if (isEmpty(data)) {
+            return resolve({})
+          }
+
+          const { CacheSubnetGroups: cacheSubnetGroups } = data || {}
+          const result = cacheSubnetGroups && cacheSubnetGroups?.length > 0 ? cacheSubnetGroups[0] : {}
+          resolve(result)
+        }
+      )
+    } catch (error) {
+      resolve({})
+    }
+  })
 export interface RawAwsElastiCacheCluster extends CacheCluster {
   Tags?: TagMap
   region: string
+  CacheSubnetGroup?: CacheSubnetGroup
 }
 
 export default async ({
@@ -90,9 +146,40 @@ export default async ({
     regions.split(',').map(region => {
       const regionPromise = new Promise<void>(async resolveRegion => {
         const elastiCache = new Elasticache({ ...config, region, endpoint })
-        const clusters = await getElasticacheClusters(elastiCache)
+        let clusters = await getElasticacheClusters(elastiCache)
 
         if (!isEmpty(clusters)) {
+          // Get cache subnet groups for each cluster
+          const cacheSubnetGroupNames: string[] = clusters.map(
+            cluster => cluster.CacheSubnetGroupName
+          )
+
+          if (!isEmpty(cacheSubnetGroupNames)) {
+            const cacheSubnetGroups: CacheSubnetGroup[] = await Promise.all(
+              cacheSubnetGroupNames.map(cacheSubnetGroupName =>
+                getCacheSubnetGroup({
+                  elastiCache,
+                  cacheSubnetGroupName,
+                })
+              )
+            )
+
+            if (!isEmpty(cacheSubnetGroups)) {
+              clusters = clusters.map(cluster => {
+                const cacheSubnetGroup: CacheSubnetGroup =
+                  cacheSubnetGroups.find(
+                    (group: CacheSubnetGroup) =>
+                      group.CacheSubnetGroupName ===
+                      cluster.CacheSubnetGroupName
+                  )
+                return {
+                  ...cluster,
+                  CacheSubnetGroup: cacheSubnetGroup || {},
+                }
+              })
+            }
+          }
+
           elastiCacheData.push(
             ...clusters.map(cluster => ({
               ...cluster,
