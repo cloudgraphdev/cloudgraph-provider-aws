@@ -69,7 +69,7 @@ type awsRawTag
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-  id: String! @id
-  key: String
-  value: String
+  id: String! @id @search(by: [hash, regexp])
+  key: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
 }

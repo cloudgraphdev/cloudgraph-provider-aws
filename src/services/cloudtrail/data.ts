@@ -61,6 +61,10 @@ const listTrailData = async (
   trailArnList: string[]
 ): Promise<Trail[]> => {
   try {
+    // If we dont have any trail arns, dont get trail data (this will return all trails and lead to dups)
+    if (isEmpty(trailArnList)) {
+      return []
+    }
     const { trailList = [] } = await cloudTrail
       .describeTrails({
         trailNameList: trailArnList,

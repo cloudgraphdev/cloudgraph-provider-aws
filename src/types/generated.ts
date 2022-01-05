@@ -1060,7 +1060,7 @@ export type AwsEc2 = {
   privateDns?: Maybe<Scalars['String']>;
   monitoring?: Maybe<Scalars['String']>;
   privateIps?: Maybe<Scalars['String']>;
-  keyPairName?: Maybe<Scalars['String']>;
+  keyPair?: Maybe<AwsEc2KeyPair>;
   cpuCoreCount?: Maybe<Scalars['Int']>;
   hibernation?: Maybe<Scalars['String']>;
   ebsOptimized?: Maybe<Scalars['String']>;
@@ -1120,6 +1120,14 @@ export type AwsEc2CloudWatchMetricsTimePeriods = {
   last24Hours?: Maybe<AwsEc2CloudWatchMetrics>;
   lastWeek?: Maybe<AwsEc2CloudWatchMetrics>;
   lastMonth?: Maybe<AwsEc2CloudWatchMetrics>;
+};
+
+export type AwsEc2KeyPair = {
+  id?: Maybe<Scalars['String']>;
+  fingerprint?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
 };
 
 export type AwsEc2MetadataOptions = {

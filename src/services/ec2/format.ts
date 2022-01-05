@@ -37,15 +37,13 @@ export default ({
     BlockDeviceMappings: blockDeviceMappings = [],
     DisableApiTermination: deletionProtection,
     Tags: tags = {},
-    KeyPairName: keyPairName,
+    KeyPair: { id: keyPairId, name, type, fingerprint, tags: keyPairTags = {} } = {},
     IamInstanceProfile: iamInstanceProfile,
     cloudWatchMetricData,
     PlatformDetails : platformDetails
   } = rawData
 
   const securityGroupIds = securityGroups.map(({ GroupId }) => GroupId)
-
-  // const ipv4PublicIp = eips.map(({ PublicIp }) => PublicIp).join(', ')
 
   const { NetworkInterfaceId: networkInterfaceId = '' } =
     networkInterfaces.find(
@@ -75,7 +73,13 @@ export default ({
     privateDns,
     monitoring: monitoring?.State || '',
     privateIps,
-    keyPairName: keyPairName || '',
+    keyPair: {
+      id: keyPairId,
+      name,
+      type,
+      fingerprint,
+      tags: formatTagsFromMap(keyPairTags)
+    },
     cpuCoreCount: cpuOptions?.CoreCount || 0,
     hibernation: hibernationOptions?.Configured ? t.yes : t.no,
     ebsOptimized: ebsOptimized ? t.yes : t.no,
