@@ -64,6 +64,14 @@ type awsEc2CloudWatchMetrics
   diskWriteBytesAverage: Float
 }
 
+type awsEc2KeyPair {
+  id: String @search(by: [hash, regexp])
+  fingerprint: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  type: String @search(by: [hash, regexp])
+  tags: [awsRawTag]
+}
+
 type awsEc2 @key(fields: "arn") {
   id: String! @id @search(by: [hash])
   accountId: String! @search(by: [hash])
@@ -76,7 +84,7 @@ type awsEc2 @key(fields: "arn") {
   privateDns: String @search(by: [hash, regexp])
   monitoring: String @search(by: [hash, regexp])
   privateIps: String @search(by: [hash, regexp])
-  keyPairName: String @search(by: [hash, regexp])
+  keyPair: awsEc2KeyPair
   cpuCoreCount: Int @search
   hibernation: String @search(by: [hash, regexp])
   ebsOptimized: String @search(by: [hash, regexp])

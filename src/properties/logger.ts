@@ -260,8 +260,8 @@ export default {
   fetchedNetworkInterfaces: (num: number): string =>
     `Fetched ${num} Network Interfaces`,
   lookingForNetworkInterfaces: 'Gathering Network Interfaces to add...',
-  fetchedKeyPairs: (num: number): string =>
-    `Fetched ${num} Key Pairs for instances`,
+  foundKeyPair: (id: string): string =>
+    `Found Key Pair ${id} for instance`,
   doneFetchingEc2Data: '✅ Done fetching EC2 Instance Data ✅',
   /**
    * RDS

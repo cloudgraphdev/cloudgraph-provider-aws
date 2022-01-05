@@ -13,7 +13,7 @@ import EC2, {
   IamInstanceProfile,
   Instance,
   InstanceAttribute,
-  DescribeImagesResult
+  DescribeImagesResult,
 } from 'aws-sdk/clients/ec2'
 import CloudWatch, {
   GetMetricDataInput,
@@ -26,9 +26,10 @@ import { AWSError } from 'aws-sdk/lib/error'
 import CloudGraph from '@cloudgraph/sdk'
 
 import metricsTypes, { metricStats } from './metrics'
-import { TagMap } from '../../types'
+import { TagMap, AwsTag } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
@@ -40,7 +41,13 @@ const cwGetMetricDataLimit = 500
 export interface RawAwsEC2 extends Omit<Instance, 'Tags'> {
   region: string
   DisableApiTermination?: boolean
-  KeyPairName?: string
+  KeyPair?: {
+    id: string
+    fingerprint: string
+    name: string
+    type: string
+    tags: TagMap
+  }
   Tags?: TagMap
   IamInstanceProfile?: IamInstanceProfile
   cloudWatchMetricData?: any
@@ -155,28 +162,24 @@ export default async ({
      * Step 2) Get the Key Pair names for each instance's key pair
      */
 
-    const keyPairPromises = ec2Instances.map(({ region }, ec2Idx) => {
+    const keyPairPromises = ec2Instances.map(({ region, KeyName }, ec2Idx) => {
       const ec2 = new EC2({ ...config, region, endpoint })
-
       const keyPairPromise = new Promise<void>(resolveKeyPair =>
         ec2.describeKeyPairs(
-          {},
+          { KeyNames: [KeyName] },
           (err: AWSError, data: DescribeKeyPairsResult) => {
             if (err) {
               generateAwsErrorLog(serviceName, 'ec2:describeKeyPairs', err)
             }
-
             /**
              * No Key Pair data for this instance
              */
 
-            if (isEmpty(data)) {
+            if (isEmpty(data) || !KeyName) {
               return resolveKeyPair()
             }
 
             const { KeyPairs: pairs } = data || {}
-
-            logger.debug(`${lt.fetchedKeyPairs(pairs.length)} at ${region}`)
 
             /**
              * No Key Pairs Found
@@ -185,10 +188,27 @@ export default async ({
             if (isEmpty(pairs)) {
               return resolveKeyPair()
             }
-
-            ec2Instances[ec2Idx].KeyPairName = pairs
-              .map(({ KeyName }) => KeyName)
-              .join(', ')
+            const [keyPair] = pairs.map(
+              ({
+                KeyName: instanceKeyName,
+                KeyPairId: id,
+                KeyFingerprint: fingerprint,
+                KeyType: type,
+                Tags,
+              }) => ({
+                id,
+                fingerprint,
+                type,
+                name: instanceKeyName,
+                tags: convertAwsTagsToTagMap(Tags as AwsTag[]),
+              })
+            )
+            logger.debug(
+              `${lt.foundKeyPair(keyPair.id)} for instance ${
+                ec2Instances[ec2Idx]?.InstanceId
+              }`
+            )
+            ec2Instances[ec2Idx].KeyPair = keyPair
 
             resolveKeyPair()
           }
@@ -360,7 +380,7 @@ export default async ({
      * Step 5) Get the platform details associated with the billing code of the AMI for all instances
      */
 
-     const describeImagesPromises = ec2Instances.map(
+    const describeImagesPromises = ec2Instances.map(
       ({ region, ImageId }, ec2Idx) => {
         const ec2 = new EC2({ ...config, region, endpoint })
 
@@ -449,8 +469,11 @@ export default async ({
         }))
       })
       .flat()
-    
-    const getMeticsForTimePeriod = async ({ minsAgo, end = new Date()}): Promise<any> => {
+
+    const getMeticsForTimePeriod = async ({
+      minsAgo,
+      end = new Date(),
+    }): Promise<any> => {
       const metrics: {
         metric: string
         label: string
@@ -465,19 +488,24 @@ export default async ({
           let token
           let metricsToFetch = [metricQueries]
           if (metricQueries.length > cwGetMetricDataLimit) {
-            logger.debug('EC2:getMetricData has more than 500 requests, chunking the requests...')
-            metricsToFetch = metricQueries.reduce((resultArray, item, index) => { 
-              const chunkIndex = Math.floor(index/cwGetMetricDataLimit)
-            
-              if(!resultArray[chunkIndex]) {
-                // eslint-disable-next-line no-param-reassign
-                resultArray[chunkIndex] = [] // start a new chunk
-              }
-            
-              resultArray[chunkIndex].push(item)
-            
-              return resultArray
-            }, [])
+            logger.debug(
+              'EC2:getMetricData has more than 500 requests, chunking the requests...'
+            )
+            metricsToFetch = metricQueries.reduce(
+              (resultArray, item, index) => {
+                const chunkIndex = Math.floor(index / cwGetMetricDataLimit)
+
+                if (!resultArray[chunkIndex]) {
+                  // eslint-disable-next-line no-param-reassign
+                  resultArray[chunkIndex] = [] // start a new chunk
+                }
+
+                resultArray[chunkIndex].push(item)
+
+                return resultArray
+              },
+              []
+            )
           }
           const promises = []
           metricsToFetch.forEach(async metricSet => {
@@ -526,15 +554,17 @@ export default async ({
       return metrics
     }
     const timePeriod = {
-      last6Hours: { minsAgo: 360, metrics: []},
-      last24Hours: { minsAgo: 1440, metrics: []},
-      lastWeek: { minsAgo: 10080, metrics: []},
-      lastMonth: { minsAgo: 43800, metrics: []}
+      last6Hours: { minsAgo: 360, metrics: [] },
+      last24Hours: { minsAgo: 1440, metrics: [] },
+      lastWeek: { minsAgo: 10080, metrics: [] },
+      lastMonth: { minsAgo: 43800, metrics: [] },
     }
     // First populate the time periods with the corresponding metrics
     try {
       for (const [key, periodObj] of Object.entries(timePeriod)) {
-        const metrics = await getMeticsForTimePeriod({ minsAgo: periodObj.minsAgo })
+        const metrics = await getMeticsForTimePeriod({
+          minsAgo: periodObj.minsAgo,
+        })
         timePeriod[key].metrics = metrics
       }
       // Now populate the ec2Instances with the metric data
@@ -549,18 +579,25 @@ export default async ({
           Object.keys(groupedMetrics).map(metricKey => {
             const camelKey = camelCase(metricKey)
             const operator = metricStats[metricKey]
-            ec2Instances[idx].cloudWatchMetricData[key][`${camelKey}${operator}`] = 0
+            ec2Instances[idx].cloudWatchMetricData[key][
+              `${camelKey}${operator}`
+            ] = 0
             const metric = groupedMetrics[metricKey]
-            const filteredMetric: {values: number[], timestamps: Date[]}[] = metric.filter(({ values }) => values.length > 1)
+            const filteredMetric: { values: number[]; timestamps: Date[] }[] =
+              metric.filter(({ values }) => values.length > 1)
             let valuesSumOrAverage
             for (const { values } of filteredMetric) {
               if (operator === 'Average') {
-                valuesSumOrAverage = values.reduce((prev, curr, _, self) => (curr + prev)/self.length)
+                valuesSumOrAverage = values.reduce(
+                  (prev, curr, _, self) => (curr + prev) / self.length
+                )
               } else {
                 valuesSumOrAverage = values.reduce((prev, curr) => prev + curr)
               }
             }
-            ec2Instances[idx].cloudWatchMetricData[key][`${camelKey}${operator}`] = valuesSumOrAverage
+            ec2Instances[idx].cloudWatchMetricData[key][
+              `${camelKey}${operator}`
+            ] = valuesSumOrAverage
           })
         }
       })
