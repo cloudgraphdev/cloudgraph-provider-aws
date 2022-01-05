@@ -1,3 +1,10 @@
+## [0.59.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.59.1...0.59.2) (2022-01-05)
+
+
+### Bug Fixes
+
+* **services:** fix ec2 keypair data, fix for cloudtrail duplication ([8e863d1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/8e863d1ea00c721c0a14db4b58a26c817bbb0b39))
+
 ## [0.59.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.59.0...0.59.1) (2022-01-03)
 
 
