@@ -19,7 +19,6 @@ type awsElastiCacheCluster @key(fields: "arn") {
   notificationConfiguration: awsElastiCacheNotificationConfiguration
   cacheSecurityGroups: [awsElastiCacheSecurityGroupMembership]
   cacheParameterGroup: awsElastiCacheParameterGroupStatus
-  cacheSubnetGroupName: String @search(by: [hash, regexp])
   cacheNodes: [awsElastiCacheNode]
   autoMinorVersionUpgrade: Boolean @search
   replicationGroupId: String @search(by: [hash, regexp])
@@ -120,15 +119,4 @@ type awsCacheSubnetGroup
   cacheSubnetGroupName: String @search(by: [hash, regexp])
   cacheSubnetGroupDescription: String @search(by: [hash, regexp])
   vpcId: String @search(by: [hash])
-  subnets: [awsSubnetGroup]
-}
-
-type awsSubnetGroup
-  @generate(
-    query: { get: false, query: true, aggregate: false }
-    mutation: { add: false, delete: false }
-    subscription: false
-  ) {
-  subnetIdentifier: String! @id
-  subnetAvailabilityZone: String @search(by: [hash, regexp])
 }

@@ -109,7 +109,6 @@ export default ({
       parameterApplyStatus: cacheParameterGroup?.ParameterApplyStatus,
       cacheNodeIdsToReboot: cacheParameterGroup?.CacheNodeIdsToReboot,
     },
-    cacheSubnetGroupName,
     cacheNodes: cacheNodes?.map(node => ({
       id: cuid(),
       cacheNodeId: node.CacheNodeId,
@@ -156,11 +155,6 @@ export default ({
       cacheSubnetGroupDescription:
         cacheSubnetGroup?.CacheSubnetGroupDescription,
       vpcId: cacheSubnetGroup?.VpcId,
-      subnets:
-        cacheSubnetGroup?.Subnets?.map(subnet => ({
-          subnetIdentifier: subnet?.SubnetIdentifier,
-          subnetAvailabilityZone: subnet?.SubnetAvailabilityZone?.Name || '',
-        })) || [],
     },
   }
 }

@@ -408,7 +408,6 @@ export type AwsCacheSubnetGroup = {
   cacheSubnetGroupName?: Maybe<Scalars['String']>;
   cacheSubnetGroupDescription?: Maybe<Scalars['String']>;
   vpcId?: Maybe<Scalars['String']>;
-  subnets?: Maybe<Array<Maybe<AwsSubnetGroup>>>;
 };
 
 export type AwsCertificateAuthenticationRequest = {
@@ -1956,7 +1955,6 @@ export type AwsElastiCacheCluster = {
   notificationConfiguration?: Maybe<AwsElastiCacheNotificationConfiguration>;
   cacheSecurityGroups?: Maybe<Array<Maybe<AwsElastiCacheSecurityGroupMembership>>>;
   cacheParameterGroup?: Maybe<AwsElastiCacheParameterGroupStatus>;
-  cacheSubnetGroupName?: Maybe<Scalars['String']>;
   cacheNodes?: Maybe<Array<Maybe<AwsElastiCacheNode>>>;
   autoMinorVersionUpgrade?: Maybe<Scalars['Boolean']>;
   replicationGroupId?: Maybe<Scalars['String']>;
@@ -3211,11 +3209,6 @@ export type AwsSubnet = {
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
   elastiCacheCluster?: Maybe<Array<Maybe<AwsElastiCacheCluster>>>;
-};
-
-export type AwsSubnetGroup = {
-  subnetIdentifier: Scalars['String'];
-  subnetAvailabilityZone?: Maybe<Scalars['String']>;
 };
 
 export type AwsSupportedLoginProvider = {

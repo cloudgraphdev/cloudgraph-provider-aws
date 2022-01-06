@@ -131,7 +131,6 @@ describe.skip('ElastiCache Cluster Service Test: ', () => {
             notificationConfiguration: expect.any(Object),
             cacheSecurityGroups: expect.any(Array),
             cacheParameterGroup: expect.any(Object),
-            cacheSubnetGroupName: expect.any(String),
             cacheNodes: expect.any(Array),
             autoMinorVersionUpgrade: expect.any(Boolean),
             replicationGroupId: undefined,
