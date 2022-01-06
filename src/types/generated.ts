@@ -404,6 +404,12 @@ export type AwsBucketPolicy = {
   policy?: Maybe<AwsIamJsonPolicy>;
 };
 
+export type AwsCacheSubnetGroup = {
+  cacheSubnetGroupName?: Maybe<Scalars['String']>;
+  cacheSubnetGroupDescription?: Maybe<Scalars['String']>;
+  vpcId?: Maybe<Scalars['String']>;
+};
+
 export type AwsCertificateAuthenticationRequest = {
   clientRootCertificateChain?: Maybe<Scalars['String']>;
 };
@@ -1959,7 +1965,6 @@ export type AwsElastiCacheCluster = {
   notificationConfiguration?: Maybe<AwsElastiCacheNotificationConfiguration>;
   cacheSecurityGroups?: Maybe<Array<Maybe<AwsElastiCacheSecurityGroupMembership>>>;
   cacheParameterGroup?: Maybe<AwsElastiCacheParameterGroupStatus>;
-  cacheSubnetGroupName?: Maybe<Scalars['String']>;
   cacheNodes?: Maybe<Array<Maybe<AwsElastiCacheNode>>>;
   autoMinorVersionUpgrade?: Maybe<Scalars['Boolean']>;
   replicationGroupId?: Maybe<Scalars['String']>;
@@ -1972,7 +1977,10 @@ export type AwsElastiCacheCluster = {
   replicationGroupLogDeliveryEnabled?: Maybe<Scalars['Boolean']>;
   logDeliveryConfigurations?: Maybe<Array<Maybe<AwsElastiCacheLogDeliveryConfiguration>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  cacheSubnetGroup?: Maybe<AwsCacheSubnetGroup>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
 export type AwsElastiCacheDestinationDetails = {
@@ -3210,6 +3218,7 @@ export type AwsSubnet = {
   efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
+  elastiCacheCluster?: Maybe<Array<Maybe<AwsElastiCacheCluster>>>;
 };
 
 export type AwsSupportedLoginProvider = {
@@ -3384,6 +3393,7 @@ export type AwsVpc = {
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
   vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
   transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
+  elastiCacheCluster?: Maybe<Array<Maybe<AwsElastiCacheCluster>>>;
 };
 
 export type AwsVpnConnection = {

@@ -19,7 +19,6 @@ type awsElastiCacheCluster @key(fields: "arn") {
   notificationConfiguration: awsElastiCacheNotificationConfiguration
   cacheSecurityGroups: [awsElastiCacheSecurityGroupMembership]
   cacheParameterGroup: awsElastiCacheParameterGroupStatus
-  cacheSubnetGroupName: String @search(by: [hash, regexp])
   cacheNodes: [awsElastiCacheNode]
   autoMinorVersionUpgrade: Boolean @search
   replicationGroupId: String @search(by: [hash, regexp])
@@ -32,7 +31,10 @@ type awsElastiCacheCluster @key(fields: "arn") {
   replicationGroupLogDeliveryEnabled: Boolean @search
   logDeliveryConfigurations: [awsElastiCacheLogDeliveryConfiguration]
   tags: [awsRawTag]
+  cacheSubnetGroup: awsCacheSubnetGroup
   securityGroups: [awsSecurityGroup] @hasInverse(field: elastiCacheCluster)
+  subnets: [awsSubnet] @hasInverse(field: elastiCacheCluster)
+  vpc: [awsVpc] @hasInverse(field: elastiCacheCluster)
 }
 
 type awsElastiCacheEndpoint
@@ -106,4 +108,15 @@ type awsElastiCacheNode
   sourceCacheNodeId: String @search(by: [hash, regexp])
   customerAvailabilityZone: String @search(by: [hash, regexp])
   customerOutpostArn: String @search(by: [hash, regexp])
+}
+
+type awsCacheSubnetGroup
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  cacheSubnetGroupName: String @search(by: [hash, regexp])
+  cacheSubnetGroupDescription: String @search(by: [hash, regexp])
+  vpcId: String @search(by: [hash])
 }
