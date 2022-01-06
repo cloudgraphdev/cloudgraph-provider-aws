@@ -697,6 +697,7 @@ export type AwsCloudtrail = {
   sns?: Maybe<Array<Maybe<AwsSns>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   cloudwatchLog?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
+  cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
 };
 
 export type AwsCloudtrailEventSelector = {
@@ -739,6 +740,7 @@ export type AwsCloudwatch = {
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   cloudwatchLog?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
   sns?: Maybe<Array<Maybe<AwsSns>>>;
+  cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
 };
 
 export type AwsCloudwatchDimensions = {

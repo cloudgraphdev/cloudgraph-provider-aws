@@ -24,6 +24,7 @@ type awsCloudtrail @key(fields: "cgId") {
   sns: [awsSns] @hasInverse(field: cloudtrail)
   kms: [awsKms] @hasInverse(field: cloudtrail)
   cloudwatchLog: [awsCloudwatchLog] @hasInverse(field: cloudtrail)
+  cloudwatch: [awsCloudwatch] @hasInverse(field: cloudtrail)
 }
 
 type awsCloudtrailStatus {

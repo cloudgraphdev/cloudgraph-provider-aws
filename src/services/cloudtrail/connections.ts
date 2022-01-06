@@ -6,6 +6,7 @@ import { TagMap } from '../../types'
 import { s3BucketArn } from '../../utils/generateArns'
 import { gets3BucketId } from '../../utils/ids'
 import { RawAwsLogGroup } from '../cloudwatchLogs/data'
+import { RawAwsCloudwatch } from '../cloudwatch/data'
 import services from '../../enums/services'
 
 /**
@@ -106,19 +107,58 @@ export default ({
    * related to the cloudTrail
    */
   const logGroups = data.find(({ name }) => name === services.cloudwatchLog)
+  let logGroupsInRegion: RawAwsLogGroup[] = []
   if (logGroups?.data?.[region]) {
-    const logGroupsInRegion: RawAwsLogGroup[] = logGroups.data[region].filter(
+    logGroupsInRegion = logGroups.data[region].filter(
       logGroup => logGroup.arn === cloudWatchLogsLogGroupArn
     )
+  }
 
-    if (!isEmpty(logGroupsInRegion)) {
-      for (const logGroup of logGroupsInRegion) {
-        connections.push({
-          id: logGroup.logGroupName,
-          resourceType: services.cloudwatchLog,
-          relation: 'child',
-          field: 'cloudwatchLog',
-        })
+  if (!isEmpty(logGroupsInRegion)) {
+    for (const logGroup of logGroupsInRegion) {
+      connections.push({
+        id: logGroup.logGroupName,
+        resourceType: services.cloudwatchLog,
+        relation: 'child',
+        field: 'cloudwatchLog',
+      })
+    }
+  }
+
+  /**
+   * Find cloudwatch metric alarms
+   * related to the cloudTrail log groups
+   */
+
+  if (!isEmpty(logGroupsInRegion)) {
+    const metricAlarms = data.find(({ name }) => name === services.cloudwatch)
+    for (const logGroup of logGroupsInRegion) {
+      let metricNames: string[] = []
+      logGroup.MetricFilters?.map(
+        ({ metricTransformations }) => metricTransformations
+      )?.forEach(transformation => {
+        metricNames = metricNames.concat(
+          transformation?.map(({ metricName }) => metricName)
+        )
+      })
+
+      if (metricAlarms?.data?.[region] && !isEmpty(metricNames)) {
+        const metricAlarmsInRegion: RawAwsCloudwatch[] = metricAlarms.data[
+          region
+        ].filter(({ MetricName }: RawAwsCloudwatch) =>
+          metricNames.includes(MetricName)
+        )
+
+        if (!isEmpty(metricAlarmsInRegion)) {
+          for (const metricAlarm of metricAlarmsInRegion) {
+            connections.push({
+              id: metricAlarm.AlarmName,
+              resourceType: services.cloudwatch,
+              relation: 'child',
+              field: 'cloudwatch',
+            })
+          }
+        }
       }
     }
   }

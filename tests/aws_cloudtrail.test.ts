@@ -8,6 +8,7 @@ import { initTestConfig } from '../src/utils'
 import { credentials, region } from '../src/properties/test'
 import { RawAwsCloudTrail } from '../src/services/cloudtrail/data'
 import services from '../src/enums/services'
+import CloudWatch from '../src/services/cloudwatch'
 
 describe.skip('CloudTrail Service Test: ', () => {
   let getDataResult
@@ -29,6 +30,7 @@ describe.skip('CloudTrail Service Test: ', () => {
           })
           const s3Service = new S3Service({ logger: CloudGraph.logger })
           const kmsClass = new KmsClass({ logger: CloudGraph.logger })
+          const cloudWatchService = new CloudWatch({ logger: CloudGraph.logger })
           const cloudwatchLogService = new CloudwatchLog({
             logger: CloudGraph.logger,
           })
@@ -59,6 +61,12 @@ describe.skip('CloudTrail Service Test: ', () => {
             regions: region,
           })
 
+          // Get cloudwatch metric alrams data
+          const metricAlarmsData = await cloudWatchService.getData({
+            credentials,
+            regions: region,
+          })
+
           const [cloudTrail] = getDataResult[region]
           cloudTrailId = cloudTrail.TrailARN
 
@@ -78,6 +86,11 @@ describe.skip('CloudTrail Service Test: ', () => {
               {
                 name: services.cloudwatchLog,
                 data: cloudwatchLogResult,
+                region,
+              },
+              {
+                name: services.cloudwatch,
+                data: metricAlarmsData,
                 region,
               },
             ],
@@ -143,6 +156,15 @@ describe.skip('CloudTrail Service Test: ', () => {
         cloudTrailId
       ]?.find(kms => kms.resourceType === services.cloudwatchLog)
       expect(cloudwatchLogConnections).toBeDefined()
+    })
+
+    test('should verify the connection to cloudwatch metric alarms', () => {
+      const metricAlarmsConnections = cloudTrailConnections[
+        cloudTrailId
+      ]?.filter(connection => connection.resourceType === services.cloudwatch)
+
+      expect(metricAlarmsConnections).toBeDefined()
+      expect(metricAlarmsConnections.length).toBe(1)
     })
 
     test.todo('should verify the connections to SNS Topic')

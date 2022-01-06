@@ -17,6 +17,7 @@ type awsCloudwatch @key(fields: "arn") {
   tags: [awsRawTag]
   cloudwatchLog: [awsCloudwatchLog] @hasInverse(field: cloudwatch)
   sns: [awsSns] @hasInverse(field: cloudwatch)
+  cloudtrail: [awsCloudtrail] @hasInverse(field: cloudwatch)
 }
 
 type awsCloudwatchDimensions
