@@ -1,3 +1,11 @@
+# [0.61.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.60.0...0.61.0) (2022-01-06)
+
+
+### Features
+
+* **service:**  use cacheSubnetGroupName, get the actual subnets in this subnet group ([2a06b6c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/2a06b6c239bed59fff77a47d948a254a6bfa59f1))
+* **service:** drop subnets property from cacheSubnetGroup ([bbe3693](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/bbe36932856f1a5f5dd0d70d8b8c587edf2aedf5))
+
 # [0.60.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.59.2...0.60.0) (2022-01-06)
 
 
