@@ -1,3 +1,10 @@
+# [0.60.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.59.2...0.60.0) (2022-01-06)
+
+
+### Features
+
+* **service:** Add cloudwatch connection to cloudtrail service ([050aeb3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/050aeb33212ce7e37a3fed21d0a26f4b319275c3))
+
 ## [0.59.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.59.1...0.59.2) (2022-01-05)
 
 
