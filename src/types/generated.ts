@@ -2913,6 +2913,7 @@ export type AwsRdsDbInstance = {
   failoverPriority?: Maybe<Scalars['Int']>;
   kmsKey?: Maybe<Scalars['String']>;
   encrypted?: Maybe<Scalars['Boolean']>;
+  licenseModel?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   cluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
