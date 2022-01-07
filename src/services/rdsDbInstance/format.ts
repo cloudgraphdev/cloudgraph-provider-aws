@@ -40,6 +40,7 @@ export default ({
     IAMDatabaseAuthenticationEnabled: iamDbAuthenticationEnabled,
     DbiResourceId: resourceId,
     Endpoint: endpoint,
+    LicenseModel: licenseModel,
     Tags = {},
   } = service
 
@@ -89,6 +90,7 @@ export default ({
     failoverPriority,
     kmsKey,
     encrypted,
+    licenseModel,
     tags: formatTagsFromMap(Tags),
   }
 }

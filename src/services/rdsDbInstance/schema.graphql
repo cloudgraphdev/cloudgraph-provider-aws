@@ -32,6 +32,7 @@ type awsRdsDbInstance @key(fields: "arn") {
   failoverPriority: Int @search
   kmsKey: String @search(by: [hash, regexp])
   encrypted: Boolean @search
+  licenseModel: String @search(by: [hash, regexp])
   tags: [awsRawTag]
   cluster: [awsRdsCluster] @hasInverse(field: instances)
   securityGroups: [awsSecurityGroup] @hasInverse(field: rdsDbInstance)
