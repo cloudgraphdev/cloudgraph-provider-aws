@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash'
 import t from '../../properties/translations'
 import { AwsEc2 } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
@@ -37,10 +38,17 @@ export default ({
     BlockDeviceMappings: blockDeviceMappings = [],
     DisableApiTermination: deletionProtection,
     Tags: tags = {},
-    KeyPair: { id: keyPairId, name, type, fingerprint, tags: keyPairTags = {} } = {},
+    KeyPair: {
+      id: keyPairId,
+      name,
+      type,
+      fingerprint,
+      tags: keyPairTags = {},
+    } = {},
     IamInstanceProfile: iamInstanceProfile,
     cloudWatchMetricData,
-    PlatformDetails : platformDetails
+    PlatformDetails: platformDetails,
+    InstanceLifecycle: instanceLifecycle,
   } = rawData
 
   const securityGroupIds = securityGroups.map(({ GroupId }) => GroupId)
@@ -62,9 +70,23 @@ export default ({
   // Instance tags
   const instanceTags = formatTagsFromMap(tags)
 
+  // Instance life cicle
+  const mapInstanceLifecycle = (lifecycle: string): string => {
+    if (isEmpty(lifecycle)) return 'on_demand'
+
+    switch (lifecycle) {
+      case 'scheduled': {
+        return 'reserved'
+      }
+      default: {
+        return lifecycle
+      }
+    }
+  }
+
   const ec2 = {
     accountId: account,
-    arn: ec2InstanceArn({region, account, id}),
+    arn: ec2InstanceArn({ region, account, id }),
     id,
     region,
     ami,
@@ -78,7 +100,7 @@ export default ({
       name,
       type,
       fingerprint,
-      tags: formatTagsFromMap(keyPairTags)
+      tags: formatTagsFromMap(keyPairTags),
     },
     cpuCoreCount: cpuOptions?.CoreCount || 0,
     hibernation: hibernationOptions?.Configured ? t.yes : t.no,
@@ -103,7 +125,8 @@ export default ({
     ephemeralBlockDevices,
     cloudWatchMetricData,
     tags: instanceTags,
-    platformDetails: platformDetails || ''
+    platformDetails: platformDetails || '',
+    instanceLifecycle: mapInstanceLifecycle(instanceLifecycle),
   }
   return ec2
 }
