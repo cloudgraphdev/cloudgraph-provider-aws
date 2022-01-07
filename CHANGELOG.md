@@ -1,3 +1,10 @@
+# [0.62.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.61.0...0.62.0) (2022-01-07)
+
+
+### Features
+
+* **service:** Add licenseModel to RDS DB Instance ([552a03d](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/552a03d9a68e3d750f2cc527d796adbc88775063))
+
 # [0.61.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.60.0...0.61.0) (2022-01-06)
 
 
