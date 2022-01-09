@@ -171,6 +171,7 @@ describe('EC2 Service Test: ', () => {
               lastMonth: expect.any(Object)
             }),
             platformDetails: expect.any(String),
+            instanceLifecycle: expect.any(String),
           }),
         ])
       )

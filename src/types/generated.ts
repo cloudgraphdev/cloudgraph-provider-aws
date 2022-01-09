@@ -1091,6 +1091,7 @@ export type AwsEc2 = {
   associatePublicIpAddress?: Maybe<Scalars['String']>;
   platformDetails?: Maybe<Scalars['String']>;
   cloudWatchMetricData?: Maybe<AwsEc2CloudWatchMetricsTimePeriods>;
+  instanceLifecycle?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
   asg?: Maybe<Array<Maybe<AwsAsg>>>;
