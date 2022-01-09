@@ -1,3 +1,10 @@
+# [0.63.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.62.0...0.63.0) (2022-01-09)
+
+
+### Features
+
+* **service:** Add InstanceLifecycle to EC2 Instance ([882e759](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/882e759174fdfc899efe181bf32dc47abeb5e3f8))
+
 # [0.62.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.61.0...0.62.0) (2022-01-07)
 
 
