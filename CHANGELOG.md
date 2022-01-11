@@ -1,3 +1,10 @@
+## [0.63.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.63.0...0.63.1) (2022-01-11)
+
+
+### Bug Fixes
+
+* Prevented exception with null launch configuration data ([fde3044](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/fde30441901a78b530d8f913928f7b910d57f9b8))
+
 # [0.63.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.62.0...0.63.0) (2022-01-09)
 
 
