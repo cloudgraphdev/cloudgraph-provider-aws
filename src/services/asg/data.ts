@@ -9,7 +9,11 @@ import CloudGraph from '@cloudgraph/sdk'
 
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog, setAwsRetryOptions } from '../../utils'
+import {
+  initTestEndpoint,
+  generateAwsErrorLog,
+  setAwsRetryOptions,
+} from '../../utils'
 import { ASG_CUSTOM_DELAY } from '../../config/constants'
 
 const lt = { ...awsLoggerText }
@@ -119,7 +123,7 @@ export default async ({
   asgData.map(({ LaunchConfigurationName: targetLcName, Tags: tags }, idx) => {
     asgData[idx].LaunchConfiguration = {}
     if (targetLcName) {
-      const launchConfig = launchConfigData.find(
+      const launchConfig = launchConfigData?.find(
         ({ LaunchConfigurationName: lcName }) => targetLcName === lcName
       )
 
