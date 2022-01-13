@@ -41,7 +41,7 @@ type awsDynamoDbTableLocalSecondaryIndexDescription
   itemCount: Int @search
   keySchema: [awsDynamoDbTableIndexKeySchema]
   projection: awsDynamoDbTableIndexProjection
-  sizeInBytes: Int @search
+  sizeInBytes: Int64 @search
 }
 
 type awsDynamoDbTableProvisionedThroughputDescription
@@ -69,7 +69,7 @@ type awsDynamoDbTableGlobalSecondaryIndexDescription
   itemCount: Int @search
   keySchema: [awsDynamoDbTableIndexKeySchema]
   projection: awsDynamoDbTableIndexProjection
-  sizeInBytes: Int @search
+  sizeInBytes: Int64 @search
   status: String @search(by: [hash, regexp])
   backfilling: Boolean @search
   provisionedThroughput: awsDynamoDbTableProvisionedThroughputDescription
@@ -166,7 +166,7 @@ type awsDynamoDbTable @key(fields: "arn") {
   provisionedThroughput: awsDynamoDbTableProvisionedThroughputDescription
   replicas: [awsDynamoDbTableReplicaDescription]
   restoreSummary: awsDynamoDbTableRestoreSummary
-  sizeInBytes: Int @search
+  sizeInBytes: Int64 @search
   sseDescription: awsDynamoDbTableSseDescription
   status: String @search(by: [hash, regexp])
   streamSpecification: awsDynamoDbTableStreamSpecification
