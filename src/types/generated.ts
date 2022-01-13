@@ -9,6 +9,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Int64: number;
 };
 
 export type AwsEcsExecuteCommandLogConfiguration = {
@@ -85,6 +86,7 @@ export type AwsStringMap = {
   key?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
 };
+
 
 export type AwsAccessLogSettings = {
   id?: Maybe<Scalars['ID']>;
@@ -930,7 +932,7 @@ export type AwsDynamoDbTable = {
   provisionedThroughput?: Maybe<AwsDynamoDbTableProvisionedThroughputDescription>;
   replicas?: Maybe<Array<Maybe<AwsDynamoDbTableReplicaDescription>>>;
   restoreSummary?: Maybe<AwsDynamoDbTableRestoreSummary>;
-  sizeInBytes?: Maybe<Scalars['Int']>;
+  sizeInBytes?: Maybe<Scalars['Int64']>;
   sseDescription?: Maybe<AwsDynamoDbTableSseDescription>;
   status?: Maybe<Scalars['String']>;
   streamSpecification?: Maybe<AwsDynamoDbTableStreamSpecification>;
@@ -957,7 +959,7 @@ export type AwsDynamoDbTableGlobalSecondaryIndexDescription = {
   itemCount?: Maybe<Scalars['Int']>;
   keySchema?: Maybe<Array<Maybe<AwsDynamoDbTableIndexKeySchema>>>;
   projection?: Maybe<AwsDynamoDbTableIndexProjection>;
-  sizeInBytes?: Maybe<Scalars['Int']>;
+  sizeInBytes?: Maybe<Scalars['Int64']>;
   status?: Maybe<Scalars['String']>;
   backfilling?: Maybe<Scalars['Boolean']>;
   provisionedThroughput?: Maybe<AwsDynamoDbTableProvisionedThroughputDescription>;
@@ -980,7 +982,7 @@ export type AwsDynamoDbTableLocalSecondaryIndexDescription = {
   itemCount?: Maybe<Scalars['Int']>;
   keySchema?: Maybe<Array<Maybe<AwsDynamoDbTableIndexKeySchema>>>;
   projection?: Maybe<AwsDynamoDbTableIndexProjection>;
-  sizeInBytes?: Maybe<Scalars['Int']>;
+  sizeInBytes?: Maybe<Scalars['Int64']>;
 };
 
 export type AwsDynamoDbTableProvisionedThroughputDescription = {
@@ -1824,10 +1826,10 @@ export type AwsEfsEfsAuthorizationConfig = {
 };
 
 export type AwsEfsFileSystemSize = {
-  value?: Maybe<Scalars['Int']>;
+  value?: Maybe<Scalars['Int64']>;
   timestamp?: Maybe<Scalars['String']>;
-  valueInIA?: Maybe<Scalars['Int']>;
-  valueInStandard?: Maybe<Scalars['Int']>;
+  valueInIA?: Maybe<Scalars['Int64']>;
+  valueInStandard?: Maybe<Scalars['Int64']>;
 };
 
 export type AwsEfsMountTarget = {
