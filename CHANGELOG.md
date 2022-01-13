@@ -1,3 +1,10 @@
+## [0.63.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.63.1...0.63.2) (2022-01-13)
+
+
+### Bug Fixes
+
+* **services:** update graphql codegen and schemas to support int64 ([5999d94](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/5999d94f7d1340c1a30fb97cae9b94c98fc0d392))
+
 ## [0.63.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.63.0...0.63.1) (2022-01-11)
 
 
