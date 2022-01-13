@@ -5,7 +5,8 @@ import flatMap from 'lodash/flatMap'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import EcsServiceClass from '../ecsService'
 import { RawAwsEcsService } from '../ecsService/data'
 import services from '../../enums/services'
@@ -13,6 +14,7 @@ import services from '../../enums/services'
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'ECS task definition'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsEcsTaskDefinition extends TaskDefinition {
@@ -58,8 +60,7 @@ export default async ({
             { taskDefinition },
             (err, data) => {
               if (err) {
-                generateAwsErrorLog({
-                  serviceName,
+                errorLog.generateAwsErrorLog({
                   functionName: 'ecs:describeTaskDefinition',
                   err,
                 })
@@ -83,6 +84,8 @@ export default async ({
     )
 
     await Promise.all(ecsTaskDefinitionPromises)
+    errorLog.reset()
+
     logger.debug(lt.fetchedEcsTaskDefinitions(ecsTaskDefinitions.length))
 
     resolve(groupBy(ecsTaskDefinitions, 'region'))

@@ -12,11 +12,13 @@ import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'NetworkACL'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsNetworkAcl extends Omit<NetworkAcl, 'Tags'> {
@@ -54,8 +56,7 @@ export default async ({
         args,
         (err: AWSError, data: DescribeNetworkAclsResult) => {
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'nacl:describeNetworkAcls',
               err,
             })
@@ -100,5 +101,7 @@ export default async ({
     })
 
     await Promise.all(regionPromises)
+    errorLog.reset()
+
     resolve(groupBy(naclData, 'region'))
   })

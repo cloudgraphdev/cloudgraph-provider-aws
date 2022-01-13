@@ -14,12 +14,14 @@ import CloudGraph from '@cloudgraph/sdk'
 import { TagMap, AwsTag } from '../../types'
 
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'Security Groups'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 /**
@@ -63,8 +65,7 @@ export default async ({
         args,
         (err: AWSError, data: DescribeSecurityGroupsResult) => {
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'ec2:describeSecurityGroups',
               err,
             })
@@ -130,5 +131,6 @@ export default async ({
     })
 
     await Promise.all(regionPromises)
+    errorLog.reset()
     resolve(groupBy(sgData, 'region'))
   })

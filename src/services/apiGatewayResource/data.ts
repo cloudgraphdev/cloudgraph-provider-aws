@@ -10,11 +10,8 @@ import { Config } from 'aws-sdk/lib/config'
 import isEmpty from 'lodash/isEmpty'
 import groupBy from 'lodash/groupBy'
 import awsLoggerText from '../../properties/logger'
-import {
-  initTestEndpoint,
-  generateAwsErrorLog,
-  setAwsRetryOptions,
-} from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
 import { API_GATEWAY_CUSTOM_DELAY } from '../../config/constants'
 import {
   getRestApisForRegion,
@@ -26,6 +23,7 @@ const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const MAX_RESOURCES = 500
 const serviceName = 'API gateway Resource'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({
   baseDelay: API_GATEWAY_CUSTOM_DELAY,
@@ -54,8 +52,7 @@ const getResources = async ({ apiGw, restApiId }): Promise<ListOfResource> =>
           (err: AWSError, data: Resources) => {
             const { position, items = [] } = data || {}
             if (err) {
-              generateAwsErrorLog({
-                serviceName,
+              errorLog.generateAwsErrorLog({
                 functionName: 'apiGw:getResources',
                 err,
               })
@@ -165,6 +162,7 @@ export default async ({
 
     await Promise.all(additionalPromises)
     logger.debug(lt.fetchedApiGatewayResources(apiGatewayResources.length))
+    errorLog.reset()
 
     resolve(groupBy(apiGatewayResources, 'region'))
   })

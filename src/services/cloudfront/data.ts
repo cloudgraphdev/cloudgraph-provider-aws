@@ -14,16 +14,14 @@ import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import {
-  generateAwsErrorLog,
-  initTestEndpoint,
-  settleAllPromises,
-} from '../../utils'
+import { initTestEndpoint, settleAllPromises } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { globalRegionName } from '../../enums/regions'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'Cloudfront'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 export interface CloudfrontDistributionConfig {
@@ -52,8 +50,7 @@ const listCloudfrontDistributions = async (
         listDistOpts,
         (err: AWSError, data: ListDistributionsResult) => {
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'cloudfront:listDistributions',
               err,
             })
@@ -98,8 +95,7 @@ const getDistributionTags = async (
       },
       (err: AWSError, data: ListTagsForResourceResult) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'cloudfront:listTagsForResource',
             err,
           })
@@ -128,8 +124,7 @@ const getDistributionConfig = async (
       },
       (err: AWSError, data: GetDistributionConfigResult) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'cloudfront:getDistributionConfig',
             err,
           })
@@ -190,5 +185,7 @@ export default async ({
         })
     )
   )
+  errorLog.reset()
+
   return groupBy(cloudfrontData, 'region')
 }

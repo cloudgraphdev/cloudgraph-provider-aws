@@ -24,11 +24,8 @@ import { Config } from 'aws-sdk/lib/config'
 
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import {
-  initTestEndpoint,
-  generateAwsErrorLog,
-  setAwsRetryOptions,
-} from '../../utils'
+import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { globalRegionName } from '../../enums/regions'
 import { convertAwsTagsToTagMap, parseCSV } from '../../utils/format'
 import {
@@ -39,6 +36,7 @@ import {
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'IAM User'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({
   maxRetries: MAX_FAILED_AWS_REQUEST_RETRIES,
@@ -94,8 +92,7 @@ const tagsByUsername = async (
       { UserName },
       (err: AWSError, data: ListUserTagsResponse) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'iam:listUserTags',
             err,
           })
@@ -121,8 +118,7 @@ const groupsByUsername = async (
       { UserName },
       (err: AWSError, data: ListGroupsForUserResponse) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'iam:listGroupsForUser',
             err,
           })
@@ -150,8 +146,7 @@ const policiesByUsername = async (
       { UserName },
       (err: AWSError, data: ListUserPoliciesResponse) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'iam:listGroupsForUser',
             err,
           })
@@ -177,8 +172,7 @@ const managedPoliciesByUsername = async (
       { UserName },
       (err: AWSError, data: ListAttachedUserPoliciesResponse) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'iam:listAttachedUserPolicies',
             err,
           })
@@ -214,8 +208,7 @@ const accessKeyByUsername = async (
       },
       async (err, { AccessKeyMetadata }: ListAccessKeysResponse) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'iam:listAccessKeys',
             err,
           })
@@ -231,8 +224,7 @@ const accessKeyByUsername = async (
                   (err: AWSError, data: GetAccessKeyLastUsedResponse) => {
                     const { AccessKeyLastUsed: accessKeyLastUsed } = data || {}
                     if (err) {
-                      generateAwsErrorLog({
-                        serviceName,
+                      errorLog.generateAwsErrorLog({
                         functionName: 'iam:getAccessKeyLastUsed',
                         err,
                       })
@@ -275,8 +267,7 @@ export const listMFADevicesByUsername = async (
       },
       async (err: AWSError, data: ListMFADevicesResponse) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'iam:listMFADevices',
             err,
           })
@@ -317,8 +308,7 @@ export const listIamUsers = async (
         }
 
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'iam:listUsers',
             err,
           })
@@ -395,8 +385,7 @@ export const getCredentialReportData = async (
   new Promise(resolve => {
     iam.generateCredentialReport((err: AWSError) => {
       if (err) {
-        generateAwsErrorLog({
-          serviceName,
+        errorLog.generateAwsErrorLog({
           functionName: 'iam:generateCredentialReport',
           err,
         })
@@ -406,8 +395,7 @@ export const getCredentialReportData = async (
       iam.getCredentialReport(
         async (err: AWSError, data: GetCredentialReportResponse) => {
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'iam:getCredentialReport',
               err,
             })
@@ -487,6 +475,7 @@ export default async ({
       })
       .filter(Boolean)
 
+    errorLog.reset()
     logger.debug(lt.fetchedIamUsers(usersData.length))
 
     resolve(groupBy(usersData, 'region'))

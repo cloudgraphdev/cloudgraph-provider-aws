@@ -22,12 +22,13 @@ import groupBy from 'lodash/groupBy'
 import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-
-import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'DynamoDB'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsDynamoDbTable extends TableDescription {
@@ -72,8 +73,7 @@ const listTableNamesForRegion = async ({
         listTableNameOpts,
         (err: AWSError, listTablesOutput: ListTablesOutput) => {
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'dynamodb:listTables',
               err,
             })
@@ -116,8 +116,7 @@ const getTableDescription = async (
       { TableName: tableName },
       (err: AWSError, tableInfoOutput: DescribeTableOutput) => {
         if (err || !tableInfoOutput) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'dynamodb:describeTable',
             err,
           })
@@ -150,8 +149,7 @@ const getTableTags = async (
           (err: AWSError, data: ListTagsOfResourceOutput) => {
             const { Tags = [], NextToken: nextToken } = data || {}
             if (err) {
-              generateAwsErrorLog({
-                serviceName,
+              errorLog.generateAwsErrorLog({
                 functionName: 'dynamodb:listTagsOfResource',
                 err,
               })
@@ -185,8 +183,7 @@ const getTableTTLDescription = async (
       },
       (err: AWSError, data: DescribeTimeToLiveOutput) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'dynamodb:describeTimeToLive',
             err,
           })
@@ -210,8 +207,7 @@ const getTableBackupsDescription = async (
       },
       (err: AWSError, data: DescribeContinuousBackupsOutput) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'dynamodb:describeContinuousBackups',
             err,
           })
@@ -324,6 +320,7 @@ export default async ({
     })
     logger.debug(lt.gettingTableBackupInfo)
     await Promise.all(backupInfoPromises)
+    errorLog.reset()
 
     resolve(groupBy(tableData, 'region'))
   })

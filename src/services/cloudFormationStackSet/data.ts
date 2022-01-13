@@ -6,10 +6,12 @@ import { Config } from 'aws-sdk/lib/config'
 import { groupBy, isEmpty } from 'lodash'
 
 import { TagMap } from '../../types'
-import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const serviceName = 'CloudFormationStackSet'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 /**
@@ -39,8 +41,7 @@ const listStackSets = async (
 
     return fullStackSets
   } catch (err) {
-    generateAwsErrorLog({
-      serviceName,
+    errorLog.generateAwsErrorLog({
       functionName: 'CloudFormationStackSet:listStackSets',
       err,
     })
@@ -56,8 +57,7 @@ const describeStackSet = async (
     const stackSetData = await cf.describeStackSet({ StackSetName }).promise()
     return stackSetData.StackSet
   } catch (err) {
-    generateAwsErrorLog({
-      serviceName,
+    errorLog.generateAwsErrorLog({
       functionName: 'CloudFormationStackSet:describeStackSet',
       err,
     })
@@ -97,6 +97,7 @@ export default async ({
       )
     }
   }
+  errorLog.reset()
 
   return groupBy(cfStackSetData, 'region')
 }

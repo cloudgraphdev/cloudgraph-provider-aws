@@ -11,11 +11,13 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'SES'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 /**
@@ -53,8 +55,7 @@ export default async ({
             }
 
             if (err) {
-              generateAwsErrorLog({
-                serviceName,
+              errorLog.generateAwsErrorLog({
                 functionName: 'ses:listIdentities',
                 err,
               })
@@ -83,8 +84,7 @@ export default async ({
                     }: GetIdentityVerificationAttributesResponse
                   ) => {
                     if (err) {
-                      generateAwsErrorLog({
-                        serviceName,
+                      errorLog.generateAwsErrorLog({
                         functionName: 'ses:getIdentityVerificationAttributes',
                         err,
                       })
@@ -116,6 +116,7 @@ export default async ({
     await Promise.all(regionPromises)
 
     await Promise.all(identityVerificationPromises)
+    errorLog.reset()
 
     resolve(groupBy(sesData, 'region'))
   })

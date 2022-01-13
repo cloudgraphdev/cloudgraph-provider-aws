@@ -6,11 +6,13 @@ import { DeliveryStreamDescription } from 'aws-sdk/clients/firehose'
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'ASG'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsKinesisFirehose extends DeliveryStreamDescription {
@@ -44,8 +46,7 @@ const listDeliveryStreamData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog({
-      serviceName,
+    errorLog.generateAwsErrorLog({
       functionName: 'kinesisFirehose:describeDeliveryStream',
       err,
     })
@@ -75,8 +76,7 @@ const listTagsForDeliveryStream = async (
 
     return convertAwsTagsToTagMap(awsTags)
   } catch (err) {
-    generateAwsErrorLog({
-      serviceName,
+    errorLog.generateAwsErrorLog({
       functionName: 'kinesisFirehose:listTagsForDeliveryStream',
       err,
     })
@@ -112,6 +112,7 @@ export default async ({
       streamDescriptionsData.push(description)
     }
   }
+  errorLog.reset()
 
   return groupBy(streamDescriptionsData, 'region')
 }

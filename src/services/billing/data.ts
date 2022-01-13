@@ -9,7 +9,8 @@ import head from 'lodash/head'
 import get from 'lodash/get'
 import { regionMap } from '../../enums/regions'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { initTestEndpoint } from '../../utils'
 import {
   getDaysAgo,
   getFirstDayOfMonth,
@@ -20,6 +21,7 @@ import {
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'Billing'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 export const getRoundedAmount = (amount: string): number =>
@@ -68,8 +70,7 @@ const listAvailabeServices = ({
        * Error fetching the services list
        */
       if (err) {
-        generateAwsErrorLog({
-          serviceName,
+        errorLog.generateAwsErrorLog({
           functionName: 'ce:getDimensionsValues',
           err,
         })
@@ -144,8 +145,7 @@ export default async ({
          * Error fetching the cost data
          */
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'ce:GetCostAndUsageReport',
             err,
           })
@@ -256,8 +256,7 @@ export default async ({
            * Error fetching the cost data
            */
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'ce:getCostAndUsageWithResources',
               err,
             })
@@ -426,6 +425,8 @@ export default async ({
       })
     }
     logger.debug(lt.doneFetchingAggregateFinOpsData(createDiffSecs(startDate)))
+    errorLog.reset()
+
     return { [region]: [results] }
   } catch (e) {
     logger.error(`There was an issue resolving data for ${serviceName}`)

@@ -14,11 +14,8 @@ import { AWSError } from 'aws-sdk/lib/error'
 
 import { TagMap, AwsTag } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import {
-  initTestEndpoint,
-  generateAwsErrorLog,
-  setAwsRetryOptions,
-} from '../../utils'
+import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import { CLOUDWATCH_CUSTOM_DELAY } from '../../config/constants'
 
@@ -29,6 +26,7 @@ const lt = { ...awsLoggerText }
 const MAX_ITEMS = 100
 const { logger } = CloudGraph
 const serviceName = 'Cloudwatch'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({
   baseDelay: CLOUDWATCH_CUSTOM_DELAY,
@@ -61,8 +59,7 @@ const listMetricAlarmsForRegion = async ({
             const { NextToken: nextToken, MetricAlarms: metricAlarms } =
               data || {}
             if (err) {
-              generateAwsErrorLog({
-                serviceName,
+              errorLog.generateAwsErrorLog({
                 functionName: 'cloudwatch:describeAlarms',
                 err,
               })
@@ -98,8 +95,7 @@ const getResourceTags = async (cloudwatch: CloudWatch, arn: string) =>
         { ResourceARN: arn },
         (err: AWSError, data: ListTagsForResourceOutput) => {
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'cloudwatch:listTagsForResource',
               err,
             })
@@ -172,6 +168,7 @@ export default async ({
 
     logger.debug(lt.gettingCloudwatchAlarmTags)
     await Promise.all(tagsPromises)
+    errorLog.reset()
 
     resolve(groupBy(cloudwatchData, 'region'))
   })

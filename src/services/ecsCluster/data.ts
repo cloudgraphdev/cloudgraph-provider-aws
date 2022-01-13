@@ -11,11 +11,13 @@ import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'ECS cluster'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsEcsCluster extends Omit<Cluster, 'Tags'> {
@@ -59,8 +61,7 @@ export default async ({
         args,
         (err: AWSError, data: ListClustersResponse) => {
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'ecs:listClusters',
               err,
             })
@@ -131,8 +132,7 @@ export default async ({
             { clusters },
             (err, data) => {
               if (err) {
-                generateAwsErrorLog({
-                  serviceName,
+                errorLog.generateAwsErrorLog({
                   functionName: 'ecs:describeClusters',
                   err,
                 })
@@ -161,6 +161,7 @@ export default async ({
     )
 
     await Promise.all(clusterPromises)
+    errorLog.reset()
 
     resolve(groupBy(ecsClusterData, 'region'))
   })

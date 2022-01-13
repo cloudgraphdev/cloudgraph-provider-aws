@@ -10,11 +10,8 @@ import IAM, {
 import { Config } from 'aws-sdk/lib/config'
 
 import awsLoggerText from '../../properties/logger'
-import {
-  initTestEndpoint,
-  generateAwsErrorLog,
-  setAwsRetryOptions,
-} from '../../utils'
+import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { globalRegionName } from '../../enums/regions'
 
 import {
@@ -25,6 +22,7 @@ import {
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'IAM OpenId Connect Provider'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({
   maxRetries: MAX_FAILED_AWS_REQUEST_RETRIES,
@@ -38,8 +36,7 @@ export const listOpenIdConnectProviders = async (
     iam.listOpenIDConnectProviders(
       async (err: AWSError, data: ListOpenIDConnectProvidersResponse) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'iam:listOpenIDConnectProviders',
             err,
           })
@@ -80,6 +77,7 @@ export default async ({
     // Fetch IAM Open Id Connect Providers
     const openIdConnectProviders = await listOpenIdConnectProviders(client)
 
+    errorLog.reset()
     logger.debug(lt.foundOpenIdProviders(openIdConnectProviders.length))
 
     resolve({ [globalRegionName]: openIdConnectProviders })

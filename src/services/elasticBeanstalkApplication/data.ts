@@ -11,11 +11,13 @@ import { AwsTag, Credentials, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import { settleAllPromises } from '../../utils/index'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'ElasticBeanstalkApp'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsElasticBeanstalkApp extends ApplicationDescription {
@@ -30,8 +32,7 @@ const listApplications = async (
       {},
       (err: AWSError, data: ApplicationDescriptionsMessage) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'elasticBeanstalk:describeApplications',
             err,
           })
@@ -62,8 +63,7 @@ export const getResourceTags = async (
       },
       (err: AWSError, data: ResourceTagsDescriptionMessage) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'elasticBeanstalk:listTagsForResource',
             err,
           })
@@ -122,6 +122,7 @@ export default async ({
         })
       })
     )
+    errorLog.reset()
     logger.debug(lt.fetchedElasticBeanstalkApps(numberOfApps))
     resolve(output)
   })

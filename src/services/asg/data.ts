@@ -9,16 +9,14 @@ import CloudGraph from '@cloudgraph/sdk'
 
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import {
-  initTestEndpoint,
-  generateAwsErrorLog,
-  setAwsRetryOptions,
-} from '../../utils'
+import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { ASG_CUSTOM_DELAY } from '../../config/constants'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'ASG'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({ baseDelay: ASG_CUSTOM_DELAY })
 
@@ -50,8 +48,7 @@ const listAsgData = async (asg: ASG): Promise<AutoScalingGroup[]> => {
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog({
-      serviceName,
+    errorLog.generateAwsErrorLog({
       functionName: 'asg:describeAutoScalingGroups',
       err,
     })
@@ -83,8 +80,7 @@ const listLaunchConfigData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog({
-      serviceName,
+    errorLog.generateAwsErrorLog({
       functionName: 'asg:describeLaunchConfiguration',
       err,
     })
@@ -146,6 +142,7 @@ export default async ({
         .reduce((acc, curr) => ({ ...acc, ...curr }), {})
     }
   })
+  errorLog.reset()
 
   return groupBy(asgData, 'region')
 }

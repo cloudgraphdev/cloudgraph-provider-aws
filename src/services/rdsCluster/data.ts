@@ -12,11 +12,13 @@ import { Config } from 'aws-sdk/lib/config'
 import awsLoggerText from '../../properties/logger'
 import { TagMap, AwsTag } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'RDS DB cluster'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 const listClustersForRegion = async rds =>
@@ -33,8 +35,7 @@ const listClustersForRegion = async rds =>
           (err: AWSError, data: DBClusterMessage) => {
             const { Marker, DBClusters = [] } = data || {}
             if (err) {
-              generateAwsErrorLog({
-                serviceName,
+              errorLog.generateAwsErrorLog({
                 functionName: 'rds:describeDBClusters',
                 err,
               })
@@ -63,8 +64,7 @@ const getResourceTags = async (rds: RDS, arn: string): Promise<TagMap> =>
         { ResourceName: arn },
         (err: AWSError, data: TagListMessage) => {
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'rds:listTagsForResource',
               err,
             })
@@ -129,6 +129,7 @@ export default async ({
     })
 
     await Promise.all(tagsPromises)
+    errorLog.reset()
 
     resolve(groupBy(rdsData, 'region'))
   })

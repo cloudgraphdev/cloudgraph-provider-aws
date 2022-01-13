@@ -13,12 +13,14 @@ import { Config } from 'aws-sdk/lib/config'
 import { AWSError } from 'aws-sdk/lib/error'
 import { AwsTag, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'TransitGateway'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 const listTransitGatewaysData = async ({
@@ -43,8 +45,7 @@ const listTransitGatewaysData = async ({
       args,
       (err: AWSError, data: DescribeTransitGatewaysResult) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'ec2:describeTransitGateways',
             err,
           })
@@ -117,6 +118,7 @@ export default async ({
     })
 
     await Promise.all(regionPromises)
+    errorLog.reset()
 
     resolve(groupBy(transitGatewaysResult, 'region'))
   })

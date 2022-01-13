@@ -6,12 +6,14 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
 import { convertAwsTagsToTagMap } from '../../utils/format'
+import AwsErrorLog from '../../utils/errorLog'
 import { AwsTag, TagMap } from '../../types'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'Redshift'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 /**
@@ -39,8 +41,7 @@ export default async ({
           {},
           (err: AWSError, data: ClustersMessage) => {
             if (err) {
-              generateAwsErrorLog({
-                serviceName,
+              errorLog.generateAwsErrorLog({
                 functionName: 'redshift:describeClusters',
                 err,
               })
@@ -73,6 +74,7 @@ export default async ({
     })
 
     await Promise.all(regionPromises)
+    errorLog.reset()
 
     resolve(groupBy(rsData, 'region'))
   })

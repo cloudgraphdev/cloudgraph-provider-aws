@@ -11,7 +11,8 @@ import { AWSError } from 'aws-sdk/lib/error'
 import { Config } from 'aws-sdk/lib/config'
 
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 /**
  * Network Interface
@@ -25,6 +26,7 @@ export interface RawNetworkInterface extends Omit<NetworkInterface, 'TagSet'> {
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'Network Interface'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 const listNetworkInterfaces = async ({
@@ -50,8 +52,7 @@ const listNetworkInterfaces = async ({
     args,
     (err: AWSError, data: DescribeNetworkInterfacesResult) => {
       if (err) {
-        generateAwsErrorLog({
-          serviceName,
+        errorLog.generateAwsErrorLog({
           functionName: 'ec2:describeNetworkInterfaces',
           err,
         })
@@ -138,6 +139,7 @@ export default async ({
 
     logger.debug(lt.lookingForNetworkInterfaces)
     await Promise.all(regionPromises)
+    errorLog.reset()
 
     resolve(groupBy(networkInterfacesData, 'region'))
   })

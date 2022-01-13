@@ -14,11 +14,13 @@ import { Config } from 'aws-sdk/lib/config'
 import awsLoggerText from '../../properties/logger'
 import { TagMap, AwsTag } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'ElastiCache cluster'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 const getElasticacheClusters = async elastiCache =>
@@ -35,8 +37,7 @@ const getElasticacheClusters = async elastiCache =>
           (err: AWSError, data: CacheClusterMessage) => {
             const { Marker, CacheClusters = [] } = data || {}
             if (err) {
-              generateAwsErrorLog({
-                serviceName,
+              errorLog.generateAwsErrorLog({
                 functionName: 'elastiCache:describeCacheClusters',
                 err,
               })
@@ -68,8 +69,7 @@ const getResourceTags = async (
         { ResourceName: arn },
         (err: AWSError, data: TagListMessage) => {
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'elastiCache:listTagsForResource',
               err,
             })
@@ -101,8 +101,7 @@ const getCacheSubnetGroup = async ({
         args,
         (err: AWSError, data: CacheSubnetGroupMessage) => {
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'elastiCache:describeCacheSubnetGroups',
               err,
             })
@@ -209,5 +208,7 @@ export default async ({
     })
 
     await Promise.all(tagsPromises)
+    errorLog.reset()
+
     resolve(groupBy(elastiCacheData, 'region'))
   })

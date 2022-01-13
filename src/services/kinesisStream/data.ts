@@ -3,11 +3,13 @@ import Kinesis, { Shard, StreamDescription } from 'aws-sdk/clients/kinesis'
 import CloudGraph from '@cloudgraph/sdk'
 import { groupBy } from 'lodash'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'Kinesis'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsKinesisStream extends StreamDescription {
@@ -44,8 +46,7 @@ const listShards = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog({
-      serviceName,
+    errorLog.generateAwsErrorLog({
       functionName: 'kinesis:listShards',
       err,
     })
@@ -72,8 +73,7 @@ const listStreamsData = async (
     logger.debug(lt.fetchedKinesisStream(fullResources.length))
     return fullResources
   } catch (err) {
-    generateAwsErrorLog({
-      serviceName,
+    errorLog.generateAwsErrorLog({
       functionName: 'kinesis:describeStream',
       err,
     })
@@ -104,6 +104,7 @@ export default async ({
       }))
     )
   }
+  errorLog.reset()
 
   return groupBy(streamDescriptionsData, 'region')
 }

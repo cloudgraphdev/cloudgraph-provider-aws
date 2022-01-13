@@ -44,13 +44,15 @@ import S3, {
 import { TagMap } from '../../types'
 import t from '../../properties/translations'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
 import { gets3BucketId } from '../../utils/ids'
+import AwsErrorLog from '../../utils/errorLog'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'S3'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 // S3 Properties
@@ -376,8 +378,7 @@ const listBucketsForRegion = async (s3: S3, resolveRegion: () => void) =>
       }
 
       if (err) {
-        generateAwsErrorLog({
-          serviceName,
+        errorLog.generateAwsErrorLog({
           functionName: 's3:listBuckets',
           err,
         })
@@ -416,8 +417,7 @@ const listBucketObjects = async (s3: S3, name: BucketName) =>
         const { Contents = [], IsTruncated, NextContinuationToken } = data || {}
 
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 's3:listObjectsV2',
             err,
           })
@@ -567,6 +567,7 @@ export default async ({
       additionalInfoPromises.push(additionalInfoPromise)
     })
     await Promise.all(additionalInfoPromises)
+    errorLog.reset()
 
     resolve(groupBy(bucketData, 'region'))
   })

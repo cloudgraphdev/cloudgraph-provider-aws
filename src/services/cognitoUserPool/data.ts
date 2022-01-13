@@ -7,10 +7,12 @@ import { Config } from 'aws-sdk/lib/config'
 import CloudGraph from '@cloudgraph/sdk'
 import { groupBy } from 'lodash'
 import { TagMap } from '../../types'
-import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import awsLoggerText from '../../properties/logger'
 
 const serviceName = 'Cognito User Pool'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
@@ -53,8 +55,7 @@ const listUserPoolIds = async (
     }
     return fullResources
   } catch (err) {
-    generateAwsErrorLog({
-      serviceName,
+    errorLog.generateAwsErrorLog({
       functionName: 'cognitoUserPool:listUserPoolIds',
       err,
     })
@@ -80,8 +81,7 @@ const describeUserPool = async ({
     }
     return pool
   } catch (err) {
-    generateAwsErrorLog({
-      serviceName,
+    errorLog.generateAwsErrorLog({
       functionName: 'cognitoUserPool:describeUserPool',
       err,
     })
@@ -136,6 +136,7 @@ export default async ({
     cognitoData.push(...userPoolData)
   }
   logger.debug(lt.addingUserPools(cognitoData.length))
+  errorLog.reset()
 
   return groupBy(cognitoData, 'region')
 }

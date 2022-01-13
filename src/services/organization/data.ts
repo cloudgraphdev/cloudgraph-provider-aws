@@ -11,11 +11,13 @@ import { AWSError } from 'aws-sdk/lib/error'
 import { regionMap } from '../../enums/regions'
 
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'Organization'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 const DEFAULT_REGION = regionMap.usEast1
@@ -31,8 +33,7 @@ const getOrganizationData = async ({
     aws.describeOrganization(
       (err: AWSError, data: DescribeOrganizationResponse) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'aws:describeOrganization',
             err,
           })
@@ -78,6 +79,7 @@ export default async ({
         region: DEFAULT_REGION,
       })
     }
+    errorLog.reset()
 
     resolve(groupBy(organizationResult, 'region'))
   })

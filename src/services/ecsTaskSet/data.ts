@@ -1,7 +1,5 @@
 import { Config } from 'aws-sdk'
-import {
-  TaskSet,
-} from 'aws-sdk/clients/ecs'
+import { TaskSet } from 'aws-sdk/clients/ecs'
 import CloudGraph from '@cloudgraph/sdk'
 import flatMap from 'lodash/flatMap'
 import groupBy from 'lodash/groupBy'
@@ -32,9 +30,8 @@ export default async ({
     const ecsTaskSets: RawAwsEcsTaskSet[] = []
     let ecsServices: RawAwsEcsService[] = []
     const existingData: RawAwsEcsService[] =
-    flatMap(
-      rawData.find(({ name }) => name === services.ecsService)?.data
-    ) || []
+      flatMap(rawData.find(({ name }) => name === services.ecsService)?.data) ||
+      []
 
     if (isEmpty(existingData)) {
       const ecsServiceClass = new EcsServiceClass({ logger: CloudGraph.logger })
@@ -51,11 +48,13 @@ export default async ({
      */
     ecsServices.map(({ taskSets, region }) => {
       if (!isEmpty(taskSets)) {
-        ecsTaskSets.push(...taskSets.map(taskSet => ({
-          region,
-          ...taskSet,
-          Tags: convertAwsTagsToTagMap(taskSet.tags as AwsTag[]),
-        })))
+        ecsTaskSets.push(
+          ...taskSets.map(taskSet => ({
+            region,
+            ...taskSet,
+            Tags: convertAwsTagsToTagMap(taskSet.tags as AwsTag[]),
+          }))
+        )
       }
     })
 

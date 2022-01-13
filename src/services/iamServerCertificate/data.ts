@@ -10,11 +10,8 @@ import IAM, {
 import { Config } from 'aws-sdk/lib/config'
 
 import awsLoggerText from '../../properties/logger'
-import {
-  initTestEndpoint,
-  generateAwsErrorLog,
-  setAwsRetryOptions,
-} from '../../utils'
+import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { globalRegionName } from '../../enums/regions'
 
 import {
@@ -25,6 +22,7 @@ import {
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'IAM Global Information'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({
   maxRetries: MAX_FAILED_AWS_REQUEST_RETRIES,
@@ -44,8 +42,7 @@ export const listServerCertificates = async (
       },
       async (err: AWSError, data: ListServerCertificatesResponse) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'iam:listServerCertificates',
             err,
           })
@@ -94,6 +91,7 @@ export default async ({
     // Fetch IAM Server Certificates
     const serverCertificates = await listServerCertificates(client)
 
+    errorLog.reset()
     logger.debug(lt.foundServerCertificates(serverCertificates.length))
 
     resolve({ [globalRegionName]: serverCertificates })

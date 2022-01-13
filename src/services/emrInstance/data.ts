@@ -11,13 +11,15 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 import flatMap from 'lodash/flatMap'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { RawAwsEmrCluster, getEmrClusters } from '../emrCluster/data'
 import services from '../../enums/services'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'EMR instance'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 const getInstancesPerCluster = async (emr: EMR, clusterId: string) =>
@@ -32,8 +34,7 @@ const getInstancesPerCluster = async (emr: EMR, clusterId: string) =>
         listInstancesOpts,
         (err: AWSError, data: ListInstancesOutput) => {
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'emr:listInstances',
               err,
             })
@@ -143,6 +144,7 @@ export default async ({
 
     await Promise.all(emrInstancePromises)
 
+    errorLog.reset()
     logger.debug(lt.fetchedEmrClusterInstances(numOfInstances))
 
     resolve(groupBy(emrInstances, 'region'))

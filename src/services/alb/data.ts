@@ -25,11 +25,8 @@ import { TagMap } from '../../types'
 
 import awsLoggerText from '../../properties/logger'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import {
-  initTestEndpoint,
-  generateAwsErrorLog,
-  setAwsRetryOptions,
-} from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
 import { ALB_CUSTOM_DELAY } from '../../config/constants'
 
 const lt = { ...awsLoggerText }
@@ -38,6 +35,7 @@ const lt = { ...awsLoggerText }
  */
 const { logger } = CloudGraph
 const serviceName = 'ALB'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({ baseDelay: ALB_CUSTOM_DELAY })
 
@@ -90,8 +88,7 @@ export default async ({
 
       return elbv2.describeLoadBalancers(args, async (err, data) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'elbv2:describeLoadBalancers',
             err,
           })
@@ -186,8 +183,7 @@ export default async ({
     }): Promise<Request<DescribeTagsOutput, AWSError>> =>
       elbv2.describeTags({ ResourceArns }, async (err, data) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'elbv2:describeTags',
             err,
           })
@@ -272,8 +268,7 @@ export default async ({
         { LoadBalancerArn },
         async (err, data) => {
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'elbv2:describeLoadBalancerAttributes',
               err,
             })
@@ -366,8 +361,7 @@ export default async ({
 
       return elbv2.describeListeners(args, async (err, data) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'elbv2:describeListeners',
             err,
           })
@@ -471,8 +465,7 @@ export default async ({
 
       return elbv2.describeTargetGroups(args, async (err, data) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'elbv2:describeTargetGroups',
             err,
           })
@@ -568,8 +561,7 @@ export default async ({
     }): Promise<Request<DescribeTargetHealthOutput, AWSError>> =>
       elbv2.describeTargetHealth({ TargetGroupArn }, async (err, data) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'elbv2:describeTargetHealth',
             err,
           })
@@ -631,6 +623,7 @@ export default async ({
     })
 
     await Promise.all(targetHealthPromises)
+    errorLog.reset()
 
     resolve(groupBy(albData, 'region'))
   })

@@ -16,12 +16,14 @@ import CloudGraph from '@cloudgraph/sdk'
 import awsLoggerText from '../../properties/logger'
 
 import { TagMap } from '../../types'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const MAX_ITEMS = 50
 const { logger } = CloudGraph
 const serviceName = 'Lambda'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsLambdaFunction extends FunctionConfiguration {
@@ -51,8 +53,7 @@ const listFunctionsForRegion = async ({
           (err: AWSError, data: ListFunctionsResponse) => {
             const { NextMarker, Functions = [] } = data || {}
             if (err) {
-              generateAwsErrorLog({
-                serviceName,
+              errorLog.generateAwsErrorLog({
                 functionName: 'lambda:listFunctions',
                 err,
               })
@@ -96,8 +97,7 @@ const getFunctionConcurrency = async (
           const { ReservedConcurrentExecutions: reservedConcurrentExecutions } =
             data || {}
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'lambda:getFunctionConcurrency',
               err,
             })
@@ -117,8 +117,7 @@ const getResourceTags = async (lambda: Lambda, arn: string): Promise<TagMap> =>
         { Resource: arn },
         (err: AWSError, data: ListTagsResponse) => {
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'lambda:listTags',
               err,
             })
@@ -185,6 +184,7 @@ export default async ({
 
     logger.debug(lt.gettingLambdaTags)
     await Promise.all(tagsPromises)
+    errorLog.reset()
 
     resolve(groupBy(lambdaData, 'region'))
   })

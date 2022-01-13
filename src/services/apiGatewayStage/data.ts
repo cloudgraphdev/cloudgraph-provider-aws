@@ -16,11 +16,8 @@ import {
 } from '../../utils/generateArns'
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import {
-  initTestEndpoint,
-  generateAwsErrorLog,
-  setAwsRetryOptions,
-} from '../../utils'
+import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { API_GATEWAY_CUSTOM_DELAY } from '../../config/constants'
 import {
   getRestApisForRegion,
@@ -32,6 +29,7 @@ import services from '../../enums/services'
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'API Gateway Stage'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({
   baseDelay: API_GATEWAY_CUSTOM_DELAY,
@@ -54,8 +52,7 @@ const getStages = async ({ apiGw, restApiId }): Promise<ListOfStage> =>
         (err: AWSError, data: Stages) => {
           const { item = [] } = data || {}
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'apiGw:getStages',
               err,
             })
@@ -182,6 +179,7 @@ export default async ({
 
     logger.debug(lt.gettingApiGatewayStageTags)
     await Promise.all(tagsPromises)
+    errorLog.reset()
 
     resolve(groupBy(apiGatewayStages, 'region'))
   })

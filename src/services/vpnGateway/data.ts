@@ -10,11 +10,13 @@ import { convertAwsTagsToTagMap } from '../../utils/format'
 import { AwsTag, TagMap } from '../../types'
 
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'VpnGateway'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 const listVpnGatewaysData = async ({
@@ -32,8 +34,7 @@ const listVpnGatewaysData = async ({
       {},
       (err: AWSError, data: DescribeVpnGatewaysResult) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'ec2:describeVpnGateways',
             err,
           })
@@ -98,6 +99,7 @@ export default async ({
     })
 
     await Promise.all(regionPromises)
+    errorLog.reset()
 
     resolve(groupBy(vpnGatewaysResult, 'region'))
   })

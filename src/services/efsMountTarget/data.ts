@@ -10,13 +10,15 @@ import isEmpty from 'lodash/isEmpty'
 import flatMap from 'lodash/flatMap'
 import uniqBy from 'lodash/uniqBy'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import EfsClass from '../efs'
 import { RawAwsEfs } from '../efs/data'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'EFS mount target'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsEfsMountTarget extends MountTargetDescription {
@@ -53,8 +55,7 @@ export default async ({
             { FileSystemId: efs.FileSystemId },
             async (err: AWSError, data: DescribeMountTargetsResponse) => {
               if (err) {
-                generateAwsErrorLog({
-                  serviceName,
+                errorLog.generateAwsErrorLog({
                   functionName: 'efs:describeMountTargets',
                   err,
                 })
@@ -85,5 +86,7 @@ export default async ({
     })
 
     await Promise.all(regionPromises)
+    errorLog.reset()
+
     resolve(groupBy(uniqBy(efsMountTargets, 'MountTargetId'), 'region'))
   })

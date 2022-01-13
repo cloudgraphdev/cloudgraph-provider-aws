@@ -7,13 +7,15 @@ import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { initTestEndpoint } from '../../utils'
 import EcsClusterClass from '../ecsCluster'
 import { RawAwsEcsCluster } from '../ecsCluster/data'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'ECS container'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsEcsContainer extends ContainerInstance {
@@ -49,8 +51,7 @@ export default async ({
               { cluster },
               (err, data) => {
                 if (err) {
-                  generateAwsErrorLog({
-                    serviceName,
+                  errorLog.generateAwsErrorLog({
                     functionName: 'ecs:listContainerInstances',
                     err,
                   })
@@ -79,8 +80,7 @@ export default async ({
             { cluster, containerInstances },
             (err, data) => {
               if (err) {
-                generateAwsErrorLog({
-                  serviceName,
+                errorLog.generateAwsErrorLog({
                   functionName: 'ecs:describeContainerInstances',
                   err,
                 })
@@ -109,6 +109,7 @@ export default async ({
     )
 
     await Promise.all(ecsContainerPromises)
+    errorLog.reset()
 
     resolve(groupBy(ecsContainers, 'region'))
   })

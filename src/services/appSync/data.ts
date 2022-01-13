@@ -5,11 +5,13 @@ import { Config } from 'aws-sdk/lib/config'
 import { groupBy } from 'lodash'
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'AppSync'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsFunction extends AppSync.FunctionConfiguration {
@@ -49,8 +51,7 @@ const listGraphqlApiData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog({
-      serviceName,
+    errorLog.generateAwsErrorLog({
       functionName: 'AppSync:listGraphqlApiData',
       err,
     })
@@ -77,8 +78,7 @@ const listApiKeysData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog({
-      serviceName,
+    errorLog.generateAwsErrorLog({
       functionName: 'AppSync:listApiKeysData',
       err,
     })
@@ -107,8 +107,7 @@ const listDataSourcesData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog({
-      serviceName,
+    errorLog.generateAwsErrorLog({
       functionName: 'AppSync:listDataSourcesData',
       err,
     })
@@ -135,8 +134,7 @@ const listFunctionsData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog({
-      serviceName,
+    errorLog.generateAwsErrorLog({
       functionName: 'AppSync:listFunctionsData',
       err,
     })
@@ -168,8 +166,7 @@ const listResolversByFunction = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog({
-      serviceName,
+    errorLog.generateAwsErrorLog({
       functionName: 'AppSync:listResolversByFunction',
       err,
     })
@@ -196,8 +193,7 @@ const listTypesData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog({
-      serviceName,
+    errorLog.generateAwsErrorLog({
       functionName: 'AppSync:listTypesData',
       err,
     })
@@ -225,8 +221,7 @@ const listTypesResolverData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog({
-      serviceName,
+    errorLog.generateAwsErrorLog({
       functionName: 'AppSync:listTypesData',
       err,
     })
@@ -295,6 +290,7 @@ export default async ({
     }
   }
 
+  errorLog.reset()
   logger.debug(lt.doneFetchedAppSync)
 
   return groupBy(graphqlApiData, 'region')

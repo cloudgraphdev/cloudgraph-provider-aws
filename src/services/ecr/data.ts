@@ -14,11 +14,13 @@ import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'ECR'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const MAX_ITEMS = 1000
 
@@ -45,8 +47,7 @@ const listReposForRegion = async ({
           (err: AWSError, data: DescribeRepositoriesResponse) => {
             const { nextToken, repositories } = data || {}
             if (err) {
-              generateAwsErrorLog({
-                serviceName,
+              errorLog.generateAwsErrorLog({
                 functionName: 'ecr:describeRepositories',
                 err,
               })
@@ -83,8 +84,7 @@ const getResourceTags = async (ecr: ECR, arn: string): Promise<TagMap> =>
         { resourceArn: arn },
         (err: AWSError, data: ListTagsForResourceResponse) => {
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'ecr:listTagsForResource',
               err,
             })
@@ -150,6 +150,7 @@ export default async ({
 
     logger.debug(lt.gettingECRRepoTags)
     await Promise.all(tagsPromises)
+    errorLog.reset()
 
     resolve(groupBy(ecrData, 'region'))
   })

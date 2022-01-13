@@ -7,11 +7,13 @@ import { Config } from 'aws-sdk/lib/config'
 import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'SecretsManager'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 /**
@@ -39,8 +41,7 @@ export default async ({
           {},
           (err: AWSError, data) => {
             if (err) {
-              generateAwsErrorLog({
-                serviceName,
+              errorLog.generateAwsErrorLog({
                 functionName: 'sm:listSecrets',
                 err,
               })
@@ -74,6 +75,7 @@ export default async ({
     })
 
     await Promise.all(regionPromises)
+    errorLog.reset()
 
     resolve(groupBy(smData, 'region'))
   })

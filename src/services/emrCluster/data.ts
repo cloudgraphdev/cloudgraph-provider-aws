@@ -13,11 +13,13 @@ import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'EMR cluster'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 const getEmrClusterDescription = async (emr: EMR, clusterId: string) =>
@@ -26,8 +28,7 @@ const getEmrClusterDescription = async (emr: EMR, clusterId: string) =>
       { ClusterId: clusterId },
       (err: AWSError, data: DescribeClusterOutput) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'emr:describeCluster',
             err,
           })
@@ -58,8 +59,7 @@ export const getEmrClusters = async (emr: EMR, region: string) =>
             'TERMINATED_WITH_ERRORS',
           ]
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'emr:listClusters',
               err,
             })
@@ -157,6 +157,7 @@ export default async ({
     )
 
     await Promise.all(clusterPromises)
+    errorLog.reset()
 
     resolve(groupBy(clusterData, 'region'))
   })

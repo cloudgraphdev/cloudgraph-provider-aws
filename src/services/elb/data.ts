@@ -14,11 +14,13 @@ import ELB, {
 } from 'aws-sdk/clients/elb'
 
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'ELB'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 const getElbTags = async (
@@ -32,8 +34,7 @@ const getElbTags = async (
       },
       (err: AWSError, data: DescribeTagsOutput) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'elb:describeTags',
             err,
           })
@@ -62,8 +63,7 @@ const listElbData = async (
     elb.describeLoadBalancers(
       (err: AWSError, data: DescribeAccessPointsOutput) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'elb:describeLoadBalancers',
             err,
           })
@@ -97,8 +97,7 @@ const listElbAttributes = async (
       },
       (err: AWSError, data: DescribeLoadBalancerAttributesOutput) => {
         if (err) {
-          generateAwsErrorLog({
-            serviceName,
+          errorLog.generateAwsErrorLog({
             functionName: 'elb:describeLoadBalancerAttributes',
             err,
           })
@@ -196,6 +195,7 @@ export default async ({
 
     logger.debug(lt.fetchingEip)
     await Promise.all(regionPromises)
+    errorLog.reset()
 
     resolve(groupBy(elbData, 'region'))
   })

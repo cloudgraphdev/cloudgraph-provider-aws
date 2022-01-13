@@ -13,11 +13,13 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
 import { TagMap } from '../../types'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'EKS cluster'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const MAX_ITEMS = 100
 
@@ -36,8 +38,7 @@ const listClustersForRegion = async ({ eks, resolveRegion }) =>
           (err: AWSError, data: ListClustersResponse) => {
             const { nextToken, clusters = [] } = data || {}
             if (err) {
-              generateAwsErrorLog({
-                serviceName,
+              errorLog.generateAwsErrorLog({
                 functionName: 'eks:listClusters',
                 err,
               })
@@ -76,8 +77,7 @@ const describeCluster = async (eks: EKS, name: string): Promise<Cluster> =>
         descClusterOpts,
         (err: AWSError, data: DescribeClusterResponse) => {
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'eks:describeCluster',
               err,
             })
@@ -100,8 +100,7 @@ const getResourceTags = async (eks: EKS, arn: string): Promise<TagMap> =>
         { resourceArn: arn },
         (err: AWSError, data: ListTagsForResourceResponse) => {
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'eks:listTagsForResource',
               err,
             })
@@ -186,6 +185,7 @@ export default async ({
     })
 
     await Promise.all(tagsPromises)
+    errorLog.reset()
 
     resolve(groupBy(eksData, 'region'))
   })

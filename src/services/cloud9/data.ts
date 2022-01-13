@@ -18,11 +18,13 @@ import chunk from 'lodash/chunk'
 import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'Cloud9 environment'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const MAX_ITEMS = 25
 
@@ -40,8 +42,7 @@ const listEnvironmentsForRegion = async ({ cloud9, resolveRegion }) =>
           (err: AWSError, data: ListEnvironmentsResult) => {
             const { nextToken, environmentIds } = data || {}
             if (err) {
-              generateAwsErrorLog({
-                serviceName,
+              errorLog.generateAwsErrorLog({
                 functionName: 'cloud9:listEnvironments',
                 err,
               })
@@ -85,8 +86,7 @@ const getEnvironmentAttributes = async (
         descEnvironmentsOpts,
         (err: AWSError, data: DescribeEnvironmentsResult) => {
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'cloud9:describeEnvironments',
               err,
             })
@@ -109,8 +109,7 @@ const getEnvironmentTags = async (
         { ResourceARN: arn },
         (err: AWSError, data: ListTagsForResourceResponse) => {
           if (err) {
-            generateAwsErrorLog({
-              serviceName,
+            errorLog.generateAwsErrorLog({
               functionName: 'cloud9:listTagsForResource',
               err,
             })
@@ -216,6 +215,7 @@ export default async ({
 
     logger.debug(lt.gettingCloud9EnvironmentTags)
     await Promise.all(tagsPromises)
+    errorLog.reset()
 
     resolve(groupBy(cloud9Data, 'region'))
   })
