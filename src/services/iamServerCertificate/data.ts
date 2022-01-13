@@ -44,7 +44,11 @@ export const listServerCertificates = async (
       },
       async (err: AWSError, data: ListServerCertificatesResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listServerCertificates', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:listServerCertificates',
+            err,
+          })
         }
         if (!isEmpty(data)) {
           const {

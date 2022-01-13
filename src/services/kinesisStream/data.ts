@@ -2,7 +2,6 @@ import { Config } from 'aws-sdk/lib/config'
 import Kinesis, { Shard, StreamDescription } from 'aws-sdk/clients/kinesis'
 import CloudGraph from '@cloudgraph/sdk'
 import { groupBy } from 'lodash'
-import { Credentials } from '../../types'
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
@@ -45,7 +44,11 @@ const listShards = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'kinesis:listShards', err)
+    generateAwsErrorLog({
+      serviceName,
+      functionName: 'kinesis:listShards',
+      err,
+    })
   }
   return []
 }
@@ -69,7 +72,11 @@ const listStreamsData = async (
     logger.debug(lt.fetchedKinesisStream(fullResources.length))
     return fullResources
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'kinesis:describeStream', err)
+    generateAwsErrorLog({
+      serviceName,
+      functionName: 'kinesis:describeStream',
+      err,
+    })
   }
   return null
 }

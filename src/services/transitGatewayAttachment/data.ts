@@ -45,11 +45,11 @@ const listTransitGatewayAttachmentsData = async ({
       args,
       (err: AWSError, data: DescribeTransitGatewayAttachmentsResult) => {
         if (err) {
-          generateAwsErrorLog(
+          generateAwsErrorLog({
             serviceName,
-            'ec2:describeTransitGatewayAttachments',
-            err
-          )
+            functionName: 'ec2:describeTransitGatewayAttachments',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -60,7 +60,11 @@ const listTransitGatewayAttachmentsData = async ({
 
           transitGatewayAttachmentList.push(...transitGatewayAttachments)
 
-          logger.debug(lt.fetchedTransitGatewayAttachments(transitGatewayAttachments.length))
+          logger.debug(
+            lt.fetchedTransitGatewayAttachments(
+              transitGatewayAttachments.length
+            )
+          )
 
           if (nextToken) {
             listTransitGatewayAttachmentsData({ ec2, region, nextToken })
@@ -85,8 +89,8 @@ const listTransitGatewayAttachmentsData = async ({
 
 export interface RawAwsTransitGatewayAttachment
   extends Omit<TransitGatewayAttachment, 'Tags'> {
-    region: string
-    Tags?: TagMap
+  region: string
+  Tags?: TagMap
 }
 
 export default async ({
@@ -106,10 +110,11 @@ export default async ({
 
       return new Promise<void>(async resolveTransitGatewayAttachmentData => {
         // Get Transit Gateway Attachment Data
-        const transitGatewayAttachments = await listTransitGatewayAttachmentsData({
-          ec2,
-          region,
-        })
+        const transitGatewayAttachments =
+          await listTransitGatewayAttachmentsData({
+            ec2,
+            region,
+          })
 
         if (!isEmpty(transitGatewayAttachments)) {
           for (const attachment of transitGatewayAttachments) {

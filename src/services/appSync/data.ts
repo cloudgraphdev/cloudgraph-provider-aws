@@ -49,7 +49,11 @@ const listGraphqlApiData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'AppSync:listGraphqlApiData', err)
+    generateAwsErrorLog({
+      serviceName,
+      functionName: 'AppSync:listGraphqlApiData',
+      err,
+    })
   }
   return []
 }
@@ -73,7 +77,11 @@ const listApiKeysData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'AppSync:listApiKeysData', err)
+    generateAwsErrorLog({
+      serviceName,
+      functionName: 'AppSync:listApiKeysData',
+      err,
+    })
   }
   return []
 }
@@ -99,7 +107,11 @@ const listDataSourcesData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'AppSync:listDataSourcesData', err)
+    generateAwsErrorLog({
+      serviceName,
+      functionName: 'AppSync:listDataSourcesData',
+      err,
+    })
   }
   return []
 }
@@ -123,7 +135,11 @@ const listFunctionsData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'AppSync:listFunctionsData', err)
+    generateAwsErrorLog({
+      serviceName,
+      functionName: 'AppSync:listFunctionsData',
+      err,
+    })
   }
   return []
 }
@@ -152,7 +168,11 @@ const listResolversByFunction = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'AppSync:listResolversByFunction', err)
+    generateAwsErrorLog({
+      serviceName,
+      functionName: 'AppSync:listResolversByFunction',
+      err,
+    })
   }
   return null
 }
@@ -176,7 +196,11 @@ const listTypesData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'AppSync:listTypesData', err)
+    generateAwsErrorLog({
+      serviceName,
+      functionName: 'AppSync:listTypesData',
+      err,
+    })
   }
   return []
 }
@@ -201,7 +225,11 @@ const listTypesResolverData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'AppSync:listTypesData', err)
+    generateAwsErrorLog({
+      serviceName,
+      functionName: 'AppSync:listTypesData',
+      err,
+    })
   }
   return []
 }

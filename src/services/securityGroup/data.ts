@@ -63,7 +63,11 @@ export default async ({
         args,
         (err: AWSError, data: DescribeSecurityGroupsResult) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'ec2:describeSecurityGroups', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'ec2:describeSecurityGroups',
+              err,
+            })
           }
 
           /**
@@ -101,7 +105,7 @@ export default async ({
             ...sgs.map(({ Tags, ...sg }) => ({
               ...sg,
               region,
-              Tags: convertAwsTagsToTagMap(Tags as AwsTag[])
+              Tags: convertAwsTagsToTagMap(Tags as AwsTag[]),
             }))
           )
 

@@ -56,7 +56,11 @@ export const getRestApisForRegion = async (
         apiGw.getRestApis(getRestApisOpts, (err: AWSError, data: RestApis) => {
           const { position, items = [] } = data || {}
           if (err) {
-            generateAwsErrorLog(serviceName, 'apiGw:getRestApis', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'apiGw:getRestApis',
+              err,
+            })
           }
 
           restApiList.push(...items)
@@ -85,7 +89,11 @@ export const getTags = async ({
     try {
       apiGw.getTags({ resourceArn: arn }, (err: AWSError, data: Tags) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'apiGw:getTags', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'apiGw:getTags',
+            err,
+          })
           resolve({})
         }
         const { tags = {} } = data || {}
@@ -111,12 +119,16 @@ const getAPIMappings = (
           if (isEmpty(data)) {
             resolveBasePathMapping({
               domainName,
-              restApiData: []
+              restApiData: [],
             })
           }
 
           if (err) {
-            generateAwsErrorLog(serviceName, 'apiGw:getBasePathMappings', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'apiGw:getBasePathMappings',
+              err,
+            })
           }
 
           const { items: restApiData = [] } = data || {}
@@ -142,7 +154,11 @@ export const getDomainNamesForRegion = async (
         getDomainNamesOpts,
         (err: AWSError, data: DomainNames) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'apiGw:getDomainNames', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'apiGw:getDomainNames',
+              err,
+            })
           }
 
           const { items = [] } = data || {}
@@ -237,6 +253,6 @@ export default async ({
 
     logger.debug(lt.gettingApiGatewayTags)
     await Promise.all(tagsPromises)
-    
+
     resolve(groupBy(apiGatewayData, 'region'))
   })

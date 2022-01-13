@@ -49,7 +49,11 @@ const policiesByGroupName = async (
       { GroupName },
       (err: AWSError, data: ListUserPoliciesResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listGroupPolicies', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:listGroupPolicies',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -72,7 +76,11 @@ const managedPoliciesByGroupName = async (
       { GroupName },
       (err: AWSError, data: ListAttachedGroupPoliciesResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listAttachedGroupPolicies', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:listAttachedGroupPolicies',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -102,7 +110,11 @@ export const listIamGroups = async (
       { Marker: marker },
       async (err: AWSError, data: ListGroupsResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listGroups', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:listGroups',
+            err,
+          })
         }
         if (!isEmpty(data)) {
           const { Groups: groups = [], IsTruncated, Marker } = data

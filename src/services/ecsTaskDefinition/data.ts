@@ -1,7 +1,5 @@
 import { Config } from 'aws-sdk'
-import ECS, {
-  TaskDefinition,
-} from 'aws-sdk/clients/ecs'
+import ECS, { TaskDefinition } from 'aws-sdk/clients/ecs'
 import CloudGraph from '@cloudgraph/sdk'
 import flatMap from 'lodash/flatMap'
 import groupBy from 'lodash/groupBy'
@@ -36,9 +34,8 @@ export default async ({
     const ecsTaskDefinitions: RawAwsEcsTaskDefinition[] = []
     let ecsServices: RawAwsEcsService[] = []
     const existingData: RawAwsEcsService[] =
-    flatMap(
-      rawData.find(({ name }) => name === services.ecsService)?.data
-    ) || []
+      flatMap(rawData.find(({ name }) => name === services.ecsService)?.data) ||
+      []
 
     if (isEmpty(existingData)) {
       const ecsServiceClass = new EcsServiceClass({ logger: CloudGraph.logger })
@@ -55,13 +52,17 @@ export default async ({
      * Get all of the containers for each instance arn
      */
     const ecsTaskDefinitionPromises = ecsServices.map(
-      async ({taskDefinition, region}) =>
+      async ({ taskDefinition, region }) =>
         new Promise<void>(resolveEcsData => {
           new ECS({ ...config, region, endpoint }).describeTaskDefinition(
             { taskDefinition },
             (err, data) => {
               if (err) {
-                generateAwsErrorLog(serviceName, 'ecs:describeTaskDefinition', err)
+                generateAwsErrorLog({
+                  serviceName,
+                  functionName: 'ecs:describeTaskDefinition',
+                  err,
+                })
               }
 
               if (isEmpty(data)) {
@@ -77,9 +78,9 @@ export default async ({
 
               resolveEcsData()
             }
-          )  
+          )
         })
-      )
+    )
 
     await Promise.all(ecsTaskDefinitionPromises)
     logger.debug(lt.fetchedEcsTaskDefinitions(ecsTaskDefinitions.length))

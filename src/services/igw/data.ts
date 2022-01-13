@@ -61,7 +61,11 @@ export default async ({
         args,
         (err: AWSError, data: DescribeInternetGatewaysResult) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'ec2:describeInternetGateways', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'ec2:describeInternetGateways',
+              err,
+            })
           }
 
           /**
@@ -99,7 +103,7 @@ export default async ({
             ...igws.map(({ Tags, ...igw }) => ({
               ...igw,
               region,
-              Tags: convertAwsTagsToTagMap(Tags as AwsTag[])
+              Tags: convertAwsTagsToTagMap(Tags as AwsTag[]),
             }))
           )
 

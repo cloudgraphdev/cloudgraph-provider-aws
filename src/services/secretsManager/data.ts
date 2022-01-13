@@ -1,6 +1,4 @@
-import SM, {
-  SecretListEntry
-} from 'aws-sdk/clients/secretsmanager'
+import SM, { SecretListEntry } from 'aws-sdk/clients/secretsmanager'
 import { AWSError } from 'aws-sdk/lib/error'
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
@@ -37,33 +35,40 @@ export default async ({
 
     regions.split(',').map(region => {
       const regionPromise = new Promise<void>(resolveSecretsManagerData => {
-        new SM({ ...config, region, endpoint }).listSecrets({}, (err: AWSError, data) => {
-          if (err) {
-            generateAwsErrorLog(serviceName, 'sm:listSecrets', err)
+        new SM({ ...config, region, endpoint }).listSecrets(
+          {},
+          (err: AWSError, data) => {
+            if (err) {
+              generateAwsErrorLog({
+                serviceName,
+                functionName: 'sm:listSecrets',
+                err,
+              })
+            }
+
+            if (isEmpty(data)) {
+              return resolveSecretsManagerData()
+            }
+
+            const { SecretList: secrets = [] } = data
+
+            if (isEmpty(secrets)) {
+              return resolveSecretsManagerData()
+            }
+
+            logger.debug(lt.fetchedSecretsManager(secrets.length))
+
+            smData.push(
+              ...secrets.map(({ Tags, ...secret }) => ({
+                ...secret,
+                region,
+                Tags: convertAwsTagsToTagMap(Tags as AwsTag[]),
+              }))
+            )
+
+            resolveSecretsManagerData()
           }
-
-          if (isEmpty(data)) {
-            return resolveSecretsManagerData()
-          }
-
-          const { SecretList: secrets = [] } = data
-
-          if (isEmpty(secrets)) {
-            return resolveSecretsManagerData()
-          }
-
-          logger.debug(lt.fetchedSecretsManager(secrets.length))
-
-          smData.push(
-            ...secrets.map(({Tags, ...secret}) => ({
-              ...secret,
-              region,
-              Tags: convertAwsTagsToTagMap(Tags as AwsTag[]),
-            }))
-          )
-
-          resolveSecretsManagerData()
-        })
+        )
       })
       regionPromises.push(regionPromise)
     })

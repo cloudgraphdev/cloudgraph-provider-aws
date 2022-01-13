@@ -42,7 +42,11 @@ const listFileSystems = async ({
         args,
         (err: AWSError, data: DescribeFileSystemsResponse) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'efs:describeFileSystems', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'efs:describeFileSystems',
+              err,
+            })
           }
 
           /**
@@ -120,17 +124,19 @@ export default async ({
       const regionPromise = new Promise<void>(async resolveRegion => {
         const efsList = await listFileSystems({ efs, region, resolveRegion })
         if (!isEmpty(efsList)) {
-          efsFileSystems.push(...efsList.map(efs => ({
-            ...efs,
-            region,
-            Tags: convertAwsTagsToTagMap(efs.Tags)
-          })))
+          efsFileSystems.push(
+            ...efsList.map(efs => ({
+              ...efs,
+              region,
+              Tags: convertAwsTagsToTagMap(efs.Tags),
+            }))
+          )
         }
         resolveRegion()
       })
       regionPromises.push(regionPromise)
     })
-  
+
     await Promise.all(regionPromises)
     resolve(groupBy(efsFileSystems, 'region'))
   })

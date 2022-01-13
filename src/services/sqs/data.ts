@@ -37,7 +37,7 @@ const listSqsQueueUrlsForRegion = async (sqs: SQS): Promise<string[]> => {
 
     return allQueueUrls
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'sqs:listQueues', err)
+    generateAwsErrorLog({ serviceName, functionName: 'sqs:listQueues', err })
   }
   return []
 }
@@ -55,7 +55,11 @@ const getQueueAttributes = async (
       .promise()
     return attributes?.Attributes ?? {}
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'sqs:getQueueAttributes', err)
+    generateAwsErrorLog({
+      serviceName,
+      functionName: 'sqs:getQueueAttributes',
+      err,
+    })
   }
   return null
 }
@@ -65,7 +69,7 @@ const getQueueTags = async (sqs: SQS, queueUrl: string): Promise<TagMap> => {
     const tags = await sqs.listQueueTags({ QueueUrl: queueUrl }).promise()
     return tags.Tags
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'sqs:listQueueTags', err)
+    generateAwsErrorLog({ serviceName, functionName: 'sqs:listQueueTags', err })
   }
   return null
 }

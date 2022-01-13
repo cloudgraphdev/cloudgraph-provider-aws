@@ -54,7 +54,11 @@ const tagsByRoleName = async (
       { RoleName },
       (err: AWSError, data: ListRoleTagsResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listRoleTags', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:listRoleTags',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -80,7 +84,11 @@ const policiesByRoleName = async (
       { RoleName },
       (err: AWSError, data: ListRolePoliciesResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listRolePolicies', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:listRolePolicies',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -103,7 +111,11 @@ const managedPoliciesByRoleName = async (
       { RoleName },
       (err: AWSError, data: ListAttachedRolePoliciesResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listAttachedRolePolicies', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:listAttachedRolePolicies',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -134,7 +146,11 @@ export const listIamRoles = async (
       { Marker: marker },
       async (err: AWSError, data: ListRolesResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listRoles', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:listRoles',
+            err,
+          })
         }
         if (!isEmpty(data)) {
           const { Roles: roles = [], IsTruncated, Marker } = data

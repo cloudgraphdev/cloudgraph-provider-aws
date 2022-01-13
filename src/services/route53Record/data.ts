@@ -67,7 +67,11 @@ const listRecordsForHostedZone = async ({
     args,
     async (err: AWSError, data: ListResourceRecordSetsResponse) => {
       if (err) {
-        generateAwsErrorLog(serviceName, 'route53:listResourceRecordSets', err)
+        generateAwsErrorLog({
+          serviceName,
+          functionName: 'route53:listResourceRecordSets',
+          err,
+        })
       }
 
       /**

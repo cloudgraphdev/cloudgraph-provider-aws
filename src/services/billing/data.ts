@@ -68,7 +68,11 @@ const listAvailabeServices = ({
        * Error fetching the services list
        */
       if (err) {
-        generateAwsErrorLog(serviceName, 'ce:getDimensionsValues', err)
+        generateAwsErrorLog({
+          serviceName,
+          functionName: 'ce:getDimensionsValues',
+          err,
+        })
         return resolveServices([])
       }
 
@@ -140,7 +144,11 @@ export default async ({
          * Error fetching the cost data
          */
         if (err) {
-          generateAwsErrorLog(serviceName, 'ce:GetCostAndUsageReport', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'ce:GetCostAndUsageReport',
+            err,
+          })
           return resolve()
         }
 
@@ -248,11 +256,11 @@ export default async ({
            * Error fetching the cost data
            */
           if (err) {
-            generateAwsErrorLog(
+            generateAwsErrorLog({
               serviceName,
-              'ce:getCostAndUsageWithResources',
-              err
-            )
+              functionName: 'ce:getCostAndUsageWithResources',
+              err,
+            })
             return resolve()
           }
 

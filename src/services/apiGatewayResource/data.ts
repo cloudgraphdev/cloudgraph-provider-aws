@@ -54,7 +54,11 @@ const getResources = async ({ apiGw, restApiId }): Promise<ListOfResource> =>
           (err: AWSError, data: Resources) => {
             const { position, items = [] } = data || {}
             if (err) {
-              generateAwsErrorLog(serviceName, 'apiGw:getResources', err)
+              generateAwsErrorLog({
+                serviceName,
+                functionName: 'apiGw:getResources',
+                err,
+              })
             }
             /**
              * No rest APIs for this region

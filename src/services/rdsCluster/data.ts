@@ -13,8 +13,9 @@ import awsLoggerText from '../../properties/logger'
 import { TagMap, AwsTag } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
+
 const lt = { ...awsLoggerText }
-const {logger} = CloudGraph
+const { logger } = CloudGraph
 const serviceName = 'RDS DB cluster'
 const endpoint = initTestEndpoint(serviceName)
 
@@ -32,7 +33,11 @@ const listClustersForRegion = async rds =>
           (err: AWSError, data: DBClusterMessage) => {
             const { Marker, DBClusters = [] } = data || {}
             if (err) {
-              generateAwsErrorLog(serviceName, 'rds:describeDBClusters', err)
+              generateAwsErrorLog({
+                serviceName,
+                functionName: 'rds:describeDBClusters',
+                err,
+              })
             }
 
             clusterList.push(...DBClusters)
@@ -58,7 +63,11 @@ const getResourceTags = async (rds: RDS, arn: string): Promise<TagMap> =>
         { ResourceName: arn },
         (err: AWSError, data: TagListMessage) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'rds:listTagsForResource', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'rds:listTagsForResource',
+              err,
+            })
             return resolve({})
           }
           const { TagList: tags = [] } = data || {}
@@ -70,57 +79,56 @@ const getResourceTags = async (rds: RDS, arn: string): Promise<TagMap> =>
     }
   })
 
-  export interface RawAwsRdsCluster extends DBCluster {
-    Tags?: TagMap
-    region: string
-  }
+export interface RawAwsRdsCluster extends DBCluster {
+  Tags?: TagMap
+  region: string
+}
 
-  export default async ({
-    regions,
-    config,
-  }: {
-    regions: string
-    config: Config
-  }): Promise<{ [property: string]: RawAwsRdsCluster[] }> =>
-    new Promise(async resolve => {
-      const rdsData: RawAwsRdsCluster[] = []
-      const regionPromises = []
-      const tagsPromises = []
-  
-      // Get all the clusters for the region
-      regions.split(',').map(region => {
-        const regionPromise = new Promise<void>(async resolveRegion => {
-          const rds = new RDS({ ...config, region, endpoint })
-          const clusters = await listClustersForRegion(rds)
+export default async ({
+  regions,
+  config,
+}: {
+  regions: string
+  config: Config
+}): Promise<{ [property: string]: RawAwsRdsCluster[] }> =>
+  new Promise(async resolve => {
+    const rdsData: RawAwsRdsCluster[] = []
+    const regionPromises = []
+    const tagsPromises = []
 
-          if (!isEmpty(clusters)) {
-            rdsData.push(
-              ...clusters.map(cluster => ({
-                ...cluster,
-                region,
-              }))
-            )
-          }
-          resolveRegion()
-        })
-        regionPromises.push(regionPromise)
-      })
-  
-      await Promise.all(regionPromises)
-      logger.debug(lt.fetchedRdsClusters(rdsData.length))
-  
-      // get all tags for each cluster
-      rdsData.map(({ DBClusterArn, region }, idx) => {
+    // Get all the clusters for the region
+    regions.split(',').map(region => {
+      const regionPromise = new Promise<void>(async resolveRegion => {
         const rds = new RDS({ ...config, region, endpoint })
-        const tagsPromise = new Promise<void>(async resolveTags => {
-          rdsData[idx].Tags = await getResourceTags(rds, DBClusterArn)
-          resolveTags()
-        })
-        tagsPromises.push(tagsPromise)
+        const clusters = await listClustersForRegion(rds)
+
+        if (!isEmpty(clusters)) {
+          rdsData.push(
+            ...clusters.map(cluster => ({
+              ...cluster,
+              region,
+            }))
+          )
+        }
+        resolveRegion()
       })
-  
-      await Promise.all(tagsPromises)
-  
-      resolve(groupBy(rdsData, 'region'))
+      regionPromises.push(regionPromise)
     })
-  
+
+    await Promise.all(regionPromises)
+    logger.debug(lt.fetchedRdsClusters(rdsData.length))
+
+    // get all tags for each cluster
+    rdsData.map(({ DBClusterArn, region }, idx) => {
+      const rds = new RDS({ ...config, region, endpoint })
+      const tagsPromise = new Promise<void>(async resolveTags => {
+        rdsData[idx].Tags = await getResourceTags(rds, DBClusterArn)
+        resolveTags()
+      })
+      tagsPromises.push(tagsPromise)
+    })
+
+    await Promise.all(tagsPromises)
+
+    resolve(groupBy(rdsData, 'region'))
+  })

@@ -29,7 +29,7 @@ export default async ({
 }: {
   regions: string
   config: Config
-}): Promise<{[region: string]: RawAwsEcsCluster[]}> =>
+}): Promise<{ [region: string]: RawAwsEcsCluster[] }> =>
   new Promise(async resolve => {
     /**
      * Get the arns of all the ECS Clusters
@@ -59,7 +59,11 @@ export default async ({
         args,
         (err: AWSError, data: ListClustersResponse) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'ecs:listClusters', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'ecs:listClusters',
+              err,
+            })
           }
 
           /**
@@ -113,45 +117,48 @@ export default async ({
       )
       regionPromises.push(regionPromise)
     })
-  
+
     await Promise.all(regionPromises)
-  
+
     /**
      * Get the details for each cluster
      */
-  
-    const clusterPromises = 
-      ecsClusterArns.map(
-        async ({ region, clusterArns: clusters }) =>
-          new Promise<void>(resolveEcsData =>
-            new ECS({ ...config, region, endpoint }).describeClusters(
-              { clusters },
-              (err, data) => {
-                if (err) {
-                  generateAwsErrorLog(serviceName, 'ecs:describeClusters', err)
-                }
 
-                if (isEmpty(data)) {
-                  return resolveEcsData()
-                }
-
-                const { clusters = [] } = data
-
-                logger.debug(lt.fetchedEcsClusters(clusters.length))
-
-                ecsClusterData.push(
-                  ...clusters.map(cluster => ({
-                    ...cluster,
-                    Tags: convertAwsTagsToTagMap(cluster.tags as AwsTag[]),
-                    region,
-                  }))
-                )
-
-                resolveEcsData()
+    const clusterPromises = ecsClusterArns.map(
+      async ({ region, clusterArns: clusters }) =>
+        new Promise<void>(resolveEcsData =>
+          new ECS({ ...config, region, endpoint }).describeClusters(
+            { clusters },
+            (err, data) => {
+              if (err) {
+                generateAwsErrorLog({
+                  serviceName,
+                  functionName: 'ecs:describeClusters',
+                  err,
+                })
               }
-            )
+
+              if (isEmpty(data)) {
+                return resolveEcsData()
+              }
+
+              const { clusters = [] } = data
+
+              logger.debug(lt.fetchedEcsClusters(clusters.length))
+
+              ecsClusterData.push(
+                ...clusters.map(cluster => ({
+                  ...cluster,
+                  Tags: convertAwsTagsToTagMap(cluster.tags as AwsTag[]),
+                  region,
+                }))
+              )
+
+              resolveEcsData()
+            }
           )
-      )
+        )
+    )
 
     await Promise.all(clusterPromises)
 

@@ -49,7 +49,11 @@ export const listHostedZones = async (
         listZonesOpts,
         async (err: AWSError, data: ListHostedZonesResponse) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'route53:listHostedZones', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'route53:listHostedZones',
+              err,
+            })
           }
 
           /**
@@ -106,7 +110,11 @@ export const getHostedZoneData = async (
           { Id },
           (err: AWSError, data: GetHostedZoneResponse) => {
             if (err) {
-              generateAwsErrorLog(serviceName, 'route53:getHostedZone', err)
+              generateAwsErrorLog({
+                serviceName,
+                functionName: 'route53:getHostedZone',
+                err,
+              })
             }
 
             /**

@@ -32,7 +32,11 @@ const listVpnGatewaysData = async ({
       {},
       (err: AWSError, data: DescribeVpnGatewaysResult) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'ec2:describeVpnGateways', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'ec2:describeVpnGateways',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {

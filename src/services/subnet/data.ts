@@ -64,7 +64,11 @@ export default ({
         args,
         (err: AWSError, data: DescribeSubnetsResult) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'ec2:describeSubnets', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'ec2:describeSubnets',
+              err,
+            })
           }
 
           /**

@@ -40,7 +40,11 @@ const listEnvironmentsForRegion = async ({ cloud9, resolveRegion }) =>
           (err: AWSError, data: ListEnvironmentsResult) => {
             const { nextToken, environmentIds } = data || {}
             if (err) {
-              generateAwsErrorLog(serviceName, 'cloud9:listEnvironments', err)
+              generateAwsErrorLog({
+                serviceName,
+                functionName: 'cloud9:listEnvironments',
+                err,
+              })
             }
             /**
              * No Cloud9 environments for this region
@@ -52,7 +56,9 @@ const listEnvironmentsForRegion = async ({ cloud9, resolveRegion }) =>
             environmentIdList.push(...environmentIds)
 
             if (nextToken) {
-              logger.debug(lt.foundMoreCloud9Environments(environmentIds.length))
+              logger.debug(
+                lt.foundMoreCloud9Environments(environmentIds.length)
+              )
               listAllEnvironments(nextToken)
             }
 
@@ -79,7 +85,11 @@ const getEnvironmentAttributes = async (
         descEnvironmentsOpts,
         (err: AWSError, data: DescribeEnvironmentsResult) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'cloud9:describeEnvironments', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'cloud9:describeEnvironments',
+              err,
+            })
           }
           resolve(data.environments)
         }
@@ -88,7 +98,7 @@ const getEnvironmentAttributes = async (
       resolve([])
     }
   })
-  
+
 const getEnvironmentTags = async (
   cloud9: Cloud9,
   arn: string
@@ -99,7 +109,11 @@ const getEnvironmentTags = async (
         { ResourceARN: arn },
         (err: AWSError, data: ListTagsForResourceResponse) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'cloud9:listTagsForResource', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'cloud9:listTagsForResource',
+              err,
+            })
             return resolve({})
           }
 
@@ -112,7 +126,8 @@ const getEnvironmentTags = async (
     }
   })
 
-export interface RawAwsCloud9Environment extends Omit<Environment, 'arn'|'ownerArn'|'type'> {
+export interface RawAwsCloud9Environment
+  extends Omit<Environment, 'arn' | 'ownerArn' | 'type'> {
   arn?: string
   ownerArn?: string
   region: string

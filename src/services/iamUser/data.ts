@@ -94,7 +94,11 @@ const tagsByUsername = async (
       { UserName },
       (err: AWSError, data: ListUserTagsResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listUserTags', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:listUserTags',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -117,7 +121,11 @@ const groupsByUsername = async (
       { UserName },
       (err: AWSError, data: ListGroupsForUserResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listGroupsForUser', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:listGroupsForUser',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -142,7 +150,11 @@ const policiesByUsername = async (
       { UserName },
       (err: AWSError, data: ListUserPoliciesResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listGroupsForUser', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:listGroupsForUser',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -165,7 +177,11 @@ const managedPoliciesByUsername = async (
       { UserName },
       (err: AWSError, data: ListAttachedUserPoliciesResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listAttachedUserPolicies', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:listAttachedUserPolicies',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -198,7 +214,11 @@ const accessKeyByUsername = async (
       },
       async (err, { AccessKeyMetadata }: ListAccessKeysResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listAccessKeys', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:listAccessKeys',
+            err,
+          })
         }
         if (!isEmpty(AccessKeyMetadata)) {
           AccessKeyMetadata.map(({ AccessKeyId, ...Metadata }) => {
@@ -211,11 +231,11 @@ const accessKeyByUsername = async (
                   (err: AWSError, data: GetAccessKeyLastUsedResponse) => {
                     const { AccessKeyLastUsed: accessKeyLastUsed } = data || {}
                     if (err) {
-                      generateAwsErrorLog(
+                      generateAwsErrorLog({
                         serviceName,
-                        'iam:getAccessKeyLastUsed',
-                        err
-                      )
+                        functionName: 'iam:getAccessKeyLastUsed',
+                        err,
+                      })
                     }
 
                     if (!isEmpty(accessKeyLastUsed)) {
@@ -255,7 +275,11 @@ export const listMFADevicesByUsername = async (
       },
       async (err: AWSError, data: ListMFADevicesResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listMFADevices', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:listMFADevices',
+            err,
+          })
         }
         if (!isEmpty(data)) {
           const { MFADevices = [] } = data
@@ -293,7 +317,11 @@ export const listIamUsers = async (
         }
 
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listUsers', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:listUsers',
+            err,
+          })
         }
 
         const { Users: users = [], IsTruncated, Marker } = data
@@ -367,14 +395,22 @@ export const getCredentialReportData = async (
   new Promise(resolve => {
     iam.generateCredentialReport((err: AWSError) => {
       if (err) {
-        generateAwsErrorLog(serviceName, 'iam:generateCredentialReport', err)
+        generateAwsErrorLog({
+          serviceName,
+          functionName: 'iam:generateCredentialReport',
+          err,
+        })
         return resolve([])
       }
 
       iam.getCredentialReport(
         async (err: AWSError, data: GetCredentialReportResponse) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'iam:getCredentialReport', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'iam:getCredentialReport',
+              err,
+            })
           }
           if (!isEmpty(data)) {
             const report = await parseCSV(data.Content.toString())

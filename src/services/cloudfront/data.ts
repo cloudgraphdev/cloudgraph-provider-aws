@@ -8,7 +8,7 @@ import Cloudfront, {
   ListDistributionsResult,
   ListTagsForResourceResult,
 } from 'aws-sdk/clients/cloudfront'
-import groupBy from 'lodash/groupBy';
+import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
 import awsLoggerText from '../../properties/logger'
@@ -52,15 +52,19 @@ const listCloudfrontDistributions = async (
         listDistOpts,
         (err: AWSError, data: ListDistributionsResult) => {
           if (err) {
-            generateAwsErrorLog(
+            generateAwsErrorLog({
               serviceName,
-              'cloudfront:listDistributions',
-              err
-            )
+              functionName: 'cloudfront:listDistributions',
+              err,
+            })
           }
 
           const {
-            DistributionList: { Items = [], NextMarker: nextToken = '', IsTruncated = false } = {},
+            DistributionList: {
+              Items = [],
+              NextMarker: nextToken = '',
+              IsTruncated = false,
+            } = {},
           } = data || {}
 
           /**
@@ -94,11 +98,11 @@ const getDistributionTags = async (
       },
       (err: AWSError, data: ListTagsForResourceResult) => {
         if (err) {
-          generateAwsErrorLog(
+          generateAwsErrorLog({
             serviceName,
-            'cloudfront:listTagsForResource',
-            err
-          )
+            functionName: 'cloudfront:listTagsForResource',
+            err,
+          })
         }
 
         const {
@@ -124,11 +128,11 @@ const getDistributionConfig = async (
       },
       (err: AWSError, data: GetDistributionConfigResult) => {
         if (err) {
-          generateAwsErrorLog(
+          generateAwsErrorLog({
             serviceName,
-            'cloudfront:getDistributionConfig',
-            err
-          )
+            functionName: 'cloudfront:getDistributionConfig',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -146,7 +150,7 @@ export default async ({
   config,
 }: {
   config: Config
-}): Promise<{[property: string]: RawAwsCloudfront[]}> => {
+}): Promise<{ [property: string]: RawAwsCloudfront[] }> => {
   const cloudfront = new Cloudfront({ ...config, endpoint })
   const distributionList: DistributionSummary[] =
     await listCloudfrontDistributions(cloudfront)
@@ -157,7 +161,7 @@ export default async ({
     numOfDistributions += distributionList.length
     cloudfrontData = distributionList.map(item => ({
       summary: item,
-      region: globalRegionName
+      region: globalRegionName,
     }))
   }
   logger.debug(lt.fetchedCloudFrontDistros(numOfDistributions))

@@ -50,7 +50,11 @@ const listAsgData = async (asg: ASG): Promise<AutoScalingGroup[]> => {
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'asg:describeAutoScalingGroups', err)
+    generateAwsErrorLog({
+      serviceName,
+      functionName: 'asg:describeAutoScalingGroups',
+      err,
+    })
   }
   return null
 }
@@ -79,7 +83,11 @@ const listLaunchConfigData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'asg:describeLaunchConfiguration', err)
+    generateAwsErrorLog({
+      serviceName,
+      functionName: 'asg:describeLaunchConfiguration',
+      err,
+    })
   }
   return null
 }

@@ -1,7 +1,5 @@
 import { Config } from 'aws-sdk'
-import ECS, {
-  Service,
-} from 'aws-sdk/clients/ecs'
+import ECS, { Service } from 'aws-sdk/clients/ecs'
 import CloudGraph from '@cloudgraph/sdk'
 import flatMap from 'lodash/flatMap'
 import groupBy from 'lodash/groupBy'
@@ -40,7 +38,7 @@ export default async ({
       regions,
     })
     const ecsClusters: RawAwsEcsCluster[] = flatMap(clusterResult)
-  
+
     /**
      * Get the arns of all the services
      */
@@ -52,7 +50,11 @@ export default async ({
               { cluster },
               (err, data) => {
                 if (err) {
-                  generateAwsErrorLog(serviceName, 'ecs:listServices', err)
+                  generateAwsErrorLog({
+                    serviceName,
+                    functionName: 'ecs:listServices',
+                    err,
+                  })
                 }
 
                 if (isEmpty(data)) {
@@ -66,14 +68,14 @@ export default async ({
             )
           )
       )
-    )  
+    )
     /**
      * Check to make sure each cluster has services before we search for them
      */
     ecsServiceArns = ecsServiceArns
       .flat()
       .filter(({ serviceArns }) => !isEmpty(serviceArns))
-  
+
     /**
      * Get all the details for each service
      */
@@ -84,7 +86,11 @@ export default async ({
             { services, cluster },
             (err, data) => {
               if (err) {
-                generateAwsErrorLog(serviceName, 'ecs:describeServices', err)
+                generateAwsErrorLog({
+                  serviceName,
+                  functionName: 'ecs:describeServices',
+                  err,
+                })
               }
 
               if (isEmpty(data)) {
@@ -95,19 +101,21 @@ export default async ({
 
               logger.debug(lt.fetchedEcsServices(services.length))
 
-              ecsServices.push(...services.map(service => ({
-                region,
-                ...service,
-                Tags: convertAwsTagsToTagMap(service.tags as AwsTag[]),
-              })))
+              ecsServices.push(
+                ...services.map(service => ({
+                  region,
+                  ...service,
+                  Tags: convertAwsTagsToTagMap(service.tags as AwsTag[]),
+                }))
+              )
 
               resolveEcsData()
             }
           )
         )
-      )
+    )
 
     await Promise.all(ecsServicePromises)
-  
+
     resolve(groupBy(ecsServices, 'region'))
   })

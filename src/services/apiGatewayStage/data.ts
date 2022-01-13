@@ -54,7 +54,11 @@ const getStages = async ({ apiGw, restApiId }): Promise<ListOfStage> =>
         (err: AWSError, data: Stages) => {
           const { item = [] } = data || {}
           if (err) {
-            generateAwsErrorLog(serviceName, 'apiGw:getStages', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'apiGw:getStages',
+              err,
+            })
           }
           resolve(item)
         }

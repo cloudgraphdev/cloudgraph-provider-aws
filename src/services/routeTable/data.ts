@@ -62,7 +62,11 @@ export default async ({
         args,
         (err: AWSError, data: DescribeRouteTablesResult) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'ec2:describeRouteTables', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'ec2:describeRouteTables',
+              err,
+            })
           }
 
           /**

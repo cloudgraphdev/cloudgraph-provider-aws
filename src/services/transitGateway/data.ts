@@ -43,7 +43,11 @@ const listTransitGatewaysData = async ({
       args,
       (err: AWSError, data: DescribeTransitGatewaysResult) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'ec2:describeTransitGateways', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'ec2:describeTransitGateways',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -75,7 +79,7 @@ const listTransitGatewaysData = async ({
  * Transit Gateway
  */
 export interface RawAwsTransitGateway extends Omit<TransitGateway, 'Tags'> {
-  region: string,
+  region: string
   Tags?: TagMap
 }
 

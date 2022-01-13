@@ -95,7 +95,11 @@ export default async ({
         args,
         (err: AWSError, data: DescribeInstancesResult) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'ec2:describeInstances', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'ec2:describeInstances',
+              err,
+            })
           }
 
           /**
@@ -169,7 +173,11 @@ export default async ({
           { KeyNames: [KeyName] },
           (err: AWSError, data: DescribeKeyPairsResult) => {
             if (err) {
-              generateAwsErrorLog(serviceName, 'ec2:describeKeyPairs', err)
+              generateAwsErrorLog({
+                serviceName,
+                functionName: 'ec2:describeKeyPairs',
+                err,
+              })
             }
             /**
              * No Key Pair data for this instance
@@ -233,11 +241,11 @@ export default async ({
               { InstanceId, Attribute: 'disableApiTermination' },
               (err: AWSError, data: InstanceAttribute) => {
                 if (err) {
-                  generateAwsErrorLog(
+                  generateAwsErrorLog({
                     serviceName,
-                    'ec2:desrcibeInstanceAttributes',
-                    err
-                  )
+                    functionName: 'ec2:desrcibeInstanceAttributes',
+                    err,
+                  })
                 }
 
                 /**
@@ -293,7 +301,11 @@ export default async ({
         args,
         (err: AWSError, data: DescribeTagsResult) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'ec2:describeTags', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'ec2:describeTags',
+              err,
+            })
           }
 
           /**
@@ -389,7 +401,11 @@ export default async ({
             { ImageIds: [ImageId] },
             (err: AWSError, data: DescribeImagesResult) => {
               if (err) {
-                generateAwsErrorLog(serviceName, 'ec2:describeImages', err)
+                generateAwsErrorLog({
+                  serviceName,
+                  functionName: 'ec2:describeImages',
+                  err,
+                })
               }
 
               /**
@@ -426,11 +442,11 @@ export default async ({
             data: DescribeIamInstanceProfileAssociationsResult
           ) => {
             if (err) {
-              generateAwsErrorLog(
+              generateAwsErrorLog({
                 serviceName,
-                'ec2:describeIamInstanceProfileAssociations',
-                err
-              )
+                functionName: 'ec2:describeIamInstanceProfileAssociations',
+                err,
+              })
             }
 
             const {
@@ -534,12 +550,13 @@ export default async ({
                   } else {
                     token = data.NextToken
                   }
-                } catch (e: any) {
-                  generateAwsErrorLog(
+                } catch (err: any) {
+                  generateAwsErrorLog({
                     serviceName,
-                    'cloudwatch:getMetricData',
-                    e
-                  )
+                    functionName: 'ec2:getMetricData',
+                    err,
+                    silenceLogs: true,
+                  })
                   resolveMetric()
                 }
               }

@@ -31,7 +31,11 @@ const getOrganizationData = async ({
     aws.describeOrganization(
       (err: AWSError, data: DescribeOrganizationResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'aws:describeOrganization', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'aws:describeOrganization',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {

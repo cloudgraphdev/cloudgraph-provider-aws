@@ -51,7 +51,11 @@ const listFunctionsForRegion = async ({
           (err: AWSError, data: ListFunctionsResponse) => {
             const { NextMarker, Functions = [] } = data || {}
             if (err) {
-              generateAwsErrorLog(serviceName, 'lambda:listFunctions', err)
+              generateAwsErrorLog({
+                serviceName,
+                functionName: 'lambda:listFunctions',
+                err,
+              })
             }
             /**
              * No Lambdas for this region
@@ -92,7 +96,11 @@ const getFunctionConcurrency = async (
           const { ReservedConcurrentExecutions: reservedConcurrentExecutions } =
             data || {}
           if (err) {
-            generateAwsErrorLog(serviceName, 'lambda:getFunctionConcurrency', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'lambda:getFunctionConcurrency',
+              err,
+            })
           }
           resolve(reservedConcurrentExecutions || -1)
         }
@@ -109,7 +117,11 @@ const getResourceTags = async (lambda: Lambda, arn: string): Promise<TagMap> =>
         { Resource: arn },
         (err: AWSError, data: ListTagsResponse) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'lambda:listTags', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'lambda:listTags',
+              err,
+            })
             resolve({})
           }
           const { Tags = {} } = data || {}

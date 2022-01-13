@@ -4,13 +4,13 @@ import SES, {
   GetIdentityVerificationAttributesResponse,
 } from 'aws-sdk/clients/ses'
 import { AWSError } from 'aws-sdk/lib/error'
+import { Config } from 'aws-sdk/lib/config'
 
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
 import awsLoggerText from '../../properties/logger'
-import { Config } from 'aws-sdk/lib/config'
 import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 
 const lt = { ...awsLoggerText }
@@ -53,7 +53,11 @@ export default async ({
             }
 
             if (err) {
-              generateAwsErrorLog(serviceName, 'ses:listIdentities', err)
+              generateAwsErrorLog({
+                serviceName,
+                functionName: 'ses:listIdentities',
+                err,
+              })
             }
 
             const { Identities }: { Identities: string[] } = data
@@ -79,11 +83,21 @@ export default async ({
                     }: GetIdentityVerificationAttributesResponse
                   ) => {
                     if (err) {
-                      generateAwsErrorLog(serviceName, 'ses:getIdentityVerificationAttributes', err)
+                      generateAwsErrorLog({
+                        serviceName,
+                        functionName: 'ses:getIdentityVerificationAttributes',
+                        err,
+                      })
                     }
 
                     if (!isEmpty(identities)) {
-                      sesData.push(...Identities.map(Identity => ({Identity, ...identities[Identity], region })))
+                      sesData.push(
+                        ...Identities.map(Identity => ({
+                          Identity,
+                          ...identities[Identity],
+                          region,
+                        }))
+                      )
                     }
 
                     resolveIdVer()

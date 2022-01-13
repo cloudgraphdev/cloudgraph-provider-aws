@@ -27,7 +27,10 @@ export interface RawAwsEcr extends Repository {
   Tags?: TagMap
 }
 
-const listReposForRegion = async ({ ecr, resolveRegion }): Promise<RepositoryList> =>
+const listReposForRegion = async ({
+  ecr,
+  resolveRegion,
+}): Promise<RepositoryList> =>
   new Promise<RepositoryList>(resolve => {
     const repositoryList: RepositoryList = []
     const descRepositoryOpts: DescribeRepositoriesRequest = {}
@@ -42,7 +45,11 @@ const listReposForRegion = async ({ ecr, resolveRegion }): Promise<RepositoryLis
           (err: AWSError, data: DescribeRepositoriesResponse) => {
             const { nextToken, repositories } = data || {}
             if (err) {
-              generateAwsErrorLog(serviceName, 'ecr:describeRepositories', err)
+              generateAwsErrorLog({
+                serviceName,
+                functionName: 'ecr:describeRepositories',
+                err,
+              })
             }
             /**
              * No repositories for this region
@@ -76,7 +83,11 @@ const getResourceTags = async (ecr: ECR, arn: string): Promise<TagMap> =>
         { resourceArn: arn },
         (err: AWSError, data: ListTagsForResourceResponse) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'ecr:listTagsForResource', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'ecr:listTagsForResource',
+              err,
+            })
             return resolve({})
           }
           const { tags = [] } = data || {}

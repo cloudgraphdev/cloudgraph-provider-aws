@@ -50,8 +50,12 @@ export default async ({
           nextTokenWatcher = false
         }
       }
-    } catch (e) {
-      generateAwsErrorLog(serviceName, 'EC2:describeFlowLogs', e)
+    } catch (err) {
+      generateAwsErrorLog({
+        serviceName,
+        functionName: 'EC2:describeFlowLogs',
+        err,
+      })
     }
   }
   return groupBy(flowLogsResult, 'region')

@@ -376,7 +376,11 @@ const listBucketsForRegion = async (s3: S3, resolveRegion: () => void) =>
       }
 
       if (err) {
-        generateAwsErrorLog(serviceName, 's3:listBuckets', err)
+        generateAwsErrorLog({
+          serviceName,
+          functionName: 's3:listBuckets',
+          err,
+        })
       }
 
       const { Buckets: buckets = [], Owner: ownerId } = data
@@ -412,7 +416,11 @@ const listBucketObjects = async (s3: S3, name: BucketName) =>
         const { Contents = [], IsTruncated, NextContinuationToken } = data || {}
 
         if (err) {
-          generateAwsErrorLog(serviceName, 's3:listObjectsV2', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 's3:listObjectsV2',
+            err,
+          })
         }
 
         contents.push(...Contents)

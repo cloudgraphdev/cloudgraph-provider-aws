@@ -43,7 +43,11 @@ export default async ({
           {},
           (err: AWSError, data: DescribeAddressesResult) => {
             if (err) {
-              generateAwsErrorLog(serviceName, 'ec2:describeAddresses', err)
+              generateAwsErrorLog({
+                serviceName,
+                functionName: 'ec2:describeAddresses',
+                err,
+              })
             }
 
             const { Addresses: addresses = [] } = data || {}

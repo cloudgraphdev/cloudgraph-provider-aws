@@ -1,4 +1,7 @@
-import CloudFormation, { StackSet, StackSetSummary } from 'aws-sdk/clients/cloudformation'
+import CloudFormation, {
+  StackSet,
+  StackSetSummary,
+} from 'aws-sdk/clients/cloudformation'
 import { Config } from 'aws-sdk/lib/config'
 import { groupBy, isEmpty } from 'lodash'
 
@@ -14,11 +17,13 @@ const endpoint = initTestEndpoint(serviceName)
  */
 
 export interface RawAwsCloudFormationStackSet extends Omit<StackSet, 'Tags'> {
-  Tags: TagMap,
-  region: string,
+  Tags: TagMap
+  region: string
 }
 
-const listStackSets = async (cf: CloudFormation): Promise<StackSetSummary[]> => {
+const listStackSets = async (
+  cf: CloudFormation
+): Promise<StackSetSummary[]> => {
   try {
     const fullStackSets: StackSetSummary[] = []
 
@@ -34,17 +39,28 @@ const listStackSets = async (cf: CloudFormation): Promise<StackSetSummary[]> => 
 
     return fullStackSets
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'CloudFormationStackSet:listStackSets', err)
+    generateAwsErrorLog({
+      serviceName,
+      functionName: 'CloudFormationStackSet:listStackSets',
+      err,
+    })
   }
   return []
 }
 
-const describeStackSet = async (cf: CloudFormation, StackSetName: string): Promise<StackSet> => {
+const describeStackSet = async (
+  cf: CloudFormation,
+  StackSetName: string
+): Promise<StackSet> => {
   try {
-    const stackSetData = await cf.describeStackSet({StackSetName}).promise()
+    const stackSetData = await cf.describeStackSet({ StackSetName }).promise()
     return stackSetData.StackSet
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'CloudFormationStackSet:describeStackSet', err)
+    generateAwsErrorLog({
+      serviceName,
+      functionName: 'CloudFormationStackSet:describeStackSet',
+      err,
+    })
   }
   return null
 }
@@ -63,8 +79,8 @@ export default async ({
   for (const region of regions.split(',')) {
     const cf = new CloudFormation({ ...config, region, endpoint })
 
-    const stackSets =  await listStackSets(cf)
-    
+    const stackSets = await listStackSets(cf)
+
     const describeStackSetPromises = []
     for (const stackSet of stackSets) {
       describeStackSetPromises.push(describeStackSet(cf, stackSet.StackSetName))

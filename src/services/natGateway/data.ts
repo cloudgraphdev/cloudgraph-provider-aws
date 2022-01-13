@@ -61,7 +61,11 @@ export default async ({
         args,
         (err: AWSError, data: DescribeNatGatewaysResult) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'ec2:describeNatGateways', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'ec2:describeNatGateways',
+              err,
+            })
           }
 
           /**

@@ -51,7 +51,11 @@ const getTrailArnData = async (
       .map(trail => trail.TrailARN)
     return trailNameList
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'cloudTrail:getTrailArnData', err)
+    generateAwsErrorLog({
+      serviceName,
+      functionName: 'cloudTrail:getTrailArnData',
+      err,
+    })
   }
   return []
 }
@@ -73,7 +77,11 @@ const listTrailData = async (
       .promise()
     return trailList
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'cloudTrail:listTrailData', err)
+    generateAwsErrorLog({
+      serviceName,
+      functionName: 'cloudTrail:listTrailData',
+      err,
+    })
   }
   return []
 }
@@ -101,7 +109,11 @@ const listTrailTagData = async (
         nextToken = resourceTags.NextToken
       }
     } catch (err) {
-      generateAwsErrorLog(serviceName, 'cloudTrail:listTrailTagData', err)
+      generateAwsErrorLog({
+        serviceName,
+        functionName: 'cloudTrail:listTrailTagData',
+        err,
+      })
     }
   }
   return resourceTagList
@@ -115,7 +127,11 @@ const getTrailStatus = async (
     const data = await cloudTrail.getTrailStatus({ Name }).promise()
     return data
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'cloudTrail:getTrailStatus', err)
+    generateAwsErrorLog({
+      serviceName,
+      functionName: 'cloudTrail:getTrailStatus',
+      err,
+    })
   }
   return null
 }
@@ -130,7 +146,11 @@ const getEventSelectors = async (
       .promise()
     return eventSelectors
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'cloudTrail:getEventSelectors', err)
+    generateAwsErrorLog({
+      serviceName,
+      functionName: 'cloudTrail:getEventSelectors',
+      err,
+    })
   }
   return []
 }
@@ -178,7 +198,11 @@ export default async ({
         }
       }
     } catch (err) {
-      generateAwsErrorLog(serviceName, 'cloudTrail:listTrail', err)
+      generateAwsErrorLog({
+        serviceName,
+        functionName: 'cloudTrail:listTrail',
+        err,
+      })
     }
   }
 

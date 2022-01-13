@@ -1,7 +1,4 @@
-import RS, {
-  Cluster,
-  ClustersMessage,
-} from 'aws-sdk/clients/redshift'
+import RS, { Cluster, ClustersMessage } from 'aws-sdk/clients/redshift'
 import { AWSError } from 'aws-sdk/lib/error'
 import { Config } from 'aws-sdk/lib/config'
 import CloudGraph from '@cloudgraph/sdk'
@@ -42,7 +39,11 @@ export default async ({
           {},
           (err: AWSError, data: ClustersMessage) => {
             if (err) {
-              generateAwsErrorLog(serviceName, 'redshift:describeClusters', err)
+              generateAwsErrorLog({
+                serviceName,
+                functionName: 'redshift:describeClusters',
+                err,
+              })
             }
 
             if (isEmpty(data)) {

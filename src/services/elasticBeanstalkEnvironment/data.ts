@@ -48,11 +48,11 @@ const listEnvironments = async (
           (err: AWSError, data: EnvironmentDescriptionsMessage) => {
             const { Environments = [], NextToken: nextToken } = data || {}
             if (err) {
-              generateAwsErrorLog(
+              generateAwsErrorLog({
                 serviceName,
-                'elasticBeanstalk:describeEnvironments',
-                err
-              )
+                functionName: 'elasticBeanstalk:describeEnvironments',
+                err,
+              })
             }
 
             environments.push(...Environments)
@@ -85,11 +85,11 @@ const getConfigSettingsForEnv = async (
       },
       (err: AWSError, data: ConfigurationSettingsDescriptions) => {
         if (err) {
-          generateAwsErrorLog(
+          generateAwsErrorLog({
             serviceName,
-            'elasticBeanstalk:describeConfigurationSettings',
-            err
-          )
+            functionName: 'elasticBeanstalk:describeConfigurationSettings',
+            err,
+          })
         }
         const { ConfigurationSettings: settings = [] } = data || {}
         resolve(settings)
@@ -108,11 +108,11 @@ const getResourcesForEnv = async (
       },
       (err: AWSError, data: EnvironmentResourceDescriptionsMessage) => {
         if (err) {
-          generateAwsErrorLog(
+          generateAwsErrorLog({
             serviceName,
-            'elasticBeanstalk:describeEnvironmentResources',
-            err
-          )
+            functionName: 'elasticBeanstalk:describeEnvironmentResources',
+            err,
+          })
         }
         const { EnvironmentResources: resources = {} } = data || {}
         resolve(resources)

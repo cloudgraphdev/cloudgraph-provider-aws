@@ -47,7 +47,11 @@ const listEbsVolumes = async ({
 
   ec2.describeVolumes(args, (err: AWSError, data: DescribeVolumesResult) => {
     if (err) {
-      generateAwsErrorLog(serviceName, 'ec2:describeVolumes', err)
+      generateAwsErrorLog({
+        serviceName,
+        functionName: 'ec2:describeVolumes',
+        err,
+      })
     }
 
     /**

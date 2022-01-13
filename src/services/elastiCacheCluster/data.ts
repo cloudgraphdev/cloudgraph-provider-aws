@@ -35,11 +35,11 @@ const getElasticacheClusters = async elastiCache =>
           (err: AWSError, data: CacheClusterMessage) => {
             const { Marker, CacheClusters = [] } = data || {}
             if (err) {
-              generateAwsErrorLog(
+              generateAwsErrorLog({
                 serviceName,
-                'elastiCache:describeCacheClusters',
-                err
-              )
+                functionName: 'elastiCache:describeCacheClusters',
+                err,
+              })
             }
 
             clusterList.push(...CacheClusters)
@@ -68,11 +68,11 @@ const getResourceTags = async (
         { ResourceName: arn },
         (err: AWSError, data: TagListMessage) => {
           if (err) {
-            generateAwsErrorLog(
+            generateAwsErrorLog({
               serviceName,
-              'elastiCache:listTagsForResource',
-              err
-            )
+              functionName: 'elastiCache:listTagsForResource',
+              err,
+            })
             return resolve({})
           }
           const { TagList: tags = [] } = data || {}
@@ -101,11 +101,11 @@ const getCacheSubnetGroup = async ({
         args,
         (err: AWSError, data: CacheSubnetGroupMessage) => {
           if (err) {
-            generateAwsErrorLog(
+            generateAwsErrorLog({
               serviceName,
-              'elastiCache:describeCacheSubnetGroups',
-              err
-            )
+              functionName: 'elastiCache:describeCacheSubnetGroups',
+              err,
+            })
           }
 
           /**
@@ -116,7 +116,10 @@ const getCacheSubnetGroup = async ({
           }
 
           const { CacheSubnetGroups: cacheSubnetGroups } = data || {}
-          const result = cacheSubnetGroups && cacheSubnetGroups?.length > 0 ? cacheSubnetGroups[0] : {}
+          const result =
+            cacheSubnetGroups && cacheSubnetGroups?.length > 0
+              ? cacheSubnetGroups[0]
+              : {}
           resolve(result)
         }
       )

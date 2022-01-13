@@ -13,8 +13,9 @@ import awsLoggerText from '../../properties/logger'
 import { TagMap, AwsTag } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
+
 const lt = { ...awsLoggerText }
-const {logger} = CloudGraph
+const { logger } = CloudGraph
 const serviceName = 'ElastiCache replication group'
 const endpoint = initTestEndpoint(serviceName)
 
@@ -32,7 +33,11 @@ const getElasticacheReplicationGroups = async elastiCache =>
           (err: AWSError, data: ReplicationGroupMessage) => {
             const { Marker, ReplicationGroups = [] } = data || {}
             if (err) {
-              generateAwsErrorLog(serviceName, 'elastiCache:describeReplicationGroups', err)
+              generateAwsErrorLog({
+                serviceName,
+                functionName: 'elastiCache:describeReplicationGroups',
+                err,
+              })
             }
 
             groupList.push(...ReplicationGroups)
@@ -51,14 +56,21 @@ const getElasticacheReplicationGroups = async elastiCache =>
     listAllGroups()
   })
 
-const getResourceTags = async (elastiCache: Elasticache, arn: string): Promise<TagMap> =>
+const getResourceTags = async (
+  elastiCache: Elasticache,
+  arn: string
+): Promise<TagMap> =>
   new Promise(resolve => {
     try {
       elastiCache.listTagsForResource(
         { ResourceName: arn },
         (err: AWSError, data: TagListMessage) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'elastiCache:listTagsForResource', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'elastiCache:listTagsForResource',
+              err,
+            })
             return resolve({})
           }
           const { TagList: tags = [] } = data || {}

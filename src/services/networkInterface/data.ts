@@ -50,7 +50,11 @@ const listNetworkInterfaces = async ({
     args,
     (err: AWSError, data: DescribeNetworkInterfacesResult) => {
       if (err) {
-        generateAwsErrorLog(serviceName, 'ec2:describeNetworkInterfaces', err)
+        generateAwsErrorLog({
+          serviceName,
+          functionName: 'ec2:describeNetworkInterfaces',
+          err,
+        })
       }
 
       /**

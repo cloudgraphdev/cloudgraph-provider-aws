@@ -47,11 +47,11 @@ const listLogGroupsForRegion = async ({
           args,
           (err: AWSError, data: DescribeLogGroupsResponse) => {
             if (err) {
-              generateAwsErrorLog(
+              generateAwsErrorLog({
                 serviceName,
-                'cloudwatch:describeLogGroups',
-                err
-              )
+                functionName: 'cloudwatch:describeLogGroups',
+                err,
+              })
             }
 
             /**
@@ -107,11 +107,11 @@ const listLogGroupMetricFilters = async ({
           (err: AWSError, data: DescribeMetricFiltersResponse) => {
             const { nextToken, metricFilters } = data || {}
             if (err) {
-              generateAwsErrorLog(
+              generateAwsErrorLog({
                 serviceName,
-                'cloudwatch:describeMetricFilters',
-                err
-              )
+                functionName: 'cloudwatch:describeMetricFilters',
+                err,
+              })
             }
 
             /**
@@ -124,7 +124,9 @@ const listLogGroupMetricFilters = async ({
             metricFiltersList.push(...metricFilters)
 
             if (nextToken) {
-              logger.debug(lt.foundMoreCloudwatchMetricFilters(metricFilters.length))
+              logger.debug(
+                lt.foundMoreCloudwatchMetricFilters(metricFilters.length)
+              )
               listAllLogMetricFilters(nextToken)
             }
 

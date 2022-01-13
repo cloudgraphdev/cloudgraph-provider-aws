@@ -38,7 +38,11 @@ export const listSAMLProviders = async (
     iam.listSAMLProviders(
       async (err: AWSError, data: ListSAMLProvidersResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listSAMLProviders', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:listSAMLProviders',
+            err,
+          })
         }
         if (!isEmpty(data)) {
           const { SAMLProviderList = [] } = data

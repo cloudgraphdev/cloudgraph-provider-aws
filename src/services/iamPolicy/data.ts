@@ -29,7 +29,6 @@ import {
 } from '../../config/constants'
 import MessageInterval from '../../utils/messageInterval'
 
-
 const MAX_ITEMS = 1000
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
@@ -55,7 +54,11 @@ const tagsByPolicyArn = async (
       { PolicyArn: Arn },
       (err: AWSError, data: ListPolicyTagsResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listPolicyTags', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:listPolicyTags',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -80,7 +83,11 @@ const policyVersionByPolicyArn = async (
       { PolicyArn: Arn, VersionId: DefaultVersionId },
       (err: AWSError, data: GetPolicyVersionResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:getPolicyVersion', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:getPolicyVersion',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -121,7 +128,11 @@ export const listIamPolicies = async ({
       },
       async (err: AWSError, data: ListPoliciesResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listPolicies', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:listPolicies',
+            err,
+          })
         }
         if (!isEmpty(data)) {
           const { Policies: policies = [], IsTruncated, Marker } = data

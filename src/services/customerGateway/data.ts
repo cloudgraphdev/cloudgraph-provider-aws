@@ -35,7 +35,11 @@ const listCustomerGatewaysData = async ({
       {},
       (err: AWSError, data: DescribeCustomerGatewaysResult) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'ec2:describeCustomerGateways', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'ec2:describeCustomerGateways',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {

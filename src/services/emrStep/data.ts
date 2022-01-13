@@ -31,7 +31,11 @@ const listEmrClusterSteps = async (emr: EMR, clusterId: string) =>
       }
       emr.listSteps(listStepsOpts, (err: AWSError, data: ListStepsOutput) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'emr:listSteps', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'emr:listSteps',
+            err,
+          })
         }
         /**
          * No EMR step data for this region
@@ -69,69 +73,72 @@ export default async ({
   rawData: any
 }): Promise<{
   [region: string]: RawAwsEmrStep[]
-}> => new Promise(async resolve => {
-  const emrSteps: RawAwsEmrStep[] = []
-  let emrClusters: RawAwsEmrCluster[] = []
-  const existingData: RawAwsEmrCluster[] =
-  flatMap(
-    rawData.find(({ name }) => name === services.emrCluster)?.data
-  ) || []
+}> =>
+  new Promise(async resolve => {
+    const emrSteps: RawAwsEmrStep[] = []
+    let emrClusters: RawAwsEmrCluster[] = []
+    const existingData: RawAwsEmrCluster[] =
+      flatMap(rawData.find(({ name }) => name === services.emrCluster)?.data) ||
+      []
 
-  if (isEmpty(existingData)) {
-    /**
-     * Get all the EMR clusters for this region
-     */
-    await Promise.all(
-      regions.split(',').map(
-        region =>
-          new Promise<void>(async resolveEmrClusters => {
-            const emr = new EMR({ ...config, region, endpoint })
-            const clusterList: Cluster[] = await getEmrClusters(emr, region)
-  
-            if (!isEmpty(clusterList)) {
-              emrClusters.push(...clusterList.map(cluster => ({
-                Id: cluster.Id,
-                region,
-              })))
-            }
-  
-            resolveEmrClusters()
-          })
+    if (isEmpty(existingData)) {
+      /**
+       * Get all the EMR clusters for this region
+       */
+      await Promise.all(
+        regions.split(',').map(
+          region =>
+            new Promise<void>(async resolveEmrClusters => {
+              const emr = new EMR({ ...config, region, endpoint })
+              const clusterList: Cluster[] = await getEmrClusters(emr, region)
+
+              if (!isEmpty(clusterList)) {
+                emrClusters.push(
+                  ...clusterList.map(cluster => ({
+                    Id: cluster.Id,
+                    region,
+                  }))
+                )
+              }
+
+              resolveEmrClusters()
+            })
+        )
       )
+    } else {
+      // Uses existing data
+      emrClusters = existingData
+    }
+
+    logger.debug(lt.fetchedEmrClusters(emrClusters.length))
+
+    /**
+     * Get the list of steps for each EMR cluster
+     */
+    let numOfSteps = 0
+    const stepPromises = emrClusters.map(
+      (cluster: RawAwsEmrCluster) =>
+        new Promise<void>(async resolveSteps => {
+          const emr = new EMR({ ...config, region: cluster.region, endpoint })
+          const steps: Step[] = await listEmrClusterSteps(emr, cluster.Id)
+
+          if (!isEmpty(steps)) {
+            numOfSteps += steps.length
+            emrSteps.push(
+              ...steps.map(step => ({
+                region: cluster.region,
+                ...step,
+              }))
+            )
+          }
+
+          resolveSteps()
+        })
     )
-  } else {
-    // Uses existing data
-    emrClusters = existingData
-  }
 
-  logger.debug(lt.fetchedEmrClusters(emrClusters.length))
+    await Promise.all(stepPromises)
 
-  /**
-   * Get the list of steps for each EMR cluster
-   */
-  let numOfSteps = 0
-  const stepPromises =
-    emrClusters.map((cluster: RawAwsEmrCluster) =>
-      new Promise<void>(async resolveSteps => {
-        const emr = new EMR({ ...config, region: cluster.region, endpoint })
-        const steps: Step[] = await listEmrClusterSteps(emr, cluster.Id)
+    logger.debug(lt.fetchedEmrClusterSteps(numOfSteps))
 
-        if (!isEmpty(steps)) {
-          numOfSteps += steps.length
-          emrSteps.push(...steps.map(step => ({
-            region: cluster.region,
-            ...step,
-          })))
-        }
-
-        resolveSteps()
-      })
-    )
-
-  await Promise.all(stepPromises)
-
-  logger.debug(lt.fetchedEmrClusterSteps(numOfSteps))
-
-  resolve(groupBy(emrSteps, 'region'))
-
+    resolve(groupBy(emrSteps, 'region'))
   })

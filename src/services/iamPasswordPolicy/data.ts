@@ -38,7 +38,11 @@ export const getPasswordPolicy = async (
     iam.getAccountPasswordPolicy(
       async (err: AWSError, data: GetAccountPasswordPolicyResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:getAccountPasswordPolicy', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'iam:getAccountPasswordPolicy',
+            err,
+          })
         }
         if (!isEmpty(data)) {
           const { PasswordPolicy: passwordPolicy } = data

@@ -36,7 +36,11 @@ const listClustersForRegion = async ({ eks, resolveRegion }) =>
           (err: AWSError, data: ListClustersResponse) => {
             const { nextToken, clusters = [] } = data || {}
             if (err) {
-              generateAwsErrorLog(serviceName, 'eks:listClusters', err)
+              generateAwsErrorLog({
+                serviceName,
+                functionName: 'eks:listClusters',
+                err,
+              })
             }
             /**
              * No clusters for this region
@@ -72,7 +76,11 @@ const describeCluster = async (eks: EKS, name: string): Promise<Cluster> =>
         descClusterOpts,
         (err: AWSError, data: DescribeClusterResponse) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'eks:describeCluster', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'eks:describeCluster',
+              err,
+            })
             return resolve({})
           }
 
@@ -92,7 +100,11 @@ const getResourceTags = async (eks: EKS, arn: string): Promise<TagMap> =>
         { resourceArn: arn },
         (err: AWSError, data: ListTagsForResourceResponse) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'eks:listTagsForResource', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'eks:listTagsForResource',
+              err,
+            })
             return resolve({})
           }
 
@@ -116,7 +128,7 @@ export default async ({
 }: {
   regions: string
   config: Config
-}): Promise<{[region: string]: RawAwsEksCluster[]}> =>
+}): Promise<{ [region: string]: RawAwsEksCluster[] }> =>
   new Promise(async resolve => {
     const eksData: RawAwsEksCluster[] = []
     const regionPromises = []

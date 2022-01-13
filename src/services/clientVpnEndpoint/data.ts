@@ -47,7 +47,11 @@ const listClientVpnEndpoints = async ({
     args,
     (err: AWSError, data: DescribeClientVpnEndpointsResult) => {
       if (err) {
-        generateAwsErrorLog(serviceName, 'ec2:describeClientVpnEndpoints', err)
+        generateAwsErrorLog({
+          serviceName,
+          functionName: 'ec2:describeClientVpnEndpoints',
+          err,
+        })
       }
 
       /**
@@ -106,7 +110,8 @@ const listClientVpnEndpoints = async ({
   )
 }
 
-export interface RawAwsClientVpnEndpoint extends Omit<ClientVpnEndpoint, 'Tags'> {
+export interface RawAwsClientVpnEndpoint
+  extends Omit<ClientVpnEndpoint, 'Tags'> {
   region: string
   Tags?: TagMap
 }

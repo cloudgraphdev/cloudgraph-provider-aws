@@ -1,18 +1,18 @@
 import CloudGraph from '@cloudgraph/sdk'
 import { AWSError } from 'aws-sdk'
 import { Config } from 'aws-sdk/lib/config'
-import EC2, { DescribeNetworkAclsRequest, DescribeNetworkAclsResult, NetworkAcl } from 'aws-sdk/clients/ec2';
-import groupBy from 'lodash/groupBy';
+import EC2, {
+  DescribeNetworkAclsRequest,
+  DescribeNetworkAclsResult,
+  NetworkAcl,
+} from 'aws-sdk/clients/ec2'
+import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
 import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import {
-  generateAwsErrorLog,
-  initTestEndpoint,
-} from '../../utils'
-
+import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
@@ -54,7 +54,11 @@ export default async ({
         args,
         (err: AWSError, data: DescribeNetworkAclsResult) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'nacl:describeNetworkAcls',err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'nacl:describeNetworkAcls',
+              err,
+            })
           }
 
           if (isEmpty(data)) {

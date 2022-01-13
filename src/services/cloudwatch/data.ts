@@ -14,7 +14,11 @@ import { AWSError } from 'aws-sdk/lib/error'
 
 import { TagMap, AwsTag } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog, setAwsRetryOptions } from '../../utils'
+import {
+  initTestEndpoint,
+  generateAwsErrorLog,
+  setAwsRetryOptions,
+} from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import { CLOUDWATCH_CUSTOM_DELAY } from '../../config/constants'
 
@@ -26,7 +30,9 @@ const MAX_ITEMS = 100
 const { logger } = CloudGraph
 const serviceName = 'Cloudwatch'
 const endpoint = initTestEndpoint(serviceName)
-const customRetrySettings = setAwsRetryOptions({ baseDelay: CLOUDWATCH_CUSTOM_DELAY })
+const customRetrySettings = setAwsRetryOptions({
+  baseDelay: CLOUDWATCH_CUSTOM_DELAY,
+})
 
 export interface RawAwsCloudwatch extends MetricAlarm {
   region: string
@@ -55,7 +61,11 @@ const listMetricAlarmsForRegion = async ({
             const { NextToken: nextToken, MetricAlarms: metricAlarms } =
               data || {}
             if (err) {
-              generateAwsErrorLog(serviceName, 'cloudwatch:describeAlarms', err)
+              generateAwsErrorLog({
+                serviceName,
+                functionName: 'cloudwatch:describeAlarms',
+                err,
+              })
             }
             /**
              * No metrics for this region
@@ -88,7 +98,11 @@ const getResourceTags = async (cloudwatch: CloudWatch, arn: string) =>
         { ResourceARN: arn },
         (err: AWSError, data: ListTagsForResourceOutput) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'cloudwatch:listTagsForResource', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'cloudwatch:listTagsForResource',
+              err,
+            })
             return resolve({})
           }
           const { Tags = [] } = data || {}
@@ -106,7 +120,7 @@ export default async ({
 }: {
   regions: string
   config: Config
-}): Promise<{[property: string]: RawAwsCloudwatch[]}> =>
+}): Promise<{ [property: string]: RawAwsCloudwatch[] }> =>
   new Promise(async resolve => {
     const cloudwatchData: Array<
       MetricAlarm & { Tags?: TagMap; region: string }
@@ -142,7 +156,12 @@ export default async ({
 
     // get all tags for each environment
     cloudwatchData.map(({ AlarmArn, region }, idx) => {
-      const cloudwatch = new CloudWatch({ ...config, region, endpoint, ...customRetrySettings })
+      const cloudwatch = new CloudWatch({
+        ...config,
+        region,
+        endpoint,
+        ...customRetrySettings,
+      })
       const tagsPromise = new Promise<void>(async resolveTags => {
         const envTags = await getResourceTags(cloudwatch, AlarmArn)
         cloudwatchData[idx].Tags = envTags

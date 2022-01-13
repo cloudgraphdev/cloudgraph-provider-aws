@@ -38,11 +38,11 @@ export const listOpenIdConnectProviders = async (
     iam.listOpenIDConnectProviders(
       async (err: AWSError, data: ListOpenIDConnectProvidersResponse) => {
         if (err) {
-          generateAwsErrorLog(
+          generateAwsErrorLog({
             serviceName,
-            'iam:listOpenIDConnectProviders',
-            err
-          )
+            functionName: 'iam:listOpenIDConnectProviders',
+            err,
+          })
         }
         if (!isEmpty(data)) {
           const { OpenIDConnectProviderList: openIdProviders = [] } = data

@@ -143,11 +143,17 @@ export function initTestConfig(): void {
   jest.setTimeout(900000)
 }
 
-export function generateAwsErrorLog(
-  service: string,
-  functionName: string,
+export function generateAwsErrorLog({
+  serviceName,
+  functionName,
+  err,
+  silenceLogs,
+}: {
+  serviceName: string
+  functionName: string
   err?: AWSError
-): void {
+  silenceLogs?: boolean
+}): void {
   if (err.statusCode === 400) {
     err.retryable = true
   }
@@ -156,15 +162,18 @@ export function generateAwsErrorLog(
   const throttling = 'Throttling'
 
   if (err?.code !== throttling) {
-    logger.warn(
-      `There was a problem getting data for service ${service}, CG encountered an error calling ${functionName}`
-    )
+    !silenceLogs &&
+      logger.warn(
+        `There was a problem getting data for service ${serviceName}, CG encountered an error calling ${functionName}`
+      )
     if (err?.message?.includes(notAuthorized) || err?.code === accessDenied) {
       logger.warn(err.message)
     }
     logger.debug(err)
   } else {
-    logger.debug(`Rate exceeded for ${service}:${functionName}. Retrying...`)
+    logger.debug(
+      `Rate exceeded for ${serviceName}:${functionName}. Retrying...`
+    )
   }
 }
 

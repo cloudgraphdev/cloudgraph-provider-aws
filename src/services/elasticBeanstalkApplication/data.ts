@@ -30,11 +30,11 @@ const listApplications = async (
       {},
       (err: AWSError, data: ApplicationDescriptionsMessage) => {
         if (err) {
-          generateAwsErrorLog(
+          generateAwsErrorLog({
             serviceName,
-            'elasticBeanstalk:describeApplications',
-            err
-          )
+            functionName: 'elasticBeanstalk:describeApplications',
+            err,
+          })
         }
         /**
          * No EB Applications for this region
@@ -62,11 +62,11 @@ export const getResourceTags = async (
       },
       (err: AWSError, data: ResourceTagsDescriptionMessage) => {
         if (err) {
-          generateAwsErrorLog(
+          generateAwsErrorLog({
             serviceName,
-            'elasticBeanstalk:listTagsForResource',
-            err
-          )
+            functionName: 'elasticBeanstalk:listTagsForResource',
+            err,
+          })
         }
         /**
          * No EB Applications for this region

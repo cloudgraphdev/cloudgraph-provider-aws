@@ -10,7 +10,7 @@ import CloudFormation, {
 import { Config } from 'aws-sdk/lib/config'
 import { groupBy, isEmpty } from 'lodash'
 
-import { Credentials, TagMap } from '../../types'
+import { TagMap } from '../../types'
 import {
   generateAwsErrorLog,
   initTestEndpoint,
@@ -48,11 +48,11 @@ const getAllStacks = async (cf: CloudFormation): Promise<Stack[]> =>
         const { Stacks = [], NextToken } = data || {}
 
         if (err) {
-          generateAwsErrorLog(
+          generateAwsErrorLog({
             serviceName,
-            'CloudFormationStack:describeStacks',
-            err
-          )
+            functionName: 'CloudFormationStack:describeStacks',
+            err,
+          })
         }
 
         fullStacks.push(...Stacks)
@@ -85,11 +85,11 @@ const getStackResourceDrifts = async (
           const { StackResourceDrifts = [], NextToken } = data || {}
 
           if (err) {
-            generateAwsErrorLog(
+            generateAwsErrorLog({
               serviceName,
-              'CloudFormationStack:describeStackResourceDrifts',
-              err
-            )
+              functionName: 'CloudFormationStack:describeStackResourceDrifts',
+              err,
+            })
           }
 
           driftedResources.push(...StackResourceDrifts)

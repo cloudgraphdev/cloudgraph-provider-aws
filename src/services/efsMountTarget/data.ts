@@ -43,36 +43,45 @@ export default async ({
     const regionPromises = []
 
     regions.split(',').map(region => {
-      efsFileSystems.map(
-        efs => {
-          const regionPromise = new Promise<void>(resolveMountTargets =>
-            new EFS({ ...config, region: efs.region, endpoint }).describeMountTargets(
-              { FileSystemId: efs.FileSystemId },
-              async (err: AWSError, data: DescribeMountTargetsResponse) => {
-                if (err) {
-                  generateAwsErrorLog(serviceName, 'efs:describeMountTargets', err)
-                }
+      efsFileSystems.map(efs => {
+        const regionPromise = new Promise<void>(resolveMountTargets =>
+          new EFS({
+            ...config,
+            region: efs.region,
+            endpoint,
+          }).describeMountTargets(
+            { FileSystemId: efs.FileSystemId },
+            async (err: AWSError, data: DescribeMountTargetsResponse) => {
+              if (err) {
+                generateAwsErrorLog({
+                  serviceName,
+                  functionName: 'efs:describeMountTargets',
+                  err,
+                })
+              }
 
-                if (isEmpty(data)) {
-                  return resolveMountTargets()
-                }
+              if (isEmpty(data)) {
+                return resolveMountTargets()
+              }
 
-                const { MountTargets: mountTargets = [] } = data || {}
+              const { MountTargets: mountTargets = [] } = data || {}
 
-                logger.debug(lt.fetchedEfsMountTargets(mountTargets.length))
+              logger.debug(lt.fetchedEfsMountTargets(mountTargets.length))
 
-                if (!isEmpty(mountTargets))  {
-                  efsMountTargets.push(...mountTargets.map(target => ({
+              if (!isEmpty(mountTargets)) {
+                efsMountTargets.push(
+                  ...mountTargets.map(target => ({
                     region,
                     ...target,
-                  })))
-                }
-                resolveMountTargets()
+                  }))
+                )
               }
-            )
+              resolveMountTargets()
+            }
           )
-          regionPromises.push(regionPromise)
-        })
+        )
+        regionPromises.push(regionPromise)
+      })
     })
 
     await Promise.all(regionPromises)

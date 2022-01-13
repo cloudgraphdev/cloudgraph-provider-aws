@@ -32,7 +32,11 @@ const getElbTags = async (
       },
       (err: AWSError, data: DescribeTagsOutput) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'elb:describeTags', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'elb:describeTags',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -58,7 +62,11 @@ const listElbData = async (
     elb.describeLoadBalancers(
       (err: AWSError, data: DescribeAccessPointsOutput) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'elb:describeLoadBalancers', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'elb:describeLoadBalancers',
+            err,
+          })
         }
         if (!isEmpty(data)) {
           const { LoadBalancerDescriptions: loadBalancerDescriptions = [] } =
@@ -89,7 +97,11 @@ const listElbAttributes = async (
       },
       (err: AWSError, data: DescribeLoadBalancerAttributesOutput) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'elb:describeLoadBalancerAttributes', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'elb:describeLoadBalancerAttributes',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {

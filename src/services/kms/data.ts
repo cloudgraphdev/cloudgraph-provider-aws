@@ -5,7 +5,12 @@ import isEmpty from 'lodash/isEmpty'
 
 import { AWSError, Request } from 'aws-sdk'
 import { Config } from 'aws-sdk/lib/config'
-import KMS, { KeyListEntry, KeyMetadata, ListKeysRequest, ListKeysResponse } from 'aws-sdk/clients/kms'
+import KMS, {
+  KeyListEntry,
+  KeyMetadata,
+  ListKeysRequest,
+  ListKeysResponse,
+} from 'aws-sdk/clients/kms'
 
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
@@ -66,7 +71,11 @@ export default async ({
 
       return kms.listKeys(args, (err, data) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'kms:listKeys', err)
+          generateAwsErrorLog({
+            serviceName,
+            functionName: 'kms:listKeys',
+            err,
+          })
         }
 
         /**
@@ -138,7 +147,11 @@ export default async ({
       const keyPromise = new Promise<void>(resolveKey =>
         kms.describeKey({ KeyId }, (err, data) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'kms:describeKey', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'kms:describeKey',
+              err,
+            })
             return resolveKey()
           }
 
@@ -185,7 +198,11 @@ export default async ({
       const rotationStatusPromise = new Promise<void>(resolveRotationStatus =>
         kms.getKeyRotationStatus({ KeyId }, (err, data) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'kms:getKeyRotationStatus', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'kms:getKeyRotationStatus',
+              err,
+            })
             return resolveRotationStatus()
           }
 
@@ -226,7 +243,11 @@ export default async ({
       const policyPromise = new Promise<void>(resolvePolicy =>
         kms.getKeyPolicy({ KeyId, PolicyName: 'default' }, (err, data) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'kms:getKeyPolicy', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'kms:getKeyPolicy',
+              err,
+            })
             resolvePolicy()
           }
 
@@ -267,7 +288,11 @@ export default async ({
       const tagsPromise = new Promise<void>(resolveTags =>
         kms.listResourceTags({ KeyId }, (err, data) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'kms:listResourceTags', err)
+            generateAwsErrorLog({
+              serviceName,
+              functionName: 'kms:listResourceTags',
+              err,
+            })
           }
 
           /**
@@ -295,7 +320,7 @@ export default async ({
           if (!isEmpty(Tags)) {
             const tagsMap = {}
             for (const tag of Tags) {
-              const {TagKey, TagValue} = tag
+              const { TagKey, TagValue } = tag
               tagsMap[TagKey] = TagValue
             }
             kmsData[idx].Tags = tagsMap

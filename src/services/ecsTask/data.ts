@@ -1,7 +1,5 @@
 import { Config } from 'aws-sdk'
-import ECS, {
-  Task,
-} from 'aws-sdk/clients/ecs'
+import ECS, { Task } from 'aws-sdk/clients/ecs'
 import CloudGraph from '@cloudgraph/sdk'
 import flatMap from 'lodash/flatMap'
 import groupBy from 'lodash/groupBy'
@@ -40,11 +38,11 @@ export default async ({
       regions,
     })
     const ecsClusters: RawAwsEcsCluster[] = flatMap(clusterResult)
-  
+
     /**
      * Get the arns of all the tasks
      */
-  
+
     let ecsTaskArns: any = await Promise.all(
       ecsClusters.map(
         async ({ clusterName: cluster, region }) =>
@@ -53,7 +51,11 @@ export default async ({
               { cluster },
               (err, data) => {
                 if (err) {
-                  generateAwsErrorLog(serviceName, 'ecs:listTasks', err)
+                  generateAwsErrorLog({
+                    serviceName,
+                    functionName: 'ecs:listTasks',
+                    err,
+                  })
                 }
 
                 if (isEmpty(data)) {
@@ -68,17 +70,19 @@ export default async ({
           )
       )
     )
-  
+
     /**
      * Check to make sure there are tasks before we try and search for them
      */
-  
-    ecsTaskArns = ecsTaskArns.flat().filter(({ taskArns }) => !isEmpty(taskArns))
-  
+
+    ecsTaskArns = ecsTaskArns
+      .flat()
+      .filter(({ taskArns }) => !isEmpty(taskArns))
+
     /**
      * Get all the details for each task
      */
-  
+
     const ecsTaskPromises = ecsTaskArns.map(
       async ({ region, taskArns: tasks, cluster }) =>
         new Promise<void>(resolveEcsData =>
@@ -86,7 +90,11 @@ export default async ({
             { tasks, cluster },
             (err, data) => {
               if (err) {
-                generateAwsErrorLog(serviceName, 'ecs:describeTasks', err)
+                generateAwsErrorLog({
+                  serviceName,
+                  functionName: 'ecs:describeTasks',
+                  err,
+                })
               }
 
               if (isEmpty(data)) {
@@ -97,17 +105,19 @@ export default async ({
 
               logger.debug(lt.fetchedEcsTasks(tasks.length))
 
-              ecsTasks.push(...tasks.map(task => ({
-                region,
-                ...task,
-                Tags: convertAwsTagsToTagMap(task.tags as AwsTag[]),
-              })))
+              ecsTasks.push(
+                ...tasks.map(task => ({
+                  region,
+                  ...task,
+                  Tags: convertAwsTagsToTagMap(task.tags as AwsTag[]),
+                }))
+              )
 
               resolveEcsData()
             }
           )
         )
-      )
+    )
 
     await Promise.all(ecsTaskPromises)
 
