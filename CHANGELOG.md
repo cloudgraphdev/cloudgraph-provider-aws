@@ -1,3 +1,11 @@
+## [0.63.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.63.2...0.63.3) (2022-01-17)
+
+
+### Bug Fixes
+
+* Added silentLogs property to generateAwsErrorLog util ([573caa2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/573caa2e0aed763b8b087f8a763ac27011488043))
+* Improved logging error messages duplication ([8d01b04](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/8d01b04fcb93841bf3c9eaf04765c3d9291845a4))
+
 ## [0.63.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.63.1...0.63.2) (2022-01-13)
 
 
