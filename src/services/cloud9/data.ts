@@ -18,11 +18,13 @@ import chunk from 'lodash/chunk'
 import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'Cloud9 environment'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const MAX_ITEMS = 25
 
@@ -40,7 +42,10 @@ const listEnvironmentsForRegion = async ({ cloud9, resolveRegion }) =>
           (err: AWSError, data: ListEnvironmentsResult) => {
             const { nextToken, environmentIds } = data || {}
             if (err) {
-              generateAwsErrorLog(serviceName, 'cloud9:listEnvironments', err)
+              errorLog.generateAwsErrorLog({
+                functionName: 'cloud9:listEnvironments',
+                err,
+              })
             }
             /**
              * No Cloud9 environments for this region
@@ -52,7 +57,9 @@ const listEnvironmentsForRegion = async ({ cloud9, resolveRegion }) =>
             environmentIdList.push(...environmentIds)
 
             if (nextToken) {
-              logger.debug(lt.foundMoreCloud9Environments(environmentIds.length))
+              logger.debug(
+                lt.foundMoreCloud9Environments(environmentIds.length)
+              )
               listAllEnvironments(nextToken)
             }
 
@@ -79,7 +86,10 @@ const getEnvironmentAttributes = async (
         descEnvironmentsOpts,
         (err: AWSError, data: DescribeEnvironmentsResult) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'cloud9:describeEnvironments', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'cloud9:describeEnvironments',
+              err,
+            })
           }
           resolve(data.environments)
         }
@@ -88,7 +98,7 @@ const getEnvironmentAttributes = async (
       resolve([])
     }
   })
-  
+
 const getEnvironmentTags = async (
   cloud9: Cloud9,
   arn: string
@@ -99,7 +109,10 @@ const getEnvironmentTags = async (
         { ResourceARN: arn },
         (err: AWSError, data: ListTagsForResourceResponse) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'cloud9:listTagsForResource', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'cloud9:listTagsForResource',
+              err,
+            })
             return resolve({})
           }
 
@@ -112,7 +125,8 @@ const getEnvironmentTags = async (
     }
   })
 
-export interface RawAwsCloud9Environment extends Omit<Environment, 'arn'|'ownerArn'|'type'> {
+export interface RawAwsCloud9Environment
+  extends Omit<Environment, 'arn' | 'ownerArn' | 'type'> {
   arn?: string
   ownerArn?: string
   region: string
@@ -201,6 +215,7 @@ export default async ({
 
     logger.debug(lt.gettingCloud9EnvironmentTags)
     await Promise.all(tagsPromises)
+    errorLog.reset()
 
     resolve(groupBy(cloud9Data, 'region'))
   })

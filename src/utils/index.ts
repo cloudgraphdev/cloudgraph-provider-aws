@@ -1,4 +1,4 @@
-import AWS, { AWSError, ConfigurationOptions } from 'aws-sdk'
+import AWS, { ConfigurationOptions } from 'aws-sdk'
 import { APIVersions } from 'aws-sdk/lib/config'
 import CloudGraph, { Opts } from '@cloudgraph/sdk'
 import STS from 'aws-sdk/clients/sts'
@@ -141,31 +141,6 @@ export function initTestEndpoint(service?: string): string | undefined {
 
 export function initTestConfig(): void {
   jest.setTimeout(900000)
-}
-
-export function generateAwsErrorLog(
-  service: string,
-  functionName: string,
-  err?: AWSError
-): void {
-  if (err.statusCode === 400) {
-    err.retryable = true
-  }
-  const notAuthorized = 'not authorized' // part of the error string aws passes back for permissions errors
-  const accessDenied = 'AccessDeniedException' // an error code aws sometimes sends back for permissions errors
-  const throttling = 'Throttling'
-
-  if (err?.code !== throttling) {
-    logger.warn(
-      `There was a problem getting data for service ${service}, CG encountered an error calling ${functionName}`
-    )
-    if (err?.message?.includes(notAuthorized) || err?.code === accessDenied) {
-      logger.warn(err.message)
-    }
-    logger.debug(err)
-  } else {
-    logger.debug(`Rate exceeded for ${service}:${functionName}. Retrying...`)
-  }
 }
 
 export const settleAllPromises = async (

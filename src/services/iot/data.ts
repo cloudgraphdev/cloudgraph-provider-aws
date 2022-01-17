@@ -12,10 +12,13 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 import { Config } from 'aws-sdk/lib/config'
 import awsLoggerText from '../../properties/logger'
-import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+
 const lt = { ...awsLoggerText }
-const {logger} = CloudGraph
+const { logger } = CloudGraph
 const serviceName = 'IoT thing attribute'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const MAX_ITEMS = 250
 
@@ -34,7 +37,10 @@ const listThingsForRegion = async ({ iot, resolveRegion }) =>
           (err: AWSError, data: ListThingsResponse) => {
             const { nextToken, things } = data || {}
             if (err) {
-              generateAwsErrorLog(serviceName, 'iot:listThings', err)
+              errorLog.generateAwsErrorLog({
+                functionName: 'iot:listThings',
+                err,
+              })
             }
             /**
              * No IoT things for this region
@@ -107,7 +113,10 @@ export default async ({
             describeThingOpts,
             (err: AWSError, data: DescribeThingResponse) => {
               if (err) {
-                generateAwsErrorLog(serviceName, 'iot:describeThing', err)
+                errorLog.generateAwsErrorLog({
+                  functionName: 'iot:describeThing',
+                  err,
+                })
               }
               iotData[idx] = {
                 ...iotData[idx],
@@ -125,7 +134,7 @@ export default async ({
 
     logger.debug(lt.gettingIoTThings)
     await Promise.all(descriptionPromises)
+    errorLog.reset()
 
     resolve(groupBy(iotData, 'region'))
   })
-  

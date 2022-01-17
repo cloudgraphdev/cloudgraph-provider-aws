@@ -13,12 +13,14 @@ import { Config } from 'aws-sdk/lib/config'
 import { AWSError } from 'aws-sdk/lib/error'
 import { AwsTag, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'TransitGatewayAttachment'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 const listTransitGatewayAttachmentsData = async ({
@@ -45,11 +47,10 @@ const listTransitGatewayAttachmentsData = async ({
       args,
       (err: AWSError, data: DescribeTransitGatewayAttachmentsResult) => {
         if (err) {
-          generateAwsErrorLog(
-            serviceName,
-            'ec2:describeTransitGatewayAttachments',
-            err
-          )
+          errorLog.generateAwsErrorLog({
+            functionName: 'ec2:describeTransitGatewayAttachments',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -60,7 +61,11 @@ const listTransitGatewayAttachmentsData = async ({
 
           transitGatewayAttachmentList.push(...transitGatewayAttachments)
 
-          logger.debug(lt.fetchedTransitGatewayAttachments(transitGatewayAttachments.length))
+          logger.debug(
+            lt.fetchedTransitGatewayAttachments(
+              transitGatewayAttachments.length
+            )
+          )
 
           if (nextToken) {
             listTransitGatewayAttachmentsData({ ec2, region, nextToken })
@@ -85,8 +90,8 @@ const listTransitGatewayAttachmentsData = async ({
 
 export interface RawAwsTransitGatewayAttachment
   extends Omit<TransitGatewayAttachment, 'Tags'> {
-    region: string
-    Tags?: TagMap
+  region: string
+  Tags?: TagMap
 }
 
 export default async ({
@@ -106,10 +111,11 @@ export default async ({
 
       return new Promise<void>(async resolveTransitGatewayAttachmentData => {
         // Get Transit Gateway Attachment Data
-        const transitGatewayAttachments = await listTransitGatewayAttachmentsData({
-          ec2,
-          region,
-        })
+        const transitGatewayAttachments =
+          await listTransitGatewayAttachmentsData({
+            ec2,
+            region,
+          })
 
         if (!isEmpty(transitGatewayAttachments)) {
           for (const attachment of transitGatewayAttachments) {
@@ -126,6 +132,7 @@ export default async ({
     })
 
     await Promise.all(regionPromises)
+    errorLog.reset()
 
     resolve(groupBy(transitGatewayAttachmentsResult, 'region'))
   })

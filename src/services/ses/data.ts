@@ -4,18 +4,20 @@ import SES, {
   GetIdentityVerificationAttributesResponse,
 } from 'aws-sdk/clients/ses'
 import { AWSError } from 'aws-sdk/lib/error'
+import { Config } from 'aws-sdk/lib/config'
 
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
 import awsLoggerText from '../../properties/logger'
-import { Config } from 'aws-sdk/lib/config'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'SES'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 /**
@@ -53,7 +55,10 @@ export default async ({
             }
 
             if (err) {
-              generateAwsErrorLog(serviceName, 'ses:listIdentities', err)
+              errorLog.generateAwsErrorLog({
+                functionName: 'ses:listIdentities',
+                err,
+              })
             }
 
             const { Identities }: { Identities: string[] } = data
@@ -79,11 +84,20 @@ export default async ({
                     }: GetIdentityVerificationAttributesResponse
                   ) => {
                     if (err) {
-                      generateAwsErrorLog(serviceName, 'ses:getIdentityVerificationAttributes', err)
+                      errorLog.generateAwsErrorLog({
+                        functionName: 'ses:getIdentityVerificationAttributes',
+                        err,
+                      })
                     }
 
                     if (!isEmpty(identities)) {
-                      sesData.push(...Identities.map(Identity => ({Identity, ...identities[Identity], region })))
+                      sesData.push(
+                        ...Identities.map(Identity => ({
+                          Identity,
+                          ...identities[Identity],
+                          region,
+                        }))
+                      )
                     }
 
                     resolveIdVer()
@@ -102,6 +116,7 @@ export default async ({
     await Promise.all(regionPromises)
 
     await Promise.all(identityVerificationPromises)
+    errorLog.reset()
 
     resolve(groupBy(sesData, 'region'))
   })

@@ -11,13 +11,15 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 import flatMap from 'lodash/flatMap'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { RawAwsEmrCluster, getEmrClusters } from '../emrCluster/data'
 import services from '../../enums/services'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'EMR instance'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 const getInstancesPerCluster = async (emr: EMR, clusterId: string) =>
@@ -32,7 +34,10 @@ const getInstancesPerCluster = async (emr: EMR, clusterId: string) =>
         listInstancesOpts,
         (err: AWSError, data: ListInstancesOutput) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'emr:listInstances', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'emr:listInstances',
+              err,
+            })
           }
           /**
            * No EMR instances data for this cluster
@@ -71,72 +76,76 @@ export default async ({
   rawData: any
 }): Promise<{
   [region: string]: RawAwsEmrInstance[]
-}> => new Promise(async resolve => {
-  const emrInstances: RawAwsEmrInstance[] = []
-  let emrClusters: RawAwsEmrCluster[] = []
-  const existingData: RawAwsEmrCluster[] =
-  flatMap(
-    rawData.find(({ name }) => name === services.emrCluster)?.data
-  ) || []
+}> =>
+  new Promise(async resolve => {
+    const emrInstances: RawAwsEmrInstance[] = []
+    let emrClusters: RawAwsEmrCluster[] = []
+    const existingData: RawAwsEmrCluster[] =
+      flatMap(rawData.find(({ name }) => name === services.emrCluster)?.data) ||
+      []
 
-  if (isEmpty(existingData)) {
-    /**
-     * Get all the EMR clusters for this region
-     */
-    await Promise.all(
-      regions.split(',').map(
-        region =>
-          new Promise<void>(async resolveEmrClusters => {
-            const emr = new EMR({ ...config, region, endpoint })
-            const clusterList: Cluster[] = await getEmrClusters(emr, region)
+    if (isEmpty(existingData)) {
+      /**
+       * Get all the EMR clusters for this region
+       */
+      await Promise.all(
+        regions.split(',').map(
+          region =>
+            new Promise<void>(async resolveEmrClusters => {
+              const emr = new EMR({ ...config, region, endpoint })
+              const clusterList: Cluster[] = await getEmrClusters(emr, region)
 
-            if (!isEmpty(clusterList)) {
-              emrClusters.push(...clusterList.map(cluster => ({
-                Id: cluster.Id,
-                region,
-              })))
-            }
+              if (!isEmpty(clusterList)) {
+                emrClusters.push(
+                  ...clusterList.map(cluster => ({
+                    Id: cluster.Id,
+                    region,
+                  }))
+                )
+              }
 
-            resolveEmrClusters()
-          })
-      )
-    )
-  } else {
-    // Uses existing data
-    emrClusters = existingData
-  }
-
-  logger.debug(lt.fetchedEmrClusters(emrClusters.length))
-
-  /**
-   * Get the instances for each EMR cluster
-   */
-  let numOfInstances = 0
-  const emrInstancePromises =
-    emrClusters.map((cluster: RawAwsEmrCluster) =>
-      new Promise<void>(async resolveInstances => {
-        const emr = new EMR({ ...config, region: cluster.region, endpoint })
-        const instances: Instance[] = await getInstancesPerCluster(
-          emr,
-          cluster.Id
+              resolveEmrClusters()
+            })
         )
+      )
+    } else {
+      // Uses existing data
+      emrClusters = existingData
+    }
 
-        if (!isEmpty(instances)) {
-          numOfInstances += instances.length
-          emrInstances.push(...instances.map(instance => ({
-            region: cluster.region,
-            ...instance,
-          })))
-        }
+    logger.debug(lt.fetchedEmrClusters(emrClusters.length))
 
-        resolveInstances()
-      })
-  )
+    /**
+     * Get the instances for each EMR cluster
+     */
+    let numOfInstances = 0
+    const emrInstancePromises = emrClusters.map(
+      (cluster: RawAwsEmrCluster) =>
+        new Promise<void>(async resolveInstances => {
+          const emr = new EMR({ ...config, region: cluster.region, endpoint })
+          const instances: Instance[] = await getInstancesPerCluster(
+            emr,
+            cluster.Id
+          )
 
-  await Promise.all(emrInstancePromises)
+          if (!isEmpty(instances)) {
+            numOfInstances += instances.length
+            emrInstances.push(
+              ...instances.map(instance => ({
+                region: cluster.region,
+                ...instance,
+              }))
+            )
+          }
 
-  logger.debug(lt.fetchedEmrClusterInstances(numOfInstances))
+          resolveInstances()
+        })
+    )
 
-  resolve(groupBy(emrInstances, 'region'))
+    await Promise.all(emrInstancePromises)
 
+    errorLog.reset()
+    logger.debug(lt.fetchedEmrClusterInstances(numOfInstances))
+
+    resolve(groupBy(emrInstances, 'region'))
   })

@@ -6,11 +6,13 @@ import EC2, { FlowLog } from 'aws-sdk/clients/ec2'
 import CloudGraph from '@cloudgraph/sdk'
 
 import { AwsTag, TagMap } from '../../types'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const { logger } = CloudGraph
 const serviceName = 'flowLog'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 export interface RawFlowLog extends Omit<FlowLog, 'Tags'> {
@@ -50,9 +52,14 @@ export default async ({
           nextTokenWatcher = false
         }
       }
-    } catch (e) {
-      generateAwsErrorLog(serviceName, 'EC2:describeFlowLogs', e)
+    } catch (err) {
+      errorLog.generateAwsErrorLog({
+        functionName: 'EC2:describeFlowLogs',
+        err,
+      })
     }
   }
+  errorLog.reset()
+
   return groupBy(flowLogsResult, 'region')
 }

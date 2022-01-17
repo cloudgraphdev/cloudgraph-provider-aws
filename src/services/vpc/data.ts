@@ -16,12 +16,14 @@ import CloudGraph from '@cloudgraph/sdk'
 
 import { AwsTag, TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'VPC'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 /**
@@ -72,7 +74,10 @@ export default async ({
         args,
         async (err: AWSError, data: DescribeVpcsResult) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'ec2:describeVpcs', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'ec2:describeVpcs',
+              err,
+            })
           }
 
           /**
@@ -101,15 +106,20 @@ export default async ({
           if (token) {
             listVpcData({ region, token, ec2, resolveRegion })
           }
-           /**
+          /**
            * Get flow log data for the vpcs in the region
            */
           const vpcIds = vpcs.map(({ VpcId }) => VpcId)
           const flowLogsResult: FlowLog[] = []
           try {
             let nextTokenWatcher = true
-            while(nextTokenWatcher) {
-              const flowLogs = await ec2.describeFlowLogs({ Filter: [{ Name: 'resource-id', Values: vpcIds }], MaxResults: 100}).promise()
+            while (nextTokenWatcher) {
+              const flowLogs = await ec2
+                .describeFlowLogs({
+                  Filter: [{ Name: 'resource-id', Values: vpcIds }],
+                  MaxResults: 100,
+                })
+                .promise()
               if (flowLogs?.FlowLogs) {
                 for (const flowLog of flowLogs.FlowLogs) {
                   flowLogsResult.push(flowLog)
@@ -123,12 +133,14 @@ export default async ({
             logger.debug('There was an issue getting vpc flow log data')
             logger.debug(e)
           }
-           /**
+          /**
            * Add the found Vpcs to the vpcData
            */
           vpcData.push(
             ...vpcs.map(vpc => {
-              const vpcFlowLogSet = flowLogsResult.filter(flowLog => flowLog.ResourceId === vpc.VpcId)
+              const vpcFlowLogSet = flowLogsResult.filter(
+                flowLog => flowLog.ResourceId === vpc.VpcId
+              )
               const flowLogTags = []
               for (const flowLog of vpcFlowLogSet) {
                 flowLogTags.push(...flowLog.Tags)
@@ -136,8 +148,12 @@ export default async ({
               return {
                 ...vpc,
                 region,
-                Tags: convertAwsTagsToTagMap(vpc.Tags.concat(flowLogTags) as AwsTag[]),
-                flowLogs: flowLogsResult.find(flowLog => flowLog.ResourceId === vpc.VpcId)
+                Tags: convertAwsTagsToTagMap(
+                  vpc.Tags.concat(flowLogTags) as AwsTag[]
+                ),
+                flowLogs: flowLogsResult.find(
+                  flowLog => flowLog.ResourceId === vpc.VpcId
+                ),
               }
             })
           )
@@ -174,7 +190,10 @@ export default async ({
         const additionalAttrPromise = new Promise<void>(resolveAdditionalAttr =>
           ec2.describeVpcAttribute({ VpcId, Attribute }, (err, data) => {
             if (err) {
-              generateAwsErrorLog(serviceName, 'ec2:describeVpcAttribute', err)
+              errorLog.generateAwsErrorLog({
+                functionName: 'ec2:describeVpcAttribute',
+                err,
+              })
             }
 
             /**
@@ -207,6 +226,7 @@ export default async ({
     logger.debug(lt.fetchingVpcDnsHostnamesData)
     fetchVpcAttribute('enableDnsHostnames')
     await Promise.all(additionalAttrPromises)
+    errorLog.reset()
 
     resolve(groupBy(vpcData, 'region'))
   })

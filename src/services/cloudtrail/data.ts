@@ -10,10 +10,12 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
 import { TagMap } from '../../types'
-import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const serviceName = 'CloudTrail'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 /**
@@ -51,7 +53,10 @@ const getTrailArnData = async (
       .map(trail => trail.TrailARN)
     return trailNameList
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'cloudTrail:getTrailArnData', err)
+    errorLog.generateAwsErrorLog({
+      functionName: 'cloudTrail:getTrailArnData',
+      err,
+    })
   }
   return []
 }
@@ -73,7 +78,10 @@ const listTrailData = async (
       .promise()
     return trailList
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'cloudTrail:listTrailData', err)
+    errorLog.generateAwsErrorLog({
+      functionName: 'cloudTrail:listTrailData',
+      err,
+    })
   }
   return []
 }
@@ -101,7 +109,10 @@ const listTrailTagData = async (
         nextToken = resourceTags.NextToken
       }
     } catch (err) {
-      generateAwsErrorLog(serviceName, 'cloudTrail:listTrailTagData', err)
+      errorLog.generateAwsErrorLog({
+        functionName: 'cloudTrail:listTrailTagData',
+        err,
+      })
     }
   }
   return resourceTagList
@@ -115,7 +126,10 @@ const getTrailStatus = async (
     const data = await cloudTrail.getTrailStatus({ Name }).promise()
     return data
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'cloudTrail:getTrailStatus', err)
+    errorLog.generateAwsErrorLog({
+      functionName: 'cloudTrail:getTrailStatus',
+      err,
+    })
   }
   return null
 }
@@ -130,7 +144,10 @@ const getEventSelectors = async (
       .promise()
     return eventSelectors
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'cloudTrail:getEventSelectors', err)
+    errorLog.generateAwsErrorLog({
+      functionName: 'cloudTrail:getEventSelectors',
+      err,
+    })
   }
   return []
 }
@@ -178,9 +195,13 @@ export default async ({
         }
       }
     } catch (err) {
-      generateAwsErrorLog(serviceName, 'cloudTrail:listTrail', err)
+      errorLog.generateAwsErrorLog({
+        functionName: 'cloudTrail:listTrail',
+        err,
+      })
     }
   }
+  errorLog.reset()
 
   return groupBy(cloudTrailData, 'region')
 }

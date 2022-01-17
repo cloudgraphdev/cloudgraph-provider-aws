@@ -13,11 +13,13 @@ import { Config } from 'aws-sdk/lib/config'
 
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'Route Table'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 /**
@@ -62,7 +64,10 @@ export default async ({
         args,
         (err: AWSError, data: DescribeRouteTablesResult) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'ec2:describeRouteTables', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'ec2:describeRouteTables',
+              err,
+            })
           }
 
           /**
@@ -126,6 +131,7 @@ export default async ({
     })
 
     await Promise.all(regionPromises)
+    errorLog.reset()
 
     resolve(groupBy(routeTableData, 'region'))
   })

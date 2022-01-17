@@ -1,4 +1,3 @@
-
 import { Config } from 'aws-sdk'
 import { AWSError } from 'aws-sdk/lib/error'
 import EMR, {
@@ -14,11 +13,13 @@ import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'EMR cluster'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 const getEmrClusterDescription = async (emr: EMR, clusterId: string) =>
@@ -27,7 +28,10 @@ const getEmrClusterDescription = async (emr: EMR, clusterId: string) =>
       { ClusterId: clusterId },
       (err: AWSError, data: DescribeClusterOutput) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'emr:describeCluster', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'emr:describeCluster',
+            err,
+          })
         }
         const { Cluster: cluster = {} } = data || {}
 
@@ -55,7 +59,10 @@ export const getEmrClusters = async (emr: EMR, region: string) =>
             'TERMINATED_WITH_ERRORS',
           ]
           if (err) {
-            generateAwsErrorLog(serviceName, 'emr:listClusters', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'emr:listClusters',
+              err,
+            })
           }
           /**
            * No EMR data for this region
@@ -111,10 +118,12 @@ export default async ({
 
             if (!isEmpty(clusterList)) {
               numOfClusters += clusterList.length
-              clusterData.push(...clusterList.map(cluster => ({
-                Id: cluster.Id,
-                region,
-              })))
+              clusterData.push(
+                ...clusterList.map(cluster => ({
+                  Id: cluster.Id,
+                  region,
+                }))
+              )
             }
 
             resolveEmrClusters()
@@ -126,29 +135,29 @@ export default async ({
     /**
      * Get the cluster description for each EMR cluster
      */
-    const clusterPromises = 
-      clusterData.map((cluster: RawAwsEmrCluster, idx) =>
-          new Promise<void>(async resolveClusterDescription => {
-            const emr = new EMR({ ...config, region: cluster.region, endpoint })
-            const clusterDescription: Cluster = await getEmrClusterDescription(
-              emr,
-              cluster.Id
-            )
+    const clusterPromises = clusterData.map(
+      (cluster: RawAwsEmrCluster, idx) =>
+        new Promise<void>(async resolveClusterDescription => {
+          const emr = new EMR({ ...config, region: cluster.region, endpoint })
+          const clusterDescription: Cluster = await getEmrClusterDescription(
+            emr,
+            cluster.Id
+          )
 
-            if (!isEmpty(clusterDescription)) {
-              clusterData[idx] = {
-                ...cluster,
-                ...clusterDescription,
-                Tags: convertAwsTagsToTagMap(clusterDescription.Tags as AwsTag[])
-              }
+          if (!isEmpty(clusterDescription)) {
+            clusterData[idx] = {
+              ...cluster,
+              ...clusterDescription,
+              Tags: convertAwsTagsToTagMap(clusterDescription.Tags as AwsTag[]),
             }
+          }
 
-            resolveClusterDescription()
-          })
-      )
+          resolveClusterDescription()
+        })
+    )
 
     await Promise.all(clusterPromises)
-    
-    resolve(groupBy(clusterData, 'region'))
+    errorLog.reset()
 
+    resolve(groupBy(clusterData, 'region'))
   })

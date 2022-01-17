@@ -18,11 +18,13 @@ import { Config } from 'aws-sdk/lib/config'
 import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'SNS'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 /**
@@ -50,7 +52,10 @@ const listSnsTopicArnsForRegion = async ({ sns, resolveRegion }) =>
         listTopicArnNameOpts,
         (err: AWSError, listTopicArnsOutput: ListTopicsResponse) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'sns:listTopics', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'sns:listTopics',
+              err,
+            })
           }
           /**
            * No SNS data for this region
@@ -89,14 +94,17 @@ const getTopicAttributes = async (
       { TopicArn: arn },
       (err: AWSError, topicAttributesData: GetTopicAttributesResponse) => {
         if (err || !topicAttributesData) {
-          generateAwsErrorLog(serviceName, 'sns:getTopicAttributes', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'sns:getTopicAttributes',
+            err,
+          })
         }
         const { Attributes = {} } = topicAttributesData || {}
         resolve(Attributes)
       }
     )
   })
-  
+
 const getTopicTags = async (sns: SNS, arn: string): Promise<TagMap> =>
   new Promise(resolveTags => {
     try {
@@ -104,7 +112,10 @@ const getTopicTags = async (sns: SNS, arn: string): Promise<TagMap> =>
         { ResourceArn: arn },
         (err: AWSError, data: ListTagsForResourceResponse) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'sns:listTagsForResource', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'sns:listTagsForResource',
+              err,
+            })
             return resolveTags({})
           }
 
@@ -136,7 +147,10 @@ const getTopicSubscriptions = async (
           (err: AWSError, data: ListSubscriptionsByTopicResponse) => {
             const { Subscriptions, NextToken } = data || {}
             if (err) {
-              generateAwsErrorLog(serviceName, 'sns:listSubscriptionsByTopic', err)
+              errorLog.generateAwsErrorLog({
+                functionName: 'sns:listSubscriptionsByTopic',
+                err,
+              })
             }
 
             subscriptions.push(...Subscriptions)
@@ -227,10 +241,8 @@ export default async ({
       const sns = new SNS({ ...config, region, endpoint })
       const listSubscriptionsPromise = new Promise<void>(
         async resolveSubscriptions => {
-          const subscriptionList: SubscriptionsList = await getTopicSubscriptions(
-            sns,
-            arn
-          )
+          const subscriptionList: SubscriptionsList =
+            await getTopicSubscriptions(sns, arn)
           snsData[idx].subscriptions = subscriptionList
           resolveSubscriptions()
         }
@@ -239,6 +251,7 @@ export default async ({
     })
     logger.debug(lt.gettingSNSTopicSubscriptions)
     await Promise.all(subscriptionsPromises)
+    errorLog.reset()
 
     resolve(groupBy(snsData, 'region'))
   })

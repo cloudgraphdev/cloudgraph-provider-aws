@@ -12,11 +12,8 @@ import Route53, {
 import { Config } from 'aws-sdk/lib/config'
 
 import awsLoggerText from '../../properties/logger'
-import {
-  initTestEndpoint,
-  generateAwsErrorLog,
-  setAwsRetryOptions,
-} from '../../utils'
+import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import {
   getHostedZoneData,
   listHostedZones,
@@ -28,6 +25,7 @@ import services from '../../enums/services'
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'Route53 Records'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({
   baseDelay: ROUTE_53_CUSTOM_DELAY,
@@ -67,7 +65,10 @@ const listRecordsForHostedZone = async ({
     args,
     async (err: AWSError, data: ListResourceRecordSetsResponse) => {
       if (err) {
-        generateAwsErrorLog(serviceName, 'route53:listResourceRecordSets', err)
+        errorLog.generateAwsErrorLog({
+          functionName: 'route53:listResourceRecordSets',
+          err,
+        })
       }
 
       /**
@@ -185,6 +186,7 @@ export default async ({
 
     await Promise.all(recordPromises)
 
+    errorLog.reset()
     logger.debug(lt.doneFetchingRoute53RecordsData)
 
     resolve(groupBy(recordData, 'region'))

@@ -10,11 +10,8 @@ import IAM, {
 import { Config } from 'aws-sdk/lib/config'
 
 import awsLoggerText from '../../properties/logger'
-import {
-  initTestEndpoint,
-  generateAwsErrorLog,
-  setAwsRetryOptions,
-} from '../../utils'
+import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { globalRegionName } from '../../enums/regions'
 
 import {
@@ -25,6 +22,7 @@ import {
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'IAM Password Policy'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({
   maxRetries: MAX_FAILED_AWS_REQUEST_RETRIES,
@@ -38,7 +36,10 @@ export const getPasswordPolicy = async (
     iam.getAccountPasswordPolicy(
       async (err: AWSError, data: GetAccountPasswordPolicyResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:getAccountPasswordPolicy', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:getAccountPasswordPolicy',
+            err,
+          })
         }
         if (!isEmpty(data)) {
           const { PasswordPolicy: passwordPolicy } = data
@@ -76,6 +77,7 @@ export default async ({
     // Fetch IAM Password Policy
     const passwordPolicy = await getPasswordPolicy(client)
 
+    errorLog.reset()
     logger.debug(lt.doneFetchingIamPasswordPolicy)
 
     resolve({ [globalRegionName]: [passwordPolicy] })

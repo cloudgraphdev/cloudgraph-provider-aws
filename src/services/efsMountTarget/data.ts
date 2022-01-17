@@ -10,13 +10,15 @@ import isEmpty from 'lodash/isEmpty'
 import flatMap from 'lodash/flatMap'
 import uniqBy from 'lodash/uniqBy'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import EfsClass from '../efs'
 import { RawAwsEfs } from '../efs/data'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'EFS mount target'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsEfsMountTarget extends MountTargetDescription {
@@ -43,38 +45,48 @@ export default async ({
     const regionPromises = []
 
     regions.split(',').map(region => {
-      efsFileSystems.map(
-        efs => {
-          const regionPromise = new Promise<void>(resolveMountTargets =>
-            new EFS({ ...config, region: efs.region, endpoint }).describeMountTargets(
-              { FileSystemId: efs.FileSystemId },
-              async (err: AWSError, data: DescribeMountTargetsResponse) => {
-                if (err) {
-                  generateAwsErrorLog(serviceName, 'efs:describeMountTargets', err)
-                }
+      efsFileSystems.map(efs => {
+        const regionPromise = new Promise<void>(resolveMountTargets =>
+          new EFS({
+            ...config,
+            region: efs.region,
+            endpoint,
+          }).describeMountTargets(
+            { FileSystemId: efs.FileSystemId },
+            async (err: AWSError, data: DescribeMountTargetsResponse) => {
+              if (err) {
+                errorLog.generateAwsErrorLog({
+                  functionName: 'efs:describeMountTargets',
+                  err,
+                })
+              }
 
-                if (isEmpty(data)) {
-                  return resolveMountTargets()
-                }
+              if (isEmpty(data)) {
+                return resolveMountTargets()
+              }
 
-                const { MountTargets: mountTargets = [] } = data || {}
+              const { MountTargets: mountTargets = [] } = data || {}
 
-                logger.debug(lt.fetchedEfsMountTargets(mountTargets.length))
+              logger.debug(lt.fetchedEfsMountTargets(mountTargets.length))
 
-                if (!isEmpty(mountTargets))  {
-                  efsMountTargets.push(...mountTargets.map(target => ({
+              if (!isEmpty(mountTargets)) {
+                efsMountTargets.push(
+                  ...mountTargets.map(target => ({
                     region,
                     ...target,
-                  })))
-                }
-                resolveMountTargets()
+                  }))
+                )
               }
-            )
+              resolveMountTargets()
+            }
           )
-          regionPromises.push(regionPromise)
-        })
+        )
+        regionPromises.push(regionPromise)
+      })
     })
 
     await Promise.all(regionPromises)
+    errorLog.reset()
+
     resolve(groupBy(uniqBy(efsMountTargets, 'MountTargetId'), 'region'))
   })

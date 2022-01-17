@@ -16,11 +16,8 @@ import { Config } from 'aws-sdk/lib/config'
 
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import {
-  initTestEndpoint,
-  generateAwsErrorLog,
-  setAwsRetryOptions,
-} from '../../utils'
+import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { globalRegionName } from '../../enums/regions'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 
@@ -32,6 +29,7 @@ import {
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'IAM Role'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({
   maxRetries: MAX_FAILED_AWS_REQUEST_RETRIES,
@@ -54,7 +52,10 @@ const tagsByRoleName = async (
       { RoleName },
       (err: AWSError, data: ListRoleTagsResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listRoleTags', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:listRoleTags',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -80,7 +81,10 @@ const policiesByRoleName = async (
       { RoleName },
       (err: AWSError, data: ListRolePoliciesResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listRolePolicies', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:listRolePolicies',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -103,7 +107,10 @@ const managedPoliciesByRoleName = async (
       { RoleName },
       (err: AWSError, data: ListAttachedRolePoliciesResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listAttachedRolePolicies', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:listAttachedRolePolicies',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -134,7 +141,10 @@ export const listIamRoles = async (
       { Marker: marker },
       async (err: AWSError, data: ListRolesResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listRoles', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:listRoles',
+            err,
+          })
         }
         if (!isEmpty(data)) {
           const { Roles: roles = [], IsTruncated, Marker } = data
@@ -218,6 +228,7 @@ export default async ({
     // Fetch IAM Roles
     rolesData = await listIamRoles(client)
 
+    errorLog.reset()
     logger.debug(lt.foundRoles(rolesData.length))
 
     resolve(groupBy(rolesData, 'region'))

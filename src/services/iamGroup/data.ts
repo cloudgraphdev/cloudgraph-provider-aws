@@ -13,11 +13,8 @@ import IAM, {
 import { Config } from 'aws-sdk/lib/config'
 
 import awsLoggerText from '../../properties/logger'
-import {
-  initTestEndpoint,
-  generateAwsErrorLog,
-  setAwsRetryOptions,
-} from '../../utils'
+import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { globalRegionName } from '../../enums/regions'
 
 import {
@@ -28,6 +25,7 @@ import {
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'IAM Group'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({
   maxRetries: MAX_FAILED_AWS_REQUEST_RETRIES,
@@ -49,7 +47,10 @@ const policiesByGroupName = async (
       { GroupName },
       (err: AWSError, data: ListUserPoliciesResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listGroupPolicies', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:listGroupPolicies',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -72,7 +73,10 @@ const managedPoliciesByGroupName = async (
       { GroupName },
       (err: AWSError, data: ListAttachedGroupPoliciesResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listAttachedGroupPolicies', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:listAttachedGroupPolicies',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -102,7 +106,10 @@ export const listIamGroups = async (
       { Marker: marker },
       async (err: AWSError, data: ListGroupsResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listGroups', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:listGroups',
+            err,
+          })
         }
         if (!isEmpty(data)) {
           const { Groups: groups = [], IsTruncated, Marker } = data
@@ -179,6 +186,7 @@ export default async ({
     // Fetch IAM Groups
     groupsData = await listIamGroups(client)
 
+    errorLog.reset()
     logger.debug(lt.foundGroups(groupsData.length))
 
     resolve(groupBy(groupsData, 'region'))

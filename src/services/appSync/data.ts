@@ -5,11 +5,13 @@ import { Config } from 'aws-sdk/lib/config'
 import { groupBy } from 'lodash'
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'AppSync'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsFunction extends AppSync.FunctionConfiguration {
@@ -49,7 +51,10 @@ const listGraphqlApiData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'AppSync:listGraphqlApiData', err)
+    errorLog.generateAwsErrorLog({
+      functionName: 'AppSync:listGraphqlApiData',
+      err,
+    })
   }
   return []
 }
@@ -73,7 +78,10 @@ const listApiKeysData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'AppSync:listApiKeysData', err)
+    errorLog.generateAwsErrorLog({
+      functionName: 'AppSync:listApiKeysData',
+      err,
+    })
   }
   return []
 }
@@ -99,7 +107,10 @@ const listDataSourcesData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'AppSync:listDataSourcesData', err)
+    errorLog.generateAwsErrorLog({
+      functionName: 'AppSync:listDataSourcesData',
+      err,
+    })
   }
   return []
 }
@@ -123,7 +134,10 @@ const listFunctionsData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'AppSync:listFunctionsData', err)
+    errorLog.generateAwsErrorLog({
+      functionName: 'AppSync:listFunctionsData',
+      err,
+    })
   }
   return []
 }
@@ -152,7 +166,10 @@ const listResolversByFunction = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'AppSync:listResolversByFunction', err)
+    errorLog.generateAwsErrorLog({
+      functionName: 'AppSync:listResolversByFunction',
+      err,
+    })
   }
   return null
 }
@@ -176,7 +193,10 @@ const listTypesData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'AppSync:listTypesData', err)
+    errorLog.generateAwsErrorLog({
+      functionName: 'AppSync:listTypesData',
+      err,
+    })
   }
   return []
 }
@@ -201,7 +221,10 @@ const listTypesResolverData = async (
 
     return fullResources
   } catch (err) {
-    generateAwsErrorLog(serviceName, 'AppSync:listTypesData', err)
+    errorLog.generateAwsErrorLog({
+      functionName: 'AppSync:listTypesData',
+      err,
+    })
   }
   return []
 }
@@ -267,6 +290,7 @@ export default async ({
     }
   }
 
+  errorLog.reset()
   logger.debug(lt.doneFetchedAppSync)
 
   return groupBy(graphqlApiData, 'region')

@@ -11,11 +11,13 @@ import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
 import { TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'EFS'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 const listFileSystems = async ({
@@ -42,7 +44,10 @@ const listFileSystems = async ({
         args,
         (err: AWSError, data: DescribeFileSystemsResponse) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'efs:describeFileSystems', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'efs:describeFileSystems',
+              err,
+            })
           }
 
           /**
@@ -120,17 +125,21 @@ export default async ({
       const regionPromise = new Promise<void>(async resolveRegion => {
         const efsList = await listFileSystems({ efs, region, resolveRegion })
         if (!isEmpty(efsList)) {
-          efsFileSystems.push(...efsList.map(efs => ({
-            ...efs,
-            region,
-            Tags: convertAwsTagsToTagMap(efs.Tags)
-          })))
+          efsFileSystems.push(
+            ...efsList.map(efs => ({
+              ...efs,
+              region,
+              Tags: convertAwsTagsToTagMap(efs.Tags),
+            }))
+          )
         }
         resolveRegion()
       })
       regionPromises.push(regionPromise)
     })
-  
+
     await Promise.all(regionPromises)
+    errorLog.reset()
+
     resolve(groupBy(efsFileSystems, 'region'))
   })

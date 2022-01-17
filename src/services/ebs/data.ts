@@ -13,7 +13,8 @@ import CloudGraph from '@cloudgraph/sdk'
 
 import { AwsTag } from '../../types'
 
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import awsLoggerText from '../../properties/logger'
 
@@ -24,6 +25,7 @@ import awsLoggerText from '../../properties/logger'
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'EBS'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 const listEbsVolumes = async ({
@@ -47,7 +49,10 @@ const listEbsVolumes = async ({
 
   ec2.describeVolumes(args, (err: AWSError, data: DescribeVolumesResult) => {
     if (err) {
-      generateAwsErrorLog(serviceName, 'ec2:describeVolumes', err)
+      errorLog.generateAwsErrorLog({
+        functionName: 'ec2:describeVolumes',
+        err,
+      })
     }
 
     /**
@@ -116,6 +121,7 @@ export default async ({
 
     logger.debug(lt.fetchingEbsData)
     await Promise.all(regionPromises)
+    errorLog.reset()
 
     resolve(groupBy(ebsData, 'region'))
   })

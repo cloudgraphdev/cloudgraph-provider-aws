@@ -17,11 +17,8 @@ import groupBy from 'lodash/groupBy'
 import { apiGatewayArn, apiGatewayRestApiArn } from '../../utils/generateArns'
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import {
-  initTestEndpoint,
-  generateAwsErrorLog,
-  setAwsRetryOptions,
-} from '../../utils'
+import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { API_GATEWAY_CUSTOM_DELAY } from '../../config/constants'
 
 const lt = { ...awsLoggerText }
@@ -29,6 +26,7 @@ const { logger } = CloudGraph
 const MAX_REST_API = 500
 const MAX_DOMAIN_NAMES = 500
 const serviceName = 'API Gateway Rest API'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({
   baseDelay: API_GATEWAY_CUSTOM_DELAY,
@@ -56,7 +54,10 @@ export const getRestApisForRegion = async (
         apiGw.getRestApis(getRestApisOpts, (err: AWSError, data: RestApis) => {
           const { position, items = [] } = data || {}
           if (err) {
-            generateAwsErrorLog(serviceName, 'apiGw:getRestApis', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'apiGw:getRestApis',
+              err,
+            })
           }
 
           restApiList.push(...items)
@@ -85,7 +86,10 @@ export const getTags = async ({
     try {
       apiGw.getTags({ resourceArn: arn }, (err: AWSError, data: Tags) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'apiGw:getTags', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'apiGw:getTags',
+            err,
+          })
           resolve({})
         }
         const { tags = {} } = data || {}
@@ -111,12 +115,15 @@ const getAPIMappings = (
           if (isEmpty(data)) {
             resolveBasePathMapping({
               domainName,
-              restApiData: []
+              restApiData: [],
             })
           }
 
           if (err) {
-            generateAwsErrorLog(serviceName, 'apiGw:getBasePathMappings', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'apiGw:getBasePathMappings',
+              err,
+            })
           }
 
           const { items: restApiData = [] } = data || {}
@@ -142,7 +149,10 @@ export const getDomainNamesForRegion = async (
         getDomainNamesOpts,
         (err: AWSError, data: DomainNames) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'apiGw:getDomainNames', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'apiGw:getDomainNames',
+              err,
+            })
           }
 
           const { items = [] } = data || {}
@@ -237,6 +247,7 @@ export default async ({
 
     logger.debug(lt.gettingApiGatewayTags)
     await Promise.all(tagsPromises)
-    
+    errorLog.reset()
+
     resolve(groupBy(apiGatewayData, 'region'))
   })

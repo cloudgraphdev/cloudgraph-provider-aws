@@ -7,7 +7,8 @@ import EC2, { Address, DescribeAddressesResult } from 'aws-sdk/clients/ec2'
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 /**
  * EIP
@@ -15,6 +16,7 @@ import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'EIP'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 /**
@@ -43,7 +45,10 @@ export default async ({
           {},
           (err: AWSError, data: DescribeAddressesResult) => {
             if (err) {
-              generateAwsErrorLog(serviceName, 'ec2:describeAddresses', err)
+              errorLog.generateAwsErrorLog({
+                functionName: 'ec2:describeAddresses',
+                err,
+              })
             }
 
             const { Addresses: addresses = [] } = data || {}
@@ -65,6 +70,7 @@ export default async ({
 
     logger.debug(lt.fetchingEip)
     await Promise.all(regionPromises)
+    errorLog.reset()
 
     resolve(groupBy(eipData, 'region'))
   })

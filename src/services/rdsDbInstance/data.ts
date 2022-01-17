@@ -9,13 +9,16 @@ import { AWSError } from 'aws-sdk/lib/error'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 import { Config } from 'aws-sdk/lib/config'
-import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import awsLoggerText from '../../properties/logger'
 import { TagMap, AwsTag } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-const {logger} = CloudGraph
+
+const { logger } = CloudGraph
 const lt = { ...awsLoggerText }
 const serviceName = 'RDS DB instance'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 const listDBInstancesForRegion = async rds =>
@@ -32,7 +35,10 @@ const listDBInstancesForRegion = async rds =>
           (err: AWSError, data: DBInstanceMessage) => {
             const { Marker, DBInstances = [] } = data || {}
             if (err) {
-              generateAwsErrorLog(serviceName, 'rds:describeDBInstances', err)
+              errorLog.generateAwsErrorLog({
+                functionName: 'rds:describeDBInstances',
+                err,
+              })
             }
 
             dbInstanceList.push(...DBInstances)
@@ -58,7 +64,10 @@ const getResourceTags = async (rds: RDS, arn: string): Promise<TagMap> =>
         { ResourceName: arn },
         (err: AWSError, data: TagListMessage) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'rds:listTagsForResource', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'rds:listTagsForResource',
+              err,
+            })
             return resolve({})
           }
           const { TagList: tags = [] } = data || {}
@@ -120,6 +129,7 @@ export default async ({
     })
 
     await Promise.all(tagsPromises)
+    errorLog.reset()
 
     resolve(groupBy(rdsData, 'region'))
   })

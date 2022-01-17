@@ -1,7 +1,5 @@
 import { Config } from 'aws-sdk'
-import ECS, {
-  Service,
-} from 'aws-sdk/clients/ecs'
+import ECS, { Service } from 'aws-sdk/clients/ecs'
 import CloudGraph from '@cloudgraph/sdk'
 import flatMap from 'lodash/flatMap'
 import groupBy from 'lodash/groupBy'
@@ -9,13 +7,15 @@ import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { initTestEndpoint } from '../../utils'
 import EcsClusterClass from '../ecsCluster'
 import { RawAwsEcsCluster } from '../ecsCluster/data'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'ECS service'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsEcsService extends Service {
@@ -40,7 +40,7 @@ export default async ({
       regions,
     })
     const ecsClusters: RawAwsEcsCluster[] = flatMap(clusterResult)
-  
+
     /**
      * Get the arns of all the services
      */
@@ -52,7 +52,10 @@ export default async ({
               { cluster },
               (err, data) => {
                 if (err) {
-                  generateAwsErrorLog(serviceName, 'ecs:listServices', err)
+                  errorLog.generateAwsErrorLog({
+                    functionName: 'ecs:listServices',
+                    err,
+                  })
                 }
 
                 if (isEmpty(data)) {
@@ -66,14 +69,14 @@ export default async ({
             )
           )
       )
-    )  
+    )
     /**
      * Check to make sure each cluster has services before we search for them
      */
     ecsServiceArns = ecsServiceArns
       .flat()
       .filter(({ serviceArns }) => !isEmpty(serviceArns))
-  
+
     /**
      * Get all the details for each service
      */
@@ -84,7 +87,10 @@ export default async ({
             { services, cluster },
             (err, data) => {
               if (err) {
-                generateAwsErrorLog(serviceName, 'ecs:describeServices', err)
+                errorLog.generateAwsErrorLog({
+                  functionName: 'ecs:describeServices',
+                  err,
+                })
               }
 
               if (isEmpty(data)) {
@@ -95,19 +101,22 @@ export default async ({
 
               logger.debug(lt.fetchedEcsServices(services.length))
 
-              ecsServices.push(...services.map(service => ({
-                region,
-                ...service,
-                Tags: convertAwsTagsToTagMap(service.tags as AwsTag[]),
-              })))
+              ecsServices.push(
+                ...services.map(service => ({
+                  region,
+                  ...service,
+                  Tags: convertAwsTagsToTagMap(service.tags as AwsTag[]),
+                }))
+              )
 
               resolveEcsData()
             }
           )
         )
-      )
+    )
 
     await Promise.all(ecsServicePromises)
-  
+    errorLog.reset()
+
     resolve(groupBy(ecsServices, 'region'))
   })

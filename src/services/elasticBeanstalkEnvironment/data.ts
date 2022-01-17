@@ -14,12 +14,14 @@ import isEmpty from 'lodash/isEmpty'
 import { Credentials, TagMap } from '../../types'
 import { settleAllPromises } from '../../utils/index'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { getResourceTags } from '../elasticBeanstalkApplication/data'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'ElasticBeanstalkEnv'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const MAX_ITEMS = 1000
 
@@ -48,11 +50,10 @@ const listEnvironments = async (
           (err: AWSError, data: EnvironmentDescriptionsMessage) => {
             const { Environments = [], NextToken: nextToken } = data || {}
             if (err) {
-              generateAwsErrorLog(
-                serviceName,
-                'elasticBeanstalk:describeEnvironments',
-                err
-              )
+              errorLog.generateAwsErrorLog({
+                functionName: 'elasticBeanstalk:describeEnvironments',
+                err,
+              })
             }
 
             environments.push(...Environments)
@@ -85,11 +86,10 @@ const getConfigSettingsForEnv = async (
       },
       (err: AWSError, data: ConfigurationSettingsDescriptions) => {
         if (err) {
-          generateAwsErrorLog(
-            serviceName,
-            'elasticBeanstalk:describeConfigurationSettings',
-            err
-          )
+          errorLog.generateAwsErrorLog({
+            functionName: 'elasticBeanstalk:describeConfigurationSettings',
+            err,
+          })
         }
         const { ConfigurationSettings: settings = [] } = data || {}
         resolve(settings)
@@ -108,11 +108,10 @@ const getResourcesForEnv = async (
       },
       (err: AWSError, data: EnvironmentResourceDescriptionsMessage) => {
         if (err) {
-          generateAwsErrorLog(
-            serviceName,
-            'elasticBeanstalk:describeEnvironmentResources',
-            err
-          )
+          errorLog.generateAwsErrorLog({
+            functionName: 'elasticBeanstalk:describeEnvironmentResources',
+            err,
+          })
         }
         const { EnvironmentResources: resources = {} } = data || {}
         resolve(resources)
@@ -179,6 +178,7 @@ export default async ({
         })
       })
     )
+    errorLog.reset()
     logger.debug(lt.fetchedElasticBeanstalkEnvs(numberOfEnvs))
     resolve(output)
   })

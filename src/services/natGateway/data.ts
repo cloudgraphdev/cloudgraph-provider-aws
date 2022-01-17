@@ -14,11 +14,13 @@ import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'NAT Gateway'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 /**
@@ -61,7 +63,10 @@ export default async ({
         args,
         (err: AWSError, data: DescribeNatGatewaysResult) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'ec2:describeNatGateways', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'ec2:describeNatGateways',
+              err,
+            })
           }
 
           /**
@@ -123,5 +128,7 @@ export default async ({
     })
 
     await Promise.all(regionPromises)
+    errorLog.reset()
+
     resolve(groupBy(natGatewayData, 'region'))
   })

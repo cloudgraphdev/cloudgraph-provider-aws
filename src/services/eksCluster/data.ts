@@ -13,11 +13,13 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
 import { TagMap } from '../../types'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'EKS cluster'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const MAX_ITEMS = 100
 
@@ -36,7 +38,10 @@ const listClustersForRegion = async ({ eks, resolveRegion }) =>
           (err: AWSError, data: ListClustersResponse) => {
             const { nextToken, clusters = [] } = data || {}
             if (err) {
-              generateAwsErrorLog(serviceName, 'eks:listClusters', err)
+              errorLog.generateAwsErrorLog({
+                functionName: 'eks:listClusters',
+                err,
+              })
             }
             /**
              * No clusters for this region
@@ -72,7 +77,10 @@ const describeCluster = async (eks: EKS, name: string): Promise<Cluster> =>
         descClusterOpts,
         (err: AWSError, data: DescribeClusterResponse) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'eks:describeCluster', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'eks:describeCluster',
+              err,
+            })
             return resolve({})
           }
 
@@ -92,7 +100,10 @@ const getResourceTags = async (eks: EKS, arn: string): Promise<TagMap> =>
         { resourceArn: arn },
         (err: AWSError, data: ListTagsForResourceResponse) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'eks:listTagsForResource', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'eks:listTagsForResource',
+              err,
+            })
             return resolve({})
           }
 
@@ -116,7 +127,7 @@ export default async ({
 }: {
   regions: string
   config: Config
-}): Promise<{[region: string]: RawAwsEksCluster[]}> =>
+}): Promise<{ [region: string]: RawAwsEksCluster[] }> =>
   new Promise(async resolve => {
     const eksData: RawAwsEksCluster[] = []
     const regionPromises = []
@@ -174,6 +185,7 @@ export default async ({
     })
 
     await Promise.all(tagsPromises)
+    errorLog.reset()
 
     resolve(groupBy(eksData, 'region'))
   })

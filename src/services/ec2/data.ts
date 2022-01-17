@@ -28,12 +28,14 @@ import CloudGraph from '@cloudgraph/sdk'
 import metricsTypes, { metricStats } from './metrics'
 import { TagMap, AwsTag } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'EC2'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 const cwGetMetricDataLimit = 500
@@ -95,7 +97,10 @@ export default async ({
         args,
         (err: AWSError, data: DescribeInstancesResult) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'ec2:describeInstances', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'ec2:describeInstances',
+              err,
+            })
           }
 
           /**
@@ -169,7 +174,10 @@ export default async ({
           { KeyNames: [KeyName] },
           (err: AWSError, data: DescribeKeyPairsResult) => {
             if (err) {
-              generateAwsErrorLog(serviceName, 'ec2:describeKeyPairs', err)
+              errorLog.generateAwsErrorLog({
+                functionName: 'ec2:describeKeyPairs',
+                err,
+              })
             }
             /**
              * No Key Pair data for this instance
@@ -233,11 +241,10 @@ export default async ({
               { InstanceId, Attribute: 'disableApiTermination' },
               (err: AWSError, data: InstanceAttribute) => {
                 if (err) {
-                  generateAwsErrorLog(
-                    serviceName,
-                    'ec2:desrcibeInstanceAttributes',
-                    err
-                  )
+                  errorLog.generateAwsErrorLog({
+                    functionName: 'ec2:desrcibeInstanceAttributes',
+                    err,
+                  })
                 }
 
                 /**
@@ -293,7 +300,10 @@ export default async ({
         args,
         (err: AWSError, data: DescribeTagsResult) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'ec2:describeTags', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'ec2:describeTags',
+              err,
+            })
           }
 
           /**
@@ -389,7 +399,10 @@ export default async ({
             { ImageIds: [ImageId] },
             (err: AWSError, data: DescribeImagesResult) => {
               if (err) {
-                generateAwsErrorLog(serviceName, 'ec2:describeImages', err)
+                errorLog.generateAwsErrorLog({
+                  functionName: 'ec2:describeImages',
+                  err,
+                })
               }
 
               /**
@@ -426,11 +439,10 @@ export default async ({
             data: DescribeIamInstanceProfileAssociationsResult
           ) => {
             if (err) {
-              generateAwsErrorLog(
-                serviceName,
-                'ec2:describeIamInstanceProfileAssociations',
-                err
-              )
+              errorLog.generateAwsErrorLog({
+                functionName: 'ec2:describeIamInstanceProfileAssociations',
+                err,
+              })
             }
 
             const {
@@ -534,12 +546,11 @@ export default async ({
                   } else {
                     token = data.NextToken
                   }
-                } catch (e: any) {
-                  generateAwsErrorLog(
-                    serviceName,
-                    'cloudwatch:getMetricData',
-                    e
-                  )
+                } catch (err: any) {
+                  errorLog.generateAwsErrorLog({
+                    functionName: 'ec2:getMetricData',
+                    err,
+                  })
                   resolveMetric()
                 }
               }
@@ -612,6 +623,8 @@ export default async ({
       ec2Instances[ec2Idx].IamInstanceProfile =
         iamInstanceProfile[InstanceId] || {}
     })
+
+    errorLog.reset()
 
     /**
      * Return the instances grouped by region

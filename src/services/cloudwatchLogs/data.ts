@@ -17,11 +17,13 @@ import { Config } from 'aws-sdk/lib/config'
 import { AWSError } from 'aws-sdk/lib/error'
 
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint, generateAwsErrorLog } from '../../utils'
+import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'Cloudwatch Logs'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 const listLogGroupsForRegion = async ({
@@ -47,11 +49,10 @@ const listLogGroupsForRegion = async ({
           args,
           (err: AWSError, data: DescribeLogGroupsResponse) => {
             if (err) {
-              generateAwsErrorLog(
-                serviceName,
-                'cloudwatch:describeLogGroups',
-                err
-              )
+              errorLog.generateAwsErrorLog({
+                functionName: 'cloudwatch:describeLogGroups',
+                err,
+              })
             }
 
             /**
@@ -107,11 +108,10 @@ const listLogGroupMetricFilters = async ({
           (err: AWSError, data: DescribeMetricFiltersResponse) => {
             const { nextToken, metricFilters } = data || {}
             if (err) {
-              generateAwsErrorLog(
-                serviceName,
-                'cloudwatch:describeMetricFilters',
-                err
-              )
+              errorLog.generateAwsErrorLog({
+                functionName: 'cloudwatch:describeMetricFilters',
+                err,
+              })
             }
 
             /**
@@ -124,7 +124,9 @@ const listLogGroupMetricFilters = async ({
             metricFiltersList.push(...metricFilters)
 
             if (nextToken) {
-              logger.debug(lt.foundMoreCloudwatchMetricFilters(metricFilters.length))
+              logger.debug(
+                lt.foundMoreCloudwatchMetricFilters(metricFilters.length)
+              )
               listAllLogMetricFilters(nextToken)
             }
 
@@ -215,6 +217,7 @@ export default async ({
 
     logger.debug(lt.gettingCloudwatchLogGroups)
     await Promise.all(regionPromises)
+    errorLog.reset()
 
     resolve(groupBy(cloudwatchLogsResult, 'region'))
   })

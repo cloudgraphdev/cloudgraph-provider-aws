@@ -22,12 +22,13 @@ import groupBy from 'lodash/groupBy'
 import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-
-import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { initTestEndpoint } from '../../utils'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'DynamoDB'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsDynamoDbTable extends TableDescription {
@@ -72,7 +73,10 @@ const listTableNamesForRegion = async ({
         listTableNameOpts,
         (err: AWSError, listTablesOutput: ListTablesOutput) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'dynamodb:listTables', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'dynamodb:listTables',
+              err,
+            })
           }
           /**
            * No DynamoDB data for this region
@@ -112,7 +116,10 @@ const getTableDescription = async (
       { TableName: tableName },
       (err: AWSError, tableInfoOutput: DescribeTableOutput) => {
         if (err || !tableInfoOutput) {
-          generateAwsErrorLog(serviceName, 'dynamodb:describeTable', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'dynamodb:describeTable',
+            err,
+          })
         }
         if (!isEmpty(tableInfoOutput)) {
           resolve(tableInfoOutput.Table)
@@ -142,11 +149,10 @@ const getTableTags = async (
           (err: AWSError, data: ListTagsOfResourceOutput) => {
             const { Tags = [], NextToken: nextToken } = data || {}
             if (err) {
-              generateAwsErrorLog(
-                serviceName,
-                'dynamodb:listTagsOfResource',
-                err
-              )
+              errorLog.generateAwsErrorLog({
+                functionName: 'dynamodb:listTagsOfResource',
+                err,
+              })
             }
 
             tags.push(...Tags)
@@ -177,7 +183,10 @@ const getTableTTLDescription = async (
       },
       (err: AWSError, data: DescribeTimeToLiveOutput) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'dynamodb:describeTimeToLive', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'dynamodb:describeTimeToLive',
+            err,
+          })
         }
         if (!isEmpty(data)) {
           resolve(data.TimeToLiveDescription)
@@ -198,11 +207,10 @@ const getTableBackupsDescription = async (
       },
       (err: AWSError, data: DescribeContinuousBackupsOutput) => {
         if (err) {
-          generateAwsErrorLog(
-            serviceName,
-            'dynamodb:describeContinuousBackups',
-            err
-          )
+          errorLog.generateAwsErrorLog({
+            functionName: 'dynamodb:describeContinuousBackups',
+            err,
+          })
         }
         if (!isEmpty(data)) {
           resolve(data.ContinuousBackupsDescription)
@@ -312,6 +320,7 @@ export default async ({
     })
     logger.debug(lt.gettingTableBackupInfo)
     await Promise.all(backupInfoPromises)
+    errorLog.reset()
 
     resolve(groupBy(tableData, 'region'))
   })

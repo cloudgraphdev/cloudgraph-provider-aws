@@ -15,11 +15,8 @@ import { Config } from 'aws-sdk/lib/config'
 
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import {
-  initTestEndpoint,
-  generateAwsErrorLog,
-  setAwsRetryOptions,
-} from '../../utils'
+import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { globalRegionName } from '../../enums/regions'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 
@@ -29,11 +26,11 @@ import {
 } from '../../config/constants'
 import MessageInterval from '../../utils/messageInterval'
 
-
 const MAX_ITEMS = 1000
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'IAM Policy'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({
   maxRetries: MAX_FAILED_AWS_REQUEST_RETRIES,
@@ -55,7 +52,10 @@ const tagsByPolicyArn = async (
       { PolicyArn: Arn },
       (err: AWSError, data: ListPolicyTagsResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listPolicyTags', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:listPolicyTags',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -80,7 +80,10 @@ const policyVersionByPolicyArn = async (
       { PolicyArn: Arn, VersionId: DefaultVersionId },
       (err: AWSError, data: GetPolicyVersionResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:getPolicyVersion', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:getPolicyVersion',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -121,7 +124,10 @@ export const listIamPolicies = async ({
       },
       async (err: AWSError, data: ListPoliciesResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listPolicies', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:listPolicies',
+            err,
+          })
         }
         if (!isEmpty(data)) {
           const { Policies: policies = [], IsTruncated, Marker } = data
@@ -216,6 +222,7 @@ export default async ({
 
     policiesData = unionBy(allAttachedPolicies, localPolicies, 'Arn')
 
+    errorLog.reset()
     logger.debug(lt.foundPolicies(policiesData.length))
 
     resolve(groupBy(policiesData, 'region'))

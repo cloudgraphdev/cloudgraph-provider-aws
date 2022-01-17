@@ -10,17 +10,15 @@ import CloudFormation, {
 import { Config } from 'aws-sdk/lib/config'
 import { groupBy, isEmpty } from 'lodash'
 
-import { Credentials, TagMap } from '../../types'
-import {
-  generateAwsErrorLog,
-  initTestEndpoint,
-  setAwsRetryOptions,
-} from '../../utils'
+import { TagMap } from '../../types'
+import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import { CLOUDFORMATION_STACK_CUSTOM_DELAY } from '../../config/constants'
 import { settleAllPromises } from '../../utils/index'
 
 const serviceName = 'CloudFormationStack'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({
   baseDelay: CLOUDFORMATION_STACK_CUSTOM_DELAY,
@@ -48,11 +46,10 @@ const getAllStacks = async (cf: CloudFormation): Promise<Stack[]> =>
         const { Stacks = [], NextToken } = data || {}
 
         if (err) {
-          generateAwsErrorLog(
-            serviceName,
-            'CloudFormationStack:describeStacks',
-            err
-          )
+          errorLog.generateAwsErrorLog({
+            functionName: 'CloudFormationStack:describeStacks',
+            err,
+          })
         }
 
         fullStacks.push(...Stacks)
@@ -85,11 +82,10 @@ const getStackResourceDrifts = async (
           const { StackResourceDrifts = [], NextToken } = data || {}
 
           if (err) {
-            generateAwsErrorLog(
-              serviceName,
-              'CloudFormationStack:describeStackResourceDrifts',
-              err
-            )
+            errorLog.generateAwsErrorLog({
+              functionName: 'CloudFormationStack:describeStackResourceDrifts',
+              err,
+            })
           }
 
           driftedResources.push(...StackResourceDrifts)
@@ -136,6 +132,7 @@ export default async ({
       cfStacksData.push(...(await settleAllPromises(data)))
     }
   }
+  errorLog.reset()
 
   return groupBy(cfStacksData, 'region')
 }

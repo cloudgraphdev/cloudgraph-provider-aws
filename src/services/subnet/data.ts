@@ -15,12 +15,14 @@ import { TagMap, AwsTag } from '../../types'
 
 import awsLoggerText from '../../properties/logger'
 // import { Tag } from '../../types/generated'
-import { generateAwsErrorLog, initTestEndpoint } from '../../utils'
+import { initTestEndpoint } from '../../utils'
 import { convertAwsTagsToTagMap } from '../../utils/format'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'Subnet'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 /**
@@ -64,7 +66,10 @@ export default ({
         args,
         (err: AWSError, data: DescribeSubnetsResult) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'ec2:describeSubnets', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'ec2:describeSubnets',
+              err,
+            })
           }
 
           /**
@@ -127,6 +132,7 @@ export default ({
     })
 
     await Promise.all(regionPromises)
+    errorLog.reset()
 
     resolve(groupBy(subnetData, 'region'))
   })

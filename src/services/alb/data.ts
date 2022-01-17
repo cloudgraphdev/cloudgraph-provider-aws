@@ -25,7 +25,8 @@ import { TagMap } from '../../types'
 
 import awsLoggerText from '../../properties/logger'
 import { convertAwsTagsToTagMap } from '../../utils/format'
-import { initTestEndpoint, generateAwsErrorLog, setAwsRetryOptions } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
 import { ALB_CUSTOM_DELAY } from '../../config/constants'
 
 const lt = { ...awsLoggerText }
@@ -34,6 +35,7 @@ const lt = { ...awsLoggerText }
  */
 const { logger } = CloudGraph
 const serviceName = 'ALB'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({ baseDelay: ALB_CUSTOM_DELAY })
 
@@ -86,7 +88,10 @@ export default async ({
 
       return elbv2.describeLoadBalancers(args, async (err, data) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'elbv2:describeLoadBalancers', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'elbv2:describeLoadBalancers',
+            err,
+          })
         }
 
         /**
@@ -147,7 +152,12 @@ export default async ({
         new Promise<void>(resolveRegion =>
           describeAlbs({
             region,
-            elbv2: new ELBV2({ ...config, region, endpoint, ...customRetrySettings }),
+            elbv2: new ELBV2({
+              ...config,
+              region,
+              endpoint,
+              ...customRetrySettings,
+            }),
             resolveRegion,
           })
         )
@@ -173,7 +183,10 @@ export default async ({
     }): Promise<Request<DescribeTagsOutput, AWSError>> =>
       elbv2.describeTags({ ResourceArns }, async (err, data) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'elbv2:describeTags', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'elbv2:describeTags',
+            err,
+          })
         }
 
         /**
@@ -215,7 +228,12 @@ export default async ({
 
     albData.map(alb => {
       const { LoadBalancerArn: arn, region } = alb
-      const elbv2 = new ELBV2({ ...config, region, endpoint, ...customRetrySettings })
+      const elbv2 = new ELBV2({
+        ...config,
+        region,
+        endpoint,
+        ...customRetrySettings,
+      })
 
       tagPromises.push(
         new Promise<void>(resolveTags => {
@@ -250,7 +268,10 @@ export default async ({
         { LoadBalancerArn },
         async (err, data) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'elbv2:describeLoadBalancerAttributes', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'elbv2:describeLoadBalancerAttributes',
+              err,
+            })
           }
 
           /**
@@ -292,7 +313,12 @@ export default async ({
 
     albData.map(alb => {
       const { LoadBalancerArn, region } = alb
-      const elbv2 = new ELBV2({ ...config, region, endpoint, ...customRetrySettings })
+      const elbv2 = new ELBV2({
+        ...config,
+        region,
+        endpoint,
+        ...customRetrySettings,
+      })
       tagPromises.push(
         new Promise<void>(resolveAttributes => {
           getAttributesForAlb({
@@ -335,7 +361,10 @@ export default async ({
 
       return elbv2.describeListeners(args, async (err, data) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'elbv2:describeListeners', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'elbv2:describeListeners',
+            err,
+          })
         }
 
         /**
@@ -389,7 +418,12 @@ export default async ({
 
     albData.map(alb => {
       const { LoadBalancerArn, region } = alb
-      const elbv2 = new ELBV2({ ...config, region, endpoint, ...customRetrySettings })
+      const elbv2 = new ELBV2({
+        ...config,
+        region,
+        endpoint,
+        ...customRetrySettings,
+      })
       const listenerPromise = new Promise<void>(resolveListeners => {
         describeListenersForAlb({
           alb,
@@ -431,7 +465,10 @@ export default async ({
 
       return elbv2.describeTargetGroups(args, async (err, data) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'elbv2:describeTargetGroups', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'elbv2:describeTargetGroups',
+            err,
+          })
         }
 
         /**
@@ -488,7 +525,12 @@ export default async ({
 
     albData.map(alb => {
       const { LoadBalancerArn, region } = alb
-      const elbv2 = new ELBV2({ ...config, region, endpoint, ...customRetrySettings })
+      const elbv2 = new ELBV2({
+        ...config,
+        region,
+        endpoint,
+        ...customRetrySettings,
+      })
       const targetGroupPromise = new Promise<void>(resolveTargetGroups => {
         describeTargetGroupsForAlb({
           alb,
@@ -519,7 +561,10 @@ export default async ({
     }): Promise<Request<DescribeTargetHealthOutput, AWSError>> =>
       elbv2.describeTargetHealth({ TargetGroupArn }, async (err, data) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'elbv2:describeTargetHealth', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'elbv2:describeTargetHealth',
+            err,
+          })
         }
 
         /**
@@ -557,7 +602,12 @@ export default async ({
 
     albData.map(alb => {
       const { region, targetGroups = [] } = alb
-      const elbv2 = new ELBV2({ ...config, region, endpoint, ...customRetrySettings })
+      const elbv2 = new ELBV2({
+        ...config,
+        region,
+        endpoint,
+        ...customRetrySettings,
+      })
       targetGroups.map(({ TargetGroupArn }) => {
         targetHealthPromises.push(
           new Promise<void>(resolveTargetHealth => {
@@ -573,6 +623,7 @@ export default async ({
     })
 
     await Promise.all(targetHealthPromises)
+    errorLog.reset()
 
     resolve(groupBy(albData, 'region'))
   })

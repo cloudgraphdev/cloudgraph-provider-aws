@@ -24,11 +24,8 @@ import { Config } from 'aws-sdk/lib/config'
 
 import { TagMap } from '../../types'
 import awsLoggerText from '../../properties/logger'
-import {
-  initTestEndpoint,
-  generateAwsErrorLog,
-  setAwsRetryOptions,
-} from '../../utils'
+import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 import { globalRegionName } from '../../enums/regions'
 import { convertAwsTagsToTagMap, parseCSV } from '../../utils/format'
 import {
@@ -39,6 +36,7 @@ import {
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'IAM User'
+const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({
   maxRetries: MAX_FAILED_AWS_REQUEST_RETRIES,
@@ -94,7 +92,10 @@ const tagsByUsername = async (
       { UserName },
       (err: AWSError, data: ListUserTagsResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listUserTags', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:listUserTags',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -117,7 +118,10 @@ const groupsByUsername = async (
       { UserName },
       (err: AWSError, data: ListGroupsForUserResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listGroupsForUser', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:listGroupsForUser',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -142,7 +146,10 @@ const policiesByUsername = async (
       { UserName },
       (err: AWSError, data: ListUserPoliciesResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listGroupsForUser', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:listGroupsForUser',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -165,7 +172,10 @@ const managedPoliciesByUsername = async (
       { UserName },
       (err: AWSError, data: ListAttachedUserPoliciesResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listAttachedUserPolicies', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:listAttachedUserPolicies',
+            err,
+          })
         }
 
         if (!isEmpty(data)) {
@@ -198,7 +208,10 @@ const accessKeyByUsername = async (
       },
       async (err, { AccessKeyMetadata }: ListAccessKeysResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listAccessKeys', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:listAccessKeys',
+            err,
+          })
         }
         if (!isEmpty(AccessKeyMetadata)) {
           AccessKeyMetadata.map(({ AccessKeyId, ...Metadata }) => {
@@ -211,11 +224,10 @@ const accessKeyByUsername = async (
                   (err: AWSError, data: GetAccessKeyLastUsedResponse) => {
                     const { AccessKeyLastUsed: accessKeyLastUsed } = data || {}
                     if (err) {
-                      generateAwsErrorLog(
-                        serviceName,
-                        'iam:getAccessKeyLastUsed',
-                        err
-                      )
+                      errorLog.generateAwsErrorLog({
+                        functionName: 'iam:getAccessKeyLastUsed',
+                        err,
+                      })
                     }
 
                     if (!isEmpty(accessKeyLastUsed)) {
@@ -255,7 +267,10 @@ export const listMFADevicesByUsername = async (
       },
       async (err: AWSError, data: ListMFADevicesResponse) => {
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listMFADevices', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:listMFADevices',
+            err,
+          })
         }
         if (!isEmpty(data)) {
           const { MFADevices = [] } = data
@@ -293,7 +308,10 @@ export const listIamUsers = async (
         }
 
         if (err) {
-          generateAwsErrorLog(serviceName, 'iam:listUsers', err)
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:listUsers',
+            err,
+          })
         }
 
         const { Users: users = [], IsTruncated, Marker } = data
@@ -367,14 +385,20 @@ export const getCredentialReportData = async (
   new Promise(resolve => {
     iam.generateCredentialReport((err: AWSError) => {
       if (err) {
-        generateAwsErrorLog(serviceName, 'iam:generateCredentialReport', err)
+        errorLog.generateAwsErrorLog({
+          functionName: 'iam:generateCredentialReport',
+          err,
+        })
         return resolve([])
       }
 
       iam.getCredentialReport(
         async (err: AWSError, data: GetCredentialReportResponse) => {
           if (err) {
-            generateAwsErrorLog(serviceName, 'iam:getCredentialReport', err)
+            errorLog.generateAwsErrorLog({
+              functionName: 'iam:getCredentialReport',
+              err,
+            })
           }
           if (!isEmpty(data)) {
             const report = await parseCSV(data.Content.toString())
@@ -451,6 +475,7 @@ export default async ({
       })
       .filter(Boolean)
 
+    errorLog.reset()
     logger.debug(lt.fetchedIamUsers(usersData.length))
 
     resolve(groupBy(usersData, 'region'))
