@@ -206,15 +206,18 @@ const accessKeyByUsername = async (
       {
         UserName,
       },
-      async (err, { AccessKeyMetadata }: ListAccessKeysResponse) => {
+      async (err, data: ListAccessKeysResponse) => {
         if (err) {
           errorLog.generateAwsErrorLog({
             functionName: 'iam:listAccessKeys',
             err,
           })
+          return resolveAccessKeyFetch(null)
         }
-        if (!isEmpty(AccessKeyMetadata)) {
-          AccessKeyMetadata.map(({ AccessKeyId, ...Metadata }) => {
+
+        const { AccessKeyMetadata: accessKeyMetadata } = data ?? {}
+        if (!isEmpty(accessKeyMetadata)) {
+          accessKeyMetadata.map(({ AccessKeyId, ...Metadata }) => {
             const lastUsedPromise = new Promise<RawAwsAccessKey>(
               resolveLastUsedData => {
                 iam.getAccessKeyLastUsed(

@@ -24,7 +24,7 @@ export default class AwsErrorLog {
     err?: AWSError
     silenceLogs?: boolean
   }): void {
-    if (err.statusCode === 400) {
+    if (err?.statusCode === 400) {
       err.retryable = true
     }
 

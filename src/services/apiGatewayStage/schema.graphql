@@ -1,4 +1,4 @@
-type awsAccessLogSettings 
+type awsAccessLogSettings
   @generate(
     query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
@@ -15,7 +15,8 @@ type awsApiGatewayStageVariable
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-  key: String! @id @search(by: [hash])
+  id: String! @id @search(by: [hash])
+  key: String! @search(by: [hash])
   value: String @search(by: [hash])
 }
 

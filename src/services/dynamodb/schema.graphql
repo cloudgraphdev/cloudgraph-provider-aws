@@ -161,7 +161,7 @@ type awsDynamoDbTable @key(fields: "arn") {
   latestStreamArn: String @search(by: [hash, regexp])
   latestStreamLabel: String @search(by: [hash, regexp])
   localIndexes: [awsDynamoDbTableLocalSecondaryIndexDescription]
-  name: String! @id @search(by: [hash, regexp])
+  name: String! @search(by: [hash, regexp])
   pointInTimeRecoveryEnabled: Boolean
   provisionedThroughput: awsDynamoDbTableProvisionedThroughputDescription
   replicas: [awsDynamoDbTableReplicaDescription]

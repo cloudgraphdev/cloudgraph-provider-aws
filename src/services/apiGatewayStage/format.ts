@@ -1,3 +1,5 @@
+import cuid from 'cuid'
+
 import { RawAwsApiGatewayStage } from './data'
 import { AwsApiGatewayStage as AwsAGStageType } from '../../types/generated'
 import {
@@ -37,7 +39,11 @@ export default ({
     name,
   })
 
-  const variables = Object.entries(vars).map(([k, v]) => ({ key: k, value: v }))
+  const variables = Object.entries(vars).map(([k, v]) => ({
+    id: cuid(),
+    key: k,
+    value: v,
+  }))
 
   return {
     id: arn,

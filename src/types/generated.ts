@@ -218,6 +218,7 @@ export type AwsApiGatewayStage = {
 };
 
 export type AwsApiGatewayStageVariable = {
+  id: Scalars['String'];
   key: Scalars['String'];
   value?: Maybe<Scalars['String']>;
 };
