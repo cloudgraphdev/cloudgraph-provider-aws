@@ -172,6 +172,8 @@ describe('EC2 Service Test: ', () => {
             }),
             platformDetails: expect.any(String),
             instanceLifecycle: expect.any(String),
+            publicIpAddress: expect.any(String),
+            launchTime: expect.any(String),
           }),
         ])
       )

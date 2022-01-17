@@ -9,6 +9,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  DateTime: string;
   Int64: number;
 };
 
@@ -86,6 +87,7 @@ export type AwsStringMap = {
   key?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
 };
+
 
 
 export type AwsAccessLogSettings = {
@@ -1090,10 +1092,11 @@ export type AwsEc2 = {
   metadatasecurityGroupIdsOptions?: Maybe<Array<Maybe<Scalars['String']>>>;
   securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
   ephemeralBlockDevices?: Maybe<Array<Maybe<AwsEc2Blockdevice>>>;
-  associatePublicIpAddress?: Maybe<Scalars['String']>;
+  publicIpAddress?: Maybe<Scalars['String']>;
   platformDetails?: Maybe<Scalars['String']>;
   cloudWatchMetricData?: Maybe<AwsEc2CloudWatchMetricsTimePeriods>;
   instanceLifecycle?: Maybe<Scalars['String']>;
+  launchTime?: Maybe<Scalars['DateTime']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
   asg?: Maybe<Array<Maybe<AwsAsg>>>;

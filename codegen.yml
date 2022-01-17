@@ -9,3 +9,4 @@ generates:
         skipTypename: true
         scalars:
           Int64: number
+          DateTime: string
