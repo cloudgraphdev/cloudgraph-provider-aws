@@ -1,3 +1,13 @@
+## [0.63.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.63.3...0.63.4) (2022-01-17)
+
+
+### Bug Fixes
+
+* Fixed duplicated id for apigatewaystage variables ([c5214e1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c5214e1cd4b13cc553685b20d7042f4e9df22c61))
+* Fixed duplicated id for cloudfront origin ([a827ab3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a827ab319615435e2ed3aeeef02ccbe5f5ea678d))
+* Fixed duplicated name for dynamodb tables ([96745e8](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/96745e8fe963548805de7d9a0221b032c82aaec9))
+* Prevented error fetching access keys ([efda9d5](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/efda9d536ec73e1402132b1f080a66f4e8f5031c))
+
 ## [0.63.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.63.2...0.63.3) (2022-01-17)
 
 
