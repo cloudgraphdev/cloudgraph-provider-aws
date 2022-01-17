@@ -29,7 +29,7 @@ type awsCloudfrontOriginData {
   customHeaders: [awsCloudfrontOriginCustomHeader]
   customOriginConfig: awsCloudfrontCustomOriginConfig
   domainName: String @search(by: [hash, regexp])
-  originId: String! @id @search(by: [hash])
+  originId: String! @search(by: [hash])
   originPath: String @search(by: [hash, regexp])
 }
 
@@ -80,7 +80,6 @@ type awsCloudfrontCacheBehavior {
   targetOriginId: String @search(by: [hash])
   viewerProtocolPolicy: String @search(by: [hash])
 }
-
 
 type awsCloudfrontCustomErrorResponse {
   id: String! @id @search(by: [hash])
