@@ -46,8 +46,6 @@ export default class Provider extends CloudGraph.Client {
   constructor(config: any) {
     super(config)
     this.properties = enums
-    this.serviceMap = serviceMap
-    this.policies = config.provider.policies
   }
 
   private credentials: Credentials | undefined
@@ -56,15 +54,11 @@ export default class Provider extends CloudGraph.Client {
 
   private role: string | undefined
 
-  private serviceMap: { [key: string]: any } // TODO: how to type the service map
-
   private properties: {
     services: { [key: string]: string }
     regions: string[]
     resources: { [key: string]: string }
   }
-
-  private policies: string [] | undefined
 
   logSelectedAccessRegionsAndResources(
     profilesOrRolesToLog: string[],
@@ -86,8 +80,8 @@ export default class Provider extends CloudGraph.Client {
 
   // TODO: update to also support ignorePrompts config
   async configure(): Promise<{ [key: string]: any }> {
-    const result: { [key: string]: any } = {}
-    const { flags = {} } = this.config
+    const { flags = {}, cloudGraphConfig, ...providerSettings } = this.config
+    const result: { [key: string]: any } = { ...providerSettings }
     let profiles
     try {
       profiles = this.getProfilesFromSharedConfig()
@@ -232,8 +226,6 @@ export default class Provider extends CloudGraph.Client {
       result.regions,
       result.resources
     )
-
-    result.policies = this.policies || []
 
     return result
   }
