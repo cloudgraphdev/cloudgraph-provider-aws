@@ -1,3 +1,10 @@
+## [0.64.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.64.0...0.64.1) (2022-01-19)
+
+
+### Bug Fixes
+
+* Preserve provider settings during init command ([81266e0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/81266e011e4e70f6989a3d56c06cc4c188acb3fb))
+
 # [0.64.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.63.4...0.64.0) (2022-01-19)
 
 
