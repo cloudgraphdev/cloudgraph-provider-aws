@@ -1,3 +1,10 @@
+# [0.64.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.63.4...0.64.0) (2022-01-19)
+
+
+### Features
+
+* **service:** Add support for Date type on Dgraph ([595442f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/595442f8d0572dc38cd986e957930676c51548f8))
+
 ## [0.63.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.63.3...0.63.4) (2022-01-17)
 
 
