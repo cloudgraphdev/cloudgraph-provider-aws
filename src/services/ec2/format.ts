@@ -49,6 +49,8 @@ export default ({
     cloudWatchMetricData,
     PlatformDetails: platformDetails,
     InstanceLifecycle: instanceLifecycle,
+    LaunchTime: launchTime,
+    PublicIpAddress: publicIpAddress,
   } = rawData
 
   const securityGroupIds = securityGroups.map(({ GroupId }) => GroupId)
@@ -127,6 +129,8 @@ export default ({
     tags: instanceTags,
     platformDetails: platformDetails || '',
     instanceLifecycle: mapInstanceLifecycle(instanceLifecycle),
+    publicIpAddress,
+    launchTime: launchTime?.toISOString() || '',
   }
   return ec2
 }
