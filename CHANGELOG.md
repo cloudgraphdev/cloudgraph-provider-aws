@@ -1,3 +1,10 @@
+## [0.64.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.64.1...0.64.2) (2022-01-20)
+
+
+### Bug Fixes
+
+* Avoid arn duplication for some iam resources ([7c34e4b](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/7c34e4b6a8637a94d055d4307fffbf09d924cd0b))
+
 ## [0.64.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.64.0...0.64.1) (2022-01-19)
 
 
