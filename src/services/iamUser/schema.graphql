@@ -1,6 +1,6 @@
-type awsIamUser @key(fields: "arn") {
+type awsIamUser @key(fields: "id") {
   id: String! @id @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
+  arn: String! @search(by: [hash, regexp])
   accountId: String! @search(by: [hash, regexp])
   path: String @search(by: [hash, regexp])
   name: String @search(by: [hash, regexp])
