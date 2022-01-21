@@ -1,8 +1,6 @@
 import { SAMLProviderListEntry } from 'aws-sdk/clients/iam'
 
-import resources from '../../enums/resources'
 import { AwsIamSamlProvider } from '../../types/generated'
-import { getIamGlobalId } from '../../utils/ids'
 
 /**
  * IAM SAML Provider
@@ -11,7 +9,6 @@ import { getIamGlobalId } from '../../utils/ids'
 export default ({
   service: rawData,
   account,
-  region,
 }: {
   service: SAMLProviderListEntry
   account: string
@@ -20,11 +17,7 @@ export default ({
   const { Arn: arn = '', ValidUntil, CreateDate } = rawData
 
   return {
-    id: getIamGlobalId({
-      accountId: account,
-      region,
-      resourceType: resources.iamSamlProvider,
-    }),
+    id: arn,
     arn,
     accountId: account,
     validUntil: ValidUntil?.toISOString() || '',

@@ -1,7 +1,6 @@
-import resources from '../../enums/resources'
 import { AwsIamRole } from '../../types/generated'
 import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
-import { getIamId } from '../../utils/ids'
+
 import { RawAwsIamRole } from './data'
 
 /**
@@ -17,7 +16,6 @@ export default ({
   region: string
 }): AwsIamRole => {
   const {
-    RoleId: id = '',
     RoleName: name = '',
     Arn: arn = '',
     Path: path = '',
@@ -33,11 +31,7 @@ export default ({
   const roleTags = formatTagsFromMap(tags)
 
   const role = {
-    id: getIamId({
-      resourceId: id,
-      resourceName: name,
-      resourceType: resources.iamRole,
-    }),
+    id: arn,
     arn,
     accountId: account,
     name,

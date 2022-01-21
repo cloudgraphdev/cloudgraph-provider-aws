@@ -1,7 +1,5 @@
-import resources from '../../enums/resources'
 import { AwsIamPolicy } from '../../types/generated'
 import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
-import { getIamId } from '../../utils/ids'
 import { RawAwsIamPolicy } from './data'
 
 /**
@@ -17,7 +15,6 @@ export default ({
   region: string
 }): AwsIamPolicy => {
   const {
-    PolicyId: id = '',
     PolicyName: name = '',
     Arn: arn = '',
     Path: path = '',
@@ -30,11 +27,7 @@ export default ({
   const policyTags = formatTagsFromMap(tags)
 
   const policy = {
-    id: getIamId({
-      resourceId: id,
-      resourceName: name,
-      resourceType: resources.iamPolicy,
-    }),
+    id: arn,
     name,
     arn,
     accountId: account,

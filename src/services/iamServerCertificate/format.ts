@@ -1,8 +1,6 @@
 import { ServerCertificateMetadata } from 'aws-sdk/clients/iam'
 
-import resources from '../../enums/resources'
 import { AwsIamServerCertificate } from '../../types/generated'
-import { getIamGlobalId } from '../../utils/ids'
 
 /**
  * IAM Server Certificate
@@ -11,7 +9,6 @@ import { getIamGlobalId } from '../../utils/ids'
 export default ({
   service: rawData,
   account,
-  region,
 }: {
   service: ServerCertificateMetadata
   account: string
@@ -27,11 +24,7 @@ export default ({
   } = rawData
 
   return {
-    id: getIamGlobalId({
-      accountId: account,
-      region,
-      resourceType: resources.iamServerCertificate,
-    }),
+    id: arn,
     certificateId: id,
     arn,
     accountId: account,

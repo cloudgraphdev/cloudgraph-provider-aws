@@ -797,14 +797,10 @@ export default ({
       )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
-          const { UserId: userId, UserName: userName } = instance
+          const { Arn: id } = instance
 
           connections.push({
-            id: getIamId({
-              resourceId: userId,
-              resourceName: userName,
-              resourceType: resources.iamUser,
-            }),
+            id,
             resourceType: services.iamUser,
             relation: 'child',
             field: 'iamUsers',
@@ -1471,7 +1467,7 @@ export default ({
         }
       }
     }
-    
+
     /**
      * Find related Transit Gateway Attachments
      */

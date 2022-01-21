@@ -1,6 +1,4 @@
-import resources from '../../enums/resources'
 import { AwsIamGroup } from '../../types/generated'
-import { getIamId } from '../../utils/ids'
 import { RawAwsIamGroup } from '../iamGroup/data'
 
 /**
@@ -16,7 +14,6 @@ export default ({
   region: string
 }): AwsIamGroup => {
   const {
-    GroupId: id = '',
     GroupName: name = '',
     Arn: arn = '',
     Path: path = '',
@@ -24,11 +21,7 @@ export default ({
   } = rawData
 
   const record = {
-    id: getIamId({
-      resourceId: id,
-      resourceName: name,
-      resourceType: resources.iamGroup,
-    }),
+    id: arn,
     arn,
     accountId: account,
     path,

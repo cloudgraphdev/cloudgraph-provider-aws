@@ -1,8 +1,7 @@
 import isEmpty from 'lodash/isEmpty'
-import resources from '../../enums/resources'
+
 import { AwsIamGroup } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
-import { getIamId } from '../../utils/ids'
 import { RawAwsIamUser } from '../iamUser/data'
 
 /**
@@ -18,7 +17,6 @@ export default ({
   region: string
 }): AwsIamGroup => {
   const {
-    UserId: id,
     Arn: arn,
     UserName: name,
     Path: path,
@@ -102,11 +100,7 @@ export default ({
   }
 
   const user = {
-    id: getIamId({
-      resourceId: id,
-      resourceName: name,
-      resourceType: resources.iamUser,
-    }),
+    id: arn,
     arn,
     accountId: account,
     name,
