@@ -1,3 +1,12 @@
+## [0.64.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.64.2...0.64.3) (2022-01-21)
+
+
+### Bug Fixes
+
+* Fixed connections for new iam ids ([37c6543](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/37c654390f3e9ea5512d490995468f4f5dc6ab6b))
+* Removed cuid from password policy entity ([709e206](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/709e2065a1b78052aa32c353e6b1248052fc3009))
+* Use arn for iam resources ([7f086aa](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/7f086aa1b97b0059b916897903e4415572f43ee6))
+
 ## [0.64.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.64.1...0.64.2) (2022-01-20)
 
 
