@@ -1,14 +1,11 @@
 import flatMap from 'lodash/flatMap'
 import isEmpty from 'lodash/isEmpty'
-import kebabCase from 'lodash/kebabCase'
 
 import { ServiceConnection } from '@cloudgraph/sdk'
 
 import services from '../../enums/services'
 import { RawAwsIamUser } from './data'
 import { RawAwsIamPolicy } from '../iamPolicy/data'
-import resources from '../../enums/resources'
-import { getIamId } from '../../utils/ids'
 
 /**
  * IAM User
@@ -24,11 +21,7 @@ export default ({
   region: string
 }): { [key: string]: ServiceConnection[] } => {
   const connections: ServiceConnection[] = []
-  const {
-    UserId: id,
-    UserName: name,
-    ManagedPolicies: managedPolicies = [],
-  } = user
+  const { Arn: id, ManagedPolicies: managedPolicies = [] } = user
 
   /**
    * Find Managed Policies
@@ -47,10 +40,10 @@ export default ({
 
   if (!isEmpty(attachedPolicies)) {
     for (const instance of attachedPolicies) {
-      const { PolicyId: policyId, PolicyName: policyName } = instance
+      const { Arn: policyId } = instance
 
       connections.push({
-        id: `${policyName}-${policyId}-${kebabCase(resources.iamPolicy)}`,
+        id: policyId,
         resourceType: services.iamPolicy,
         relation: 'child',
         field: 'iamAttachedPolicies',
@@ -59,10 +52,6 @@ export default ({
   }
 
   return {
-    [getIamId({
-      resourceId: id,
-      resourceName: name,
-      resourceType: resources.iamUser,
-    })]: connections,
+    [id]: connections,
   }
 }

@@ -35,8 +35,6 @@ import { RawAwsElasticBeanstalkEnv } from '../elasticBeanstalkEnvironment/data'
 import { RawAwsElastiCacheCluster } from '../elastiCacheCluster/data'
 import { RawAwsElastiCacheReplicationGroup } from '../elastiCacheReplicationGroup/data'
 import { RawFlowLog } from '../flowLogs/data'
-import resources from '../../enums/resources'
-import { getIamId } from '../../utils/ids'
 import { RawAwsSns } from '../sns/data'
 import { RawAwsRedshiftCluster } from '../redshift/data'
 import {
@@ -797,14 +795,10 @@ export default ({
       )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
-          const { UserId: userId, UserName: userName } = instance
+          const { Arn: id } = instance
 
           connections.push({
-            id: getIamId({
-              resourceId: userId,
-              resourceName: userName,
-              resourceType: resources.iamUser,
-            }),
+            id,
             resourceType: services.iamUser,
             relation: 'child',
             field: 'iamUsers',
@@ -825,14 +819,10 @@ export default ({
       )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
-          const { RoleId: roleId, RoleName: roleName } = instance
+          const { Arn: roleId } = instance
 
           connections.push({
-            id: getIamId({
-              resourceId: roleId,
-              resourceName: roleName,
-              resourceType: resources.iamRole,
-            }),
+            id: roleId,
             resourceType: services.iamRole,
             relation: 'child',
             field: 'iamRoles',
@@ -853,14 +843,10 @@ export default ({
       )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
-          const { PolicyId: policyId, PolicyName: policyName } = instance
+          const { Arn: policyId } = instance
 
           connections.push({
-            id: getIamId({
-              resourceId: policyId,
-              resourceName: policyName,
-              resourceType: resources.iamPolicy,
-            }),
+            id: policyId,
             resourceType: services.iamPolicy,
             relation: 'child',
             field: 'iamPolicies',
@@ -1471,7 +1457,7 @@ export default ({
         }
       }
     }
-    
+
     /**
      * Find related Transit Gateway Attachments
      */

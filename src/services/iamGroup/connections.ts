@@ -1,6 +1,5 @@
 import flatMap from 'lodash/flatMap'
 import isEmpty from 'lodash/isEmpty'
-import kebabCase from 'lodash/kebabCase'
 
 import { ServiceConnection } from '@cloudgraph/sdk'
 
@@ -8,8 +7,6 @@ import services from '../../enums/services'
 import { RawAwsIamGroup } from './data'
 import { RawAwsIamPolicy } from '../iamPolicy/data'
 import { RawAwsIamUser } from '../iamUser/data'
-import resources from '../../enums/resources'
-import { getIamId } from '../../utils/ids'
 
 /**
  * IAM Group
@@ -26,8 +23,8 @@ export default ({
 }): { [key: string]: ServiceConnection[] } => {
   const connections: ServiceConnection[] = []
   const {
-    GroupId: id,
-    GroupName: name,
+    Arn: id,
+    GroupId: groupId,
     ManagedPolicies: managedPolicies = [],
   } = group
 
@@ -48,10 +45,10 @@ export default ({
 
   if (!isEmpty(attachedPolicies)) {
     for (const instance of attachedPolicies) {
-      const { PolicyId: policyId, PolicyName: policyName } = instance
+      const { Arn: policyId } = instance
 
       connections.push({
-        id: `${policyName}-${policyId}-${kebabCase(resources.iamPolicy)}`,
+        id: policyId,
         resourceType: services.iamPolicy,
         relation: 'child',
         field: 'iamAttachedPolicies',
@@ -71,15 +68,15 @@ export default ({
     ) || []
 
   const belonginUsers = users.filter(({ Groups: groups }: RawAwsIamUser) =>
-    groups.includes(id)
+    groups.includes(groupId)
   )
 
   if (!isEmpty(belonginUsers)) {
     for (const instance of belonginUsers) {
-      const { UserId: userId, UserName: userName } = instance
+      const { Arn: userId } = instance
 
       connections.push({
-        id: `${userName}-${userId}-${kebabCase(resources.iamUser)}`,
+        id: userId,
         resourceType: services.iamUser,
         relation: 'child',
         field: 'iamUsers',
@@ -88,10 +85,6 @@ export default ({
   }
 
   return {
-    [getIamId({
-      resourceId: id,
-      resourceName: name,
-      resourceType: resources.iamGroup,
-    })]: connections,
+    [id]: connections,
   }
 }

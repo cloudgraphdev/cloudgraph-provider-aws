@@ -5,13 +5,10 @@ import { RawAwsIamRole } from '../iamRole/data'
 import { AwsSecurityGroup } from '../securityGroup/data'
 import { RawAwsSubnet } from '../subnet/data'
 import { RawAwsVpc } from '../vpc/data'
-import { getIamId } from '../../utils/ids'
 import services from '../../enums/services'
-import resources from '../../enums/resources'
 import { globalRegionName } from '../../enums/regions'
 
 export default ({
-  account,
   service,
   data,
   region,
@@ -23,7 +20,12 @@ export default ({
 }): {
   [property: string]: ServiceConnection[]
 } => {
-  const { arn: id, roleArn, encryptionConfig = [], resourcesVpcConfig = {} } = service
+  const {
+    arn: id,
+    roleArn,
+    encryptionConfig = [],
+    resourcesVpcConfig = {},
+  } = service
   const connections: ServiceConnection[] = []
   const keyArns = encryptionConfig.map(({ provider }) => provider?.keyArn) || []
   const sgIds = resourcesVpcConfig.securityGroupIds || []
@@ -36,19 +38,15 @@ export default ({
   const roles: { name: string; data: { [property: string]: any[] } } =
     data.find(({ name }) => name === services.iamRole)
   if (roles?.data?.[globalRegionName]) {
-    const dataAtRegion: RawAwsIamRole[] = roles.data[globalRegionName].filter(role => 
-      role.Arn === roleArn
+    const dataAtRegion: RawAwsIamRole[] = roles.data[globalRegionName].filter(
+      role => role.Arn === roleArn
     )
     if (!isEmpty(dataAtRegion)) {
       for (const instance of dataAtRegion) {
-        const { RoleId: roleId, RoleName: roleName } = instance
+        const { Arn: roleId } = instance
 
         connections.push({
-          id: getIamId({
-            resourceId: roleId,
-            resourceName: roleName,
-            resourceType: resources.iamRole,
-          }),
+          id: roleId,
           resourceType: services.iamRole,
           relation: 'child',
           field: 'iamRoles',
@@ -62,7 +60,7 @@ export default ({
    */
   const kmsKeys = data.find(({ name }) => name === services.kms)
   if (kmsKeys?.data?.[region]) {
-    const kmsKeyInRegion = kmsKeys.data[region].filter(kmsKey => 
+    const kmsKeyInRegion = kmsKeys.data[region].filter(kmsKey =>
       keyArns.includes(kmsKey.Arn)
     )
 
@@ -88,7 +86,8 @@ export default ({
 
   if (securityGroups?.data?.[region]) {
     const sgsInRegion: AwsSecurityGroup[] = securityGroups.data[region].filter(
-      ({ GroupId }: AwsSecurityGroup) => sgIds.includes(GroupId) || GroupId === clusterSgId
+      ({ GroupId }: AwsSecurityGroup) =>
+        sgIds.includes(GroupId) || GroupId === clusterSgId
     )
 
     if (!isEmpty(sgsInRegion)) {
@@ -133,7 +132,7 @@ export default ({
     name: string
     data: { [property: string]: any[] }
   } = data.find(({ name }) => name === services.vpc)
-  
+
   if (vpcs?.data?.[region]) {
     const vpc = vpcs.data[region].find(
       ({ VpcId }: RawAwsVpc) => VpcId === resourcesVpcConfig.vpcId

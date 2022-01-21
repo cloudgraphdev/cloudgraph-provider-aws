@@ -1,4 +1,4 @@
-type awsIamPolicy @key(fields: "arn") {
+type awsIamPolicy @key(fields: "id") {
   id: String! @id @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   accountId: String! @search(by: [hash, regexp])
