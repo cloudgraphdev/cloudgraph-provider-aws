@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import { generateId } from '@cloudgraph/sdk'
 import { AwsEcsTask } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsEcsTask } from './data'
@@ -38,49 +38,48 @@ export default ({
     stoppedAt,
     stoppedReason,
     stoppingAt,
-    taskDefinitionArn,
     version,
     ephemeralStorage,
     Tags,
   } = service
 
   const attachments = service.attachments?.map(attachment => ({
-    id: cuid(),
+    id: generateId(attachment as Record<string, unknown>),
     ...attachment,
     details: attachment?.details?.map(detail => ({
-      id: cuid(),
+      id: generateId(detail as Record<string, unknown>),
       ...detail,
     })), 
   }))
 
   const attributes = service.attributes?.map(attribute => ({
-    id: cuid(),
+    id: generateId(attribute as unknown as Record<string, unknown>),
     ...attribute,
   }))
 
   const inferenceAccelerators = service.inferenceAccelerators?.map(ia => ({
-    id: cuid(),
+    id: generateId(ia as unknown as Record<string, unknown>),
     ...ia,
   }))
 
   const containerOverrides = service?.overrides?.containerOverrides?.map(co => ({
-    id: cuid(),
+    id: generateId(co as Record<string, unknown>),
     environment: co?.environment?.map(env => ({
-      id: cuid(),
+      id: generateId(env as Record<string, unknown>),
       ...env,
     })),
     environmentFiles: co?.environmentFiles?.map(ef => ({
-      id: cuid(),
+      id: generateId(ef as unknown as Record<string, unknown>),
       ...ef,
     })),
     resourceRequirements: co?.resourceRequirements?.map(rr => ({
-      id: cuid(),
+      id: generateId(rr as unknown as Record<string, unknown>),
       ...rr,
     }))
   }))
 
   const inferenceAcceleratorOverrides = service?.overrides?.inferenceAcceleratorOverrides?.map(ia => ({
-    id: cuid(),
+    id: generateId(ia as Record<string, unknown>),
     ...ia,
   }))
 
@@ -108,7 +107,6 @@ export default ({
     launchType,
     memory,
     overrides: {
-      id: cuid(),
       ...overrides,
       containerOverrides,
       inferenceAcceleratorOverrides,

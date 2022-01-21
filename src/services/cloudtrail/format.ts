@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import { generateId } from '@cloudgraph/sdk'
 import { isEmpty } from 'lodash'
 import t from '../../properties/translations'
 import { AwsCloudtrail } from '../../types/generated'
@@ -51,16 +51,15 @@ export default ({
   if (!isEmpty(EventSelectors)) {
     eventSelectors = EventSelectors.map(
       ({ ReadWriteType, IncludeManagementEvents }) => ({
-        id: cuid(),
+        id: generateId({ ReadWriteType, IncludeManagementEvents }),
         readWriteType: ReadWriteType,
         includeManagementEvents: IncludeManagementEvents,
       })
     )
   }
 
-  const cloudTrail = {
+  const cloudTrailObj = {
     id: arn,
-    cgId: cuid(),
     arn,
     accountId: account,
     name,
@@ -96,5 +95,8 @@ export default ({
     region,
   }
 
-  return cloudTrail
+  return {
+    cgId: generateId(cloudTrailObj),
+    ...cloudTrailObj
+  }
 }

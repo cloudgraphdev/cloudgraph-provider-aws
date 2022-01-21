@@ -28,7 +28,6 @@ type awsEcsversionInfo
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
     agentVersion: String @search(by: [hash, regexp])
     agentHash: String @search(by: [hash, regexp])
     dockerVersion: String @search(by: [hash, regexp])

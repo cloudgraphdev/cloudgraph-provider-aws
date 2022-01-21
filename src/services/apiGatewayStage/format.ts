@@ -1,5 +1,4 @@
-import cuid from 'cuid'
-
+import { generateId } from '@cloudgraph/sdk'
 import { RawAwsApiGatewayStage } from './data'
 import { AwsApiGatewayStage as AwsAGStageType } from '../../types/generated'
 import {
@@ -40,7 +39,7 @@ export default ({
   })
 
   const variables = Object.entries(vars).map(([k, v]) => ({
-    id: cuid(),
+    id: generateId({key: k, value: v}),
     key: k,
     value: v,
   }))

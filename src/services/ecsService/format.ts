@@ -1,7 +1,4 @@
-import CloudGraph from '@cloudgraph/sdk'
-const { logger } = CloudGraph
-
-import cuid from 'cuid'
+import { generateId } from '@cloudgraph/sdk'
 import { AwsEcsService } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsEcsService } from './data'
@@ -38,40 +35,53 @@ export default ({
   } = service
 
   const loadBalancers = service.loadBalancers?.map(lb => ({
-    id: cuid(),
+    id: generateId(lb as Record<string, unknown>),
     ...lb,
   }))
 
   const serviceRegistries = service.serviceRegistries?.map(sr => ({
-    id: cuid(),
+    id: generateId(sr as Record<string, unknown>),
     ...sr,
   }))
 
-  const deployments = service.deployments?.map(({ capacityProviderStrategy, networkConfiguration, createdAt, updatedAt, ...deployment}) => ({
-    id: cuid(),
-    ...deployment,
-    capacityProviderStrategy: capacityProviderStrategy?.map(strat => ({
-      id: cuid(),
-      ...strat,
-    })),
-    networkConfiguration,
-    createdAt: createdAt?.toISOString(),
-    updatedAt: updatedAt?.toISOString(),
-  }))
+  const deployments = service.deployments?.map(
+    ({
+      capacityProviderStrategy: deploymentCapacityProviderStrategy,
+      networkConfiguration: deploymentNetworkConfiguration,
+      createdAt: deploymentCreatedAt,
+      updatedAt,
+      ...deployment
+    }) => {
+      const obj = {
+        ...deployment,
+        capacityProviderStrategy: deploymentCapacityProviderStrategy?.map(strat => ({
+          id: generateId(strat as unknown as Record<string, unknown>),
+          ...strat,
+        })),
+        networkConfiguration: deploymentNetworkConfiguration,
+        createdAt: deploymentCreatedAt?.toISOString(),
+        updatedAt: updatedAt?.toISOString(),
+      }
+      return {
+        id: generateId(obj),
+        ...obj
+      }
+    }
+  )
 
-  const events = service.events?.map(({ createdAt, ...event}) => ({
-    id: cuid(),
-    createdAt: createdAt?.toISOString(),
+  const events = service.events?.map(({ createdAt: eventCreatedAt, ...event }) => ({
+    id: generateId(event as Record<string, unknown>),
+    createdAt: eventCreatedAt?.toISOString(),
     ...event,
   }))
 
   const placementConstraints = service.placementConstraints?.map(pc => ({
-    id: cuid(),
+    id: generateId(pc as Record<string, unknown>),
     ...pc,
   }))
 
   const placementStrategy = service.placementStrategy?.map(ps => ({
-    id: cuid(),
+    id: generateId(ps as Record<string, unknown>),
     ...ps,
   }))
 
@@ -88,25 +98,20 @@ export default ({
     pendingCount,
     launchType,
     capacityProviderStrategy: capacityProviderStrategy?.map(strat => ({
-      id: cuid(),
+      id: generateId(strat as unknown as Record<string, unknown>),
       ...strat,
     })),
     platformVersion,
-    deploymentConfiguration: {
-      id: cuid(),
-      ...deploymentConfiguration,
-      deploymentCircuitBreaker: {
-        id: cuid(),
-        ...deploymentConfiguration?.deploymentCircuitBreaker,
-      },
-    },
+    deploymentConfiguration,
     deployments: deployments?.map(deployment => ({
-      id: cuid(),
+      id: generateId(deployment as unknown as Record<string, unknown>),
       ...deployment,
-      capacityProviderStrategy: deployment.capacityProviderStrategy?.map(strat => ({
-        id: cuid(),
-        ...strat,
-      })),
+      capacityProviderStrategy: deployment.capacityProviderStrategy?.map(
+        strat => ({
+          id: generateId(strat as unknown as Record<string, unknown>),
+          ...strat,
+        })
+      ),
     })),
     roleArn,
     events,
@@ -116,10 +121,7 @@ export default ({
     networkConfiguration,
     healthCheckGracePeriodSeconds,
     schedulingStrategy,
-    deploymentController: {
-      id: cuid(),
-      ...deploymentController,
-    },
+    deploymentController,
     createdBy,
     enableECSManagedTags,
     propagateTags,

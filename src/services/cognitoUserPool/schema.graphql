@@ -4,7 +4,6 @@ type awsCognitoUserPoolPasswordPolicy
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
     minimumLength: Int @search
     requireUppercase: String @search(by: [hash, regexp])
     requireLowercase: String @search(by: [hash, regexp])
@@ -19,7 +18,6 @@ type awsCognitoUserPoolLambdaConfig
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
     preSignUp: String @search(by: [hash, regexp])
     customMessage: String @search(by: [hash, regexp])
     postConfirmation: String @search(by: [hash, regexp])

@@ -3,7 +3,7 @@ import {
   DefaultCacheBehavior,
   Origin,
 } from 'aws-sdk/clients/cloudfront'
-import cuid from 'cuid'
+import { generateId } from '@cloudgraph/sdk'
 import isEmpty from 'lodash/isEmpty'
 
 import t from '../../properties/translations'
@@ -43,9 +43,7 @@ export const createCacheBehavior = (
     headers,
     queryString: queryString ? t.yes : t.no,
   }
-
-  return {
-    id: cuid(),
+  const obj = {
     allowedMethods,
     cachedMethods,
     compress: compress ? t.yes : t.no,
@@ -57,6 +55,10 @@ export const createCacheBehavior = (
     smoothStreaming: smoothStreaming ? t.yes : t.no,
     targetOriginId,
     viewerProtocolPolicy,
+  }
+  return {
+    id: generateId(obj),
+    ...obj,
   }
 }
 
@@ -85,9 +87,7 @@ export const createDefaultCacheBehavior = (
     headers,
     queryString: queryString ? t.yes : t.no,
   }
-
-  return {
-    id: cuid(),
+  const obj = {
     allowedMethods,
     cachedMethods,
     compress: compress ? t.yes : t.no,
@@ -98,6 +98,10 @@ export const createDefaultCacheBehavior = (
     smoothStreaming: smoothStreaming ? t.yes : t.no,
     targetOriginId,
     viewerProtocolPolicy,
+  }
+  return {
+    id: generateId(obj),
+    ...obj,
   }
 }
 
@@ -154,7 +158,12 @@ export default ({
       ResponseCode: responseCode,
       ResponsePagePath: responsePagePath,
     }) => ({
-      id: cuid(),
+      id: generateId({
+        errorCachingMinTtl: `${errorCachingMinTtl} ${t.seconds}`,
+        errorCode,
+        responseCode,
+        responsePagePath,
+      }),
       errorCachingMinTtl: `${errorCachingMinTtl} ${t.seconds}`,
       errorCode,
       responseCode,
@@ -191,25 +200,30 @@ export default ({
       DomainName: domainName,
       Id: originId,
       OriginPath: originPath,
-    }: Origin) => ({
-      id: cuid(),
-      customHeaders: customHeader.map(({ HeaderName, HeaderValue }) => ({
-        id: cuid(),
-        name: HeaderName,
-        value: HeaderValue,
-      })),
-      customOriginConfig: {
-        httpPort,
-        httpsPort,
-        originProtocolPolicy,
-        originSslProtocols: { quantity, items },
-        originReadTimeout,
-        originKeepaliveTimeout,
-      },
-      domainName,
-      originId,
-      originPath,
-    })
+    }: Origin) => {
+      const obj = {
+        customHeaders: customHeader.map(({ HeaderName, HeaderValue }) => ({
+          id: generateId({ HeaderName, HeaderValue }),
+          name: HeaderName,
+          value: HeaderValue,
+        })),
+        customOriginConfig: {
+          httpPort,
+          httpsPort,
+          originProtocolPolicy,
+          originSslProtocols: { quantity, items },
+          originReadTimeout,
+          originKeepaliveTimeout,
+        },
+        domainName,
+        originId,
+        originPath,
+      }
+      return {
+        id: generateId(obj),
+        ...obj
+      }
+    }
   )
 
   return {

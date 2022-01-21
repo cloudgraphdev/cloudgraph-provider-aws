@@ -130,7 +130,6 @@ type awsEcsDeploymentController
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
     type: String @search(by: [hash, regexp])
   }
 
@@ -140,7 +139,6 @@ type awsEcsDeploymentConfiguration
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
     deploymentCircuitBreaker: awsEcsDeploymentCircuitBreaker
     maximumPercent: Int @search
     minimumHealthyPercent: Int @search
@@ -152,7 +150,6 @@ type awsEcsDeploymentCircuitBreaker
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
     enable: Boolean @search
     rollback: Boolean @search
   }

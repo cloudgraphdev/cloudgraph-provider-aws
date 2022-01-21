@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import { generateId } from '@cloudgraph/sdk'
 import { AwsEcsCluster } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsEcsCluster } from './data'
@@ -25,25 +25,25 @@ export default ({
   } = service
 
   const statistics = service.statistics?.map(stat => ({
-    id: cuid(),
+    id: generateId(stat as Record<string, unknown>),
     ...stat,
   }))
 
   const settings = service.settings?.map(setting => ({
-    id: cuid(),
+    id: generateId(setting as Record<string, unknown>),
     ...setting,
   }))
 
   const defaultCapacityProviderStrategy = service.defaultCapacityProviderStrategy?.map(strat => ({
-    id: cuid(),
+    id: generateId(strat as unknown as Record<string, unknown>),
     ...strat,
   }))
 
   const attachments = service.attachments?.map(attachment => ({
-    id: cuid(),
+    id: generateId(attachment as Record<string, unknown>),
     ...attachment,
     details: attachment?.details?.map(detail => ({
-      id: cuid(),
+      id: generateId(detail as Record<string, unknown>),
       ...detail,
     })), 
   }))
@@ -54,11 +54,8 @@ export default ({
     accountId: account,
     clusterName,
     configuration: {
-      id: cuid(),
       executeCommandConfiguration: {
-        id: cuid(),
         logConfiguration: {
-          id: cuid(),
           ...configuration?.executeCommandConfiguration?.logConfiguration
         },
       },

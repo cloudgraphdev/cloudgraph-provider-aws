@@ -27,7 +27,6 @@ type AwsEcsExecuteCommandLogConfiguration
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
     cloudWatchLogGroupName: String @search(by: [hash, regexp])
     cloudWatchEncryptionEnabled: Boolean @search
     s3BucketName: String @search(by: [hash, regexp])
@@ -41,7 +40,6 @@ type awsEcsExecuteCommandConfiguration
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
     kmsKeyId: String @search(by: [hash])
     logging: String @search(by: [hash, regexp])
     logConfiguration: AwsEcsExecuteCommandLogConfiguration
@@ -53,7 +51,6 @@ type awsEcsClusterConfiguration
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
     executeCommandConfiguration: awsEcsExecuteCommandConfiguration
   }
 

@@ -1,9 +1,9 @@
-import cuid from 'cuid';
+import { generateId } from '@cloudgraph/sdk'
 import t from '../../properties/translations'
-import { AwsCloudFormationStackSet } from '../../types/generated';
+import { AwsCloudFormationStackSet } from '../../types/generated'
 
-import { formatTagsFromMap } from '../../utils/format';
-import { RawAwsCloudFormationStackSet } from './data';
+import { formatTagsFromMap } from '../../utils/format'
+import { RawAwsCloudFormationStackSet } from './data'
 
 export default ({
   service: rawData,
@@ -30,21 +30,43 @@ export default ({
     OrganizationalUnitIds: organizationalUnitIds,
   } = rawData
 
-  const parameterList = parameters.map(({
-    ParameterKey: parameterKey,
-    ParameterValue: parameterValue,
-    UsePreviousValue: usePreviousValue,
-    ResolvedValue: resolvedValue,
-  }) => {
-    return {
-      id: cuid(),
-      parameterKey,
-      parameterValue,
-      usePreviousValue: usePreviousValue? t.yes : t.no,
-      resolvedValue,
+  const parameterList = parameters.map(
+    ({
+      ParameterKey: parameterKey,
+      ParameterValue: parameterValue,
+      UsePreviousValue: usePreviousValue,
+      ResolvedValue: resolvedValue,
+    }) => {
+      const obj = {
+        parameterKey,
+        parameterValue,
+        usePreviousValue: usePreviousValue ? t.yes : t.no,
+        resolvedValue,
+      }
+      return {
+        id: generateId(obj),
+        ...obj,
+      }
     }
-  })
-
+  )
+  const driftDetectionDetail = {
+    driftStatus: stackSetDriftDetectionDetails?.DriftStatus || '',
+    driftDetectionStatus:
+      stackSetDriftDetectionDetails?.DriftDetectionStatus || '',
+    lastDriftCheckTimestamp:
+      stackSetDriftDetectionDetails?.LastDriftCheckTimestamp?.toISOString() ||
+      '',
+    totalStackInstancesCount:
+      stackSetDriftDetectionDetails?.TotalStackInstancesCount || 0,
+    driftedStackInstancesCount:
+      stackSetDriftDetectionDetails?.DriftedStackInstancesCount || 0,
+    inSyncStackInstancesCount:
+      stackSetDriftDetectionDetails?.InSyncStackInstancesCount || 0,
+    inProgressStackInstancesCount:
+      stackSetDriftDetectionDetails?.InProgressStackInstancesCount || 0,
+    failedStackInstancesCount:
+      stackSetDriftDetectionDetails?.FailedStackInstancesCount || 0,
+  }
   return {
     id: stackSetId,
     arn: stackSetARN,
@@ -58,20 +80,15 @@ export default ({
     administrationRoleARN,
     executionRoleName,
     driftDetectionDetail: {
-      id: cuid(),
-      driftStatus: stackSetDriftDetectionDetails?.DriftStatus || '',
-      driftDetectionStatus: stackSetDriftDetectionDetails?.DriftDetectionStatus || '',
-      lastDriftCheckTimestamp: stackSetDriftDetectionDetails?.LastDriftCheckTimestamp?.toISOString() || '',
-      totalStackInstancesCount: stackSetDriftDetectionDetails?.TotalStackInstancesCount || 0,
-      driftedStackInstancesCount: stackSetDriftDetectionDetails?.DriftedStackInstancesCount || 0,
-      inSyncStackInstancesCount: stackSetDriftDetectionDetails?.InSyncStackInstancesCount || 0,
-      inProgressStackInstancesCount: stackSetDriftDetectionDetails?.InProgressStackInstancesCount || 0,
-      failedStackInstancesCount: stackSetDriftDetectionDetails?.FailedStackInstancesCount || 0,
+      id: generateId(driftDetectionDetail),
+      ...driftDetectionDetail,
     },
     autoDeploymentConfig: {
       enabled: autoDeployment?.Enabled ? t.yes : t.no,
-      retainStacksOnAccountRemoval: autoDeployment?.RetainStacksOnAccountRemoval ? t.yes : t.no,
-    },    
+      retainStacksOnAccountRemoval: autoDeployment?.RetainStacksOnAccountRemoval
+        ? t.yes
+        : t.no,
+    },
     permissionModel,
     organizationalUnitIds,
     region,

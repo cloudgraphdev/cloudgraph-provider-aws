@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import { generateId } from '@cloudgraph/sdk'
 import { AwsEcsTaskDefinition } from '../../types/generated'
 import { RawAwsEcsTaskDefinition } from './data'
 
@@ -37,84 +37,84 @@ export default ({
   } = service
 
   const containerDefinitions = service.containerDefinitions?.map(def => ({
-    id: cuid(),
+    id: generateId(def as Record<string, unknown>),
     ...def,
     portMappings: def.portMappings?.map(mapping => ({
-      id: cuid(),
+      id: generateId(mapping as Record<string, unknown>),
       ...mapping,
     })),
     environment: def.environment?.map(env => ({
-      id: cuid(),
+      id: generateId(env as Record<string, unknown>),
       ...env,
     })),
     environmentFiles: def.environmentFiles?.map(file => ({
-      id: cuid(),
+      id: generateId(file as unknown as Record<string, unknown>),
       ...file,
     })),
     mountPoints: def.mountPoints?.map(mp => ({
-      id: cuid(),
+      id: generateId(mp as Record<string, unknown>),
       ...mp,
     })),
     volumesFrom: def.volumesFrom?.map(vol => ({
-      id: cuid(),
+      id: generateId(vol as Record<string, unknown>),
       ...vol,
     })),
     linuxParameters: {
       ...def?.linuxParameters,
       devices: def.linuxParameters?.devices?.map(device => ({
-        id: cuid(),
+        id: generateId(device as unknown as Record<string, unknown>),
         ...device,
       })),
       tmpfs: def.linuxParameters?.tmpfs?.map(fs => ({
-        id: cuid(),
+        id: generateId(fs as unknown as Record<string, unknown>),
         ...fs,
       }))
     },
     secrets: def.secrets?.map(secret => ({
-      id: cuid(),
+      id: generateId(secret as unknown as Record<string, unknown>),
       ...secret,
     })),
     dependsOn: def.dependsOn?.map(dep => ({
-      id: cuid(),
+      id: generateId(dep as unknown as Record<string, unknown>),
       ...dep,
     })),
     extraHosts: def.extraHosts?.map(host => ({
-      id: cuid(),
+      id: generateId(host as unknown as Record<string, unknown>),
       ...host,
     })),
     dockerLabels: Object.keys(def.dockerLabels || {}).map(key => ({
-      id: cuid(),
+      id: generateId({ key, value: def.dockerLabels[key]}),
       key,
       value: def.dockerLabels[key],
     })),
     ulimits: def.ulimits?.map(ulimit => ({
-      id: cuid(),
+      id: generateId(ulimit as unknown as Record<string, unknown>),
       ...ulimit,
     })),
     logConfiguration: {
       ...def.logConfiguration,
       options: Object.keys(def.logConfiguration?.options || {}).map(key => ({
-        id: cuid(),
+        id: generateId({ key, value: def.logConfiguration?.options?.[key]}),
         key,
-        value: def.logConfiguration?.options[key],
+        value: def.logConfiguration?.options?.[key],
       })),
       secretOptions: def.logConfiguration?.secretOptions?.map(option => ({
-        id: cuid(),
+        id: generateId(option as unknown as Record<string, unknown>),
         ...option,
       }))
     },
     systemControls: def.systemControls?.map(control => ({
-      id: cuid(),
+      id: generateId(control as unknown as Record<string, unknown>),
       ...control,
     })),
     resourceRequirements: def.resourceRequirements?.map(rr => ({
-      id: cuid(),
+      id: generateId(rr as unknown as Record<string, unknown>),
       ...rr,
     })),
     firelensConfiguration: {
       ...def.firelensConfiguration,
       options: Object.keys(def.firelensConfiguration?.options || {}).map(key => ({
-        id: cuid(),
+        id: generateId({ key, value: def.firelensConfiguration?.options[key] }),
         key,
         value: def.firelensConfiguration?.options[key],
       })),
@@ -133,16 +133,16 @@ export default ({
     networkMode,
     revision,
     volumes: volumes?.map(vol => ({
-      id: cuid(),
+      id: generateId(vol as unknown as Record<string, unknown>),
       ...vol,
       dockerVolumeConfiguration: {
         driverOpts: Object.keys(vol?.dockerVolumeConfiguration?.driverOpts).map(key => ({
-          id: cuid(),
+          id: generateId({ key, value: vol?.dockerVolumeConfiguration?.driverOpts[key]}),
           key,
           value: vol?.dockerVolumeConfiguration?.driverOpts[key],
         })),
         labels: Object.keys(vol?.dockerVolumeConfiguration?.labels).map(key => ({
-          id: cuid(),
+          id: generateId({ key, value: vol?.dockerVolumeConfiguration?.labels[key]}),
           key,
           value: vol?.dockerVolumeConfiguration?.labels[key],
         })),
@@ -150,11 +150,11 @@ export default ({
     })),
     status,
     requiresAttributes: requiresAttributes?.map(attr => ({
-      id: cuid(),
+      id: generateId(attr as unknown as Record<string, unknown>),
       ...attr,
     })),
     placementConstraints: placementConstraints?.map(pc => ({
-      id: cuid(),
+      id: generateId(pc as unknown as Record<string, unknown>),
       ...pc,
     })),
     compatibilities,
@@ -162,7 +162,7 @@ export default ({
     cpu,
     memory,
     inferenceAccelerators: inferenceAccelerators?.map(ia => ({
-      id: cuid(),
+      id: generateId(ia as unknown as Record<string, unknown>),
       ...ia,
     })),
     pidMode,
@@ -170,7 +170,7 @@ export default ({
     proxyConfiguration: {
       ...proxyConfiguration,
       properties: proxyConfiguration?.properties?.map(prop => ({
-        id: cuid(),
+        id: generateId(prop as unknown as Record<string, unknown>),
         ...prop,
       })),
     },

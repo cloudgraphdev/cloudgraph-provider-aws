@@ -3,7 +3,7 @@ import {
   Projection,
   ProvisionedThroughputDescription,
 } from 'aws-sdk/clients/dynamodb'
-import cuid from 'cuid'
+import { generateId } from '@cloudgraph/sdk';
 import { RawAwsDynamoDbTable } from './data'
 import { formatTagsFromMap } from '../../utils/format';
 import {
@@ -25,7 +25,7 @@ const formatKeySchema = (
   KeySchema: KeySchemaElement[]
 ): AwsDynamoDbTableIndexKeySchema[] =>
   KeySchema.map(({ AttributeName: attributeName, KeyType: keyType }) => ({
-    id: cuid(),
+    id: generateId({ attributeName, keyType }),
     attributeName,
     keyType,
   }))
@@ -120,7 +120,7 @@ export default ({
 
   const attributes: AwsDynamoDbTableAttributes[] = AttributeDefinitions.map(
     ({ AttributeName, AttributeType: type }) => ({
-      id: cuid(),
+      id: generateId({ AttributeName, type }),
       name: AttributeName,
       type,
     })
@@ -145,20 +145,25 @@ export default ({
         IndexStatus: status,
         Backfilling: backfilling,
         ProvisionedThroughput: globalIndexProvisionedThroughput = {},
-      }) => ({
-        id: cuid(),
-        name: IndexName,
-        arn,
-        itemCount: ItemCount,
-        keySchema: formatKeySchema(KeySchema),
-        projection: formatProjection(globalIndexProjection),
-        sizeInBytes,
-        status,
-        backfilling,
-        provisionedThroughput: formatProvisionedThroughput(
-          globalIndexProvisionedThroughput
-        ),
-      })
+      }) => {
+        const obj = {
+          name: IndexName,
+          arn,
+          itemCount: ItemCount,
+          keySchema: formatKeySchema(KeySchema),
+          projection: formatProjection(globalIndexProjection),
+          sizeInBytes,
+          status,
+          backfilling,
+          provisionedThroughput: formatProvisionedThroughput(
+            globalIndexProvisionedThroughput
+          ),
+        }
+        return {
+          id: generateId(obj),
+          ...obj,
+        }
+      }
     )
 
   const localIndexes: AwsDynamoDbTableLocalSecondaryIndexDescription[] =
@@ -189,26 +194,31 @@ export default ({
       ProvisionedThroughputOverride,
       GlobalSecondaryIndexes: ReplicasGlobalSecondaryIndexes,
       ReplicaInaccessibleDateTime,
-    }) => ({
-      id: cuid(),
-      regionName,
-      status: ReplicaStatus,
-      statusDescription: ReplicaStatusDescription,
-      statusPercentProgress: ReplicaStatusPercentProgress,
-      kmsMasterKeyId: KMSMasterKeyId,
-      provisionedThroughput: ProvisionedThroughputOverride,
-      globalSecondaryIndexes: ReplicasGlobalSecondaryIndexes.map(
-        ({
-          IndexName,
-          ProvisionedThroughputOverride: {
-            ReadCapacityUnits: readCapacityUnits,
-          },
-        }) => ({ name: IndexName, readCapacityUnits })
-      ),
-      ...(ReplicaInaccessibleDateTime ? {
-        replicaInaccessibleDateTime: ReplicaInaccessibleDateTime.toString(),
-      }  : {}),
-    })
+    }) => {
+      const obj = {
+        regionName,
+        status: ReplicaStatus,
+        statusDescription: ReplicaStatusDescription,
+        statusPercentProgress: ReplicaStatusPercentProgress,
+        kmsMasterKeyId: KMSMasterKeyId,
+        provisionedThroughput: ProvisionedThroughputOverride,
+        globalSecondaryIndexes: ReplicasGlobalSecondaryIndexes.map(
+          ({
+            IndexName,
+            ProvisionedThroughputOverride: {
+              ReadCapacityUnits: readCapacityUnits,
+            },
+          }) => ({ name: IndexName, readCapacityUnits })
+        ),
+        ...(ReplicaInaccessibleDateTime ? {
+          replicaInaccessibleDateTime: ReplicaInaccessibleDateTime.toString(),
+        }  : {}),
+      }
+      return {
+        id: generateId(obj),
+        ...obj,
+      }
+    }
   )
 
   const restoreSummary: AwsDynamoDbTableRestoreSummary = {

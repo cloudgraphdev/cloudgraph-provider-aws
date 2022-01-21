@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import { generateId } from '@cloudgraph/sdk'
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsClientVpnEndpoint } from './data'
 import { AwsClientVpnEndpoint } from '../../types/generated'
@@ -47,7 +47,7 @@ export default ({
     associatedTargetNetworkSet?.map(
       ({ NetworkId: networkId, NetworkType: networkType }) => {
         return {
-          id: cuid(),
+          id: generateId({ networkId, networkType }),
           networkId,
           networkType,
         }
@@ -63,8 +63,7 @@ export default ({
         MutualAuthentication: mutualAuthentication,
         FederatedAuthentication: federatedAuthentication,
       }) => {
-        return {
-          id: cuid(),
+        const obj = {
           type: type?.toString(),
           activeDirectory: {
             directoryId: activeDirectory?.DirectoryId,
@@ -75,7 +74,11 @@ export default ({
           federatedAuthentication: {
             samlProviderArn: federatedAuthentication?.SamlProviderArn,
             selfServiceSamlProviderArn: federatedAuthentication?.SelfServiceSamlProviderArn,
-          },
+          }
+        }
+        return {
+          id: generateId(obj),
+          ...obj
         }
       }
     ) || []

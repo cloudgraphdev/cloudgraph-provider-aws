@@ -1,4 +1,4 @@
-import cuid from 'cuid';
+import { generateId } from '@cloudgraph/sdk';
 import t from '../../properties/translations'
 
 import { AwsCognitoUserPool } from '../../types/generated';
@@ -61,8 +61,7 @@ export default ({
     NumberAttributeConstraints: numberAttributeConstraints,
     StringAttributeConstraints: stringAttributeConstraints,
   }) => {
-    return {
-      id: cuid(),
+    const obj = {
       name: schemaAttributeName,
       attributeDataType,
       developerOnlyAttribute: developerOnlyAttribute ? t.yes : t.no,
@@ -73,6 +72,10 @@ export default ({
       stringAttributeConstraintsMinValue: stringAttributeConstraints?.MinLength || '',
       stringAttributeConstraintsMaxValue: stringAttributeConstraints?.MaxLength || '',
     }
+    return {
+      id: generateId(obj),
+      ...obj
+    }
   }) || []
 
   const accountRecoverySettings = accountRecoverySetting?.RecoveryMechanisms?.map(({
@@ -80,7 +83,7 @@ export default ({
     Name: recoveryOptionName
   }) => {
     return {
-      id: cuid(),
+      id: generateId({ priority, recoveryOptionName }),
       priority,
       name: recoveryOptionName
     }
@@ -92,7 +95,6 @@ export default ({
     arn,
     name,
     policies: {
-      id: cuid(),
       minimumLength: policies?.PasswordPolicy?.MinimumLength || 0,
       requireUppercase: policies?.PasswordPolicy?.RequireUppercase ? t.yes : t.no,
       requireLowercase: policies?.PasswordPolicy?.RequireLowercase ? t.yes : t.no,
@@ -101,7 +103,6 @@ export default ({
       temporaryPasswordValidityDays: policies?.PasswordPolicy?.MinimumLength || 0,
     },
     lambdaConfig: {
-      id: cuid(),
       preSignUp: lambdaConfig?.PreSignUp || '',
       customMessage: lambdaConfig?.CustomMessage || '',
       postConfirmation: lambdaConfig?.PostConfirmation || '',

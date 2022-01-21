@@ -14,7 +14,6 @@ export type Scalars = {
 };
 
 export type AwsEcsExecuteCommandLogConfiguration = {
-  id: Scalars['String'];
   cloudWatchLogGroupName?: Maybe<Scalars['String']>;
   cloudWatchEncryptionEnabled?: Maybe<Scalars['Boolean']>;
   s3BucketName?: Maybe<Scalars['String']>;
@@ -852,7 +851,6 @@ export type AwsCognitoUserPool = {
 };
 
 export type AwsCognitoUserPoolLambdaConfig = {
-  id: Scalars['String'];
   preSignUp?: Maybe<Scalars['String']>;
   customMessage?: Maybe<Scalars['String']>;
   postConfirmation?: Maybe<Scalars['String']>;
@@ -871,7 +869,6 @@ export type AwsCognitoUserPoolLambdaConfig = {
 };
 
 export type AwsCognitoUserPoolPasswordPolicy = {
-  id: Scalars['String'];
   minimumLength?: Maybe<Scalars['Int']>;
   requireUppercase?: Maybe<Scalars['String']>;
   requireLowercase?: Maybe<Scalars['String']>;
@@ -1231,7 +1228,6 @@ export type AwsEcsCluster = {
 };
 
 export type AwsEcsClusterConfiguration = {
-  id: Scalars['String'];
   executeCommandConfiguration?: Maybe<AwsEcsExecuteCommandConfiguration>;
 };
 
@@ -1345,20 +1341,17 @@ export type AwsEcsDeployment = {
 };
 
 export type AwsEcsDeploymentCircuitBreaker = {
-  id: Scalars['String'];
   enable?: Maybe<Scalars['Boolean']>;
   rollback?: Maybe<Scalars['Boolean']>;
 };
 
 export type AwsEcsDeploymentConfiguration = {
-  id: Scalars['String'];
   deploymentCircuitBreaker?: Maybe<AwsEcsDeploymentCircuitBreaker>;
   maximumPercent?: Maybe<Scalars['Int']>;
   minimumHealthyPercent?: Maybe<Scalars['Int']>;
 };
 
 export type AwsEcsDeploymentController = {
-  id: Scalars['String'];
   type?: Maybe<Scalars['String']>;
 };
 
@@ -1408,7 +1401,6 @@ export type AwsEcsEphemeralStorage = {
 };
 
 export type AwsEcsExecuteCommandConfiguration = {
-  id: Scalars['String'];
   kmsKeyId?: Maybe<Scalars['String']>;
   logging?: Maybe<Scalars['String']>;
   logConfiguration?: Maybe<AwsEcsExecuteCommandLogConfiguration>;
@@ -1726,7 +1718,6 @@ export type AwsEcsTaskDefinitionPlacementConstraint = {
 };
 
 export type AwsEcsTaskOverride = {
-  id: Scalars['String'];
   containerOverrides?: Maybe<Array<Maybe<AwsEcsContainerOverride>>>;
   cpu?: Maybe<Scalars['String']>;
   inferenceAcceleratorOverrides?: Maybe<Array<Maybe<AwsEcsInferenceAcceleratorOverride>>>;
@@ -1794,7 +1785,6 @@ export type AwsEcsVolumeFrom = {
 };
 
 export type AwsEcsversionInfo = {
-  id: Scalars['String'];
   agentVersion?: Maybe<Scalars['String']>;
   agentHash?: Maybe<Scalars['String']>;
   dockerVersion?: Maybe<Scalars['String']>;

@@ -119,7 +119,6 @@ type awsEcsTaskOverride
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
     containerOverrides: [awsEcsContainerOverride]
     cpu: String @search(by: [hash, regexp])
     inferenceAcceleratorOverrides: [awsEcsInferenceAcceleratorOverride]
