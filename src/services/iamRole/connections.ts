@@ -1,6 +1,5 @@
 import flatMap from 'lodash/flatMap'
 import isEmpty from 'lodash/isEmpty'
-import kebabCase from 'lodash/kebabCase'
 
 import { ServiceConnection } from '@cloudgraph/sdk'
 
@@ -9,8 +8,6 @@ import { RawAwsIamRole } from './data'
 import { RawAwsIamPolicy } from '../iamPolicy/data'
 import { RawAwsEcsService } from '../ecsService/data'
 import { RawFlowLog } from '../flowLogs/data'
-import resources from '../../enums/resources'
-import { getIamId } from '../../utils/ids'
 
 /**
  * IAM Role
@@ -27,7 +24,7 @@ export default ({
   region: string
 }): { [key: string]: ServiceConnection[] } => {
   const connections: ServiceConnection[] = []
-  const { RoleId: id, RoleName: name, ManagedPolicies: managedPolicies } = role
+  const { Arn: id, ManagedPolicies: managedPolicies } = role
 
   const policies: RawAwsIamPolicy[] =
     flatMap(
@@ -46,10 +43,10 @@ export default ({
 
   if (!isEmpty(attachedPolicies)) {
     for (const instance of attachedPolicies) {
-      const { PolicyId: policyId, PolicyName: policyName } = instance
+      const { Arn: policyId } = instance
 
       connections.push({
-        id: `${policyName}-${policyId}-${kebabCase(resources.iamPolicy)}`,
+        id: policyId,
         resourceType: services.iamPolicy,
         relation: 'child',
         field: 'iamAttachedPolicies',
@@ -65,9 +62,9 @@ export default ({
     data: { [property: string]: RawAwsEcsService[] }
   } = data.find(({ name }) => name === services.ecsService)
   if (ecsServices?.data?.[region]) {
-    const ecsServicesInRegion: RawAwsEcsService[] = ecsServices.data[region].filter(
-      ({ roleArn }: RawAwsEcsService) => roleArn === role.Arn
-    )
+    const ecsServicesInRegion: RawAwsEcsService[] = ecsServices.data[
+      region
+    ].filter(({ roleArn }: RawAwsEcsService) => roleArn === role.Arn)
     if (!isEmpty(ecsServicesInRegion)) {
       for (const service of ecsServicesInRegion) {
         const { serviceArn } = service
@@ -85,27 +82,23 @@ export default ({
   /**
    * Find any FlowLog related data
    */
-   const flowLogs = data.find(({ name }) => name === services.flowLog)
-   if (flowLogs?.data?.[region]) {
-     const dataAtRegion: RawFlowLog[] = flowLogs.data[region].filter(
-       ({ DeliverLogsPermissionArn }: RawFlowLog) =>
-       DeliverLogsPermissionArn === role.Arn
-     )
-     for (const flowLog of dataAtRegion) {
-       connections.push({
-         id: flowLog.FlowLogId,
-         resourceType: services.flowLog,
-         relation: 'child',
-         field: 'flowLogs',
-       })
-     }
-   }
+  const flowLogs = data.find(({ name }) => name === services.flowLog)
+  if (flowLogs?.data?.[region]) {
+    const dataAtRegion: RawFlowLog[] = flowLogs.data[region].filter(
+      ({ DeliverLogsPermissionArn }: RawFlowLog) =>
+        DeliverLogsPermissionArn === role.Arn
+    )
+    for (const flowLog of dataAtRegion) {
+      connections.push({
+        id: flowLog.FlowLogId,
+        resourceType: services.flowLog,
+        relation: 'child',
+        field: 'flowLogs',
+      })
+    }
+  }
 
   return {
-    [getIamId({
-      resourceId: id,
-      resourceName: name,
-      resourceType: resources.iamRole,
-    })]: connections,
+    [id]: connections,
   }
 }

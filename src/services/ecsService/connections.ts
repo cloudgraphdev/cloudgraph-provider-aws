@@ -2,7 +2,7 @@ import { ServiceConnection } from '@cloudgraph/sdk'
 import { isEmpty } from 'lodash'
 import { SecurityGroup } from 'aws-sdk/clients/ec2'
 import { RawAwsEcsService } from '../ecsService/data'
-import { RawAwsSubnet } from '../subnet/data' 
+import { RawAwsSubnet } from '../subnet/data'
 import { RawAwsElb } from '../elb/data'
 import { RawAwsEcsCluster } from '../ecsCluster/data'
 import { RawAwsEcsTaskSet } from '../ecsTaskSet/data'
@@ -10,7 +10,6 @@ import { RawAwsEcsTaskDefinition } from '../ecsTaskDefinition/data'
 import services from '../../enums/services'
 
 export default ({
-  account,
   service,
   data,
   region,
@@ -24,13 +23,16 @@ export default ({
 } => {
   const { serviceArn: id } = service
   const connections: ServiceConnection[] = []
-  const sgIds = service?.networkConfiguration?.awsvpcConfiguration?.securityGroups
+  const sgIds =
+    service?.networkConfiguration?.awsvpcConfiguration?.securityGroups
   const subnetIds = service?.networkConfiguration?.awsvpcConfiguration?.subnets
-  const elbNames = service?.loadBalancers?.map(({loadBalancerName}) => loadBalancerName)
-  const taskSetArns = service?.taskSets?.map(({taskSetArn}) => taskSetArn)
+  const elbNames = service?.loadBalancers?.map(
+    ({ loadBalancerName }) => loadBalancerName
+  )
+  const taskSetArns = service?.taskSets?.map(({ taskSetArn }) => taskSetArn)
 
   /**
-   * Find Security Groups 
+   * Find Security Groups
    */
   const securityGroups: {
     name: string
@@ -79,7 +81,7 @@ export default ({
             id: subnet.VpcId,
             resourceType: services.vpc,
             relation: 'child',
-            field: 'vpc'
+            field: 'vpc',
           })
         }
       }
@@ -89,8 +91,9 @@ export default ({
   /**
    * Find related ELB
    */
-  const elbs: { name: string; data: { [property: string]: any[] } } =
-    data.find(({ name }) => name === services.elb)
+  const elbs: { name: string; data: { [property: string]: any[] } } = data.find(
+    ({ name }) => name === services.elb
+  )
   if (elbs?.data?.[region]) {
     const dataAtRegion: RawAwsElb[] = elbs.data[region].filter(
       ({ LoadBalancerName }: RawAwsElb) => elbNames?.includes(LoadBalancerName)
@@ -154,11 +157,16 @@ export default ({
   /**
    * Find related ECS task definition
    */
-  const ecsTaskDefinitions: { name: string; data: { [property: string]: any[] } } =
-    data.find(({ name }) => name === services.ecsTaskDefinition)
+  const ecsTaskDefinitions: {
+    name: string
+    data: { [property: string]: any[] }
+  } = data.find(({ name }) => name === services.ecsTaskDefinition)
   if (ecsTaskDefinitions?.data?.[region]) {
-    const dataAtRegion: RawAwsEcsTaskDefinition[] = ecsTaskDefinitions.data[region].filter(
-      ({ taskDefinitionArn }: RawAwsEcsTaskDefinition) => taskDefinitionArn === service.taskDefinition
+    const dataAtRegion: RawAwsEcsTaskDefinition[] = ecsTaskDefinitions.data[
+      region
+    ].filter(
+      ({ taskDefinitionArn }: RawAwsEcsTaskDefinition) =>
+        taskDefinitionArn === service.taskDefinition
     )
     if (!isEmpty(dataAtRegion)) {
       for (const instance of dataAtRegion) {
