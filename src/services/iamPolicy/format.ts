@@ -2,6 +2,8 @@ import { AwsIamPolicy } from '../../types/generated'
 import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 import { RawAwsIamPolicy } from './data'
 
+const GLOBAL_ARN_PREFIX = '::aws:'
+
 /**
  * IAM Policy
  */
@@ -30,7 +32,7 @@ export default ({
     id: arn,
     name,
     arn,
-    accountId: account,
+    accountId: arn.includes(GLOBAL_ARN_PREFIX) ? 'global' : account, // Uses global for AWS managed policies
     path,
     policyContent: formatIamJsonPolicy(policyContent),
     description,
