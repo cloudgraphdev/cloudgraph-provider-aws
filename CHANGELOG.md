@@ -1,3 +1,10 @@
+## [0.64.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.64.3...0.64.4) (2022-01-25)
+
+
+### Bug Fixes
+
+* **services:** update alb and elb to use arn as an id and have a name field ([8b4ffc7](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/8b4ffc7daaffcb7cf73360a6d8af53f626531e40))
+
 ## [0.64.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.64.2...0.64.3) (2022-01-21)
 
 
