@@ -95,7 +95,7 @@ export default async ({
   for (const region of regions.split(',')) {
     const kinesis = new Kinesis({ ...config, region, endpoint })
 
-    const streamDescriptions = await listStreamsData(kinesis)
+    const streamDescriptions = (await listStreamsData(kinesis)) ?? []
 
     streamDescriptionsData.push(
       ...streamDescriptions.map((streamDescription: StreamDescription) => ({
