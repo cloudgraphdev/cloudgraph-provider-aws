@@ -1,3 +1,12 @@
+## [0.64.5](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.64.4...0.64.5) (2022-01-25)
+
+
+### Bug Fixes
+
+* Fixed kinesis stream empty error ([b299ff2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b299ff2c3dfdd56dd504ad5ef7c5c4d252058be7))
+* Prevented error with empty iamPasswordPolicy ([6cae9e3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/6cae9e3c1c9ca444ec4d4adb58003a9eae7854ff))
+* Use accountId to prevent errors inserting iam global policies ([f534017](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/f53401775ca89118d6fe5d2edd1f541dd5abc977))
+
 ## [0.64.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.64.3...0.64.4) (2022-01-25)
 
 
