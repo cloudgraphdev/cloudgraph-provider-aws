@@ -80,5 +80,5 @@ export default async ({
     errorLog.reset()
     logger.debug(lt.doneFetchingIamPasswordPolicy)
 
-    resolve({ [globalRegionName]: [passwordPolicy] })
+    resolve({ [globalRegionName]: passwordPolicy ? [passwordPolicy] : [] })
   })
