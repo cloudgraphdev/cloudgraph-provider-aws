@@ -9,6 +9,7 @@ import { RawAwsAlb } from '../alb/data'
 import { RawAwsElb } from '../elb/data'
 import { getHostedZoneId, getRecordId } from '../../utils/ids'
 import { RawAwsApiGatewayRestApi } from '../apiGatewayRestApi/data'
+import { elbArn } from '../../utils/generateArns'
 
 /**
  * Route53 Record
@@ -51,10 +52,10 @@ export default ({
 
     if (!isEmpty(elbsInRegion)) {
       for (const instance of elbsInRegion) {
-        const { LoadBalancerName: lbId } = instance
+        const { LoadBalancerName: lbName, region: elbRegion, account: elbAccount } = instance
 
         connections.push({
-          id: lbId,
+          id: elbArn({ region: elbRegion, account: elbAccount, name: lbName }),
           resourceType: services.elb,
           relation: 'child',
           field: 'elb',
@@ -80,10 +81,10 @@ export default ({
 
     if (!isEmpty(albsInRegion)) {
       for (const instance of albsInRegion) {
-        const { LoadBalancerName: lbId } = instance
+        const { LoadBalancerArn: arn } = instance
 
         connections.push({
-          id: lbId,
+          id: arn,
           resourceType: services.alb,
           relation: 'child',
           field: 'alb',

@@ -116,6 +116,7 @@ export type AwsAdditionalAuthenticationProvider = {
 
 export type AwsAlb = {
   id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
   accountId: Scalars['String'];
   arn: Scalars['String'];
   region?: Maybe<Scalars['String']>;
@@ -2185,6 +2186,7 @@ export type AwsElasticBeanstalkEnvSetting = {
 
 export type AwsElb = {
   id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
   accountId: Scalars['String'];
   arn: Scalars['String'];
   region?: Maybe<Scalars['String']>;

@@ -37,11 +37,14 @@ import { RawAwsElastiCacheReplicationGroup } from '../elastiCacheReplicationGrou
 import { RawFlowLog } from '../flowLogs/data'
 import { RawAwsSns } from '../sns/data'
 import { RawAwsRedshiftCluster } from '../redshift/data'
+import { RawAwsAlb } from '../alb/data'
+import { RawAwsElb } from '../elb/data'
 import {
   apiGatewayArn,
   apiGatewayRestApiArn,
   apiGatewayStageArn,
   redshiftArn,
+  elbArn
 } from '../../utils/generateArns'
 import { RawAwsEksCluster } from '../eksCluster/data'
 import { RawAwsEcsCluster } from '../ecsCluster/data'
@@ -84,13 +87,13 @@ export default ({
     const albs: { name: string; data: { [property: string]: any[] } } =
       data.find(({ name }) => name === services.alb)
     if (albs?.data?.[region]) {
-      const dataAtRegion: any = findServiceInstancesWithTag(
+      const dataAtRegion: RawAwsAlb[] = findServiceInstancesWithTag(
         tag,
         albs.data[region]
       )
       if (!isEmpty(dataAtRegion)) {
         for (const alb of dataAtRegion) {
-          const { LoadBalancerName: id } = alb
+          const { LoadBalancerArn: id } = alb
           connections.push({
             id,
             resourceType: services.alb,
@@ -458,13 +461,13 @@ export default ({
     const elbs: { name: string; data: { [property: string]: any[] } } =
       data.find(({ name }) => name === services.elb)
     if (elbs?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(tag, elbs.data[region])
+      const dataAtRegion: RawAwsElb[] = findServiceInstancesWithTag(tag, elbs.data[region])
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
-          const { LoadBalancerName: id } = instance
+          const { LoadBalancerName: loadBalancerName, region: elbRegion, account } = instance
 
           connections.push({
-            id,
+            id: elbArn({ region: elbRegion, account, name: loadBalancerName }),
             resourceType: services.elb,
             relation: 'child',
             field: 'elb',

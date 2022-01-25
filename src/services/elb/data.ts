@@ -55,11 +55,10 @@ const getElbTags = async (
   })
 
 const listElbData = async (
-  elb: ELB,
-  region: string
-): Promise<(LoadBalancerDescription & { region: string })[]> =>
-  new Promise<(LoadBalancerDescription & { region: string })[]>(resolve => {
-    let loadBalancerData: (LoadBalancerDescription & { region: string })[] = []
+  elb: ELB
+): Promise<LoadBalancerDescription[]> =>
+  new Promise<LoadBalancerDescription[]>(resolve => {
+    let loadBalancerData: LoadBalancerDescription[] = []
     elb.describeLoadBalancers(
       (err: AWSError, data: DescribeAccessPointsOutput) => {
         if (err) {
@@ -74,7 +73,6 @@ const listElbData = async (
           logger.debug(lt.fetchedElbs(loadBalancerDescriptions.length))
           loadBalancerData = loadBalancerDescriptions.map(lbDescription => ({
             ...lbDescription,
-            region,
           }))
           resolve(loadBalancerData)
         }
@@ -123,13 +121,16 @@ export interface RawAwsElb extends LoadBalancerDescription {
   Attributes?: LoadBalancerAttributes
   Tags?: { [key: string]: any }
   region: string
+  account: string
 }
 
 export default async ({
   regions,
   config,
+  account
 }: {
   regions: string
+  account: string
   config: Config
 }): Promise<{
   [region: string]: RawAwsElb[]
@@ -141,8 +142,8 @@ export default async ({
       const elbInstance = new ELB({ ...config, region, endpoint })
       return new Promise<void>(async resolveElbData => {
         // Get Load Balancer Data
-        elbData = await listElbData(elbInstance, region)
-        const elbNames: string[] = elbData.map(elb => elb.LoadBalancerName)
+        const elbDescriptionData = await listElbData(elbInstance)
+        const elbNames: string[] = elbDescriptionData.map(elb => elb.LoadBalancerName)
 
         if (!isEmpty(elbNames)) {
           // Get Tags
@@ -150,7 +151,7 @@ export default async ({
 
           // If exists tags, populate elb tags
           if (!isEmpty(tagDescriptions)) {
-            elbData = elbData.map(elb => {
+            elbData = elbDescriptionData.map(elb => {
               const elbsTags = tagDescriptions.find(
                 tagDescription =>
                   tagDescription.LoadBalancerName === elb.LoadBalancerName
@@ -158,6 +159,8 @@ export default async ({
 
               return {
                 ...elb,
+                account,
+                region,
                 Tags: (elbsTags?.Tags || [])
                   .map(({ Key, Value }) => ({ [Key]: Value }))
                   .reduce((acc, curr) => ({ ...acc, ...curr }), {}),
