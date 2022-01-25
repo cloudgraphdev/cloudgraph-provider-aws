@@ -62,7 +62,7 @@ export default ({
     )
     for (const instance of dataAtRegion) {
       connections.push({
-        id: instance.LoadBalancerName,
+        id: instance.LoadBalancerArn,
         resourceType: services.alb,
         relation: 'child',
         field: 'alb',

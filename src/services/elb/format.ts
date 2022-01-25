@@ -80,17 +80,17 @@ export default ({
 
   // Format ELB Tags
   const elbTags = formatTagsFromMap(tags)
-
+  const arn = elbArn({region, account, name: loadBalancerName})
   const elb = {
-    id: loadBalancerName,
+    id: arn,
+    name: loadBalancerName,
     accountId: account,
-    arn: elbArn({region, account, name: loadBalancerName}),
+    arn,
     region,
     dnsName,
     createdAt: createdAt.toISOString(),
     hostedZone,
     type: t.classic,
-    // status: `${inServiceCount}/${instanceData.length} ${t.inServiceText}`, TODO: Can't be calculated without EC2 instances data
     scheme,
     vpcId,
     sourceSecurityGroup: {

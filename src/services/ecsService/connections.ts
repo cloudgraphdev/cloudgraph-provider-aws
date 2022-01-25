@@ -8,6 +8,7 @@ import { RawAwsEcsCluster } from '../ecsCluster/data'
 import { RawAwsEcsTaskSet } from '../ecsTaskSet/data'
 import { RawAwsEcsTaskDefinition } from '../ecsTaskDefinition/data'
 import services from '../../enums/services'
+import { elbArn } from '../../utils/generateArns'
 
 export default ({
   service,
@@ -100,10 +101,17 @@ export default ({
     )
     if (!isEmpty(dataAtRegion)) {
       for (const instance of dataAtRegion) {
-        const { LoadBalancerName: id } = instance
-
+        const {
+          LoadBalancerName: loadBalancerName,
+          region: elbRegion,
+          account: elbAccount,
+        } = instance
         connections.push({
-          id,
+          id: elbArn({
+            region: elbRegion,
+            account: elbAccount,
+            name: loadBalancerName,
+          }),
           resourceType: services.elb,
           relation: 'child',
           field: 'elb',

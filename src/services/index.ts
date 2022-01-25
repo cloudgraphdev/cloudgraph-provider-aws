@@ -581,6 +581,7 @@ export default class Provider extends CloudGraph.Client {
             regions: configuredRegions,
             config,
             opts,
+            account: accountId,
             rawData: result,
           })
           result.push({

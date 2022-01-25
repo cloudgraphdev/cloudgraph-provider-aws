@@ -6,6 +6,7 @@ import services from '../../enums/services'
 import { RawAwsS3 } from '../s3/data'
 import { RawAwsElb } from '../elb/data'
 import { RawAwsCloudfront } from './data'
+import { elbArn } from '../../utils/generateArns'
 
 /**
  * Cloudfront
@@ -81,8 +82,13 @@ export default ({
 
           if (!isEmpty(elbsInRegion)) {
             for (const elb of elbsInRegion) {
+              const arn = elbArn({
+                region: elb.region,
+                account: elb.account,
+                name: elb.LoadBalancerName,
+              })
               connections.push({
-                id: elb.LoadBalancerName,
+                id: arn,
                 resourceType: services.elb,
                 relation: 'child',
                 field: 'elb',

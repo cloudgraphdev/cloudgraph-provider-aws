@@ -10,6 +10,7 @@ import { SecurityGroup } from 'aws-sdk/clients/ec2'
 
 import services from '../../enums/services'
 import { RawAwsSubnet } from '../subnet/data'
+import { elbArn } from '../../utils/generateArns'
 
 /**
  * ELB
@@ -18,6 +19,7 @@ import { RawAwsSubnet } from '../subnet/data'
 export default ({
   service: loadbalancer,
   data,
+  account,
   region,
 }: {
   account: string
@@ -30,12 +32,13 @@ export default ({
 }): { [key: string]: ServiceConnection[] } => {
   const connections: ServiceConnection[] = []
   const {
-    LoadBalancerName: id,
+    LoadBalancerName: loadBalancerName,
     SecurityGroups: loadbalancerSecurityGroups,
     VPCId: vpcId,
     Subnets = [],
   } = loadbalancer
 
+  const id = elbArn({ region, account, name: loadBalancerName })
   /**
    * Find Security Groups VPC Security Groups
    * related to this ELB loadbalancer

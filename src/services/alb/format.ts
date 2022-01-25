@@ -46,7 +46,7 @@ export default ({
 }): AwsAlb => {
   // TODO: type this from aws
   const {
-    LoadBalancerName: id,
+    LoadBalancerName: name,
     LoadBalancerArn: arn,
     DNSName: dnsName,
     Scheme: scheme,
@@ -77,7 +77,8 @@ export default ({
   // }
 
   const albResult = {
-    id,
+    id: arn,
+    name,
     accountId: account,
     arn,
     dnsName,

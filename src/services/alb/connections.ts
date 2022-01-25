@@ -1,12 +1,7 @@
-// import isEmpty from 'lodash/isEmpty'
 import { ServiceConnection } from '@cloudgraph/sdk'
 
-// import get from 'lodash/get'
-import resourceTypes from '../../enums/resources'
 import services from '../../enums/services'
 import { RawAwsAlb } from './data'
-
-// import {awsRoute53HostedZoneConverter} from '../route53/graphFormat'
 
 /**
  * ALBs
@@ -15,7 +10,6 @@ import { RawAwsAlb } from './data'
 export default ({
   service: alb,
   data,
-  // account,
   region,
 }: {
   service: RawAwsAlb
@@ -23,7 +17,7 @@ export default ({
   region: string
 }): { [key: string]: ServiceConnection[] } => {
   const {
-    LoadBalancerName: id,
+    LoadBalancerArn: id,
     SecurityGroups: securityGroups = [],
     AvailabilityZones: azs = [],
   }: RawAwsAlb = alb
