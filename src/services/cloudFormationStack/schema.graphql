@@ -4,12 +4,12 @@ type awsCloudFormationStackParameter
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    parameterKey: String @search(by: [hash, regexp])
-    parameterValue: String @search(by: [hash, regexp])
-    usePreviousValue: String @search(by: [hash, regexp])
-    resolvedValue: String @search(by: [hash, regexp])
-  }
+  id: String! @id @search(by: [hash])
+  parameterKey: String @search(by: [hash, regexp])
+  parameterValue: String @search(by: [hash, regexp])
+  usePreviousValue: String @search(by: [hash, regexp])
+  resolvedValue: String @search(by: [hash, regexp])
+}
 
 type awsRollbackConfigurationRollbackTrigger
   @generate(
@@ -17,10 +17,10 @@ type awsRollbackConfigurationRollbackTrigger
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    arn: String @search(by: [hash, regexp])
-    type: String @search(by: [hash, regexp])
-  }
+  id: String! @id @search(by: [hash])
+  arn: String @search(by: [hash, regexp])
+  type: String @search(by: [hash, regexp])
+}
 
 type awsCloudFormationStackOutputList
   @generate(
@@ -28,12 +28,12 @@ type awsCloudFormationStackOutputList
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    outputKey: String @search(by: [hash, regexp])
-    outputValue: String @search(by: [hash, regexp])
-    description: String @search(by: [hash, regexp])
-    exportName: String @search(by: [hash, regexp])
-  }
+  id: String! @id @search(by: [hash])
+  outputKey: String @search(by: [hash, regexp])
+  outputValue: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  exportName: String @search(by: [hash, regexp])
+}
 
 type awsCloudFormationStackRollbackConfiguration {
   id: String! @id @search(by: [hash])
@@ -53,12 +53,13 @@ type awsCloudFormationStackDriftList {
   resourceType: String @search(by: [hash, regexp])
   timestamp: String @search(by: [hash, regexp])
 }
-# add an accountId
+
 type awsCloudFormationStack @key(fields: "arn") {
   id: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String! @search(by: [hash, regexp])
   name: String @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash, regexp])
   changeSetId: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp])
   parameters: [awsCloudFormationStackParameter]
@@ -73,13 +74,15 @@ type awsCloudFormationStack @key(fields: "arn") {
   timeoutInMinutes: Int @search
   capabilities: [String] @search(by: [hash])
   outputs: [awsCloudFormationStackOutputList]
-  roleARN: String @search(by: [hash, regexp]) # TODO: make a connection here and update casing
+  roleArn: String @search(by: [hash, regexp])
   tags: [awsRawTag]
   enableTerminationProtection: String @search(by: [hash, regexp])
   parentId: String @search(by: [hash, regexp])
   rootId: String @search(by: [hash, regexp])
   stackDriftInfo: awsCloudFormationStackDriftInfo
   stackDriftList: [awsCloudFormationStackDriftList]
-  # parentStack: awsCloudFormationStack TODO: requires work for CG-210 to be complete
-  # rootStack: awsCloudFormationStack TODO: requires work for CG-210 to be complete
+  parentStack: [awsCloudFormationStack]
+  rootStack: [awsCloudFormationStack]
+  iamRole: [awsIamRole] @hasInverse(field: cloudFormationStack)
+  sns: [awsSns] @hasInverse(field: cloudFormationStack)
 }

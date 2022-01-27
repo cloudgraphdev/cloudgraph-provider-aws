@@ -3,6 +3,9 @@ import { APIVersions } from 'aws-sdk/lib/config'
 import CloudGraph, { Opts } from '@cloudgraph/sdk'
 import STS from 'aws-sdk/clients/sts'
 import camelCase from 'lodash/camelCase'
+import isEmpty from 'lodash/isEmpty'
+import isEqual from 'lodash/isEqual'
+import unionWith from 'lodash/unionWith'
 import environment from '../config/environment'
 import { Credentials } from '../types'
 import {
@@ -10,6 +13,8 @@ import {
   MAX_FAILED_AWS_REQUEST_RETRIES,
 } from '../config/constants'
 import relations from '../enums/relations'
+
+
 
 const { logger } = CloudGraph
 
@@ -169,3 +174,39 @@ export const sortResourcesDependencies = (resourceNames: string[]): string[] =>
     }
     return 0
   })
+
+export const checkAndMergeConnections = (
+  serviceConnections: any,
+  connectionsToMerge: any
+): any => {
+  let connections = serviceConnections
+  // IF we have no pre existing connections for this service, use new connections
+  // IF we have pre existing connections, check if its for the same serivce id, if so
+  // check if the connections list for that id is empty, use new connections for that id if so.
+  // otherwise, merge connections by unioning on id of the connections
+  if (!isEmpty(connections)) {
+    const entries: [string, any][] = Object.entries(connectionsToMerge)
+    for (const [key] of entries) {
+      // If there are no service connections for this entity i.e. { [serviceId]: [] }
+      // use new connections for that key
+      if (connections[key]) {
+        if (isEmpty(connections[key])) {
+          connections[key] = connectionsToMerge[key] ?? []
+        } else {
+          connections[key] = unionWith(
+            connections[key],
+            connectionsToMerge[key] ?? [],
+            isEqual
+          )
+        }
+      } else {
+        connections = {
+          ...connections,
+          ...connectionsToMerge,
+        }
+      }
+    }
+    return connections
+  }
+  return connectionsToMerge
+}

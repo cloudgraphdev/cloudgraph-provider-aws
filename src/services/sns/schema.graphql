@@ -11,6 +11,7 @@ type awsSns @key(fields: "arn") {
   cloudtrail: [awsCloudtrail] @hasInverse(field: sns)
   kms: [awsKms] @hasInverse(field: sns)
   cloudwatch: [awsCloudwatch] @hasInverse(field: sns)
+  cloudFormationStack: [awsCloudFormationStack] @hasInverse(field: sns)
 }
 
 type awsSnsSubscription 

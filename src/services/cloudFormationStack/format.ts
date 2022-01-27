@@ -7,9 +7,11 @@ import { RawAwsCloudFormationStack } from './data'
 
 export default ({
   service: rawData,
+  account: accountId,
   region,
 }: {
   service: RawAwsCloudFormationStack
+  account: string
   region: string
 }): AwsCloudFormationStack => {
   const {
@@ -29,7 +31,7 @@ export default ({
     TimeoutInMinutes: timeoutInMinutes,
     Capabilities: capabilities,
     Outputs: outputs,
-    RoleARN: roleARN,
+    RoleARN: roleArn,
     Tags: tags,
     EnableTerminationProtection: enableTerminationProtection,
     ParentId: parentId,
@@ -102,6 +104,7 @@ export default ({
     id: stackId,
     arn: stackId,
     name: stackName,
+    accountId,
     changeSetId: changeSetId || '',
     description,
     parameters: parameterList,
@@ -121,7 +124,7 @@ export default ({
     timeoutInMinutes,
     capabilities,
     outputs: outputsList,
-    roleARN: roleARN || '', // TODO: create connection to IAM role if possible
+    roleArn: roleArn || '', // TODO: create connection to IAM role if possible
     tags: formatTagsFromMap(tags),
     enableTerminationProtection: enableTerminationProtection ? t.yes : t.no,
     parentId: parentId || '',

@@ -1,11 +1,15 @@
-import CloudGraph, { Service, Opts, ProviderData } from '@cloudgraph/sdk'
+import CloudGraph, {
+  Service,
+  Opts,
+  ProviderData
+} from '@cloudgraph/sdk'
 import { loadFilesSync } from '@graphql-tools/load-files'
 import { mergeTypeDefs } from '@graphql-tools/merge'
 import AWS, { Config } from 'aws-sdk'
 import chalk from 'chalk'
 import { print } from 'graphql'
 import STS from 'aws-sdk/clients/sts'
-import { isEmpty, get, merge, unionBy } from 'lodash'
+import { isEmpty, get, merge } from 'lodash'
 import path from 'path'
 
 import regions, { regionMap } from '../enums/regions'
@@ -15,8 +19,7 @@ import serviceMap from '../enums/serviceMap'
 import schemasMap from '../enums/schemasMap'
 import { Credentials } from '../types'
 import { obfuscateSensitiveString } from '../utils/format'
-// import { setAwsRetryOptions } from '../utils'
-import { sortResourcesDependencies } from '../utils'
+import { checkAndMergeConnections, sortResourcesDependencies } from '../utils'
 
 const DEFAULT_REGION = 'us-east-1'
 const DEFAULT_RESOURCES = Object.values(services).join(',')
@@ -38,6 +41,7 @@ interface Account {
 }
 
 interface rawDataInterface {
+  className: string
   name: string
   accountId?: string
   data: any
@@ -508,7 +512,7 @@ export default class Provider extends CloudGraph.Client {
     const result: rawDataInterface[] = []
     for (const entity of oldData) {
       try {
-        const { name, data } = entity
+        const { className, name, data } = entity
         const newDataForEntity =
           newData.find(({ name: serviceName }) => name === serviceName).data ||
           {}
@@ -534,12 +538,14 @@ export default class Provider extends CloudGraph.Client {
             }
           }
           result.push({
+            className,
             name,
             data: mergedData,
           })
           // if not, just use the old data
         } else {
           result.push({
+            className,
             name,
             data,
           })
@@ -585,6 +591,7 @@ export default class Provider extends CloudGraph.Client {
             rawData: result,
           })
           result.push({
+            className: serviceClass.constructor.name,
             name: resource,
             accountId,
             data,
@@ -652,7 +659,7 @@ export default class Provider extends CloudGraph.Client {
     // TODO: find a better way to handle this
     let mergedRawData: rawDataInterface[] = []
     const tagRegion = 'aws-global'
-    const tags = { name: 'tag', data: { [tagRegion]: [] } }
+    const tags = { className: 'Tag', name: 'tag', data: { [tagRegion]: [] } }
     // If the user has passed aws creds as env variables, dont use profile list
     if (usingEnvCreds) {
       rawData = await this.getRawData(
@@ -728,13 +735,6 @@ export default class Provider extends CloudGraph.Client {
       this.logger.debug(error)
     }
 
-    /**
-     * Loop through the aws sdk data to format entities and build connections
-     * 1. Format data with provider service format function
-     * 2. build connections for data with provider service connections function
-     * 3. spread new connections over result.connections
-     * 4. push the array of formatted entities into result.entites
-     */
     for (const serviceData of rawData) {
       try {
         const serviceClass = this.getService(serviceData.name)
@@ -753,43 +753,16 @@ export default class Provider extends CloudGraph.Client {
                 // We need to loop through all configured regions here because services can be connected to things in another region
                 let serviceConnections = {}
                 for (const connectionRegion of configuredRegions.split(',')) {
-                  // Use merged raw data for connections so we can connect across accounts
-                  const newConnections = serviceClass.getConnections({
+                  const connections = serviceClass.getConnections({
                     service,
                     region: connectionRegion,
                     account: serviceData.accountId,
                     data: mergedRawData,
                   })
-                  // IF we have no pre existing connections for this service, use new connections
-                  // IF we have pre existing connections, check if its for the same serivce id, if so
-                  // check if the connections list for that id is empty, use new connections for that id if so.
-                  // otherwise, merge connections by unioning on id of the connections
-                  if (!isEmpty(serviceConnections)) {
-                    const entries: [string, any][] =
-                      Object.entries(newConnections)
-                    for (const [key, value] of entries) {
-                      // If there are no service connections for this entity i.e. { [serviceId]: [] }
-                      // use new connections for that key
-                      if (serviceConnections[key]) {
-                        if (isEmpty(serviceConnections[key])) {
-                          serviceConnections[key] = newConnections[key] ?? []
-                        } else {
-                          serviceConnections[key] = unionBy(
-                            serviceConnections[key],
-                            newConnections[key] ?? [],
-                            'id'
-                          )
-                        }
-                      } else {
-                        serviceConnections = {
-                          ...serviceConnections,
-                          ...newConnections,
-                        }
-                      }
-                    }
-                  } else {
-                    serviceConnections = newConnections
-                  }
+                  serviceConnections = checkAndMergeConnections(
+                    serviceConnections,
+                    connections
+                  )
                 }
                 result.connections = {
                   ...result.connections,
@@ -827,12 +800,14 @@ export default class Provider extends CloudGraph.Client {
             }
           }
           result.entities[existingServiceIdx] = {
+            className: serviceClass.constructor.name,
             name: serviceData.name,
             mutation: serviceClass.mutation,
             data: [...existingData, ...entities],
           }
         } else {
           result.entities.push({
+            className: serviceClass.constructor.name,
             name: serviceData.name,
             mutation: serviceClass.mutation,
             data: entities,
