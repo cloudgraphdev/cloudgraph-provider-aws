@@ -1,6 +1,6 @@
 # TODO: change to accountId
 type awsBilling {
-  id: String!
+  id: String! @id @search(by: [hash])
   account: String! @id @search(by: [hash])
   totalCostMonthToDate: awsTotalBillingInfo
   totalCostLast30Days: awsTotalBillingInfo
