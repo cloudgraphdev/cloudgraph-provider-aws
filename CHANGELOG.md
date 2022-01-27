@@ -1,3 +1,10 @@
+# [0.65.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.64.5...0.65.0) (2022-01-27)
+
+
+### Features
+
+* refactor to be able to add more connections after initial mutation ([adfa1a8](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/adfa1a80b83926bae627a31ae132b2454e19bb05))
+
 ## [0.64.5](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.64.4...0.64.5) (2022-01-25)
 
 
