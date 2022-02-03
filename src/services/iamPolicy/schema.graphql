@@ -33,7 +33,7 @@ type awsIamJSONPolicyStatement
   action: [String] @search(by: [hash])
   condition: [awsIamJSONPolicyCondition]
   effect: String @search(by: [hash, regexp])
-  principle: String @search(by: [hash, regexp])
+  principal: [awsIamJSONPolicyPrincipal]
   resource: [String] @search(by: [hash])
 }
 
@@ -45,6 +45,17 @@ type awsIamJSONPolicyCondition
   ) {
   id: ID
   operator: String @search(by: [hash, regexp])
+  key: String @search(by: [hash, regexp])
+  value: [String] @search(by: [hash])
+}
+
+type awsIamJSONPolicyPrincipal
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: ID
   key: String @search(by: [hash, regexp])
   value: [String] @search(by: [hash])
 }

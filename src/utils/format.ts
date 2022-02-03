@@ -89,6 +89,17 @@ export const formatIamJsonPolicy = (json: string): AwsIamJsonPolicy => {
     })
   }
 
+  const formatPrincipal = principal => {
+    if (!principal) return null
+     return Object.entries(principal).map(([key, value]) => {
+      const conVal = (isArray(value) ? value : [value]) || []
+      return {
+        key: key === '0' ? '' : key.toString(),
+        value: conVal.map(val => toString(val)),
+      }
+     })
+  }
+
   return {
     id: cuid(),
     version: object.Version,
@@ -96,7 +107,7 @@ export const formatIamJsonPolicy = (json: string): AwsIamJsonPolicy => {
       action: isArray(el.Action) ? el.Action : [toString(el.Action)],
       condition: formatCondition(el.Condition),
       effect: el.Effect,
-      principle: el.Principle,
+      principal: formatPrincipal(el.Principal),
       resource: isArray(el.Resource) ? el.Resource : [toString(el.Resource)],
     })),
   }
