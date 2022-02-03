@@ -1,3 +1,10 @@
+## [0.65.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.65.0...0.65.1) (2022-02-03)
+
+
+### Bug Fixes
+
+* Replace principle to principal key-value pair property ([0b993d7](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/0b993d79f50c12a1ccc8b4378699f044a8f6b44f))
+
 # [0.65.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.64.5...0.65.0) (2022-01-27)
 
 
