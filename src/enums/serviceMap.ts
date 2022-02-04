@@ -77,6 +77,7 @@ import ClientVpnEndpoint from '../services/clientVpnEndpoint'
 import VpnConnection from '../services/vpnConnection'
 import Organization from '../services/organization'
 import CloudWatchLog from '../services/cloudwatchLogs'
+import ConfigurationRecorder from '../services/configurationRecorder'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -100,6 +101,7 @@ export default {
   [services.cloudwatchLog]: CloudWatchLog,
   [services.cognitoIdentityPool]: CognitoIdentityPool,
   [services.cognitoUserPool]: CognitoUserPool,
+  [services.configurationRecorder]: ConfigurationRecorder,
   [services.ebs]: EBS,
   [services.ec2Instance]: EC2,
   [services.ecr]: ECR,

@@ -21,6 +21,7 @@ export default {
   [services.cloudwatchLog]: 'awsCloudwatchLog',
   [services.cognitoIdentityPool]: 'awsCognitoIdentityPool',
   [services.cognitoUserPool]: 'awsCognitoUserPool',
+  [services.configurationRecorder]: 'awsConfigurationRecorder',
   [services.customerGateway]: 'awsCustomerGateway',
   [services.dynamodb]: 'awsDynamoDbTable',
   [services.ebs]: 'awsEbs',

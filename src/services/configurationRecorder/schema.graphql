@@ -1,0 +1,37 @@
+type awsConfigurationRecorder @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+  accountId: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  roleARN: String @search(by: [hash, regexp])
+  recordingGroup: awsRecordingGroup
+  status: awsRecorderStatus
+  iamRole: [awsIamRole] @hasInverse(field: configurationRecorder)
+}
+
+type awsRecordingGroup
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  allSupported: Boolean @search
+  includeGlobalResourceTypes: Boolean @search
+  resourceTypes: [String] @search(by: [hash, regexp])
+}
+
+type awsRecorderStatus
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  name: String @search(by: [hash, regexp])
+  lastStatus: String @search(by: [hash, regexp])
+  recording: Boolean @search
+  lastStatusChangeTime: String @search(by: [hash, regexp])
+  lastStartTime: String @search(by: [hash, regexp])
+  lastStopTime: String @search(by: [hash, regexp])
+}
+
