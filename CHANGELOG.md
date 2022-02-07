@@ -1,3 +1,10 @@
+# [0.66.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.65.1...0.66.0) (2022-02-07)
+
+
+### Features
+
+* **service:** Create AWS Config Service ([a3f591c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a3f591ca7a1f2300a1f85f1d25dd2b096a5e4cbf))
+
 ## [0.65.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.65.0...0.65.1) (2022-02-03)
 
 

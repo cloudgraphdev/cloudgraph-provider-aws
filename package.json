@@ -1,6 +1,6 @@
 {
   "name": "@cloudgraph/cg-provider-aws",
-  "version": "0.65.1",
+  "version": "0.66.0",
   "description": "cloud-graph provider plugin for AWS used to fetch AWS cloud data.",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
