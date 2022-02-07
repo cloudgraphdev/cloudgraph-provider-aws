@@ -15,4 +15,5 @@ type awsIamRole @key(fields: "id") {
   ecsService: [awsEcsService] @hasInverse(field: iamRoles) #change to plural
   flowLogs: [awsFlowLog] @hasInverse(field: iamRole)
   cloudFormationStack: [awsCloudFormationStack] @hasInverse(field: iamRole)
+  configurationRecorder: [awsConfigurationRecorder] @hasInverse(field: iamRole)
 }

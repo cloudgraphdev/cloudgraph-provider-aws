@@ -16,6 +16,7 @@ export default {
   cloudwatchLog: 'cloudwatchLog',
   cognitoIdentityPool: 'cognitoIdentityPool',
   cognitoUserPool: 'cognitoUserPool',
+  configurationRecorder: 'configurationRecorder',
   customerGateway: 'customerGateway',
   dynamodb: 'dynamodb',
   ebs: 'ebs',

@@ -657,4 +657,12 @@ export default {
    gettingCloudwatchLogGroups: 'Fetching CloudWatch Log groups...',
    foundMoreCloudwatchMetricFilters: (num: number): string =>
    `Found another ${num} CloudWatch Metric filters in this region...`,
+  /**
+   * Configuration Recorders
+   */
+  fetchedConfigurationRecorders: (num: number): string => `Fetched ${num} Configuration Recorders`,
+  /**
+   * Configuration Recorder Status
+   */
+   fetchedConfigurationRecorderStatus: (num: number): string => `Fetched ${num} Configuration Recorder Status`,
 }

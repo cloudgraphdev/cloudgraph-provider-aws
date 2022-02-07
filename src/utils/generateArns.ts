@@ -210,3 +210,13 @@ export const transitGatewayAttachmentArn = ({
   account: string
   id: string
 }): string => `arn:aws:ec2:${region}:${account}:transit-gateway-attachment/${id}`
+
+export const configurationRecorderArn = ({
+  region,
+  account,
+  name,
+}: {
+  region: string
+  account: string
+  name: string
+}): string => `arn:aws:ec2:${region}:${account}:configuration-recorder/${name}`

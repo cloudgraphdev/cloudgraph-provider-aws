@@ -899,6 +899,18 @@ export type AwsCognitoUserPoolSchemaAttribute = {
   stringAttributeConstraintsMaxValue?: Maybe<Scalars['String']>;
 };
 
+export type AwsConfigurationRecorder = {
+  id: Scalars['String'];
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  roleARN?: Maybe<Scalars['String']>;
+  recordingGroup?: Maybe<AwsRecordingGroup>;
+  status?: Maybe<AwsRecorderStatus>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
+};
+
 export type AwsConnectionLogResponseOptions = {
   enabled?: Maybe<Scalars['Boolean']>;
   cloudwatchLogGroup?: Maybe<Scalars['String']>;
@@ -2500,6 +2512,7 @@ export type AwsIamRole = {
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
   cloudFormationStack?: Maybe<Array<Maybe<AwsCloudFormationStack>>>;
+  configurationRecorder?: Maybe<Array<Maybe<AwsConfigurationRecorder>>>;
 };
 
 export type AwsIamSamlProvider = {
@@ -2940,6 +2953,21 @@ export type AwsRdsDbInstance = {
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+};
+
+export type AwsRecorderStatus = {
+  name?: Maybe<Scalars['String']>;
+  lastStatus?: Maybe<Scalars['String']>;
+  recording?: Maybe<Scalars['Boolean']>;
+  lastStatusChangeTime?: Maybe<Scalars['String']>;
+  lastStartTime?: Maybe<Scalars['String']>;
+  lastStopTime?: Maybe<Scalars['String']>;
+};
+
+export type AwsRecordingGroup = {
+  allSupported?: Maybe<Scalars['Boolean']>;
+  includeGlobalResourceTypes?: Maybe<Scalars['Boolean']>;
+  resourceTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type AwsRedshiftCluster = {

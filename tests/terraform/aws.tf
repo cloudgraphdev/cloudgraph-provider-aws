@@ -820,6 +820,12 @@ resource "aws_vpn_connection" "vpn_connection" {
 }
 
 # Localstack Pro Tier
+# resource "aws_config_configuration_recorder" "foo" {
+#   name     = "example"
+#   role_arn = aws_iam_role.r.arn
+# }
+
+# Localstack Pro Tier
 # resource "aws_elasticache_subnet_group" "bar" {
 #   name       = "tf-test-cache-subnet"
 #   subnet_ids = [aws_subnet.subnet.id]
