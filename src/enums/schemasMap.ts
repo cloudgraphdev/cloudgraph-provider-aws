@@ -19,6 +19,7 @@ export default {
   [services.cloudtrail]: 'awsCloudtrail',
   [services.cloudwatch]: 'awsCloudwatch',
   [services.cloudwatchLog]: 'awsCloudwatchLog',
+  [services.codebuild]: 'awsCodebuild',
   [services.cognitoIdentityPool]: 'awsCognitoIdentityPool',
   [services.cognitoUserPool]: 'awsCognitoUserPool',
   [services.configurationRecorder]: 'awsConfigurationRecorder',

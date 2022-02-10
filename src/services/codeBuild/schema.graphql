@@ -1,0 +1,188 @@
+type awsCodebuildLogsConfig {
+  cloudWatchLogs: awsCodebuildCloudWatchLogs,
+  s3Logs: awsCodebuildS3Logs
+}
+
+type awsCodebuildS3Logs {
+  status: String @search(by: [hash, regexp])
+  location: String @search(by: [hash, regexp])
+  bucketOwnerAccess: String @search(by: [hash, regexp])
+  encryptionDisabled: Boolean @search
+}
+
+type awsCodebuildCloudWatchLogs {
+  status: String @search(by: [hash, regexp])
+  groupName: String @search(by: [hash, regexp])
+  streamName: String @search(by: [hash, regexp])
+}
+
+type awsCodebuildBadge {
+  badgeEnabled: Boolean @search
+  badgeRequestUrl: String @search(by: [hash, regexp])
+}
+
+type awsCodebuildEnvironment {
+  type: String @search(by: [hash, regexp]),
+  image: String @search(by: [hash, regexp]),
+  computeType: String @search(by: [hash, regexp]),
+  environmentVariables: [awsCodebuildEnvironmentVariables],
+  privilegedMode: Boolean @search,
+  certificate: String @search(by: [hash, regexp])
+  registryCredential: awsCodebuildEnvRegistryCredentials
+  imagePullCredentialsType: String @search(by: [hash, regexp])
+}
+
+type awsCodebuildEnvRegistryCredentials {
+  credential: String @search(by: [hash, regexp])
+  credentialProvider: String @search(by: [hash, regexp])
+}
+
+type awsCodebuildEnvironmentVariables {
+  id: String! @id
+  name: String @search(by: [hash, regexp]),
+  value: String @search(by: [hash, regexp]),
+  type: String @search(by: [hash, regexp])
+}
+
+type awsCodebuildCache {
+  type: String @search(by: [hash, regexp])
+  location: String @search(by: [hash, regexp])
+  modes: [String] @search(by: [hash, regexp])
+
+}
+
+type awsCodebuildArtifacts {
+  id: String! @id
+  type: String @search(by: [hash, regexp]),
+  location: String @search(by: [hash, regexp]),
+  path: String @search(by: [hash, regexp]),
+  namespaceType: String @search(by: [hash, regexp]),
+  name: String @search(by: [hash, regexp]),
+  packaging: String @search(by: [hash, regexp]),
+  overrideArtifactName: Boolean @search,
+  encryptionDisabled: Boolean @search
+  artifactIdentifier: String @search(by: [hash, regexp])
+  bucketOwnerAccess: String @search(by: [hash, regexp])
+}
+
+type awsCodebuildSource {
+  id: String! @id
+  type: String @search(by: [hash, regexp]),
+  location: String @search(by: [hash, regexp]),
+  gitCloneDepth: Int @search,
+  gitSubmodulesConfig: awsCodebuildGitSubmodulesConfig,
+  buildspec: String @search(by: [hash, regexp]),
+  auth: awsCodebuildSourceAuth
+  reportBuildStatus: Boolean @search
+  buildStatusConfig: awsCodebuildSourceStatusConfig
+  insecureSsl: Boolean @search
+  sourceIdentifier: String @search(by: [hash, regexp])
+}
+
+type awsCodebuildSourceStatusConfig {
+  context: String @search(by: [hash, regexp])
+  targetUrl: String @search(by: [hash, regexp])
+}
+
+type awsCodebuildSourceAuth {
+  type: String @search(by: [hash, regexp])
+  resource: String @search(by: [hash, regexp])
+}
+
+type awsCodebuildGitSubmodulesConfig {
+  fetchSubmodules: Boolean @search
+}
+
+type awsCodebuildSecondarySourceVersion {
+  sourceIdentifier: String @search(by: [hash, regexp])
+  sourceVersion: String @search(by: [hash, regexp])
+}
+
+type awsCodebuildVpcConfig {
+  vpcId: String @search(by: [hash, regexp])
+  subnets: [String] @search(by: [hash, regexp])
+  securityGroupIds: [String] @search(by: [hash, regexp])
+}
+
+type awsCodebuildBatchConfig {
+  serviceRole: String @search(by: [hash, regexp])
+  combineArtifacts: Boolean @search
+  restrictions: awsCodebuildBatchConfigRestrictions
+  timeoutInMins: Int @search
+  batchReportMode: String @search(by: [hash, regexp])
+}
+
+type awsCodebuildBatchConfigRestrictions {
+  maximumBuildsAllowed: Int @search
+  computeTypesAllowed: [String] @search(by: [hash, regexp])
+}
+
+type awsCodebuildFileSystemLocation {
+  id: String! @id
+  type: String @search(by: [hash, regexp])
+  location: String @search(by: [hash, regexp])
+  mountPoint: String @search(by: [hash, regexp])
+  identifier: String @search(by: [hash, regexp])
+  mountOptions: String @search(by: [hash, regexp])
+}
+
+type awsCodebuildWebhook {
+  url: String @search(by: [hash, regexp])
+  payloadUrl: String @search(by: [hash, regexp])
+  secret: String @search(by: [hash, regexp])
+  branchFilter: String @search(by: [hash, regexp])
+  filterGroups: [awsCodebuildFilterGroupArray]
+  buildType: String @search(by: [hash, regexp])
+  lastModifiedSecret: DateTime
+}
+
+type awsCodebuildFilterGroupArray {
+  id: String! @id
+  data: [awsCodeBuildFilterGroup]
+}
+
+type awsCodeBuildFilterGroup {
+  id: String! @id
+  type: String @search(by: [hash, regexp])
+  pattern: String @search(by: [hash, regexp])
+  excludeMatchedPattern: Boolean @search
+}
+
+type awsCodebuild @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash])
+  region: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  source: awsCodebuildSource
+  secondarySources: [awsCodebuildSource],
+  sourceVersion: String @search(by: [hash])
+  secondarySourceVersions: [awsCodebuildSecondarySourceVersion],
+  artifacts: awsCodebuildArtifacts
+  secondaryArtifacts: [awsCodebuildArtifacts]
+  cache: awsCodebuildCache
+  environment: awsCodebuildEnvironment
+  serviceRole: String @search(by: [hash, regexp])
+  timeoutInMinutes: Int @search
+  queuedTimeoutInMinutes: Int @search
+  encryptionKey: String @search(by: [hash, regexp])
+  created: DateTime @search(by: [day])
+  lastModified: DateTime @search(by: [day])
+  tags: [awsRawTag]
+  webhook: awsCodebuildWebhook
+  fileSystemLocations: [awsCodebuildFileSystemLocation]
+  vpcConfig: awsCodebuildVpcConfig
+  badge: awsCodebuildBadge
+  logsConfig: awsCodebuildLogsConfig
+  buildBatchConfig: awsCodebuildBatchConfig
+  concurrentBuildLimit: Int @search
+  projectVisibility: String @search(by: [hash, regexp])
+  publicProjectAlias: String @search(by: [hash, regexp])
+  resourceAccessRole: String @search(by: [hash, regexp])
+  iamRoles: [awsIamRole] @hasInverse(field: codebuilds)
+  kms: [awsKms] @hasInverse(field: codebuilds)
+  vpc: [awsVpc] @hasInverse(field: codebuilds)
+  securityGroups: [awsSecurityGroup] @hasInverse(field: codebuilds)
+  subnets: [awsSubnet] @hasInverse(field: codebuilds)
+  }

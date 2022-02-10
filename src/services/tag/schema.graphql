@@ -7,6 +7,7 @@ type awsTag @key(fields: "id") {
   asg: [awsAsg] #change to plural
   cloudwatch: [awsCloudwatch] #change to plural
   cloudfront: [awsCloudfront] #change to plural
+  codebuilds: [awsCodebuild]
   ebs: [awsEbs]
   eip: [awsEip]
   elb: [awsElb]

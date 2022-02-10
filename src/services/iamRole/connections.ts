@@ -8,6 +8,7 @@ import { RawAwsIamRole } from './data'
 import { RawAwsIamPolicy } from '../iamPolicy/data'
 import { RawAwsEcsService } from '../ecsService/data'
 import { RawFlowLog } from '../flowLogs/data'
+import { RawAwsCodeBuild } from '../codeBuild/data'
 
 /**
  * IAM Role
@@ -97,6 +98,25 @@ export default ({
       })
     }
   }
+
+  /**
+   * Find any CodeBuild related data
+   */
+   const codebuild = data.find(({ name }) => name === services.codebuild)
+   if (codebuild?.data?.[region]) {
+     const dataAtRegion: RawAwsCodeBuild[] = codebuild.data[region].filter(
+       ({ serviceRole, resourceAccessRole }: RawAwsCodeBuild) =>
+       serviceRole === role.Arn || resourceAccessRole === role.Arn
+     )
+     for (const cb of dataAtRegion) {
+       connections.push({
+         id: cb.arn,
+         resourceType: services.codebuild,
+         relation: 'child',
+         field: 'codebuilds',
+       })
+     }
+   }
 
   return {
     [id]: connections,

@@ -782,6 +782,194 @@ export type AwsCloudwatchLog = {
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
 };
 
+export type AwsCodeBuildFilterGroup = {
+  id: Scalars['String'];
+  type?: Maybe<Scalars['String']>;
+  pattern?: Maybe<Scalars['String']>;
+  excludeMatchedPattern?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsCodebuild = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  source?: Maybe<AwsCodebuildSource>;
+  secondarySources?: Maybe<Array<Maybe<AwsCodebuildSource>>>;
+  sourceVersion?: Maybe<Scalars['String']>;
+  secondarySourceVersions?: Maybe<Array<Maybe<AwsCodebuildSecondarySourceVersion>>>;
+  artifacts?: Maybe<AwsCodebuildArtifacts>;
+  secondaryArtifacts?: Maybe<Array<Maybe<AwsCodebuildArtifacts>>>;
+  cache?: Maybe<AwsCodebuildCache>;
+  environment?: Maybe<AwsCodebuildEnvironment>;
+  serviceRole?: Maybe<Scalars['String']>;
+  timeoutInMinutes?: Maybe<Scalars['Int']>;
+  queuedTimeoutInMinutes?: Maybe<Scalars['Int']>;
+  encryptionKey?: Maybe<Scalars['String']>;
+  created?: Maybe<Scalars['DateTime']>;
+  lastModified?: Maybe<Scalars['DateTime']>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  webhook?: Maybe<AwsCodebuildWebhook>;
+  fileSystemLocations?: Maybe<Array<Maybe<AwsCodebuildFileSystemLocation>>>;
+  vpcConfig?: Maybe<AwsCodebuildVpcConfig>;
+  badge?: Maybe<AwsCodebuildBadge>;
+  logsConfig?: Maybe<AwsCodebuildLogsConfig>;
+  buildBatchConfig?: Maybe<AwsCodebuildBatchConfig>;
+  concurrentBuildLimit?: Maybe<Scalars['Int']>;
+  projectVisibility?: Maybe<Scalars['String']>;
+  publicProjectAlias?: Maybe<Scalars['String']>;
+  resourceAccessRole?: Maybe<Scalars['String']>;
+  iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
+};
+
+export type AwsCodebuildArtifacts = {
+  id: Scalars['String'];
+  type?: Maybe<Scalars['String']>;
+  location?: Maybe<Scalars['String']>;
+  path?: Maybe<Scalars['String']>;
+  namespaceType?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  packaging?: Maybe<Scalars['String']>;
+  overrideArtifactName?: Maybe<Scalars['Boolean']>;
+  encryptionDisabled?: Maybe<Scalars['Boolean']>;
+  artifactIdentifier?: Maybe<Scalars['String']>;
+  bucketOwnerAccess?: Maybe<Scalars['String']>;
+};
+
+export type AwsCodebuildBadge = {
+  badgeEnabled?: Maybe<Scalars['Boolean']>;
+  badgeRequestUrl?: Maybe<Scalars['String']>;
+};
+
+export type AwsCodebuildBatchConfig = {
+  serviceRole?: Maybe<Scalars['String']>;
+  combineArtifacts?: Maybe<Scalars['Boolean']>;
+  restrictions?: Maybe<AwsCodebuildBatchConfigRestrictions>;
+  timeoutInMins?: Maybe<Scalars['Int']>;
+  batchReportMode?: Maybe<Scalars['String']>;
+};
+
+export type AwsCodebuildBatchConfigRestrictions = {
+  maximumBuildsAllowed?: Maybe<Scalars['Int']>;
+  computeTypesAllowed?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsCodebuildCache = {
+  type?: Maybe<Scalars['String']>;
+  location?: Maybe<Scalars['String']>;
+  modes?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsCodebuildCloudWatchLogs = {
+  status?: Maybe<Scalars['String']>;
+  groupName?: Maybe<Scalars['String']>;
+  streamName?: Maybe<Scalars['String']>;
+};
+
+export type AwsCodebuildEnvRegistryCredentials = {
+  credential?: Maybe<Scalars['String']>;
+  credentialProvider?: Maybe<Scalars['String']>;
+};
+
+export type AwsCodebuildEnvironment = {
+  type?: Maybe<Scalars['String']>;
+  image?: Maybe<Scalars['String']>;
+  computeType?: Maybe<Scalars['String']>;
+  environmentVariables?: Maybe<Array<Maybe<AwsCodebuildEnvironmentVariables>>>;
+  privilegedMode?: Maybe<Scalars['Boolean']>;
+  certificate?: Maybe<Scalars['String']>;
+  registryCredential?: Maybe<AwsCodebuildEnvRegistryCredentials>;
+  imagePullCredentialsType?: Maybe<Scalars['String']>;
+};
+
+export type AwsCodebuildEnvironmentVariables = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
+export type AwsCodebuildFileSystemLocation = {
+  id: Scalars['String'];
+  type?: Maybe<Scalars['String']>;
+  location?: Maybe<Scalars['String']>;
+  mountPoint?: Maybe<Scalars['String']>;
+  identifier?: Maybe<Scalars['String']>;
+  mountOptions?: Maybe<Scalars['String']>;
+};
+
+export type AwsCodebuildFilterGroupArray = {
+  id: Scalars['String'];
+  data?: Maybe<Array<Maybe<AwsCodeBuildFilterGroup>>>;
+};
+
+export type AwsCodebuildGitSubmodulesConfig = {
+  fetchSubmodules?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsCodebuildLogsConfig = {
+  cloudWatchLogs?: Maybe<AwsCodebuildCloudWatchLogs>;
+  s3Logs?: Maybe<AwsCodebuildS3Logs>;
+};
+
+export type AwsCodebuildS3Logs = {
+  status?: Maybe<Scalars['String']>;
+  location?: Maybe<Scalars['String']>;
+  bucketOwnerAccess?: Maybe<Scalars['String']>;
+  encryptionDisabled?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsCodebuildSecondarySourceVersion = {
+  sourceIdentifier?: Maybe<Scalars['String']>;
+  sourceVersion?: Maybe<Scalars['String']>;
+};
+
+export type AwsCodebuildSource = {
+  id: Scalars['String'];
+  type?: Maybe<Scalars['String']>;
+  location?: Maybe<Scalars['String']>;
+  gitCloneDepth?: Maybe<Scalars['Int']>;
+  gitSubmodulesConfig?: Maybe<AwsCodebuildGitSubmodulesConfig>;
+  buildspec?: Maybe<Scalars['String']>;
+  auth?: Maybe<AwsCodebuildSourceAuth>;
+  reportBuildStatus?: Maybe<Scalars['Boolean']>;
+  buildStatusConfig?: Maybe<AwsCodebuildSourceStatusConfig>;
+  insecureSsl?: Maybe<Scalars['Boolean']>;
+  sourceIdentifier?: Maybe<Scalars['String']>;
+};
+
+export type AwsCodebuildSourceAuth = {
+  type?: Maybe<Scalars['String']>;
+  resource?: Maybe<Scalars['String']>;
+};
+
+export type AwsCodebuildSourceStatusConfig = {
+  context?: Maybe<Scalars['String']>;
+  targetUrl?: Maybe<Scalars['String']>;
+};
+
+export type AwsCodebuildVpcConfig = {
+  vpcId?: Maybe<Scalars['String']>;
+  subnets?: Maybe<Array<Maybe<Scalars['String']>>>;
+  securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsCodebuildWebhook = {
+  url?: Maybe<Scalars['String']>;
+  payloadUrl?: Maybe<Scalars['String']>;
+  secret?: Maybe<Scalars['String']>;
+  branchFilter?: Maybe<Scalars['String']>;
+  filterGroups?: Maybe<Array<Maybe<AwsCodebuildFilterGroupArray>>>;
+  buildType?: Maybe<Scalars['String']>;
+  lastModifiedSecret?: Maybe<Scalars['DateTime']>;
+};
+
 export type AwsCognitoIdentityPool = {
   id: Scalars['String'];
   accountId: Scalars['String'];
@@ -2513,6 +2701,7 @@ export type AwsIamRole = {
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
   cloudFormationStack?: Maybe<Array<Maybe<AwsCloudFormationStack>>>;
   configurationRecorder?: Maybe<Array<Maybe<AwsConfigurationRecorder>>>;
+  codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
 };
 
 export type AwsIamSamlProvider = {
@@ -2665,6 +2854,7 @@ export type AwsKms = {
   efs?: Maybe<Array<Maybe<AwsEfs>>>;
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
   cloudwatchLog?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
+  codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
 };
 
 export type AwsLambda = {
@@ -3140,6 +3330,7 @@ export type AwsSecurityGroup = {
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   elastiCacheCluster?: Maybe<Array<Maybe<AwsElastiCacheCluster>>>;
   clientVpnEndpoint?: Maybe<Array<Maybe<AwsClientVpnEndpoint>>>;
+  codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
 };
 
 export type AwsServiceBillingInfo = {
@@ -3270,6 +3461,7 @@ export type AwsSubnet = {
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
   elastiCacheCluster?: Maybe<Array<Maybe<AwsElastiCacheCluster>>>;
+  codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
 };
 
 export type AwsSupportedLoginProvider = {
@@ -3291,6 +3483,7 @@ export type AwsTag = {
   asg?: Maybe<Array<Maybe<AwsAsg>>>;
   cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
   cloudfront?: Maybe<Array<Maybe<AwsCloudfront>>>;
+  codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
   eip?: Maybe<Array<Maybe<AwsEip>>>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
@@ -3445,6 +3638,7 @@ export type AwsVpc = {
   vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
   transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
   elastiCacheCluster?: Maybe<Array<Maybe<AwsElastiCacheCluster>>>;
+  codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
 };
 
 export type AwsVpnConnection = {

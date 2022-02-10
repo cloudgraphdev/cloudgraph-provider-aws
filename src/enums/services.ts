@@ -14,6 +14,7 @@ export default {
   cloudtrail: 'cloudtrail',
   cloudwatch: 'cloudwatch',
   cloudwatchLog: 'cloudwatchLog',
+  codebuild: 'codebuild',
   cognitoIdentityPool: 'cognitoIdentityPool',
   cognitoUserPool: 'cognitoUserPool',
   configurationRecorder: 'configurationRecorder',
