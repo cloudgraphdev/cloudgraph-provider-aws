@@ -2675,6 +2675,30 @@ export type AwsGlueJobNotificationProperty = {
   notifyDelayAfter?: Maybe<Scalars['Int']>;
 };
 
+export type AwsGlueRegistry = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  registryName?: Maybe<Scalars['String']>;
+  registryArn?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  createdTime?: Maybe<Scalars['String']>;
+  updatedTime?: Maybe<Scalars['String']>;
+  schemas?: Maybe<Array<Maybe<AwsGlueRegistrySchema>>>;
+};
+
+export type AwsGlueRegistrySchema = {
+  id: Scalars['String'];
+  schemaName?: Maybe<Scalars['String']>;
+  registryName?: Maybe<Scalars['String']>;
+  registryArn?: Maybe<Scalars['String']>;
+  arn?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  schemaStatus?: Maybe<Scalars['String']>;
+  createdTime?: Maybe<Scalars['String']>;
+};
+
 export type AwsIamAccessKey = {
   accessKeyId: Scalars['String'];
   lastUsedDate?: Maybe<Scalars['String']>;

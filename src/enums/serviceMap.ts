@@ -81,6 +81,7 @@ import CloudWatchLog from '../services/cloudwatchLogs'
 import ConfigurationRecorder from '../services/configurationRecorder'
 import CodeBuild from '../services/codeBuild'
 import GlueJob from '../services/glueJob'
+import GlueRegistry from '../services/glueRegistry'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -121,6 +122,7 @@ export default {
   [services.elb]: ELB,
   [services.flowLog]: FlowLog,
   [services.glueJob]: GlueJob,
+  [services.glueRegistry]: GlueRegistry,
   [services.emrCluster]: EmrCluster,
   [services.emrInstance]: EmrInstance,
   [services.emrStep]: EmrStep,

@@ -41,6 +41,7 @@ export default {
   elb: 'elb',
   flowLog: 'flowLog',
   glueJob: 'glueJob',
+  glueRegistry: 'glueRegistry',
   emrCluster: 'emrCluster',
   emrInstance: 'emrInstance',
   emrStep: 'emrStep',

@@ -47,6 +47,6 @@ export default async ({
 
     result.push(...glueJobData.map(val => ({ ...val, region })))
   }
-
+  errorLog.reset()
   return groupBy(result, 'region')
 }

@@ -46,6 +46,7 @@ export default {
   [services.elb]: 'awsElb',
   [services.flowLog]: 'awsFlowLog',
   [services.glueJob]: 'awsGlueJob',
+  [services.glueRegistry]: 'awsGlueRegistry',
   [services.emrCluster]: 'awsEmrCluster',
   [services.emrInstance]: 'awsEmrInstance',
   [services.emrStep]: 'awsEmrStep',

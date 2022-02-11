@@ -79,6 +79,6 @@ export default async ({
       }))
     }
   }
-
+  errorLog.reset()
   return groupBy(result, 'region')
 }
