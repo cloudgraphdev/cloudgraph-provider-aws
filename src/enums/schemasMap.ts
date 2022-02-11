@@ -45,6 +45,7 @@ export default {
   [services.elasticBeanstalkEnv]: 'awsElasticBeanstalkEnv',
   [services.elb]: 'awsElb',
   [services.flowLog]: 'awsFlowLog',
+  [services.glueJob]: 'awsGlueJob',
   [services.emrCluster]: 'awsEmrCluster',
   [services.emrInstance]: 'awsEmrInstance',
   [services.emrStep]: 'awsEmrStep',

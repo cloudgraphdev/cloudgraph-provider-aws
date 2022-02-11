@@ -40,6 +40,7 @@ export default {
   elastiCacheReplicationGroup: 'elastiCacheReplicationGroup',
   elb: 'elb',
   flowLog: 'flowLog',
+  glueJob: 'glueJob',
   emrCluster: 'emrCluster',
   emrInstance: 'emrInstance',
   emrStep: 'emrStep',

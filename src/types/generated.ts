@@ -2629,6 +2629,52 @@ export type AwsFlowLog = {
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
 };
 
+export type AwsGlueJob = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  logUri?: Maybe<Scalars['String']>;
+  role?: Maybe<Scalars['String']>;
+  createdOn?: Maybe<Scalars['DateTime']>;
+  lastModifiedOn?: Maybe<Scalars['DateTime']>;
+  executionProperty?: Maybe<AwsGlueJobExecutionProperty>;
+  command?: Maybe<AwsGlueJobCommand>;
+  defaultArguments?: Maybe<Array<Maybe<AwsRawTag>>>;
+  nonOverrideableArguments?: Maybe<Array<Maybe<AwsRawTag>>>;
+  connections?: Maybe<AwsGlueJobConnections>;
+  maxRetries?: Maybe<Scalars['Int']>;
+  allocatedCapacity?: Maybe<Scalars['Int']>;
+  timeout?: Maybe<Scalars['Int']>;
+  maxCapacity?: Maybe<Scalars['Int']>;
+  workerType?: Maybe<Scalars['String']>;
+  numberOfWorkers?: Maybe<Scalars['Int']>;
+  securityConfiguration?: Maybe<Scalars['String']>;
+  notificationProperty?: Maybe<AwsGlueJobNotificationProperty>;
+  glueVersion?: Maybe<Scalars['String']>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
+};
+
+export type AwsGlueJobCommand = {
+  name?: Maybe<Scalars['String']>;
+  scriptLocation?: Maybe<Scalars['String']>;
+  pythonVersion?: Maybe<Scalars['String']>;
+};
+
+export type AwsGlueJobConnections = {
+  connections?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsGlueJobExecutionProperty = {
+  maxConcurrentRuns?: Maybe<Scalars['Int']>;
+};
+
+export type AwsGlueJobNotificationProperty = {
+  notifyDelayAfter?: Maybe<Scalars['Int']>;
+};
+
 export type AwsIamAccessKey = {
   accessKeyId: Scalars['String'];
   lastUsedDate?: Maybe<Scalars['String']>;
@@ -2737,6 +2783,7 @@ export type AwsIamRole = {
   cloudFormationStack?: Maybe<Array<Maybe<AwsCloudFormationStack>>>;
   configurationRecorder?: Maybe<Array<Maybe<AwsConfigurationRecorder>>>;
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
+  glueJobs?: Maybe<Array<Maybe<AwsGlueJob>>>;
 };
 
 export type AwsIamSamlProvider = {
