@@ -78,6 +78,8 @@ export default {
   [services.route53HostedZone]: 'awsRoute53HostedZone',
   [services.route53Record]: 'awsRoute53Record',
   [services.routeTable]: 'awsRouteTable',
+  [services.sageMakerProject]: 'awsSageMakerProject',
+  [services.sageMakerExperiment]: 'awsSageMakerExperiment',
   [services.s3]: 'awsS3',
   [services.secretsManager]: 'awsSecretsManager',
   [services.ses]: 'awsSes',

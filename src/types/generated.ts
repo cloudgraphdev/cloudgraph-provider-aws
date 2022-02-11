@@ -3386,6 +3386,36 @@ export type AwsS3 = {
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
 };
 
+export type AwsSageMakerExperiment = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  experimentArn?: Maybe<Scalars['String']>;
+  experimentName?: Maybe<Scalars['String']>;
+  displayName?: Maybe<Scalars['String']>;
+  experimentSource?: Maybe<AwsSageMakerExperimentExperimentSource>;
+  creationTime?: Maybe<Scalars['DateTime']>;
+  lastModifiedTime?: Maybe<Scalars['DateTime']>;
+};
+
+export type AwsSageMakerExperimentExperimentSource = {
+  sourceArn?: Maybe<Scalars['String']>;
+  sourceType?: Maybe<Scalars['String']>;
+};
+
+export type AwsSageMakerProject = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  projectName?: Maybe<Scalars['String']>;
+  projectArn?: Maybe<Scalars['String']>;
+  projectId?: Maybe<Scalars['String']>;
+  creationTime?: Maybe<Scalars['DateTime']>;
+  projectStatus?: Maybe<Scalars['String']>;
+};
+
 export type AwsSecretsManager = {
   id: Scalars['String'];
   accountId: Scalars['String'];

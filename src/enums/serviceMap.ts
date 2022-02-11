@@ -82,6 +82,8 @@ import ConfigurationRecorder from '../services/configurationRecorder'
 import CodeBuild from '../services/codeBuild'
 import GlueJob from '../services/glueJob'
 import GlueRegistry from '../services/glueRegistry'
+import SageMakerProject from '../services/sageMakerProject'
+import SageMakerExperiment from '../services/sageMakerExperiment'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -146,6 +148,8 @@ export default {
   [services.route53HostedZone]: Route53HostedZone,
   [services.route53Record]: Route53Record,
   [services.routeTable]: RouteTable,
+  [services.sageMakerProject]: SageMakerProject,
+  [services.sageMakerExperiment]: SageMakerExperiment,
   [services.s3]: S3,
   [services.secretsManager]: SecretsManager,
   [services.ses]: SES,

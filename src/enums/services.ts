@@ -69,6 +69,8 @@ export default {
   route53HostedZone: 'route53HostedZone',
   route53Record: 'route53Record',
   routeTable: 'routeTable',
+  sageMakerProject: 'sageMakerProject',
+  sageMakerExperiment: 'sageMakerExperiment', 
   s3: 's3',
   secretsManager: 'secretsManager',
   ses: 'ses',
