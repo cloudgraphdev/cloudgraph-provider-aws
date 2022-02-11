@@ -220,3 +220,23 @@ export const configurationRecorderArn = ({
   account: string
   name: string
 }): string => `arn:aws:ec2:${region}:${account}:configuration-recorder/${name}`
+
+export const athenaDataCatalogArn = ({
+  region,
+  account,
+  name
+}: {
+  region: string
+  account: string
+  name: string
+}): string => `arn:aws:athena:${region}:${account}:datacatalog/${name}`
+
+export const glueJobArn = ({
+  region,
+  account,
+  name
+}: {
+  region: string
+  account: string
+  name: string
+}): string => `arn:aws:glue:${region}:${account}:job/${name}`

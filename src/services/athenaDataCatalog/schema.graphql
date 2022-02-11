@@ -1,0 +1,34 @@
+type awsAthenaDataCatalog @key(fields: "arn") {
+  id: String! @id @search(by: [hash, regexp])
+  arn: String! @id @search(by: [hash, regexp])
+  catalogName: String! @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash])
+  region: String @search(by: [hash, regexp])
+  type: String @search(by: [hash, regexp])
+  databases: [awsAthenaDatabase]
+}
+
+type awsAthenaDatabase {
+  id: String! @id
+  name: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  parameters: [awsRawTag]
+  metadata: awsAthenaMetadata
+}
+
+type awsAthenaMetadata {
+  name: String @search(by: [hash, regexp])
+  createTime: DateTime
+  lastAccessTime: DateTime
+  tableType: String @search(by: [hash, regexp])
+  columns: [awsAthenaMetadataColumn]
+  partitionKeys: [awsAthenaMetadataColumn]
+  parameters: [awsRawTag]
+}
+
+type awsAthenaMetadataColumn {
+  id: String! @id
+  name: String @search(by: [hash, regexp])
+  type: String @search(by: [hash, regexp])
+  comment: String @search(by: [hash, regexp])
+}

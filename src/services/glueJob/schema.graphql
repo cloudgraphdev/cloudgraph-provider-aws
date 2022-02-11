@@ -1,0 +1,45 @@
+type awsGlueJobCommand {
+  name: String @search(by: [hash, regexp])
+  scriptLocation: String @search(by: [hash, regexp])
+  pythonVersion: String @search(by: [hash, regexp])
+}
+
+type awsGlueJobExecutionProperty {
+  maxConcurrentRuns: Int @search
+}
+
+type awsGlueJobConnections {
+  connections: [String] @search(by: [hash, regexp])
+}
+
+type awsGlueJobNotificationProperty {
+  notifyDelayAfter: Int @search
+}
+
+type awsGlueJob @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash])
+  region: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  logUri: String @search(by: [hash, regexp])
+  role: String @search(by: [hash, regexp])
+  createdOn: DateTime @search(by: [day])
+  lastModifiedOn: DateTime @search(by: [day])
+  executionProperty: awsGlueJobExecutionProperty
+  command: awsGlueJobCommand
+  defaultArguments: [awsRawTag]
+  nonOverrideableArguments: [awsRawTag]
+  connections: awsGlueJobConnections
+  maxRetries: Int @search
+  allocatedCapacity: Int @search
+  timeout: Int @search
+  maxCapacity: Int @search
+  workerType: String @search(by: [hash, regexp])
+  numberOfWorkers: Int @search
+  securityConfiguration: String @search(by: [hash, regexp])
+  notificationProperty: awsGlueJobNotificationProperty
+  glueVersion: String @search(by: [hash, regexp])
+  iamRole: [awsIamRole] @hasInverse(field: glueJobs)
+}

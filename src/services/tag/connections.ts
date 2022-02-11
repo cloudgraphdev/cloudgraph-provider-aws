@@ -57,6 +57,7 @@ import { RawAwsCloud9Environment } from '../cloud9/data'
 import { RawAwsEfs } from '../efs/data'
 import { RawAwsEmrCluster } from '../emrCluster/data'
 import { RawAwsClientVpnEndpoint } from '../clientVpnEndpoint/data'
+import { RawAwsCodeBuild } from '../codeBuild/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -176,6 +177,29 @@ export default ({
         }
       }
     }
+
+    /**
+     * Find related Codebuild
+     */
+     const codebuild: { name: string; data: { [property: string]: any[] } } =
+     data.find(({ name }) => name === services.codebuild)
+   if (codebuild?.data?.[region]) {
+     const dataAtRegion: any = findServiceInstancesWithTag(
+       tag,
+       codebuild.data[region]
+     )
+     if (!isEmpty(dataAtRegion)) {
+       for (const cb of dataAtRegion) {
+         const { arn: id }: RawAwsCodeBuild = cb
+         connections.push({
+           id,
+           resourceType: services.codebuild,
+           relation: 'child',
+           field: 'codebuilds',
+         })
+       }
+     }
+   }
 
     /**
      * Find related CognitoIdentityPools

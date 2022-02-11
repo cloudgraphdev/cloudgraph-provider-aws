@@ -702,7 +702,7 @@ export default class Provider extends CloudGraph.Client {
     try {
       for (const { data: entityData } of rawData) {
         for (const region of Object.keys(entityData)) {
-          const dataAtRegion = entityData[region]
+          const dataAtRegion = entityData[region] ?? []
           dataAtRegion.forEach(singleEntity => {
             if (!isEmpty(singleEntity.Tags)) {
               for (const [key, value] of Object.entries(singleEntity.Tags)) {

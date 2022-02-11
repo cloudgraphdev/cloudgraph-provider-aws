@@ -8,12 +8,16 @@ import { RawAwsIamRole } from './data'
 import { RawAwsIamPolicy } from '../iamPolicy/data'
 import { RawAwsEcsService } from '../ecsService/data'
 import { RawFlowLog } from '../flowLogs/data'
+import { RawAwsCodeBuild } from '../codeBuild/data'
+import { RawAwsGlueJob } from '../glueJob/data'
+import { glueJobArn } from '../../utils/generateArns'
 
 /**
  * IAM Role
  */
 
 export default ({
+  account,
   service: role,
   data,
   region,
@@ -97,6 +101,45 @@ export default ({
       })
     }
   }
+
+  /**
+   * Find any CodeBuild related data
+   */
+   const codebuild = data.find(({ name }) => name === services.codebuild)
+   if (codebuild?.data?.[region]) {
+     const dataAtRegion: RawAwsCodeBuild[] = codebuild.data[region].filter(
+       ({ serviceRole, resourceAccessRole }: RawAwsCodeBuild) =>
+       serviceRole === role.Arn || resourceAccessRole === role.Arn
+     )
+     for (const cb of dataAtRegion) {
+       connections.push({
+         id: cb.arn,
+         resourceType: services.codebuild,
+         relation: 'child',
+         field: 'codebuilds',
+       })
+     }
+   }
+
+   /**
+   * Find any glueJob related data
+   */
+    const jobs = data.find(({ name }) => name === services.glueJob)
+    if (jobs?.data?.[region]) {
+      const dataAtRegion: RawAwsGlueJob[] = jobs.data[region].filter(
+        ({ Role }: RawAwsGlueJob) =>
+        Role === role.Arn
+      )
+      for (const job of dataAtRegion) {
+        const arn = glueJobArn({ region, account, name: job.Name })
+        connections.push({
+          id: arn,
+          resourceType: services.glueJob,
+          relation: 'child',
+          field: 'glueJobs',
+        })
+      }
+    }
 
   return {
     [id]: connections,

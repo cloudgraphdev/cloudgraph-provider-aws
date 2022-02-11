@@ -16,4 +16,6 @@ type awsIamRole @key(fields: "id") {
   flowLogs: [awsFlowLog] @hasInverse(field: iamRole)
   cloudFormationStack: [awsCloudFormationStack] @hasInverse(field: iamRole)
   configurationRecorder: [awsConfigurationRecorder] @hasInverse(field: iamRole)
+  codebuilds: [awsCodebuild] @hasInverse(field: iamRoles)
+  glueJobs: [awsGlueJob] @hasInverse(field: iamRole)
 }

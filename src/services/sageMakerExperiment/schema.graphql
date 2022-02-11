@@ -1,0 +1,17 @@
+type awsSageMakerExperimentExperimentSource {
+  sourceArn: String @search(by: [hash, regexp])
+  sourceType: String @search(by: [hash, regexp])
+}
+
+type awsSageMakerExperiment @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash])
+  region: String @search(by: [hash, regexp])
+  experimentArn: String @search(by: [hash, regexp])
+  experimentName: String @search(by: [hash, regexp])
+  displayName: String @search(by: [hash, regexp])
+  experimentSource: awsSageMakerExperimentExperimentSource
+  creationTime: DateTime @search(by: [day])
+  lastModifiedTime: DateTime @search(by: [day])
+}

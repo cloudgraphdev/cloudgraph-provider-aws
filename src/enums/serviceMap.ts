@@ -11,6 +11,7 @@ import AwsKms from '../services/kms'
 import AwsSecurityGroup from '../services/securityGroup'
 import AwsSubnet from '../services/subnet'
 import AwsTag from '../services/tag'
+import AthenaDataCatalog from '../services/athenaDataCatalog'
 import Billing from '../services/billing'
 import CloudFront from '../services/cloudfront'
 import CloudTrail from '../services/cloudtrail'
@@ -78,6 +79,11 @@ import VpnConnection from '../services/vpnConnection'
 import Organization from '../services/organization'
 import CloudWatchLog from '../services/cloudwatchLogs'
 import ConfigurationRecorder from '../services/configurationRecorder'
+import CodeBuild from '../services/codeBuild'
+import GlueJob from '../services/glueJob'
+import GlueRegistry from '../services/glueRegistry'
+import SageMakerProject from '../services/sageMakerProject'
+import SageMakerExperiment from '../services/sageMakerExperiment'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -89,6 +95,7 @@ export default {
   [services.apiGatewayResource]: APIGatewayResource,
   [services.apiGatewayRestApi]: APIGatewayRestApi,
   [services.apiGatewayStage]: APIGatewayStage,
+  [services.athenaDataCatalog]: AthenaDataCatalog,
   [services.asg]: ASG,
   [services.billing]: Billing,
   [services.clientVpnEndpoint]: ClientVpnEndpoint,
@@ -99,6 +106,7 @@ export default {
   [services.cloudFormationStackSet]: CloudFormationStackSet,
   [services.cloudwatch]: CloudWatch,
   [services.cloudwatchLog]: CloudWatchLog,
+  [services.codebuild]: CodeBuild,
   [services.cognitoIdentityPool]: CognitoIdentityPool,
   [services.cognitoUserPool]: CognitoUserPool,
   [services.configurationRecorder]: ConfigurationRecorder,
@@ -115,6 +123,8 @@ export default {
   [services.elastiCacheReplicationGroup]: ElastiCacheReplicationGroup,
   [services.elb]: ELB,
   [services.flowLog]: FlowLog,
+  [services.glueJob]: GlueJob,
+  [services.glueRegistry]: GlueRegistry,
   [services.emrCluster]: EmrCluster,
   [services.emrInstance]: EmrInstance,
   [services.emrStep]: EmrStep,
@@ -138,6 +148,8 @@ export default {
   [services.route53HostedZone]: Route53HostedZone,
   [services.route53Record]: Route53Record,
   [services.routeTable]: RouteTable,
+  [services.sageMakerProject]: SageMakerProject,
+  [services.sageMakerExperiment]: SageMakerExperiment,
   [services.s3]: S3,
   [services.secretsManager]: SecretsManager,
   [services.ses]: SES,

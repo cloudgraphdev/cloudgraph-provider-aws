@@ -34,4 +34,5 @@ type awsVpc @key(fields: "id") {
   vpnGateway: [awsVpnGateway] @hasInverse(field: vpc)
   transitGatewayAttachment: [awsTransitGatewayAttachment] @hasInverse(field: vpc)
   elastiCacheCluster: [awsElastiCacheCluster] @hasInverse(field: vpc)
+  codebuilds: [awsCodebuild] @hasInverse(field: vpc)
 }
