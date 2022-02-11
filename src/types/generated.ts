@@ -394,6 +394,41 @@ export type AwsAssociatedTargetNetworks = {
   networkType?: Maybe<Scalars['String']>;
 };
 
+export type AwsAthenaDataCatalog = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  catalogName: Scalars['String'];
+  accountId: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  databases?: Maybe<Array<Maybe<AwsAthenaDatabase>>>;
+};
+
+export type AwsAthenaDatabase = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  parameters?: Maybe<Array<Maybe<AwsRawTag>>>;
+  metadata?: Maybe<AwsAthenaMetadata>;
+};
+
+export type AwsAthenaMetadata = {
+  name?: Maybe<Scalars['String']>;
+  createTime?: Maybe<Scalars['DateTime']>;
+  lastAccessTime?: Maybe<Scalars['DateTime']>;
+  tableType?: Maybe<Scalars['String']>;
+  columns?: Maybe<Array<Maybe<AwsAthenaMetadataColumn>>>;
+  partitionKeys?: Maybe<Array<Maybe<AwsAthenaMetadataColumn>>>;
+  parameters?: Maybe<Array<Maybe<AwsRawTag>>>;
+};
+
+export type AwsAthenaMetadataColumn = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  comment?: Maybe<Scalars['String']>;
+};
+
 export type AwsBilling = {
   id: Scalars['String'];
   account: Scalars['String'];

@@ -10,6 +10,7 @@ export default {
   [services.apiGatewayStage]: 'awsApiGatewayStage',
   [services.appSync]: 'awsAppSync',
   [services.asg]: 'awsAsg',
+  [services.athenaDataCatalog]: 'awsAthenaDataCatalog',
   [services.billing]: 'awsBilling',
   [services.clientVpnEndpoint]: 'awsClientVpnEndpoint',
   [services.cloud9]: 'awsCloud9Environment',

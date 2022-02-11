@@ -11,6 +11,7 @@ import AwsKms from '../services/kms'
 import AwsSecurityGroup from '../services/securityGroup'
 import AwsSubnet from '../services/subnet'
 import AwsTag from '../services/tag'
+import AthenaDataCatalog from '../services/athenaDataCatalog'
 import Billing from '../services/billing'
 import CloudFront from '../services/cloudfront'
 import CloudTrail from '../services/cloudtrail'
@@ -90,6 +91,7 @@ export default {
   [services.apiGatewayResource]: APIGatewayResource,
   [services.apiGatewayRestApi]: APIGatewayRestApi,
   [services.apiGatewayStage]: APIGatewayStage,
+  [services.athenaDataCatalog]: AthenaDataCatalog,
   [services.asg]: ASG,
   [services.billing]: Billing,
   [services.clientVpnEndpoint]: ClientVpnEndpoint,

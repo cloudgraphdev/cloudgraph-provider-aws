@@ -5,6 +5,7 @@ export default {
   apiGatewayStage: 'apiGatewayStage',
   appSync: 'appSync',
   asg: 'asg',
+  athenaDataCatalog: 'athenaDataCatalog',
   billing: 'billing',
   clientVpnEndpoint: 'clientVpnEndpoint',
   cloud9: 'cloud9',
