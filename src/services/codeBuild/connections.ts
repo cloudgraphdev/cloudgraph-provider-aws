@@ -62,7 +62,7 @@ export default ({
    * Find securityGroups
    */
   const securityGroups = data.find(({ name }) => name === services.sg)
-  if (securityGroups?.data?.[region]) {
+  if (securityGroups?.data?.[region] && !isEmpty(securityGroupIds)) {
     const sgsInRegion = securityGroups.data[region].filter(
       sg => securityGroupIds.includes(sg.GroupId)
     )
@@ -82,7 +82,7 @@ export default ({
    * Find subnets
    */
    const subnets = data.find(({ name }) => name === services.subnet)
-   if (subnets?.data?.[region]) {
+   if (subnets?.data?.[region] && !isEmpty(codebuildSubnets)) {
      const subnetsInRegion = subnets.data[region].filter(
        subnet => codebuildSubnets.includes(subnet.SubnetId)
      )
