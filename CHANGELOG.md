@@ -1,3 +1,19 @@
+# [0.67.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.66.0...0.67.0) (2022-02-11)
+
+
+### Bug Fixes
+
+* **services:** fix code build connections and update readme ([568f5a3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/568f5a39084215e304c98db04beef38f61d7b039))
+
+
+### Features
+
+* **services:** add new service athenaDataCatalog ([57a0976](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/57a09763123ea21a0d86ce7614dad95d0eb874f8))
+* **services:** add new service codebuild and connections ([b897208](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b89720849ae27707fd7c97344e1d1630b43da42c))
+* **services:** add new service glueJob ([f17b649](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/f17b649cc00d9b9915e9032cb933e3e7f80011ab))
+* **services:** add new service glueRegistry ([6aecfe2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/6aecfe2d3e2e02ca0bd5f89edd6e7c5d1449f96a))
+* **services:** add new services sageMakerProject and sageMakerExperiment ([c4808f2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c4808f22ccb23f48843c846971f6f263b62bd1c3))
+
 # [0.66.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.65.1...0.66.0) (2022-02-07)
 
 
