@@ -3,6 +3,7 @@ import { ServiceConnection } from '@cloudgraph/sdk'
 import services from '../../enums/services'
 import { RawAwsSubnet } from '../subnet/data'
 import { RawFlowLog } from '../flowLogs/data'
+import { RawAwsManagedAirflow } from '../managedAirflow/data'
 
 export default ({
   service: subnet,
@@ -36,6 +37,25 @@ export default ({
        })
      }
    }
+
+   /**
+   * Find any managedAirflow related data
+   */
+    const airflows = data.find(({ name }) => name === services.managedAirflow)
+    if (airflows?.data?.[region]) {
+      const dataAtRegion: RawAwsManagedAirflow[] = airflows.data[region].filter(
+        ({ NetworkConfiguration: { SubnetIds = [] } = {} }: RawAwsManagedAirflow) =>
+          SubnetIds.includes(SubnetId)
+      )
+      for (const airflow of dataAtRegion) {
+        connections.push({
+          id: airflow.Arn,
+          resourceType: services.managedAirflow,
+          relation: 'child',
+          field: 'managedAirflows',
+        })
+      }
+    }
 
   const natResult = {
     [SubnetId]: connections,

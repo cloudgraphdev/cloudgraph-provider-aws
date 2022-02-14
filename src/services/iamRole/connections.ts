@@ -11,6 +11,7 @@ import { RawFlowLog } from '../flowLogs/data'
 import { RawAwsCodeBuild } from '../codeBuild/data'
 import { RawAwsGlueJob } from '../glueJob/data'
 import { glueJobArn } from '../../utils/generateArns'
+import { RawAwsManagedAirflow } from '../managedAirflow/data'
 
 /**
  * IAM Role
@@ -140,6 +141,25 @@ export default ({
         })
       }
     }
+    
+    /**
+   * Find any managedAirflow related data
+   */
+   const managedAirflow = data.find(({ name }) => name === services.managedAirflow)
+   if (managedAirflow?.data?.[region]) {
+     const dataAtRegion: RawAwsManagedAirflow[] = managedAirflow.data[region].filter(
+       ({ ServiceRoleArn, ExecutionRoleArn }: RawAwsManagedAirflow) =>
+       ServiceRoleArn === role.Arn || ExecutionRoleArn === role.Arn
+     )
+     for (const airflow of dataAtRegion) {
+       connections.push({
+         id: airflow.Arn,
+         resourceType: services.managedAirflow,
+         relation: 'child',
+         field: 'managedAirflows',
+       })
+     }
+   }
 
   return {
     [id]: connections,

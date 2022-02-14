@@ -64,6 +64,7 @@ export default {
   [services.kinesisStream]: 'awsKinesisStream',
   [services.kms]: 'awsKms',
   [services.lambda]: 'awsLambda',
+  [services.managedAirflow]: 'awsManagedAirflow',
   [services.nacl]: 'awsNetworkAcl',
   [services.nat]: 'awsNatGateway',
   [services.networkInterface]: 'awsNetworkInterface',

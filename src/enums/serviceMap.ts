@@ -84,6 +84,7 @@ import GlueJob from '../services/glueJob'
 import GlueRegistry from '../services/glueRegistry'
 import SageMakerProject from '../services/sageMakerProject'
 import SageMakerExperiment from '../services/sageMakerExperiment'
+import ManagedAirflow from '../services/managedAirflow'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -135,6 +136,7 @@ export default {
   [services.kinesisStream]: AwsKinesisStream,
   [services.kms]: AwsKms,
   [services.lambda]: Lambda,
+  [services.managedAirflow]: ManagedAirflow,
   [services.nacl]: NetworkAcl,
   [services.nat]: NATGateway,
   [services.networkInterface]: NetworkInterface,

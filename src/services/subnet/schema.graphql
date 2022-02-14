@@ -29,4 +29,5 @@ type awsSubnet @key(fields: "id") {
   emrCluster: [awsEmrCluster] @hasInverse(field: subnet) #change to plural
   elastiCacheCluster: [awsElastiCacheCluster] @hasInverse(field: subnets)
   codebuilds: [awsCodebuild] @hasInverse(field: subnets)
+  managedAirflows: [awsManagedAirflow] @hasInverse(field: subnets)
 }
