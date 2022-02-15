@@ -23,10 +23,15 @@ export default ({
     Arn: arn,
     CreatedAt: createdAt,
     DagS3Path: dagS3Path,
+    KmsKey,
     EnvironmentClass: environmentClass,
     ExecutionRoleArn: executionRoleArn,
     LastUpdate: {
       CreatedAt: lastUpdateCreatedAt,
+      Error: {
+        ErrorCode: errorCode,
+        ErrorMessage: errorMessage
+      },
       Status: lastUpdateStatus,
     } = {},
     LoggingConfiguration: {
@@ -90,6 +95,7 @@ export default ({
     accountId: account,
     airflowConfigurationOptions: mappedAirflowConfigurationOptions,
     airflowVersion,
+    kmsKey: KmsKey,
     createdAt: createdAt?.toISOString(),
     dagS3Path,
     environmentClass,
@@ -97,6 +103,10 @@ export default ({
     lastUpdate: {
       createdAt: lastUpdateCreatedAt?.toISOString(),
       status: lastUpdateStatus,
+      error: {
+        errorCode,
+        errorMessage
+      }
     },
     loggingConfiguration: {
       dagProcessingLogs: {

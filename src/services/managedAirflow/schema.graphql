@@ -5,6 +5,7 @@ type awsManagedAirflow @key(fields: "arn") {
     region: String @search(by: [hash, regexp])
     airflowConfigurationOptions: [awsRawTag]
     airflowVersion: String @search(by: [hash, regexp])
+    kmsKey: String @search(by: [hash, regexp])
     createdAt: DateTime
     dagS3Path: String @search(by: [hash, regexp])
     environmentClass: String @search(by: [hash, regexp])
@@ -38,7 +39,13 @@ type awsManagedAirflow @key(fields: "arn") {
 
   type awsManagedAirflowLastUpdate {
     createdAt: DateTime
+    error: awsManagedAirflowLastUpdateError
     status: String @search(by: [hash, regexp])
+  }
+
+  type awsManagedAirflowLastUpdateError {
+    errorCode: String @search(by: [hash, regexp])
+    errorMessage: String @search(by: [hash, regexp])
   }
 
   type awsManagedAirflowLoggingConfig {
