@@ -316,6 +316,30 @@ export default ({
     }
 
     /**
+     * Find related lambdas
+     */
+     const airflows: { name: string; data: { [property: string]: any[] } } =
+     data.find(({ name }) => name === services.managedAirflow)
+   if (airflows?.data?.[region]) {
+     const dataAtRegion = findServiceInstancesWithTag(
+       tag,
+       airflows.data[region]
+     )
+     if (!isEmpty(dataAtRegion)) {
+       for (const instance of dataAtRegion) {
+         const { Arn: id } = instance
+
+         connections.push({
+           id,
+           resourceType: services.managedAirflow,
+           relation: 'child',
+           field: 'managedAirflows',
+         })
+       }
+     }
+   }
+
+    /**
      * Find related SecurityGroups
      */
     const securityGroups: {

@@ -25,6 +25,7 @@ type awsSecurityGroup @key(fields: "id") {
   elastiCacheCluster: [awsElastiCacheCluster] @hasInverse(field: securityGroups) #change to plural
   clientVpnEndpoint: [awsClientVpnEndpoint] @hasInverse(field: securityGroups) #change to plural
   codebuilds: [awsCodebuild] @hasInverse(field: securityGroups)
+  managedAirflows: [awsManagedAirflow] @hasInverse(field: securityGroups)
 }
 
 type awsSgOutboundRule

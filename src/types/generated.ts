@@ -2808,6 +2808,7 @@ export type AwsIamRole = {
   configurationRecorder?: Maybe<Array<Maybe<AwsConfigurationRecorder>>>;
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
   glueJobs?: Maybe<Array<Maybe<AwsGlueJob>>>;
+  managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
 };
 
 export type AwsIamSamlProvider = {
@@ -3034,6 +3035,63 @@ export type AwsLcBlockDeviceMapping = {
   virtualName?: Maybe<Scalars['String']>;
   deviceName?: Maybe<Scalars['String']>;
   noDevice?: Maybe<Scalars['String']>;
+};
+
+export type AwsManagedAirflow = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  airflowConfigurationOptions?: Maybe<Array<Maybe<AwsRawTag>>>;
+  airflowVersion?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  dagS3Path?: Maybe<Scalars['String']>;
+  environmentClass?: Maybe<Scalars['String']>;
+  executionRoleArn?: Maybe<Scalars['String']>;
+  lastUpdate?: Maybe<AwsManagedAirflowLastUpdate>;
+  loggingConfiguration?: Maybe<AwsManagedAirflowLoggingConfig>;
+  maxWorkers?: Maybe<Scalars['Int']>;
+  minWorkers?: Maybe<Scalars['Int']>;
+  name?: Maybe<Scalars['String']>;
+  networkConfiguration?: Maybe<AwsManagedAirflowNetworkConfig>;
+  pluginsS3Path?: Maybe<Scalars['String']>;
+  requirementsS3Path?: Maybe<Scalars['String']>;
+  schedulers?: Maybe<Scalars['Int']>;
+  serviceRoleArn?: Maybe<Scalars['String']>;
+  sourceBucketArn?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  webserverAccessMode?: Maybe<Scalars['String']>;
+  webserverUrl?: Maybe<Scalars['String']>;
+  weeklyMaintenanceWindowStart?: Maybe<Scalars['String']>;
+  iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
+  subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  s3?: Maybe<Array<Maybe<AwsS3>>>;
+};
+
+export type AwsManagedAirflowLastUpdate = {
+  createdAt?: Maybe<Scalars['DateTime']>;
+  status?: Maybe<Scalars['String']>;
+};
+
+export type AwsManagedAirflowLogging = {
+  cloudWatchLogGroupArn?: Maybe<Scalars['String']>;
+  enabled?: Maybe<Scalars['Boolean']>;
+  logLevel?: Maybe<Scalars['String']>;
+};
+
+export type AwsManagedAirflowLoggingConfig = {
+  dagProcessingLogs?: Maybe<AwsManagedAirflowLogging>;
+  schedulerLogs?: Maybe<AwsManagedAirflowLogging>;
+  taskLogs?: Maybe<AwsManagedAirflowLogging>;
+  webserverLogs?: Maybe<AwsManagedAirflowLogging>;
+  workerLogs?: Maybe<AwsManagedAirflowLogging>;
+};
+
+export type AwsManagedAirflowNetworkConfig = {
+  subnetIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type AwsMetricFilter = {
@@ -3384,6 +3442,7 @@ export type AwsS3 = {
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   cloudfrontDistribution?: Maybe<Array<Maybe<AwsCloudfront>>>;
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
+  managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
 };
 
 export type AwsSageMakerExperiment = {
@@ -3467,6 +3526,7 @@ export type AwsSecurityGroup = {
   elastiCacheCluster?: Maybe<Array<Maybe<AwsElastiCacheCluster>>>;
   clientVpnEndpoint?: Maybe<Array<Maybe<AwsClientVpnEndpoint>>>;
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
+  managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
 };
 
 export type AwsServiceBillingInfo = {
@@ -3598,6 +3658,7 @@ export type AwsSubnet = {
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
   elastiCacheCluster?: Maybe<Array<Maybe<AwsElastiCacheCluster>>>;
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
+  managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
 };
 
 export type AwsSupportedLoginProvider = {
@@ -3674,6 +3735,7 @@ export type AwsTag = {
   vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
   clientVpnEndpoint?: Maybe<Array<Maybe<AwsClientVpnEndpoint>>>;
   vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
+  managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
 };
 
 export type AwsTotalBillingInfo = {

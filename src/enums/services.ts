@@ -59,6 +59,7 @@ export default {
   kinesisStream: 'kinesisStream',
   kms: 'kms',
   lambda: 'lambda',
+  managedAirflow: 'managedAirflow',
   nacl: 'nacl',
   nat: 'nat',
   networkInterface: 'networkInterface',
