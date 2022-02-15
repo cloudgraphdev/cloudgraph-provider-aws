@@ -1,5 +1,7 @@
 import { Config } from 'aws-sdk/lib/config'
-import MWAA from 'aws-sdk/clients/mwaa'
+import { PromiseResult } from 'aws-sdk/lib/request'
+import { AWSError } from 'aws-sdk/lib/error'
+import MWAA, { GetEnvironmentOutput } from 'aws-sdk/clients/mwaa'
 import isEmpty from 'lodash/isEmpty'
 import groupBy from 'lodash/groupBy'
 import { convertToPromise, fetchAllPaginatedData } from '../../utils/fetchUtils'
@@ -24,7 +26,7 @@ export default async ({
 }: {
   regions: string
   config: Config
-}): Promise<{ [region: string]: RawAwsManagedAirflow[]}> => {
+}): Promise<{ [region: string]: RawAwsManagedAirflow[] }> => {
   const result: RawAwsManagedAirflow[] = []
 
   const activeRegions = regions.split(',')
@@ -43,14 +45,16 @@ export default async ({
       errorLog.generateAwsErrorLog({ functionName: 'listEnvironments', err })
     }
     if (!isEmpty(envNames)) {
-        envNames.forEach(async name => {
-          try {
-            const env = await client.getEnvironment({ Name: name }).promise()
-            result.push({ ...env.Environment, region })
-          } catch (err) {
-            errorLog.generateAwsErrorLog({ functionName: 'getEnvironments', err })
-          }
-        })
+      const promises: Promise<PromiseResult<GetEnvironmentOutput, AWSError>>[] = []
+      envNames.forEach(async name => {
+        try {
+          promises.push(client.getEnvironment({ Name: name }).promise())
+        } catch (err) {
+          errorLog.generateAwsErrorLog({ functionName: 'getEnvironments', err })
+        }
+      })
+      const envs = await Promise.all(promises)
+      envs.forEach(val => result.push({ ...val.Environment, region }))
     }
   }
   errorLog.reset()
