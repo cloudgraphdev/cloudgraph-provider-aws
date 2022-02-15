@@ -1,3 +1,15 @@
+# [0.68.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.67.0...0.68.0) (2022-02-15)
+
+
+### Bug Fixes
+
+* **services:** update async code for getEnvironment ([9e695a6](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/9e695a6386ca43c0ecdec3ed11dda316df7eb777))
+
+
+### Features
+
+* **services:** add new service managedAirflow ([28256d9](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/28256d91381f1a9f21ee5b35ca8916bd273c740a))
+
 # [0.67.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.66.0...0.67.0) (2022-02-11)
 
 
