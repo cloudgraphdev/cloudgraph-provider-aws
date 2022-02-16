@@ -53,8 +53,12 @@ export default async ({
           errorLog.generateAwsErrorLog({ functionName: 'getEnvironments', err })
         }
       })
-      const envs = await Promise.all(promises)
-      envs.forEach(val => result.push({ ...val.Environment, region }))
+      try {
+        const envs = await Promise.all(promises)
+        envs.forEach(val => result.push({ ...val.Environment, region }))
+      } catch (err) {
+        errorLog.generateAwsErrorLog({ functionName: 'getEnvironments', err })
+      }
     }
   }
   errorLog.reset()
