@@ -1,3 +1,11 @@
+## [0.68.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.68.0...0.68.1) (2022-02-16)
+
+
+### Bug Fixes
+
+* **services:** fix for airflow service not catching error ([089339c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/089339c1073801d1253089105590eff4c972568f))
+* **services:** update async code for getEnvironments ([d577aca](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d577aca738ed24684a7efb423c624d94a2b1c316))
+
 # [0.68.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.67.0...0.68.0) (2022-02-15)
 
 
