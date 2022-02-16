@@ -45,7 +45,8 @@ export default async ({
       errorLog.generateAwsErrorLog({ functionName: 'listEnvironments', err })
     }
     if (!isEmpty(envNames)) {
-      const promises: Promise<PromiseResult<GetEnvironmentOutput, AWSError>>[] = []
+      const promises: Promise<PromiseResult<GetEnvironmentOutput, AWSError>>[] =
+        []
       envNames.forEach(async name => {
         try {
           promises.push(client.getEnvironment({ Name: name }).promise())
@@ -53,8 +54,16 @@ export default async ({
           errorLog.generateAwsErrorLog({ functionName: 'getEnvironments', err })
         }
       })
-      const envs = await Promise.all(promises)
-      envs.forEach(val => result.push({ ...val.Environment, region }))
+      await Promise.all(promises)
+        .then(envs =>
+          envs.forEach(val => result.push({ ...val.Environment, region }))
+        )
+        .catch(err =>
+          errorLog.generateAwsErrorLog({
+            functionName: 'getEnvironments',
+            err,
+          })
+        )
     }
   }
   errorLog.reset()
