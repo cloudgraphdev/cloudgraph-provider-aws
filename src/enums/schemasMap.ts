@@ -89,5 +89,6 @@ export default {
   [services.transitGatewayAttachment]: 'awsTransitGatewayAttachment',
   [services.vpnConnection]: 'awsVpnConnection',
   [services.organization]: 'awsOrganization',
+  [services.wafV2WebAcl]: 'awsWafV2WebAcl',
   tag: 'awsTag',
 }

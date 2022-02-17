@@ -1,5 +1,270 @@
 type awsWafV2WebAcl @key(fields: "arn") {
-    id: String! @id @search(by: [hash])
-    arn: String! @id @search(by: [hash, regexp])
-    accountId: String! @search(by: [hash])
-  }
+  id: String! @id @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash])
+  region: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  ManagedByFirewallManager: Boolean @search
+  capacity: Int @search
+  labelNamespace: String @search(by: [hash, regexp])
+  rules: [awsWafV2Rule]
+  defaultAction: awsWafV2DefaultAction
+  visibilityConfig: awsWafV2VisibilityConfig
+  preProcessFirewallManagerRuleGroups: [awsWafV2FirewallManagerRuleGroup]
+  postProcessFirewallManagerRuleGroups: [awsWafV2FirewallManagerRuleGroup]
+  customResponseBodies: [awsWafV2CustomResponseBody]
+  loggingConfiguration: awsWafV2LoggingConfig
+}
+
+type awsWafV2Rule {
+  id: String! @id @search(by: [hash])
+  name: String @search(by: [hash, regexp])
+  priority: Int @search
+  statement: String #we need to use string here as its recursive
+  action: awsWafV2RuleAction
+  overrideAction: awsWafV2RuleOverrideAction
+  ruleLabels: [awsWafV2RuleLabel]
+  visibilityConfig: awsWafV2VisibilityConfig
+}
+
+type awsWafV2DefaultAction {
+  block: awsWafV2RuleBlockAction
+  allow: awsWafV2RuleAllowOrCountAction
+}
+
+type awsWafV2FirewallManagerRuleGroup {
+  id: String! @id @search(by: [hash])
+    name: String @search(by: [hash, regexp])
+    priority: Int @search
+    overrideAction: awsWafV2RuleOverrideAction
+    visibilityConfig: awsWafV2VisibilityConfig
+}
+
+type awsWafV2FirewallManager {
+  firewallManagerStatement: awsWafV2FirewallManagerStatement
+}
+
+type awsWafV2FirewallManagerStatement {
+  managedRuleGroupStatement: awsWafV2StatementManagedRuleGroupStatement
+  ruleGroupReferenceStatement: awsWafV2StatementRuleGroupReferenceStatement
+}
+
+type awsWafV2CustomResponseBody {
+  id: String! @id @search(by: [hash])
+  key: String @search(by: [hash, regexp])
+  contentType: String @search(by: [hash, regexp])
+  content: String @search(by: [hash, regexp])
+}
+
+type awsWafV2LoggingConfig {
+  resourceArn: String @search(by: [hash, regexp])
+    logDestinationConfigs: [String] @search(by: [hash, regexp])
+    redactedFields: [awsWafV2FieldToMatch]
+    managedByFirewallManager: Boolean @search
+    loggingFilter: awsWafV2LoggingFilter
+}
+
+type awsWafV2Statement {
+  id: String! @id @search(by: [hash, regexp])
+  byteMatchStatement: awsWafV2StatementByteMatchStatement
+  sqliMatchStatement: awsWafV2StatementSqliMatchStatement
+  xssMatchStatement: awsWafV2StatementXssMatchStatement
+  sizeConstraintStatement: awsWafV2StatementSzieConstraintStatement
+  geoMatchStatement: awsWafV2StatementGeoMatchStatement
+  ruleGroupReferenceStatement: awsWafV2StatementRuleGroupReferenceStatement
+  iPSetReferenceStatement: awsWafV2StatementIpSetReferenceStatement
+  regexPatternSetReferenceStatement: awsWafV2StatementRegrexPatternSetReferenceStatement
+  rateBasedStatement: awsWafV2StatementRateBasedStatement
+  andStatement: awsWafV2StatementAndStatement
+  orStatement: awsWafV2StatementOrStatement
+  notStatement: awsWafV2StatementNotStatement
+  managedRuleGroupStatement: awsWafV2StatementManagedRuleGroupStatement
+  labelMatchStatement: awsWafV2StatementLabelMatchStatement
+}
+
+type awsWafV2RuleAction {
+  block: awsWafV2RuleBlockAction
+  allow: awsWafV2RuleAllowOrCountAction
+  count: awsWafV2RuleAllowOrCountAction
+}
+
+type awsWafV2RuleOverrideAction {
+  count: awsWafV2RuleAllowOrCountAction
+  none: Boolean @search
+}
+
+type awsWafV2RuleLabel {
+  id: String! @id @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+}
+
+type awsWafV2VisibilityConfig {
+  sampledRequestsEnabled: Boolean @search
+  cloudWatchMetricsEnabled: Boolean @search
+  metricName: String @search(by: [hash, regexp])
+}
+
+type awsWafV2StatementByteMatchStatement {
+  searchString: String @search(by: [hash, regexp])
+  fieldToMatch: awsWafV2FieldToMatch
+  textTransformations: [awsWafV2TextTransformation]
+  positionalConstraint: String @search(by: [hash, regexp])
+}
+
+type awsWafV2StatementSqliMatchStatement {
+  fieldToMatch: awsWafV2FieldToMatch
+  textTransformations: [awsWafV2TextTransformation]
+}
+
+type awsWafV2StatementXssMatchStatement {
+  fieldToMatch: awsWafV2FieldToMatch
+  textTransformations: [awsWafV2TextTransformation]
+}
+
+type awsWafV2StatementSzieConstraintStatement {
+  size: Int @search
+  comparisonOperator: String @search(by: [hash, regexp])
+  fieldToMatch: awsWafV2FieldToMatch
+  textTransformations: [awsWafV2TextTransformation]
+}
+
+type awsWafV2StatementGeoMatchStatement {
+  countryCodes: [String] @search(by: [hash, regexp])
+  forwardedIpConfig: awsWafV2ForwardedIpConfig
+}
+
+type awsWafV2StatementRuleGroupReferenceStatement {
+  arn: String @search(by: [hash, regexp])
+  excludedRules: [awsWafV2ExcludedRule]
+}
+
+type awsWafV2StatementIpSetReferenceStatement {
+  arn: String @search(by: [hash, regexp])
+  iPSetForwardedIPConfig: awsWafV2IPSetForwardedIPConfig
+}
+
+type awsWafV2StatementRegrexPatternSetReferenceStatement {
+  arn: String @search(by: [hash, regexp])
+  fieldToMatch: awsWafV2FieldToMatch
+  textTransformations: [awsWafV2TextTransformation]
+}
+
+type awsWafV2StatementRateBasedStatement {
+  limit: Int @search
+  aggregateKeyType: String @search(by: [hash, regexp])
+  forwardedIpConfig: awsWafV2ForwardedIpConfig
+  statement: awsWafV2Statement
+}
+
+type awsWafV2StatementAndStatement {
+  statements: [awsWafV2Statement]
+}
+
+type awsWafV2StatementOrStatement {
+  statements: [awsWafV2Statement]
+}
+
+type awsWafV2StatementNotStatement {
+  statement: awsWafV2Statement
+}
+
+type awsWafV2StatementManagedRuleGroupStatement {
+  vendorName: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  version: String @search(by: [hash, regexp])
+  excludedRules: [awsWafV2ExcludedRule]
+  scopedDownStatement: String
+}
+
+type awsWafV2StatementLabelMatchStatement {
+  scope: String @search(by: [hash, regexp])
+  key: String @search(by: [hash, regexp])
+}
+
+type awsWafV2FieldToMatch {
+  id: String! @id @search(by: [hash, regexp])
+  singleHeader: awsWafV2SingleName
+  singleQueryArgument: awsWafV2SingleName
+}
+
+type awsWafV2SingleName {
+  name: String @search(by: [hash, regexp])
+}
+
+type awsWafV2TextTransformation {
+  id: String! @id @search(by: [hash, regexp])
+  priority: Int @search
+  type: String @search(by: [hash, regexp])
+}
+
+type awsWafV2ForwardedIpConfig {
+  headerName: String @search(by: [hash, regexp])
+  fallbackBehavior: String @search(by: [hash, regexp])
+}
+
+type awsWafV2IPSetForwardedIPConfig {
+  headerName: String @search(by: [hash, regexp])
+  fallbackBehavior: String @search(by: [hash, regexp])
+  position: Int @search
+}
+type awsWafV2ExcludedRule {
+  id: String! @id @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+}
+
+type awsWafV2RuleBlockAction {
+  customResponse: awsWafV2RuleActionCustomResponse
+}
+
+type awsWafV2RuleAllowOrCountAction {
+  customRequestHandling: awsWafV2RuleActionCustomRequestHandling
+}
+
+type awsWafV2RuleActionCustomResponse {
+  responseCode: Int
+  customResponseBodyKey: String @search(by: [hash, regexp])
+  responseHeaders: [awsWafV2RuleActionResponseHeader]
+}
+
+type awsWafV2RuleActionResponseHeader {
+  id: String! @id @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
+}
+
+type awsWafV2RuleActionCustomRequestHandling {
+  insertHeaders: [awsWafV2RuleActionCustomRequestHandlingHeader]
+}
+
+type awsWafV2RuleActionCustomRequestHandlingHeader {
+  id: String! @id @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
+}
+
+type awsWafV2LoggingFilter {
+  filters: [awsWafV2LoggingFilterFilter]
+  defaultBehavior: String @search(by: [hash, regexp])
+}
+
+type awsWafV2LoggingFilterFilter {
+  id: String! @id @search(by: [hash, regexp])
+  behavior: String @search(by: [hash, regexp])
+  requirement: String @search(by: [hash, regexp])
+  conditions: [awsWafV2LoggingFilterCondition]
+}
+
+type awsWafV2LoggingFilterCondition {
+  id: String! @id @search(by: [hash, regexp])
+  actionCondition: awsWafV2LoggingFilterActionCondition
+  labelNameCondition: awsWafV2LoggingFilterLabelNameCondition
+}
+
+type awsWafV2LoggingFilterActionCondition {
+  action: String @search(by: [hash, regexp])
+}
+
+type awsWafV2LoggingFilterLabelNameCondition {
+  labelName: String @search(by: [hash, regexp])
+}

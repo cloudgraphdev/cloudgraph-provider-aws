@@ -3049,6 +3049,7 @@ export type AwsManagedAirflow = {
   airflowConfigurationOptions?: Maybe<Array<Maybe<AwsRawTag>>>;
   airflowVersion?: Maybe<Scalars['String']>;
   arn: Scalars['String'];
+  kmsKey?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   dagS3Path?: Maybe<Scalars['String']>;
   environmentClass?: Maybe<Scalars['String']>;
@@ -3079,7 +3080,13 @@ export type AwsManagedAirflow = {
 
 export type AwsManagedAirflowLastUpdate = {
   createdAt?: Maybe<Scalars['DateTime']>;
+  error?: Maybe<AwsManagedAirflowLastUpdateError>;
   status?: Maybe<Scalars['String']>;
+};
+
+export type AwsManagedAirflowLastUpdateError = {
+  errorCode?: Maybe<Scalars['String']>;
+  errorMessage?: Maybe<Scalars['String']>;
 };
 
 export type AwsManagedAirflowLogging = {
@@ -3897,6 +3904,10 @@ export type AwsVpnStaticRoute = {
   id: Scalars['String'];
   source?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
+};
+
+export type AwsWafV2WebAcl = {
+  id: Scalars['String'];
 };
 
 export type BlockDeviceEbs = {

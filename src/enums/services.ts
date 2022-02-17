@@ -84,4 +84,5 @@ export default {
   vpc: 'vpc',
   vpnConnection: 'vpnConnection',
   vpnGateway: 'vpnGateway',
+  wafV2WebAcl: 'wafV2WebAcl'
 }

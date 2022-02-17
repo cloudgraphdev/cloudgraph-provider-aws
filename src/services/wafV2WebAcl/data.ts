@@ -1,8 +1,7 @@
 import { Config } from 'aws-sdk/lib/config'
-import WAFV2 from 'aws-sdk/clients/wafv2'
+import WAFV2, { WebACLSummaries } from 'aws-sdk/clients/wafv2'
 import isEmpty from 'lodash/isEmpty'
 import groupBy from 'lodash/groupBy'
-import { convertToPromise, fetchAllPaginatedData } from '../../utils/fetchUtils'
 import { initTestEndpoint } from '../../utils'
 import ErrorLog from '../../utils/errorLog'
 
@@ -34,38 +33,43 @@ export default async ({
   const result: RawAwsWafV2WebAcl[] = []
 
   const activeRegions = regions.split(',')
-  activeRegions.push('global')
+  // TODO: how to support global instances
+  // activeRegions.push('global')
   for (const region of activeRegions) {
     const client = new WAFV2({ ...config, region, endpoint })
     const scope = region === 'global' ? scopes.cloudfront : scopes.regional
-    let WafV2WebAclData: WAFV2.WebACLSummary[]
+    const WafV2WebAclData: WebACLSummaries = []
     try {
-      WafV2WebAclData = await fetchAllPaginatedData({
-        getResourcesFn: convertToPromise({
-          sdkContext: client,
-          fnName: 'listWebACLs',
-        }),
-        initialParams: {
-          Scope: scope,
-        },
-        accessor: '',
-      })
+      const { WebACLs, NextMarker } = await client.listWebACLs({ Scope: scope, Limit: 10 }).promise()
+      WafV2WebAclData.push(...WebACLs)
+      let marker = NextMarker
+      while(marker) {
+        const { WebACLs, NextMarker } = await client.listWebACLs({ Scope: scope, Limit: 10 }).promise()
+        // There is some issue with wafV2 where it always returns a next marker
+        if (WebACLs.find(({ Name }) => Name === NextMarker)) {
+          marker = undefined
+        } else {
+          marker = NextMarker
+          WafV2WebAclData.push(...WebACLs)
+        }
+      }
     } catch (err) {
       errorLog.generateAwsErrorLog({ functionName: 'listWebAcls', err })
     }
-
     if (!isEmpty(WafV2WebAclData)) {
-      WafV2WebAclData.forEach(async waf => {
+      for (const waf of WafV2WebAclData) {
         try {
           const wafData = await client
             .getWebACL({ Name: waf.Name, Id: waf.Id, Scope: scope })
             .promise()
-          const loggingConfiguration = await client.getLoggingConfiguration({ ResourceArn: wafData?.WebACL?.ARN }).promise()
+
+          const arn = wafData?.WebACL?.ARN
+          const loggingConfiguration = await client.getLoggingConfiguration({ ResourceArn: arn }).promise()
           result.push({ ...wafData.WebACL, loggingConfiguration: loggingConfiguration.LoggingConfiguration, region })
         } catch (err) {
-          errorLog.generateAwsErrorLog({ functionName: 'getWebAcl', err })
+          errorLog.generateAwsErrorLog({ functionName: 'getWebACL', err })
         }
-      })
+      }
     }
   }
   errorLog.reset()
