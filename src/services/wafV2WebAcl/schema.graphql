@@ -21,7 +21,7 @@ type awsWafV2Rule {
   id: String! @id @search(by: [hash])
   name: String @search(by: [hash, regexp])
   priority: Int @search
-  statement: String #we need to use string here as its recursive
+  statement: awsWafV2Statement
   action: awsWafV2RuleAction
   overrideAction: awsWafV2RuleOverrideAction
   ruleLabels: [awsWafV2RuleLabel]
@@ -35,10 +35,10 @@ type awsWafV2DefaultAction {
 
 type awsWafV2FirewallManagerRuleGroup {
   id: String! @id @search(by: [hash])
-    name: String @search(by: [hash, regexp])
-    priority: Int @search
-    overrideAction: awsWafV2RuleOverrideAction
-    visibilityConfig: awsWafV2VisibilityConfig
+  name: String @search(by: [hash, regexp])
+  priority: Int @search
+  overrideAction: awsWafV2RuleOverrideAction
+  visibilityConfig: awsWafV2VisibilityConfig
 }
 
 type awsWafV2FirewallManager {
@@ -59,10 +59,10 @@ type awsWafV2CustomResponseBody {
 
 type awsWafV2LoggingConfig {
   resourceArn: String @search(by: [hash, regexp])
-    logDestinationConfigs: [String] @search(by: [hash, regexp])
-    redactedFields: [awsWafV2FieldToMatch]
-    managedByFirewallManager: Boolean @search
-    loggingFilter: awsWafV2LoggingFilter
+  logDestinationConfigs: [String] @search(by: [hash, regexp])
+  redactedFields: [awsWafV2FieldToMatch]
+  managedByFirewallManager: Boolean @search
+  loggingFilter: awsWafV2LoggingFilterConfig
 }
 
 type awsWafV2Statement {
@@ -243,12 +243,12 @@ type awsWafV2RuleActionCustomRequestHandlingHeader {
   value: String @search(by: [hash, regexp])
 }
 
-type awsWafV2LoggingFilter {
-  filters: [awsWafV2LoggingFilterFilter]
+type awsWafV2LoggingFilterConfig {
+  filters: [awsWafV2LoggingFilter]
   defaultBehavior: String @search(by: [hash, regexp])
 }
 
-type awsWafV2LoggingFilterFilter {
+type awsWafV2LoggingFilter {
   id: String! @id @search(by: [hash, regexp])
   behavior: String @search(by: [hash, regexp])
   requirement: String @search(by: [hash, regexp])

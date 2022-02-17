@@ -12,6 +12,7 @@ import {
 } from 'aws-sdk/clients/wafv2'
 import { Blob } from 'buffer'
 import cuid from 'cuid'
+import { isEmpty } from 'lodash'
 
 /**
  * WafV2WebAcl
@@ -25,11 +26,11 @@ export const mapTextTransformations = (transforms: TextTransformations = []) => 
   }))
 }
 
-export const formatSearchString = async (
+export const formatSearchString = (
   searchString: SearchString = ''
-): Promise<string> => {
+): string => {
   if (searchString instanceof Blob) {
-    return searchString.text()
+    return 'blob'
   }
   if (searchString instanceof Uint8Array) {
     return Buffer.from(searchString).toString('base64')
@@ -54,7 +55,10 @@ export const formatFieldToMatch = (fieldToMatch: FieldToMatch) => {
   }
 }
 
-export const formatRuleStatement = async (statement: Statement = {}) => {
+export const formatRuleStatement = (statement: Statement = {}) => {
+  if (isEmpty(statement)) {
+    return null
+  }
   const {
     ByteMatchStatement,
     SqliMatchStatement,
@@ -73,7 +77,7 @@ export const formatRuleStatement = async (statement: Statement = {}) => {
   } = statement
 
   const formattedByteMatchStatement = {
-    searchString: await formatSearchString(ByteMatchStatement?.SearchString),
+    searchString: formatSearchString(ByteMatchStatement?.SearchString),
     fieldToMatch: formatFieldToMatch(ByteMatchStatement?.FieldToMatch),
     textTransformations: mapTextTransformations(
       ByteMatchStatement?.TextTransformations ?? []
@@ -83,14 +87,14 @@ export const formatRuleStatement = async (statement: Statement = {}) => {
 
   const formattedSqliMatchStatement = {
     fieldToMatch: formatFieldToMatch(SqliMatchStatement?.FieldToMatch),
-    textTransformation: mapTextTransformations(
+    textTransformations: mapTextTransformations(
       SqliMatchStatement?.TextTransformations
     ),
   }
 
   const formattedXssMatchStatement = {
     fieldToMatch: formatFieldToMatch(XssMatchStatement?.FieldToMatch),
-    textTransformation: mapTextTransformations(
+    textTransformations: mapTextTransformations(
       XssMatchStatement?.TextTransformations
     ),
   }
@@ -99,7 +103,7 @@ export const formatRuleStatement = async (statement: Statement = {}) => {
     size: SizeConstraintStatement?.Size,
     comparisonOperator: SizeConstraintStatement?.ComparisonOperator,
     fieldToMatch: formatFieldToMatch(SizeConstraintStatement?.FieldToMatch),
-    textTransformation: mapTextTransformations(
+    textTransformations: mapTextTransformations(
       SizeConstraintStatement?.TextTransformations
     ),
   }
@@ -161,7 +165,7 @@ export const formatRuleStatement = async (statement: Statement = {}) => {
   }
 
   const formattedNotStatement = {
-    statements: formatRuleStatement(NotStatement?.Statement),
+    statement: formatRuleStatement(NotStatement?.Statement),
   }
 
   const formattedManagedRuleGroupStatement = {
