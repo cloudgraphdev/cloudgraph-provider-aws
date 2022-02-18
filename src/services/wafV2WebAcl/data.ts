@@ -44,7 +44,7 @@ export default async ({
       WafV2WebAclData.push(...WebACLs)
       let marker = NextMarker
       while(marker) {
-        const { WebACLs, NextMarker } = await client.listWebACLs({ Scope: scope, Limit: 10 }).promise()
+        const { WebACLs, NextMarker } = await client.listWebACLs({ Scope: scope, Limit: 10, NextMarker: marker }).promise()
         // There is some issue with wafV2 where it always returns a next marker
         if (WebACLs.find(({ Name }) => Name === NextMarker)) {
           marker = undefined
