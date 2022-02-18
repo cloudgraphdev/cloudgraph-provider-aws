@@ -34,9 +34,9 @@ export default async ({
 
   const activeRegions = regions.split(',')
   // TODO: how to support global instances
-  // activeRegions.push('global')
+  activeRegions.push('global')
   for (const region of activeRegions) {
-    const client = new WAFV2({ ...config, region, endpoint })
+    const client = new WAFV2({ ...config, region: region === 'global' ? 'us-east-1' : region, endpoint })
     const scope = region === 'global' ? scopes.cloudfront : scopes.regional
     const WafV2WebAclData: WebACLSummaries = []
     try {
@@ -58,17 +58,19 @@ export default async ({
     }
     if (!isEmpty(WafV2WebAclData)) {
       for (const waf of WafV2WebAclData) {
+        let wafData
         try {
-          const wafData = await client
+          wafData = await client
             .getWebACL({ Name: waf.Name, Id: waf.Id, Scope: scope })
             .promise()
 
           const arn = wafData?.WebACL?.ARN
           const loggingConfiguration = await client.getLoggingConfiguration({ ResourceArn: arn }).promise()
-          result.push({ ...wafData.WebACL, loggingConfiguration: loggingConfiguration.LoggingConfiguration, region })
+          wafData.loggingConfiguration = loggingConfiguration.LoggingConfiguration
         } catch (err) {
           errorLog.generateAwsErrorLog({ functionName: 'getWebACL', err })
         }
+        result.push({ ...wafData?.WebACL, loggingConfiguration: wafData?.loggingConfiguration, region })
       }
     }
   }
