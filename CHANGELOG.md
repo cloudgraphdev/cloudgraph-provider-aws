@@ -1,3 +1,10 @@
+## [0.68.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.68.1...0.68.2) (2022-02-21)
+
+
+### Bug Fixes
+
+* **services:** fix ec2 metric data for endless loop ([0b431fc](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/0b431fc9bb8ff0b6890ab9b3c7b10c5703ca61ff))
+
 ## [0.68.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.68.0...0.68.1) (2022-02-16)
 
 
