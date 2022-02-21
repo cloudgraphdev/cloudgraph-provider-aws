@@ -551,6 +551,7 @@ export default async ({
                     functionName: 'ec2:getMetricData',
                     err,
                   })
+                  loopBreak = true
                   resolveMetric()
                 }
               }
