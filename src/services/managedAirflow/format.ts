@@ -31,7 +31,7 @@ export default ({
       Error: {
         ErrorCode: errorCode,
         ErrorMessage: errorMessage
-      },
+      } = {},
       Status: lastUpdateStatus,
     } = {},
     LoggingConfiguration: {
