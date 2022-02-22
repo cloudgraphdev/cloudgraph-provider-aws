@@ -86,6 +86,7 @@ import SageMakerProject from '../services/sageMakerProject'
 import SageMakerExperiment from '../services/sageMakerExperiment'
 import ManagedAirflow from '../services/managedAirflow'
 import WafV2WebAcl from '../services/wafV2WebAcl'
+import GuardDutyDetector from '../services/guardDutyDetector'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -126,6 +127,7 @@ export default {
   [services.elb]: ELB,
   [services.flowLog]: FlowLog,
   [services.glueJob]: GlueJob,
+  [services.guardDutyDetector]: GuardDutyDetector,
   [services.glueRegistry]: GlueRegistry,
   [services.emrCluster]: EmrCluster,
   [services.emrInstance]: EmrInstance,

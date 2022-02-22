@@ -1,0 +1,36 @@
+type awsGuardDutyDetector @key(fields: "id") {
+  id: String! @id @search(by: [hash])
+  accountId: String! @search(by: [hash])
+  region: String @search(by: [hash, regexp])
+  createdAt: DateTime
+  updatedAt: DateTime
+  findingPublishingFrequency: String @search(by: [hash, regexp])
+  serviceRole: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
+  members: [awsGuardDutyMember]
+  dataSources: awsGuardDutyDataSources
+  tags: [awsRawTag]
+  iamRole: awsIamRole @hasInverse(field: guardDutyDetectors)
+}
+
+type awsGuardDutyMember {
+  id: String! @id @search(by: [hash])
+  accountId: String! @search(by: [hash])
+  detectorId: String @search(by: [hash, regexp])
+  masterId: String @search(by: [hash, regexp])
+  email: String @search(by: [hash, regexp])
+  relationshipStatus: String @search(by: [hash, regexp])
+  invitedAt: DateTime
+  updatedAt: DateTime
+}
+
+type awsGuardDutyDataSources {
+  cloudTrail: awsGuardDutyDataSource
+    dnsLogs: awsGuardDutyDataSource
+    flowLogs: awsGuardDutyDataSource
+    s3Logs: awsGuardDutyDataSource
+}
+
+type awsGuardDutyDataSource {
+  status: String @search(by: [hash, regexp])
+}

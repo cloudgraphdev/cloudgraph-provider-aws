@@ -12,6 +12,7 @@ import { RawAwsCodeBuild } from '../codeBuild/data'
 import { RawAwsGlueJob } from '../glueJob/data'
 import { glueJobArn } from '../../utils/generateArns'
 import { RawAwsManagedAirflow } from '../managedAirflow/data'
+import { RawAwsGuardDutyDetector } from '../guardDutyDetector/data'
 
 /**
  * IAM Role
@@ -106,60 +107,86 @@ export default ({
   /**
    * Find any CodeBuild related data
    */
-   const codebuild = data.find(({ name }) => name === services.codebuild)
-   if (codebuild?.data?.[region]) {
-     const dataAtRegion: RawAwsCodeBuild[] = codebuild.data[region].filter(
-       ({ serviceRole, resourceAccessRole }: RawAwsCodeBuild) =>
-       serviceRole === role.Arn || resourceAccessRole === role.Arn
-     )
-     for (const cb of dataAtRegion) {
-       connections.push({
-         id: cb.arn,
-         resourceType: services.codebuild,
-         relation: 'child',
-         field: 'codebuilds',
-       })
-     }
-   }
+  const codebuild = data.find(({ name }) => name === services.codebuild)
+  if (codebuild?.data?.[region]) {
+    const dataAtRegion: RawAwsCodeBuild[] = codebuild.data[region].filter(
+      ({ serviceRole, resourceAccessRole }: RawAwsCodeBuild) =>
+        serviceRole === role.Arn || resourceAccessRole === role.Arn
+    )
+    for (const cb of dataAtRegion) {
+      connections.push({
+        id: cb.arn,
+        resourceType: services.codebuild,
+        relation: 'child',
+        field: 'codebuilds',
+      })
+    }
+  }
 
-   /**
+  /**
    * Find any glueJob related data
    */
-    const jobs = data.find(({ name }) => name === services.glueJob)
-    if (jobs?.data?.[region]) {
-      const dataAtRegion: RawAwsGlueJob[] = jobs.data[region].filter(
-        ({ Role }: RawAwsGlueJob) =>
-        Role === role.Arn
-      )
-      for (const job of dataAtRegion) {
-        const arn = glueJobArn({ region, account, name: job.Name })
-        connections.push({
-          id: arn,
-          resourceType: services.glueJob,
-          relation: 'child',
-          field: 'glueJobs',
-        })
-      }
+  const jobs = data.find(({ name }) => name === services.glueJob)
+  if (jobs?.data?.[region]) {
+    const dataAtRegion: RawAwsGlueJob[] = jobs.data[region].filter(
+      ({ Role }: RawAwsGlueJob) => Role === role.Arn
+    )
+    for (const job of dataAtRegion) {
+      const arn = glueJobArn({ region, account, name: job.Name })
+      connections.push({
+        id: arn,
+        resourceType: services.glueJob,
+        relation: 'child',
+        field: 'glueJobs',
+      })
     }
-    
-    /**
+  }
+
+  /**
    * Find any managedAirflow related data
    */
-   const managedAirflow = data.find(({ name }) => name === services.managedAirflow)
-   if (managedAirflow?.data?.[region]) {
-     const dataAtRegion: RawAwsManagedAirflow[] = managedAirflow.data[region].filter(
-       ({ ServiceRoleArn, ExecutionRoleArn }: RawAwsManagedAirflow) =>
-       ServiceRoleArn === role.Arn || ExecutionRoleArn === role.Arn
-     )
-     for (const airflow of dataAtRegion) {
-       connections.push({
-         id: airflow.Arn,
-         resourceType: services.managedAirflow,
-         relation: 'child',
-         field: 'managedAirflows',
-       })
-     }
-   }
+  const managedAirflow = data.find(
+    ({ name }) => name === services.managedAirflow
+  )
+  if (managedAirflow?.data?.[region]) {
+    const dataAtRegion: RawAwsManagedAirflow[] = managedAirflow.data[
+      region
+    ].filter(
+      ({ ServiceRoleArn, ExecutionRoleArn }: RawAwsManagedAirflow) =>
+        ServiceRoleArn === role.Arn || ExecutionRoleArn === role.Arn
+    )
+    for (const airflow of dataAtRegion) {
+      connections.push({
+        id: airflow.Arn,
+        resourceType: services.managedAirflow,
+        relation: 'child',
+        field: 'managedAirflows',
+      })
+    }
+  }
+
+  /**
+   * Find any guardDutyDetector related data
+   */
+  const detectors = data.find(
+    ({ name }) => name === services.guardDutyDetector
+  )
+  if (detectors?.data?.[region]) {
+    const dataAtRegion: RawAwsGuardDutyDetector[] = detectors.data[
+      region
+    ].filter(
+      ({ ServiceRole }: RawAwsGuardDutyDetector) =>
+      ServiceRole === role.Arn
+    )
+    for (const detector of dataAtRegion) {
+      connections.push({
+        id: detector.id,
+        resourceType: services.guardDutyDetector,
+        relation: 'child',
+        field: 'guardDutyDetectors',
+      })
+    }
+  }
 
   return {
     [id]: connections,

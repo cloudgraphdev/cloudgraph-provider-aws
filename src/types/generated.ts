@@ -2707,6 +2707,43 @@ export type AwsGlueRegistrySchema = {
   schemaStatus?: Maybe<Scalars['String']>;
 };
 
+export type AwsGuardDutyDataSource = {
+  status?: Maybe<Scalars['String']>;
+};
+
+export type AwsGuardDutyDataSources = {
+  cloudTrail?: Maybe<AwsGuardDutyDataSource>;
+  dnsLogs?: Maybe<AwsGuardDutyDataSource>;
+  flowLogs?: Maybe<AwsGuardDutyDataSource>;
+  s3Logs?: Maybe<AwsGuardDutyDataSource>;
+};
+
+export type AwsGuardDutyDetector = {
+  accountId: Scalars['String'];
+  createdAt?: Maybe<Scalars['DateTime']>;
+  dataSources?: Maybe<AwsGuardDutyDataSources>;
+  findingPublishingFrequency?: Maybe<Scalars['String']>;
+  iamRole?: Maybe<AwsIamRole>;
+  id: Scalars['String'];
+  members?: Maybe<Array<Maybe<AwsGuardDutyMember>>>;
+  region?: Maybe<Scalars['String']>;
+  serviceRole?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type AwsGuardDutyMember = {
+  accountId: Scalars['String'];
+  detectorId?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  invitedAt?: Maybe<Scalars['DateTime']>;
+  masterId?: Maybe<Scalars['String']>;
+  relationshipStatus?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
 export type AwsIamAccessKey = {
   accessKeyId: Scalars['String'];
   createDate?: Maybe<Scalars['String']>;
@@ -2809,6 +2846,7 @@ export type AwsIamRole = {
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
   glueJobs?: Maybe<Array<Maybe<AwsGlueJob>>>;
+  guardDutyDetectors?: Maybe<Array<Maybe<AwsGuardDutyDetector>>>;
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   id: Scalars['String'];
   inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -3050,13 +3088,13 @@ export type AwsManagedAirflow = {
   airflowConfigurationOptions?: Maybe<Array<Maybe<AwsRawTag>>>;
   airflowVersion?: Maybe<Scalars['String']>;
   arn: Scalars['String'];
-  kmsKey?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   dagS3Path?: Maybe<Scalars['String']>;
   environmentClass?: Maybe<Scalars['String']>;
   executionRoleArn?: Maybe<Scalars['String']>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   id: Scalars['String'];
+  kmsKey?: Maybe<Scalars['String']>;
   lastUpdate?: Maybe<AwsManagedAirflowLastUpdate>;
   loggingConfiguration?: Maybe<AwsManagedAirflowLoggingConfig>;
   maxWorkers?: Maybe<Scalars['Int']>;
@@ -3722,6 +3760,7 @@ export type AwsTag = {
   elb?: Maybe<Array<Maybe<AwsElb>>>;
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
+  guardDutyDetectors?: Maybe<Array<Maybe<AwsGuardDutyDetector>>>;
   iamPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   iamUsers?: Maybe<Array<Maybe<AwsIamUser>>>;
@@ -3908,15 +3947,15 @@ export type AwsVpnStaticRoute = {
 };
 
 export type AwsWafV2CustomResponseBody = {
+  content?: Maybe<Scalars['String']>;
+  contentType?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   key?: Maybe<Scalars['String']>;
-  contentType?: Maybe<Scalars['String']>;
-  content?: Maybe<Scalars['String']>;
 };
 
 export type AwsWafV2DefaultAction = {
-  block?: Maybe<AwsWafV2RuleBlockAction>;
   allow?: Maybe<AwsWafV2RuleAllowOrCountAction>;
+  block?: Maybe<AwsWafV2RuleBlockAction>;
 };
 
 export type AwsWafV2ExcludedRule = {
@@ -3937,8 +3976,8 @@ export type AwsWafV2FirewallManager = {
 export type AwsWafV2FirewallManagerRuleGroup = {
   id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
-  priority?: Maybe<Scalars['Int']>;
   overrideAction?: Maybe<AwsWafV2RuleOverrideAction>;
+  priority?: Maybe<Scalars['Int']>;
   visibilityConfig?: Maybe<AwsWafV2VisibilityConfig>;
 };
 
@@ -3948,29 +3987,29 @@ export type AwsWafV2FirewallManagerStatement = {
 };
 
 export type AwsWafV2ForwardedIpConfig = {
-  headerName?: Maybe<Scalars['String']>;
   fallbackBehavior?: Maybe<Scalars['String']>;
+  headerName?: Maybe<Scalars['String']>;
 };
 
 export type AwsWafV2IpSetForwardedIpConfig = {
-  headerName?: Maybe<Scalars['String']>;
   fallbackBehavior?: Maybe<Scalars['String']>;
+  headerName?: Maybe<Scalars['String']>;
   position?: Maybe<Scalars['Int']>;
 };
 
 export type AwsWafV2LoggingConfig = {
-  resourceArn?: Maybe<Scalars['String']>;
   logDestinationConfigs?: Maybe<Array<Maybe<Scalars['String']>>>;
-  redactedFields?: Maybe<Array<Maybe<AwsWafV2FieldToMatch>>>;
-  managedByFirewallManager?: Maybe<Scalars['Boolean']>;
   loggingFilter?: Maybe<AwsWafV2LoggingFilterConfig>;
+  managedByFirewallManager?: Maybe<Scalars['Boolean']>;
+  redactedFields?: Maybe<Array<Maybe<AwsWafV2FieldToMatch>>>;
+  resourceArn?: Maybe<Scalars['String']>;
 };
 
 export type AwsWafV2LoggingFilter = {
-  id: Scalars['String'];
   behavior?: Maybe<Scalars['String']>;
-  requirement?: Maybe<Scalars['String']>;
   conditions?: Maybe<Array<Maybe<AwsWafV2LoggingFilterCondition>>>;
+  id: Scalars['String'];
+  requirement?: Maybe<Scalars['String']>;
 };
 
 export type AwsWafV2LoggingFilterActionCondition = {
@@ -3978,14 +4017,14 @@ export type AwsWafV2LoggingFilterActionCondition = {
 };
 
 export type AwsWafV2LoggingFilterCondition = {
-  id: Scalars['String'];
   actionCondition?: Maybe<AwsWafV2LoggingFilterActionCondition>;
+  id: Scalars['String'];
   labelNameCondition?: Maybe<AwsWafV2LoggingFilterLabelNameCondition>;
 };
 
 export type AwsWafV2LoggingFilterConfig = {
-  filters?: Maybe<Array<Maybe<AwsWafV2LoggingFilter>>>;
   defaultBehavior?: Maybe<Scalars['String']>;
+  filters?: Maybe<Array<Maybe<AwsWafV2LoggingFilter>>>;
 };
 
 export type AwsWafV2LoggingFilterLabelNameCondition = {
@@ -3993,19 +4032,19 @@ export type AwsWafV2LoggingFilterLabelNameCondition = {
 };
 
 export type AwsWafV2Rule = {
+  action?: Maybe<AwsWafV2RuleAction>;
   id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
-  priority?: Maybe<Scalars['Int']>;
-  statement?: Maybe<AwsWafV2Statement>;
-  action?: Maybe<AwsWafV2RuleAction>;
   overrideAction?: Maybe<AwsWafV2RuleOverrideAction>;
+  priority?: Maybe<Scalars['Int']>;
   ruleLabels?: Maybe<Array<Maybe<AwsWafV2RuleLabel>>>;
+  statement?: Maybe<AwsWafV2Statement>;
   visibilityConfig?: Maybe<AwsWafV2VisibilityConfig>;
 };
 
 export type AwsWafV2RuleAction = {
-  block?: Maybe<AwsWafV2RuleBlockAction>;
   allow?: Maybe<AwsWafV2RuleAllowOrCountAction>;
+  block?: Maybe<AwsWafV2RuleBlockAction>;
   count?: Maybe<AwsWafV2RuleAllowOrCountAction>;
 };
 
@@ -4020,8 +4059,8 @@ export type AwsWafV2RuleActionCustomRequestHandlingHeader = {
 };
 
 export type AwsWafV2RuleActionCustomResponse = {
-  responseCode?: Maybe<Scalars['Int']>;
   customResponseBodyKey?: Maybe<Scalars['String']>;
+  responseCode?: Maybe<Scalars['Int']>;
   responseHeaders?: Maybe<Array<Maybe<AwsWafV2RuleActionResponseHeader>>>;
 };
 
@@ -4054,21 +4093,21 @@ export type AwsWafV2SingleName = {
 };
 
 export type AwsWafV2Statement = {
-  id: Scalars['String'];
+  andStatement?: Maybe<AwsWafV2StatementAndStatement>;
   byteMatchStatement?: Maybe<AwsWafV2StatementByteMatchStatement>;
+  geoMatchStatement?: Maybe<AwsWafV2StatementGeoMatchStatement>;
+  iPSetReferenceStatement?: Maybe<AwsWafV2StatementIpSetReferenceStatement>;
+  id: Scalars['String'];
+  labelMatchStatement?: Maybe<AwsWafV2StatementLabelMatchStatement>;
+  managedRuleGroupStatement?: Maybe<AwsWafV2StatementManagedRuleGroupStatement>;
+  notStatement?: Maybe<AwsWafV2StatementNotStatement>;
+  orStatement?: Maybe<AwsWafV2StatementOrStatement>;
+  rateBasedStatement?: Maybe<AwsWafV2StatementRateBasedStatement>;
+  regexPatternSetReferenceStatement?: Maybe<AwsWafV2StatementRegrexPatternSetReferenceStatement>;
+  ruleGroupReferenceStatement?: Maybe<AwsWafV2StatementRuleGroupReferenceStatement>;
+  sizeConstraintStatement?: Maybe<AwsWafV2StatementSzieConstraintStatement>;
   sqliMatchStatement?: Maybe<AwsWafV2StatementSqliMatchStatement>;
   xssMatchStatement?: Maybe<AwsWafV2StatementXssMatchStatement>;
-  sizeConstraintStatement?: Maybe<AwsWafV2StatementSzieConstraintStatement>;
-  geoMatchStatement?: Maybe<AwsWafV2StatementGeoMatchStatement>;
-  ruleGroupReferenceStatement?: Maybe<AwsWafV2StatementRuleGroupReferenceStatement>;
-  iPSetReferenceStatement?: Maybe<AwsWafV2StatementIpSetReferenceStatement>;
-  regexPatternSetReferenceStatement?: Maybe<AwsWafV2StatementRegrexPatternSetReferenceStatement>;
-  rateBasedStatement?: Maybe<AwsWafV2StatementRateBasedStatement>;
-  andStatement?: Maybe<AwsWafV2StatementAndStatement>;
-  orStatement?: Maybe<AwsWafV2StatementOrStatement>;
-  notStatement?: Maybe<AwsWafV2StatementNotStatement>;
-  managedRuleGroupStatement?: Maybe<AwsWafV2StatementManagedRuleGroupStatement>;
-  labelMatchStatement?: Maybe<AwsWafV2StatementLabelMatchStatement>;
 };
 
 export type AwsWafV2StatementAndStatement = {
@@ -4076,10 +4115,10 @@ export type AwsWafV2StatementAndStatement = {
 };
 
 export type AwsWafV2StatementByteMatchStatement = {
-  searchString?: Maybe<Scalars['String']>;
   fieldToMatch?: Maybe<AwsWafV2FieldToMatch>;
-  textTransformations?: Maybe<Array<Maybe<AwsWafV2TextTransformation>>>;
   positionalConstraint?: Maybe<Scalars['String']>;
+  searchString?: Maybe<Scalars['String']>;
+  textTransformations?: Maybe<Array<Maybe<AwsWafV2TextTransformation>>>;
 };
 
 export type AwsWafV2StatementGeoMatchStatement = {
@@ -4093,16 +4132,16 @@ export type AwsWafV2StatementIpSetReferenceStatement = {
 };
 
 export type AwsWafV2StatementLabelMatchStatement = {
-  scope?: Maybe<Scalars['String']>;
   key?: Maybe<Scalars['String']>;
+  scope?: Maybe<Scalars['String']>;
 };
 
 export type AwsWafV2StatementManagedRuleGroupStatement = {
-  vendorName?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  version?: Maybe<Scalars['String']>;
   excludedRules?: Maybe<Array<Maybe<AwsWafV2ExcludedRule>>>;
+  name?: Maybe<Scalars['String']>;
   scopedDownStatement?: Maybe<Scalars['String']>;
+  vendorName?: Maybe<Scalars['String']>;
+  version?: Maybe<Scalars['String']>;
 };
 
 export type AwsWafV2StatementNotStatement = {
@@ -4114,9 +4153,9 @@ export type AwsWafV2StatementOrStatement = {
 };
 
 export type AwsWafV2StatementRateBasedStatement = {
-  limit?: Maybe<Scalars['Int']>;
   aggregateKeyType?: Maybe<Scalars['String']>;
   forwardedIpConfig?: Maybe<AwsWafV2ForwardedIpConfig>;
+  limit?: Maybe<Scalars['Int']>;
   statement?: Maybe<AwsWafV2Statement>;
 };
 
@@ -4137,9 +4176,9 @@ export type AwsWafV2StatementSqliMatchStatement = {
 };
 
 export type AwsWafV2StatementSzieConstraintStatement = {
-  size?: Maybe<Scalars['Int']>;
   comparisonOperator?: Maybe<Scalars['String']>;
   fieldToMatch?: Maybe<AwsWafV2FieldToMatch>;
+  size?: Maybe<Scalars['Int']>;
   textTransformations?: Maybe<Array<Maybe<AwsWafV2TextTransformation>>>;
 };
 
@@ -4155,28 +4194,28 @@ export type AwsWafV2TextTransformation = {
 };
 
 export type AwsWafV2VisibilityConfig = {
-  sampledRequestsEnabled?: Maybe<Scalars['Boolean']>;
   cloudWatchMetricsEnabled?: Maybe<Scalars['Boolean']>;
   metricName?: Maybe<Scalars['String']>;
+  sampledRequestsEnabled?: Maybe<Scalars['Boolean']>;
 };
 
 export type AwsWafV2WebAcl = {
-  id: Scalars['String'];
-  arn: Scalars['String'];
-  accountId: Scalars['String'];
-  region?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
   ManagedByFirewallManager?: Maybe<Scalars['Boolean']>;
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
   capacity?: Maybe<Scalars['Int']>;
-  labelNamespace?: Maybe<Scalars['String']>;
-  rules?: Maybe<Array<Maybe<AwsWafV2Rule>>>;
-  defaultAction?: Maybe<AwsWafV2DefaultAction>;
-  visibilityConfig?: Maybe<AwsWafV2VisibilityConfig>;
-  preProcessFirewallManagerRuleGroups?: Maybe<Array<Maybe<AwsWafV2FirewallManagerRuleGroup>>>;
-  postProcessFirewallManagerRuleGroups?: Maybe<Array<Maybe<AwsWafV2FirewallManagerRuleGroup>>>;
   customResponseBodies?: Maybe<Array<Maybe<AwsWafV2CustomResponseBody>>>;
+  defaultAction?: Maybe<AwsWafV2DefaultAction>;
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  labelNamespace?: Maybe<Scalars['String']>;
   loggingConfiguration?: Maybe<AwsWafV2LoggingConfig>;
+  name?: Maybe<Scalars['String']>;
+  postProcessFirewallManagerRuleGroups?: Maybe<Array<Maybe<AwsWafV2FirewallManagerRuleGroup>>>;
+  preProcessFirewallManagerRuleGroups?: Maybe<Array<Maybe<AwsWafV2FirewallManagerRuleGroup>>>;
+  region?: Maybe<Scalars['String']>;
+  rules?: Maybe<Array<Maybe<AwsWafV2Rule>>>;
+  visibilityConfig?: Maybe<AwsWafV2VisibilityConfig>;
 };
 
 export type BlockDeviceEbs = {

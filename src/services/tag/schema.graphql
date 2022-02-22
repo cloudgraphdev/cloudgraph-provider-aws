@@ -63,6 +63,7 @@ type awsTag @key(fields: "id") {
   clientVpnEndpoint: [awsClientVpnEndpoint]
   vpnConnection: [awsVpnConnection]
   managedAirflows: [awsManagedAirflow]
+  guardDutyDetectors: [awsGuardDutyDetector]
 }
 
 type awsRawTag
