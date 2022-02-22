@@ -1,10 +1,9 @@
-import { Volume } from 'aws-sdk/clients/ec2'
-
+import cuid from 'cuid'
 import { AwsEbs } from '../../types/generated'
-import { TagMap } from '../../types'
 import t from '../../properties/translations'
 import { formatTagsFromMap } from '../../utils/format'
 import { ebsVolumeArn } from '../../utils/generateArns'
+import { RawAwsEBS } from './data'
 
 /**
  * EBS
@@ -15,7 +14,7 @@ export default ({
   account,
   region,
 }: {
-  service: Omit<Volume, 'Tags'> & { Tags: TagMap; region: string }
+  service: RawAwsEBS
   account: string
   region: string
 }): AwsEbs => {
@@ -30,9 +29,19 @@ export default ({
     SnapshotId: snapshot,
     Iops: iops,
     VolumeType: volumeType,
+    Permissions: permissions = [],
     VolumeId: id,
     Tags: tags,
   } = rawData
+
+  // Format volume permissions
+  const volumePermissions = permissions.map(permission => {
+    return {
+      id: cuid(),
+      group: permission.Group,
+      userId: permission.UserId,
+    }
+  })
 
   // Format volume attachments
   const volumeAttachments = attachments.map(attachment => {
@@ -51,7 +60,7 @@ export default ({
   const ebs = {
     id,
     accountId: account,
-    arn: ebsVolumeArn({ region, account, id}),
+    arn: ebsVolumeArn({ region, account, id }),
     region,
     attachments: volumeAttachments,
     iops,
@@ -64,6 +73,7 @@ export default ({
     volumeType,
     availabilityZone,
     multiAttachEnabled,
+    permissions: volumePermissions,
     tags: volumeTags,
   }
 
