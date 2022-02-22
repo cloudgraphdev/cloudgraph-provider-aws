@@ -1,3 +1,10 @@
+## [0.68.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.68.2...0.68.3) (2022-02-22)
+
+
+### Bug Fixes
+
+* Included permissions to EBS volumes ([ad9fa47](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/ad9fa4779c1da896e60e6b0846cdeee91b3b6d49))
+
 ## [0.68.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.68.1...0.68.2) (2022-02-21)
 
 
