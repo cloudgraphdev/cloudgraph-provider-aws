@@ -14,6 +14,7 @@ type awsEbs @key(fields: "arn") {
   volumeType: String @search(by: [hash, regexp])
   availabilityZone: String @search(by: [hash, regexp])
   multiAttachEnabled: Boolean @search
+  permissions: [awsEbsPermission]
   tags: [awsRawTag]
   ec2Instance: [awsEc2] @hasInverse(field: ebs)
   asg: [awsAsg] @hasInverse(field: ebs)
@@ -30,4 +31,15 @@ type awsEbsAttachment
   attachmentInformation: String
   attachedTime: String
   deleteOnTermination: Boolean
+}
+
+type awsEbsPermission
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  group: String @search(by: [hash, regexp])
+  userId: String @search(by: [hash, regexp])
 }
