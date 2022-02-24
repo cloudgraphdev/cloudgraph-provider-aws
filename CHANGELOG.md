@@ -1,3 +1,10 @@
+## [0.68.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.68.3...0.68.4) (2022-02-24)
+
+
+### Bug Fixes
+
+* Added redirectProtocol field to ALB service ([bc47c40](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/bc47c40704b718fbfd23c108836e724909d44b9b))
+
 ## [0.68.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.68.2...0.68.3) (2022-02-22)
 
 
