@@ -29,17 +29,13 @@ export const mapTextTransformations = (transforms: TextTransformations = []) => 
 export const formatSearchString = (
   searchString: SearchString = ''
 ): string => {
-  console.log('we got the search string')
-  console.log(typeof searchString)
   if (searchString instanceof Blob) {
     return 'blob'
   }
   if (searchString instanceof Uint8Array) {
-    console.log('search string is a array')
     return Buffer.from(searchString).toString()
   }
   if (searchString instanceof Buffer) {
-    console.log('search string is a buffer')
     return searchString.toString()
   }
 
