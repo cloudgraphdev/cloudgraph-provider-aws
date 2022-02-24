@@ -3050,6 +3050,7 @@ export type AwsManagedAirflow = {
   airflowConfigurationOptions?: Maybe<Array<Maybe<AwsRawTag>>>;
   airflowVersion?: Maybe<Scalars['String']>;
   arn: Scalars['String'];
+  kmsKey?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   dagS3Path?: Maybe<Scalars['String']>;
   environmentClass?: Maybe<Scalars['String']>;
@@ -3080,7 +3081,13 @@ export type AwsManagedAirflow = {
 
 export type AwsManagedAirflowLastUpdate = {
   createdAt?: Maybe<Scalars['DateTime']>;
+  error?: Maybe<AwsManagedAirflowLastUpdateError>;
   status?: Maybe<Scalars['String']>;
+};
+
+export type AwsManagedAirflowLastUpdateError = {
+  errorCode?: Maybe<Scalars['String']>;
+  errorMessage?: Maybe<Scalars['String']>;
 };
 
 export type AwsManagedAirflowLogging = {
@@ -3898,6 +3905,278 @@ export type AwsVpnStaticRoute = {
   id: Scalars['String'];
   source?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
+};
+
+export type AwsWafV2CustomResponseBody = {
+  id: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  contentType?: Maybe<Scalars['String']>;
+  content?: Maybe<Scalars['String']>;
+};
+
+export type AwsWafV2DefaultAction = {
+  block?: Maybe<AwsWafV2RuleBlockAction>;
+  allow?: Maybe<AwsWafV2RuleAllowOrCountAction>;
+};
+
+export type AwsWafV2ExcludedRule = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+};
+
+export type AwsWafV2FieldToMatch = {
+  id: Scalars['String'];
+  singleHeader?: Maybe<AwsWafV2SingleName>;
+  singleQueryArgument?: Maybe<AwsWafV2SingleName>;
+};
+
+export type AwsWafV2FirewallManager = {
+  firewallManagerStatement?: Maybe<AwsWafV2FirewallManagerStatement>;
+};
+
+export type AwsWafV2FirewallManagerRuleGroup = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  priority?: Maybe<Scalars['Int']>;
+  overrideAction?: Maybe<AwsWafV2RuleOverrideAction>;
+  visibilityConfig?: Maybe<AwsWafV2VisibilityConfig>;
+};
+
+export type AwsWafV2FirewallManagerStatement = {
+  managedRuleGroupStatement?: Maybe<AwsWafV2StatementManagedRuleGroupStatement>;
+  ruleGroupReferenceStatement?: Maybe<AwsWafV2StatementRuleGroupReferenceStatement>;
+};
+
+export type AwsWafV2ForwardedIpConfig = {
+  headerName?: Maybe<Scalars['String']>;
+  fallbackBehavior?: Maybe<Scalars['String']>;
+};
+
+export type AwsWafV2IpSetForwardedIpConfig = {
+  headerName?: Maybe<Scalars['String']>;
+  fallbackBehavior?: Maybe<Scalars['String']>;
+  position?: Maybe<Scalars['Int']>;
+};
+
+export type AwsWafV2LoggingConfig = {
+  resourceArn?: Maybe<Scalars['String']>;
+  logDestinationConfigs?: Maybe<Array<Maybe<Scalars['String']>>>;
+  redactedFields?: Maybe<Array<Maybe<AwsWafV2FieldToMatch>>>;
+  managedByFirewallManager?: Maybe<Scalars['Boolean']>;
+  loggingFilter?: Maybe<AwsWafV2LoggingFilterConfig>;
+};
+
+export type AwsWafV2LoggingFilter = {
+  id: Scalars['String'];
+  behavior?: Maybe<Scalars['String']>;
+  requirement?: Maybe<Scalars['String']>;
+  conditions?: Maybe<Array<Maybe<AwsWafV2LoggingFilterCondition>>>;
+};
+
+export type AwsWafV2LoggingFilterActionCondition = {
+  action?: Maybe<Scalars['String']>;
+};
+
+export type AwsWafV2LoggingFilterCondition = {
+  id: Scalars['String'];
+  actionCondition?: Maybe<AwsWafV2LoggingFilterActionCondition>;
+  labelNameCondition?: Maybe<AwsWafV2LoggingFilterLabelNameCondition>;
+};
+
+export type AwsWafV2LoggingFilterConfig = {
+  filters?: Maybe<Array<Maybe<AwsWafV2LoggingFilter>>>;
+  defaultBehavior?: Maybe<Scalars['String']>;
+};
+
+export type AwsWafV2LoggingFilterLabelNameCondition = {
+  labelName?: Maybe<Scalars['String']>;
+};
+
+export type AwsWafV2Rule = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  priority?: Maybe<Scalars['Int']>;
+  statement?: Maybe<AwsWafV2Statement>;
+  action?: Maybe<AwsWafV2RuleAction>;
+  overrideAction?: Maybe<AwsWafV2RuleOverrideAction>;
+  ruleLabels?: Maybe<Array<Maybe<AwsWafV2RuleLabel>>>;
+  visibilityConfig?: Maybe<AwsWafV2VisibilityConfig>;
+};
+
+export type AwsWafV2RuleAction = {
+  block?: Maybe<AwsWafV2RuleBlockAction>;
+  allow?: Maybe<AwsWafV2RuleAllowOrCountAction>;
+  count?: Maybe<AwsWafV2RuleAllowOrCountAction>;
+};
+
+export type AwsWafV2RuleActionCustomRequestHandling = {
+  insertHeaders?: Maybe<Array<Maybe<AwsWafV2RuleActionCustomRequestHandlingHeader>>>;
+};
+
+export type AwsWafV2RuleActionCustomRequestHandlingHeader = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+export type AwsWafV2RuleActionCustomResponse = {
+  responseCode?: Maybe<Scalars['Int']>;
+  customResponseBodyKey?: Maybe<Scalars['String']>;
+  responseHeaders?: Maybe<Array<Maybe<AwsWafV2RuleActionResponseHeader>>>;
+};
+
+export type AwsWafV2RuleActionResponseHeader = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+export type AwsWafV2RuleAllowOrCountAction = {
+  customRequestHandling?: Maybe<AwsWafV2RuleActionCustomRequestHandling>;
+};
+
+export type AwsWafV2RuleBlockAction = {
+  customResponse?: Maybe<AwsWafV2RuleActionCustomResponse>;
+};
+
+export type AwsWafV2RuleLabel = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+};
+
+export type AwsWafV2RuleOverrideAction = {
+  count?: Maybe<AwsWafV2RuleAllowOrCountAction>;
+  none?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsWafV2SingleName = {
+  name?: Maybe<Scalars['String']>;
+};
+
+export type AwsWafV2Statement = {
+  id: Scalars['String'];
+  byteMatchStatement?: Maybe<AwsWafV2StatementByteMatchStatement>;
+  sqliMatchStatement?: Maybe<AwsWafV2StatementSqliMatchStatement>;
+  xssMatchStatement?: Maybe<AwsWafV2StatementXssMatchStatement>;
+  sizeConstraintStatement?: Maybe<AwsWafV2StatementSzieConstraintStatement>;
+  geoMatchStatement?: Maybe<AwsWafV2StatementGeoMatchStatement>;
+  ruleGroupReferenceStatement?: Maybe<AwsWafV2StatementRuleGroupReferenceStatement>;
+  iPSetReferenceStatement?: Maybe<AwsWafV2StatementIpSetReferenceStatement>;
+  regexPatternSetReferenceStatement?: Maybe<AwsWafV2StatementRegrexPatternSetReferenceStatement>;
+  rateBasedStatement?: Maybe<AwsWafV2StatementRateBasedStatement>;
+  andStatement?: Maybe<AwsWafV2StatementAndStatement>;
+  orStatement?: Maybe<AwsWafV2StatementOrStatement>;
+  notStatement?: Maybe<AwsWafV2StatementNotStatement>;
+  managedRuleGroupStatement?: Maybe<AwsWafV2StatementManagedRuleGroupStatement>;
+  labelMatchStatement?: Maybe<AwsWafV2StatementLabelMatchStatement>;
+};
+
+export type AwsWafV2StatementAndStatement = {
+  statements?: Maybe<Array<Maybe<AwsWafV2Statement>>>;
+};
+
+export type AwsWafV2StatementByteMatchStatement = {
+  searchString?: Maybe<Scalars['String']>;
+  fieldToMatch?: Maybe<AwsWafV2FieldToMatch>;
+  textTransformations?: Maybe<Array<Maybe<AwsWafV2TextTransformation>>>;
+  positionalConstraint?: Maybe<Scalars['String']>;
+};
+
+export type AwsWafV2StatementGeoMatchStatement = {
+  countryCodes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  forwardedIpConfig?: Maybe<AwsWafV2ForwardedIpConfig>;
+};
+
+export type AwsWafV2StatementIpSetReferenceStatement = {
+  arn?: Maybe<Scalars['String']>;
+  iPSetForwardedIPConfig?: Maybe<AwsWafV2IpSetForwardedIpConfig>;
+};
+
+export type AwsWafV2StatementLabelMatchStatement = {
+  scope?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars['String']>;
+};
+
+export type AwsWafV2StatementManagedRuleGroupStatement = {
+  vendorName?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  version?: Maybe<Scalars['String']>;
+  excludedRules?: Maybe<Array<Maybe<AwsWafV2ExcludedRule>>>;
+  scopedDownStatement?: Maybe<Scalars['String']>;
+};
+
+export type AwsWafV2StatementNotStatement = {
+  statement?: Maybe<AwsWafV2Statement>;
+};
+
+export type AwsWafV2StatementOrStatement = {
+  statements?: Maybe<Array<Maybe<AwsWafV2Statement>>>;
+};
+
+export type AwsWafV2StatementRateBasedStatement = {
+  limit?: Maybe<Scalars['Int']>;
+  aggregateKeyType?: Maybe<Scalars['String']>;
+  forwardedIpConfig?: Maybe<AwsWafV2ForwardedIpConfig>;
+  statement?: Maybe<AwsWafV2Statement>;
+};
+
+export type AwsWafV2StatementRegrexPatternSetReferenceStatement = {
+  arn?: Maybe<Scalars['String']>;
+  fieldToMatch?: Maybe<AwsWafV2FieldToMatch>;
+  textTransformations?: Maybe<Array<Maybe<AwsWafV2TextTransformation>>>;
+};
+
+export type AwsWafV2StatementRuleGroupReferenceStatement = {
+  arn?: Maybe<Scalars['String']>;
+  excludedRules?: Maybe<Array<Maybe<AwsWafV2ExcludedRule>>>;
+};
+
+export type AwsWafV2StatementSqliMatchStatement = {
+  fieldToMatch?: Maybe<AwsWafV2FieldToMatch>;
+  textTransformations?: Maybe<Array<Maybe<AwsWafV2TextTransformation>>>;
+};
+
+export type AwsWafV2StatementSzieConstraintStatement = {
+  size?: Maybe<Scalars['Int']>;
+  comparisonOperator?: Maybe<Scalars['String']>;
+  fieldToMatch?: Maybe<AwsWafV2FieldToMatch>;
+  textTransformations?: Maybe<Array<Maybe<AwsWafV2TextTransformation>>>;
+};
+
+export type AwsWafV2StatementXssMatchStatement = {
+  fieldToMatch?: Maybe<AwsWafV2FieldToMatch>;
+  textTransformations?: Maybe<Array<Maybe<AwsWafV2TextTransformation>>>;
+};
+
+export type AwsWafV2TextTransformation = {
+  id: Scalars['String'];
+  priority?: Maybe<Scalars['Int']>;
+  type?: Maybe<Scalars['String']>;
+};
+
+export type AwsWafV2VisibilityConfig = {
+  sampledRequestsEnabled?: Maybe<Scalars['Boolean']>;
+  cloudWatchMetricsEnabled?: Maybe<Scalars['Boolean']>;
+  metricName?: Maybe<Scalars['String']>;
+};
+
+export type AwsWafV2WebAcl = {
+  id: Scalars['String'];
+  arn: Scalars['String'];
+  accountId: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  ManagedByFirewallManager?: Maybe<Scalars['Boolean']>;
+  capacity?: Maybe<Scalars['Int']>;
+  labelNamespace?: Maybe<Scalars['String']>;
+  rules?: Maybe<Array<Maybe<AwsWafV2Rule>>>;
+  defaultAction?: Maybe<AwsWafV2DefaultAction>;
+  visibilityConfig?: Maybe<AwsWafV2VisibilityConfig>;
+  preProcessFirewallManagerRuleGroups?: Maybe<Array<Maybe<AwsWafV2FirewallManagerRuleGroup>>>;
+  postProcessFirewallManagerRuleGroups?: Maybe<Array<Maybe<AwsWafV2FirewallManagerRuleGroup>>>;
+  customResponseBodies?: Maybe<Array<Maybe<AwsWafV2CustomResponseBody>>>;
+  loggingConfiguration?: Maybe<AwsWafV2LoggingConfig>;
 };
 
 export type BlockDeviceEbs = {

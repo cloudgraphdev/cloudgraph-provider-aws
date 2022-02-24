@@ -85,6 +85,7 @@ import GlueRegistry from '../services/glueRegistry'
 import SageMakerProject from '../services/sageMakerProject'
 import SageMakerExperiment from '../services/sageMakerExperiment'
 import ManagedAirflow from '../services/managedAirflow'
+import WafV2WebAcl from '../services/wafV2WebAcl'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -176,5 +177,6 @@ export default {
   [services.vpnGateway]: VpnGateway,
   [services.vpnConnection]: VpnConnection,
   [services.organization]: Organization,
+  [services.wafV2WebAcl]: WafV2WebAcl,
   tag: AwsTag,
 }

@@ -151,4 +151,5 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | vpc                         | alb, codebuild, ec2, eip, elb, ecsService, efsMountTarget, eksCluster igw, elastiCacheCluster, lambda, nacl, natGateway, networkInterface, rdsDbInstance, redshiftCluster, route53HostedZone, routeTable, subnet, flowLog, vpnGateway, transitGatewayAttachment |
 | vpnConnection               | customerGateway, transitGateway, transitGatewayAttachment, vpnGateway                                                                                                                                                                              |
 | vpnGateway                  | vpc, vpnConnection                                                                                                                                                                                        |
+| wafV2WebAcl                  |                                                                                                                                                                                        |
 

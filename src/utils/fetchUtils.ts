@@ -45,7 +45,6 @@ export async function fetchAllPaginatedData<GReturnType, GInitialParamsType>({
   const params = initialParams || {}
 
   const { Marker, ...relevantPayloadData } = await getResourcesFn(params)
-
   let resources = getValidResource(relevantPayloadData)
 
   resourcesList = resourcesList.concat(...(resources as Array<GReturnType>))
