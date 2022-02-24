@@ -1,3 +1,20 @@
+# [0.69.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.68.4...0.69.0) (2022-02-24)
+
+
+### Bug Fixes
+
+* **services:** fix managed airflow service format and wafV2WebAcl format ([26ec809](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/26ec809c3855ad3319d9149cd53327bb45a21ce8))
+* **services:** fix waf service for global instances ([826dbd1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/826dbd150793e37aef0f479e8aded8e44dbbd1a7))
+* **services:** fix waf service formatStatement ([080e931](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/080e9312fe72df8eb1804da0f9391907c988c946))
+* **services:** fix waf service use nextMarker ([9d8654c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/9d8654c9ba02e756ea7499eb25c35ced696ecd94))
+* **services:** update waf to support global regions and still push data if no logging configuration is enabled. ([081b71b](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/081b71b0bd9ef6a6927ab3dd6ff83d01385ad8bf))
+
+
+### Features
+
+* **services:** add new service waf ([77ee8f6](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/77ee8f691ec495946193e1eb4beb92d8e2ec0783))
+* **services:** continued work on wafv2 service ([973e523](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/973e5237fa216f2b9fb1e5b8f249096f3a1db0a4))
+
 ## [0.68.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.68.3...0.68.4) (2022-02-24)
 
 
