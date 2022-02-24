@@ -25,10 +25,16 @@ const awsAlbListernerGraphFormat = (listener): AwsAlbListener => {
       sslPolicy,
       protocol: `${protocol}:${port} ${id}`,
       rules: rules.map(
-        ({ Order: order, Type: type, TargetGroupArn: targetGroupArn }) => ({
+        ({
+          Order: order,
+          Type: type,
+          TargetGroupArn: targetGroupArn,
+          RedirectConfig,
+        }) => ({
           type,
           order: order?.toString(),
           targetGroupArn,
+          redirectProtocol: RedirectConfig?.Protocol,
         })
       ),
     },
@@ -38,7 +44,7 @@ const awsAlbListernerGraphFormat = (listener): AwsAlbListener => {
 export default ({
   service: alb,
   account,
-  region
+  region,
 }: {
   service: RawAwsAlb
   account: string

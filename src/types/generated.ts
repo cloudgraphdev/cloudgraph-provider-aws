@@ -150,6 +150,7 @@ export type AwsAlbListener = {
 
 export type AwsAlbListenerRule = {
   order?: Maybe<Scalars['String']>;
+  redirectProtocol?: Maybe<Scalars['String']>;
   targetGroupArn?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
 };

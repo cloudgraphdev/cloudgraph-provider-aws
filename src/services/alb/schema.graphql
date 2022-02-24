@@ -57,4 +57,5 @@ type awsAlbListenerRule
   type: String @search(by: [hash, regexp])
   order: String @search(by: [hash, regexp])
   targetGroupArn: String @search
+  redirectProtocol: String @search(by: [hash, regexp])
 }
