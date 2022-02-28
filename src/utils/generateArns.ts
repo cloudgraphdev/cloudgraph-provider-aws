@@ -240,3 +240,13 @@ export const glueJobArn = ({
   account: string
   name: string
 }): string => `arn:aws:glue:${region}:${account}:job/${name}`
+
+export const ssmDocumentArn = ({
+  region,
+  account,
+  name
+}: {
+  region: string
+  account: string
+  name: string
+}): string => `arn:aws:ssm:${region}:${account}:document/${name}`

@@ -1,0 +1,55 @@
+type awsSystemsManagerInstance @key(fields: "id") {
+  id: String! @id @search(by: [hash])
+  accountId: String! @search(by: [hash])
+  region: String @search(by: [hash, regexp])
+  pingStatus: String @search(by: [hash, regexp])
+  lastPingDateTime: DateTime @search(by: [day])
+  agentVersion: String @search(by: [hash, regexp])
+  isLatestVersion: Boolean @search
+  platformType: String @search(by: [hash, regexp])
+  platformName: String @search(by: [hash, regexp])
+  platformVersion: String @search(by: [hash, regexp])
+  activationId: String @search(by: [hash, regexp])
+  registrationDate: DateTime @search(by: [day])
+  resourceType: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  associationStatus: String @search(by: [hash, regexp])
+  lastAssociationExecutionDate: DateTime @search(by: [day])
+  lastSuccessfulAssociationExecutionDate: DateTime @search(by: [day])
+  ipAddress: String @search(by: [hash, regexp])
+  computerName: String @search(by: [hash, regexp])
+  associationOverview: systemsManagerInstanceAssociationOverview
+  complianceItems: [systemsManagerInstanceComplianceItem]
+  sourceId: String @search(by: [hash, regexp])
+  sourceType: String @search(by: [hash, regexp])
+  iamRole: [awsIamRole] @hasInverse(field: systemManagerInstances)
+}
+
+type systemsManagerInstanceAssociationOverview {
+  detailedStatus: String @search(by: [hash, regexp])
+  instanceAssociationStatusAggregatedCount: [ssmAssociationOverviewAggregatedCount]
+}
+
+type ssmAssociationOverviewAggregatedCount {
+  id: String! @id
+  key: String @search(by: [hash, regexp])
+  value: Int @search
+}
+
+type systemsManagerInstanceComplianceItem {
+  id: String! @id @search(by: [hash])
+  complianceType: String @search(by: [hash, regexp])
+  resourceType: String @search(by: [hash, regexp])
+  resourceId: String @search(by: [hash, regexp])
+  title: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
+  severity: String @search(by: [hash, regexp])
+  executionSummary: ssmComplianceItemExecutionSummary
+  details: [awsRawTag]
+}
+
+type ssmComplianceItemExecutionSummary {
+  executionTime: DateTime @search(by: [day])
+  executionId: String @search(by: [hash, regexp])
+  executionType: String @search(by: [hash, regexp])
+}

@@ -3069,6 +3069,7 @@ export type AwsIamRole = {
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
+  systemManagerInstances?: Maybe<Array<Maybe<AwsSystemsManagerInstance>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
 };
 
@@ -3982,6 +3983,62 @@ export type AwsSuspendedProcess = {
   suspensionReason?: Maybe<Scalars['String']>;
 };
 
+export type AwsSystemsManagerDocument = {
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  createdDate?: Maybe<Scalars['DateTime']>;
+  documentFormat?: Maybe<Scalars['String']>;
+  documentType?: Maybe<Scalars['String']>;
+  documentVersion?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  owner?: Maybe<Scalars['String']>;
+  permissions?: Maybe<AwsSystemsManagerDocumentPermissions>;
+  platformTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  region?: Maybe<Scalars['String']>;
+  schemaVersion?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  targetType?: Maybe<Scalars['String']>;
+};
+
+export type AwsSystemsManagerDocumentPermissions = {
+  accountIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  accountSharingInfoList?: Maybe<Array<Maybe<AwsSystemsManagerDocumentPermissionsSharingList>>>;
+};
+
+export type AwsSystemsManagerDocumentPermissionsSharingList = {
+  accountId?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  sharedDocumentVersion?: Maybe<Scalars['String']>;
+};
+
+export type AwsSystemsManagerInstance = {
+  accountId: Scalars['String'];
+  activationId?: Maybe<Scalars['String']>;
+  agentVersion?: Maybe<Scalars['String']>;
+  associationOverview?: Maybe<SystemsManagerInstanceAssociationOverview>;
+  associationStatus?: Maybe<Scalars['String']>;
+  complianceItems?: Maybe<Array<Maybe<SystemsManagerInstanceComplianceItem>>>;
+  computerName?: Maybe<Scalars['String']>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
+  id: Scalars['String'];
+  ipAddress?: Maybe<Scalars['String']>;
+  isLatestVersion?: Maybe<Scalars['Boolean']>;
+  lastAssociationExecutionDate?: Maybe<Scalars['DateTime']>;
+  lastPingDateTime?: Maybe<Scalars['DateTime']>;
+  lastSuccessfulAssociationExecutionDate?: Maybe<Scalars['DateTime']>;
+  name?: Maybe<Scalars['String']>;
+  pingStatus?: Maybe<Scalars['String']>;
+  platformName?: Maybe<Scalars['String']>;
+  platformType?: Maybe<Scalars['String']>;
+  platformVersion?: Maybe<Scalars['String']>;
+  region?: Maybe<Scalars['String']>;
+  registrationDate?: Maybe<Scalars['DateTime']>;
+  resourceType?: Maybe<Scalars['String']>;
+  sourceId?: Maybe<Scalars['String']>;
+  sourceType?: Maybe<Scalars['String']>;
+};
+
 export type AwsTag = {
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
   apiGatewayRestApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
@@ -4043,6 +4100,7 @@ export type AwsTag = {
   sns?: Maybe<Array<Maybe<AwsSns>>>;
   sqs?: Maybe<Array<Maybe<AwsSqs>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
+  systemsManagerDocuments?: Maybe<Array<Maybe<AwsSystemsManagerDocument>>>;
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
   transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
   value: Scalars['String'];
@@ -4484,4 +4542,33 @@ export type BlockDeviceEbs = {
   deleteOnTermination: Scalars['Boolean'];
   status: Scalars['String'];
   volumeId: Scalars['String'];
+};
+
+export type SsmAssociationOverviewAggregatedCount = {
+  id: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['Int']>;
+};
+
+export type SsmComplianceItemExecutionSummary = {
+  executionId?: Maybe<Scalars['String']>;
+  executionTime?: Maybe<Scalars['DateTime']>;
+  executionType?: Maybe<Scalars['String']>;
+};
+
+export type SystemsManagerInstanceAssociationOverview = {
+  detailedStatus?: Maybe<Scalars['String']>;
+  instanceAssociationStatusAggregatedCount?: Maybe<Array<Maybe<SsmAssociationOverviewAggregatedCount>>>;
+};
+
+export type SystemsManagerInstanceComplianceItem = {
+  complianceType?: Maybe<Scalars['String']>;
+  details?: Maybe<Array<Maybe<AwsRawTag>>>;
+  executionSummary?: Maybe<SsmComplianceItemExecutionSummary>;
+  id: Scalars['String'];
+  resourceId?: Maybe<Scalars['String']>;
+  resourceType?: Maybe<Scalars['String']>;
+  severity?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
 };

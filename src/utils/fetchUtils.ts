@@ -44,22 +44,33 @@ export async function fetchAllPaginatedData<GReturnType, GInitialParamsType>({
 
   const params = initialParams || {}
 
-  const { Marker, ...relevantPayloadData } = await getResourcesFn(params)
+  const { Marker, NextToken, ...relevantPayloadData } = await getResourcesFn(
+    params
+  )
   let resources = getValidResource(relevantPayloadData)
 
   resourcesList = resourcesList.concat(...(resources as Array<GReturnType>))
 
-  let markerController = Marker
-
+  let markerController = Marker ?? NextToken
+  let markerVar
+  // Some aws sdk services use 'Marker' while others use 'NextToken' we need to handle both
+  if (markerController) {
+    markerVar = Marker ? 'Marker' : 'NextToken'
+  }
   while (markerController) {
-    const { Marker, ...relevantPayloadData } = await getResourcesFn({
-      ...params,
-      Marker: markerController,
-    })
+    const nextPageParams =
+      markerVar === 'Marker'
+        ? { ...params, Marker: markerController }
+        : { ...params, NextToken: markerController }
+    const {
+      Marker: innerMarker,
+      NextToken: innerNextToken,
+      ...relevantPayloadData
+    } = await getResourcesFn(nextPageParams)
 
     resources = getValidResource(relevantPayloadData)
     resourcesList = resourcesList.concat(...(resources as Array<GReturnType>))
-    markerController = Marker
+    markerController = innerMarker ?? innerNextToken
   }
 
   const result = accessor
