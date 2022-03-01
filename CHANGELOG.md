@@ -1,3 +1,15 @@
+# [0.70.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.69.0...0.70.0) (2022-03-01)
+
+
+### Bug Fixes
+
+* **services:** reset error log for guard duty ([a110cbb](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/a110cbb6c4324bc3d516f43a51917a9aceadfdbe))
+
+
+### Features
+
+* **services:** add new service guardDutyDetector ([d955f35](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d955f35afa8400e078134e33932f8d9b023e1b27))
+
 # [0.69.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.68.4...0.69.0) (2022-02-24)
 
 
