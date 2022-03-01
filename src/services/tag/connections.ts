@@ -44,7 +44,7 @@ import {
   apiGatewayRestApiArn,
   apiGatewayStageArn,
   redshiftArn,
-  elbArn
+  elbArn,
 } from '../../utils/generateArns'
 import { RawAwsEksCluster } from '../eksCluster/data'
 import { RawAwsEcsCluster } from '../ecsCluster/data'
@@ -58,6 +58,7 @@ import { RawAwsEfs } from '../efs/data'
 import { RawAwsEmrCluster } from '../emrCluster/data'
 import { RawAwsClientVpnEndpoint } from '../clientVpnEndpoint/data'
 import { RawAwsCodeBuild } from '../codeBuild/data'
+import { RawAwsGuardDutyDetector } from '../guardDutyDetector/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -181,25 +182,25 @@ export default ({
     /**
      * Find related Codebuild
      */
-     const codebuild: { name: string; data: { [property: string]: any[] } } =
-     data.find(({ name }) => name === services.codebuild)
-   if (codebuild?.data?.[region]) {
-     const dataAtRegion: any = findServiceInstancesWithTag(
-       tag,
-       codebuild.data[region]
-     )
-     if (!isEmpty(dataAtRegion)) {
-       for (const cb of dataAtRegion) {
-         const { arn: id }: RawAwsCodeBuild = cb
-         connections.push({
-           id,
-           resourceType: services.codebuild,
-           relation: 'child',
-           field: 'codebuilds',
-         })
-       }
-     }
-   }
+    const codebuild: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.codebuild)
+    if (codebuild?.data?.[region]) {
+      const dataAtRegion: any = findServiceInstancesWithTag(
+        tag,
+        codebuild.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const cb of dataAtRegion) {
+          const { arn: id }: RawAwsCodeBuild = cb
+          connections.push({
+            id,
+            resourceType: services.codebuild,
+            relation: 'child',
+            field: 'codebuilds',
+          })
+        }
+      }
+    }
 
     /**
      * Find related CognitoIdentityPools
@@ -316,28 +317,52 @@ export default ({
     }
 
     /**
-     * Find related lambdas
+     * Find related managedAirflows
      */
-     const airflows: { name: string; data: { [property: string]: any[] } } =
-     data.find(({ name }) => name === services.managedAirflow)
-   if (airflows?.data?.[region]) {
-     const dataAtRegion = findServiceInstancesWithTag(
-       tag,
-       airflows.data[region]
-     )
-     if (!isEmpty(dataAtRegion)) {
-       for (const instance of dataAtRegion) {
-         const { Arn: id } = instance
+    const airflows: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.managedAirflow)
+    if (airflows?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        airflows.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { Arn: id } = instance
 
-         connections.push({
-           id,
-           resourceType: services.managedAirflow,
-           relation: 'child',
-           field: 'managedAirflows',
-         })
-       }
-     }
-   }
+          connections.push({
+            id,
+            resourceType: services.managedAirflow,
+            relation: 'child',
+            field: 'managedAirflows',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related guardDutyDetectors
+     */
+    const detectors: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.guardDutyDetector)
+    if (detectors?.data?.[region]) {
+      const dataAtRegion: RawAwsGuardDutyDetector[] = findServiceInstancesWithTag(
+        tag,
+        detectors.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { id } = instance
+
+          connections.push({
+            id,
+            resourceType: services.guardDutyDetector,
+            relation: 'child',
+            field: 'guardDutyDetectors',
+          })
+        }
+      }
+    }
 
     /**
      * Find related SecurityGroups
@@ -509,10 +534,17 @@ export default ({
     const elbs: { name: string; data: { [property: string]: any[] } } =
       data.find(({ name }) => name === services.elb)
     if (elbs?.data?.[region]) {
-      const dataAtRegion: RawAwsElb[] = findServiceInstancesWithTag(tag, elbs.data[region])
+      const dataAtRegion: RawAwsElb[] = findServiceInstancesWithTag(
+        tag,
+        elbs.data[region]
+      )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
-          const { LoadBalancerName: loadBalancerName, region: elbRegion, account } = instance
+          const {
+            LoadBalancerName: loadBalancerName,
+            region: elbRegion,
+            account,
+          } = instance
 
           connections.push({
             id: elbArn({ region: elbRegion, account, name: loadBalancerName }),

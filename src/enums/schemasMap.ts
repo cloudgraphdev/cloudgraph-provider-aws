@@ -47,6 +47,7 @@ export default {
   [services.flowLog]: 'awsFlowLog',
   [services.glueJob]: 'awsGlueJob',
   [services.glueRegistry]: 'awsGlueRegistry',
+  [services.guardDutyDetector]: 'awsGuardDutyDetector',
   [services.emrCluster]: 'awsEmrCluster',
   [services.emrInstance]: 'awsEmrInstance',
   [services.emrStep]: 'awsEmrStep',

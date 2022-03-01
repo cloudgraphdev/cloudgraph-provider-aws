@@ -42,6 +42,7 @@ export default {
   flowLog: 'flowLog',
   glueJob: 'glueJob',
   glueRegistry: 'glueRegistry',
+  guardDutyDetector: 'guardDutyDetector',
   emrCluster: 'emrCluster',
   emrInstance: 'emrInstance',
   emrStep: 'emrStep',
