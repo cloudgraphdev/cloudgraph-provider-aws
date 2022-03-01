@@ -30,4 +30,5 @@ type awsSubnet @key(fields: "id") {
   elastiCacheCluster: [awsElastiCacheCluster] @hasInverse(field: subnets)
   codebuilds: [awsCodebuild] @hasInverse(field: subnets)
   managedAirflows: [awsManagedAirflow] @hasInverse(field: subnets)
+  elasticSearchDomains: [awsElasticSearchDomain] @hasInverse(field: subnets)
 }

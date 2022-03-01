@@ -1,0 +1,147 @@
+type awsElasticSearchDomain @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash])
+  region: String @search(by: [hash, regexp])
+  domainName: String @search(by: [hash, regexp])
+  created: Boolean @search
+  deleted: Boolean @search
+  endpoint: String @search(by: [hash, regexp])
+  processing: Boolean @search
+  upgradeProcessing: Boolean @search
+  elasticSearchVersion: String @search(by: [hash, regexp])
+  accessPolicies: awsIamJSONPolicy
+  endpoints: [awsRawTag]
+  elasticSearchClusterConfig: awsElasticSearchClusterConfig
+  ebsOptions: awsElasticSearchEbsOptions
+  snapshotOptions: awsElasticSearchSnapshotOptions
+  vpcOptions: awsElasticSearchVpcOptions
+  cognitoOptions: awsElasticSearchCognitoOptions
+  encryptionAtRestOptions: awsElasticSearchEncryptionAtRestOptions
+  nodeToNodeEncryptionOptions: awsElasticSearchNodeToNodeEncryptionOptions
+  advancedOptions: [awsRawTag]
+  logPublishingOptions: [awsElasticSearchLogPublishingOption]
+  serviceSoftwareOptions: awsElasticSearchServiceSoftwareOptions
+  domainEndpointOptions: awsElasticSearchDomainEndpointOptions
+  advancedSecurityOptions: awsElasticSearchAdvancedSecurityOptions
+  autoTuneOptions: awsElasticSearchAutoTuneOptions
+  changeProcessDetails: awsElasticSearchChangeProcessDetails
+  tags: [awsRawTag]
+  vpc: [awsVpc] @hasInverse(field: elasticSearchDomains)
+  subnets: [awsSubnet] @hasInverse(field: elasticSearchDomains)
+  securityGroups: [awsSecurityGroup] @hasInverse(field: elasticSearchDomains)
+  kms: [awsKms] @hasInverse(field: elasticSearchDomains)
+}
+
+type awsElasticSearchClusterConfig {
+  instanceType: String @search(by: [hash, regexp])
+  instanceCount: Int @search
+  dedicatedMasterEnabled: Boolean @search
+  dedicatedMasterCount: Int @search
+  zoneAwarenessEnabled: Boolean @search
+  zoneAwarenessConfig: awsElasticSearchClusterConfigZoneAwarenessConfig
+  dedicatedMasterType: String @search(by: [hash, regexp])
+  warmEnabled: Boolean @search
+  warmType: String @search(by: [hash, regexp])
+  warmCount: Int @search
+  coldStorageOptions: awsElasticSearchClusterConfigColdStorageOptions
+}
+
+type awsElasticSearchEbsOptions {
+  ebsEnabled: Boolean @search
+  volumeType: String @search(by: [hash, regexp])
+  volumeSize: Int @search
+  iops: Int @search
+}
+
+type awsElasticSearchSnapshotOptions {
+  automatedSnapshotStartHour: Int @search
+}
+
+type awsElasticSearchVpcOptions {
+  vpcId: String @search(by: [hash, regexp])
+  subnetIds: [String] @search(by: [hash, regexp])
+  availabilityZones: [String] @search(by: [hash, regexp])
+  securityGroupIds: [String] @search(by: [hash, regexp])
+}
+
+type awsElasticSearchCognitoOptions {
+  enabled: Boolean @search
+  userPoolId: String @search(by: [hash, regexp])
+  identityPoolId: String @search(by: [hash, regexp])
+  roleArn: String @search(by: [hash, regexp])
+}
+
+type awsElasticSearchEncryptionAtRestOptions {
+  enabled: Boolean @search
+  kmsKeyId: String @search(by: [hash, regexp])
+}
+
+type awsElasticSearchNodeToNodeEncryptionOptions {
+  enabled: Boolean @search
+}
+
+type awsElasticSearchLogPublishingOption {
+  id: String! @id
+  key: String @search(by: [hash, regexp])
+  enabled: Boolean @search
+  cloudWatchLogsLogGroupArn: String @search(by: [hash, regexp])
+}
+
+type awsElasticSearchServiceSoftwareOptions {
+  currentVersion: String @search(by: [hash, regexp])
+  newVersion: String @search(by: [hash, regexp])
+  updateAvailable: Boolean @search
+  cancellable: Boolean @search
+  updateStatus: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  automatedUpdateDate: DateTime @search(by: [day])
+  optionalDeployment: Boolean @search
+}
+
+type awsElasticSearchDomainEndpointOptions {
+  enforceHttps: Boolean @search
+  tlsSecurityPolicy: String @search(by: [hash, regexp])
+  customEndpointEnabled: Boolean @search
+  customEndpoint: String @search(by: [hash, regexp])
+  customEndpointCertificateArn: String @search(by: [hash, regexp])
+}
+
+type awsElasticSearchAdvancedSecurityOptions {
+  enabled: Boolean @search
+  internalUserDatabaseEnabled: Boolean @search
+  samlOptions: awsElasticSearchAdvancedSecurityOptionsSamlOptions
+  anonymousAuthDisableDate: DateTime @search(by: [day])
+  anonymousAuthEnabled: Boolean @search
+}
+
+type awsElasticSearchAutoTuneOptions {
+  state: String @search(by: [hash, regexp])
+  errorMessage: String @search(by: [hash, regexp])
+}
+
+type awsElasticSearchChangeProcessDetails {
+  changeId: String @search(by: [hash, regexp])
+  message: String @search(by: [hash, regexp])
+}
+
+type awsElasticSearchClusterConfigZoneAwarenessConfig {
+  availabilityZoneCount: Int @search
+}
+
+type awsElasticSearchClusterConfigColdStorageOptions {
+  enabled: Boolean @search
+}
+
+type awsElasticSearchAdvancedSecurityOptionsSamlOptions {
+  enabled: Boolean @search
+  idp: awsElasticSearchAdvancedSecurityOptionsSamlOptionsIdp
+  subjectKey: String @search(by: [hash, regexp])
+  rolesKey: String @search(by: [hash, regexp])
+  sessionTimeoutMinutes: Int @search
+}
+
+type awsElasticSearchAdvancedSecurityOptionsSamlOptionsIdp {
+  metadataContent: String @search(by: [hash, regexp])
+  entityId: String @search(by: [hash, regexp])
+}

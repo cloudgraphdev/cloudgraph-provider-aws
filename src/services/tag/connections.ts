@@ -59,6 +59,7 @@ import { RawAwsEmrCluster } from '../emrCluster/data'
 import { RawAwsClientVpnEndpoint } from '../clientVpnEndpoint/data'
 import { RawAwsCodeBuild } from '../codeBuild/data'
 import { RawAwsGuardDutyDetector } from '../guardDutyDetector/data'
+import { RawAwsElasticSearchDomain } from '../elasticSearchDomain/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -346,10 +347,8 @@ export default ({
     const detectors: { name: string; data: { [property: string]: any[] } } =
       data.find(({ name }) => name === services.guardDutyDetector)
     if (detectors?.data?.[region]) {
-      const dataAtRegion: RawAwsGuardDutyDetector[] = findServiceInstancesWithTag(
-        tag,
-        detectors.data[region]
-      )
+      const dataAtRegion: RawAwsGuardDutyDetector[] =
+        findServiceInstancesWithTag(tag, detectors.data[region])
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
           const { id } = instance
@@ -459,6 +458,27 @@ export default ({
         }
       }
     }
+
+    /**
+     * Find related elasticSearchDomain
+     */
+     const domains: { name: string; data: { [property: string]: any[] } } =
+     data.find(({ name }) => name === services.elasticSearchDomain)
+   if (domains?.data?.[region]) {
+     const dataAtRegion = findServiceInstancesWithTag(tag, domains.data[region])
+     if (!isEmpty(dataAtRegion)) {
+       for (const instance of dataAtRegion) {
+         const { DomainId: id } = instance
+
+         connections.push({
+           id,
+           resourceType: services.elasticSearchDomain,
+           relation: 'child',
+           field: 'elasticSearchDomains',
+         })
+       }
+     }
+   }
 
     /**
      * Find related IGW

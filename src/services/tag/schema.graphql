@@ -64,6 +64,7 @@ type awsTag @key(fields: "id") {
   vpnConnection: [awsVpnConnection]
   managedAirflows: [awsManagedAirflow]
   guardDutyDetectors: [awsGuardDutyDetector]
+  elasticSearchDomains: [awsElasticSearchDomain]
 }
 
 type awsRawTag
