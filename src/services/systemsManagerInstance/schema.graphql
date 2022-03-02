@@ -38,6 +38,7 @@ type ssmAssociationOverviewAggregatedCount {
 
 type systemsManagerInstanceComplianceItem {
   id: String! @id @search(by: [hash])
+  complianceItemId: String @search(by: [hash, regexp])
   complianceType: String @search(by: [hash, regexp])
   resourceType: String @search(by: [hash, regexp])
   resourceId: String @search(by: [hash, regexp])
