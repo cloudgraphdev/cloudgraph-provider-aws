@@ -1,3 +1,15 @@
+# [0.71.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.70.0...0.71.0) (2022-03-02)
+
+
+### Bug Fixes
+
+* **deps:** update aws sdk ver ([324905f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/324905f2cac11b1a31e4a12a1aea3b94e12eaf27))
+
+
+### Features
+
+* **services:** add new service elasticSearchDomain ([db7d9cd](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/db7d9cd5185f08e1ab9a64bb9c15f4e48d3f9c6e))
+
 # [0.70.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.69.0...0.70.0) (2022-03-01)
 
 
