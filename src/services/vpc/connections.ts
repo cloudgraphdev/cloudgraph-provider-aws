@@ -22,6 +22,7 @@ import { intersectStringArrays } from '../../utils/index'
 import { RawAwsSubnet } from '../subnet/data'
 import { RawFlowLog } from '../flowLogs/data'
 import { RawAwsEcsService } from '../ecsService/data'
+import { RawAwsElasticSearchDomain } from '../elasticSearchDomain/data'
 /**
  * ALBs
  */
@@ -106,6 +107,24 @@ export default ({
       })
     }
   }
+
+  /**
+   * Find any elasticSearchDomain related data
+   */
+   const domains = data.find(({ name }) => name === services.elasticSearchDomain)
+   if (domains?.data?.[region]) {
+     const dataAtRegion: RawAwsElasticSearchDomain[] = domains.data[region]
+       .filter(({ VPCOptions }) => VPCOptions.VPCId === id)
+ 
+     for (const domain of dataAtRegion) {
+       connections.push({
+         id: domain.DomainId,
+         resourceType: services.elasticSearchDomain,
+         relation: 'child',
+         field: 'elasticSearchDomains',
+       })
+     }
+   }
   /**
    * Find any EKS related data
    */

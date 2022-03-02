@@ -26,4 +26,5 @@ type awsKms @key(fields: "id"){
   emrCluster: [awsEmrCluster] @hasInverse(field: kms) #change to plural
   cloudwatchLog: [awsCloudwatchLog] @hasInverse(field: kms)
   codebuilds: [awsCodebuild] @hasInverse(field: kms)
+  elasticSearchDomains: [awsElasticSearchDomain] @hasInverse(field: kms)
 }

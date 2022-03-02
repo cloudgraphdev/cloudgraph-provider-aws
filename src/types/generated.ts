@@ -2432,6 +2432,154 @@ export type AwsElasticBeanstalkEnvSetting = {
   value?: Maybe<Scalars['String']>;
 };
 
+export type AwsElasticSearchAdvancedSecurityOptions = {
+  anonymousAuthDisableDate?: Maybe<Scalars['DateTime']>;
+  anonymousAuthEnabled?: Maybe<Scalars['Boolean']>;
+  enabled?: Maybe<Scalars['Boolean']>;
+  internalUserDatabaseEnabled?: Maybe<Scalars['Boolean']>;
+  samlOptions?: Maybe<AwsElasticSearchAdvancedSecurityOptionsSamlOptions>;
+};
+
+export type AwsElasticSearchAdvancedSecurityOptionsSamlOptions = {
+  enabled?: Maybe<Scalars['Boolean']>;
+  idp?: Maybe<AwsElasticSearchAdvancedSecurityOptionsSamlOptionsIdp>;
+  rolesKey?: Maybe<Scalars['String']>;
+  sessionTimeoutMinutes?: Maybe<Scalars['Int']>;
+  subjectKey?: Maybe<Scalars['String']>;
+};
+
+export type AwsElasticSearchAdvancedSecurityOptionsSamlOptionsIdp = {
+  entityId?: Maybe<Scalars['String']>;
+  metadataContent?: Maybe<Scalars['String']>;
+};
+
+export type AwsElasticSearchAutoTuneOptions = {
+  errorMessage?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+};
+
+export type AwsElasticSearchChangeProcessDetails = {
+  changeId?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']>;
+};
+
+export type AwsElasticSearchClusterConfig = {
+  coldStorageOptions?: Maybe<AwsElasticSearchClusterConfigColdStorageOptions>;
+  dedicatedMasterCount?: Maybe<Scalars['Int']>;
+  dedicatedMasterEnabled?: Maybe<Scalars['Boolean']>;
+  dedicatedMasterType?: Maybe<Scalars['String']>;
+  instanceCount?: Maybe<Scalars['Int']>;
+  instanceType?: Maybe<Scalars['String']>;
+  warmCount?: Maybe<Scalars['Int']>;
+  warmEnabled?: Maybe<Scalars['Boolean']>;
+  warmType?: Maybe<Scalars['String']>;
+  zoneAwarenessConfig?: Maybe<AwsElasticSearchClusterConfigZoneAwarenessConfig>;
+  zoneAwarenessEnabled?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsElasticSearchClusterConfigColdStorageOptions = {
+  enabled?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsElasticSearchClusterConfigZoneAwarenessConfig = {
+  availabilityZoneCount?: Maybe<Scalars['Int']>;
+};
+
+export type AwsElasticSearchCognitoOptions = {
+  enabled?: Maybe<Scalars['Boolean']>;
+  identityPoolId?: Maybe<Scalars['String']>;
+  roleArn?: Maybe<Scalars['String']>;
+  userPoolId?: Maybe<Scalars['String']>;
+};
+
+export type AwsElasticSearchDomain = {
+  accessPolicies?: Maybe<AwsIamJsonPolicy>;
+  accountId: Scalars['String'];
+  advancedOptions?: Maybe<Array<Maybe<AwsRawTag>>>;
+  advancedSecurityOptions?: Maybe<AwsElasticSearchAdvancedSecurityOptions>;
+  arn: Scalars['String'];
+  autoTuneOptions?: Maybe<AwsElasticSearchAutoTuneOptions>;
+  changeProcessDetails?: Maybe<AwsElasticSearchChangeProcessDetails>;
+  cognitoOptions?: Maybe<AwsElasticSearchCognitoOptions>;
+  created?: Maybe<Scalars['Boolean']>;
+  deleted?: Maybe<Scalars['Boolean']>;
+  domainEndpointOptions?: Maybe<AwsElasticSearchDomainEndpointOptions>;
+  domainName?: Maybe<Scalars['String']>;
+  ebsOptions?: Maybe<AwsElasticSearchEbsOptions>;
+  elasticSearchClusterConfig?: Maybe<AwsElasticSearchClusterConfig>;
+  elasticSearchVersion?: Maybe<Scalars['String']>;
+  encryptionAtRestOptions?: Maybe<AwsElasticSearchEncryptionAtRestOptions>;
+  endpoint?: Maybe<Scalars['String']>;
+  endpoints?: Maybe<Array<Maybe<AwsRawTag>>>;
+  id: Scalars['String'];
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
+  logPublishingOptions?: Maybe<Array<Maybe<AwsElasticSearchLogPublishingOption>>>;
+  nodeToNodeEncryptionOptions?: Maybe<AwsElasticSearchNodeToNodeEncryptionOptions>;
+  processing?: Maybe<Scalars['Boolean']>;
+  region?: Maybe<Scalars['String']>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  serviceSoftwareOptions?: Maybe<AwsElasticSearchServiceSoftwareOptions>;
+  snapshotOptions?: Maybe<AwsElasticSearchSnapshotOptions>;
+  subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  upgradeProcessing?: Maybe<Scalars['Boolean']>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  vpcOptions?: Maybe<AwsElasticSearchVpcOptions>;
+};
+
+export type AwsElasticSearchDomainEndpointOptions = {
+  customEndpoint?: Maybe<Scalars['String']>;
+  customEndpointCertificateArn?: Maybe<Scalars['String']>;
+  customEndpointEnabled?: Maybe<Scalars['Boolean']>;
+  enforceHttps?: Maybe<Scalars['Boolean']>;
+  tlsSecurityPolicy?: Maybe<Scalars['String']>;
+};
+
+export type AwsElasticSearchEbsOptions = {
+  ebsEnabled?: Maybe<Scalars['Boolean']>;
+  iops?: Maybe<Scalars['Int']>;
+  volumeSize?: Maybe<Scalars['Int']>;
+  volumeType?: Maybe<Scalars['String']>;
+};
+
+export type AwsElasticSearchEncryptionAtRestOptions = {
+  enabled?: Maybe<Scalars['Boolean']>;
+  kmsKeyId?: Maybe<Scalars['String']>;
+};
+
+export type AwsElasticSearchLogPublishingOption = {
+  cloudWatchLogsLogGroupArn?: Maybe<Scalars['String']>;
+  enabled?: Maybe<Scalars['Boolean']>;
+  id: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+};
+
+export type AwsElasticSearchNodeToNodeEncryptionOptions = {
+  enabled?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsElasticSearchServiceSoftwareOptions = {
+  automatedUpdateDate?: Maybe<Scalars['DateTime']>;
+  cancellable?: Maybe<Scalars['Boolean']>;
+  currentVersion?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  newVersion?: Maybe<Scalars['String']>;
+  optionalDeployment?: Maybe<Scalars['Boolean']>;
+  updateAvailable?: Maybe<Scalars['Boolean']>;
+  updateStatus?: Maybe<Scalars['String']>;
+};
+
+export type AwsElasticSearchSnapshotOptions = {
+  automatedSnapshotStartHour?: Maybe<Scalars['Int']>;
+};
+
+export type AwsElasticSearchVpcOptions = {
+  availabilityZones?: Maybe<Array<Maybe<Scalars['String']>>>;
+  securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  subnetIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  vpcId?: Maybe<Scalars['String']>;
+};
+
 export type AwsElb = {
   accessLogs?: Maybe<Scalars['String']>;
   accountId: Scalars['String'];
@@ -2993,6 +3141,7 @@ export type AwsKms = {
   efs?: Maybe<Array<Maybe<AwsEfs>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   elastiCacheReplicationGroup?: Maybe<Array<Maybe<AwsElastiCacheReplicationGroup>>>;
+  elasticSearchDomains?: Maybe<Array<Maybe<AwsElasticSearchDomain>>>;
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
   enabled?: Maybe<Scalars['String']>;
   id: Scalars['String'];
@@ -3565,6 +3714,7 @@ export type AwsSecurityGroup = {
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   elastiCacheCluster?: Maybe<Array<Maybe<AwsElastiCacheCluster>>>;
+  elasticSearchDomains?: Maybe<Array<Maybe<AwsElasticSearchDomain>>>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
   id: Scalars['String'];
   inboundRuleCount?: Maybe<Scalars['Int']>;
@@ -3696,6 +3846,7 @@ export type AwsSubnet = {
   efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   elastiCacheCluster?: Maybe<Array<Maybe<AwsElastiCacheCluster>>>;
+  elasticSearchDomains?: Maybe<Array<Maybe<AwsElasticSearchDomain>>>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
@@ -3757,6 +3908,7 @@ export type AwsTag = {
   elastiCacheReplicationGroup?: Maybe<Array<Maybe<AwsElastiCacheReplicationGroup>>>;
   elasticBeanstalkApp?: Maybe<Array<Maybe<AwsElasticBeanstalkApp>>>;
   elasticBeanstalkEnv?: Maybe<Array<Maybe<AwsElasticBeanstalkEnv>>>;
+  elasticSearchDomains?: Maybe<Array<Maybe<AwsElasticSearchDomain>>>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
@@ -3868,6 +4020,7 @@ export type AwsVpc = {
   eip?: Maybe<Array<Maybe<AwsEip>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   elastiCacheCluster?: Maybe<Array<Maybe<AwsElastiCacheCluster>>>;
+  elasticSearchDomains?: Maybe<Array<Maybe<AwsElasticSearchDomain>>>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
   enableDnsHostnames?: Maybe<Scalars['Boolean']>;
   enableDnsSupport?: Maybe<Scalars['Boolean']>;

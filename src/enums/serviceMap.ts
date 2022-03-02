@@ -87,6 +87,7 @@ import SageMakerExperiment from '../services/sageMakerExperiment'
 import ManagedAirflow from '../services/managedAirflow'
 import WafV2WebAcl from '../services/wafV2WebAcl'
 import GuardDutyDetector from '../services/guardDutyDetector'
+import ElasticSearchDomain from '../services/elasticSearchDomain'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -124,6 +125,7 @@ export default {
   [services.elasticBeanstalkEnv]: ElasticBeanstalkEnv,
   [services.elastiCacheCluster]: ElastiCacheCluster,
   [services.elastiCacheReplicationGroup]: ElastiCacheReplicationGroup,
+  [services.elasticSearchDomain]: ElasticSearchDomain,
   [services.elb]: ELB,
   [services.flowLog]: FlowLog,
   [services.glueJob]: GlueJob,

@@ -36,7 +36,7 @@
     "@fast-csv/parse": "^4.3.6",
     "@graphql-tools/load-files": "6.3.2",
     "@graphql-tools/merge": "8.0.1",
-    "aws-sdk": "2.982.0",
+    "aws-sdk": "^2.1084.0",
     "chalk": "4.1.2",
     "cuid": "2.1.8",
     "dotenv": "10.0.0",

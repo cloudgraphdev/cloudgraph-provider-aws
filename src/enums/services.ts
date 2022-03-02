@@ -38,6 +38,7 @@ export default {
   elasticBeanstalkEnv: 'elasticBeanstalkEnv',
   elastiCacheCluster: 'elastiCacheCluster',
   elastiCacheReplicationGroup: 'elastiCacheReplicationGroup',
+  elasticSearchDomain: 'elasticSearchDomain',
   elb: 'elb',
   flowLog: 'flowLog',
   glueJob: 'glueJob',

@@ -43,6 +43,7 @@ export default {
   [services.elastiCacheReplicationGroup]: 'awsElastiCacheReplicationGroup',
   [services.elasticBeanstalkApp]: 'awsElasticBeanstalkApp',
   [services.elasticBeanstalkEnv]: 'awsElasticBeanstalkEnv',
+  [services.elasticSearchDomain]: 'awsElasticSearchDomain',
   [services.elb]: 'awsElb',
   [services.flowLog]: 'awsFlowLog',
   [services.glueJob]: 'awsGlueJob',
