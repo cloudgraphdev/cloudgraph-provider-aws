@@ -12,3 +12,8 @@ export interface AwsTag {
 export interface TagMap {
   [property: string]: string
 }
+
+export interface RawAwsService {
+  cgId: string
+  accountId: string
+}

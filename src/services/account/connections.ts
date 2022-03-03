@@ -33,7 +33,7 @@ export default ({
       for (const instance of filtered) {
         if (instance) {
           connections.push({
-            id: instance.id,
+            id: instance.cgId,
             resourceType: serviceName,
             relation: 'child',
             field: serviceName,
