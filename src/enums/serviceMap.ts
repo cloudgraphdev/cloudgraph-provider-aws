@@ -89,6 +89,7 @@ import WafV2WebAcl from '../services/wafV2WebAcl'
 import GuardDutyDetector from '../services/guardDutyDetector'
 import ElasticSearchDomain from '../services/elasticSearchDomain'
 import DmsReplicationInstance from '../services/dmsReplicationInstance'
+import SageMakerNotebookInstance from '../services/sageMakerNotebookInstance'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -157,8 +158,9 @@ export default {
   [services.route53HostedZone]: Route53HostedZone,
   [services.route53Record]: Route53Record,
   [services.routeTable]: RouteTable,
-  [services.sageMakerProject]: SageMakerProject,
   [services.sageMakerExperiment]: SageMakerExperiment,
+  [services.sageMakerNotebookInstance]: SageMakerNotebookInstance,
+  [services.sageMakerProject]: SageMakerProject,
   [services.s3]: S3,
   [services.secretsManager]: SecretsManager,
   [services.ses]: SES,

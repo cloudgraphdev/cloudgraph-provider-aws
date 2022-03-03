@@ -28,4 +28,5 @@ type awsKms @key(fields: "id"){
   codebuilds: [awsCodebuild] @hasInverse(field: kms)
   elasticSearchDomains: [awsElasticSearchDomain] @hasInverse(field: kms)
   dmsReplicationInstances: [awsDmsReplicationInstance] @hasInverse(field: kms)
+  sageMakerNotebookInstances: [awsSageMakerNotebookInstance] @hasInverse(field: kms)
 }

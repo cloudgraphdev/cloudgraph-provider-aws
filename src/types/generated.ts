@@ -3068,6 +3068,7 @@ export type AwsIamRole = {
   maxSessionDuration?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
+  sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
 };
 
@@ -3220,6 +3221,7 @@ export type AwsKms = {
   policy?: Maybe<AwsIamJsonPolicy>;
   redshiftCluster?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
   region?: Maybe<Scalars['String']>;
+  sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   sns?: Maybe<Array<Maybe<AwsSns>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   usage?: Maybe<Scalars['String']>;
@@ -3457,6 +3459,7 @@ export type AwsNetworkInterface = {
   privateDnsName?: Maybe<Scalars['String']>;
   privateIps?: Maybe<Array<Maybe<Scalars['String']>>>;
   region?: Maybe<Scalars['String']>;
+  sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   securityGroups?: Maybe<Array<Maybe<Scalars['String']>>>;
   status?: Maybe<Scalars['String']>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
@@ -3732,6 +3735,38 @@ export type AwsSageMakerExperimentExperimentSource = {
   sourceType?: Maybe<Scalars['String']>;
 };
 
+export type AwsSageMakerNotebookInstance = {
+  acceleratorTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  accountId: Scalars['String'];
+  additionalCodeRepositories?: Maybe<Array<Maybe<Scalars['String']>>>;
+  arn: Scalars['String'];
+  creationTime?: Maybe<Scalars['DateTime']>;
+  defaultCodeRepository?: Maybe<Scalars['String']>;
+  directInternetAccess?: Maybe<Scalars['String']>;
+  failureReason?: Maybe<Scalars['String']>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
+  id: Scalars['String'];
+  instanceType?: Maybe<Scalars['String']>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
+  kmsKeyId?: Maybe<Scalars['String']>;
+  lastModifiedTime?: Maybe<Scalars['DateTime']>;
+  networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  networkInterfaceId?: Maybe<Scalars['String']>;
+  notebookInstanceLifecycleConfigName?: Maybe<Scalars['String']>;
+  notebookInstanceName?: Maybe<Scalars['String']>;
+  notebookInstanceStatus?: Maybe<Scalars['String']>;
+  platformIdentifier?: Maybe<Scalars['String']>;
+  region?: Maybe<Scalars['String']>;
+  roleArn?: Maybe<Scalars['String']>;
+  rootAccess?: Maybe<Scalars['String']>;
+  securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
+  subnetId?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
+  volumeSizeInGb?: Maybe<Scalars['Int']>;
+};
+
 export type AwsSageMakerProject = {
   accountId: Scalars['String'];
   arn: Scalars['String'];
@@ -3796,6 +3831,7 @@ export type AwsSecurityGroup = {
   rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   region?: Maybe<Scalars['String']>;
+  sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   vpcId?: Maybe<Scalars['String']>;
 };
@@ -3929,6 +3965,7 @@ export type AwsSubnet = {
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   region?: Maybe<Scalars['String']>;
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
+  sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   state?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;

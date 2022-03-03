@@ -6,6 +6,7 @@ import { RawFlowLog } from '../flowLogs/data'
 import { RawAwsManagedAirflow } from '../managedAirflow/data'
 import { RawAwsElasticSearchDomain } from '../elasticSearchDomain/data'
 import { RawAwsDmsReplicationInstance } from '../dmsReplicationInstance/data'
+import { RawAwsSageMakerNotebookInstance } from '../sageMakerNotebookInstance/data'
 
 export default ({
   service: subnet,
@@ -62,49 +63,77 @@ export default ({
   /**
    * Find any elasticSearchDomain related data
    */
-   const domains = data.find(({ name }) => name === services.elasticSearchDomain)
-   if (domains?.data?.[region]) {
-     const dataAtRegion: RawAwsElasticSearchDomain[] = domains.data[region].filter(
-       ({
-         VPCOptions: { SubnetIds = [] } = {},
-       }: RawAwsElasticSearchDomain) => SubnetIds.includes(SubnetId)
-     )
-     for (const domain of dataAtRegion) {
-       connections.push({
-         id: domain.DomainId,
-         resourceType: services.elasticSearchDomain,
-         relation: 'child',
-         field: 'elasticSearchDomains',
-       })
-     }
-   }
+  const domains = data.find(({ name }) => name === services.elasticSearchDomain)
+  if (domains?.data?.[region]) {
+    const dataAtRegion: RawAwsElasticSearchDomain[] = domains.data[
+      region
+    ].filter(
+      ({ VPCOptions: { SubnetIds = [] } = {} }: RawAwsElasticSearchDomain) =>
+        SubnetIds.includes(SubnetId)
+    )
+    for (const domain of dataAtRegion) {
+      connections.push({
+        id: domain.DomainId,
+        resourceType: services.elasticSearchDomain,
+        relation: 'child',
+        field: 'elasticSearchDomains',
+      })
+    }
+  }
 
-   /**
+  /**
    * Find any elasticSearchDomain related data
    */
-    const replications = data.find(({ name }) => name === services.dmsReplicationInstance)
-    if (replications?.data?.[region]) {
-      const dataAtRegion: RawAwsDmsReplicationInstance[] = replications.data[region].filter(
-        ({
-          ReplicationSubnetGroup: { Subnets = [] } = {},
-        }: RawAwsDmsReplicationInstance) => {
-          for (const replicationSubnet of Subnets) {
-            if (replicationSubnet.SubnetIdentifier === SubnetId) {
-              return true
-            }
+  const replications = data.find(
+    ({ name }) => name === services.dmsReplicationInstance
+  )
+  if (replications?.data?.[region]) {
+    const dataAtRegion: RawAwsDmsReplicationInstance[] = replications.data[
+      region
+    ].filter(
+      ({
+        ReplicationSubnetGroup: { Subnets = [] } = {},
+      }: RawAwsDmsReplicationInstance) => {
+        for (const replicationSubnet of Subnets) {
+          if (replicationSubnet.SubnetIdentifier === SubnetId) {
+            return true
           }
-          return false
         }
-      )
-      for (const replication of dataAtRegion) {
-        connections.push({
-          id: replication.ReplicationInstanceArn,
-          resourceType: services.dmsReplicationInstance,
-          relation: 'child',
-          field: 'dmsReplicationInstances',
-        })
+        return false
       }
+    )
+    for (const replication of dataAtRegion) {
+      connections.push({
+        id: replication.ReplicationInstanceArn,
+        resourceType: services.dmsReplicationInstance,
+        relation: 'child',
+        field: 'dmsReplicationInstances',
+      })
     }
+  }
+
+  /**
+   * Find any sageMakerNotebookInstance related data
+   */
+  const notebooks = data.find(
+    ({ name }) => name === services.sageMakerNotebookInstance
+  )
+  if (notebooks?.data?.[region]) {
+    const dataAtRegion: RawAwsSageMakerNotebookInstance[] = notebooks.data[
+      region
+    ].filter(
+      ({ SubnetId: notebookSubnetId }: RawAwsSageMakerNotebookInstance) =>
+        notebookSubnetId === SubnetId
+    )
+    for (const notebook of dataAtRegion) {
+      connections.push({
+        id: notebook.NotebookInstanceArn,
+        resourceType: services.sageMakerNotebookInstance,
+        relation: 'child',
+        field: 'sageMakerNotebookInstances',
+      })
+    }
+  }
 
   const natResult = {
     [SubnetId]: connections,

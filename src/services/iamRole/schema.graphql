@@ -20,4 +20,5 @@ type awsIamRole @key(fields: "id") {
   glueJobs: [awsGlueJob] @hasInverse(field: iamRole)
   managedAirflows: [awsManagedAirflow] @hasInverse(field: iamRoles)
   guardDutyDetectors: [awsGuardDutyDetector] @hasInverse(field: iamRole)
+  sageMakerNotebookInstances: [awsSageMakerNotebookInstance] @hasInverse(field: iamRole)
 }
