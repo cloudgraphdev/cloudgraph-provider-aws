@@ -65,6 +65,7 @@ type awsTag @key(fields: "id") {
   managedAirflows: [awsManagedAirflow]
   guardDutyDetectors: [awsGuardDutyDetector]
   elasticSearchDomains: [awsElasticSearchDomain]
+  dmsReplicationInstances: [awsDmsReplicationInstance]
 }
 
 type awsRawTag

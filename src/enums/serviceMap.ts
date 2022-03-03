@@ -88,6 +88,7 @@ import ManagedAirflow from '../services/managedAirflow'
 import WafV2WebAcl from '../services/wafV2WebAcl'
 import GuardDutyDetector from '../services/guardDutyDetector'
 import ElasticSearchDomain from '../services/elasticSearchDomain'
+import DmsReplicationInstance from '../services/dmsReplicationInstance'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -134,6 +135,7 @@ export default {
   [services.emrCluster]: EmrCluster,
   [services.emrInstance]: EmrInstance,
   [services.emrStep]: EmrStep,
+  [services.dmsReplicationInstance]: DmsReplicationInstance,
   [services.dynamodb]: DynamoDB,
   [services.igw]: AwsInternetGateway,
   [services.iot]: IotThingAttribute,

@@ -27,6 +27,7 @@ type awsSecurityGroup @key(fields: "id") {
   codebuilds: [awsCodebuild] @hasInverse(field: securityGroups)
   managedAirflows: [awsManagedAirflow] @hasInverse(field: securityGroups)
   elasticSearchDomains: [awsElasticSearchDomain] @hasInverse(field: securityGroups)
+  dmsReplicationInstances: [awsDmsReplicationInstance] @hasInverse(field: securityGroups)
 }
 
 type awsSgOutboundRule

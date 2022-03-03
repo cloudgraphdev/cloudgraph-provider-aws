@@ -25,6 +25,7 @@ export default {
   [services.cognitoUserPool]: 'awsCognitoUserPool',
   [services.configurationRecorder]: 'awsConfigurationRecorder',
   [services.customerGateway]: 'awsCustomerGateway',
+  [services.dmsReplicationInstance]: 'awsDmsReplicationInstance',
   [services.dynamodb]: 'awsDynamoDbTable',
   [services.ebs]: 'awsEbs',
   [services.ec2Instance]: 'awsEc2',

@@ -5,6 +5,7 @@ import { RawAwsSubnet } from '../subnet/data'
 import { RawFlowLog } from '../flowLogs/data'
 import { RawAwsManagedAirflow } from '../managedAirflow/data'
 import { RawAwsElasticSearchDomain } from '../elasticSearchDomain/data'
+import { RawAwsDmsReplicationInstance } from '../dmsReplicationInstance/data'
 
 export default ({
   service: subnet,
@@ -77,6 +78,33 @@ export default ({
        })
      }
    }
+
+   /**
+   * Find any elasticSearchDomain related data
+   */
+    const replications = data.find(({ name }) => name === services.dmsReplicationInstance)
+    if (replications?.data?.[region]) {
+      const dataAtRegion: RawAwsDmsReplicationInstance[] = replications.data[region].filter(
+        ({
+          ReplicationSubnetGroup: { Subnets = [] } = {},
+        }: RawAwsDmsReplicationInstance) => {
+          for (const replicationSubnet of Subnets) {
+            if (replicationSubnet.SubnetIdentifier === SubnetId) {
+              return true
+            }
+          }
+          return false
+        }
+      )
+      for (const replication of dataAtRegion) {
+        connections.push({
+          id: replication.ReplicationInstanceArn,
+          resourceType: services.dmsReplicationInstance,
+          relation: 'child',
+          field: 'dmsReplicationInstances',
+        })
+      }
+    }
 
   const natResult = {
     [SubnetId]: connections,
