@@ -1,8 +1,4 @@
-import CloudGraph, {
-  Service,
-  Opts,
-  ProviderData
-} from '@cloudgraph/sdk'
+import CloudGraph, { Service, Opts, ProviderData } from '@cloudgraph/sdk'
 import { loadFilesSync } from '@graphql-tools/load-files'
 import { mergeTypeDefs } from '@graphql-tools/merge'
 import AWS, { Config } from 'aws-sdk'
@@ -660,6 +656,11 @@ export default class Provider extends CloudGraph.Client {
     let mergedRawData: rawDataInterface[] = []
     const tagRegion = 'aws-global'
     const tags = { className: 'Tag', name: 'tag', data: { [tagRegion]: [] } }
+    const accounts = {
+      className: 'AwsAccount',
+      name: 'account',
+      data: { [tagRegion]: [] },
+    }
     // If the user has passed aws creds as env variables, dont use profile list
     if (usingEnvCreds) {
       rawData = await this.getRawData(
@@ -682,6 +683,10 @@ export default class Provider extends CloudGraph.Client {
           }
         }
         const { accountId } = await this.getIdentity(account)
+        accounts.data[tagRegion].push({
+          id: accountId,
+          regions: configuredRegions.split(','),
+        })
         if (!crawledAccounts.find(val => val === accountId)) {
           crawledAccounts.push(accountId)
           const newRawData = await this.getRawData(account, opts)
