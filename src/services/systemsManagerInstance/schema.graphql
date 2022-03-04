@@ -1,7 +1,9 @@
-type awsSystemsManagerInstance @key(fields: "id") {
+type awsSystemsManagerInstance @key(fields: "arn") {
   id: String! @id @search(by: [hash])
+  arn: String! @id @search(by: [hash])
   accountId: String! @search(by: [hash])
   region: String @search(by: [hash, regexp])
+  instanceId: String @search(by: [hash, regexp])
   pingStatus: String @search(by: [hash, regexp])
   lastPingDateTime: DateTime @search(by: [day])
   agentVersion: String @search(by: [hash, regexp])
@@ -22,7 +24,8 @@ type awsSystemsManagerInstance @key(fields: "id") {
   complianceItems: [systemsManagerInstanceComplianceItem]
   sourceId: String @search(by: [hash, regexp])
   sourceType: String @search(by: [hash, regexp])
-  iamRole: [awsIamRole] @hasInverse(field: systemManagerInstances)
+  iamRole: [awsIamRole] @hasInverse(field: systemsManagerInstances)
+  ec2Instance: [awsEc2] @hasInverse(field: systemsManagerInstance)
 }
 
 type systemsManagerInstanceAssociationOverview {

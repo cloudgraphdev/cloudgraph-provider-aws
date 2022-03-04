@@ -96,7 +96,7 @@ type awsEc2 @key(fields: "arn") {
   sourceDestCheck: String @search(by: [hash, regexp])
   availabilityZone: String @search(by: [hash, regexp])
   cpuThreadsPerCore: Int @search
-  iamInstanceProfile: String @search(by: [hash, regexp])
+  iamInstanceProfile: String @search(by: [hash, regexp]) # TODO: use to make a connection to a role
   deletionProtection: String @search(by: [hash, regexp])
   dailyCost: awsTotalBillingInfo
   primaryNetworkInterface: String @search(by: [hash, regexp])
@@ -119,4 +119,5 @@ type awsEc2 @key(fields: "arn") {
   subnet: [awsSubnet] @hasInverse(field: ec2Instance) #change to plural
   ecsContainer: [awsEcsContainer] @hasInverse(field: ec2Instance) #change to plural
   emrInstance: [awsEmrInstance] @hasInverse(field: ec2Instance)
+  systemsManagerInstance: [awsSystemsManagerInstance] @hasInverse(field: ec2Instance)
 }

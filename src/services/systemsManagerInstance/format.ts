@@ -2,6 +2,7 @@
 import cuid from 'cuid'
 import { AwsSystemsManagerInstance } from '../../types/generated'
 import { RawAwsSystemsManagerInstance } from './data'
+import { ssmManagedInstanceArn } from '../../utils/generateArns'
 
 /**
  * SystemsManagerInstance
@@ -86,8 +87,12 @@ export default ({
     value: instanceAssociationStatusAggregatedCount[key],
   }))
 
+  const arn = ssmManagedInstanceArn({ region, account, name: instanceId })
+
   return {
-    id: instanceId,
+    id: arn,
+    arn,
+    instanceId,
     region,
     accountId: account,
     pingStatus,

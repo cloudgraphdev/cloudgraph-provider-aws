@@ -1421,6 +1421,7 @@ export type AwsEc2 = {
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   sourceDestCheck?: Maybe<Scalars['String']>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
+  systemsManagerInstance?: Maybe<Array<Maybe<AwsSystemsManagerInstance>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   tenancy?: Maybe<Scalars['String']>;
 };
@@ -2231,7 +2232,9 @@ export type AwsEksIdentity = {
 };
 
 export type AwsEksKubernetesNetworkConfigResponse = {
+  ipFamily?: Maybe<Scalars['String']>;
   serviceIpv4Cidr?: Maybe<Scalars['String']>;
+  serviceIpv6Cidr?: Maybe<Scalars['String']>;
 };
 
 export type AwsEksLogSetup = {
@@ -4016,12 +4019,15 @@ export type AwsSystemsManagerInstance = {
   accountId: Scalars['String'];
   activationId?: Maybe<Scalars['String']>;
   agentVersion?: Maybe<Scalars['String']>;
+  arn: Scalars['String'];
   associationOverview?: Maybe<SystemsManagerInstanceAssociationOverview>;
   associationStatus?: Maybe<Scalars['String']>;
   complianceItems?: Maybe<Array<Maybe<SystemsManagerInstanceComplianceItem>>>;
   computerName?: Maybe<Scalars['String']>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   id: Scalars['String'];
+  instanceId?: Maybe<Scalars['String']>;
   ipAddress?: Maybe<Scalars['String']>;
   isLatestVersion?: Maybe<Scalars['Boolean']>;
   lastAssociationExecutionDate?: Maybe<Scalars['DateTime']>;
@@ -4562,6 +4568,7 @@ export type SystemsManagerInstanceAssociationOverview = {
 };
 
 export type SystemsManagerInstanceComplianceItem = {
+  complianceItemId?: Maybe<Scalars['String']>;
   complianceType?: Maybe<Scalars['String']>;
   details?: Maybe<Array<Maybe<AwsRawTag>>>;
   executionSummary?: Maybe<SsmComplianceItemExecutionSummary>;
