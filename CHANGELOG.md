@@ -1,3 +1,10 @@
+# [0.72.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.71.0...0.72.0) (2022-03-04)
+
+
+### Features
+
+* **services:** add new service dmsReplicationInstance ([3a3baea](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/3a3baea707e90845ebe2ba60f7157499da5f8d27))
+
 # [0.71.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.70.0...0.71.0) (2022-03-02)
 
 
