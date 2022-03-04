@@ -17,7 +17,7 @@ export default ({
 } => {
   const { id } = service
   const connections: ServiceConnection[] = []
-  const connectTo = Object.values(services).filter(s => s !== 'account')
+  const connectTo = Object.values(services)
 
   for (const serviceName of connectTo) {
     const instances: {

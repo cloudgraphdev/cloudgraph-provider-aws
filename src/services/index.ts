@@ -654,12 +654,12 @@ export default class Provider extends CloudGraph.Client {
     // data so we can pass along accountId
     // TODO: find a better way to handle this
     let mergedRawData: rawDataInterface[] = []
-    const tagRegion = 'aws-global'
-    const tags = { className: 'Tag', name: 'tag', data: { [tagRegion]: [] } }
+    const globalRegion = 'aws-global'
+    const tags = { className: 'Tag', name: 'tag', data: { [globalRegion]: [] } }
     const accounts = {
       className: 'AwsAccount',
       name: 'account',
-      data: { [tagRegion]: [] },
+      data: { [globalRegion]: [] },
     }
     // If the user has passed aws creds as env variables, dont use profile list
     if (usingEnvCreds) {
@@ -683,7 +683,7 @@ export default class Provider extends CloudGraph.Client {
           }
         }
         const { accountId } = await this.getIdentity(account)
-        accounts.data[tagRegion].push({
+        accounts.data[globalRegion].push({
           id: accountId,
           regions: configuredRegions.split(','),
         })
@@ -712,11 +712,11 @@ export default class Provider extends CloudGraph.Client {
             if (!isEmpty(singleEntity.Tags)) {
               for (const [key, value] of Object.entries(singleEntity.Tags)) {
                 if (
-                  !tags.data[tagRegion].find(
+                  !tags.data[globalRegion].find(
                     ({ id }) => id === `${key}:${value}`
                   )
                 ) {
-                  tags.data[tagRegion].push({
+                  tags.data[globalRegion].push({
                     id: `${key}:${value}`,
                     key,
                     value,
@@ -727,6 +727,7 @@ export default class Provider extends CloudGraph.Client {
           })
         }
       }
+      rawData.push(accounts)
       const existingTagsIdx = rawData.findIndex(({ name }) => {
         return name === 'tag'
       })
