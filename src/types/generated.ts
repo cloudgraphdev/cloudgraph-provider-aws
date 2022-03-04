@@ -13,6 +13,38 @@ export type Scalars = {
   Int64: number;
 };
 
+export type AwsDmsReplicationInstancePendingModifiedValues = {
+  allocatedStorage?: Maybe<Scalars['Int']>;
+  engineVersion?: Maybe<Scalars['String']>;
+  multiAZ?: Maybe<Scalars['Boolean']>;
+  replicationInstanceClass?: Maybe<Scalars['String']>;
+};
+
+export type AwsDmsReplicationInstanceReplicationSubnetGroup = {
+  replicationSubnetGroupDescription?: Maybe<Scalars['String']>;
+  replicationSubnetGroupIdentifier?: Maybe<Scalars['String']>;
+  subnetGroupStatus?: Maybe<Scalars['String']>;
+  subnets?: Maybe<Array<Maybe<AwsDmsReplicationInstanceSubnets>>>;
+  vpcId?: Maybe<Scalars['String']>;
+};
+
+export type AwsDmsReplicationInstanceSubnetAvailabilityZone = {
+  name?: Maybe<Scalars['String']>;
+};
+
+export type AwsDmsReplicationInstanceSubnets = {
+  id: Scalars['String'];
+  subnetAvailabilityZone?: Maybe<AwsDmsReplicationInstanceSubnetAvailabilityZone>;
+  subnetIdentifier?: Maybe<Scalars['String']>;
+  subnetStatus?: Maybe<Scalars['String']>;
+};
+
+export type AwsDmsReplicationInstanceVpcSecurityGroups = {
+  id: Scalars['String'];
+  status?: Maybe<Scalars['String']>;
+  vpcSecurityGroupId?: Maybe<Scalars['String']>;
+};
+
 export type AwsEcsExecuteCommandLogConfiguration = {
   cloudWatchEncryptionEnabled?: Maybe<Scalars['Boolean']>;
   cloudWatchLogGroupName?: Maybe<Scalars['String']>;
@@ -1155,6 +1187,40 @@ export type AwsCustomerGateway = {
 
 export type AwsDirectoryServiceAuthenticationRequest = {
   directoryId?: Maybe<Scalars['String']>;
+};
+
+export type AwsDmsReplicationInstance = {
+  accountId: Scalars['String'];
+  allocatedStorage?: Maybe<Scalars['Int']>;
+  arn: Scalars['String'];
+  autoMinorVersionUpgrade?: Maybe<Scalars['Boolean']>;
+  availabilityZone?: Maybe<Scalars['String']>;
+  dnsNameServers?: Maybe<Scalars['String']>;
+  engineVersion?: Maybe<Scalars['String']>;
+  freeUntil?: Maybe<Scalars['DateTime']>;
+  id: Scalars['String'];
+  instanceCreateTime?: Maybe<Scalars['DateTime']>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
+  kmsKeyId?: Maybe<Scalars['String']>;
+  multiAz?: Maybe<Scalars['Boolean']>;
+  pendingModifiedValues?: Maybe<AwsDmsReplicationInstancePendingModifiedValues>;
+  preferredMaintenanceWindow?: Maybe<Scalars['String']>;
+  publiclyAccessible?: Maybe<Scalars['Boolean']>;
+  region?: Maybe<Scalars['String']>;
+  replicationInstanceClass?: Maybe<Scalars['String']>;
+  replicationInstanceIdentifier?: Maybe<Scalars['String']>;
+  replicationInstancePrivateIpAddress?: Maybe<Scalars['String']>;
+  replicationInstancePrivateIpAddresses?: Maybe<Array<Maybe<Scalars['String']>>>;
+  replicationInstancePublicIpAddress?: Maybe<Scalars['String']>;
+  replicationInstancePublicIpAddresses?: Maybe<Array<Maybe<Scalars['String']>>>;
+  replicationInstanceStatus?: Maybe<Scalars['String']>;
+  replicationSubnetGroup?: Maybe<AwsDmsReplicationInstanceReplicationSubnetGroup>;
+  secondaryAvailabilityZone?: Maybe<Scalars['String']>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  vpcSecurityGroups?: Maybe<Array<Maybe<AwsDmsReplicationInstanceVpcSecurityGroups>>>;
 };
 
 export type AwsDynamoDbTable = {
@@ -3138,6 +3204,7 @@ export type AwsKms = {
   customerMasterKeySpec?: Maybe<Scalars['String']>;
   deletionDate?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  dmsReplicationInstances?: Maybe<Array<Maybe<AwsDmsReplicationInstance>>>;
   efs?: Maybe<Array<Maybe<AwsEfs>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   elastiCacheReplicationGroup?: Maybe<Array<Maybe<AwsElastiCacheReplicationGroup>>>;
@@ -3710,6 +3777,7 @@ export type AwsSecurityGroup = {
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
   default?: Maybe<Scalars['Boolean']>;
   description?: Maybe<Scalars['String']>;
+  dmsReplicationInstances?: Maybe<Array<Maybe<AwsDmsReplicationInstance>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
@@ -3841,6 +3909,7 @@ export type AwsSubnet = {
   availableIpV4Addresses?: Maybe<Scalars['Int']>;
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
   defaultForAz?: Maybe<Scalars['Boolean']>;
+  dmsReplicationInstances?: Maybe<Array<Maybe<AwsDmsReplicationInstance>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
@@ -3893,6 +3962,7 @@ export type AwsTag = {
   cognitoIdentityPool?: Maybe<Array<Maybe<AwsCognitoIdentityPool>>>;
   cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   customerGateway?: Maybe<Array<Maybe<AwsCustomerGateway>>>;
+  dmsReplicationInstances?: Maybe<Array<Maybe<AwsDmsReplicationInstance>>>;
   dynamodb?: Maybe<Array<Maybe<AwsDynamoDbTable>>>;
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
@@ -4015,6 +4085,7 @@ export type AwsVpc = {
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
   defaultVpc?: Maybe<Scalars['Boolean']>;
   dhcpOptionsSet?: Maybe<Scalars['String']>;
+  dmsReplicationInstances?: Maybe<Array<Maybe<AwsDmsReplicationInstance>>>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
   eip?: Maybe<Array<Maybe<AwsEip>>>;

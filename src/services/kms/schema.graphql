@@ -27,4 +27,5 @@ type awsKms @key(fields: "id"){
   cloudwatchLog: [awsCloudwatchLog] @hasInverse(field: kms)
   codebuilds: [awsCodebuild] @hasInverse(field: kms)
   elasticSearchDomains: [awsElasticSearchDomain] @hasInverse(field: kms)
+  dmsReplicationInstances: [awsDmsReplicationInstance] @hasInverse(field: kms)
 }

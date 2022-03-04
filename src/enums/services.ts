@@ -20,6 +20,7 @@ export default {
   cognitoUserPool: 'cognitoUserPool',
   configurationRecorder: 'configurationRecorder',
   customerGateway: 'customerGateway',
+  dmsReplicationInstance: 'dmsReplicationInstance',
   dynamodb: 'dynamodb',
   ebs: 'ebs',
   ec2Instance: 'ec2Instance',

@@ -460,6 +460,27 @@ export default ({
     }
 
     /**
+     * Find related dmsReplicationInstances
+     */
+     const replications: { name: string; data: { [property: string]: any[] } } =
+     data.find(({ name }) => name === services.dmsReplicationInstance)
+   if (replications?.data?.[region]) {
+     const dataAtRegion = findServiceInstancesWithTag(tag, replications.data[region])
+     if (!isEmpty(dataAtRegion)) {
+       for (const instance of dataAtRegion) {
+         const { ReplicationInstanceArn: id } = instance
+
+         connections.push({
+           id,
+           resourceType: services.dmsReplicationInstance,
+           relation: 'child',
+           field: 'dmsReplicationInstances',
+         })
+       }
+     }
+   }
+
+    /**
      * Find related elasticSearchDomain
      */
      const domains: { name: string; data: { [property: string]: any[] } } =

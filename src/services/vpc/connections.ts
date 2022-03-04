@@ -23,6 +23,7 @@ import { RawAwsSubnet } from '../subnet/data'
 import { RawFlowLog } from '../flowLogs/data'
 import { RawAwsEcsService } from '../ecsService/data'
 import { RawAwsElasticSearchDomain } from '../elasticSearchDomain/data'
+import { RawAwsDmsReplicationInstance } from '../dmsReplicationInstance/data'
 /**
  * ALBs
  */
@@ -70,15 +71,43 @@ export default ({
       })
     }
   }
+
+  /**
+   * Find any ECS service related data
+   */
+  const replications = data.find(
+    ({ name }) => name === services.dmsReplicationInstance
+  )
+  if (replications?.data?.[region]) {
+    const dataAtRegion: RawAwsDmsReplicationInstance[] = replications.data[
+      region
+    ].filter(({ ReplicationSubnetGroup = {} }: RawAwsDmsReplicationInstance) => {
+      const vpcId = ReplicationSubnetGroup.VpcId
+      return id === vpcId
+    })
+
+    for (const instance of dataAtRegion) {
+      connections.push({
+        id: instance.ReplicationInstanceArn,
+        resourceType: services.dmsReplicationInstance,
+        relation: 'child',
+        field: 'dmsReplicationInstances',
+      })
+    }
+  }
+
   /**
    * Find any ECS service related data
    */
   const ecsServices = data.find(({ name }) => name === services.ecsService)
   if (ecsServices?.data?.[region]) {
-    const dataAtRegion: RawAwsEcsService[] = ecsServices.data[region].filter(({ networkConfiguration }) => {
-      const sgIds = networkConfiguration?.awsvpcConfiguration?.securityGroups || []
-      return sgIds.includes(id)
-    })
+    const dataAtRegion: RawAwsEcsService[] = ecsServices.data[region].filter(
+      ({ networkConfiguration }) => {
+        const sgIds =
+          networkConfiguration?.awsvpcConfiguration?.securityGroups || []
+        return sgIds.includes(id)
+      }
+    )
 
     for (const instance of dataAtRegion) {
       connections.push({
@@ -111,20 +140,21 @@ export default ({
   /**
    * Find any elasticSearchDomain related data
    */
-   const domains = data.find(({ name }) => name === services.elasticSearchDomain)
-   if (domains?.data?.[region]) {
-     const dataAtRegion: RawAwsElasticSearchDomain[] = domains.data[region]
-       .filter(({ VPCOptions }) => VPCOptions.VPCId === id)
- 
-     for (const domain of dataAtRegion) {
-       connections.push({
-         id: domain.DomainId,
-         resourceType: services.elasticSearchDomain,
-         relation: 'child',
-         field: 'elasticSearchDomains',
-       })
-     }
-   }
+  const domains = data.find(({ name }) => name === services.elasticSearchDomain)
+  if (domains?.data?.[region]) {
+    const dataAtRegion: RawAwsElasticSearchDomain[] = domains.data[
+      region
+    ].filter(({ VPCOptions }) => VPCOptions.VPCId === id)
+
+    for (const domain of dataAtRegion) {
+      connections.push({
+        id: domain.DomainId,
+        resourceType: services.elasticSearchDomain,
+        relation: 'child',
+        field: 'elasticSearchDomains',
+      })
+    }
+  }
   /**
    * Find any EKS related data
    */
@@ -147,21 +177,20 @@ export default ({
   /**
    * Find any FlowLog related data
    */
-   const flowLogs = data.find(({ name }) => name === services.flowLog)
-   if (flowLogs?.data?.[region]) {
-     const dataAtRegion: RawFlowLog[] = flowLogs.data[region].filter(
-       ({ ResourceId }: RawFlowLog) =>
-         ResourceId === id
-     )
-     for (const flowLog of dataAtRegion) {
-       connections.push({
-         id: flowLog.FlowLogId,
-         resourceType: services.flowLog,
-         relation: 'child',
-         field: 'flowLogs',
-       })
-     }
-   }
+  const flowLogs = data.find(({ name }) => name === services.flowLog)
+  if (flowLogs?.data?.[region]) {
+    const dataAtRegion: RawFlowLog[] = flowLogs.data[region].filter(
+      ({ ResourceId }: RawFlowLog) => ResourceId === id
+    )
+    for (const flowLog of dataAtRegion) {
+      connections.push({
+        id: flowLog.FlowLogId,
+        resourceType: services.flowLog,
+        relation: 'child',
+        field: 'flowLogs',
+      })
+    }
+  }
 
   /**
    * Find any IGW related data
@@ -247,10 +276,13 @@ export default ({
   /**
    * Find any RDS related data
    */
-  const rdsDbInstances = data.find(({ name }) => name === services.rdsDbInstance)
+  const rdsDbInstances = data.find(
+    ({ name }) => name === services.rdsDbInstance
+  )
   if (rdsDbInstances?.data?.[region] && sgs?.data?.[region]) {
-    const dataAtRegion: DBInstance[] = rdsDbInstances.data[region]
-      .filter(({ DBSubnetGroup }) => DBSubnetGroup.VpcId === id)
+    const dataAtRegion: DBInstance[] = rdsDbInstances.data[region].filter(
+      ({ DBSubnetGroup }) => DBSubnetGroup.VpcId === id
+    )
 
     for (const rds of dataAtRegion) {
       connections.push({

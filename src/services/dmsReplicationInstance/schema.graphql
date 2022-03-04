@@ -1,0 +1,65 @@
+type AwsDmsReplicationInstancePendingModifiedValues {
+  replicationInstanceClass: String @search(by: [hash, regexp])
+  allocatedStorage: Int @search
+  multiAZ: Boolean @search
+  engineVersion: String @search(by: [hash, regexp])
+}
+
+type AwsDmsReplicationInstanceReplicationSubnetGroup {
+  replicationSubnetGroupIdentifier: String @search(by: [hash, regexp])
+  replicationSubnetGroupDescription: String @search(by: [hash, regexp])
+  vpcId: String @search(by: [hash, regexp])
+  subnetGroupStatus: String @search(by: [hash, regexp])
+  subnets: [AwsDmsReplicationInstanceSubnets]
+}
+
+type AwsDmsReplicationInstanceSubnets {
+  id: String! @id
+  subnetIdentifier: String @search(by: [hash, regexp])
+  subnetAvailabilityZone: AwsDmsReplicationInstanceSubnetAvailabilityZone
+  subnetStatus: String @search(by: [hash, regexp])
+}
+
+type AwsDmsReplicationInstanceSubnetAvailabilityZone {
+  name: String @search(by: [hash, regexp])
+}
+
+type AwsDmsReplicationInstanceVpcSecurityGroups {
+  id: String! @id
+  vpcSecurityGroupId: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
+}
+
+type awsDmsReplicationInstance @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash])
+  region: String @search(by: [hash, regexp])
+  replicationInstanceIdentifier: String @search(by: [hash, regexp])
+  replicationInstanceClass: String @search(by: [hash, regexp])
+  replicationInstanceStatus: String @search(by: [hash, regexp])
+  allocatedStorage: Int @search
+  instanceCreateTime: DateTime @search(by: [day])
+  vpcSecurityGroups: [AwsDmsReplicationInstanceVpcSecurityGroups]
+  availabilityZone: String @search(by: [hash, regexp])
+  replicationSubnetGroup: AwsDmsReplicationInstanceReplicationSubnetGroup
+  preferredMaintenanceWindow: String @search(by: [hash, regexp])
+  pendingModifiedValues: AwsDmsReplicationInstancePendingModifiedValues
+  replicationInstancePrivateIpAddress: String @search(by: [hash, regexp])
+  replicationInstancePublicIpAddress: String @search(by: [hash, regexp])
+  replicationInstancePrivateIpAddresses: [String] @search(by: [hash, regexp])
+  replicationInstancePublicIpAddresses: [String] @search(by: [hash, regexp])
+  multiAz: Boolean @search
+  engineVersion: String @search(by: [hash, regexp])
+  autoMinorVersionUpgrade: Boolean @search
+  kmsKeyId: String @search(by: [hash, regexp])
+  publiclyAccessible: Boolean @search
+  freeUntil: DateTime @search(by: [day])
+  secondaryAvailabilityZone: String @search(by: [hash, regexp])
+  dnsNameServers: String @search(by: [hash, regexp])
+  tags: [awsRawTag]
+  vpc: [awsVpc] @hasInverse(field: dmsReplicationInstances)
+  subnets: [awsSubnet] @hasInverse(field: dmsReplicationInstances)
+  securityGroups: [awsSecurityGroup] @hasInverse(field: dmsReplicationInstances)
+  kms: [awsKms] @hasInverse(field: dmsReplicationInstances)
+}

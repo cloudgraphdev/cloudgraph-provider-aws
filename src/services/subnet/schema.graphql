@@ -31,4 +31,5 @@ type awsSubnet @key(fields: "id") {
   codebuilds: [awsCodebuild] @hasInverse(field: subnets)
   managedAirflows: [awsManagedAirflow] @hasInverse(field: subnets)
   elasticSearchDomains: [awsElasticSearchDomain] @hasInverse(field: subnets)
+  dmsReplicationInstances: [awsDmsReplicationInstance] @hasInverse(field: subnets)
 }

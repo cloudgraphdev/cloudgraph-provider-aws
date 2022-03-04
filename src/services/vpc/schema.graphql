@@ -36,4 +36,5 @@ type awsVpc @key(fields: "id") {
   elastiCacheCluster: [awsElastiCacheCluster] @hasInverse(field: vpc)
   codebuilds: [awsCodebuild] @hasInverse(field: vpc)
   elasticSearchDomains: [awsElasticSearchDomain] @hasInverse(field: vpc)
+  dmsReplicationInstances: [awsDmsReplicationInstance] @hasInverse(field: vpc)
 }
