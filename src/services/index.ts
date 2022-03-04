@@ -5,10 +5,10 @@ import AWS, { Config } from 'aws-sdk'
 import chalk from 'chalk'
 import { print } from 'graphql'
 import STS from 'aws-sdk/clients/sts'
-import { isEmpty, get, merge } from 'lodash'
+import { isEmpty, merge } from 'lodash'
 import path from 'path'
 
-import regions, { regionMap } from '../enums/regions'
+import regions from '../enums/regions'
 import resources from '../enums/resources'
 import services from '../enums/services'
 import serviceMap from '../enums/serviceMap'
@@ -16,6 +16,8 @@ import schemasMap from '../enums/schemasMap'
 import { Credentials } from '../types'
 import { obfuscateSensitiveString } from '../utils/format'
 import { checkAndMergeConnections, sortResourcesDependencies } from '../utils'
+import { Account, rawDataInterface } from './base'
+import enhancers, { EnhancerConfig } from './base/enhancers'
 
 const DEFAULT_REGION = 'us-east-1'
 const DEFAULT_RESOURCES = Object.values(services).join(',')
@@ -28,20 +30,6 @@ export const enums = {
   schemasMap,
 }
 
-interface Account {
-  profile: string
-  roleArn: string | undefined
-  externalId: string | undefined
-  accessKeyId?: string
-  secretAccessKey?: string
-}
-
-interface rawDataInterface {
-  className: string
-  name: string
-  accountId?: string
-  data: any
-}
 export default class Provider extends CloudGraph.Client {
   constructor(config: any) {
     super(config)
@@ -607,6 +595,25 @@ export default class Provider extends CloudGraph.Client {
     return result
   }
 
+  private enhanceData({ data, ...config }: EnhancerConfig): ProviderData {
+    let enhanceData = {
+      entities: data.entities,
+      connections: data.connections,
+    }
+    for (const { name, enhancer } of enhancers) {
+      try {
+        enhanceData = enhancer({ ...config, data: enhanceData })
+      } catch (error: any) {
+        this.logger.error(
+          `There was an error enriching AWS data with ${name} data`
+        )
+        this.logger.debug(error)
+      }
+    }
+
+    return enhanceData
+  }
+
   /**
    * getData is used to fetch all provider data specified in the config for the provider
    * @param opts: A set of optional values to configure how getData works
@@ -826,116 +833,12 @@ export default class Provider extends CloudGraph.Client {
         this.logger.debug(error)
       }
     }
-    try {
-      result.entities = this.enrichInstanceWithBillingData(
-        configuredRegions,
-        mergedRawData,
-        result.entities
-      )
-    } catch (error: any) {
-      this.logger.error(
-        'There was an error enriching AWS data with billing data'
-      )
-      this.logger.debug(error)
-    }
-    return result
-  }
 
-  enrichInstanceWithBillingData(
-    configuredRegions: string,
-    rawData: rawDataInterface[],
-    entities: any
-  ): any[] {
-    const billingRegion = regionMap.usEast1
-    let result = entities
-    if (configuredRegions.includes(billingRegion)) {
-      const billingArray =
-        rawData.find(({ name }) => name === services.billing)?.data?.[
-          billingRegion
-        ] ?? []
-      for (const billing of billingArray) {
-        const individualData: {
-          [key: string]: {
-            cost: number
-            currency: string
-            formattedCost: string
-          }
-        } = get(billing, ['individualData'], undefined)
-        if (individualData) {
-          for (const [key, value] of Object.entries(individualData)) {
-            if (key.includes('natgateway') && !isEmpty()) {
-              // this billing data is for natgateway, search for the instance
-              const {
-                name,
-                mutation,
-                data: nats,
-              } = result.find(
-                ({ name: instanceName }: { name: string }) =>
-                  instanceName === services.nat
-              ) ?? {}
-              if (!isEmpty(nats)) {
-                const natsWithBilling = nats.map(val => {
-                  if (key.includes(val.id)) {
-                    return {
-                      ...val,
-                      dailyCost: {
-                        cost: value?.cost,
-                        currency: value?.currency,
-                        formattedCost: value?.formattedCost,
-                      },
-                    }
-                  }
-                  return val
-                })
-                result = result.filter(
-                  ({ name: serviceName }) => serviceName !== services.nat
-                )
-                result.push({
-                  name,
-                  mutation,
-                  data: natsWithBilling,
-                })
-              }
-            }
-            if (key.includes('i-')) {
-              // this billing data is for ec2, search for the instance
-              const {
-                name,
-                mutation,
-                data: ec2s,
-              } = result.find(
-                ({ name: instanceName }: { name: string }) =>
-                  instanceName === services.ec2Instance
-              ) ?? {}
-              if (!isEmpty(ec2s)) {
-                const ec2WithBilling = ec2s.map(val => {
-                  if (key === val.id) {
-                    return {
-                      ...val,
-                      dailyCost: {
-                        cost: value?.cost,
-                        currency: value?.currency,
-                        formattedCost: value?.formattedCost,
-                      },
-                    }
-                  }
-                  return val
-                })
-                result = result.filter(
-                  ({ name: serviceName }) =>
-                    serviceName !== services.ec2Instance
-                )
-                result.push({
-                  name,
-                  mutation,
-                  data: ec2WithBilling,
-                })
-              }
-            }
-          }
-        }
-      }
-    }
-    return result
+    return this.enhanceData({
+      accounts: accounts.data[globalRegion],
+      configuredRegions,
+      rawData: mergedRawData,
+      data: result,
+    })
   }
 }

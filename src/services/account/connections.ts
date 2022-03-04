@@ -1,17 +1,14 @@
-import { ServiceConnection } from '@cloudgraph/sdk'
+import { Entity, ServiceConnection } from '@cloudgraph/sdk'
 import { flatMap } from 'lodash'
 import services from '../../enums/services'
+import aliases from '../../enums/serviceAliases'
 
 export default ({
   service,
   data,
 }: {
   service: any
-  data: Array<{
-    name: string
-    accountId: string
-    data: { [property: string]: any[] }
-  }>
+  data: Entity[]
 }): {
   [property: string]: ServiceConnection[]
 } => {
@@ -33,10 +30,10 @@ export default ({
       for (const instance of filtered) {
         if (instance) {
           connections.push({
-            id: instance.cgId,
+            id: instance.id,
             resourceType: serviceName,
             relation: 'child',
-            field: serviceName,
+            field: aliases[serviceName] ? aliases[serviceName] : serviceName,
           })
         }
       }
