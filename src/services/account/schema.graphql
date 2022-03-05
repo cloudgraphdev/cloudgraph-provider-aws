@@ -23,6 +23,7 @@ type awsAccount @key(fields: "id") {
   cognitoUserPool: [awsCognitoUserPool]
   configurationRecorders: [awsConfigurationRecorder]
   customerGateway: [awsCustomerGateway]
+  dmsReplicationInstances: [awsDmsReplicationInstance]
   dynamodb: [awsDynamoDbTable]
   ebs: [awsEbs]
   ec2Instances: [awsEc2]

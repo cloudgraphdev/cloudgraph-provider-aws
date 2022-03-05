@@ -153,6 +153,6 @@ export const enrichInstanceWithBillingData = ({
 }
 
 export default [
-  { name: 'account', enhancer: connectAWSServicesToAccount },
   { name: 'billing', enhancer: enrichInstanceWithBillingData },
+  { name: 'account', enhancer: connectAWSServicesToAccount },
 ]

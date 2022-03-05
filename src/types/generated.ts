@@ -151,6 +151,7 @@ export type AwsAccount = {
   cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   configurationRecorders?: Maybe<Array<Maybe<AwsConfigurationRecorder>>>;
   customerGateway?: Maybe<Array<Maybe<AwsCustomerGateway>>>;
+  dmsReplicationInstances?: Maybe<Array<Maybe<AwsDmsReplicationInstance>>>;
   dynamodb?: Maybe<Array<Maybe<AwsDynamoDbTable>>>;
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
   ec2Instances?: Maybe<Array<Maybe<AwsEc2>>>;

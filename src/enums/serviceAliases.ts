@@ -14,6 +14,7 @@ export default {
   [services.cloudwatchLog]: 'cloudwatchLogs',
   [services.codebuild]: 'codebuilds',
   [services.configurationRecorder]: 'configurationRecorders',
+  [services.dmsReplicationInstance]: 'dmsReplicationInstances',
   [services.ec2Instance]: 'ec2Instances',
   [services.ecsCluster]: 'ecsClusters',
   [services.ecsContainer]: 'ecsContainers',

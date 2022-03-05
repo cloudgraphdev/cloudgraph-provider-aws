@@ -614,7 +614,7 @@ export default class Provider extends CloudGraph.Client {
           `There was an error enriching AWS data with ${name} data`
         )
         this.logger.debug(error)
-        return data
+        return enhanceData
       }
     }
 
