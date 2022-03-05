@@ -1,4 +1,4 @@
-import { ServiceConnection } from '@cloudgraph/sdk'
+import { intersectStringArrays, ServiceConnection } from '@cloudgraph/sdk'
 
 import {
   Address,
@@ -18,7 +18,6 @@ import { FunctionConfiguration } from 'aws-sdk/clients/lambda'
 // import { LoadBalancerDescription } from 'aws-sdk/clients/elb' // TODO: Uncomment when adding ELB
 
 import services from '../../enums/services'
-import { intersectStringArrays } from '../../utils/index'
 import { RawAwsSubnet } from '../subnet/data'
 import { RawFlowLog } from '../flowLogs/data'
 import { RawAwsEcsService } from '../ecsService/data'

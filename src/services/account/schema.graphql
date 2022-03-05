@@ -8,7 +8,6 @@ type awsAccount @key(fields: "id") {
   appSync: [awsAppSync]
   asgs: [awsAsg]
   athenaDataCatalogs: [awsAthenaDataCatalog]
-
   billing: [awsBilling]
   clientVpnEndpoint: [awsClientVpnEndpoint]
   cloud9Environments: [awsCloud9Environment]

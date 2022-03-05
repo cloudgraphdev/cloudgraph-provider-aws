@@ -1,8 +1,9 @@
+import { toCamel } from '@cloudgraph/sdk'
 import cuid from 'cuid'
+
 import t from '../../properties/translations'
 import { AwsSecurityGroup } from './data'
 import { AwsSecurityGroup as AwsSgType } from '../../types/generated'
-import { toCamel } from '../../utils'
 import { formatTagsFromMap } from '../../utils/format'
 import { securityGroupArn } from '../../utils/generateArns'
 

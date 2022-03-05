@@ -1,4 +1,9 @@
-import CloudGraph, { Service, Opts, ProviderData } from '@cloudgraph/sdk'
+import CloudGraph, {
+  Service,
+  Opts,
+  ProviderData,
+  sortResourcesDependencies,
+} from '@cloudgraph/sdk'
 import { loadFilesSync } from '@graphql-tools/load-files'
 import { mergeTypeDefs } from '@graphql-tools/merge'
 import AWS, { Config } from 'aws-sdk'
@@ -13,9 +18,10 @@ import resources from '../enums/resources'
 import services from '../enums/services'
 import serviceMap from '../enums/serviceMap'
 import schemasMap from '../enums/schemasMap'
+import relations from '../enums/relations'
 import { Credentials } from '../types'
 import { obfuscateSensitiveString } from '../utils/format'
-import { checkAndMergeConnections, sortResourcesDependencies } from '../utils'
+import { checkAndMergeConnections } from '../utils'
 import { Account, rawDataInterface } from './base'
 import enhancers, { EnhancerConfig } from './base/enhancers'
 
@@ -557,7 +563,7 @@ export default class Provider extends CloudGraph.Client {
     if (!configuredResources) {
       configuredResources = Object.values(this.properties.services).join(',')
     }
-    const resourceNames: string[] = sortResourcesDependencies([
+    const resourceNames: string[] = sortResourcesDependencies(relations, [
       ...new Set<string>(configuredResources.split(',')),
     ])
 
