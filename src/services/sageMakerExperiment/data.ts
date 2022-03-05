@@ -4,6 +4,7 @@ import groupBy from 'lodash/groupBy'
 import { convertToPromise, fetchAllPaginatedData } from '../../utils/fetchUtils'
 import { initTestEndpoint } from '../../utils'
 import ErrorLog from '../../utils/errorLog'
+import { isEmpty } from 'lodash'
 
 const serviceName = 'sageMakerExperiment'
 const errorLog = new ErrorLog(serviceName)
@@ -24,13 +25,13 @@ export default async ({
 }: {
   regions: string
   config: Config
-}): Promise<{[region: string]: RawAwsSageMakerExperiment[]}> => {
+}): Promise<{ [region: string]: RawAwsSageMakerExperiment[] }> => {
   const result: RawAwsSageMakerExperiment[] = []
 
   const activeRegions = regions.split(',')
 
   for (const region of activeRegions) {
-    let sageMakerExperimentData: SAGEMAKER.ExperimentSummary[]
+    let sageMakerExperimentData: SAGEMAKER.ExperimentSummary[] = []
     try {
       sageMakerExperimentData = await fetchAllPaginatedData({
         getResourcesFn: convertToPromise({
@@ -42,11 +43,12 @@ export default async ({
     } catch (err) {
       errorLog.generateAwsErrorLog({
         functionName: 'listExperiments',
-        err
+        err,
       })
     }
 
-    result.push(...sageMakerExperimentData.map(val => ({ ... val, region })))
+    if (!isEmpty(sageMakerExperimentData))
+      result.push(...sageMakerExperimentData.map(val => ({ ...val, region })))
   }
 
   return groupBy(result, 'region')
