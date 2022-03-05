@@ -614,6 +614,7 @@ export default class Provider extends CloudGraph.Client {
           `There was an error enriching AWS data with ${name} data`
         )
         this.logger.debug(error)
+        return data
       }
     }
 
@@ -697,7 +698,8 @@ export default class Provider extends CloudGraph.Client {
         }
         const { accountId } = await this.getIdentity(account)
         accounts.data[globalRegion].push({
-          id: accountId,
+          id: `account:${accountId}`,
+          accountId,
           regions: configuredRegions.split(','),
         })
         if (!crawledAccounts.find(val => val === accountId)) {

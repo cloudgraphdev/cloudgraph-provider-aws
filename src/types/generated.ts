@@ -129,6 +129,7 @@ export type AwsAccessLogSettings = {
 };
 
 export type AwsAccount = {
+  accountId: Scalars['String'];
   albs?: Maybe<Array<Maybe<AwsAlb>>>;
   apiGatewayResources?: Maybe<Array<Maybe<AwsApiGatewayResource>>>;
   apiGatewayRestApis?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
@@ -556,7 +557,7 @@ export type AwsAthenaMetadataColumn = {
 };
 
 export type AwsBilling = {
-  account: Scalars['String'];
+  accountId: Scalars['String'];
   id: Scalars['String'];
   last30Days?: Maybe<Array<Maybe<AwsServiceBillingInfo>>>;
   last30DaysDailyAverage?: Maybe<Array<Maybe<AwsServiceBillingInfo>>>;

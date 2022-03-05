@@ -7,12 +7,12 @@ export default ({
   service,
   data,
 }: {
-  service: any
+  service: { id: string; accountId: string; regions: string[] }
   data: Entity[]
 }): {
   [property: string]: ServiceConnection[]
 } => {
-  const { id } = service
+  const { id, accountId } = service
   const connections: ServiceConnection[] = []
   const connectTo = Object.values(services)
 
@@ -25,7 +25,9 @@ export default ({
     })
 
     if (instances?.data) {
-      const filtered = flatMap(instances.data).filter(i => i.accountId === id)
+      const filtered = flatMap(instances.data).filter(
+        i => i.accountId === accountId
+      )
 
       for (const instance of filtered) {
         if (instance) {

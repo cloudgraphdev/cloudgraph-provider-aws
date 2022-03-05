@@ -4,6 +4,7 @@ import isEmpty from 'lodash/isEmpty'
 import { rawDataInterface } from '.'
 import { regionMap } from '../../enums/regions'
 import services from '../../enums/services'
+import { checkAndMergeConnections } from '../../utils'
 import addAccountConnections from '../account/connections'
 
 /**
@@ -11,7 +12,7 @@ import addAccountConnections from '../account/connections'
  */
 export interface EnhancerConfig {
   rawData: rawDataInterface[]
-  accounts: { id: string; regions: string[] }[]
+  accounts: { id: string; accountId: string; regions: string[] }[]
   configuredRegions: string
   data: ProviderData
 }
@@ -37,13 +38,12 @@ export const connectAWSServicesToAccount = ({
       ...connections,
     }
   }
-
   return {
     entities: data.entities,
-    connections: {
-      ...data.connections,
-      ...accountsConnections,
-    },
+    connections: checkAndMergeConnections(
+      data.connections,
+      accountsConnections
+    ),
   }
 }
 

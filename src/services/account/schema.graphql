@@ -1,5 +1,6 @@
 type awsAccount @key(fields: "id") {
   id: String! @id @search(by: [hash])
+  accountId: String! @search(by: [hash])
   regions: [String] @search(by: [hash])
   albs: [awsAlb]
   apiGatewayResources: [awsApiGatewayResource]
