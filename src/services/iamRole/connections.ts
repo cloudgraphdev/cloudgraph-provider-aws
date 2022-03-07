@@ -13,6 +13,7 @@ import { RawAwsGlueJob } from '../glueJob/data'
 import { glueJobArn } from '../../utils/generateArns'
 import { RawAwsManagedAirflow } from '../managedAirflow/data'
 import { RawAwsGuardDutyDetector } from '../guardDutyDetector/data'
+import { RawAwsSageMakerNotebookInstance } from '../sageMakerNotebookInstance/data'
 
 /**
  * IAM Role
@@ -184,6 +185,29 @@ export default ({
         resourceType: services.guardDutyDetector,
         relation: 'child',
         field: 'guardDutyDetectors',
+      })
+    }
+  }
+
+  /**
+   * Find any sageMakerNotebookInstance related data
+   */
+   const notebooks = data.find(
+    ({ name }) => name === services.sageMakerNotebookInstance
+  )
+  if (notebooks?.data?.[region]) {
+    const dataAtRegion: RawAwsSageMakerNotebookInstance[] = notebooks.data[
+      region
+    ].filter(
+      ({ RoleArn }: RawAwsSageMakerNotebookInstance) =>
+      RoleArn === role.Arn
+    )
+    for (const notebook of dataAtRegion) {
+      connections.push({
+        id: notebook.NotebookInstanceArn,
+        resourceType: services.sageMakerNotebookInstance,
+        relation: 'child',
+        field: 'sageMakerNotebookInstances',
       })
     }
   }

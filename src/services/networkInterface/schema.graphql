@@ -22,6 +22,7 @@ type awsNetworkInterface @key(fields: "arn") {
   vpc: [awsVpc] @hasInverse(field: networkInterface)
   efsMountTarget: [awsEfsMountTarget] @hasInverse(field: networkInterface)
   flowLogs: [awsFlowLog] @hasInverse(field: networkInterface) #change to singular
+  sageMakerNotebookInstances: [awsSageMakerNotebookInstance] @hasInverse(field: networkInterface)
 }
 
 type awsNetworkInterfaceAttachment
