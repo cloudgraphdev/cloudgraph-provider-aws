@@ -14,6 +14,8 @@ import { ServiceConnection } from '@cloudgraph/sdk'
 import services from '../../enums/services'
 import { RawAwsSubnet } from '../subnet/data'
 import { RawAwsEcsContainer } from '../ecsContainer/data'
+import { RawAwsSystemsManagerInstance } from '../systemsManagerInstance/data'
+import { ssmManagedInstanceArn } from '../../utils/generateArns'
 
 /**
  * EC2
@@ -23,6 +25,7 @@ export default ({
   service: instance,
   data,
   region,
+  account,
 }: {
   account: string
   data: { name: string; data: { [property: string]: any[] } }[]
@@ -169,7 +172,7 @@ export default ({
 
   /**
    * Find Subnets
-   * related to this EC2 load balancer
+   * related to this EC2
    */
   const subnets: {
     name: string
@@ -194,13 +197,13 @@ export default ({
 
   /**
    * Find EKS
-   * related to this EC2 loadbalancer
+   * related to this EC2
    */
   // TODO: Implement when eks service is ready
 
   /**
    * Find ECS Container
-   * related to this EC2 loadbalancer
+   * related to this EC2
    */
   const ecsContainers: {
     name: string
@@ -218,6 +221,32 @@ export default ({
           resourceType: services.ecsContainer,
           relation: 'child',
           field: 'ecsContainer',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find SSM managed instances
+   * related to this EC2 instance
+   */
+   const instances: {
+    name: string
+    data: { [property: string]: any[] }
+  } = data.find(({ name }) => name === services.systemsManagerInstance)
+  if (instances?.data?.[region]) {
+    const dataInRegion: RawAwsSystemsManagerInstance[] = instances.data[region].filter(
+      ({ InstanceId }: RawAwsSystemsManagerInstance) => InstanceId === id
+    )
+
+    if (!isEmpty(dataInRegion)) {
+      for (const ssmInstance of dataInRegion) {
+        const arn = ssmManagedInstanceArn({ region, account, name: ssmInstance.InstanceId })
+        connections.push({
+          id: arn,
+          resourceType: services.systemsManagerInstance,
+          relation: 'child',
+          field: 'systemsManagerInstance',
         })
       }
     }

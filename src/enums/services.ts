@@ -83,6 +83,8 @@ export default {
   sns: 'sns',
   sqs: 'sqs',
   subnet: 'subnet',
+  systemsManagerInstance: 'systemsManagerInstance',
+  systemsManagerDocument: 'systemsManagerDocument',
   transitGateway: 'transitGateway',
   transitGatewayAttachment: 'transitGatewayAttachment',
   vpc: 'vpc',

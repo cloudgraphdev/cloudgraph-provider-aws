@@ -21,4 +21,5 @@ type awsIamRole @key(fields: "id") {
   managedAirflows: [awsManagedAirflow] @hasInverse(field: iamRoles)
   guardDutyDetectors: [awsGuardDutyDetector] @hasInverse(field: iamRole)
   sageMakerNotebookInstances: [awsSageMakerNotebookInstance] @hasInverse(field: iamRole)
+  systemsManagerInstances: [awsSystemsManagerInstance] @hasInverse(field: iamRole)
 }

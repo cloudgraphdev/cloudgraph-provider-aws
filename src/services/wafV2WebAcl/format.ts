@@ -1,4 +1,5 @@
 import cuid from 'cuid'
+import isEmpty from 'lodash/isEmpty'
 import {
   formatFieldToMatch,
   formatRuleLabels,
@@ -62,7 +63,7 @@ export default ({
     content: CustomResponseBodies[key]?.Content,
   }))
 
-  const formattedLoggingConfig = {
+  const formattedLoggingConfig = isEmpty(loggingConfiguration ?? {}) ? {
     resourceArn: loggingConfiguration?.ResourceArn,
     logDestinationConfigs: loggingConfiguration?.LogDestinationConfigs,
     redactedFields: loggingConfiguration?.RedactedFields?.map(formatFieldToMatch),
@@ -84,7 +85,7 @@ export default ({
       })),
       defaultBehavior: loggingConfiguration?.LoggingFilter?.DefaultBehavior
     },
-  }
+  } : null
 
   return {
     id,

@@ -30,6 +30,12 @@ export default ({
     Tags = {},
   } = service
 
+  const formattedKubernetesNetworkConfig = {
+    serviceIpv4Cidr: kubernetesNetworkConfig?.serviceIpv4Cidr,
+    serviceIpv6Cidr: kubernetesNetworkConfig?.serviceIpv6Cidr,
+    ipFamily: kubernetesNetworkConfig?.ipFamily
+  }
+
   return {
     id: arn,
     arn,
@@ -40,7 +46,7 @@ export default ({
     version,
     endpoint,
     resourcesVpcConfig,
-    kubernetesNetworkConfig,
+    kubernetesNetworkConfig: formattedKubernetesNetworkConfig,
     logging: {
       clusterLogging: logging?.clusterLogging?.map(logSetup => ({
         id: cuid(),

@@ -89,6 +89,8 @@ export default {
   [services.secretsManager]: 'awsSecretsManager',
   [services.ses]: 'awsSes',
   [services.sns]: 'awsSns',
+  [services.systemsManagerInstance]: 'awsSystemsManagerInstance',
+  [services.systemsManagerDocument]: 'awsSystemsManagerDocument',
   [services.transitGateway]: 'awsTransitGateway',
   [services.transitGatewayAttachment]: 'awsTransitGatewayAttachment',
   [services.vpnConnection]: 'awsVpnConnection',

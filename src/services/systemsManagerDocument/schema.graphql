@@ -1,0 +1,28 @@
+type awsSystemsManagerDocument @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash])
+  region: String @search(by: [hash])
+  name: String @search(by: [hash, regexp])
+  createdDate: DateTime @search(by: [day])
+  owner: String @search(by: [hash, regexp])
+  platformTypes: [String]
+  documentVersion: String @search(by: [hash, regexp])
+  documentType: String @search(by: [hash, regexp])
+  schemaVersion: String @search(by: [hash, regexp])
+  documentFormat: String @search(by: [hash, regexp])
+  targetType: String @search(by: [hash, regexp])
+  tags: [awsRawTag]
+  permissions: awsSystemsManagerDocumentPermissions
+}
+
+type awsSystemsManagerDocumentPermissions {
+  accountIds: [String] @search(by: [hash, regexp])
+  accountSharingInfoList: [awsSystemsManagerDocumentPermissionsSharingList]
+}
+
+type awsSystemsManagerDocumentPermissionsSharingList {
+  id: String! @id @search(by: [hash])
+  accountId: String @search(by: [hash, regexp])
+  sharedDocumentVersion: String @search(by: [hash, regexp])
+}

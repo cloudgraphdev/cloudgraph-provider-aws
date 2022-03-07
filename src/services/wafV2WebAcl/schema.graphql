@@ -15,6 +15,7 @@ type awsWafV2WebAcl @key(fields: "arn") {
   postProcessFirewallManagerRuleGroups: [awsWafV2FirewallManagerRuleGroup]
   customResponseBodies: [awsWafV2CustomResponseBody]
   loggingConfiguration: awsWafV2LoggingConfig
+  cloudfront: [awsCloudfront] @hasInverse(field: webAcl)
 }
 
 type awsWafV2Rule {

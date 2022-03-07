@@ -90,6 +90,8 @@ import GuardDutyDetector from '../services/guardDutyDetector'
 import ElasticSearchDomain from '../services/elasticSearchDomain'
 import DmsReplicationInstance from '../services/dmsReplicationInstance'
 import SageMakerNotebookInstance from '../services/sageMakerNotebookInstance'
+import SystemsManagerInstance from '../services/systemsManagerInstance'
+import SystemsManagerDocument from '../services/systemsManagerDocument'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -186,5 +188,7 @@ export default {
   [services.vpnConnection]: VpnConnection,
   [services.organization]: Organization,
   [services.wafV2WebAcl]: WafV2WebAcl,
+  [services.systemsManagerInstance]: SystemsManagerInstance,
+  [services.systemsManagerDocument]: SystemsManagerDocument,
   tag: AwsTag,
 }

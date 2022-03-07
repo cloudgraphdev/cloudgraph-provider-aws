@@ -36,6 +36,8 @@ type awsEksVpcConfigResponse {
 
 type awsEksKubernetesNetworkConfigResponse {
   serviceIpv4Cidr: String @search(by: [hash, regexp])
+  serviceIpv6Cidr: String @search(by: [hash, regexp])
+  ipFamily: String @search(by: [hash, regexp])
 }
 
 type awsEksLogging {
@@ -58,24 +60,24 @@ type awsEksProvider {
   keyArn: String @search(by: [hash, regexp])
 }
 
-type awsEksLogSetup 
+type awsEksLogSetup
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    types: [String] @search(by: [hash])
-    enabled: Boolean @search
-  }
+  id: String! @id @search(by: [hash])
+  types: [String] @search(by: [hash])
+  enabled: Boolean @search
+}
 
-type awsEksEncryptionConfig 
+type awsEksEncryptionConfig
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    resources: [String] @search(by: [hash])
-    provider: awsEksProvider
-  }
+  id: String! @id @search(by: [hash])
+  resources: [String] @search(by: [hash])
+  provider: awsEksProvider
+}
