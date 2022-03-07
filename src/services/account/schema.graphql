@@ -1,6 +1,5 @@
 type awsAccount @key(fields: "id") {
   id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
   regions: [String] @search(by: [hash])
   albs: [awsAlb]
   apiGatewayResources: [awsApiGatewayResource]
@@ -78,6 +77,7 @@ type awsAccount @key(fields: "id") {
   routeTables: [awsRouteTable]
   s3: [awsS3]
   sageMakerExperiments: [awsSageMakerExperiment]
+  sageMakerNotebookInstances: [awsSageMakerNotebookInstance]
   sageMakerProjects: [awsSageMakerProject]
   secretsManager: [awsSecretsManager]
   securityGroups: [awsSecurityGroup]

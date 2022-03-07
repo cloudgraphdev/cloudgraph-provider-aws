@@ -698,8 +698,7 @@ export default class Provider extends CloudGraph.Client {
         }
         const { accountId } = await this.getIdentity(account)
         accounts.data[globalRegion].push({
-          id: `account:${accountId}`,
-          accountId,
+          id: accountId,
           regions: configuredRegions.split(','),
         })
         if (!crawledAccounts.find(val => val === accountId)) {

@@ -56,6 +56,7 @@ export default {
   [services.route53Record]: 'route53Records',
   [services.routeTable]: 'routeTables',
   [services.sageMakerExperiment]: 'sageMakerExperiments',
+  [services.sageMakerNotebookInstance]: 'sageMakerNotebookInstances',
   [services.sageMakerProject]: 'sageMakerProjects',
   [services.secretsManager]: 'secretsManager',
   [services.sg]: 'securityGroups',

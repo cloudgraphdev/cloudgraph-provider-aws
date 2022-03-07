@@ -129,7 +129,6 @@ export type AwsAccessLogSettings = {
 };
 
 export type AwsAccount = {
-  accountId: Scalars['String'];
   albs?: Maybe<Array<Maybe<AwsAlb>>>;
   apiGatewayResources?: Maybe<Array<Maybe<AwsApiGatewayResource>>>;
   apiGatewayRestApis?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
@@ -208,6 +207,7 @@ export type AwsAccount = {
   routeTables?: Maybe<Array<Maybe<AwsRouteTable>>>;
   s3?: Maybe<Array<Maybe<AwsS3>>>;
   sageMakerExperiments?: Maybe<Array<Maybe<AwsSageMakerExperiment>>>;
+  sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   sageMakerProjects?: Maybe<Array<Maybe<AwsSageMakerProject>>>;
   secretsManager?: Maybe<Array<Maybe<AwsSecretsManager>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
