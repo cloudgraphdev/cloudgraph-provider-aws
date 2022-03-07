@@ -688,6 +688,7 @@ export type AwsCloudfront = {
   status?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   viewerCertificate?: Maybe<AwsCloudfrontViewerCertificate>;
+  webAcl?: Maybe<Array<Maybe<AwsWafV2WebAcl>>>;
   webAclId?: Maybe<Scalars['String']>;
 };
 
@@ -3072,7 +3073,7 @@ export type AwsIamRole = {
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
-  systemManagerInstances?: Maybe<Array<Maybe<AwsSystemsManagerInstance>>>;
+  systemsManagerInstances?: Maybe<Array<Maybe<AwsSystemsManagerInstance>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
 };
 
@@ -4529,6 +4530,7 @@ export type AwsWafV2WebAcl = {
   accountId: Scalars['String'];
   arn: Scalars['String'];
   capacity?: Maybe<Scalars['Int']>;
+  cloudfront?: Maybe<Array<Maybe<AwsCloudfront>>>;
   customResponseBodies?: Maybe<Array<Maybe<AwsWafV2CustomResponseBody>>>;
   defaultAction?: Maybe<AwsWafV2DefaultAction>;
   description?: Maybe<Scalars['String']>;

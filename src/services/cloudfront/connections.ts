@@ -7,6 +7,7 @@ import { RawAwsS3 } from '../s3/data'
 import { RawAwsElb } from '../elb/data'
 import { RawAwsCloudfront } from './data'
 import { elbArn } from '../../utils/generateArns'
+import { RawAwsWafV2WebAcl } from '../wafV2WebAcl/data'
 
 /**
  * Cloudfront
@@ -22,7 +23,7 @@ export default ({
 }): { [key: string]: ServiceConnection[] } => {
   const connections: ServiceConnection[] = []
   const {
-    summary: { Id: id },
+    summary: { Id: id, WebACLId },
     config: {
       Origins: { Items: originData = [] },
     },
@@ -98,6 +99,33 @@ export default ({
         }
       }
     })
+  }
+
+  /**
+   * Find wafV2WebAcls
+   * related to this Cloudfront distribution
+   */
+  const acls: {
+    name: string
+    data: { [property: string]: RawAwsWafV2WebAcl[] }
+  } = data.find(({ name }) => name === services.wafV2WebAcl)
+
+  if (acls?.data) {
+    const allAcls = Object.values(acls.data).flat()
+    const dataInRegion: RawAwsWafV2WebAcl[] = allAcls.filter(
+      ({ ARN }: RawAwsWafV2WebAcl) => ARN === WebACLId
+    )
+
+    if (!isEmpty(dataInRegion)) {
+      for (const acl of dataInRegion) {
+        connections.push({
+          id: acl.Id,
+          resourceType: services.wafV2WebAcl,
+          relation: 'child',
+          field: 'webAcl',
+        })
+      }
+    }
   }
 
   const cloudfrontResult = {
