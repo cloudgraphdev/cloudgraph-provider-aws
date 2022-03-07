@@ -1,3 +1,10 @@
+# [0.73.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.72.0...0.73.0) (2022-03-07)
+
+
+### Features
+
+* **services:** add new service sageMakerNotebookInstance ([c74b244](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c74b24427d93f4b21f614f0eb5d5a7d75be5fdbc))
+
 # [0.72.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.71.0...0.72.0) (2022-03-04)
 
 
