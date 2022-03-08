@@ -1,3 +1,18 @@
+# [0.74.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.73.0...0.74.0) (2022-03-08)
+
+
+### Bug Fixes
+
+* **services:** fix eksCluster, fix ssmInstance to use arn, add connection ec2 <-> ssmInstance ([7d394ac](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/7d394ac012744cc95153f56e228a7cf9424a7500))
+* **services:** fix iamRole schema ([adbe084](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/adbe084e3cd459c7935a1c431190b37c355e2069))
+* **services:** fix ssm instance compliance item id ([96fa19e](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/96fa19e999e38024d7590d3cd32009071b95171e))
+
+
+### Features
+
+* **services:** add new connection wafV2WebAcl <-> cloudfront ([15ca93f](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/15ca93fac80772a652b35e22cdab5b65ea463221))
+* **services:** add new services systemsManager instance and document ([b486ae4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/b486ae4bec44814fb95e54235d060335ad2027fa))
+
 # [0.73.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.72.0...0.73.0) (2022-03-07)
 
 
