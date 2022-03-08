@@ -81,6 +81,8 @@ type awsAccount @key(fields: "id") {
   sageMakerProjects: [awsSageMakerProject]
   secretsManager: [awsSecretsManager]
   securityGroups: [awsSecurityGroup]
+  systemsManagerDocuments: [awsSystemsManagerDocument]
+  systemsManagerInstances: [awsSystemsManagerInstance]
   ses: [awsSes]
   sns: [awsSns]
   sqs: [awsSqs]

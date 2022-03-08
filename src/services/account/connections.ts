@@ -7,12 +7,12 @@ export default ({
   service,
   data,
 }: {
-  service: { id: string; accountId: string; regions: string[] }
+  service: { id: string; regions: string[] }
   data: Entity[]
 }): {
   [property: string]: ServiceConnection[]
 } => {
-  const { id, accountId } = service
+  const { id: accountId } = service
   const connections: ServiceConnection[] = []
   const connectTo = Object.values(services)
 
@@ -20,9 +20,7 @@ export default ({
     const instances: {
       name: string
       data: { [property: string]: any[] }
-    } = data.find(({ name }) => {
-      return name === serviceName
-    })
+    } = data.find(({ name }) => name === serviceName)
 
     if (instances?.data) {
       const filtered = flatMap(instances.data).filter(
@@ -43,6 +41,6 @@ export default ({
   }
 
   return {
-    [id]: connections,
+    [accountId]: connections,
   }
 }

@@ -215,6 +215,8 @@ export type AwsAccount = {
   sns?: Maybe<Array<Maybe<AwsSns>>>;
   sqs?: Maybe<Array<Maybe<AwsSqs>>>;
   subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
+  systemsManagerDocuments?: Maybe<Array<Maybe<AwsSystemsManagerDocument>>>;
+  systemsManagerInstances?: Maybe<Array<Maybe<AwsSystemsManagerInstance>>>;
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
   transitGatewayAttachments?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;

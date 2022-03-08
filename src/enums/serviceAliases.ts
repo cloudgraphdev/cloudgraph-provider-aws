@@ -61,6 +61,8 @@ export default {
   [services.secretsManager]: 'secretsManager',
   [services.sg]: 'securityGroups',
   [services.subnet]: 'subnets',
+  [services.systemsManagerDocument]: 'systemsManagerDocuments',
+  [services.systemsManagerInstance]: 'systemsManagerInstances',
   [services.transitGatewayAttachment]: 'transitGatewayAttachments',
   [services.vpnConnection]: 'vpnConnections',
 }
