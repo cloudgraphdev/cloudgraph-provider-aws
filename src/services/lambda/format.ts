@@ -31,6 +31,7 @@ export default ({
     TracingConfig: tracing = [],
     Version: version,
     reservedConcurrentExecutions: rawReservedConcurrentExecutions,
+    VpcConfig: vpcConfig
   } = rawData
   const environmentVariables = []
   const secretNames = [t.pass, t.secret, t.private, t.cert]
@@ -56,6 +57,12 @@ export default ({
     .map(([key, value]) => `${key} - ${value}`)
     .join(', ')
 
+  const formattedVpcConfig = {
+    vpcId: vpcConfig?.VpcId,
+    subnetIds: vpcConfig?.SubnetIds,
+    securityGroupIds: vpcConfig?.SecurityGroupIds
+  }
+
   return {
     accountId: account,
     arn,
@@ -74,6 +81,7 @@ export default ({
     tracingConfig,
     version,
     environmentVariables,
+    vpcConfig: formattedVpcConfig,
     tags: formatTagsFromMap(Tags),
   }
 }
