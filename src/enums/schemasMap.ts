@@ -4,6 +4,7 @@ import services from './services'
  * schemasMap is an object that contains schemas name by resource
  */
 export default {
+  account: 'awsAccount',
   [services.alb]: 'awsAlb',
   [services.apiGatewayResource]: 'awsApiGatewayResource',
   [services.apiGatewayRestApi]: 'awsApiGatewayRestApi',

@@ -31,7 +31,7 @@ export default async ({
   const activeRegions = regions.split(',')
 
   for (const region of activeRegions) {
-    let glueRegistryData: GLUE.RegistryListItem[]
+    let glueRegistryData: GLUE.RegistryListItem[] = []
     try {
       glueRegistryData = await fetchAllPaginatedData({
         getResourcesFn: convertToPromise({

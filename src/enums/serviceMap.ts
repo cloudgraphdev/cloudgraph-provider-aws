@@ -1,3 +1,4 @@
+import Account from '../services/account'
 import ALB from '../services/alb'
 import APIGatewayResource from '../services/apiGatewayResource'
 import APIGatewayRestApi from '../services/apiGatewayRestApi'
@@ -98,6 +99,7 @@ import SystemsManagerDocument from '../services/systemsManagerDocument'
  * serviceMap is used by the serviceFactory to produce instances of service classes
  */
 export default {
+  account: Account,
   [services.appSync]: AppSync,
   [services.alb]: ALB,
   [services.apiGatewayResource]: APIGatewayResource,

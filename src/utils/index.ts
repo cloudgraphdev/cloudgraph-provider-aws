@@ -2,70 +2,18 @@ import AWS, { ConfigurationOptions } from 'aws-sdk'
 import { APIVersions } from 'aws-sdk/lib/config'
 import CloudGraph, { Opts } from '@cloudgraph/sdk'
 import STS from 'aws-sdk/clients/sts'
-import camelCase from 'lodash/camelCase'
 import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
 import unionWith from 'lodash/unionWith'
+
 import environment from '../config/environment'
 import { Credentials } from '../types'
 import {
   BASE_CUSTOM_RETRY_DELAY,
   MAX_FAILED_AWS_REQUEST_RETRIES,
 } from '../config/constants'
-import relations from '../enums/relations'
-
-
 
 const { logger } = CloudGraph
-
-export const toCamel = (o: any): any => {
-  let origKey
-  let newKey
-  let value
-
-  if (o instanceof Array) {
-    return o.map(value => {
-      if (typeof value === 'object') {
-        value = toCamel(value)
-      }
-      return value
-    })
-  }
-
-  const newObject = {}
-  for (origKey in o) {
-    if (o.hasOwnProperty(origKey)) {
-      newKey = camelCase(origKey)
-      value = o[origKey]
-      if (
-        value instanceof Array ||
-        (value !== null && value !== undefined && value.constructor === Object)
-      ) {
-        value = toCamel(value)
-      }
-      newObject[newKey] = value
-    }
-  }
-
-  return newObject
-}
-
-export const getKeyByValue = (
-  object: Record<string, unknown>,
-  value: any
-): string | undefined => {
-  return Object.keys(object).find(key => object[key] === value)
-}
-
-export const intersectStringArrays = (
-  a: Array<string>,
-  b: Array<string>
-): Array<string> => {
-  const setA = new Set(a)
-  const setB = new Set(b)
-  const intersection = new Set([...setA].filter(x => setB.has(x)))
-  return Array.from(intersection)
-}
 
 export async function getAccountId({
   credentials,
@@ -159,21 +107,6 @@ export const settleAllPromises = async (
      *  and that the value property doesn't exist for the PromiseRejectedResult interface */
     i => (i as PromiseFulfilledResult<any>).value
   )
-
-/**
- * Sorts a services list depending on his dependencies
- * @param resourceNames services to sort
- * @returns sorted list of services
- */
-export const sortResourcesDependencies = (resourceNames: string[]): string[] =>
-  resourceNames.sort((prevResource, nextResource) => {
-    const dependecies = relations[prevResource]
-
-    if (dependecies && dependecies.includes(nextResource)) {
-      return -1
-    }
-    return 0
-  })
 
 export const checkAndMergeConnections = (
   serviceConnections: any,

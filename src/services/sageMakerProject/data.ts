@@ -1,6 +1,6 @@
 import { Config } from 'aws-sdk/lib/config'
 import SAGEMAKER from 'aws-sdk/clients/sagemaker'
-import { groupBy } from 'lodash'
+import { groupBy, isEmpty } from 'lodash'
 import { convertToPromise, fetchAllPaginatedData } from '../../utils/fetchUtils'
 import { initTestEndpoint } from '../../utils'
 import ErrorLog from '../../utils/errorLog'
@@ -29,7 +29,7 @@ export default async ({
   const activeRegions = regions.split(',')
 
   for (const region of activeRegions) {
-    let sageMakerProjectData: SAGEMAKER.ProjectSummary[]
+    let sageMakerProjectData: SAGEMAKER.ProjectSummary[] = []
     try {
       sageMakerProjectData = await fetchAllPaginatedData({
         getResourcesFn: convertToPromise({
@@ -41,11 +41,12 @@ export default async ({
     } catch (err) {
       errorLog.generateAwsErrorLog({
         functionName: 'sageMakerProject:listProjects',
-        err
+        err,
       })
     }
 
-    result.push(...sageMakerProjectData.map(val => ({ ...val, region })))
+    if (!isEmpty(sageMakerProjectData))
+      result.push(...sageMakerProjectData.map(val => ({ ...val, region })))
   }
   errorLog.reset()
   return groupBy(result, 'region')

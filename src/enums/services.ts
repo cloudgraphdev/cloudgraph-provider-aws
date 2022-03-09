@@ -74,7 +74,7 @@ export default {
   route53Record: 'route53Record',
   routeTable: 'routeTable',
   sageMakerExperiment: 'sageMakerExperiment',
-  sageMakerNotebookInstance:  'sageMakerNotebookInstance',
+  sageMakerNotebookInstance: 'sageMakerNotebookInstance',
   sageMakerProject: 'sageMakerProject',
   s3: 's3',
   secretsManager: 'secretsManager',
@@ -90,5 +90,5 @@ export default {
   vpc: 'vpc',
   vpnConnection: 'vpnConnection',
   vpnGateway: 'vpnGateway',
-  wafV2WebAcl: 'wafV2WebAcl'
+  wafV2WebAcl: 'wafV2WebAcl',
 }
