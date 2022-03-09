@@ -1,3 +1,25 @@
+# [0.75.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.74.0...0.75.0) (2022-03-09)
+
+
+### Bug Fixes
+
+* Added system manager services to awsAccount schema ([8601b6c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/8601b6cbbd62736abbc646ef382516ee58868fdc))
+* Cleaned code ([3aaa470](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/3aaa470a796dffdccc10e8a4c16312b08d14a872))
+* Fixed billing schema fields ([8048a2c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/8048a2c6aab2f876c866aa4c3ca41816b3f0736c))
+* Fixed eksCluster schema ([84e0601](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/84e06017d4d9ff00af178761c400aaf66e31d629))
+* Fixed glueJob and glueRegistry issues during scan ([e33ff2e](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/e33ff2ed1762696e58b19015ff2b841888fc9ce4))
+* Fixed issues scanning sageMakerExperiment and sageMakerProject ([96915f3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/96915f37c8c2cb17f4a6068895ad89c20e45b75b))
+
+
+### Features
+
+* Added new RawAwsType to include common attributes ([1714f24](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/1714f245ff56d55310265d7264a130ac60bb00ca))
+* Added sageMakerNotebookInstances field to awsAccount schema ([49b4691](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/49b469186fc0b6a28b4f740756696a721dd93643))
+* Better error handling for exceptions during enhancer data processing ([046d00e](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/046d00ebcff6dbb47474023b21bfe74b99dabddf))
+* Created account global service ([eb44044](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/eb44044346ead49596f5bf22394c2a442e70ee92))
+* Created enhancers for scanned data ([cbecdc4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/cbecdc4e6c65a2afb6047c00401e15a7bb753924))
+* Pluralized services at awsAccount schema ([c529cee](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/c529cee44b8815499a2b9d0896c136a992a50554))
+
 # [0.74.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.73.0...0.74.0) (2022-03-08)
 
 
