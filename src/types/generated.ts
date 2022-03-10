@@ -3313,10 +3313,10 @@ export type AwsKms = {
   elastiCacheReplicationGroup?: Maybe<Array<Maybe<AwsElastiCacheReplicationGroup>>>;
   elasticSearchDomains?: Maybe<Array<Maybe<AwsElasticSearchDomain>>>;
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
-  enabled?: Maybe<Scalars['String']>;
+  enabled?: Maybe<Scalars['Boolean']>;
   id: Scalars['String'];
   keyManager?: Maybe<Scalars['String']>;
-  keyRotationEnabled?: Maybe<Scalars['String']>;
+  keyRotationEnabled?: Maybe<Scalars['Boolean']>;
   keyState?: Maybe<Scalars['String']>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   origin?: Maybe<Scalars['String']>;
@@ -3355,12 +3355,19 @@ export type AwsLambda = {
   tracingConfig?: Maybe<Scalars['String']>;
   version?: Maybe<Scalars['String']>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  vpcConfig?: Maybe<AwsLambdaVpcConfig>;
 };
 
 export type AwsLambdaEnvironmentVariable = {
   id: Scalars['String'];
   key: Scalars['String'];
   value?: Maybe<Scalars['String']>;
+};
+
+export type AwsLambdaVpcConfig = {
+  securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  subnetIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  vpcId?: Maybe<Scalars['String']>;
 };
 
 export type AwsLaunchConfiguration = {

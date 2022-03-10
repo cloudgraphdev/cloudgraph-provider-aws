@@ -4,10 +4,10 @@ type awsKms @key(fields: "id"){
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp, fulltext])
-  keyRotationEnabled: String @search(by: [hash, regexp])
+  keyRotationEnabled: Boolean @search
   usage: String @search(by: [hash, regexp])
   policy: awsIamJSONPolicy
-  enabled: String @search(by: [hash, regexp])
+  enabled: Boolean @search
   keyState: String @search(by: [hash, regexp])
   customerMasterKeySpec: String @search(by: [hash, regexp])
   tags: [awsRawTag]
