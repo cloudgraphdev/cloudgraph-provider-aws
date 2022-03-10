@@ -1,3 +1,10 @@
+## [0.75.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.75.0...0.75.1) (2022-03-10)
+
+
+### Bug Fixes
+
+* **services:** fix lambda to include vpcConfig, fix kms to use booleans ([453343e](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/453343ec7ed9f1ff8e0b1bf667db07a3f5ca75a5))
+
 # [0.75.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.74.0...0.75.0) (2022-03-09)
 
 
