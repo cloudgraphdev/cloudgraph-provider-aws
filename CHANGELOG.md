@@ -1,3 +1,10 @@
+## [0.75.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.75.2...0.75.3) (2022-03-11)
+
+
+### Bug Fixes
+
+* **services:** add createdDate field to secretsManager ([4a17180](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/4a1718042edcc3570519b03fecb597572c974b7b))
+
 ## [0.75.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.75.1...0.75.2) (2022-03-11)
 
 
