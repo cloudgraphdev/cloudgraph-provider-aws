@@ -24,6 +24,7 @@ export default ({
     PasswordLastUsed: passwordLastUsed,
     AccessKeyLastUsedData: accessKeys = [],
     MFADevices: mfaDevices = [],
+    VirtualMFADevices: virtualMfaDevices = [],
     Groups: groups = [],
     Policies: inlinePolicies = [],
     ReportData: {
@@ -79,6 +80,17 @@ export default ({
     })
   }
 
+  // Virtual MFA Devices
+  const virtualMfaData = []
+  if (!isEmpty(virtualMfaDevices)) {
+    virtualMfaDevices.map(({ SerialNumber, EnableDate }) => {
+      virtualMfaData.push({
+        serialNumber: SerialNumber,
+        enableDate: EnableDate?.toISOString(),
+      })
+    })
+  }
+
   // Format User Tags
   const userTags = formatTagsFromMap(tags)
 
@@ -108,6 +120,7 @@ export default ({
     creationTime: creationTime?.toISOString() || '',
     accessKeyData,
     mfaDevices: mfaData,
+    virtualMfaDevices: virtualMfaData,
     accessKeysActive:
       accessKey1Active === 'true' || accessKey2Active === 'true',
     passwordLastUsed: passwordLastUsed?.toISOString() || '',

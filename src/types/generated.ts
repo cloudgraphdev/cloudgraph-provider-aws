@@ -3213,6 +3213,7 @@ export type AwsIamUser = {
   passwordNextRotation?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  virtualMfaDevices?: Maybe<Array<Maybe<AwsIamMfaDevice>>>;
 };
 
 export type AwsIgw = {

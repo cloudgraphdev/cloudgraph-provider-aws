@@ -13,6 +13,7 @@ type awsIamUser @key(fields: "id") {
   accessKeysActive: Boolean @search
   accessKeyData: [awsIamAccessKey]
   mfaDevices: [awsIamMfaDevice]
+  virtualMfaDevices: [awsIamMfaDevice]
   groups: [String]
   tags: [awsRawTag]
   inlinePolicies: [String]
