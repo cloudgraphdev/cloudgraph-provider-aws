@@ -1,3 +1,10 @@
+## [0.75.2](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.75.1...0.75.2) (2022-03-11)
+
+
+### Bug Fixes
+
+* CG-910 Add virtualMFADevices to iamPolicies needed for aws cis 1.14 ([05be9df](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/05be9dfe2a72e53e8fbe97561d2fdb00bafd1462))
+
 ## [0.75.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.75.0...0.75.1) (2022-03-10)
 
 
