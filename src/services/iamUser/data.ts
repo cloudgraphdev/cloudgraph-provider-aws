@@ -17,8 +17,11 @@ import IAM, {
   ListUserPoliciesResponse,
   ListUsersResponse,
   ListUserTagsResponse,
+  ListVirtualMFADevicesRequest,
+  ListVirtualMFADevicesResponse,
   MFADevice,
   User,
+  VirtualMFADevice,
 } from 'aws-sdk/clients/iam'
 import { Config } from 'aws-sdk/lib/config'
 
@@ -75,6 +78,7 @@ export interface RawAwsIamUserReport {
 export interface RawAwsIamUser extends Omit<User, 'Tags'> {
   AccessKeyLastUsedData: RawAwsAccessKey[]
   MFADevices: MFADevice[]
+  VirtualMFADevices?: VirtualMFADevice[]
   Groups: string[]
   Policies: string[]
   ManagedPolicies: AttachedPolicy[]
@@ -286,6 +290,45 @@ export const listMFADevicesByUsername = async (
     )
   })
 
+export const listVirtualMFADevices = async (
+  iam: IAM
+): Promise<VirtualMFADevice[]> =>
+  new Promise(resolve => {
+    const virtualMFADeviceList: VirtualMFADevice[] = []
+    let args: ListVirtualMFADevicesRequest = {}
+    const listAllVirtualMFADevices = (marker?: string) => {
+      if (marker) {
+        args = { ...args, Marker: marker }
+      }
+      try {
+        iam.listVirtualMFADevices(
+          args,
+          async (err: AWSError, data: ListVirtualMFADevicesResponse) => {
+            if (err) {
+              errorLog.generateAwsErrorLog({
+                functionName: 'iam:listVirtualMFADevices',
+                err,
+              })
+            }
+
+            const { VirtualMFADevices = [], IsTruncated, Marker } = data
+
+            virtualMFADeviceList.push(...VirtualMFADevices)
+
+            if (IsTruncated) {
+              listAllVirtualMFADevices(Marker)
+            }
+
+            resolve(virtualMFADeviceList)
+          }
+        )
+      } catch (error) {
+        resolve([])
+      }
+    }
+    listAllVirtualMFADevices()
+  })
+
 export const listIamUsers = async (
   iam: IAM,
   marker?: string
@@ -446,6 +489,9 @@ export default async ({
     // Fetch IAM Report Credential
     const credentialReport = await getCredentialReportData(client)
 
+    // Fetch all virtual MFA Devices
+    const virtualMFADevices = await listVirtualMFADevices(client)
+
     usersData = credentialReport
       .map(userReport => {
         const user = iamUsers.find(u => u.Arn === userReport.Arn)
@@ -459,6 +505,9 @@ export default async ({
             CreateDate: new Date(),
             AccessKeyLastUsedData: [],
             MFADevices: [],
+            VirtualMFADevices:
+              virtualMFADevices?.filter(d => d.User?.Arn === userReport.Arn) ||
+              [],
             Groups: [],
             Policies: [],
             ManagedPolicies: [],
@@ -471,8 +520,13 @@ export default async ({
           return undefined
         }
 
+        const { Arn, ...rest } = user
+
         return {
-          ...user,
+          Arn,
+          VirtualMFADevices:
+            virtualMFADevices?.filter(d => d.User?.Arn === Arn) || [],
+          ...rest,
           ReportData: userReport,
         }
       })
