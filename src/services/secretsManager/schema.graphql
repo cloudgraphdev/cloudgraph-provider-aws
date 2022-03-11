@@ -20,9 +20,10 @@ type awsSecretsManager @key(fields: "arn") {
   rotationEnabled: Boolean @search
   rotationLambdaARN: String @search(by: [hash, regexp])
   rotationRules: awsSecretsManagerRotationRule
-  lastRotatedDate: String @search(by: [hash, regexp])
-  lastChangedDate: String @search(by: [hash, regexp])
-  lastAccessedDate: String @search(by: [hash, regexp])
-  deletedDate: String @search(by: [hash, regexp])
+  lastRotatedDate: DateTime @search(by: [day])
+  lastChangedDate: DateTime @search(by: [day])
+  lastAccessedDate: DateTime @search(by: [day])
+  deletedDate: DateTime @search(by: [day])
+  createdDate: DateTime @search(by: [day])
   owningService: String @search(by: [hash, regexp])
 }

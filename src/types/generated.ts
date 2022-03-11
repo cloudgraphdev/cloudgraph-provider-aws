@@ -3892,13 +3892,14 @@ export type AwsSageMakerProject = {
 export type AwsSecretsManager = {
   accountId: Scalars['String'];
   arn: Scalars['String'];
-  deletedDate?: Maybe<Scalars['String']>;
+  createdDate?: Maybe<Scalars['DateTime']>;
+  deletedDate?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   kmsKeyId?: Maybe<Scalars['String']>;
-  lastAccessedDate?: Maybe<Scalars['String']>;
-  lastChangedDate?: Maybe<Scalars['String']>;
-  lastRotatedDate?: Maybe<Scalars['String']>;
+  lastAccessedDate?: Maybe<Scalars['DateTime']>;
+  lastChangedDate?: Maybe<Scalars['DateTime']>;
+  lastRotatedDate?: Maybe<Scalars['DateTime']>;
   name?: Maybe<Scalars['String']>;
   owningService?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
