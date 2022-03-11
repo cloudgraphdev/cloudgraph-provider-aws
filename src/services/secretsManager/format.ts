@@ -28,6 +28,7 @@ export default ({
     LastAccessedDate: lastAccessedDate,
     DeletedDate: deletedDate,
     OwningService: owningService,
+    CreatedDate: createdDate,
     Tags,
   } = service
 
@@ -47,6 +48,7 @@ export default ({
     lastChangedDate: lastChangedDate?.toISOString(),
     lastAccessedDate: lastAccessedDate?.toISOString(),
     deletedDate: deletedDate?.toISOString(),
+    createdDate: createdDate?.toISOString(),
     owningService,
   }
 }
