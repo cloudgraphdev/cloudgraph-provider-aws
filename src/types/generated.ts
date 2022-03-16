@@ -4032,8 +4032,14 @@ export type AwsSqs = {
   approximateNumberOfMessagesDelayed?: Maybe<Scalars['Int']>;
   approximateNumberOfMessagesNotVisible?: Maybe<Scalars['Int']>;
   arn: Scalars['String'];
+  contentBasedDeduplication?: Maybe<Scalars['Boolean']>;
+  deduplicationScope?: Maybe<Scalars['String']>;
   delaySeconds?: Maybe<Scalars['String']>;
+  fifoQueue?: Maybe<Scalars['Boolean']>;
+  fifoThroughputLimit?: Maybe<Scalars['String']>;
   id: Scalars['String'];
+  kmsDataKeyReusePeriodSeconds?: Maybe<Scalars['String']>;
+  kmsMasterKeyId?: Maybe<Scalars['String']>;
   maximumMessageSize?: Maybe<Scalars['Int']>;
   messageRetentionPeriod?: Maybe<Scalars['String']>;
   policy?: Maybe<AwsIamJsonPolicy>;
@@ -4041,6 +4047,7 @@ export type AwsSqs = {
   queueUrl: Scalars['String'];
   receiveMessageWaitTimeSeconds?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
+  sqsManagedSseEnabled?: Maybe<Scalars['Boolean']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   visibilityTimeout?: Maybe<Scalars['String']>;
 };
