@@ -3344,6 +3344,8 @@ export type AwsLambda = {
   kmsKeyArn?: Maybe<Scalars['String']>;
   lastModified?: Maybe<Scalars['String']>;
   memorySize?: Maybe<Scalars['Int']>;
+  policy?: Maybe<AwsIamJsonPolicy>;
+  policyRevisionId?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
   reservedConcurrentExecutions?: Maybe<Scalars['Int']>;
   role?: Maybe<Scalars['String']>;

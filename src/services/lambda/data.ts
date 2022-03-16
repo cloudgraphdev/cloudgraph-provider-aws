@@ -9,6 +9,7 @@ import Lambda, {
   GetFunctionConcurrencyRequest,
   GetFunctionConcurrencyResponse,
   ReservedConcurrentExecutions,
+  GetPolicyResponse
 } from 'aws-sdk/clients/lambda'
 import { AWSError } from 'aws-sdk/lib/error'
 import { Config } from 'aws-sdk/lib/config'
@@ -30,6 +31,10 @@ export interface RawAwsLambdaFunction extends FunctionConfiguration {
   Tags?: TagMap
   region: string
   reservedConcurrentExecutions: ReservedConcurrentExecutions
+  PolicyData?: {
+    Policy?: string
+    RevisionId?: string
+  }
 }
 
 const listFunctionsForRegion = async ({
@@ -132,6 +137,28 @@ const getResourceTags = async (lambda: Lambda, arn: string): Promise<TagMap> =>
     }
   })
 
+  const getLambdaPolicy = async (lambda: Lambda, arn: string): Promise<{ Policy?: string; RevisionId?: string }> =>
+  new Promise(resolve => {
+    try {
+      lambda.getPolicy(
+        { FunctionName: arn },
+        (err: AWSError, data: GetPolicyResponse) => {
+          if (err) {
+            errorLog.generateAwsErrorLog({
+              functionName: 'lambda:getPolicy',
+              err,
+            })
+            resolve({})
+          }
+          const { Policy = '', RevisionId = '' } = data || {}
+          resolve({ Policy, RevisionId })
+        }
+      )
+    } catch (error) {
+      resolve({})
+    }
+  })
+
 export default async ({
   regions,
   config,
@@ -171,15 +198,17 @@ export default async ({
     await Promise.all(regionPromises)
     logger.debug(lt.fetchedLambdas(lambdaData.length))
 
-    // get all tags for each Lambda
+    // get all tags and policy for each Lambda
     lambdaData.map(({ FunctionArn: arn, region }, idx) => {
       const lambda = new Lambda({ ...config, region, endpoint })
-      const tagsPromise = new Promise<void>(async resolveTags => {
+      const tagsAndPolicyPromise = new Promise<void>(async resolveData => {
         const envTags: TagMap = await getResourceTags(lambda, arn)
         lambdaData[idx].Tags = envTags
-        resolveTags()
+        const policy = await getLambdaPolicy(lambda, arn)
+        lambdaData[idx].PolicyData = policy
+        resolveData()
       })
-      tagsPromises.push(tagsPromise)
+      tagsPromises.push(tagsAndPolicyPromise)
     })
 
     logger.debug(lt.gettingLambdaTags)
