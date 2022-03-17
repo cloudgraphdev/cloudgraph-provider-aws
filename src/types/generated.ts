@@ -220,7 +220,7 @@ export type AwsAccount = {
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
   transitGatewayAttachments?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
-  vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
+  vpnConnections?: Maybe<Array<Maybe<AwsVpnConnection>>>;
   vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
   wafV2WebAcl?: Maybe<Array<Maybe<AwsWafV2WebAcl>>>;
 };
