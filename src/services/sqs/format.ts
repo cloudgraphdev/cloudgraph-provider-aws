@@ -33,6 +33,13 @@ export default ({
     DelaySeconds: delaySeconds,
     Policy: policy,
     ReceiveMessageWaitTimeSeconds: receiveMessageWaitTimeSeconds,
+    KmsMasterKeyId: kmsMasterKeyId,
+    KmsDataKeyReusePeriodSeconds: kmsDataKeyReusePeriodSeconds,
+    SqsManagedSseEnabled: sqsManagedSseEnabled,
+    FifoQueue: fifoQueue,
+    DeduplicationScope: deduplicationScope,
+    FifoThroughputLimit: fifoThroughputLimit,
+    ContentBasedDeduplication: contentBasedDeduplication,
   } = key?.sqsAttributes || {}
 
   return {
@@ -53,6 +60,13 @@ export default ({
     delaySeconds: `${delaySeconds} ${t.seconds}`,
     policy: formatIamJsonPolicy(policy),
     receiveMessageWaitTimeSeconds: getTime(receiveMessageWaitTimeSeconds),
+    kmsMasterKeyId,
+    kmsDataKeyReusePeriodSeconds,
+    sqsManagedSseEnabled: sqsManagedSseEnabled === t.true,
+    fifoQueue: fifoQueue === t.true,
+    deduplicationScope,
+    fifoThroughputLimit,
+    contentBasedDeduplication: contentBasedDeduplication === t.true,
     tags: formatTagsFromMap(Tags),
   }
 }

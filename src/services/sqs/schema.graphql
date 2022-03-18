@@ -14,5 +14,12 @@ type awsSqs @key(fields: "arn"){
   delaySeconds: String @search(by: [hash, regexp])
   policy: awsIamJSONPolicy
   receiveMessageWaitTimeSeconds: String @search(by: [hash, regexp])
+  kmsMasterKeyId: String @search(by: [hash, regexp])
+  kmsDataKeyReusePeriodSeconds: String @search(by: [hash, regexp])
+  sqsManagedSseEnabled: Boolean @search
+  fifoQueue: Boolean @search
+  deduplicationScope: String @search(by: [hash, regexp])
+  fifoThroughputLimit: String @search(by: [hash, regexp])
+  contentBasedDeduplication: Boolean @search
   tags: [awsRawTag]
 }
