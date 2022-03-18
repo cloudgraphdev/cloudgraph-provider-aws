@@ -1,3 +1,10 @@
+## [0.75.5](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.75.4...0.75.5) (2022-03-18)
+
+
+### Bug Fixes
+
+* added plural schema field for kinesisStream service ([fd6f11a](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/fd6f11abf9ba8978d14e81f43c48d195bbfdd8c1))
+
 ## [0.75.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.75.3...0.75.4) (2022-03-18)
 
 
