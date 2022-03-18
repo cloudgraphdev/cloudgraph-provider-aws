@@ -68,6 +68,7 @@ export default {
   networkInterface: 'networkInterface',
   organization: 'organization',
   rdsCluster: 'rdsCluster',
+  rdsClusterSnapshot: 'rdsClusterSnapshot',
   rdsDbInstance: 'rdsDbInstance',
   redshiftCluster: 'redshiftCluster',
   route53HostedZone: 'route53HostedZone',

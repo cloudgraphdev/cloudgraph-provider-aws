@@ -1,0 +1,43 @@
+type AwsRdsClusterSnapshotTagList {
+  key: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
+}
+
+type awsRdsClusterSnapshot @key(fields: "arn") {
+  id: String! @id @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash])
+  availabilityZones: [String] @search(by: [hash, regexp])
+  dbClusterSnapshotIdentifier: String @search(by: [hash, regexp])
+  dbClusterIdentifier: String @search(by: [hash, regexp])
+  snapshotCreateTime: DateTime @search(by: [day])
+  engine: String @search(by: [hash, regexp])
+  engineMode: String @search(by: [hash, regexp])
+  allocatedStorage: Int @search
+  status: String @search(by: [hash, regexp])
+  port: Int @search
+  vpcId: String @search(by: [hash, regexp])
+  clusterCreateTime: DateTime @search(by: [day])
+  masterUsername: String @search(by: [hash, regexp])
+  engineVersion: String @search(by: [hash, regexp])
+  licenseModel: String @search(by: [hash, regexp])
+  snapshotType: String @search(by: [hash, regexp])
+  percentProgress: Int @search
+  storageEncrypted: Boolean @search
+  kmsKeyId: String @search(by: [hash, regexp])
+  dbClusterSnapshotArn: String @search(by: [hash, regexp])
+  iamDatabaseAuthenticationEnabled: Boolean @search
+  sourceDBClusterSnapshotArn: String @search(by: [hash, regexp])
+  tags: [awsRawTag]
+  attributes: [awsRdsClusterSnapshotAttribute]
+  vpc: [awsVpc] @hasInverse(field: rdsClusterSnapshots)
+  cluster: [awsRdsCluster] @hasInverse(field: snapshots)
+  kms: [awsKms] @hasInverse(field: rdsClusterSnapshots)
+}
+
+type awsRdsClusterSnapshotAttribute {
+  id: String! @id
+  name: String @search(by: [hash, regexp])
+  values: [String] @search(by: [hash, regexp])
+}

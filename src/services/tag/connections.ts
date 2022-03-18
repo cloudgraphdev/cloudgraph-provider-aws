@@ -62,6 +62,7 @@ import { RawAwsCodeBuild } from '../codeBuild/data'
 import { RawAwsGuardDutyDetector } from '../guardDutyDetector/data'
 import { RawAwsElasticSearchDomain } from '../elasticSearchDomain/data'
 import { RawAwsSystemsManagerDocument } from '../systemsManagerDocument/data'
+import { RawAwsRdsClusterSnapshot } from '../rdsClusterSnapshot/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -1007,6 +1008,30 @@ export default ({
         }
       }
     }
+
+    /**
+     * Find related RDS cluster Snapshots
+     */
+     const snapshots: { name: string; data: { [property: string]: any[] } } =
+     data.find(({ name }) => name === services.rdsClusterSnapshot)
+   if (snapshots?.data?.[region]) {
+     const dataAtRegion: RawAwsRdsClusterSnapshot[] = findServiceInstancesWithTag(
+       tag,
+       snapshots.data[region]
+     )
+     if (!isEmpty(dataAtRegion)) {
+       for (const instance of dataAtRegion) {
+         const { DBClusterSnapshotIdentifier } = instance
+
+         connections.push({
+           id: DBClusterSnapshotIdentifier,
+           resourceType: services.rdsClusterSnapshot,
+           relation: 'child',
+           field: 'rdsClusterSnapshot',
+         })
+       }
+     }
+   }
 
     /**
      * Find related RDS instances

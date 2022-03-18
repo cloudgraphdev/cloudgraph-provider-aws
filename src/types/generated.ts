@@ -114,6 +114,11 @@ export type AwsEmrClusterTimeline = {
   readyDateTime?: Maybe<Scalars['String']>;
 };
 
+export type AwsRdsClusterSnapshotTagList = {
+  key?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
 export type AwsStringMap = {
   id: Scalars['String'];
   key?: Maybe<Scalars['String']>;
@@ -198,6 +203,7 @@ export type AwsAccount = {
   natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   networkInterfaces?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   organizations?: Maybe<Array<Maybe<AwsOrganization>>>;
+  rdsClusterSnapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
   rdsClusters?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsDbInstances?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   redshiftClusters?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
@@ -3322,6 +3328,7 @@ export type AwsKms = {
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   origin?: Maybe<Scalars['String']>;
   policy?: Maybe<AwsIamJsonPolicy>;
+  rdsClusterSnapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
   redshiftCluster?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
   region?: Maybe<Scalars['String']>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
@@ -3643,10 +3650,50 @@ export type AwsRdsCluster = {
   replicationSourceIdentifier?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  snapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
   status?: Maybe<Scalars['String']>;
   subnets?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   username?: Maybe<Scalars['String']>;
+};
+
+export type AwsRdsClusterSnapshot = {
+  accountId: Scalars['String'];
+  allocatedStorage?: Maybe<Scalars['Int']>;
+  arn: Scalars['String'];
+  attributes?: Maybe<Array<Maybe<AwsRdsClusterSnapshotAttribute>>>;
+  availabilityZones?: Maybe<Array<Maybe<Scalars['String']>>>;
+  cluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
+  clusterCreateTime?: Maybe<Scalars['DateTime']>;
+  dbClusterIdentifier?: Maybe<Scalars['String']>;
+  dbClusterSnapshotArn?: Maybe<Scalars['String']>;
+  dbClusterSnapshotIdentifier?: Maybe<Scalars['String']>;
+  engine?: Maybe<Scalars['String']>;
+  engineMode?: Maybe<Scalars['String']>;
+  engineVersion?: Maybe<Scalars['String']>;
+  iamDatabaseAuthenticationEnabled?: Maybe<Scalars['Boolean']>;
+  id: Scalars['String'];
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
+  kmsKeyId?: Maybe<Scalars['String']>;
+  licenseModel?: Maybe<Scalars['String']>;
+  masterUsername?: Maybe<Scalars['String']>;
+  percentProgress?: Maybe<Scalars['Int']>;
+  port?: Maybe<Scalars['Int']>;
+  region?: Maybe<Scalars['String']>;
+  snapshotCreateTime?: Maybe<Scalars['DateTime']>;
+  snapshotType?: Maybe<Scalars['String']>;
+  sourceDBClusterSnapshotArn?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  storageEncrypted?: Maybe<Scalars['Boolean']>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  vpcId?: Maybe<Scalars['String']>;
+};
+
+export type AwsRdsClusterSnapshotAttribute = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  values?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type AwsRdsDbInstance = {
@@ -4211,6 +4258,7 @@ export type AwsTag = {
   natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
+  rdsClusterSnapshot?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   redshiftClusters?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
@@ -4320,6 +4368,7 @@ export type AwsVpc = {
   nacl?: Maybe<Array<Maybe<AwsNetworkAcl>>>;
   natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  rdsClusterSnapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   redshiftCluster?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
   region?: Maybe<Scalars['String']>;

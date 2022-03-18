@@ -93,6 +93,7 @@ import DmsReplicationInstance from '../services/dmsReplicationInstance'
 import SageMakerNotebookInstance from '../services/sageMakerNotebookInstance'
 import SystemsManagerInstance from '../services/systemsManagerInstance'
 import SystemsManagerDocument from '../services/systemsManagerDocument'
+import RdsClusterSnapshot from '../services/rdsClusterSnapshot'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -157,6 +158,7 @@ export default {
   [services.vpc]: VPC,
   [services.sqs]: SQS,
   [services.rdsCluster]: RDSCluster,
+  [services.rdsClusterSnapshot]: RdsClusterSnapshot,
   [services.rdsDbInstance]: RDSDbInstance,
   [services.redshiftCluster]: RedshiftCluster,
   [services.route53HostedZone]: Route53HostedZone,

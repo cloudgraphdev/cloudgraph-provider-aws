@@ -50,6 +50,7 @@ export default {
   [services.networkInterface]: 'networkInterfaces',
   [services.organization]: 'organizations',
   [services.rdsCluster]: 'rdsClusters',
+  [services.rdsClusterSnapshot]: 'rdsClusterSnapshots',
   [services.rdsDbInstance]: 'rdsDbInstances',
   [services.redshiftCluster]: 'redshiftClusters',
   [services.route53HostedZone]: 'route53HostedZones',

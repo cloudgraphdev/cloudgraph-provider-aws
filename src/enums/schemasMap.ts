@@ -78,6 +78,7 @@ export default {
   [services.vpnGateway]: 'awsVpnGateway',
   [services.sqs]: 'awsSqs',
   [services.rdsCluster]: 'awsRdsCluster',
+  [services.rdsClusterSnapshot]: 'awsRdsClusterSnapshot',
   [services.rdsDbInstance]: 'awsRdsDbInstance',
   [services.redshiftCluster]: 'awsRedshiftCluster',
   [services.route53HostedZone]: 'awsRoute53HostedZone',
