@@ -1,3 +1,11 @@
+## [0.75.4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.75.3...0.75.4) (2022-03-18)
+
+
+### Bug Fixes
+
+* Add poperties needed for policy packs checks ([d9ad974](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/d9ad97467ad5cace35a05b11b31e94d506f11634))
+* added plural schema field for vpnConnections service ([9588681](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/9588681be2884147ab047e51405dcf5641200e89))
+
 ## [0.75.3](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.75.2...0.75.3) (2022-03-11)
 
 
