@@ -61,7 +61,7 @@ type awsAccount @key(fields: "id") {
   igw: [awsIgw]
   iot: [awsIotThingAttribute]
   kinesisFirehose: [awsKinesisFirehose]
-  kinesisStream: [awsKinesisStream]
+  kinesisStreams: [awsKinesisStream]
   kms: [awsKms]
   lambdaFunctions: [awsLambda]
   managedAirflows: [awsManagedAirflow]
