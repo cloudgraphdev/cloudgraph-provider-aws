@@ -190,7 +190,7 @@ export type AwsAccount = {
   igw?: Maybe<Array<Maybe<AwsIgw>>>;
   iot?: Maybe<Array<Maybe<AwsIotThingAttribute>>>;
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
-  kinesisStream?: Maybe<Array<Maybe<AwsKinesisStream>>>;
+  kinesisStreams?: Maybe<Array<Maybe<AwsKinesisStream>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   lambdaFunctions?: Maybe<Array<Maybe<AwsLambda>>>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
@@ -3080,6 +3080,15 @@ export type AwsIamGroup = {
   path?: Maybe<Scalars['String']>;
 };
 
+export type AwsIamInstanceProfile = {
+  arn?: Maybe<Scalars['String']>;
+  createDate?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  instanceProfileId?: Maybe<Scalars['String']>;
+  instanceProfileName?: Maybe<Scalars['String']>;
+  path?: Maybe<Scalars['String']>;
+};
+
 export type AwsIamJsonPolicy = {
   id: Scalars['String'];
   statement?: Maybe<Array<Maybe<AwsIamJsonPolicyStatement>>>;
@@ -3165,6 +3174,7 @@ export type AwsIamRole = {
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   id: Scalars['String'];
   inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
+  instanceProfiles?: Maybe<Array<Maybe<AwsIamInstanceProfile>>>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
   maxSessionDuration?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;

@@ -1,3 +1,4 @@
+import cuid from 'cuid'
 import { AwsIamRole } from '../../types/generated'
 import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 
@@ -25,6 +26,7 @@ export default ({
     MaxSessionDuration: maxSessionDuration = 0,
     Policies: inlinePolicies = [],
     Tags: tags = {},
+    InstanceProfiles : instanceProfiles = [],
   } = rawData
 
   // Format Role Tags
@@ -42,6 +44,14 @@ export default ({
     maxSessionDuration,
     inlinePolicies,
     tags: roleTags,
+    instanceProfiles: instanceProfiles.map(({ ...p }) => ({
+      id: cuid(),
+      arn: p.Arn || '',
+      path: p.Path || '',
+      instanceProfileName: p.InstanceProfileName || '',
+      instanceProfileId: p.InstanceProfileId || '',
+      createDate: p.CreateDate?.toISOString() || '',
+    })),
   }
   return role
 }

@@ -1,3 +1,17 @@
+type awsIamInstanceProfile
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  arn: String @search(by: [hash, regexp])
+  createDate: String @search(by: [hash, regexp])
+  instanceProfileName: String @search(by: [hash, regexp])
+  instanceProfileId: String @search(by: [hash, regexp])
+  path: String @search(by: [hash, regexp])
+}
+
 type awsIamRole @key(fields: "id") {
   id: String! @id @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
@@ -10,6 +24,7 @@ type awsIamRole @key(fields: "id") {
   maxSessionDuration: Int @search
   tags: [awsRawTag]
   inlinePolicies: [String]
+  instanceProfiles: [awsIamInstanceProfile]
   iamAttachedPolicies: [awsIamPolicy] @hasInverse(field: iamRoles)
   eksCluster: [awsEksCluster] @hasInverse(field: iamRoles) #change to plural
   ecsService: [awsEcsService] @hasInverse(field: iamRoles) #change to plural

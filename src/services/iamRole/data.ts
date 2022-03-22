@@ -6,7 +6,9 @@ import { AWSError } from 'aws-sdk/lib/error'
 
 import IAM, {
   AttachedPolicy,
+  InstanceProfile,
   ListAttachedRolePoliciesResponse,
+  ListInstanceProfilesForRoleResponse,
   ListRolePoliciesResponse,
   ListRolesResponse,
   ListRoleTagsResponse,
@@ -41,6 +43,7 @@ export interface RawAwsIamRole extends Omit<Role, 'Tags'> {
   ManagedPolicies: AttachedPolicy[]
   region: string
   Tags?: TagMap
+  InstanceProfiles: InstanceProfile[]
 }
 
 const tagsByRoleName = async (
@@ -127,6 +130,34 @@ const managedPoliciesByRoleName = async (
     )
   })
 
+const instancesProfileByRoleName = async (
+  iam: IAM,
+  { RoleName }: Role
+): Promise<{ RoleName: string; InstanceProfiles: InstanceProfile[] }> =>
+  new Promise(resolveInstanceProfile => {
+    iam.listInstanceProfilesForRole(
+      { RoleName },
+      (err: AWSError, data: ListInstanceProfilesForRoleResponse) => {
+        if (err) {
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:listInstanceProfilesForRole',
+            err,
+          })
+        }
+
+        if (!isEmpty(data)) {
+          const { InstanceProfiles = [] } = data
+          resolveInstanceProfile({
+            RoleName,
+            InstanceProfiles,
+          })
+        }
+
+        resolveInstanceProfile(null)
+      }
+    )
+  })
+
 export const listIamRoles = async (
   iam: IAM,
   marker?: string
@@ -136,6 +167,7 @@ export const listIamRoles = async (
     const policiesByRoleNamePromises = []
     const tagsByRoleNamePromises = []
     const managedPoliciesByRoleNamePromises = []
+    const instancesProfilesPromises = []
 
     iam.listRoles(
       { Marker: marker },
@@ -155,6 +187,9 @@ export const listIamRoles = async (
             managedPoliciesByRoleNamePromises.push(
               managedPoliciesByRoleName(iam, role)
             )
+            instancesProfilesPromises.push(
+              instancesProfileByRoleName(iam, role)
+            )
           })
 
           const tags = await Promise.all(tagsByRoleNamePromises)
@@ -162,6 +197,7 @@ export const listIamRoles = async (
           const managedPolicies = await Promise.all(
             managedPoliciesByRoleNamePromises
           )
+          const instancesProfiles = await Promise.all(instancesProfilesPromises)
 
           result.push(
             ...roles.map(
@@ -182,6 +218,11 @@ export const listIamRoles = async (
                     managedPolicies
                       ?.filter(p => p?.RoleName === RoleName)
                       .map(p => p.ManagedPolicies)
+                      .reduce((current, acc) => [...acc, ...current], []) || [],
+                  InstanceProfiles:
+                    instancesProfiles
+                      ?.filter(p => p?.RoleName === RoleName)
+                      .map(p => p.InstanceProfiles)
                       .reduce((current, acc) => [...acc, ...current], []) || [],
                   Tags: tags.find(t => t?.RoleName === RoleName)?.Tags || {},
                 }
