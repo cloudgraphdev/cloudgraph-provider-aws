@@ -17,6 +17,8 @@ type awsLambda @key(fields: "arn") {
   version: String @search(by: [hash, regexp])
   environmentVariables: [awsLambdaEnvironmentVariable]
   vpcConfig: awsLambdaVpcConfig
+  policyRevisionId: String @search(by: [hash, regexp])
+  policy: awsIamJSONPolicy
   tags: [awsRawTag]
   kms: [awsKms] @hasInverse(field: lambda)
   securityGroups: [awsSecurityGroup] @hasInverse(field: lambda)

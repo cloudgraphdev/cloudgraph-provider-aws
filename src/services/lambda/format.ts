@@ -3,6 +3,7 @@ import t from '../../properties/translations'
 import { AwsLambda } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsLambdaFunction } from './data'
+import { formatIamJsonPolicy } from '../../utils/format'
 
 /**
  * Lambda
@@ -31,7 +32,11 @@ export default ({
     TracingConfig: tracing = [],
     Version: version,
     reservedConcurrentExecutions: rawReservedConcurrentExecutions,
-    VpcConfig: vpcConfig
+    VpcConfig: vpcConfig,
+    PolicyData: {
+      Policy: policy = '',
+      RevisionId: policyRevisionId = ''
+    }
   } = rawData
   const environmentVariables = []
   const secretNames = [t.pass, t.secret, t.private, t.cert]
@@ -82,6 +87,8 @@ export default ({
     version,
     environmentVariables,
     vpcConfig: formattedVpcConfig,
+    policyRevisionId,
+    policy: formatIamJsonPolicy(policy),
     tags: formatTagsFromMap(Tags),
   }
 }
