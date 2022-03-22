@@ -1,3 +1,10 @@
+# [0.76.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.75.5...0.76.0) (2022-03-22)
+
+
+### Features
+
+* **services:** add policy data to lambda ([fadbe8c](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/fadbe8ccfc03751b7dbebb97b7a5c938e6f24d48))
+
 ## [0.75.5](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.75.4...0.75.5) (2022-03-18)
 
 
