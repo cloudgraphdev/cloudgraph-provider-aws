@@ -38,6 +38,7 @@ type awsTag @key(fields: "id") {
   iamRoles: [awsIamRole]
   iamPolicies: [awsIamPolicy]
   rdsCluster: [awsRdsCluster]
+  rdsClusterSnapshot: [awsRdsClusterSnapshot]
   rdsDbInstance: [awsRdsDbInstance]
   elasticBeanstalkApp: [awsElasticBeanstalkApp]
   elasticBeanstalkEnv: [awsElasticBeanstalkEnv]

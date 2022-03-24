@@ -23,6 +23,7 @@ import { RawFlowLog } from '../flowLogs/data'
 import { RawAwsEcsService } from '../ecsService/data'
 import { RawAwsElasticSearchDomain } from '../elasticSearchDomain/data'
 import { RawAwsDmsReplicationInstance } from '../dmsReplicationInstance/data'
+import { RawAwsRdsClusterSnapshot } from '../rdsClusterSnapshot/data'
 /**
  * ALBs
  */
@@ -273,7 +274,7 @@ export default ({
     }
   }
   /**
-   * Find any RDS related data
+   * Find any RDS Instance related data
    */
   const rdsDbInstances = data.find(
     ({ name }) => name === services.rdsDbInstance
@@ -292,6 +293,28 @@ export default ({
       })
     }
   }
+
+  /**
+   * Find any RDS Cluster Snapshot related data
+   */
+   const snapshots = data.find(
+    ({ name }) => name === services.rdsClusterSnapshot
+  )
+  if (snapshots?.data?.[region]) {
+    const dataAtRegion: RawAwsRdsClusterSnapshot[] = snapshots.data[region].filter(
+      ({ VpcId }: RawAwsRdsClusterSnapshot) => VpcId === id
+    )
+
+    for (const snapshot of dataAtRegion) {
+      connections.push({
+        id: snapshot.DBClusterSnapshotIdentifier,
+        resourceType: services.rdsClusterSnapshot,
+        relation: 'child',
+        field: 'rdsClusterSnapshots',
+      })
+    }
+  }
+
   /**
    * Find any Subnet related data
    */

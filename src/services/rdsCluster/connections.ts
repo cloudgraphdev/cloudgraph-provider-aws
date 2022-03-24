@@ -4,6 +4,7 @@ import { SecurityGroup } from 'aws-sdk/clients/ec2'
 import { DBInstance, DBCluster } from 'aws-sdk/clients/rds'
 
 import services from '../../enums/services'
+import { RawAwsRdsClusterSnapshot } from '../rdsClusterSnapshot/data'
 
 export default ({
   service,
@@ -27,7 +28,7 @@ export default ({
   )
 
   /**
-   * Find instances
+   * Find rds db instances
    */
   const instances: {
     name: string
@@ -46,6 +47,30 @@ export default ({
           resourceType: services.rdsDbInstance,
           relation: 'child',
           field: 'instances',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find cluster snapshots
+   */
+   const snapshots: {
+    name: string
+    data: { [property: string]: RawAwsRdsClusterSnapshot[] }
+  } = data.find(({ name }) => name === services.rdsClusterSnapshot)
+
+  if (snapshots?.data?.[region]) {
+    const dataInRegion: RawAwsRdsClusterSnapshot[] = snapshots.data[region].filter(
+      ({ DBClusterIdentifier }: RawAwsRdsClusterSnapshot) => DBClusterIdentifier === clusterId
+    )
+    if (!isEmpty(dataInRegion)) {
+      for (const snapshot of dataInRegion) {
+        connections.push({
+          id: snapshot.DBClusterSnapshotIdentifier,
+          resourceType: services.rdsClusterSnapshot,
+          relation: 'child',
+          field: 'snapshots',
         })
       }
     }

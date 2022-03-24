@@ -70,6 +70,7 @@ type awsAccount @key(fields: "id") {
   networkInterfaces: [awsNetworkInterface]
   organizations: [awsOrganization]
   rdsClusters: [awsRdsCluster]
+  rdsClusterSnapshots: [awsRdsClusterSnapshot]
   rdsDbInstances: [awsRdsDbInstance]
   redshiftClusters: [awsRedshiftCluster]
   route53HostedZones: [awsRoute53HostedZone]
