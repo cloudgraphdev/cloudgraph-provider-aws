@@ -1,3 +1,10 @@
+# [0.77.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.76.0...0.77.0) (2022-03-24)
+
+
+### Features
+
+* **services:** add new service rds cluster snapshot ([2ce27d7](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/2ce27d7e6d2d30a2c0e32b40909c4e4453a45667))
+
 # [0.76.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.75.5...0.76.0) (2022-03-22)
 
 
