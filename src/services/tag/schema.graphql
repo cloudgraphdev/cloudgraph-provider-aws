@@ -37,6 +37,7 @@ type awsTag @key(fields: "id") {
   iamUsers: [awsIamUser]
   iamRoles: [awsIamRole]
   iamPolicies: [awsIamPolicy]
+  iamInstanceProfiles: [awsIamInstanceProfile]
   rdsCluster: [awsRdsCluster]
   rdsClusterSnapshot: [awsRdsClusterSnapshot]
   rdsDbInstance: [awsRdsDbInstance]

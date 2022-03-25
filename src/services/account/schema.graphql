@@ -58,6 +58,7 @@ type awsAccount @key(fields: "id") {
   iamSamlProviders: [awsIamSamlProvider]
   iamServerCertificates: [awsIamServerCertificate]
   iamUsers: [awsIamUser]
+  iamInstanceProfiles: [awsIamInstanceProfile]
   igw: [awsIgw]
   iot: [awsIotThingAttribute]
   kinesisFirehose: [awsKinesisFirehose]

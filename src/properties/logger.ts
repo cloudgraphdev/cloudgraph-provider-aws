@@ -37,6 +37,8 @@ export default {
   lookingForIamServerCertificates: 'Looking for IAM Server Certificates to add',
   foundServerCertificates: (num: number): string =>
     `Found ${num} Server Certificates to add`,
+  foundInstanceProfiles: (num: number): string =>
+    `Found ${num} Instance Profiles to add`,
   /**
    * CloudFormation
    */

@@ -184,6 +184,7 @@ export type AwsAccount = {
   glueRegistries?: Maybe<Array<Maybe<AwsGlueRegistry>>>;
   guardDutyDetectors?: Maybe<Array<Maybe<AwsGuardDutyDetector>>>;
   iamGroups?: Maybe<Array<Maybe<AwsIamGroup>>>;
+  iamInstanceProfiles?: Maybe<Array<Maybe<AwsIamInstanceProfile>>>;
   iamOpenIdConnectProviders?: Maybe<Array<Maybe<AwsIamOpenIdConnectProvider>>>;
   iamPasswordPolicies?: Maybe<Array<Maybe<AwsIamPasswordPolicy>>>;
   iamPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
@@ -195,7 +196,7 @@ export type AwsAccount = {
   igw?: Maybe<Array<Maybe<AwsIgw>>>;
   iot?: Maybe<Array<Maybe<AwsIotThingAttribute>>>;
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
-  kinesisStream?: Maybe<Array<Maybe<AwsKinesisStream>>>;
+  kinesisStreams?: Maybe<Array<Maybe<AwsKinesisStream>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   lambdaFunctions?: Maybe<Array<Maybe<AwsLambda>>>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
@@ -3086,6 +3087,17 @@ export type AwsIamGroup = {
   path?: Maybe<Scalars['String']>;
 };
 
+export type AwsIamInstanceProfile = {
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  createDate?: Maybe<Scalars['DateTime']>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  path?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+};
+
 export type AwsIamJsonPolicy = {
   id: Scalars['String'];
   statement?: Maybe<Array<Maybe<AwsIamJsonPolicyStatement>>>;
@@ -3169,6 +3181,7 @@ export type AwsIamRole = {
   glueJobs?: Maybe<Array<Maybe<AwsGlueJob>>>;
   guardDutyDetectors?: Maybe<Array<Maybe<AwsGuardDutyDetector>>>;
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
+  iamInstanceProfiles?: Maybe<Array<Maybe<AwsIamInstanceProfile>>>;
   id: Scalars['String'];
   inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
@@ -4246,6 +4259,7 @@ export type AwsTag = {
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
   guardDutyDetectors?: Maybe<Array<Maybe<AwsGuardDutyDetector>>>;
+  iamInstanceProfiles?: Maybe<Array<Maybe<AwsIamInstanceProfile>>>;
   iamPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   iamUsers?: Maybe<Array<Maybe<AwsIamUser>>>;

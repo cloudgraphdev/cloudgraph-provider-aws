@@ -56,6 +56,7 @@ export default {
   iamSamlProvider: 'iamSamlProvider',
   iamOpenIdConnectProvider: 'iamOpenIdConnectProvider',
   iamServerCertificate: 'iamServerCertificate',
+  iamInstanceProfile: 'iamInstanceProfile',
   igw: 'igw',
   iot: 'iot',
   kinesisFirehose: 'kinesisFirehose',
