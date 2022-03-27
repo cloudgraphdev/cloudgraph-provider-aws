@@ -63,6 +63,7 @@ import { RawAwsGuardDutyDetector } from '../guardDutyDetector/data'
 import { RawAwsElasticSearchDomain } from '../elasticSearchDomain/data'
 import { RawAwsSystemsManagerDocument } from '../systemsManagerDocument/data'
 import { RawAwsRdsClusterSnapshot } from '../rdsClusterSnapshot/data'
+import { RawAwsInstanceProfile } from '../iamInstanceProfile/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -465,23 +466,26 @@ export default ({
     /**
      * Find related dmsReplicationInstances
      */
-     const replications: { name: string; data: { [property: string]: any[] } } =
-     data.find(({ name }) => name === services.dmsReplicationInstance)
-   if (replications?.data?.[region]) {
-     const dataAtRegion = findServiceInstancesWithTag(tag, replications.data[region])
-     if (!isEmpty(dataAtRegion)) {
-       for (const instance of dataAtRegion) {
-         const { ReplicationInstanceArn: id } = instance
+    const replications: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.dmsReplicationInstance)
+    if (replications?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        replications.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { ReplicationInstanceArn: id } = instance
 
-         connections.push({
-           id,
-           resourceType: services.dmsReplicationInstance,
-           relation: 'child',
-           field: 'dmsReplicationInstances',
-         })
-       }
-     }
-   }
+          connections.push({
+            id,
+            resourceType: services.dmsReplicationInstance,
+            relation: 'child',
+            field: 'dmsReplicationInstances',
+          })
+        }
+      }
+    }
 
     /**
      * Find related elasticSearchDomain
@@ -495,7 +499,7 @@ export default ({
       )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
-          const { DomainId: id } = instance
+          const { DomainId: id }: RawAwsElasticSearchDomain = instance
 
           connections.push({
             id,
@@ -1012,26 +1016,24 @@ export default ({
     /**
      * Find related RDS cluster Snapshots
      */
-     const snapshots: { name: string; data: { [property: string]: any[] } } =
-     data.find(({ name }) => name === services.rdsClusterSnapshot)
-   if (snapshots?.data?.[region]) {
-     const dataAtRegion: RawAwsRdsClusterSnapshot[] = findServiceInstancesWithTag(
-       tag,
-       snapshots.data[region]
-     )
-     if (!isEmpty(dataAtRegion)) {
-       for (const instance of dataAtRegion) {
-         const { DBClusterSnapshotIdentifier } = instance
+    const snapshots: { name: string; data: { [property: string]: any[] } } =
+      data.find(({ name }) => name === services.rdsClusterSnapshot)
+    if (snapshots?.data?.[region]) {
+      const dataAtRegion: RawAwsRdsClusterSnapshot[] =
+        findServiceInstancesWithTag(tag, snapshots.data[region])
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { DBClusterSnapshotIdentifier } = instance
 
-         connections.push({
-           id: DBClusterSnapshotIdentifier,
-           resourceType: services.rdsClusterSnapshot,
-           relation: 'child',
-           field: 'rdsClusterSnapshot',
-         })
-       }
-     }
-   }
+          connections.push({
+            id: DBClusterSnapshotIdentifier,
+            resourceType: services.rdsClusterSnapshot,
+            relation: 'child',
+            field: 'rdsClusterSnapshot',
+          })
+        }
+      }
+    }
 
     /**
      * Find related RDS instances
@@ -1658,6 +1660,32 @@ export default ({
             resourceType: services.transitGatewayAttachment,
             relation: 'child',
             field: 'transitGatewayAttachment',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related IAM Instance Profiles
+     */
+    const iamInstanceProfiles: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.iamInstanceProfile)
+    if (iamInstanceProfiles?.data?.[globalRegionName]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        iamInstanceProfiles.data[globalRegionName]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { InstanceProfileId: id }: RawAwsInstanceProfile = instance
+
+          connections.push({
+            id,
+            resourceType: services.iamInstanceProfile,
+            relation: 'child',
+            field: 'iamInstanceProfiles',
           })
         }
       }

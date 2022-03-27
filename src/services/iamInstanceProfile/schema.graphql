@@ -1,0 +1,10 @@
+type awsIamInstanceProfile @key(fields: "id") {
+  id: String! @id @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  accountId: String! @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  path: String @search(by: [hash, regexp])
+  createDate: DateTime
+  tags: [awsRawTag]
+  iamRole: [awsIamRole] @hasInverse(field: iamInstanceProfiles)
+}

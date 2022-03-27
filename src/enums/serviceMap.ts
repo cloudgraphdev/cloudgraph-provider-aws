@@ -66,6 +66,7 @@ import IamPasswordPolicy from '../services/iamPasswordPolicy'
 import IamSamlProvider from '../services/iamSamlProvider'
 import IamOpenIdConnectProvider from '../services/iamOpenIdConnectProvider'
 import IamServerCertificate from '../services/iamServerCertificate'
+import IamInstanceProfile from '../services/iamInstanceProfile'
 import SNS from '../services/sns'
 import EKSCluster from '../services/eksCluster'
 import Cloud9Environment from '../services/cloud9'
@@ -178,6 +179,7 @@ export default {
   [services.iamSamlProvider]: IamSamlProvider,
   [services.iamOpenIdConnectProvider]: IamOpenIdConnectProvider,
   [services.iamServerCertificate]: IamServerCertificate,
+  [services.iamInstanceProfile]: IamInstanceProfile,
   [services.sns]: SNS,
   [services.ecsCluster]: EcsCluster,
   [services.ecsContainer]: EcsContainer,

@@ -43,6 +43,7 @@ export default {
   [services.iamRole]: 'iamRoles',
   [services.iamSamlProvider]: 'iamSamlProviders',
   [services.iamServerCertificate]: 'iamServerCertificates',
+  [services.iamInstanceProfile]: 'iamInstanceProfiles',
   [services.iamUser]: 'iamUsers',
   [services.kinesisStream]: 'kinesisStreams',
   [services.lambda]: 'lambdaFunctions',

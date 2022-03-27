@@ -62,6 +62,7 @@ export default {
   [services.iamPolicy]: 'awsIamPolicy',
   [services.iamSamlProvider]: 'awsIamSamlProvider',
   [services.iamServerCertificate]: 'awsIamServerCertificate',
+  [services.iamInstanceProfile]: 'awsIamInstanceProfile',
   [services.igw]: 'awsIgw',
   [services.iot]: 'awsIotThingAttribute',
   [services.kinesisFirehose]: 'awsKinesisFirehose',
