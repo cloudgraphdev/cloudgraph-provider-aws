@@ -1,3 +1,10 @@
+# [0.78.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.77.0...0.78.0) (2022-03-27)
+
+
+### Features
+
+* **service:** Add AWS service iamInstanceProfile ([12484c4](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/12484c4d4a8687496ac5e0c6ca48c5f40df07ac8))
+
 # [0.77.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.76.0...0.77.0) (2022-03-24)
 
 
