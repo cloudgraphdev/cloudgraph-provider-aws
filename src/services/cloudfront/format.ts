@@ -14,6 +14,7 @@ import {
   AwsCloudfrontCustomErrorResponse,
   AwsCloudfrontOriginData,
   AwsCloudfrontViewerCertificate,
+  AwsCloudfrontLoggingConfig,
 } from '../../types/generated'
 import { RawAwsCloudfront } from './data'
 
@@ -120,6 +121,7 @@ export default ({
       Restrictions: { GeoRestriction: { Items: geoRestrictions = [] } } = {
         GeoRestriction: { RestrictionType: '', Items: [], Quantity: 0 },
       },
+      Logging: logging,
     },
     etag,
     summary: {
@@ -212,6 +214,15 @@ export default ({
     })
   )
 
+  const loggingConfig: AwsCloudfrontLoggingConfig = logging
+    ? {
+        enabled: logging.Enabled,
+        includeCookies: logging.IncludeCookies,
+        bucket: logging.Bucket,
+        prefix: logging.Prefix,
+      }
+    : {}
+
   return {
     id,
     accountId: account,
@@ -238,5 +249,6 @@ export default ({
     tags: formatTagsFromMap(Tags),
     viewerCertificate,
     webAclId,
+    logging: loggingConfig,
   }
 }
