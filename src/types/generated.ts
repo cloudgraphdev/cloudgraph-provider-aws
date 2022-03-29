@@ -785,6 +785,7 @@ export type AwsCloudfront = {
   id: Scalars['String'];
   ipv6Enabled?: Maybe<Scalars['String']>;
   lastModified?: Maybe<Scalars['String']>;
+  logging?: Maybe<AwsCloudfrontLoggingConfig>;
   orderedCacheBehaviors?: Maybe<Array<Maybe<AwsCloudfrontCacheBehavior>>>;
   origins?: Maybe<Array<Maybe<AwsCloudfrontOriginData>>>;
   priceClass?: Maybe<Scalars['String']>;
@@ -826,6 +827,13 @@ export type AwsCloudfrontCustomOriginConfig = {
   originProtocolPolicy?: Maybe<Scalars['String']>;
   originReadTimeout?: Maybe<Scalars['Int']>;
   originSslProtocols?: Maybe<AwsCloudfrontOriginSslProtocols>;
+};
+
+export type AwsCloudfrontLoggingConfig = {
+  bucket?: Maybe<Scalars['String']>;
+  enabled?: Maybe<Scalars['Boolean']>;
+  includeCookies?: Maybe<Scalars['Boolean']>;
+  prefix?: Maybe<Scalars['String']>;
 };
 
 export type AwsCloudfrontOriginCustomHeader = {
@@ -890,7 +898,14 @@ export type AwsCloudtrail = {
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
 };
 
+export type AwsCloudtrailDataResource = {
+  id: Scalars['String'];
+  type?: Maybe<Scalars['String']>;
+  values?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
 export type AwsCloudtrailEventSelector = {
+  dataResources?: Maybe<Array<Maybe<AwsCloudtrailDataResource>>>;
   id: Scalars['String'];
   includeManagementEvents?: Maybe<Scalars['Boolean']>;
   readWriteType?: Maybe<Scalars['String']>;

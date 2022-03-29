@@ -19,6 +19,7 @@ type awsCloudfront @key(fields: "id") {
   orderedCacheBehaviors: [awsCloudfrontCacheBehavior]
   viewerCertificate: awsCloudfrontViewerCertificate
   origins: [awsCloudfrontOriginData]
+  logging: awsCloudfrontLoggingConfig
   elb: [awsElb] @hasInverse(field: cloudfrontDistribution)
   s3: [awsS3] @hasInverse(field: cloudfrontDistribution)
   tags: [awsRawTag]
@@ -88,4 +89,11 @@ type awsCloudfrontCustomErrorResponse {
   errorCode: Int @search
   responseCode: String @search(by: [hash, regexp])
   responsePagePath: String @search(by: [hash, regexp])
+}
+
+type awsCloudfrontLoggingConfig {
+  enabled: Boolean @search
+  includeCookies: Boolean @search
+  bucket: String @search(by: [hash, regexp])
+  prefix: String @search(by: [hash, regexp])
 }

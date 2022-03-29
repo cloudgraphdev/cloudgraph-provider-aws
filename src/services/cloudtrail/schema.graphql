@@ -51,4 +51,16 @@ type awsCloudtrailEventSelector
   id: String! @id @search(by: [hash])
   readWriteType: String @search(by: [hash, regexp])
   includeManagementEvents: Boolean @search
+  dataResources: [awsCloudtrailDataResource]
+}
+
+type awsCloudtrailDataResource
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  type: String @search(by: [hash, regexp])
+  values: [String] @search(by: [hash, regexp])
 }
