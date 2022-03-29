@@ -174,3 +174,5 @@ type awsDynamoDbTable @key(fields: "arn") {
   ttlEnabled: Boolean @search
   appSync: [awsAppSync] @hasInverse(field: dynamodb)
 }
+
+#TODO: create conenction to iam roles using autoscalingRoleArn, also connect to KMS

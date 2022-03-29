@@ -8,3 +8,5 @@ type awsElasticBeanstalkApp @key(fields: "arn") {
   elasticBeanstalkEnv: [awsElasticBeanstalkEnv] #change to plural
   tags: [awsRawTag]
 }
+
+#TODO: get iam role data and connection in format from ResourceLifecycleConfig

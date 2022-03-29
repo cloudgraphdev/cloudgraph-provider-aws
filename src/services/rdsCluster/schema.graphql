@@ -37,4 +37,7 @@ type awsRdsCluster @key(fields: "arn") {
   securityGroups: [awsSecurityGroup] @hasInverse(field: rdsCluster)
   appSync: [awsAppSync] @hasInverse(field: rdsCluster)
 }
+
+# TODO: create connection to iam roles using AssociatedRoles property AND DomainMemberships AND MonitoringRole
+# TODO: create connection to kms using all kms related fields
  

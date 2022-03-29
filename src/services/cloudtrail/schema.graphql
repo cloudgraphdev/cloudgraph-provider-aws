@@ -12,7 +12,7 @@ type awsCloudtrail @key(fields: "cgId") {
   homeRegion: String @search(by: [hash, regexp])
   logFileValidationEnabled: String @search(by: [hash, regexp])
   cloudWatchLogsLogGroupArn: String @search(by: [hash, regexp])
-  cloudWatchLogsRoleArn: String @search(by: [hash, regexp])
+  cloudWatchLogsRoleArn: String @search(by: [hash, regexp]) # add iamRole connection here
   kmsKeyId: String @search(by: [hash, regexp])
   hasCustomEventSelectors: String @search(by: [hash, regexp])
   hasInsightSelectors: String @search(by: [hash, regexp])

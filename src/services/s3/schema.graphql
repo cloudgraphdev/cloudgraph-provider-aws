@@ -29,6 +29,8 @@ type awsS3 @key(fields: "arn") {
   managedAirflows: [awsManagedAirflow] @hasInverse(field: s3)
 }
 
+# TODO: use getBucketReplication and getBucketNotificationConfiguration to make connections to lambda, sns, iamRole, SQS
+
 type awsBucketPolicy
   @generate(
     query: { get: false, query: true, aggregate: false }

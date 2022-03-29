@@ -96,7 +96,7 @@ type awsEc2 @key(fields: "arn") {
   sourceDestCheck: String @search(by: [hash, regexp])
   availabilityZone: String @search(by: [hash, regexp])
   cpuThreadsPerCore: Int @search
-  iamInstanceProfile: String @search(by: [hash, regexp]) # TODO: use to make a connection to a role
+  iamInstanceProfile: String @search(by: [hash, regexp]) # TODO: use to make a connection to a iamRole
   deletionProtection: String @search(by: [hash, regexp])
   dailyCost: awsTotalBillingInfo
   primaryNetworkInterface: String @search(by: [hash, regexp])

@@ -40,7 +40,7 @@ type awsCloudFormationStackAutoDeploymentConfig {
   enabled: String @search(by: [hash, regexp])
   retainStacksOnAccountRemoval: String @search(by: [hash, regexp])
 }
-# add accountId to cloudFormationStackSet
+# TODO: add accountId to cloudFormationStackSet
 type awsCloudFormationStackSet @key(fields: "arn") {
   id: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
@@ -59,3 +59,5 @@ type awsCloudFormationStackSet @key(fields: "arn") {
   permissionModel: String @search(by: [hash, regexp])
   organizationalUnitIds: [String] @search
 }
+
+# TODO: add iam role connection using AdministrationRoleARN (also see if a connection can be made using ExecutionRoleName)

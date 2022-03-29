@@ -21,6 +21,8 @@ type awsEcsCluster @key(fields: "arn") {
   ecsTaskSet: [awsEcsTaskSet] @hasInverse(field: ecsCluster)
 }
 
+#TODO: add connections to cloudwatchLog, s3, 
+
 type AwsEcsExecuteCommandLogConfiguration 
   @generate(
     query: { get: false, query: true, aggregate: false }

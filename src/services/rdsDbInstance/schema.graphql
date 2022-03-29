@@ -39,3 +39,9 @@ type awsRdsDbInstance @key(fields: "arn") {
   subnet: [awsSubnet] @hasInverse(field: rdsDbInstance)
   vpc: [awsVpc] @hasInverse(field: rdsDbInstance)
 }
+
+#TODO: add connection to route53HostedZone using hostedZoneId in Endpoint
+# TODO: add connection to kms using kmsKeyId AND PerformanceInsightsKMSKeyId AND ActivityStreamKmsKeyId
+# TODO: add connection to IAM role using DomainMembership AND MonitoringRoleArn AND AssociatedRoles
+# TODO: add connection to cloudwatchLog using EnhancedMonitoringResourceArn
+
