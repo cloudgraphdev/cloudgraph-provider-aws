@@ -1,3 +1,10 @@
+## [0.78.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.78.0...0.78.1) (2022-03-29)
+
+
+### Bug Fixes
+
+* Added missing properties needed for nist rules ([0536584](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/commit/0536584aced207b3b475a51ed411e0c780966b9c))
+
 # [0.78.0](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.77.0...0.78.0) (2022-03-27)
 
 
