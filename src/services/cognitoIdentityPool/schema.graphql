@@ -35,5 +35,6 @@ type awsCognitoIdentityPool @key(fields: "id") {
   tags: [awsRawTag]
 }
 
+# TODO: add an arn for identity pool see here: https://docs.aws.amazon.com/cognito/latest/developerguide/security_iam_service-with-iam.html
 #TODO: add connections to iamSamlProvider and iamOpenIdConnectProvider
 #TODO: try to add connection to iam role using getIdentityPoolRoles 

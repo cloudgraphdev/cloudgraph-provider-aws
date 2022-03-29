@@ -22,6 +22,8 @@ type awsFlowLog @key(fields: "id") {
   # destinationOptions: awsDestinationOptions Cant find in the aws SDK flow log type but is in docs, investigate later
 }
 
+# TODO: add arn like so arn:aws:ec2:region:account_id:vpc-flow-log/flow-log-id
+
 # type awsDestinationOptions {
 #   fileFormat: String
 #   hiveCompatiblePartitions: Boolean

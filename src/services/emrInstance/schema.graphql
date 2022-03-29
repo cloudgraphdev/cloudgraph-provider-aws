@@ -16,6 +16,8 @@ type awsEmrInstance @key(fields: "id") {
   ec2Instance: [awsEc2] @hasInverse(field: emrInstance)
 }
 
+# TODO: add arn if possible
+
 type awsEmrInstanceStatus
   @generate(
     query: { get: false, query: false, aggregate: false }

@@ -8,6 +8,8 @@ type awsEmrStep @key(fields: "id") {
   status: awsEmrStepStatus
 }
 
+# TODO: add arn if possible (or maybe deconvert from a service to a sub-object)
+
 type awsEmrHadoopStepConfig
   @generate(
     query: { get: false, query: false, aggregate: false }

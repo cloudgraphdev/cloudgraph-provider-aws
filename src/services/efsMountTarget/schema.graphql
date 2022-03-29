@@ -13,3 +13,5 @@ type awsEfsMountTarget @key(fields: "id") {
   subnet: [awsSubnet] @hasInverse(field: efsMountTarget) #change to plural
   vpc: [awsVpc] @hasInverse(field: efsMountTarget)
 }
+
+# TODO: add an arn if possible
