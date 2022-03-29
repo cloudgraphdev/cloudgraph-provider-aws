@@ -50,10 +50,11 @@ export default ({
   let eventSelectors = []
   if (!isEmpty(EventSelectors)) {
     eventSelectors = EventSelectors.map(
-      ({ ReadWriteType, IncludeManagementEvents }) => ({
+      ({ ReadWriteType, IncludeManagementEvents, DataResources }) => ({
         id: cuid(),
         readWriteType: ReadWriteType,
         includeManagementEvents: IncludeManagementEvents,
+        dataResources: DataResources?.map(({ Type, Values }) => ({id: cuid(), type: Type, values : Values})) || [],
       })
     )
   }
