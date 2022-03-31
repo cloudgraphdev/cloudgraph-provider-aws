@@ -118,3 +118,6 @@ type awsCognitoUserPool @key(fields: "id") {
   lambda: [awsLambda] @hasInverse(field: cognitoUserPool) #change to plural
   appSync: [awsAppSync] @hasInverse(field: cognitoUserPool)
 }
+
+# TODO: add connetion to kms
+# TODO: add connection to iamRole using SmsConfiguration.SnsCallerArn

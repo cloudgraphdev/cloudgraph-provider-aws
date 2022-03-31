@@ -1,3 +1,4 @@
+#TODO add connection for userPool, identityPool, iamRole, cloudwatchLogs
 type awsElasticSearchDomain @key(fields: "arn") {
   id: String! @id @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])

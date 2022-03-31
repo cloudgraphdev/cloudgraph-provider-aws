@@ -124,7 +124,9 @@ type awsAdditionalAuthenticationProvider
     userPoolAwsRegion: String @search(by: [hash, regexp])
     userPoolAppIdClientRegex: String @search(by: [hash, regexp])
   }
-
+# TODO: add iam role connection
+# TODO: waf web acl connection
+# TODO: add cloudwatchLog connection
 type awsAppSync @key(fields: "arn") {
   id: String! @id @search(by: [hash])
   accountId: String! @search(by: [hash])

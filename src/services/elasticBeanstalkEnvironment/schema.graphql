@@ -30,3 +30,6 @@ type awsElasticBeanstalkEnvResource {
   name: String @search(by: [hash, regexp])
   value: [String] @search(by: [hash, regexp])
 }
+
+
+# TODO: add iam role based on OperationsRole field

@@ -9,7 +9,7 @@ type awsLambda @key(fields: "arn") {
   lastModified: String @search(by: [hash, regexp])
   memorySize: Int @search
   reservedConcurrentExecutions: Int @search
-  role: String @search(by: [hash, regexp])
+  role: String @search(by: [hash, regexp]) # TODO: add iamRole connection here
   runtime: String @search(by: [hash, regexp])
   sourceCodeSize: String @search(by: [hash, regexp])
   timeout: Int @search

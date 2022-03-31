@@ -1,3 +1,4 @@
+#TODO: add iamRole connection here
 type awsEmrCluster @key(fields: "arn") {
   id: String! @id @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])

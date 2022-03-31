@@ -1,3 +1,4 @@
+#TODO: add iam role connection
 type awsKinesisFirehose @key(fields: "arn") {
     id: String! @id @search(by: [hash])
     accountId: String! @search(by: [hash])

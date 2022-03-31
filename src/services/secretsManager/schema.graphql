@@ -27,3 +27,7 @@ type awsSecretsManager @key(fields: "arn") {
   createdDate: DateTime @search(by: [day])
   owningService: String @search(by: [hash, regexp])
 }
+
+# TODO: add connection to kms (also use ReplicationStatus.KmsKeyId)
+# TODO: add connection to lambda
+

@@ -93,6 +93,7 @@ type awsLaunchConfiguration
     metadataOptHttpEndpoint: String @search(by: [hash, regexp])
   }
 
+#TODO: add iam role connection here
 type awsAsg @key(fields: "arn") {
   id: String! @search(by: [hash])
   accountId: String! @search(by: [hash])
