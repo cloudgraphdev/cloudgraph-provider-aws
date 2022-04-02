@@ -1,7 +1,4 @@
-type awsIamUser @key(fields: "id") {
-  id: String! @id @search(by: [hash])
-  arn: String! @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash, regexp])
+type awsIamUser implements awsOptionalService @key(fields: "id") {
   path: String @search(by: [hash, regexp])
   name: String @search(by: [hash, regexp])
   creationTime: String @search(by: [hash, regexp])

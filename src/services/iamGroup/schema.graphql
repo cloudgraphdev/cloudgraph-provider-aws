@@ -1,7 +1,4 @@
-type awsIamGroup @key(fields: "id") {
-  id: String! @id @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash, regexp])
+type awsIamGroup implements awsBaseService @key(fields: "id") {
   path: String @search(by: [hash, regexp])
   name: String @search(by: [hash, regexp])
   inlinePolicies: [String]

@@ -1,8 +1,4 @@
-type awsElastiCacheCluster @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsElastiCacheCluster implements awsBaseService @key(fields: "arn") {
   cacheClusterId: String @search(by: [hash, regexp])
   configurationEndpoint: awsElastiCacheEndpoint
   clientDownloadLandingPage: String @search(by: [hash, regexp])

@@ -1,8 +1,4 @@
-type awsVpnConnection @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsVpnConnection implements awsBaseService @key(fields: "arn") {
   category: String @search(by: [hash, regexp])
   customerGatewayId: String @search(by: [hash, regexp])
   state: String @search(by: [hash, regexp])
@@ -16,7 +12,8 @@ type awsVpnConnection @key(fields: "arn") {
   transitGateway: [awsTransitGateway] @hasInverse(field: vpnConnection)
   customerGateway: [awsCustomerGateway] @hasInverse(field: vpnConnection)
   vpnGateway: [awsVpnGateway] @hasInverse(field: vpnConnection)
-  transitGatewayAttachment: [awsTransitGatewayAttachment] @hasInverse(field: vpnConnection)
+  transitGatewayAttachment: [awsTransitGatewayAttachment]
+    @hasInverse(field: vpnConnection)
 }
 
 type awsVpnConnectionOptions
