@@ -115,9 +115,9 @@ type awsCognitoUserPool @key(fields: "id") {
   usernameConfigurationCaseSensitive: String @search(by: [hash, regexp])
   accountRecoverySettings: [awsAccountRecoverySetting]
   tags: [awsRawTag]
-  lambda: [awsLambda] @hasInverse(field: cognitoUserPool) #change to plural
+  lambdas: [awsLambda] @hasInverse(field: cognitoUserPools)
   appSync: [awsAppSync] @hasInverse(field: cognitoUserPool)
+  kms: [awsKms] @hasInverse(field: cognitoUserPool)
+  ses: [awsSes] @hasInverse(field: cognitoUserPool)
+  iamRole: [awsIamRole] @hasInverse(field: cognitoUserPool)
 }
-
-# TODO: add connetion to kms
-# TODO: add connection to iamRole using SmsConfiguration.SnsCallerArn

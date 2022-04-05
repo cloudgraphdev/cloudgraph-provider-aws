@@ -1206,15 +1206,18 @@ export type AwsCognitoUserPool = {
   emailVerificationMessage?: Maybe<Scalars['String']>;
   emailVerificationSubject?: Maybe<Scalars['String']>;
   estimatedNumberOfUsers?: Maybe<Scalars['Int']>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   id: Scalars['String'];
-  lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
   lambdaConfig?: Maybe<AwsCognitoUserPoolLambdaConfig>;
+  lambdas?: Maybe<Array<Maybe<AwsLambda>>>;
   lastModifiedDate?: Maybe<Scalars['String']>;
   mfaConfiguration?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   policies?: Maybe<AwsCognitoUserPoolPasswordPolicy>;
   region?: Maybe<Scalars['String']>;
   schemaAttributes?: Maybe<Array<Maybe<AwsCognitoUserPoolSchemaAttribute>>>;
+  ses?: Maybe<Array<Maybe<AwsSes>>>;
   smsAuthenticationMessage?: Maybe<Scalars['String']>;
   smsConfigurationExternalId?: Maybe<Scalars['String']>;
   smsConfigurationFailure?: Maybe<Scalars['String']>;
@@ -3187,6 +3190,7 @@ export type AwsIamRole = {
   assumeRolePolicy?: Maybe<AwsIamJsonPolicy>;
   cloudFormationStack?: Maybe<Array<Maybe<AwsCloudFormationStack>>>;
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
+  cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   configurationRecorder?: Maybe<Array<Maybe<AwsConfigurationRecorder>>>;
   createdAt?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
@@ -3338,6 +3342,7 @@ export type AwsKms = {
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
   cloudwatchLog?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
+  cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   creationDate?: Maybe<Scalars['String']>;
   customerMasterKeySpec?: Maybe<Scalars['String']>;
   deletionDate?: Maybe<Scalars['String']>;
@@ -3370,7 +3375,7 @@ export type AwsLambda = {
   accountId: Scalars['String'];
   appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
   arn: Scalars['String'];
-  cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
+  cognitoUserPools?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   description?: Maybe<Scalars['String']>;
   environmentVariables?: Maybe<Array<Maybe<AwsLambdaEnvironmentVariable>>>;
   handler?: Maybe<Scalars['String']>;
@@ -4034,6 +4039,7 @@ export type AwsServiceBillingInfo = {
 export type AwsSes = {
   accountId: Scalars['String'];
   arn: Scalars['String'];
+  cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   email?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   region?: Maybe<Scalars['String']>;
