@@ -1,3 +1,10 @@
+## [0.78.2-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.78.1...0.78.2-alpha.1) (2022-04-06)
+
+
+### Bug Fixes
+
+* Standardized aws service schemas using base schema ([f0f7cfd](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/f0f7cfdc3b71a202f211ed7255ea6b0aa1e4988d))
+
 ## [0.78.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.78.0...0.78.1) (2022-03-29)
 
 
