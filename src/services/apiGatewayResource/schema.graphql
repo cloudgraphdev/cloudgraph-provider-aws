@@ -6,11 +6,7 @@ type awsApiGatewayMethod @key(fields: "arn") {
   apiKeyRequired: Boolean @search
 }
 
-type awsApiGatewayResource @key(fields: "arn") {
-  id: String! @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsApiGatewayResource implements awsBaseService @key(fields: "arn") {
   restApi: [awsApiGatewayRestApi] @hasInverse(field: resources) #change to plural
   path: String @search(by: [hash, regexp])
   methods: [awsApiGatewayMethod]

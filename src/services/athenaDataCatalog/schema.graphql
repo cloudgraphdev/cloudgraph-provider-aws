@@ -1,9 +1,5 @@
-type awsAthenaDataCatalog @key(fields: "arn") {
-  id: String! @id @search(by: [hash, regexp])
-  arn: String! @id @search(by: [hash, regexp])
+type awsAthenaDataCatalog implements awsBaseService @key(fields: "arn") {
   catalogName: String! @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash])
-  region: String @search(by: [hash, regexp])
   type: String @search(by: [hash, regexp])
   databases: [awsAthenaDatabase]
 }

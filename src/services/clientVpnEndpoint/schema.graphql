@@ -1,8 +1,4 @@
-type awsClientVpnEndpoint @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsClientVpnEndpoint implements awsBaseService @key(fields: "arn") {
   status: String @search(by: [hash, regexp])
   creationTime: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp])
@@ -97,5 +93,3 @@ type awsClientConnectResponseOptions
   lambdaFunctionArn: String @search(by: [hash, regexp])
   status: String @search(by: [hash, regexp])
 }
-
-

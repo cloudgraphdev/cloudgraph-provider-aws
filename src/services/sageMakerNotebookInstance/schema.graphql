@@ -1,8 +1,5 @@
-type awsSageMakerNotebookInstance @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash])
+type awsSageMakerNotebookInstance implements awsBaseService
+  @key(fields: "arn") {
   notebookInstanceName: String @search(by: [hash, regexp])
   notebookInstanceStatus: String @search(by: [hash, regexp])
   failureReason: String @search(by: [hash, regexp])
@@ -24,8 +21,10 @@ type awsSageMakerNotebookInstance @key(fields: "arn") {
   rootAccess: String @search(by: [hash, regexp])
   platformIdentifier: String @search(by: [hash, regexp])
   iamRole: [awsIamRole] @hasInverse(field: sageMakerNotebookInstances)
-  networkInterface: [awsNetworkInterface] @hasInverse(field: sageMakerNotebookInstances)
+  networkInterface: [awsNetworkInterface]
+    @hasInverse(field: sageMakerNotebookInstances)
   subnet: [awsSubnet] @hasInverse(field: sageMakerNotebookInstances)
   kms: [awsKms] @hasInverse(field: sageMakerNotebookInstances)
-  securityGroups: [awsSecurityGroup] @hasInverse(field: sageMakerNotebookInstances)
+  securityGroups: [awsSecurityGroup]
+    @hasInverse(field: sageMakerNotebookInstances)
 }

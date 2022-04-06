@@ -4,10 +4,10 @@ type awsAppSyncApiKey
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    description: String @search(by: [hash, regexp])
-    expires: Int @search
-  }
+  id: String! @id @search(by: [hash])
+  description: String @search(by: [hash, regexp])
+  expires: Int @search
+}
 
 type awsAppSyncDataSource
   @generate(
@@ -15,33 +15,33 @@ type awsAppSyncDataSource
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    arn: String! @search(by: [hash])
-    name: String @search(by: [hash, regexp])
-    description: String @search(by: [hash, regexp])
-    type: String @search(by: [hash, regexp])
-    serviceRoleArn: String @search(by: [hash, regexp])
-    dynamodbTableName: String @search(by: [hash, regexp])
-    dynamodbAwsRegion: String @search(by: [hash, regexp])
-    dynamodbUseCallerCredentials: String @search(by: [hash, regexp])
-    dynamodbDeltaSyncBaseTableTTL: Int @search
-    dynamodbDeltaSyncTableName: String @search(by: [hash, regexp])
-    dynamodbDeltaSyncTableTTL: Int @search
-    dynamodbVersioned: String @search(by: [hash, regexp])
-    lambdaFunctionArn: String @search(by: [hash, regexp])
-    elasticsearchEndpoint: String @search(by: [hash, regexp])
-    elasticsearchAwsRegion: String @search(by: [hash, regexp])
-    httpEndpoint: String @search(by: [hash, regexp])
-    httpAuthorizationType: String @search(by: [hash, regexp])
-    httpAuthorizationIamSigningRegion: String @search(by: [hash, regexp])
-    httpAuthorizationIamSigningServiceName: String @search(by: [hash, regexp])
-    relationalDatabaseSourceType: String @search(by: [hash, regexp])
-    relationalDatabaseAwsRegion: String @search(by: [hash, regexp])
-    relationalDatabaseClusterIdentifier: String @search(by: [hash, regexp])
-    relationalDatabaseName: String @search(by: [hash, regexp])
-    relationalDatabaseSchema: String @search(by: [hash, regexp])
-    relationalDatabaseAwsSecretStoreArn: String @search(by: [hash, regexp])
-  }
+  id: String! @id @search(by: [hash])
+  arn: String! @search(by: [hash])
+  name: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  type: String @search(by: [hash, regexp])
+  serviceRoleArn: String @search(by: [hash, regexp])
+  dynamodbTableName: String @search(by: [hash, regexp])
+  dynamodbAwsRegion: String @search(by: [hash, regexp])
+  dynamodbUseCallerCredentials: String @search(by: [hash, regexp])
+  dynamodbDeltaSyncBaseTableTTL: Int @search
+  dynamodbDeltaSyncTableName: String @search(by: [hash, regexp])
+  dynamodbDeltaSyncTableTTL: Int @search
+  dynamodbVersioned: String @search(by: [hash, regexp])
+  lambdaFunctionArn: String @search(by: [hash, regexp])
+  elasticsearchEndpoint: String @search(by: [hash, regexp])
+  elasticsearchAwsRegion: String @search(by: [hash, regexp])
+  httpEndpoint: String @search(by: [hash, regexp])
+  httpAuthorizationType: String @search(by: [hash, regexp])
+  httpAuthorizationIamSigningRegion: String @search(by: [hash, regexp])
+  httpAuthorizationIamSigningServiceName: String @search(by: [hash, regexp])
+  relationalDatabaseSourceType: String @search(by: [hash, regexp])
+  relationalDatabaseAwsRegion: String @search(by: [hash, regexp])
+  relationalDatabaseClusterIdentifier: String @search(by: [hash, regexp])
+  relationalDatabaseName: String @search(by: [hash, regexp])
+  relationalDatabaseSchema: String @search(by: [hash, regexp])
+  relationalDatabaseAwsSecretStoreArn: String @search(by: [hash, regexp])
+}
 
 type awsAppSyncResolver
   @generate(
@@ -49,21 +49,21 @@ type awsAppSyncResolver
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    arn: String! @search(by: [hash])
-    typeName: String @search(by: [hash, regexp])
-    fieldName: String @search(by: [hash, regexp])
-    dataSourceName: String @search(by: [hash, regexp])
-    requestMappingTemplate: String @search(by: [hash, regexp])
-    responseMappingTemplate: String @search(by: [hash, regexp])
-    kind: String @search(by: [hash, regexp])
-    pipelineFunctionIds: [String] @search(by: [hash])
-    syncConflictHandler: String @search(by: [hash, regexp])
-    syncConflictDetection: String @search(by: [hash, regexp])
-    syncLambdaConflictHandlerArn: String @search(by: [hash, regexp])
-    cachingTTL: Int @search
-    cachingKeys: [String] @search(by: [hash])
-  }
+  id: String! @id @search(by: [hash])
+  arn: String! @search(by: [hash])
+  typeName: String @search(by: [hash, regexp])
+  fieldName: String @search(by: [hash, regexp])
+  dataSourceName: String @search(by: [hash, regexp])
+  requestMappingTemplate: String @search(by: [hash, regexp])
+  responseMappingTemplate: String @search(by: [hash, regexp])
+  kind: String @search(by: [hash, regexp])
+  pipelineFunctionIds: [String] @search(by: [hash])
+  syncConflictHandler: String @search(by: [hash, regexp])
+  syncConflictDetection: String @search(by: [hash, regexp])
+  syncLambdaConflictHandlerArn: String @search(by: [hash, regexp])
+  cachingTTL: Int @search
+  cachingKeys: [String] @search(by: [hash])
+}
 
 type awsAppSyncFunction
   @generate(
@@ -71,16 +71,16 @@ type awsAppSyncFunction
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    arn: String! @search(by: [hash])
-    name: String @search(by: [hash, regexp])
-    description: String @search(by: [hash, regexp])
-    dataSourceName: String @search(by: [hash, regexp])
-    requestMappingTemplate: String @search(by: [hash, regexp])
-    responseMappingTemplate: String @search(by: [hash, regexp])
-    functionVersion: String @search(by: [hash, regexp])
-    resolvers: [awsAppSyncResolver]
-  }
+  id: String! @id @search(by: [hash])
+  arn: String! @search(by: [hash])
+  name: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  dataSourceName: String @search(by: [hash, regexp])
+  requestMappingTemplate: String @search(by: [hash, regexp])
+  responseMappingTemplate: String @search(by: [hash, regexp])
+  functionVersion: String @search(by: [hash, regexp])
+  resolvers: [awsAppSyncResolver]
+}
 
 type awsAppSyncType
   @generate(
@@ -88,14 +88,14 @@ type awsAppSyncType
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    arn: String! @search(by: [hash])
-    name: String @search(by: [hash, regexp])
-    description: String @search(by: [hash, regexp])
-    definition: String @search(by: [hash, regexp])
-    format: String @search(by: [hash, regexp])
-    resolvers: [awsAppSyncResolver]
-  }
+  id: String! @id @search(by: [hash])
+  arn: String! @search(by: [hash])
+  name: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  definition: String @search(by: [hash, regexp])
+  format: String @search(by: [hash, regexp])
+  resolvers: [awsAppSyncResolver]
+}
 
 type awsAppSyncGraphqlApiUris
   @generate(
@@ -103,10 +103,10 @@ type awsAppSyncGraphqlApiUris
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    key: String! @search(by: [hash, regexp])
-    value: String! @search(by: [hash, regexp])
-  }
+  id: String! @id @search(by: [hash])
+  key: String! @search(by: [hash, regexp])
+  value: String! @search(by: [hash, regexp])
+}
 
 type awsAdditionalAuthenticationProvider
   @generate(
@@ -114,25 +114,21 @@ type awsAdditionalAuthenticationProvider
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    authenticationType: String @search(by: [hash, regexp])
-    openIDConnectIssuer: String @search(by: [hash, regexp])
-    openIDConnectClientId: String @search(by: [hash, regexp])
-    openIDConnectIatTTL: Int @search
-    openIDConnectAuthTTL: Int @search
-    userPoolId: String @search(by: [hash, regexp])
-    userPoolAwsRegion: String @search(by: [hash, regexp])
-    userPoolAppIdClientRegex: String @search(by: [hash, regexp])
-  }
+  id: String! @id @search(by: [hash])
+  authenticationType: String @search(by: [hash, regexp])
+  openIDConnectIssuer: String @search(by: [hash, regexp])
+  openIDConnectClientId: String @search(by: [hash, regexp])
+  openIDConnectIatTTL: Int @search
+  openIDConnectAuthTTL: Int @search
+  userPoolId: String @search(by: [hash, regexp])
+  userPoolAwsRegion: String @search(by: [hash, regexp])
+  userPoolAppIdClientRegex: String @search(by: [hash, regexp])
+}
 # TODO: add iam role connection
 # TODO: waf web acl connection
 # TODO: add cloudwatchLog connection
-type awsAppSync @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String! @search(by: [hash, regexp])
-  name: String! @search(by: [hash, regexp])
+type awsAppSync implements awsBaseService @key(fields: "arn") {
+  name: String @search(by: [hash, regexp])
   authenticationType: String @search(by: [hash, regexp])
   logFieldLogLevel: String @search(by: [hash, regexp])
   logCloudWatchLogsRoleArn: String @search(by: [hash, regexp])
@@ -145,14 +141,15 @@ type awsAppSync @key(fields: "arn") {
   openIDConnectClientId: String @search(by: [hash, regexp])
   openIDConnectIatTTL: Int @search
   openIDConnectAuthTTL: Int @search
-  uris: [awsAppSyncGraphqlApiUris] 
+  uris: [awsAppSyncGraphqlApiUris]
   tags: [awsRawTag]
   additionalAuthenticationProviders: [awsAdditionalAuthenticationProvider]
   xrayEnabled: String @search(by: [hash, regexp])
   wafWebAclArn: String @search(by: [hash, regexp])
   lambdaAuthorizerResultTtlInSeconds: Int @search
   lambdaAuthorizerUri: String @search(by: [hash, regexp])
-  lambdaAuthorizerIdentityValidationExpression: String @search(by: [hash, regexp])
+  lambdaAuthorizerIdentityValidationExpression: String
+    @search(by: [hash, regexp])
   apiKeys: [awsAppSyncApiKey]
   dataSources: [awsAppSyncDataSource]
   functions: [awsAppSyncFunction]

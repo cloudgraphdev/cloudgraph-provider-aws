@@ -54,12 +54,8 @@ type awsCloudFormationStackDriftList {
   timestamp: String @search(by: [hash, regexp])
 }
 
-type awsCloudFormationStack @key(fields: "arn") {
-  id: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String! @search(by: [hash, regexp])
+type awsCloudFormationStack implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash, regexp])
   changeSetId: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp])
   parameters: [awsCloudFormationStackParameter]
