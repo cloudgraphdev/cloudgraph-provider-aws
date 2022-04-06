@@ -120,7 +120,7 @@ export default ({
         id: subnet.SubnetId,
         resourceType: services.subnet,
         relation: 'child',
-        field: 'subnet',
+        field: 'subnets',
       })
     }
   }

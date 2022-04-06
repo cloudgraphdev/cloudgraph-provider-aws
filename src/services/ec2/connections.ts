@@ -16,6 +16,9 @@ import { RawAwsSubnet } from '../subnet/data'
 import { RawAwsEcsContainer } from '../ecsContainer/data'
 import { RawAwsSystemsManagerInstance } from '../systemsManagerInstance/data'
 import { ssmManagedInstanceArn } from '../../utils/generateArns'
+import { RawAwsElasticBeanstalkEnv } from '../elasticBeanstalkEnvironment/data'
+import { RawAwsEksCluster } from '../eksCluster/data'
+import { getEksClusterName, getElasticBeanstalkEnvId } from './utils'
 
 /**
  * EC2
@@ -44,6 +47,7 @@ export default ({
     SecurityGroups: instanceSecurityGroups = [],
     NetworkInterfaces: instanceNetworkInterfaces = [],
     SubnetId: subnetId,
+    Tags: tags,
   } = instance
 
   /**
@@ -189,17 +193,37 @@ export default ({
           id: subnet.SubnetId,
           resourceType: services.subnet,
           relation: 'child',
-          field: 'subnet',
+          field: 'subnets',
         })
       }
     }
   }
 
   /**
-   * Find EKS
+   * Find EKS cluster
    * related to this EC2
    */
-  // TODO: Implement when eks service is ready
+  const eksClusterName = getEksClusterName(tags)
+  const eksClusters: {
+    name: string
+    data: { [property: string]: any[] }
+  } = data.find(({ name }) => name === services.eksCluster)
+  if (eksClusters?.data?.[region]) {
+    const eksClustersInRegion: RawAwsEksCluster[] = eksClusters.data[
+      region
+    ].filter(({ name }: RawAwsEksCluster) => name === eksClusterName)
+
+    if (!isEmpty(eksClustersInRegion)) {
+      for (const eksCluster of eksClustersInRegion) {
+        connections.push({
+          id: eksCluster.arn,
+          resourceType: services.eksCluster,
+          relation: 'child',
+          field: 'eksCluster',
+        })
+      }
+    }
+  }
 
   /**
    * Find ECS Container
@@ -210,9 +234,9 @@ export default ({
     data: { [property: string]: any[] }
   } = data.find(({ name }) => name === services.ecsContainer)
   if (ecsContainers?.data?.[region]) {
-    const containersInRegion: RawAwsEcsContainer[] = ecsContainers.data[region].filter(
-      ({ ec2InstanceId }) => ec2InstanceId === id
-    )
+    const containersInRegion: RawAwsEcsContainer[] = ecsContainers.data[
+      region
+    ].filter(({ ec2InstanceId }) => ec2InstanceId === id)
 
     if (!isEmpty(containersInRegion)) {
       for (const container of containersInRegion) {
@@ -230,18 +254,24 @@ export default ({
    * Find SSM managed instances
    * related to this EC2 instance
    */
-   const instances: {
+  const instances: {
     name: string
     data: { [property: string]: any[] }
   } = data.find(({ name }) => name === services.systemsManagerInstance)
   if (instances?.data?.[region]) {
-    const dataInRegion: RawAwsSystemsManagerInstance[] = instances.data[region].filter(
+    const dataInRegion: RawAwsSystemsManagerInstance[] = instances.data[
+      region
+    ].filter(
       ({ InstanceId }: RawAwsSystemsManagerInstance) => InstanceId === id
     )
 
     if (!isEmpty(dataInRegion)) {
       for (const ssmInstance of dataInRegion) {
-        const arn = ssmManagedInstanceArn({ region, account, name: ssmInstance.InstanceId })
+        const arn = ssmManagedInstanceArn({
+          region,
+          account,
+          name: ssmInstance.InstanceId,
+        })
         connections.push({
           id: arn,
           resourceType: services.systemsManagerInstance,
@@ -254,9 +284,31 @@ export default ({
 
   /**
    * Find Elastic Beanstalk
-   * related to this EC2 loadbalancer
+   * related to this EC2 instance
    */
-  // TODO: Implement when eb service is ready
+  const elasticBeanstalkEnvId = getElasticBeanstalkEnvId(tags)
+  const elasticBeanstalkEnvs: {
+    name: string
+    data: { [property: string]: any[] }
+  } = data.find(({ name }) => name === services.elasticBeanstalkEnv)
+  if (elasticBeanstalkEnvs?.data?.[region]) {
+    const elasticBeanstalkEnvsInRegion: RawAwsElasticBeanstalkEnv[] =
+    elasticBeanstalkEnvs.data[region].filter(
+        ({ EnvironmentId }: RawAwsElasticBeanstalkEnv) =>
+          elasticBeanstalkEnvId === EnvironmentId
+      )
+
+    if (!isEmpty(elasticBeanstalkEnvsInRegion)) {
+      for (const elasticBeanstalkEnv of elasticBeanstalkEnvsInRegion) {
+        connections.push({
+          id: elasticBeanstalkEnv.EnvironmentId,
+          resourceType: services.elasticBeanstalkEnv,
+          relation: 'child',
+          field: 'elasticBeanstalkEnv',
+        })
+      }
+    }
+  }
 
   const ec2Result = {
     [id]: connections,
