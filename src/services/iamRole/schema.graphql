@@ -23,4 +23,5 @@ type awsIamRole @key(fields: "id") {
   sageMakerNotebookInstances: [awsSageMakerNotebookInstance] @hasInverse(field: iamRole)
   systemsManagerInstances: [awsSystemsManagerInstance] @hasInverse(field: iamRole)
   iamInstanceProfiles: [awsIamInstanceProfile] @hasInverse(field: iamRole)
+  cognitoUserPools: [awsCognitoUserPool] @hasInverse(field: iamRole)
 }
