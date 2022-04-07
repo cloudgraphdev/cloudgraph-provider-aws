@@ -1,7 +1,5 @@
 import cuid from 'cuid'
-import {
-  Configuration,
-} from 'aws-sdk/clients/emr'
+import { Configuration } from 'aws-sdk/clients/emr'
 import { AwsEmrCluster } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsEmrCluster } from './data'
@@ -9,7 +7,7 @@ import { RawAwsEmrCluster } from './data'
 export default ({
   service,
   account,
-  region
+  region,
 }: {
   service: RawAwsEmrCluster
   account: string
@@ -28,12 +26,10 @@ export default ({
     AutoTerminate: autoTerminate,
     TerminationProtected: terminationProtected,
     VisibleToAllUsers: visibleToAllUsers,
-    ServiceRole: serviceRole,
     NormalizedInstanceHours: normalizedInstanceHours,
     MasterPublicDnsName: masterPublicDnsName,
     Configurations: configurations,
     SecurityConfiguration: securityConfiguration,
-    AutoScalingRole: autoScalingRole,
     ScaleDownBehavior: scaleDownBehavior,
     CustomAmiId: customAmiId,
     EbsRootVolumeSize: ebsRootVolumeSize,
@@ -50,7 +46,7 @@ export default ({
     Timeline: timeline,
   } = status ?? {}
 
-  const { 
+  const {
     Ec2KeyName: ec2KeyName,
     Ec2SubnetId: ec2SubnetId,
     RequestedEc2SubnetIds: requestedEc2SubnetIds,
@@ -73,7 +69,7 @@ export default ({
       id: cuid(),
       key,
       value: app.AdditionalInfo[key],
-    }))
+    })),
   }))
 
   const {
@@ -92,7 +88,7 @@ export default ({
       id: cuid(),
       key,
       value: config.Properties[key],
-    }))
+    })),
   })
 
   const placementGroups = service.PlacementGroups?.map(pg => ({
@@ -116,7 +112,7 @@ export default ({
         creationDateTime: timeline?.CreationDateTime?.toISOString(),
         readyDateTime: timeline?.ReadyDateTime?.toISOString(),
         endDateTime: timeline?.EndDateTime?.toISOString(),
-      }
+      },
     },
     ec2InstanceAttributes: {
       ec2KeyName,
@@ -141,12 +137,10 @@ export default ({
     terminationProtected,
     visibleToAllUsers,
     applications,
-    serviceRole,
     normalizedInstanceHours,
     masterPublicDnsName,
     configurations: configurations?.map(child => configConverter(child)),
     securityConfiguration,
-    autoScalingRole,
     scaleDownBehavior,
     customAmiId,
     ebsRootVolumeSize,

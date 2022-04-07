@@ -2742,12 +2742,12 @@ export type AwsElbSourceSecurityGroup = {
 
 export type AwsEmrCluster = AwsBaseService & {
   applications?: Maybe<Array<Maybe<AwsEmrClusterApplication>>>;
-  autoScalingRole?: Maybe<Scalars['String']>;
   autoTerminate?: Maybe<Scalars['Boolean']>;
   configurations?: Maybe<Array<Maybe<AwsEmrClusterConfiguration>>>;
   customAmiId?: Maybe<Scalars['String']>;
   ebsRootVolumeSize?: Maybe<Scalars['Int']>;
   ec2InstanceAttributes?: Maybe<AwsEmrClusterEc2InstanceAttributes>;
+  iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   instanceCollectionType?: Maybe<Scalars['String']>;
   kerberosAttributes?: Maybe<AwsEmrClusterKerberosAttributes>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
@@ -2763,7 +2763,6 @@ export type AwsEmrCluster = AwsBaseService & {
   runningAmiVersion?: Maybe<Scalars['String']>;
   scaleDownBehavior?: Maybe<Scalars['String']>;
   securityConfiguration?: Maybe<Scalars['String']>;
-  serviceRole?: Maybe<Scalars['String']>;
   status?: Maybe<AwsEmrClusterStatus>;
   stepConcurrencyLevel?: Maybe<Scalars['Int']>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
@@ -3082,6 +3081,7 @@ export type AwsIamRole = AwsBaseService & {
   eksClusters?: Maybe<Array<Maybe<AwsEksCluster>>>;
   elasticBeanstalkApps?: Maybe<Array<Maybe<AwsElasticBeanstalkApp>>>;
   elasticBeanstalkEnvs?: Maybe<Array<Maybe<AwsElasticBeanstalkEnv>>>;
+  emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
   glueJobs?: Maybe<Array<Maybe<AwsGlueJob>>>;
   guardDutyDetectors?: Maybe<Array<Maybe<AwsGuardDutyDetector>>>;
