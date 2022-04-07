@@ -1,4 +1,5 @@
 type awsSes implements awsBaseService @key(fields: "arn") {
   email: String @search(by: [hash, regexp])
   verificationStatus: String @search(by: [hash, regexp])
+  cognitoUserPools: [awsCognitoUserPool] @hasInverse(field: ses)
 }
