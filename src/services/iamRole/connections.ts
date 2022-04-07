@@ -170,15 +170,12 @@ export default ({
   /**
    * Find any guardDutyDetector related data
    */
-  const detectors = data.find(
-    ({ name }) => name === services.guardDutyDetector
-  )
+  const detectors = data.find(({ name }) => name === services.guardDutyDetector)
   if (detectors?.data?.[region]) {
     const dataAtRegion: RawAwsGuardDutyDetector[] = detectors.data[
       region
     ].filter(
-      ({ ServiceRole }: RawAwsGuardDutyDetector) =>
-      ServiceRole === role.Arn
+      ({ ServiceRole }: RawAwsGuardDutyDetector) => ServiceRole === role.Arn
     )
     for (const detector of dataAtRegion) {
       connections.push({
@@ -189,19 +186,17 @@ export default ({
       })
     }
   }
- /**
+  /**
    * Find any systemsManagerInstance related data
    */
-   const systemsManagerInstances = data.find(
+  const systemsManagerInstances = data.find(
     ({ name }) => name === services.systemsManagerInstance
   )
   if (systemsManagerInstances?.data?.[region]) {
-    const dataAtRegion: RawAwsSystemsManagerInstance[] = systemsManagerInstances.data[
-      region
-    ].filter(
-      ({ IamRole }: RawAwsSystemsManagerInstance) =>
-        IamRole === role.Arn
-    )
+    const dataAtRegion: RawAwsSystemsManagerInstance[] =
+      systemsManagerInstances.data[region].filter(
+        ({ IamRole }: RawAwsSystemsManagerInstance) => IamRole === role.Arn
+      )
     for (const instance of dataAtRegion) {
       connections.push({
         id: instance.InstanceId,
@@ -215,15 +210,14 @@ export default ({
   /**
    * Find any sageMakerNotebookInstance related data
    */
-   const notebooks = data.find(
+  const notebooks = data.find(
     ({ name }) => name === services.sageMakerNotebookInstance
   )
   if (notebooks?.data?.[region]) {
     const dataAtRegion: RawAwsSageMakerNotebookInstance[] = notebooks.data[
       region
     ].filter(
-      ({ RoleArn }: RawAwsSageMakerNotebookInstance) =>
-      RoleArn === role.Arn
+      ({ RoleArn }: RawAwsSageMakerNotebookInstance) => RoleArn === role.Arn
     )
     for (const notebook of dataAtRegion) {
       connections.push({

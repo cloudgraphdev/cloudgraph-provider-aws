@@ -3064,6 +3064,7 @@ export type AwsIamRole = AwsBaseService & {
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   iamInstanceProfiles?: Maybe<Array<Maybe<AwsIamInstanceProfile>>>;
   inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
+  kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
   maxSessionDuration?: Maybe<Scalars['Int']>;
@@ -3139,6 +3140,7 @@ export type AwsKinesisFirehose = AwsBaseService & {
   encryptionConfig?: Maybe<AwsKinesisFirehoseEncryptionConfig>;
   failureDescriptionDetails?: Maybe<Scalars['String']>;
   failureDescriptionType?: Maybe<Scalars['String']>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   kinesisStream?: Maybe<Array<Maybe<AwsKinesisStream>>>;
   lastUpdateTimestamp?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
