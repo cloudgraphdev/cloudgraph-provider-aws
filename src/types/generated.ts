@@ -1153,7 +1153,6 @@ export type AwsCognitoUserPool = AwsBaseService & {
   emailVerificationSubject?: Maybe<Scalars['String']>;
   estimatedNumberOfUsers?: Maybe<Scalars['Int']>;
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
-  id: Scalars['String'];
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   lambdaConfig?: Maybe<AwsCognitoUserPoolLambdaConfig>;
   lambdas?: Maybe<Array<Maybe<AwsLambda>>>;
@@ -3168,7 +3167,6 @@ export type AwsKms = AwsBaseService & {
 
 export type AwsLambda = AwsBaseService & {
   appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
-  arn: Scalars['String'];
   cognitoUserPools?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   description?: Maybe<Scalars['String']>;
   environmentVariables?: Maybe<Array<Maybe<AwsLambdaEnvironmentVariable>>>;
@@ -3767,9 +3765,7 @@ export type AwsServiceBillingInfo = {
   name: Scalars['String'];
 };
 
-export type AwsSes = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsSes = AwsBaseService & {
   cognitoUserPools?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   email?: Maybe<Scalars['String']>;
   verificationStatus?: Maybe<Scalars['String']>;
