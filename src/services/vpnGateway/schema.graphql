@@ -1,8 +1,4 @@
-type awsVpnGateway @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsVpnGateway implements awsBaseService @key(fields: "arn") {
   type: String @search(by: [hash, regexp])
   state: String @search(by: [hash, regexp])
   amazonSideAsn: Int @search

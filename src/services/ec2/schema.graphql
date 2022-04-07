@@ -72,11 +72,7 @@ type awsEc2KeyPair {
   tags: [awsRawTag]
 }
 
-type awsEc2 @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsEc2 implements awsBaseService @key(fields: "arn") {
   ami: String @search(by: [hash, regexp])
   tenancy: String @search(by: [hash, regexp])
   elasticIps: String @search(by: [hash, regexp])
