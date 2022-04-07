@@ -87,6 +87,7 @@ export default ({
     environmentVariables,
     vpcConfig: formattedVpcConfig,
     policyRevisionId,
+    rawPolicy: policy,
     policy: formatIamJsonPolicy(policy),
     tags: formatTagsFromMap(Tags),
   }

@@ -1,6 +1,7 @@
 type awsIamRole implements awsBaseService @key(fields: "id") {
   name: String @search(by: [hash, regexp])
   path: String @search(by: [hash, regexp])
+  rawPolicy: String @search(by: [hash, regexp])
   assumeRolePolicy: awsIamJSONPolicy
   description: String @search(by: [hash, regexp])
   createdAt: String @search(by: [hash, regexp])

@@ -1,14 +1,14 @@
 import cuid from 'cuid'
+import { Subscription } from 'aws-sdk/clients/sns'
 import { RawAwsSns } from './data'
 import { AwsSns, AwsSnsSubscription } from '../../types/generated'
 import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
-import { Subscription } from 'aws-sdk/clients/sns'
 
 /**
  * SNS
  */
 
- const awsSNSSubscriptionConverter = (
+const awsSNSSubscriptionConverter = (
   subscription: Subscription
 ): AwsSnsSubscription => ({
   id: cuid(),
@@ -17,11 +17,11 @@ import { Subscription } from 'aws-sdk/clients/sns'
   protocol: subscription.Protocol,
 })
 
-export default ({ 
+export default ({
   service,
   account,
   region,
-}:{
+}: {
   service: RawAwsSns
   account: string
   region: string
@@ -41,6 +41,7 @@ export default ({
     arn,
     region,
     tags: formatTagsFromMap(Tags),
+    rawPolicy: policy,
     policy: formatIamJsonPolicy(policy),
     displayName,
     deliveryPolicy,

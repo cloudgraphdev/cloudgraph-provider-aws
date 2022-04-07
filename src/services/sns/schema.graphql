@@ -1,5 +1,6 @@
 type awsSns implements awsBaseService @key(fields: "arn") {
   tags: [awsRawTag]
+  rawPolicy: String @search(by: [hash, regexp])
   policy: awsIamJSONPolicy
   displayName: String @search(by: [hash, regexp])
   deliveryPolicy: String @search(by: [hash, regexp])

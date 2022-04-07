@@ -34,6 +34,7 @@ export default ({
     arn,
     region,
     description,
+    rawPolicy: policy,
     policy: formatIamJsonPolicy(policy),
     endpointConfiguration,
     apiKeySource,

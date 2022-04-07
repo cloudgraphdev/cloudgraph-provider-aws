@@ -16,6 +16,7 @@ type awsKms implements awsBaseService @key(fields: "id") {
   description: String @search(by: [hash, regexp, fulltext])
   keyRotationEnabled: Boolean @search
   usage: String @search(by: [hash, regexp])
+  rawPolicy: String @search(by: [hash, regexp])
   policy: awsIamJSONPolicy
   enabled: Boolean @search
   keyState: String @search(by: [hash, regexp])
