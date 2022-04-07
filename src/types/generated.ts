@@ -1441,7 +1441,7 @@ export type AwsEc2 = AwsBaseService & {
   ephemeralBlockDevices?: Maybe<Array<Maybe<AwsEc2Blockdevice>>>;
   hibernation?: Maybe<Scalars['String']>;
   iamInstanceProfile?: Maybe<Array<Maybe<AwsIamInstanceProfile>>>;
-  id: Scalars['String'];
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   instanceLifecycle?: Maybe<Scalars['String']>;
   instanceState?: Maybe<Scalars['String']>;
   instanceType?: Maybe<Scalars['String']>;
@@ -3020,6 +3020,7 @@ export type AwsIamRole = AwsBaseService & {
   configurationRecorder?: Maybe<Array<Maybe<AwsConfigurationRecorder>>>;
   createdAt?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  ec2Instances?: Maybe<Array<Maybe<AwsEc2>>>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;

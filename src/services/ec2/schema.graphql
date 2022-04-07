@@ -118,4 +118,5 @@ type awsEc2 implements awsBaseService @key(fields: "arn") {
   eksCluster: [awsEksCluster] @hasInverse(field: ec2Instances)
   elasticBeanstalkEnv: [awsElasticBeanstalkEnv] @hasInverse(field: ec2Instances)
   iamInstanceProfile: [awsIamInstanceProfile] @hasInverse(field: ec2Instances)
+  iamRole: [awsIamRole] @hasInverse(field: ec2Instances)
 }

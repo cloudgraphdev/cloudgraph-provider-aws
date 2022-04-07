@@ -21,6 +21,7 @@ import { RawAwsEksCluster } from '../eksCluster/data'
 import { getEksClusterName, getElasticBeanstalkEnvId } from './utils'
 import { RawAwsInstanceProfile } from '../iamInstanceProfile/data'
 import { globalRegionName } from '../../enums/regions'
+import { RawAwsIamRole } from '../iamRole/data'
 
 /**
  * EC2
@@ -40,6 +41,7 @@ export default ({
     KeyPairName?: string
     Tags?: TagList
     IamInstanceProfile: IamInstanceProfile
+    IamRolesArn?: string[]
   }
   region: string
 }): { [key: string]: ServiceConnection[] } => {
@@ -51,6 +53,7 @@ export default ({
     SubnetId: subnetId,
     Tags: tags,
     IamInstanceProfile: iamInstanceProfile,
+    IamRolesArn: rolesArn,
   } = instance
 
   /**
@@ -338,6 +341,31 @@ export default ({
       }
     }
   }
+
+  /**
+   * Find IAM Roles
+   * related to this EC2 instance
+   */
+   const roles: { name: string; data: { [property: string]: any[] } } =
+     data.find(({ name }) => name === services.iamRole)
+ 
+   if (roles?.data?.[globalRegionName]) {
+     const dataAtRegion: RawAwsIamRole[] = roles.data[globalRegionName].filter(
+       ({ Arn }: RawAwsIamRole) => rolesArn?.includes(Arn)
+     )
+     if (!isEmpty(dataAtRegion)) {
+       for (const iamRole of dataAtRegion) {
+         const { Arn: arn } :RawAwsIamRole = iamRole
+ 
+         connections.push({
+           id: arn,
+           resourceType: services.iamRole,
+           relation: 'child',
+           field: 'iamRole',
+         })
+       }
+     }
+   }
 
   const ec2Result = {
     [id]: connections,
