@@ -7,4 +7,5 @@ type awsIamInstanceProfile @key(fields: "id") {
   createDate: DateTime
   tags: [awsRawTag]
   iamRole: [awsIamRole] @hasInverse(field: iamInstanceProfiles)
+  ec2Instances: [awsEc2] @hasInverse(field: iamInstanceProfile)
 }

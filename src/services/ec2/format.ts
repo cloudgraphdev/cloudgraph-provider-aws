@@ -45,7 +45,6 @@ export default ({
       fingerprint,
       tags: keyPairTags = {},
     } = {},
-    IamInstanceProfile: iamInstanceProfile,
     cloudWatchMetricData,
     PlatformDetails: platformDetails,
     InstanceLifecycle: instanceLifecycle,
@@ -114,7 +113,6 @@ export default ({
     sourceDestCheck: sourceDestCheck ? t.yes : t.no,
     availabilityZone: placement?.AvailabilityZone || '',
     cpuThreadsPerCore: cpuOptions?.ThreadsPerCore || 0,
-    iamInstanceProfile: iamInstanceProfile?.Arn || '',
     deletionProtection: deletionProtection ? t.yes : t.no,
     primaryNetworkInterface: networkInterfaceId,
     metadataOptions: {

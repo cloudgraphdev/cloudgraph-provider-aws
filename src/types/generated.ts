@@ -1518,7 +1518,7 @@ export type AwsEc2 = {
   emrInstance?: Maybe<Array<Maybe<AwsEmrInstance>>>;
   ephemeralBlockDevices?: Maybe<Array<Maybe<AwsEc2Blockdevice>>>;
   hibernation?: Maybe<Scalars['String']>;
-  iamInstanceProfile?: Maybe<Scalars['String']>;
+  iamInstanceProfile?: Maybe<Array<Maybe<AwsIamInstanceProfile>>>;
   id: Scalars['String'];
   instanceLifecycle?: Maybe<Scalars['String']>;
   instanceState?: Maybe<Scalars['String']>;
@@ -3110,6 +3110,7 @@ export type AwsIamInstanceProfile = {
   accountId: Scalars['String'];
   arn: Scalars['String'];
   createDate?: Maybe<Scalars['DateTime']>;
+  ec2Instances?: Maybe<Array<Maybe<AwsEc2>>>;
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   id: Scalars['String'];
   name?: Maybe<Scalars['String']>;

@@ -19,6 +19,8 @@ import { ssmManagedInstanceArn } from '../../utils/generateArns'
 import { RawAwsElasticBeanstalkEnv } from '../elasticBeanstalkEnvironment/data'
 import { RawAwsEksCluster } from '../eksCluster/data'
 import { getEksClusterName, getElasticBeanstalkEnvId } from './utils'
+import { RawAwsInstanceProfile } from '../iamInstanceProfile/data'
+import { globalRegionName } from '../../enums/regions'
 
 /**
  * EC2
@@ -48,6 +50,7 @@ export default ({
     NetworkInterfaces: instanceNetworkInterfaces = [],
     SubnetId: subnetId,
     Tags: tags,
+    IamInstanceProfile: iamInstanceProfile,
   } = instance
 
   /**
@@ -293,7 +296,7 @@ export default ({
   } = data.find(({ name }) => name === services.elasticBeanstalkEnv)
   if (elasticBeanstalkEnvs?.data?.[region]) {
     const elasticBeanstalkEnvsInRegion: RawAwsElasticBeanstalkEnv[] =
-    elasticBeanstalkEnvs.data[region].filter(
+      elasticBeanstalkEnvs.data[region].filter(
         ({ EnvironmentId }: RawAwsElasticBeanstalkEnv) =>
           elasticBeanstalkEnvId === EnvironmentId
       )
@@ -305,6 +308,32 @@ export default ({
           resourceType: services.elasticBeanstalkEnv,
           relation: 'child',
           field: 'elasticBeanstalkEnv',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find IAM Instance Profiles
+   * related to this EC2 instance
+   */
+  const iamInstanceProfiles: {
+    name: string
+    data: { [property: string]: any[] }
+  } = data.find(({ name }) => name === services.iamInstanceProfile)
+  if (iamInstanceProfiles?.data?.[globalRegionName]) {
+    const dataAtRegion: RawAwsInstanceProfile[] = iamInstanceProfiles.data[
+      globalRegionName
+    ].filter(instanceProfile => instanceProfile.Arn === iamInstanceProfile?.Arn)
+    if (!isEmpty(dataAtRegion)) {
+      for (const iamInstance of dataAtRegion) {
+        const { InstanceProfileId: instanceProfileId }: RawAwsInstanceProfile = iamInstance
+
+        connections.push({
+          id: instanceProfileId,
+          resourceType: services.iamInstanceProfile,
+          relation: 'child',
+          field: 'iamInstanceProfile',
         })
       }
     }

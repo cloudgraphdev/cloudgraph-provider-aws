@@ -96,7 +96,6 @@ type awsEc2 @key(fields: "arn") {
   sourceDestCheck: String @search(by: [hash, regexp])
   availabilityZone: String @search(by: [hash, regexp])
   cpuThreadsPerCore: Int @search
-  iamInstanceProfile: String @search(by: [hash, regexp]) # TODO: use to make a connection to a iamRole
   deletionProtection: String @search(by: [hash, regexp])
   dailyCost: awsTotalBillingInfo
   primaryNetworkInterface: String @search(by: [hash, regexp])
@@ -122,4 +121,5 @@ type awsEc2 @key(fields: "arn") {
   systemsManagerInstance: [awsSystemsManagerInstance] @hasInverse(field: ec2Instance)
   eksCluster: [awsEksCluster] @hasInverse(field: ec2Instances)
   elasticBeanstalkEnv: [awsElasticBeanstalkEnv] @hasInverse(field: ec2Instances)
+  iamInstanceProfile: [awsIamInstanceProfile] @hasInverse(field: ec2Instances)
 }
