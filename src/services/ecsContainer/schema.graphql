@@ -1,7 +1,4 @@
-type awsEcsContainer @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-	arn: String! @id @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash, regexp])
+type awsEcsContainer implements awsBaseService @key(fields: "arn") {
   ec2InstanceId: String @search(by: [hash])
   capacityProviderName: String @search(by: [hash, regexp])
   version: Int @search
@@ -28,11 +25,11 @@ type awsEcsversionInfo
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    agentVersion: String @search(by: [hash, regexp])
-    agentHash: String @search(by: [hash, regexp])
-    dockerVersion: String @search(by: [hash, regexp])
-  }
+  id: String! @id @search(by: [hash])
+  agentVersion: String @search(by: [hash, regexp])
+  agentHash: String @search(by: [hash, regexp])
+  dockerVersion: String @search(by: [hash, regexp])
+}
 
 type awsEcsResource
   @generate(
@@ -40,14 +37,14 @@ type awsEcsResource
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    name: String @search(by: [hash, regexp])
-    type: String @search(by: [hash, regexp])
-    doubleValue: Float @search
-    longValue: Int @search
-    integerValue: Int @search
-    stringSetValue: [String] @search(by: [hash])
-  }
+  id: String! @id @search(by: [hash])
+  name: String @search(by: [hash, regexp])
+  type: String @search(by: [hash, regexp])
+  doubleValue: Float @search
+  longValue: Int @search
+  integerValue: Int @search
+  stringSetValue: [String] @search(by: [hash])
+}
 
 type awsEcsAttachment
   @generate(
@@ -55,8 +52,8 @@ type awsEcsAttachment
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    type: String @search(by: [hash, regexp])
-    status: String @search(by: [hash, regexp])
-    details: [awsEcsAttachmentDetail]
-  }
+  id: String! @id @search(by: [hash])
+  type: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
+  details: [awsEcsAttachmentDetail]
+}
