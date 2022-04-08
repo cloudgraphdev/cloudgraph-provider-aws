@@ -1,3 +1,10 @@
+# [0.79.0-alpha.3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.2...0.79.0-alpha.3) (2022-04-08)
+
+
+### Features
+
+* **appSync:** add iamRole/wafV2WebAcl connections ([36b90f2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/36b90f256445568dd33d9f0fcbed8dc66531407a))
+
 # [0.79.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.1...0.79.0-alpha.2) (2022-04-08)
 
 
