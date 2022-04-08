@@ -30,4 +30,5 @@ type awsKms @key(fields: "id"){
   dmsReplicationInstances: [awsDmsReplicationInstance] @hasInverse(field: kms)
   sageMakerNotebookInstances: [awsSageMakerNotebookInstance] @hasInverse(field: kms)
   rdsClusterSnapshots: [awsRdsClusterSnapshot] @hasInverse(field: kms)
+  dynamodb: [awsDynamoDbTable] @hasInverse(field: kms)
 }
