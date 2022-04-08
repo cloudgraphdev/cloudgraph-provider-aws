@@ -1,3 +1,18 @@
+# [0.79.0-alpha.4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.3...0.79.0-alpha.4) (2022-04-08)
+
+
+### Features
+
+* Handle TODOs for dynamoDB ([d2b42ce](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d2b42cec491776ecebbedc30f691a49960cfd47e))
+* Handle TODOs for dynamoDB ([9b3ae42](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/9b3ae425097f06972f292f3c82930bd7f97bb5ac))
+
+# [0.79.0-alpha.3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.2...0.79.0-alpha.3) (2022-04-08)
+
+
+### Features
+
+* **appSync:** add iamRole/wafV2WebAcl connections ([36b90f2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/36b90f256445568dd33d9f0fcbed8dc66531407a))
+
 # [0.79.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.1...0.79.0-alpha.2) (2022-04-08)
 
 
