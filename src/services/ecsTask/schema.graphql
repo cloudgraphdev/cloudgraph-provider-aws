@@ -1,4 +1,3 @@
-#TODO: add iam role connection
 type awsEcsTask @key(fields: "arn") {
   id: String! @id @search(by: [hash])
 	arn: String! @id @search(by: [hash, regexp])
