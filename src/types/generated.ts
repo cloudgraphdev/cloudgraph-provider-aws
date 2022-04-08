@@ -1437,11 +1437,14 @@ export type AwsEc2 = AwsBaseService & {
   ebsOptimized?: Maybe<Scalars['String']>;
   ecsContainer?: Maybe<Array<Maybe<AwsEcsContainer>>>;
   eip?: Maybe<Array<Maybe<AwsEip>>>;
+  eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
+  elasticBeanstalkEnv?: Maybe<Array<Maybe<AwsElasticBeanstalkEnv>>>;
   elasticIps?: Maybe<Scalars['String']>;
   emrInstance?: Maybe<Array<Maybe<AwsEmrInstance>>>;
   ephemeralBlockDevices?: Maybe<Array<Maybe<AwsEc2Blockdevice>>>;
   hibernation?: Maybe<Scalars['String']>;
-  iamInstanceProfile?: Maybe<Scalars['String']>;
+  iamInstanceProfile?: Maybe<Array<Maybe<AwsIamInstanceProfile>>>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   instanceLifecycle?: Maybe<Scalars['String']>;
   instanceState?: Maybe<Scalars['String']>;
   instanceType?: Maybe<Scalars['String']>;
@@ -1463,7 +1466,7 @@ export type AwsEc2 = AwsBaseService & {
   securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   sourceDestCheck?: Maybe<Scalars['String']>;
-  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
+  subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
   systemsManagerInstance?: Maybe<Array<Maybe<AwsSystemsManagerInstance>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   tenancy?: Maybe<Scalars['String']>;
@@ -1599,8 +1602,8 @@ export type AwsEcsContainer = AwsBaseService & {
   attachments?: Maybe<Array<Maybe<AwsEcsAttachment>>>;
   attributes?: Maybe<Array<Maybe<AwsEcsAttribute>>>;
   capacityProviderName?: Maybe<Scalars['String']>;
-  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   ec2InstanceId?: Maybe<Scalars['String']>;
+  ec2Instances?: Maybe<Array<Maybe<AwsEc2>>>;
   ecsTask?: Maybe<Array<Maybe<AwsEcsTask>>>;
   pendingTasksCount?: Maybe<Scalars['Int']>;
   registeredAt?: Maybe<Scalars['String']>;
@@ -2207,6 +2210,7 @@ export type AwsEksCluster = AwsBaseService & {
   certificateAuthority?: Maybe<AwsEksCertificate>;
   clientRequestToken?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['String']>;
+  ec2Instances?: Maybe<Array<Maybe<AwsEc2>>>;
   encryptionConfig?: Maybe<Array<Maybe<AwsEksEncryptionConfig>>>;
   endpoint?: Maybe<Scalars['String']>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
@@ -2219,7 +2223,7 @@ export type AwsEksCluster = AwsBaseService & {
   resourcesVpcConfig?: Maybe<AwsEksVpcConfigResponse>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   status?: Maybe<Scalars['String']>;
-  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
+  subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   version?: Maybe<Scalars['String']>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
@@ -2464,6 +2468,7 @@ export type AwsElasticBeanstalkEnv = AwsBaseService & {
   applicationName?: Maybe<Scalars['String']>;
   cname?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  ec2Instances?: Maybe<Array<Maybe<AwsEc2>>>;
   elasticBeanstalkApp?: Maybe<Array<Maybe<AwsElasticBeanstalkApp>>>;
   endpointUrl?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
@@ -2937,6 +2942,7 @@ export type AwsIamGroup = AwsBaseService & {
 
 export type AwsIamInstanceProfile = AwsBaseService & {
   createDate?: Maybe<Scalars['DateTime']>;
+  ec2Instances?: Maybe<Array<Maybe<AwsEc2>>>;
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
@@ -3018,6 +3024,7 @@ export type AwsIamRole = AwsBaseService & {
   configurationRecorder?: Maybe<Array<Maybe<AwsConfigurationRecorder>>>;
   createdAt?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  ec2Instances?: Maybe<Array<Maybe<AwsEc2>>>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
@@ -3862,7 +3869,7 @@ export type AwsSubnet = AwsBaseService & {
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
   defaultForAz?: Maybe<Scalars['Boolean']>;
   dmsReplicationInstances?: Maybe<Array<Maybe<AwsDmsReplicationInstance>>>;
-  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
+  ec2Instances?: Maybe<Array<Maybe<AwsEc2>>>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;

@@ -10,7 +10,7 @@ type awsSubnet implements awsBaseService @key(fields: "id") {
   tags: [awsRawTag]
   alb: [awsAlb] @hasInverse(field: subnet) #change to plural
   asg: [awsAsg] @hasInverse(field: subnet) #change to plural
-  ec2Instance: [awsEc2] @hasInverse(field: subnet) #change to plural
+  ec2Instances: [awsEc2] @hasInverse(field: subnets) #change to plural
   elb: [awsElb] @hasInverse(field: subnet) #change to plural
   lambda: [awsLambda] @hasInverse(field: subnet) #change to plural
   natGateway: [awsNatGateway] @hasInverse(field: subnet) #change to plural
@@ -18,7 +18,7 @@ type awsSubnet implements awsBaseService @key(fields: "id") {
   routeTable: [awsRouteTable] @hasInverse(field: subnet)
   vpc: [awsVpc] @hasInverse(field: subnet)
   rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: subnet) #change to plural
-  eksCluster: [awsEksCluster] @hasInverse(field: subnet) #change to plural
+  eksCluster: [awsEksCluster] @hasInverse(field: subnets)
   ecsService: [awsEcsService] @hasInverse(field: subnet) #change to plural
   efsMountTarget: [awsEfsMountTarget] @hasInverse(field: subnet) #change to plural
   flowLogs: [awsFlowLog] @hasInverse(field: subnet) #change to singular
