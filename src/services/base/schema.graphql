@@ -1,0 +1,23 @@
+interface awsBaseService
+  @generate(
+    query: { get: true, query: true, aggregate: true }
+    mutation: { add: true, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  arn: String! @id @search(by: [hash])
+  accountId: String! @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
+}
+
+interface awsOptionalService
+  @generate(
+    query: { get: true, query: true, aggregate: true }
+    mutation: { add: true, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  arn: String @search(by: [hash])
+  accountId: String @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
+}

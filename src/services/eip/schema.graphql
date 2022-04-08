@@ -1,8 +1,4 @@
-type awsEip @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsEip implements awsBaseService @key(fields: "arn") {
   tags: [awsRawTag]
   vpc: String @search(by: [hash])
   domain: String @search(by: [hash, regexp])

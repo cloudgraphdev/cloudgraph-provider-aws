@@ -133,7 +133,7 @@ export type AwsAccessLogSettings = {
   id?: Maybe<Scalars['ID']>;
 };
 
-export type AwsAccount = {
+export type AwsAccount = AwsOptionalService & {
   albs?: Maybe<Array<Maybe<AwsAlb>>>;
   apiGatewayResources?: Maybe<Array<Maybe<AwsApiGatewayResource>>>;
   apiGatewayRestApis?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
@@ -192,7 +192,6 @@ export type AwsAccount = {
   iamSamlProviders?: Maybe<Array<Maybe<AwsIamSamlProvider>>>;
   iamServerCertificates?: Maybe<Array<Maybe<AwsIamServerCertificate>>>;
   iamUsers?: Maybe<Array<Maybe<AwsIamUser>>>;
-  id: Scalars['String'];
   igw?: Maybe<Array<Maybe<AwsIgw>>>;
   iot?: Maybe<Array<Maybe<AwsIotThingAttribute>>>;
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
@@ -250,10 +249,8 @@ export type AwsAdditionalAuthenticationProvider = {
   userPoolId?: Maybe<Scalars['String']>;
 };
 
-export type AwsAlb = {
+export type AwsAlb = AwsBaseService & {
   accessLogsEnabled?: Maybe<Scalars['String']>;
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
   createdAt?: Maybe<Scalars['String']>;
   defaultVpc?: Maybe<Scalars['String']>;
   deletionProtection?: Maybe<Scalars['String']>;
@@ -262,12 +259,10 @@ export type AwsAlb = {
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   hostedZone?: Maybe<Scalars['String']>;
   http2?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   idleTimeout?: Maybe<Scalars['String']>;
   ipAddressType?: Maybe<Scalars['String']>;
   listeners?: Maybe<Array<Maybe<AwsAlbListener>>>;
   name?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   route53Record?: Maybe<Array<Maybe<AwsRoute53Record>>>;
   scheme?: Maybe<Scalars['String']>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
@@ -311,46 +306,34 @@ export type AwsApiGatewayMethod = {
   httpMethod?: Maybe<Scalars['String']>;
 };
 
-export type AwsApiGatewayResource = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
-  id: Scalars['String'];
+export type AwsApiGatewayResource = AwsBaseService & {
   methods?: Maybe<Array<Maybe<AwsApiGatewayMethod>>>;
   path?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
 };
 
-export type AwsApiGatewayRestApi = {
-  accountId: Scalars['String'];
+export type AwsApiGatewayRestApi = AwsBaseService & {
   apiKeySource?: Maybe<Scalars['String']>;
-  arn: Scalars['String'];
   binaryMediaTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
   createdDate?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   endpointConfiguration?: Maybe<AwsApiGatewayEndpointConfiguration>;
-  id: Scalars['String'];
   minimumCompressionSize?: Maybe<Scalars['Int']>;
   policy?: Maybe<AwsIamJsonPolicy>;
-  region?: Maybe<Scalars['String']>;
   resources?: Maybe<Array<Maybe<AwsApiGatewayResource>>>;
   route53Record?: Maybe<Array<Maybe<AwsRoute53Record>>>;
   stages?: Maybe<Array<Maybe<AwsApiGatewayStage>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
 };
 
-export type AwsApiGatewayStage = {
+export type AwsApiGatewayStage = AwsBaseService & {
   accessLogSettings?: Maybe<AwsAccessLogSettings>;
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
   cacheCluster?: Maybe<Scalars['Boolean']>;
   cacheClusterSize?: Maybe<Scalars['String']>;
   clientCertificateId?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   documentationVersion?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   variables?: Maybe<Array<Maybe<AwsApiGatewayStageVariable>>>;
@@ -363,17 +346,14 @@ export type AwsApiGatewayStageVariable = {
   value?: Maybe<Scalars['String']>;
 };
 
-export type AwsAppSync = {
-  accountId: Scalars['String'];
+export type AwsAppSync = AwsBaseService & {
   additionalAuthenticationProviders?: Maybe<Array<Maybe<AwsAdditionalAuthenticationProvider>>>;
   apiKeys?: Maybe<Array<Maybe<AwsAppSyncApiKey>>>;
-  arn: Scalars['String'];
   authenticationType?: Maybe<Scalars['String']>;
   cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   dataSources?: Maybe<Array<Maybe<AwsAppSyncDataSource>>>;
   dynamodb?: Maybe<Array<Maybe<AwsDynamoDbTable>>>;
   functions?: Maybe<Array<Maybe<AwsAppSyncFunction>>>;
-  id: Scalars['String'];
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   lambdaAuthorizerIdentityValidationExpression?: Maybe<Scalars['String']>;
   lambdaAuthorizerResultTtlInSeconds?: Maybe<Scalars['Int']>;
@@ -381,13 +361,12 @@ export type AwsAppSync = {
   logCloudWatchLogsRoleArn?: Maybe<Scalars['String']>;
   logExcludeVerboseContent?: Maybe<Scalars['String']>;
   logFieldLogLevel?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
   openIDConnectAuthTTL?: Maybe<Scalars['Int']>;
   openIDConnectClientId?: Maybe<Scalars['String']>;
   openIDConnectIatTTL?: Maybe<Scalars['Int']>;
   openIDConnectIssuer?: Maybe<Scalars['String']>;
   rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
-  region: Scalars['String'];
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   types?: Maybe<Array<Maybe<AwsAppSyncType>>>;
   uris?: Maybe<Array<Maybe<AwsAppSyncGraphqlApiUris>>>;
@@ -479,9 +458,7 @@ export type AwsAppSyncType = {
   resolvers?: Maybe<Array<Maybe<AwsAppSyncResolver>>>;
 };
 
-export type AwsAsg = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsAsg = AwsBaseService & {
   availabilityZones?: Maybe<Array<Maybe<Scalars['String']>>>;
   capacityRebalanceEnabled?: Maybe<Scalars['String']>;
   context?: Maybe<Scalars['String']>;
@@ -493,7 +470,6 @@ export type AwsAsg = {
   enabledMetrics?: Maybe<Array<Maybe<AwsEnabledMetrics>>>;
   healthCheckGracePeriod?: Maybe<Scalars['Int']>;
   healthCheckType?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   launchConfiguration?: Maybe<AwsLaunchConfiguration>;
   launchConfigurationName?: Maybe<Scalars['String']>;
   launchTemplateId?: Maybe<Scalars['String']>;
@@ -508,7 +484,6 @@ export type AwsAsg = {
   newInstancesProtectedFromScaleIn?: Maybe<Scalars['String']>;
   placementGroup?: Maybe<Scalars['String']>;
   predictedCapacity?: Maybe<Scalars['Int']>;
-  region: Scalars['String'];
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   serviceLinkedRoleARN?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
@@ -531,13 +506,9 @@ export type AwsAssociatedTargetNetworks = {
   networkType?: Maybe<Scalars['String']>;
 };
 
-export type AwsAthenaDataCatalog = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsAthenaDataCatalog = AwsBaseService & {
   catalogName: Scalars['String'];
   databases?: Maybe<Array<Maybe<AwsAthenaDatabase>>>;
-  id: Scalars['String'];
-  region?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
 };
 
@@ -564,6 +535,13 @@ export type AwsAthenaMetadataColumn = {
   id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
+};
+
+export type AwsBaseService = {
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
+  id: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
 };
 
 export type AwsBilling = {
@@ -606,9 +584,7 @@ export type AwsClientVpnAuthentication = {
   type?: Maybe<Scalars['String']>;
 };
 
-export type AwsClientVpnEndpoint = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsClientVpnEndpoint = AwsBaseService & {
   associatedTargetNetworks?: Maybe<Array<Maybe<AwsAssociatedTargetNetworks>>>;
   authenticationOptions?: Maybe<Array<Maybe<AwsClientVpnAuthentication>>>;
   clientCidrBlock?: Maybe<Scalars['String']>;
@@ -619,8 +595,6 @@ export type AwsClientVpnEndpoint = {
   description?: Maybe<Scalars['String']>;
   dnsName?: Maybe<Scalars['String']>;
   dnsServers?: Maybe<Array<Maybe<Scalars['String']>>>;
-  id: Scalars['String'];
-  region?: Maybe<Scalars['String']>;
   securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   serverCertificateArn?: Maybe<Scalars['String']>;
@@ -632,17 +606,13 @@ export type AwsClientVpnEndpoint = {
   vpnProtocol?: Maybe<Scalars['String']>;
 };
 
-export type AwsCloud9Environment = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsCloud9Environment = AwsBaseService & {
   connectionType?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   lifecycle?: Maybe<AwsCloud9EnvironmentLifecycle>;
   managedCredentialsStatus?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   ownerArn?: Maybe<Scalars['String']>;
-  region: Scalars['String'];
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   type?: Maybe<Scalars['String']>;
 };
@@ -653,9 +623,7 @@ export type AwsCloud9EnvironmentLifecycle = {
   status?: Maybe<Scalars['String']>;
 };
 
-export type AwsCloudFormationStack = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsCloudFormationStack = AwsBaseService & {
   capabilities?: Maybe<Array<Maybe<Scalars['String']>>>;
   changeSetId?: Maybe<Scalars['String']>;
   creationTime: Scalars['String'];
@@ -664,7 +632,6 @@ export type AwsCloudFormationStack = {
   disableRollback?: Maybe<Scalars['String']>;
   enableTerminationProtection?: Maybe<Scalars['String']>;
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
-  id: Scalars['String'];
   lastUpdatedTime?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   notificationARNs?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -672,7 +639,6 @@ export type AwsCloudFormationStack = {
   parameters?: Maybe<Array<Maybe<AwsCloudFormationStackParameter>>>;
   parentId?: Maybe<Scalars['String']>;
   parentStack?: Maybe<Array<Maybe<AwsCloudFormationStack>>>;
-  region: Scalars['String'];
   roleArn?: Maybe<Scalars['String']>;
   rollbackConfiguration?: Maybe<AwsCloudFormationStackRollbackConfiguration>;
   rootId?: Maybe<Scalars['String']>;
@@ -726,20 +692,17 @@ export type AwsCloudFormationStackRollbackConfiguration = {
   rollbackTriggers?: Maybe<Array<Maybe<AwsRollbackConfigurationRollbackTrigger>>>;
 };
 
-export type AwsCloudFormationStackSet = {
+export type AwsCloudFormationStackSet = AwsBaseService & {
   administrationRoleARN?: Maybe<Scalars['String']>;
-  arn: Scalars['String'];
   autoDeploymentConfig?: Maybe<AwsCloudFormationStackAutoDeploymentConfig>;
   capabilities?: Maybe<Array<Maybe<Scalars['String']>>>;
   description?: Maybe<Scalars['String']>;
   driftDetectionDetail?: Maybe<AwsCloudFormationStackSetDriftDetectionDetail>;
   executionRoleName?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   organizationalUnitIds?: Maybe<Array<Maybe<Scalars['String']>>>;
   parameters?: Maybe<Array<Maybe<AwsCloudFormationStackSetParameter>>>;
   permissionModel?: Maybe<Scalars['String']>;
-  region: Scalars['String'];
   status?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   templateBody?: Maybe<Scalars['String']>;
@@ -769,9 +732,7 @@ export type AwsCloudFormationStackSetParameter = {
   usePreviousValue?: Maybe<Scalars['String']>;
 };
 
-export type AwsCloudfront = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsCloudfront = AwsBaseService & {
   callerReference?: Maybe<Scalars['String']>;
   customErrorResponses?: Maybe<Array<Maybe<AwsCloudfrontCustomErrorResponse>>>;
   defaultCacheBehavior?: Maybe<AwsCloudfrontCacheBehavior>;
@@ -782,7 +743,6 @@ export type AwsCloudfront = {
   etag?: Maybe<Scalars['String']>;
   geoRestrictions?: Maybe<Scalars['String']>;
   httpVersion?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   ipv6Enabled?: Maybe<Scalars['String']>;
   lastModified?: Maybe<Scalars['String']>;
   logging?: Maybe<AwsCloudfrontLoggingConfig>;
@@ -869,10 +829,7 @@ export type AwsCloudfrontforwardedValues = {
   queryString?: Maybe<Scalars['String']>;
 };
 
-export type AwsCloudtrail = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
-  cgId: Scalars['String'];
+export type AwsCloudtrail = AwsOptionalService & {
   cloudWatchLogsLogGroupArn?: Maybe<Scalars['String']>;
   cloudWatchLogsRoleArn?: Maybe<Scalars['String']>;
   cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
@@ -881,7 +838,6 @@ export type AwsCloudtrail = {
   hasCustomEventSelectors?: Maybe<Scalars['String']>;
   hasInsightSelectors?: Maybe<Scalars['String']>;
   homeRegion?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   includeGlobalServiceEvents?: Maybe<Scalars['String']>;
   isMultiRegionTrail?: Maybe<Scalars['String']>;
   isOrganizationTrail?: Maybe<Scalars['String']>;
@@ -889,7 +845,6 @@ export type AwsCloudtrail = {
   kmsKeyId?: Maybe<Scalars['String']>;
   logFileValidationEnabled?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   s3?: Maybe<Array<Maybe<AwsS3>>>;
   s3BucketName?: Maybe<Scalars['String']>;
   s3KeyPrefix?: Maybe<Scalars['String']>;
@@ -926,22 +881,18 @@ export type AwsCloudtrailStatus = {
   timeLoggingStopped?: Maybe<Scalars['String']>;
 };
 
-export type AwsCloudwatch = {
-  accountId: Scalars['String'];
+export type AwsCloudwatch = AwsBaseService & {
   actions?: Maybe<Array<Maybe<Scalars['String']>>>;
   actionsEnabled?: Maybe<Scalars['String']>;
-  arn: Scalars['String'];
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
   cloudwatchLog?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
   comparisonOperator?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   dimensions?: Maybe<Array<Maybe<AwsCloudwatchDimensions>>>;
   evaluationPeriods?: Maybe<Scalars['Int']>;
-  id: Scalars['String'];
   metric?: Maybe<Scalars['String']>;
   namespace?: Maybe<Scalars['String']>;
   period?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   sns?: Maybe<Array<Maybe<AwsSns>>>;
   statistic?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
@@ -957,6 +908,7 @@ export type AwsCloudwatchDimensions = {
 export type AwsCloudwatchLog = {
   accountId: Scalars['String'];
   arn: Scalars['String'];
+  cgId?: Maybe<Scalars['String']>;
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
   cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
   creationTime?: Maybe<Scalars['String']>;
@@ -977,9 +929,7 @@ export type AwsCodeBuildFilterGroup = {
   type?: Maybe<Scalars['String']>;
 };
 
-export type AwsCodebuild = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsCodebuild = AwsBaseService & {
   artifacts?: Maybe<AwsCodebuildArtifacts>;
   badge?: Maybe<AwsCodebuildBadge>;
   buildBatchConfig?: Maybe<AwsCodebuildBatchConfig>;
@@ -991,7 +941,6 @@ export type AwsCodebuild = {
   environment?: Maybe<AwsCodebuildEnvironment>;
   fileSystemLocations?: Maybe<Array<Maybe<AwsCodebuildFileSystemLocation>>>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
-  id: Scalars['String'];
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   lastModified?: Maybe<Scalars['DateTime']>;
   logsConfig?: Maybe<AwsCodebuildLogsConfig>;
@@ -999,7 +948,6 @@ export type AwsCodebuild = {
   projectVisibility?: Maybe<Scalars['String']>;
   publicProjectAlias?: Maybe<Scalars['String']>;
   queuedTimeoutInMinutes?: Maybe<Scalars['Int']>;
-  region?: Maybe<Scalars['String']>;
   resourceAccessRole?: Maybe<Scalars['String']>;
   secondaryArtifacts?: Maybe<Array<Maybe<AwsCodebuildArtifacts>>>;
   secondarySourceVersions?: Maybe<Array<Maybe<AwsCodebuildSecondarySourceVersion>>>;
@@ -1180,8 +1128,7 @@ export type AwsCognitoIdentityProviders = {
   serverSideTokenCheck?: Maybe<Scalars['String']>;
 };
 
-export type AwsCognitoUserPool = {
-  accountId: Scalars['String'];
+export type AwsCognitoUserPool = AwsBaseService & {
   accountRecoverySettings?: Maybe<Array<Maybe<AwsAccountRecoverySetting>>>;
   adminCreateUserConfigAllowAdminCreateUserOnly?: Maybe<Scalars['String']>;
   adminCreateUserConfigInviteMessageTemplateEmailMessage?: Maybe<Scalars['String']>;
@@ -1190,7 +1137,6 @@ export type AwsCognitoUserPool = {
   adminCreateUserConfigUnusedAccountValidityDays?: Maybe<Scalars['Int']>;
   aliasAttributes?: Maybe<Array<Maybe<Scalars['String']>>>;
   appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
-  arn: Scalars['String'];
   autoVerifiedAttributes?: Maybe<Array<Maybe<Scalars['String']>>>;
   creationDate?: Maybe<Scalars['String']>;
   customDomain?: Maybe<Scalars['String']>;
@@ -1206,15 +1152,16 @@ export type AwsCognitoUserPool = {
   emailVerificationMessage?: Maybe<Scalars['String']>;
   emailVerificationSubject?: Maybe<Scalars['String']>;
   estimatedNumberOfUsers?: Maybe<Scalars['Int']>;
-  id: Scalars['String'];
-  lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
   lambdaConfig?: Maybe<AwsCognitoUserPoolLambdaConfig>;
+  lambdas?: Maybe<Array<Maybe<AwsLambda>>>;
   lastModifiedDate?: Maybe<Scalars['String']>;
   mfaConfiguration?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   policies?: Maybe<AwsCognitoUserPoolPasswordPolicy>;
-  region?: Maybe<Scalars['String']>;
   schemaAttributes?: Maybe<Array<Maybe<AwsCognitoUserPoolSchemaAttribute>>>;
+  ses?: Maybe<Array<Maybe<AwsSes>>>;
   smsAuthenticationMessage?: Maybe<Scalars['String']>;
   smsConfigurationExternalId?: Maybe<Scalars['String']>;
   smsConfigurationFailure?: Maybe<Scalars['String']>;
@@ -1275,14 +1222,10 @@ export type AwsCognitoUserPoolSchemaAttribute = {
   stringAttributeConstraintsMinValue?: Maybe<Scalars['String']>;
 };
 
-export type AwsConfigurationRecorder = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsConfigurationRecorder = AwsBaseService & {
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
-  id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   recordingGroup?: Maybe<AwsRecordingGroup>;
-  region?: Maybe<Scalars['String']>;
   roleARN?: Maybe<Scalars['String']>;
   status?: Maybe<AwsRecorderStatus>;
 };
@@ -1293,13 +1236,9 @@ export type AwsConnectionLogResponseOptions = {
   enabled?: Maybe<Scalars['Boolean']>;
 };
 
-export type AwsCustomerGateway = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsCustomerGateway = AwsBaseService & {
   bgpAsn?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   ipAddress?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   type?: Maybe<Scalars['String']>;
   vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
@@ -1309,16 +1248,13 @@ export type AwsDirectoryServiceAuthenticationRequest = {
   directoryId?: Maybe<Scalars['String']>;
 };
 
-export type AwsDmsReplicationInstance = {
-  accountId: Scalars['String'];
+export type AwsDmsReplicationInstance = AwsBaseService & {
   allocatedStorage?: Maybe<Scalars['Int']>;
-  arn: Scalars['String'];
   autoMinorVersionUpgrade?: Maybe<Scalars['Boolean']>;
   availabilityZone?: Maybe<Scalars['String']>;
   dnsNameServers?: Maybe<Scalars['String']>;
   engineVersion?: Maybe<Scalars['String']>;
   freeUntil?: Maybe<Scalars['DateTime']>;
-  id: Scalars['String'];
   instanceCreateTime?: Maybe<Scalars['DateTime']>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   kmsKeyId?: Maybe<Scalars['String']>;
@@ -1326,7 +1262,6 @@ export type AwsDmsReplicationInstance = {
   pendingModifiedValues?: Maybe<AwsDmsReplicationInstancePendingModifiedValues>;
   preferredMaintenanceWindow?: Maybe<Scalars['String']>;
   publiclyAccessible?: Maybe<Scalars['Boolean']>;
-  region?: Maybe<Scalars['String']>;
   replicationInstanceClass?: Maybe<Scalars['String']>;
   replicationInstanceIdentifier?: Maybe<Scalars['String']>;
   replicationInstancePrivateIpAddress?: Maybe<Scalars['String']>;
@@ -1343,10 +1278,8 @@ export type AwsDmsReplicationInstance = {
   vpcSecurityGroups?: Maybe<Array<Maybe<AwsDmsReplicationInstanceVpcSecurityGroups>>>;
 };
 
-export type AwsDynamoDbTable = {
-  accountId: Scalars['String'];
+export type AwsDynamoDbTable = AwsBaseService & {
   appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
-  arn: Scalars['String'];
   attributes?: Maybe<Array<Maybe<AwsDynamoDbTableAttributes>>>;
   billingModeSummary?: Maybe<AwsDynamoDbTableBillingSummary>;
   creationDate: Scalars['String'];
@@ -1360,10 +1293,9 @@ export type AwsDynamoDbTable = {
   latestStreamArn?: Maybe<Scalars['String']>;
   latestStreamLabel?: Maybe<Scalars['String']>;
   localIndexes?: Maybe<Array<Maybe<AwsDynamoDbTableLocalSecondaryIndexDescription>>>;
-  name: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
   pointInTimeRecoveryEnabled?: Maybe<Scalars['Boolean']>;
   provisionedThroughput?: Maybe<AwsDynamoDbTableProvisionedThroughputDescription>;
-  region?: Maybe<Scalars['String']>;
   replicas?: Maybe<Array<Maybe<AwsDynamoDbTableReplicaDescription>>>;
   restoreSummary?: Maybe<AwsDynamoDbTableRestoreSummary>;
   sizeInBytes?: Maybe<Scalars['Int64']>;
@@ -1483,9 +1415,7 @@ export type AwsDynamoDbTableStreamSpecification = {
   streamsEnabled?: Maybe<Scalars['Boolean']>;
 };
 
-export type AwsEbs = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsEbs = AwsBaseService & {
   asg?: Maybe<Array<Maybe<AwsAsg>>>;
   attachments?: Maybe<Array<Maybe<AwsEbsAttachment>>>;
   availabilityZone?: Maybe<Scalars['String']>;
@@ -1493,12 +1423,10 @@ export type AwsEbs = {
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   emrInstance?: Maybe<Array<Maybe<AwsEmrInstance>>>;
   encrypted?: Maybe<Scalars['Boolean']>;
-  id: Scalars['String'];
   iops?: Maybe<Scalars['Int']>;
   isBootDisk?: Maybe<Scalars['Boolean']>;
   multiAttachEnabled?: Maybe<Scalars['Boolean']>;
   permissions?: Maybe<Array<Maybe<AwsEbsPermission>>>;
-  region?: Maybe<Scalars['String']>;
   size?: Maybe<Scalars['String']>;
   snapshot?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
@@ -1519,11 +1447,9 @@ export type AwsEbsPermission = {
   userId?: Maybe<Scalars['String']>;
 };
 
-export type AwsEc2 = {
-  accountId: Scalars['String'];
+export type AwsEc2 = AwsBaseService & {
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
   ami?: Maybe<Scalars['String']>;
-  arn: Scalars['String'];
   asg?: Maybe<Array<Maybe<AwsAsg>>>;
   availabilityZone?: Maybe<Scalars['String']>;
   cloudWatchMetricData?: Maybe<AwsEc2CloudWatchMetricsTimePeriods>;
@@ -1540,7 +1466,6 @@ export type AwsEc2 = {
   ephemeralBlockDevices?: Maybe<Array<Maybe<AwsEc2Blockdevice>>>;
   hibernation?: Maybe<Scalars['String']>;
   iamInstanceProfile?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   instanceLifecycle?: Maybe<Scalars['String']>;
   instanceState?: Maybe<Scalars['String']>;
   instanceType?: Maybe<Scalars['String']>;
@@ -1559,7 +1484,6 @@ export type AwsEc2 = {
   privateIps?: Maybe<Scalars['String']>;
   publicDns?: Maybe<Scalars['String']>;
   publicIpAddress?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   sourceDestCheck?: Maybe<Scalars['String']>;
@@ -1611,16 +1535,12 @@ export type AwsEc2MetadataOptions = {
   state: Scalars['String'];
 };
 
-export type AwsEcr = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsEcr = AwsBaseService & {
   createdAt?: Maybe<Scalars['String']>;
   encryptionConfig?: Maybe<AwsEcrEncryptionConfiguration>;
-  id: Scalars['String'];
   imageScanOnPush?: Maybe<Scalars['Boolean']>;
   imageTagMutability?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   registryAccountId?: Maybe<Scalars['String']>;
   repositoryUri?: Maybe<Scalars['String']>;
   scanOnPush?: Maybe<Scalars['Boolean']>;
@@ -1666,10 +1586,8 @@ export type AwsEcsCapacityProviderStrategyItem = {
   weight?: Maybe<Scalars['Int']>;
 };
 
-export type AwsEcsCluster = {
-  accountId: Scalars['String'];
+export type AwsEcsCluster = AwsBaseService & {
   activeServicesCount?: Maybe<Scalars['Int']>;
-  arn: Scalars['String'];
   attachments?: Maybe<Array<Maybe<AwsEcsAttachment>>>;
   attachmentsStatus?: Maybe<Scalars['String']>;
   capacityProviders?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -1679,7 +1597,6 @@ export type AwsEcsCluster = {
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   ecsTask?: Maybe<Array<Maybe<AwsEcsTask>>>;
   ecsTaskSet?: Maybe<Array<Maybe<AwsEcsTaskSet>>>;
-  id: Scalars['String'];
   pendingTasksCount?: Maybe<Scalars['Int']>;
   registeredContainerInstancesCount?: Maybe<Scalars['Int']>;
   runningTasksCount?: Maybe<Scalars['Int']>;
@@ -1700,18 +1617,15 @@ export type AwsEcsClusterSettings = {
   value?: Maybe<Scalars['String']>;
 };
 
-export type AwsEcsContainer = {
-  accountId: Scalars['String'];
+export type AwsEcsContainer = AwsBaseService & {
   agentConnected?: Maybe<Scalars['Boolean']>;
   agentUpdateStatus?: Maybe<Scalars['String']>;
-  arn: Scalars['String'];
   attachments?: Maybe<Array<Maybe<AwsEcsAttachment>>>;
   attributes?: Maybe<Array<Maybe<AwsEcsAttribute>>>;
   capacityProviderName?: Maybe<Scalars['String']>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   ec2InstanceId?: Maybe<Scalars['String']>;
   ecsTask?: Maybe<Array<Maybe<AwsEcsTask>>>;
-  id: Scalars['String'];
   pendingTasksCount?: Maybe<Scalars['Int']>;
   registeredAt?: Maybe<Scalars['String']>;
   registeredResources?: Maybe<Array<Maybe<AwsEcsResource>>>;
@@ -2033,9 +1947,7 @@ export type AwsEcsSecret = {
   valueFrom?: Maybe<Scalars['String']>;
 };
 
-export type AwsEcsService = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsEcsService = AwsBaseService & {
   capacityProviderStrategy?: Maybe<Array<Maybe<AwsEcsCapacityProviderStrategyItem>>>;
   createdAt?: Maybe<Scalars['String']>;
   createdBy?: Maybe<Scalars['String']>;
@@ -2052,7 +1964,6 @@ export type AwsEcsService = {
   events?: Maybe<Array<Maybe<AwsEcsServiceEvent>>>;
   healthCheckGracePeriodSeconds?: Maybe<Scalars['Int']>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
-  id: Scalars['String'];
   launchType?: Maybe<Scalars['String']>;
   loadBalancers?: Maybe<Array<Maybe<AwsEcsLoadBalancer>>>;
   networkConfiguration?: Maybe<AwsEcsNetworkConfiguration>;
@@ -2105,9 +2016,7 @@ export type AwsEcsSystemControl = {
   value?: Maybe<Scalars['String']>;
 };
 
-export type AwsEcsTask = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsEcsTask = AwsBaseService & {
   attachments?: Maybe<Array<Maybe<AwsEcsAttachment>>>;
   attributes?: Maybe<Array<Maybe<AwsEcsAttribute>>>;
   availabilityZone?: Maybe<Scalars['String']>;
@@ -2127,7 +2036,6 @@ export type AwsEcsTask = {
   executionStoppedAt?: Maybe<Scalars['String']>;
   group?: Maybe<Scalars['String']>;
   healthStatus?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   inferenceAccelerators?: Maybe<Array<Maybe<AwsEcsInferenceAccelerator>>>;
   lastStatus?: Maybe<Scalars['String']>;
   launchType?: Maybe<Scalars['String']>;
@@ -2146,9 +2054,7 @@ export type AwsEcsTask = {
   version?: Maybe<Scalars['Int']>;
 };
 
-export type AwsEcsTaskDefinition = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsEcsTaskDefinition = AwsBaseService & {
   compatibilities?: Maybe<Array<Maybe<Scalars['String']>>>;
   containerDefinitions?: Maybe<Array<Maybe<AwsEcsContainerDefinition>>>;
   cpu?: Maybe<Scalars['String']>;
@@ -2159,7 +2065,6 @@ export type AwsEcsTaskDefinition = {
   ephemeralStorage?: Maybe<AwsEcsEphemeralStorage>;
   executionRoleArn?: Maybe<Scalars['String']>;
   family?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   inferenceAccelerators?: Maybe<Array<Maybe<AwsEcsInferenceAccelerator>>>;
   ipcMode?: Maybe<Scalars['String']>;
   memory?: Maybe<Scalars['String']>;
@@ -2167,7 +2072,6 @@ export type AwsEcsTaskDefinition = {
   pidMode?: Maybe<Scalars['String']>;
   placementConstraints?: Maybe<Array<Maybe<AwsEcsTaskDefinitionPlacementConstraint>>>;
   proxyConfiguration?: Maybe<AwsEcsProxyConfiguration>;
-  region?: Maybe<Scalars['String']>;
   registeredAt?: Maybe<Scalars['String']>;
   registeredBy?: Maybe<Scalars['String']>;
   requiresAttributes?: Maybe<Array<Maybe<AwsEcsAttribute>>>;
@@ -2195,9 +2099,7 @@ export type AwsEcsTaskOverride = {
   taskRoleArn?: Maybe<Scalars['String']>;
 };
 
-export type AwsEcsTaskSet = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsEcsTaskSet = AwsBaseService & {
   capacityProviderStrategy?: Maybe<Array<Maybe<AwsEcsCapacityProviderStrategyItem>>>;
   computedDesiredCount?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['String']>;
@@ -2205,13 +2107,11 @@ export type AwsEcsTaskSet = {
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   ecsTaskDefinition?: Maybe<Array<Maybe<AwsEcsTaskDefinition>>>;
   externalId?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   launchType?: Maybe<Scalars['String']>;
   loadBalancers?: Maybe<Array<Maybe<AwsEcsLoadBalancer>>>;
   networkConfiguration?: Maybe<AwsEcsNetworkConfiguration>;
   pendingCount?: Maybe<Scalars['Int']>;
   platformVersion?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   runningCount?: Maybe<Scalars['Int']>;
   scale?: Maybe<AwsEcsScale>;
   serviceRegistries?: Maybe<Array<Maybe<AwsEcsServiceRegistry>>>;
@@ -2259,9 +2159,7 @@ export type AwsEcsversionInfo = {
   id: Scalars['String'];
 };
 
-export type AwsEfs = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsEfs = AwsBaseService & {
   availabilityZoneId?: Maybe<Scalars['String']>;
   availabilityZoneName?: Maybe<Scalars['String']>;
   creationTime?: Maybe<Scalars['String']>;
@@ -2269,7 +2167,6 @@ export type AwsEfs = {
   efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
   encrypted?: Maybe<Scalars['Boolean']>;
   fileSystemId?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   lifeCycleState?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
@@ -2277,7 +2174,6 @@ export type AwsEfs = {
   ownerId?: Maybe<Scalars['String']>;
   performanceMode?: Maybe<Scalars['String']>;
   provisionedThroughputInMibps?: Maybe<Scalars['Int']>;
-  region?: Maybe<Scalars['String']>;
   sizeInBytes?: Maybe<AwsEfsFileSystemSize>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   throughputMode?: Maybe<Scalars['String']>;
@@ -2295,31 +2191,25 @@ export type AwsEfsFileSystemSize = {
   valueInStandard?: Maybe<Scalars['Int64']>;
 };
 
-export type AwsEfsMountTarget = {
-  accountId: Scalars['String'];
+export type AwsEfsMountTarget = AwsOptionalService & {
   availabilityZoneId?: Maybe<Scalars['String']>;
   availabilityZoneName?: Maybe<Scalars['String']>;
   efs?: Maybe<Array<Maybe<AwsEfs>>>;
   fileSystemId?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   ipAddress?: Maybe<Scalars['String']>;
   lifeCycleState?: Maybe<Scalars['String']>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   ownerId?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
-export type AwsEip = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsEip = AwsBaseService & {
   customerOwnedIp?: Maybe<Scalars['String']>;
   customerOwnedIpv4Pool?: Maybe<Scalars['String']>;
   domain?: Maybe<Scalars['String']>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   ec2InstanceAssociationId?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   instanceId?: Maybe<Scalars['String']>;
   networkBorderGroup?: Maybe<Scalars['String']>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
@@ -2328,7 +2218,6 @@ export type AwsEip = {
   privateIp?: Maybe<Scalars['String']>;
   publicIp?: Maybe<Scalars['String']>;
   publicIpv4Pool?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   vpc?: Maybe<Scalars['String']>;
   vpcs?: Maybe<Array<Maybe<AwsVpc>>>;
@@ -2338,23 +2227,19 @@ export type AwsEksCertificate = {
   data?: Maybe<Scalars['String']>;
 };
 
-export type AwsEksCluster = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsEksCluster = AwsBaseService & {
   certificateAuthority?: Maybe<AwsEksCertificate>;
   clientRequestToken?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['String']>;
   encryptionConfig?: Maybe<Array<Maybe<AwsEksEncryptionConfig>>>;
   endpoint?: Maybe<Scalars['String']>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
-  id: Scalars['String'];
   identity?: Maybe<AwsEksIdentity>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   kubernetesNetworkConfig?: Maybe<AwsEksKubernetesNetworkConfigResponse>;
   logging?: Maybe<AwsEksLogging>;
   name?: Maybe<Scalars['String']>;
   platformVersion?: Maybe<Scalars['String']>;
-  region: Scalars['String'];
   resourcesVpcConfig?: Maybe<AwsEksVpcConfigResponse>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   status?: Maybe<Scalars['String']>;
@@ -2412,9 +2297,7 @@ export type AwsElastiCacheCloudWatchLogsDestinationDetails = {
   logGroup?: Maybe<Scalars['String']>;
 };
 
-export type AwsElastiCacheCluster = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsElastiCacheCluster = AwsBaseService & {
   atRestEncryptionEnabled?: Maybe<Scalars['Boolean']>;
   authTokenEnabled?: Maybe<Scalars['Boolean']>;
   authTokenLastModifiedDate?: Maybe<Scalars['String']>;
@@ -2431,7 +2314,6 @@ export type AwsElastiCacheCluster = {
   configurationEndpoint?: Maybe<AwsElastiCacheEndpoint>;
   engine?: Maybe<Scalars['String']>;
   engineVersion?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   logDeliveryConfigurations?: Maybe<Array<Maybe<AwsElastiCacheLogDeliveryConfiguration>>>;
   notificationConfiguration?: Maybe<AwsElastiCacheNotificationConfiguration>;
   numCacheNodes?: Maybe<Scalars['Int']>;
@@ -2439,7 +2321,6 @@ export type AwsElastiCacheCluster = {
   preferredAvailabilityZone?: Maybe<Scalars['String']>;
   preferredMaintenanceWindow?: Maybe<Scalars['String']>;
   preferredOutpostArn?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   replicationGroupId?: Maybe<Scalars['String']>;
   replicationGroupLogDeliveryEnabled?: Maybe<Scalars['Boolean']>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
@@ -2540,9 +2421,7 @@ export type AwsElastiCachePendingModifiedValues = {
   numCacheNodes?: Maybe<Scalars['Int']>;
 };
 
-export type AwsElastiCacheReplicationGroup = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsElastiCacheReplicationGroup = AwsBaseService & {
   atRestEncryptionEnabled?: Maybe<Scalars['Boolean']>;
   authTokenEnabled?: Maybe<Scalars['Boolean']>;
   authTokenLastModifiedDate?: Maybe<Scalars['String']>;
@@ -2552,7 +2431,6 @@ export type AwsElastiCacheReplicationGroup = {
   configurationEndpoint?: Maybe<AwsElastiCacheEndpoint>;
   description?: Maybe<Scalars['String']>;
   globalReplicationGroupInfo?: Maybe<AwsElastiCacheGlobalReplicationGroupInfo>;
-  id: Scalars['String'];
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   logDeliveryConfigurations?: Maybe<Array<Maybe<AwsElastiCacheLogDeliveryConfiguration>>>;
   memberClusters?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -2560,7 +2438,6 @@ export type AwsElastiCacheReplicationGroup = {
   multiAZ?: Maybe<Scalars['String']>;
   nodeGroups?: Maybe<Array<Maybe<AwsElastiCacheNodeGroup>>>;
   pendingModifiedValues?: Maybe<AwsElastiCacheReplicationGroupPendingModifiedValues>;
-  region?: Maybe<Scalars['String']>;
   replicationGroupCreateTime?: Maybe<Scalars['String']>;
   replicationGroupId?: Maybe<Scalars['String']>;
   snapshotRetentionLimit?: Maybe<Scalars['Int']>;
@@ -2600,29 +2477,21 @@ export type AwsElastiCacheUserGroupsUpdateStatus = {
   userGroupIdsToRemove?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
-export type AwsElasticBeanstalkApp = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsElasticBeanstalkApp = AwsBaseService & {
   description?: Maybe<Scalars['String']>;
   elasticBeanstalkEnv?: Maybe<Array<Maybe<AwsElasticBeanstalkEnv>>>;
-  id: Scalars['String'];
-  name: Scalars['String'];
-  region?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
 };
 
-export type AwsElasticBeanstalkEnv = {
-  accountId: Scalars['String'];
+export type AwsElasticBeanstalkEnv = AwsBaseService & {
   applicationName?: Maybe<Scalars['String']>;
-  arn: Scalars['String'];
   cname?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   elasticBeanstalkApp?: Maybe<Array<Maybe<AwsElasticBeanstalkApp>>>;
   endpointUrl?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   platformArn?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   resources?: Maybe<Array<Maybe<AwsElasticBeanstalkEnvResource>>>;
   settings?: Maybe<Array<Maybe<AwsElasticBeanstalkEnvSetting>>>;
   solutionStackName?: Maybe<Scalars['String']>;
@@ -2704,12 +2573,10 @@ export type AwsElasticSearchCognitoOptions = {
   userPoolId?: Maybe<Scalars['String']>;
 };
 
-export type AwsElasticSearchDomain = {
+export type AwsElasticSearchDomain = AwsBaseService & {
   accessPolicies?: Maybe<AwsIamJsonPolicy>;
-  accountId: Scalars['String'];
   advancedOptions?: Maybe<Array<Maybe<AwsRawTag>>>;
   advancedSecurityOptions?: Maybe<AwsElasticSearchAdvancedSecurityOptions>;
-  arn: Scalars['String'];
   autoTuneOptions?: Maybe<AwsElasticSearchAutoTuneOptions>;
   changeProcessDetails?: Maybe<AwsElasticSearchChangeProcessDetails>;
   cognitoOptions?: Maybe<AwsElasticSearchCognitoOptions>;
@@ -2723,12 +2590,10 @@ export type AwsElasticSearchDomain = {
   encryptionAtRestOptions?: Maybe<AwsElasticSearchEncryptionAtRestOptions>;
   endpoint?: Maybe<Scalars['String']>;
   endpoints?: Maybe<Array<Maybe<AwsRawTag>>>;
-  id: Scalars['String'];
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   logPublishingOptions?: Maybe<Array<Maybe<AwsElasticSearchLogPublishingOption>>>;
   nodeToNodeEncryptionOptions?: Maybe<AwsElasticSearchNodeToNodeEncryptionOptions>;
   processing?: Maybe<Scalars['Boolean']>;
-  region?: Maybe<Scalars['String']>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   serviceSoftwareOptions?: Maybe<AwsElasticSearchServiceSoftwareOptions>;
   snapshotOptions?: Maybe<AwsElasticSearchSnapshotOptions>;
@@ -2792,10 +2657,8 @@ export type AwsElasticSearchVpcOptions = {
   vpcId?: Maybe<Scalars['String']>;
 };
 
-export type AwsElb = {
+export type AwsElb = AwsBaseService & {
   accessLogs?: Maybe<Scalars['String']>;
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
   cloudfrontDistribution?: Maybe<Array<Maybe<AwsCloudfront>>>;
   createdAt?: Maybe<Scalars['String']>;
   crossZoneLoadBalancing?: Maybe<Scalars['String']>;
@@ -2803,12 +2666,10 @@ export type AwsElb = {
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   healthCheck?: Maybe<AwsElbHealthCheck>;
   hostedZone?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   idleTimeout?: Maybe<Scalars['String']>;
   instances?: Maybe<AwsElbInstances>;
   listeners?: Maybe<Array<Maybe<AwsElbListener>>>;
   name?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   route53Record?: Maybe<Array<Maybe<AwsRoute53Record>>>;
   scheme?: Maybe<Scalars['String']>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
@@ -2851,17 +2712,14 @@ export type AwsElbSourceSecurityGroup = {
   ownerAlias?: Maybe<Scalars['String']>;
 };
 
-export type AwsEmrCluster = {
-  accountId: Scalars['String'];
+export type AwsEmrCluster = AwsBaseService & {
   applications?: Maybe<Array<Maybe<AwsEmrClusterApplication>>>;
-  arn: Scalars['String'];
   autoScalingRole?: Maybe<Scalars['String']>;
   autoTerminate?: Maybe<Scalars['Boolean']>;
   configurations?: Maybe<Array<Maybe<AwsEmrClusterConfiguration>>>;
   customAmiId?: Maybe<Scalars['String']>;
   ebsRootVolumeSize?: Maybe<Scalars['Int']>;
   ec2InstanceAttributes?: Maybe<AwsEmrClusterEc2InstanceAttributes>;
-  id: Scalars['String'];
   instanceCollectionType?: Maybe<Scalars['String']>;
   kerberosAttributes?: Maybe<AwsEmrClusterKerberosAttributes>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
@@ -2871,7 +2729,6 @@ export type AwsEmrCluster = {
   normalizedInstanceHours?: Maybe<Scalars['Int']>;
   outpostArn?: Maybe<Scalars['String']>;
   placementGroups?: Maybe<Array<Maybe<AwsEmrClusterPlacementGroupConfig>>>;
-  region: Scalars['String'];
   releaseLabel?: Maybe<Scalars['String']>;
   repoUpgradeOnBoot?: Maybe<Scalars['String']>;
   requestedAmiVersion?: Maybe<Scalars['String']>;
@@ -2900,12 +2757,10 @@ export type AwsEmrHadoopStepConfig = {
   properties?: Maybe<Array<Maybe<AwsStringMap>>>;
 };
 
-export type AwsEmrInstance = {
-  accountId: Scalars['String'];
+export type AwsEmrInstance = AwsOptionalService & {
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   ec2InstanceId?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   instanceFleetId?: Maybe<Scalars['String']>;
   instanceGroupId?: Maybe<Scalars['String']>;
   instanceType?: Maybe<Scalars['String']>;
@@ -2914,7 +2769,6 @@ export type AwsEmrInstance = {
   privateIpAddress?: Maybe<Scalars['String']>;
   publicDnsName?: Maybe<Scalars['String']>;
   publicIpAddress?: Maybe<Scalars['String']>;
-  region: Scalars['String'];
   status?: Maybe<AwsEmrInstanceStatus>;
 };
 
@@ -2935,13 +2789,10 @@ export type AwsEmrInstanceTimeline = {
   readyDateTime?: Maybe<Scalars['String']>;
 };
 
-export type AwsEmrStep = {
-  accountId: Scalars['String'];
+export type AwsEmrStep = AwsOptionalService & {
   actionOnFailure?: Maybe<Scalars['String']>;
   config?: Maybe<AwsEmrHadoopStepConfig>;
-  id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
-  region: Scalars['String'];
   status?: Maybe<AwsEmrStepStatus>;
 };
 
@@ -2974,8 +2825,7 @@ export type AwsFederatedAuthentication = {
   selfServiceSamlProviderArn?: Maybe<Scalars['String']>;
 };
 
-export type AwsFlowLog = {
-  accountId: Scalars['String'];
+export type AwsFlowLog = AwsOptionalService & {
   creationTime?: Maybe<Scalars['String']>;
   deliverLogsErrorMessage?: Maybe<Scalars['String']>;
   deliverLogsPermissionArn?: Maybe<Scalars['String']>;
@@ -2985,11 +2835,9 @@ export type AwsFlowLog = {
   format?: Maybe<Scalars['String']>;
   groupName?: Maybe<Scalars['String']>;
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
-  id: Scalars['String'];
   logStatus?: Maybe<Scalars['String']>;
   maxAggregationInterval?: Maybe<Scalars['Int']>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
-  region: Scalars['String'];
   resourceId?: Maybe<Scalars['String']>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
@@ -2997,10 +2845,8 @@ export type AwsFlowLog = {
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
-export type AwsGlueJob = {
-  accountId: Scalars['String'];
+export type AwsGlueJob = AwsBaseService & {
   allocatedCapacity?: Maybe<Scalars['Int']>;
-  arn: Scalars['String'];
   command?: Maybe<AwsGlueJobCommand>;
   connections?: Maybe<AwsGlueJobConnections>;
   createdOn?: Maybe<Scalars['DateTime']>;
@@ -3009,7 +2855,6 @@ export type AwsGlueJob = {
   executionProperty?: Maybe<AwsGlueJobExecutionProperty>;
   glueVersion?: Maybe<Scalars['String']>;
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
-  id: Scalars['String'];
   lastModifiedOn?: Maybe<Scalars['DateTime']>;
   logUri?: Maybe<Scalars['String']>;
   maxCapacity?: Maybe<Scalars['Int']>;
@@ -3018,7 +2863,6 @@ export type AwsGlueJob = {
   nonOverrideableArguments?: Maybe<Array<Maybe<AwsRawTag>>>;
   notificationProperty?: Maybe<AwsGlueJobNotificationProperty>;
   numberOfWorkers?: Maybe<Scalars['Int']>;
-  region?: Maybe<Scalars['String']>;
   role?: Maybe<Scalars['String']>;
   securityConfiguration?: Maybe<Scalars['String']>;
   timeout?: Maybe<Scalars['Int']>;
@@ -3043,12 +2887,8 @@ export type AwsGlueJobNotificationProperty = {
   notifyDelayAfter?: Maybe<Scalars['Int']>;
 };
 
-export type AwsGlueRegistry = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsGlueRegistry = AwsBaseService & {
   createdTime?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
-  region?: Maybe<Scalars['String']>;
   registryArn?: Maybe<Scalars['String']>;
   registryName?: Maybe<Scalars['String']>;
   schemas?: Maybe<Array<Maybe<AwsGlueRegistrySchema>>>;
@@ -3078,15 +2918,12 @@ export type AwsGuardDutyDataSources = {
   s3Logs?: Maybe<AwsGuardDutyDataSource>;
 };
 
-export type AwsGuardDutyDetector = {
-  accountId: Scalars['String'];
+export type AwsGuardDutyDetector = AwsOptionalService & {
   createdAt?: Maybe<Scalars['DateTime']>;
   dataSources?: Maybe<AwsGuardDutyDataSources>;
   findingPublishingFrequency?: Maybe<Scalars['String']>;
   iamRole?: Maybe<AwsIamRole>;
-  id: Scalars['String'];
   members?: Maybe<Array<Maybe<AwsGuardDutyMember>>>;
-  region?: Maybe<Scalars['String']>;
   serviceRole?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
@@ -3114,23 +2951,17 @@ export type AwsIamAccessKey = {
   status?: Maybe<Scalars['String']>;
 };
 
-export type AwsIamGroup = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsIamGroup = AwsBaseService & {
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   iamUsers?: Maybe<Array<Maybe<AwsIamUser>>>;
-  id: Scalars['String'];
   inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
 };
 
-export type AwsIamInstanceProfile = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsIamInstanceProfile = AwsBaseService & {
   createDate?: Maybe<Scalars['DateTime']>;
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
-  id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
@@ -3172,7 +3003,9 @@ export type AwsIamMfaDevice = {
 export type AwsIamOpenIdConnectProvider = {
   accountId: Scalars['String'];
   arn: Scalars['String'];
+  cgId?: Maybe<Scalars['String']>;
   id: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
 };
 
 export type AwsIamPasswordPolicy = {
@@ -3190,26 +3023,22 @@ export type AwsIamPasswordPolicy = {
   requireUppercaseCharacters?: Maybe<Scalars['Boolean']>;
 };
 
-export type AwsIamPolicy = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsIamPolicy = AwsBaseService & {
   description?: Maybe<Scalars['String']>;
   iamGroups?: Maybe<Array<Maybe<AwsIamGroup>>>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   iamUsers?: Maybe<Array<Maybe<AwsIamUser>>>;
-  id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
   policyContent?: Maybe<AwsIamJsonPolicy>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
 };
 
-export type AwsIamRole = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsIamRole = AwsBaseService & {
   assumeRolePolicy?: Maybe<AwsIamJsonPolicy>;
   cloudFormationStack?: Maybe<Array<Maybe<AwsCloudFormationStack>>>;
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
+  cognitoUserPools?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   configurationRecorder?: Maybe<Array<Maybe<AwsConfigurationRecorder>>>;
   createdAt?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
@@ -3221,7 +3050,6 @@ export type AwsIamRole = {
   guardDutyDetectors?: Maybe<Array<Maybe<AwsGuardDutyDetector>>>;
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   iamInstanceProfiles?: Maybe<Array<Maybe<AwsIamInstanceProfile>>>;
-  id: Scalars['String'];
   inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
   maxSessionDuration?: Maybe<Scalars['Int']>;
@@ -3232,35 +3060,26 @@ export type AwsIamRole = {
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
 };
 
-export type AwsIamSamlProvider = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsIamSamlProvider = AwsOptionalService & {
   createdDate?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   validUntil?: Maybe<Scalars['String']>;
 };
 
-export type AwsIamServerCertificate = {
-  accountId?: Maybe<Scalars['String']>;
-  arn: Scalars['String'];
+export type AwsIamServerCertificate = AwsOptionalService & {
   certificateId?: Maybe<Scalars['String']>;
   expiration?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
   uploadDate?: Maybe<Scalars['String']>;
 };
 
-export type AwsIamUser = {
+export type AwsIamUser = AwsOptionalService & {
   accessKeyData?: Maybe<Array<Maybe<AwsIamAccessKey>>>;
   accessKeysActive?: Maybe<Scalars['Boolean']>;
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
   creationTime?: Maybe<Scalars['String']>;
   groups?: Maybe<Array<Maybe<Scalars['String']>>>;
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   iamGroups?: Maybe<Array<Maybe<AwsIamGroup>>>;
-  id: Scalars['String'];
   inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
   mfaActive?: Maybe<Scalars['Boolean']>;
   mfaDevices?: Maybe<Array<Maybe<AwsIamMfaDevice>>>;
@@ -3274,13 +3093,9 @@ export type AwsIamUser = {
   virtualMfaDevices?: Maybe<Array<Maybe<AwsIamMfaDevice>>>;
 };
 
-export type AwsIgw = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsIgw = AwsBaseService & {
   attachments?: Maybe<Array<Maybe<AwsIgwAttachment>>>;
-  id: Scalars['String'];
   owner?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
@@ -3296,35 +3111,27 @@ export type AwsIotAttribute = {
   value?: Maybe<Scalars['String']>;
 };
 
-export type AwsIotThingAttribute = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsIotThingAttribute = AwsBaseService & {
   attributes?: Maybe<Array<Maybe<AwsIotAttribute>>>;
-  id: Scalars['String'];
-  region?: Maybe<Scalars['String']>;
   thingName?: Maybe<Scalars['String']>;
   thingTypeName?: Maybe<Scalars['String']>;
   version?: Maybe<Scalars['Int']>;
 };
 
-export type AwsKinesisFirehose = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsKinesisFirehose = AwsBaseService & {
   createTimestamp?: Maybe<Scalars['String']>;
-  deliveryStreamStatus: Scalars['String'];
-  deliveryStreamType: Scalars['String'];
+  deliveryStreamStatus?: Maybe<Scalars['String']>;
+  deliveryStreamType?: Maybe<Scalars['String']>;
   encryptionConfig?: Maybe<AwsKinesisFirehoseEncryptionConfig>;
-  failureDescriptionDetails: Scalars['String'];
-  failureDescriptionType: Scalars['String'];
-  id: Scalars['String'];
+  failureDescriptionDetails?: Maybe<Scalars['String']>;
+  failureDescriptionType?: Maybe<Scalars['String']>;
   kinesisStream?: Maybe<Array<Maybe<AwsKinesisStream>>>;
   lastUpdateTimestamp?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
-  region?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
   s3?: Maybe<Array<Maybe<AwsS3>>>;
   source?: Maybe<AwsKinesisFirehoseSource>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
-  versionId: Scalars['String'];
+  versionId?: Maybe<Scalars['String']>;
 };
 
 export type AwsKinesisFirehoseEncryptionConfig = {
@@ -3341,27 +3148,22 @@ export type AwsKinesisFirehoseSource = {
   roleARN?: Maybe<Scalars['String']>;
 };
 
-export type AwsKinesisStream = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsKinesisStream = AwsBaseService & {
   encryptionType?: Maybe<Scalars['String']>;
-  enhancedMonitoring: Array<AwsShardLevelMetrics>;
-  id: Scalars['String'];
+  enhancedMonitoring?: Maybe<Array<Maybe<AwsShardLevelMetrics>>>;
   keyId?: Maybe<Scalars['String']>;
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
-  region: Scalars['String'];
-  retentionPeriodHours: Scalars['Int'];
-  shards: Array<Maybe<AwsShards>>;
-  streamName: Scalars['String'];
-  streamStatus: Scalars['String'];
+  retentionPeriodHours?: Maybe<Scalars['Int']>;
+  shards?: Maybe<Array<Maybe<AwsShards>>>;
+  streamName?: Maybe<Scalars['String']>;
+  streamStatus?: Maybe<Scalars['String']>;
 };
 
-export type AwsKms = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsKms = AwsBaseService & {
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
   cloudwatchLog?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
+  cognitoUserPools?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   creationDate?: Maybe<Scalars['String']>;
   customerMasterKeySpec?: Maybe<Scalars['String']>;
   deletionDate?: Maybe<Scalars['String']>;
@@ -3374,7 +3176,6 @@ export type AwsKms = {
   elasticSearchDomains?: Maybe<Array<Maybe<AwsElasticSearchDomain>>>;
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
   enabled?: Maybe<Scalars['Boolean']>;
-  id: Scalars['String'];
   keyManager?: Maybe<Scalars['String']>;
   keyRotationEnabled?: Maybe<Scalars['Boolean']>;
   keyState?: Maybe<Scalars['String']>;
@@ -3383,7 +3184,6 @@ export type AwsKms = {
   policy?: Maybe<AwsIamJsonPolicy>;
   rdsClusterSnapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
   redshiftCluster?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
-  region?: Maybe<Scalars['String']>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   sns?: Maybe<Array<Maybe<AwsSns>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
@@ -3391,22 +3191,18 @@ export type AwsKms = {
   validTo?: Maybe<Scalars['String']>;
 };
 
-export type AwsLambda = {
-  accountId: Scalars['String'];
+export type AwsLambda = AwsBaseService & {
   appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
-  arn: Scalars['String'];
-  cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
+  cognitoUserPools?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   description?: Maybe<Scalars['String']>;
   environmentVariables?: Maybe<Array<Maybe<AwsLambdaEnvironmentVariable>>>;
   handler?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   kmsKeyArn?: Maybe<Scalars['String']>;
   lastModified?: Maybe<Scalars['String']>;
   memorySize?: Maybe<Scalars['Int']>;
   policy?: Maybe<AwsIamJsonPolicy>;
   policyRevisionId?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   reservedConcurrentExecutions?: Maybe<Scalars['Int']>;
   role?: Maybe<Scalars['String']>;
   runtime?: Maybe<Scalars['String']>;
@@ -3473,17 +3269,14 @@ export type AwsLcBlockDeviceMapping = {
   virtualName?: Maybe<Scalars['String']>;
 };
 
-export type AwsManagedAirflow = {
-  accountId: Scalars['String'];
+export type AwsManagedAirflow = AwsBaseService & {
   airflowConfigurationOptions?: Maybe<Array<Maybe<AwsRawTag>>>;
   airflowVersion?: Maybe<Scalars['String']>;
-  arn: Scalars['String'];
   createdAt?: Maybe<Scalars['DateTime']>;
   dagS3Path?: Maybe<Scalars['String']>;
   environmentClass?: Maybe<Scalars['String']>;
   executionRoleArn?: Maybe<Scalars['String']>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
-  id: Scalars['String'];
   kmsKey?: Maybe<Scalars['String']>;
   lastUpdate?: Maybe<AwsManagedAirflowLastUpdate>;
   loggingConfiguration?: Maybe<AwsManagedAirflowLoggingConfig>;
@@ -3492,7 +3285,6 @@ export type AwsManagedAirflow = {
   name?: Maybe<Scalars['String']>;
   networkConfiguration?: Maybe<AwsManagedAirflowNetworkConfig>;
   pluginsS3Path?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   requirementsS3Path?: Maybe<Scalars['String']>;
   s3?: Maybe<Array<Maybe<AwsS3>>>;
   schedulers?: Maybe<Scalars['Int']>;
@@ -3568,32 +3360,24 @@ export type AwsMixedInstancesPolicy = {
   launchTemplateVersion?: Maybe<Scalars['String']>;
 };
 
-export type AwsNatGateway = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsNatGateway = AwsBaseService & {
   createTime?: Maybe<Scalars['String']>;
   dailyCost?: Maybe<AwsTotalBillingInfo>;
-  id: Scalars['String'];
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
-  region?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
-export type AwsNetworkAcl = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsNetworkAcl = AwsBaseService & {
   associatedSubnets?: Maybe<Array<Maybe<AwsNetworkAclAssociatedSubnet>>>;
   default?: Maybe<Scalars['Boolean']>;
-  id: Scalars['String'];
   inboundRules?: Maybe<Array<Maybe<AwsNetworkAclRule>>>;
   outboundRules?: Maybe<Array<Maybe<AwsNetworkAclRule>>>;
-  region: Scalars['String'];
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
-  vpcId: Scalars['String'];
+  vpcId?: Maybe<Scalars['String']>;
 };
 
 export type AwsNetworkAclAssociatedSubnet = {
@@ -3614,9 +3398,7 @@ export type AwsNetworkAclRule = {
   toPort?: Maybe<Scalars['Int']>;
 };
 
-export type AwsNetworkInterface = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsNetworkInterface = AwsBaseService & {
   attachment?: Maybe<AwsNetworkInterfaceAttachment>;
   availabilityZone?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
@@ -3624,13 +3406,11 @@ export type AwsNetworkInterface = {
   efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
   eip?: Maybe<Array<Maybe<AwsEip>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
-  id: Scalars['String'];
   interfaceType?: Maybe<Scalars['String']>;
   macAddress?: Maybe<Scalars['String']>;
   natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   privateDnsName?: Maybe<Scalars['String']>;
   privateIps?: Maybe<Array<Maybe<Scalars['String']>>>;
-  region?: Maybe<Scalars['String']>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   securityGroups?: Maybe<Array<Maybe<Scalars['String']>>>;
   status?: Maybe<Scalars['String']>;
@@ -3648,12 +3428,16 @@ export type AwsNetworkInterfaceAttachment = {
   status?: Maybe<Scalars['String']>;
 };
 
-export type AwsOrganization = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsOptionalService = {
+  accountId?: Maybe<Scalars['String']>;
+  arn?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+};
+
+export type AwsOrganization = AwsBaseService & {
   availablePolicyTypes?: Maybe<Array<Maybe<AwsPolicyTypes>>>;
   featureSet?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   masterAccountArn?: Maybe<Scalars['String']>;
   masterAccountEmail?: Maybe<Scalars['String']>;
   masterAccountId?: Maybe<Scalars['String']>;
@@ -3671,11 +3455,9 @@ export type AwsRawTag = {
   value?: Maybe<Scalars['String']>;
 };
 
-export type AwsRdsCluster = {
-  accountId: Scalars['String'];
+export type AwsRdsCluster = AwsBaseService & {
   allocatedStorage?: Maybe<Scalars['Int']>;
   appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
-  arn: Scalars['String'];
   backupRetentionPeriod?: Maybe<Scalars['Int']>;
   capacity?: Maybe<Scalars['Int']>;
   characterSetName?: Maybe<Scalars['String']>;
@@ -3694,14 +3476,12 @@ export type AwsRdsCluster = {
   hostedZoneId?: Maybe<Scalars['String']>;
   httpEndpointEnabled?: Maybe<Scalars['Boolean']>;
   iamDbAuthenticationEnabled?: Maybe<Scalars['Boolean']>;
-  id: Scalars['String'];
   instances?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   kmsKey?: Maybe<Scalars['String']>;
   multiAZ?: Maybe<Scalars['Boolean']>;
   percentProgress?: Maybe<Scalars['String']>;
   port?: Maybe<Scalars['Int']>;
   readerEndpoint?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   replicationSourceIdentifier?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
@@ -3712,10 +3492,8 @@ export type AwsRdsCluster = {
   username?: Maybe<Scalars['String']>;
 };
 
-export type AwsRdsClusterSnapshot = {
-  accountId: Scalars['String'];
+export type AwsRdsClusterSnapshot = AwsBaseService & {
   allocatedStorage?: Maybe<Scalars['Int']>;
-  arn: Scalars['String'];
   attributes?: Maybe<Array<Maybe<AwsRdsClusterSnapshotAttribute>>>;
   availabilityZones?: Maybe<Array<Maybe<Scalars['String']>>>;
   cluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
@@ -3727,14 +3505,12 @@ export type AwsRdsClusterSnapshot = {
   engineMode?: Maybe<Scalars['String']>;
   engineVersion?: Maybe<Scalars['String']>;
   iamDatabaseAuthenticationEnabled?: Maybe<Scalars['Boolean']>;
-  id: Scalars['String'];
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   kmsKeyId?: Maybe<Scalars['String']>;
   licenseModel?: Maybe<Scalars['String']>;
   masterUsername?: Maybe<Scalars['String']>;
   percentProgress?: Maybe<Scalars['Int']>;
   port?: Maybe<Scalars['Int']>;
-  region?: Maybe<Scalars['String']>;
   snapshotCreateTime?: Maybe<Scalars['DateTime']>;
   snapshotType?: Maybe<Scalars['String']>;
   sourceDBClusterSnapshotArn?: Maybe<Scalars['String']>;
@@ -3751,11 +3527,9 @@ export type AwsRdsClusterSnapshotAttribute = {
   values?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
-export type AwsRdsDbInstance = {
-  accountId: Scalars['String'];
+export type AwsRdsDbInstance = AwsBaseService & {
   address?: Maybe<Scalars['String']>;
   allocatedStorage?: Maybe<Scalars['Int']>;
-  arn: Scalars['String'];
   autoMinorVersionUpgrade?: Maybe<Scalars['Boolean']>;
   availabilityZone?: Maybe<Scalars['String']>;
   certificateAuthority?: Maybe<Scalars['String']>;
@@ -3770,7 +3544,6 @@ export type AwsRdsDbInstance = {
   failoverPriority?: Maybe<Scalars['Int']>;
   hostedZoneId?: Maybe<Scalars['String']>;
   iamDbAuthenticationEnabled?: Maybe<Scalars['Boolean']>;
-  id: Scalars['String'];
   instanceClass?: Maybe<Scalars['String']>;
   kmsKey?: Maybe<Scalars['String']>;
   licenseModel?: Maybe<Scalars['String']>;
@@ -3781,7 +3554,6 @@ export type AwsRdsDbInstance = {
   performanceInsightsEnabled?: Maybe<Scalars['Boolean']>;
   port?: Maybe<Scalars['Int']>;
   publiclyAccessible?: Maybe<Scalars['Boolean']>;
-  region?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   status?: Maybe<Scalars['String']>;
@@ -3808,10 +3580,8 @@ export type AwsRecordingGroup = {
   resourceTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
-export type AwsRedshiftCluster = {
-  accountId: Scalars['String'];
+export type AwsRedshiftCluster = AwsBaseService & {
   allowVersionUpgrade?: Maybe<Scalars['Boolean']>;
-  arn: Scalars['String'];
   automatedSnapshotRetentionPeriod?: Maybe<Scalars['Int']>;
   availabilityZone?: Maybe<Scalars['String']>;
   clusterAvailabilityStatus?: Maybe<Scalars['String']>;
@@ -3823,7 +3593,6 @@ export type AwsRedshiftCluster = {
   dBName?: Maybe<Scalars['String']>;
   encrypted?: Maybe<Scalars['Boolean']>;
   enhancedVpcRouting?: Maybe<Scalars['Boolean']>;
-  id: Scalars['String'];
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   manualSnapshotRetentionPeriod?: Maybe<Scalars['Int']>;
   masterUsername?: Maybe<Scalars['String']>;
@@ -3832,7 +3601,6 @@ export type AwsRedshiftCluster = {
   numberOfNodes?: Maybe<Scalars['Int']>;
   preferredMaintenanceWindow?: Maybe<Scalars['String']>;
   publiclyAccessible?: Maybe<Scalars['Boolean']>;
-  region: Scalars['String'];
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
@@ -3855,24 +3623,19 @@ export type AwsRoute53Alias = {
   zoneId: Scalars['String'];
 };
 
-export type AwsRoute53HostedZone = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsRoute53HostedZone = AwsBaseService & {
   comment?: Maybe<Scalars['String']>;
   delegationSetId?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   nameServers?: Maybe<Array<Maybe<Scalars['String']>>>;
   route53Record?: Maybe<Array<Maybe<AwsRoute53Record>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
-export type AwsRoute53Record = {
-  accountId: Scalars['String'];
+export type AwsRoute53Record = AwsOptionalService & {
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
   alias?: Maybe<AwsRoute53Alias>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
-  id: Scalars['String'];
   records?: Maybe<Array<Maybe<Scalars['String']>>>;
   restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
   route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
@@ -3881,13 +3644,9 @@ export type AwsRoute53Record = {
   zoneId?: Maybe<Scalars['String']>;
 };
 
-export type AwsRouteTable = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsRouteTable = AwsBaseService & {
   explicitlyAssociatedWithSubnets?: Maybe<Scalars['Int']>;
-  id: Scalars['String'];
   mainRouteTable?: Maybe<Scalars['Boolean']>;
-  region?: Maybe<Scalars['String']>;
   routes?: Maybe<Array<Maybe<AwsRoute>>>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   subnetAssociations?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -3898,10 +3657,8 @@ export type AwsRouteTable = {
   vpcId?: Maybe<Scalars['String']>;
 };
 
-export type AwsS3 = {
+export type AwsS3 = AwsBaseService & {
   access?: Maybe<Scalars['String']>;
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
   blockPublicAcls?: Maybe<Scalars['String']>;
   blockPublicPolicy?: Maybe<Scalars['String']>;
   bucketOwnerName?: Maybe<Scalars['String']>;
@@ -3911,14 +3668,12 @@ export type AwsS3 = {
   corsConfiguration?: Maybe<Scalars['String']>;
   crossRegionReplication?: Maybe<Scalars['String']>;
   encrypted?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   ignorePublicAcls?: Maybe<Scalars['String']>;
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
   lifecycle?: Maybe<Scalars['String']>;
   logging?: Maybe<Scalars['String']>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
   mfa?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   requesterPays?: Maybe<Scalars['String']>;
   restrictPublicBuckets?: Maybe<Scalars['String']>;
   size?: Maybe<Scalars['String']>;
@@ -3929,17 +3684,13 @@ export type AwsS3 = {
   versioning?: Maybe<Scalars['String']>;
 };
 
-export type AwsSageMakerExperiment = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsSageMakerExperiment = AwsBaseService & {
   creationTime?: Maybe<Scalars['DateTime']>;
   displayName?: Maybe<Scalars['String']>;
   experimentArn?: Maybe<Scalars['String']>;
   experimentName?: Maybe<Scalars['String']>;
   experimentSource?: Maybe<AwsSageMakerExperimentExperimentSource>;
-  id: Scalars['String'];
   lastModifiedTime?: Maybe<Scalars['DateTime']>;
-  region?: Maybe<Scalars['String']>;
 };
 
 export type AwsSageMakerExperimentExperimentSource = {
@@ -3947,17 +3698,14 @@ export type AwsSageMakerExperimentExperimentSource = {
   sourceType?: Maybe<Scalars['String']>;
 };
 
-export type AwsSageMakerNotebookInstance = {
+export type AwsSageMakerNotebookInstance = AwsBaseService & {
   acceleratorTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
-  accountId: Scalars['String'];
   additionalCodeRepositories?: Maybe<Array<Maybe<Scalars['String']>>>;
-  arn: Scalars['String'];
   creationTime?: Maybe<Scalars['DateTime']>;
   defaultCodeRepository?: Maybe<Scalars['String']>;
   directInternetAccess?: Maybe<Scalars['String']>;
   failureReason?: Maybe<Scalars['String']>;
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
-  id: Scalars['String'];
   instanceType?: Maybe<Scalars['String']>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   kmsKeyId?: Maybe<Scalars['String']>;
@@ -3968,7 +3716,6 @@ export type AwsSageMakerNotebookInstance = {
   notebookInstanceName?: Maybe<Scalars['String']>;
   notebookInstanceStatus?: Maybe<Scalars['String']>;
   platformIdentifier?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   roleArn?: Maybe<Scalars['String']>;
   rootAccess?: Maybe<Scalars['String']>;
   securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -3979,32 +3726,24 @@ export type AwsSageMakerNotebookInstance = {
   volumeSizeInGb?: Maybe<Scalars['Int']>;
 };
 
-export type AwsSageMakerProject = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsSageMakerProject = AwsBaseService & {
   creationTime?: Maybe<Scalars['DateTime']>;
-  id: Scalars['String'];
   projectArn?: Maybe<Scalars['String']>;
   projectId?: Maybe<Scalars['String']>;
   projectName?: Maybe<Scalars['String']>;
   projectStatus?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
 };
 
-export type AwsSecretsManager = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsSecretsManager = AwsBaseService & {
   createdDate?: Maybe<Scalars['DateTime']>;
   deletedDate?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   kmsKeyId?: Maybe<Scalars['String']>;
   lastAccessedDate?: Maybe<Scalars['DateTime']>;
   lastChangedDate?: Maybe<Scalars['DateTime']>;
   lastRotatedDate?: Maybe<Scalars['DateTime']>;
   name?: Maybe<Scalars['String']>;
   owningService?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   rotationEnabled?: Maybe<Scalars['Boolean']>;
   rotationLambdaARN?: Maybe<Scalars['String']>;
   rotationRules?: Maybe<AwsSecretsManagerRotationRule>;
@@ -4016,10 +3755,8 @@ export type AwsSecretsManagerRotationRule = {
   id?: Maybe<Scalars['ID']>;
 };
 
-export type AwsSecurityGroup = {
-  accountId: Scalars['String'];
+export type AwsSecurityGroup = AwsBaseService & {
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
-  arn: Scalars['String'];
   asg?: Maybe<Array<Maybe<AwsAsg>>>;
   clientVpnEndpoint?: Maybe<Array<Maybe<AwsClientVpnEndpoint>>>;
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
@@ -4032,18 +3769,16 @@ export type AwsSecurityGroup = {
   elastiCacheCluster?: Maybe<Array<Maybe<AwsElastiCacheCluster>>>;
   elasticSearchDomains?: Maybe<Array<Maybe<AwsElasticSearchDomain>>>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
-  id: Scalars['String'];
   inboundRuleCount?: Maybe<Scalars['Int']>;
   inboundRules?: Maybe<Array<Maybe<AwsSgInboundRule>>>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
-  name: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
   outboundRuleCount?: Maybe<Scalars['Int']>;
   outboundRules?: Maybe<Array<Maybe<AwsSgOutboundRule>>>;
   owner?: Maybe<Scalars['String']>;
   rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
-  region?: Maybe<Scalars['String']>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   vpcId?: Maybe<Scalars['String']>;
@@ -4056,12 +3791,9 @@ export type AwsServiceBillingInfo = {
   name: Scalars['String'];
 };
 
-export type AwsSes = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsSes = AwsBaseService & {
+  cognitoUserPools?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   email?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
-  region?: Maybe<Scalars['String']>;
   verificationStatus?: Maybe<Scalars['String']>;
 };
 
@@ -4105,18 +3837,14 @@ export type AwsShards = {
   shardId: Scalars['String'];
 };
 
-export type AwsSns = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsSns = AwsBaseService & {
   cloudFormationStack?: Maybe<Array<Maybe<AwsCloudFormationStack>>>;
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
   cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
   deliveryPolicy?: Maybe<Scalars['String']>;
   displayName?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   policy?: Maybe<AwsIamJsonPolicy>;
-  region: Scalars['String'];
   subscriptions?: Maybe<Array<Maybe<AwsSnsSubscription>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
 };
@@ -4128,36 +3856,30 @@ export type AwsSnsSubscription = {
   protocol?: Maybe<Scalars['String']>;
 };
 
-export type AwsSqs = {
-  accountId: Scalars['String'];
+export type AwsSqs = AwsBaseService & {
   approximateNumberOfMessages?: Maybe<Scalars['Int']>;
   approximateNumberOfMessagesDelayed?: Maybe<Scalars['Int']>;
   approximateNumberOfMessagesNotVisible?: Maybe<Scalars['Int']>;
-  arn: Scalars['String'];
   contentBasedDeduplication?: Maybe<Scalars['Boolean']>;
   deduplicationScope?: Maybe<Scalars['String']>;
   delaySeconds?: Maybe<Scalars['String']>;
   fifoQueue?: Maybe<Scalars['Boolean']>;
   fifoThroughputLimit?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   kmsDataKeyReusePeriodSeconds?: Maybe<Scalars['String']>;
   kmsMasterKeyId?: Maybe<Scalars['String']>;
   maximumMessageSize?: Maybe<Scalars['Int']>;
   messageRetentionPeriod?: Maybe<Scalars['String']>;
   policy?: Maybe<AwsIamJsonPolicy>;
-  queueType: Scalars['String'];
-  queueUrl: Scalars['String'];
+  queueType?: Maybe<Scalars['String']>;
+  queueUrl?: Maybe<Scalars['String']>;
   receiveMessageWaitTimeSeconds?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   sqsManagedSseEnabled?: Maybe<Scalars['Boolean']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   visibilityTimeout?: Maybe<Scalars['String']>;
 };
 
-export type AwsSubnet = {
-  accountId: Scalars['String'];
+export type AwsSubnet = AwsBaseService & {
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
-  arn: Scalars['String'];
   asg?: Maybe<Array<Maybe<AwsAsg>>>;
   autoAssignPublicIpv4Address?: Maybe<Scalars['String']>;
   autoAssignPublicIpv6Address?: Maybe<Scalars['String']>;
@@ -4175,7 +3897,6 @@ export type AwsSubnet = {
   elb?: Maybe<Array<Maybe<AwsElb>>>;
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
-  id: Scalars['String'];
   ipV4Cidr?: Maybe<Scalars['String']>;
   ipV6Cidr?: Maybe<Scalars['String']>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
@@ -4183,7 +3904,6 @@ export type AwsSubnet = {
   natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
-  region?: Maybe<Scalars['String']>;
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   state?: Maybe<Scalars['String']>;
@@ -4202,19 +3922,15 @@ export type AwsSuspendedProcess = {
   suspensionReason?: Maybe<Scalars['String']>;
 };
 
-export type AwsSystemsManagerDocument = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsSystemsManagerDocument = AwsBaseService & {
   createdDate?: Maybe<Scalars['DateTime']>;
   documentFormat?: Maybe<Scalars['String']>;
   documentType?: Maybe<Scalars['String']>;
   documentVersion?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   owner?: Maybe<Scalars['String']>;
   permissions?: Maybe<AwsSystemsManagerDocumentPermissions>;
   platformTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
-  region?: Maybe<Scalars['String']>;
   schemaVersion?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   targetType?: Maybe<Scalars['String']>;
@@ -4231,18 +3947,15 @@ export type AwsSystemsManagerDocumentPermissionsSharingList = {
   sharedDocumentVersion?: Maybe<Scalars['String']>;
 };
 
-export type AwsSystemsManagerInstance = {
-  accountId: Scalars['String'];
+export type AwsSystemsManagerInstance = AwsBaseService & {
   activationId?: Maybe<Scalars['String']>;
   agentVersion?: Maybe<Scalars['String']>;
-  arn: Scalars['String'];
   associationOverview?: Maybe<SystemsManagerInstanceAssociationOverview>;
   associationStatus?: Maybe<Scalars['String']>;
   complianceItems?: Maybe<Array<Maybe<SystemsManagerInstanceComplianceItem>>>;
   computerName?: Maybe<Scalars['String']>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
-  id: Scalars['String'];
   instanceId?: Maybe<Scalars['String']>;
   ipAddress?: Maybe<Scalars['String']>;
   isLatestVersion?: Maybe<Scalars['Boolean']>;
@@ -4254,7 +3967,6 @@ export type AwsSystemsManagerInstance = {
   platformName?: Maybe<Scalars['String']>;
   platformType?: Maybe<Scalars['String']>;
   platformVersion?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   registrationDate?: Maybe<Scalars['DateTime']>;
   resourceType?: Maybe<Scalars['String']>;
   sourceId?: Maybe<Scalars['String']>;
@@ -4339,20 +4051,16 @@ export type AwsTotalBillingInfo = {
   formattedCost?: Maybe<Scalars['String']>;
 };
 
-export type AwsTransitGateway = {
-  accountId: Scalars['String'];
+export type AwsTransitGateway = AwsBaseService & {
   amazonSideAsn?: Maybe<Scalars['String']>;
-  arn: Scalars['String'];
   associationDefaultRouteTableId?: Maybe<Scalars['String']>;
   autoAcceptSharedAttachments?: Maybe<Scalars['String']>;
   defaultRouteTableAssociation?: Maybe<Scalars['String']>;
   defaultRouteTablePropagation?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   dnsSupport?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
-  ownerId: Scalars['String'];
+  ownerId?: Maybe<Scalars['String']>;
   propagationDefaultRouteTableId?: Maybe<Scalars['String']>;
-  region?: Maybe<Scalars['String']>;
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
@@ -4360,12 +4068,8 @@ export type AwsTransitGateway = {
   vpnEcmpSupport?: Maybe<Scalars['String']>;
 };
 
-export type AwsTransitGatewayAttachment = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsTransitGatewayAttachment = AwsBaseService & {
   creationTime?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
-  region?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
   resourceOwnerId?: Maybe<Scalars['String']>;
   resourceType?: Maybe<Scalars['String']>;
@@ -4397,10 +4101,8 @@ export type AwsVgwTelemetry = {
   statusMessage?: Maybe<Scalars['String']>;
 };
 
-export type AwsVpc = {
-  accountId: Scalars['String'];
+export type AwsVpc = AwsBaseService & {
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
-  arn: Scalars['String'];
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
   defaultVpc?: Maybe<Scalars['Boolean']>;
   dhcpOptionsSet?: Maybe<Scalars['String']>;
@@ -4415,7 +4117,6 @@ export type AwsVpc = {
   enableDnsHostnames?: Maybe<Scalars['Boolean']>;
   enableDnsSupport?: Maybe<Scalars['Boolean']>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
-  id: Scalars['String'];
   igw?: Maybe<Array<Maybe<AwsIgw>>>;
   instanceTenancy?: Maybe<Scalars['String']>;
   ipV4Cidr?: Maybe<Scalars['String']>;
@@ -4427,7 +4128,6 @@ export type AwsVpc = {
   rdsClusterSnapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   redshiftCluster?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
-  region?: Maybe<Scalars['String']>;
   route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
   state?: Maybe<Scalars['String']>;
@@ -4437,15 +4137,11 @@ export type AwsVpc = {
   vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
 };
 
-export type AwsVpnConnection = {
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
+export type AwsVpnConnection = AwsBaseService & {
   category?: Maybe<Scalars['String']>;
   customerGateway?: Maybe<Array<Maybe<AwsCustomerGateway>>>;
   customerGatewayId?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   options?: Maybe<AwsVpnConnectionOptions>;
-  region?: Maybe<Scalars['String']>;
   routes?: Maybe<Array<Maybe<AwsVpnStaticRoute>>>;
   state?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
@@ -4469,12 +4165,8 @@ export type AwsVpnConnectionOptions = {
   type?: Maybe<Scalars['String']>;
 };
 
-export type AwsVpnGateway = {
-  accountId: Scalars['String'];
+export type AwsVpnGateway = AwsBaseService & {
   amazonSideAsn?: Maybe<Scalars['Int']>;
-  arn: Scalars['String'];
-  id: Scalars['String'];
-  region?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   type?: Maybe<Scalars['String']>;
@@ -4743,22 +4435,18 @@ export type AwsWafV2VisibilityConfig = {
   sampledRequestsEnabled?: Maybe<Scalars['Boolean']>;
 };
 
-export type AwsWafV2WebAcl = {
+export type AwsWafV2WebAcl = AwsBaseService & {
   ManagedByFirewallManager?: Maybe<Scalars['Boolean']>;
-  accountId: Scalars['String'];
-  arn: Scalars['String'];
   capacity?: Maybe<Scalars['Int']>;
   cloudfront?: Maybe<Array<Maybe<AwsCloudfront>>>;
   customResponseBodies?: Maybe<Array<Maybe<AwsWafV2CustomResponseBody>>>;
   defaultAction?: Maybe<AwsWafV2DefaultAction>;
   description?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
   labelNamespace?: Maybe<Scalars['String']>;
   loggingConfiguration?: Maybe<AwsWafV2LoggingConfig>;
   name?: Maybe<Scalars['String']>;
   postProcessFirewallManagerRuleGroups?: Maybe<Array<Maybe<AwsWafV2FirewallManagerRuleGroup>>>;
   preProcessFirewallManagerRuleGroups?: Maybe<Array<Maybe<AwsWafV2FirewallManagerRuleGroup>>>;
-  region?: Maybe<Scalars['String']>;
   rules?: Maybe<Array<Maybe<AwsWafV2Rule>>>;
   visibilityConfig?: Maybe<AwsWafV2VisibilityConfig>;
 };

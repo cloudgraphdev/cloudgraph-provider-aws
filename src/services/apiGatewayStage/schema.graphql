@@ -20,11 +20,7 @@ type awsApiGatewayStageVariable
   value: String @search(by: [hash])
 }
 
-type awsApiGatewayStage @key(fields: "arn") {
-  id: String! @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsApiGatewayStage implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp, fulltext])
   cacheCluster: Boolean @search
