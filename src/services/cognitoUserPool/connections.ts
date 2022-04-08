@@ -103,7 +103,7 @@ export default ({
 
   if (kmsKeyID && kms?.data?.[region]) {
     const kmsInRegion: AwsKms = kms.data[region].find(
-      ({ KeyId }: AwsKms) => kmsKeyID === KeyId
+      ({ KeyArn }: AwsKms) => kmsKeyID === KeyArn
     )
 
     if (kmsInRegion) {

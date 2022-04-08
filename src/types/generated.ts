@@ -1578,7 +1578,6 @@ export type AwsEcsCluster = AwsBaseService & {
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   ecsTask?: Maybe<Array<Maybe<AwsEcsTask>>>;
   ecsTaskSet?: Maybe<Array<Maybe<AwsEcsTaskSet>>>;
-  id: Scalars['String'];
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   pendingTasksCount?: Maybe<Scalars['Int']>;
   registeredContainerInstancesCount?: Maybe<Scalars['Int']>;

@@ -77,7 +77,7 @@ export default ({
   const kms = data.find(({ name }) => name === services.kms)
   if (kms?.data?.[region]) {
     const kmsInRegion: AwsKms = kms.data[region].find(
-      ({ KeyId }: AwsKms) => KeyId === kmsKeyId
+      ({ KeyArn }: AwsKms) => KeyArn === kmsKeyId
     )
 
     if (kmsInRegion) {
