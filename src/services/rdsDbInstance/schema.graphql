@@ -35,9 +35,7 @@ type awsRdsDbInstance implements awsBaseService @key(fields: "arn") {
   securityGroups: [awsSecurityGroup] @hasInverse(field: rdsDbInstance)
   subnet: [awsSubnet] @hasInverse(field: rdsDbInstance)
   vpc: [awsVpc] @hasInverse(field: rdsDbInstance)
+  cloudwatchLogs: [awsCloudwatchLog] @hasInverse(field: rdsDbInstance)
+  route53HostedZone: [awsRoute53HostedZone] @hasInverse(field: rdsDbInstance)
+  iamRoles: [awsIamRole] @hasInverse(field: rdsDbInstance)
 }
-
-#TODO: add connection to route53HostedZone using hostedZoneId in Endpoint
-# TODO: add connection to kms using kmsKeyId AND PerformanceInsightsKMSKeyId AND ActivityStreamKmsKeyId
-# TODO: add connection to IAM role using DomainMembership AND MonitoringRoleArn AND AssociatedRoles
-# TODO: add connection to cloudwatchLog using EnhancedMonitoringResourceArn

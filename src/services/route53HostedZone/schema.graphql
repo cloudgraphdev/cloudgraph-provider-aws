@@ -6,4 +6,5 @@ type awsRoute53HostedZone implements awsBaseService @key(fields: "arn") {
   rdsCluster: [awsRdsCluster] @hasInverse(field: route53HostedZone)
   route53Record: [awsRoute53Record] @hasInverse(field: route53HostedZone) #change to plural
   vpc: [awsVpc] @hasInverse(field: route53HostedZone)
+  rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: route53HostedZone)
 }
