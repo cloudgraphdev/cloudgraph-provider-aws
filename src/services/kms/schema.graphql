@@ -28,5 +28,6 @@ type awsKms implements awsBaseService @key(fields: "id") {
   sageMakerNotebookInstances: [awsSageMakerNotebookInstance]
     @hasInverse(field: kms)
   rdsClusterSnapshots: [awsRdsClusterSnapshot] @hasInverse(field: kms)
+  dynamodb: [awsDynamoDbTable] @hasInverse(field: kms)
   cognitoUserPools: [awsCognitoUserPool] @hasInverse(field: kms)
 }

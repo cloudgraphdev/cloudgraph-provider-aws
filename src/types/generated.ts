@@ -1287,8 +1287,10 @@ export type AwsDynamoDbTable = AwsBaseService & {
   creationDate: Scalars['String'];
   globalIndexes?: Maybe<Array<Maybe<AwsDynamoDbTableGlobalSecondaryIndexDescription>>>;
   globalTableVersion?: Maybe<Scalars['String']>;
+  iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   itemCount?: Maybe<Scalars['Int']>;
   keySchema?: Maybe<Array<Maybe<AwsDynamoDbTableIndexKeySchema>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
   latestStreamArn?: Maybe<Scalars['String']>;
   latestStreamLabel?: Maybe<Scalars['String']>;
   localIndexes?: Maybe<Array<Maybe<AwsDynamoDbTableLocalSecondaryIndexDescription>>>;
@@ -1309,6 +1311,23 @@ export type AwsDynamoDbTableAttributes = {
   id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
+};
+
+export type AwsDynamoDbTableAutoScalingPolicyDescription = {
+  disableScaleIn?: Maybe<Scalars['Boolean']>;
+  id: Scalars['String'];
+  policyName?: Maybe<Scalars['String']>;
+  scaleInCooldown?: Maybe<Scalars['Int']>;
+  scaleOutCooldown?: Maybe<Scalars['Int']>;
+  targetValue?: Maybe<Scalars['Int']>;
+};
+
+export type AwsDynamoDbTableAutoScalingSettingsDescription = {
+  autoScalingDisabled?: Maybe<Scalars['Boolean']>;
+  autoScalingRoleArn?: Maybe<Scalars['String']>;
+  maximumUnits?: Maybe<Scalars['Int']>;
+  minimumUnits?: Maybe<Scalars['Int']>;
+  scalingPolicies?: Maybe<Array<Maybe<AwsDynamoDbTableAutoScalingPolicyDescription>>>;
 };
 
 export type AwsDynamoDbTableBillingSummary = {
@@ -1342,6 +1361,7 @@ export type AwsDynamoDbTableIndexProjection = {
 
 export type AwsDynamoDbTableLocalSecondaryIndexDescription = {
   arn: Scalars['String'];
+  id: Scalars['String'];
   itemCount?: Maybe<Scalars['Int']>;
   keySchema?: Maybe<Array<Maybe<AwsDynamoDbTableIndexKeySchema>>>;
   name: Scalars['String'];
@@ -1361,6 +1381,8 @@ export type AwsDynamoDbTableReplicaDescription = {
   globalSecondaryIndexes?: Maybe<Array<Maybe<AwsDynamoDbTableReplicaGlobalSecondaryIndexDescription>>>;
   id: Scalars['String'];
   kmsMasterKeyId?: Maybe<Scalars['String']>;
+  provisionedReadCapacityAutoScalingSettings?: Maybe<AwsDynamoDbTableAutoScalingSettingsDescription>;
+  provisionedWriteCapacityAutoScalingSettings?: Maybe<AwsDynamoDbTableAutoScalingSettingsDescription>;
   readCapacityUnits?: Maybe<Scalars['Int']>;
   regionName?: Maybe<Scalars['String']>;
   replicaInaccessibleDateTime?: Maybe<Scalars['String']>;
@@ -1370,6 +1392,7 @@ export type AwsDynamoDbTableReplicaDescription = {
 };
 
 export type AwsDynamoDbTableReplicaGlobalSecondaryIndexDescription = {
+  id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   readCapacityUnits?: Maybe<Scalars['Int']>;
 };
@@ -3027,6 +3050,7 @@ export type AwsIamRole = AwsBaseService & {
   configurationRecorder?: Maybe<Array<Maybe<AwsConfigurationRecorder>>>;
   createdAt?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  dynamodb?: Maybe<Array<Maybe<AwsDynamoDbTable>>>;
   ec2Instances?: Maybe<Array<Maybe<AwsEc2>>>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
@@ -3154,6 +3178,7 @@ export type AwsKms = AwsBaseService & {
   deletionDate?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   dmsReplicationInstances?: Maybe<Array<Maybe<AwsDmsReplicationInstance>>>;
+  dynamodb?: Maybe<Array<Maybe<AwsDynamoDbTable>>>;
   efs?: Maybe<Array<Maybe<AwsEfs>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   elastiCacheReplicationGroup?: Maybe<Array<Maybe<AwsElastiCacheReplicationGroup>>>;
