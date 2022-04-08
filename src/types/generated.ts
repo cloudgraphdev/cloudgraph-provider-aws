@@ -354,6 +354,7 @@ export type AwsAppSync = AwsBaseService & {
   dataSources?: Maybe<Array<Maybe<AwsAppSyncDataSource>>>;
   dynamodb?: Maybe<Array<Maybe<AwsDynamoDbTable>>>;
   functions?: Maybe<Array<Maybe<AwsAppSyncFunction>>>;
+  iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   lambdaAuthorizerIdentityValidationExpression?: Maybe<Scalars['String']>;
   lambdaAuthorizerResultTtlInSeconds?: Maybe<Scalars['Int']>;
@@ -375,6 +376,7 @@ export type AwsAppSync = AwsBaseService & {
   userPoolDefaultAction?: Maybe<Scalars['String']>;
   userPoolId?: Maybe<Scalars['String']>;
   wafWebAclArn?: Maybe<Scalars['String']>;
+  webAcl?: Maybe<Array<Maybe<AwsWafV2WebAcl>>>;
   xrayEnabled?: Maybe<Scalars['String']>;
 };
 
@@ -3017,6 +3019,7 @@ export type AwsIamPolicy = AwsBaseService & {
 };
 
 export type AwsIamRole = AwsBaseService & {
+  appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
   assumeRolePolicy?: Maybe<AwsIamJsonPolicy>;
   cloudFormationStack?: Maybe<Array<Maybe<AwsCloudFormationStack>>>;
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
@@ -4418,6 +4421,7 @@ export type AwsWafV2VisibilityConfig = {
 
 export type AwsWafV2WebAcl = AwsBaseService & {
   ManagedByFirewallManager?: Maybe<Scalars['Boolean']>;
+  appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
   capacity?: Maybe<Scalars['Int']>;
   cloudfront?: Maybe<Array<Maybe<AwsCloudfront>>>;
   customResponseBodies?: Maybe<Array<Maybe<AwsWafV2CustomResponseBody>>>;

@@ -124,9 +124,7 @@ type awsAdditionalAuthenticationProvider
   userPoolAwsRegion: String @search(by: [hash, regexp])
   userPoolAppIdClientRegex: String @search(by: [hash, regexp])
 }
-# TODO: add iam role connection
-# TODO: waf web acl connection
-# TODO: add cloudwatchLog connection
+
 type awsAppSync implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   authenticationType: String @search(by: [hash, regexp])
@@ -158,4 +156,6 @@ type awsAppSync implements awsBaseService @key(fields: "arn") {
   dynamodb: [awsDynamoDbTable] @hasInverse(field: appSync)
   lambda: [awsLambda] @hasInverse(field: appSync)
   rdsCluster: [awsRdsCluster] @hasInverse(field: appSync)
+  iamRoles: [awsIamRole] @hasInverse(field: appSync)
+  webAcl: [awsWafV2WebAcl] @hasInverse(field: appSync)
 }
