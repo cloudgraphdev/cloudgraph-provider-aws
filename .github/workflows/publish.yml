@@ -1,0 +1,59 @@
+---
+name: publish
+
+on:
+  push:
+    branches:
+      - alpha
+      - beta
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          token: ${{secrets.gh_token}}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Get cache directory
+        id: yarn-cache-dir
+        run: |
+          echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Restoring cache
+        uses: actions/cache@v3
+        id: yarn-cache # use this to check for `cache-hit` ==> if: steps.yarn-cache.outputs.cache-hit != 'true'
+        with:
+          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install Packages
+        # NOTE: The --ignore-scripts flag is required to prevent leakage of NPM_TOKEN value
+        # See https://github.com/actions/setup-node/blob/main/docs/advanced-usage.md#use-private-packages
+        run: yarn install --frozen-lockfile --prefer-offline --ignore-scripts
+
+      - name: Build
+        run: yarn prepack
+
+      # - name: Test
+      #   run: yarn lint
+
+      - name: Publish
+        run: npx semantic-release
+        env:
+          NODE_ENV: "cicd"
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          GITHUB_TOKEN: ${{secrets.gh_token}}
+          GIT_AUTHOR_NAME: "autocloud-deploy-bot"
+          GIT_AUTHOR_EMAIL: "no-reply@autocloud.dev"
+          GIT_COMMITTER_NAME: "autocloud-deploy-bot"
+          GIT_COMMITTER_EMAIL: "no-reply@autocloud.dev"

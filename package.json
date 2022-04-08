@@ -1,10 +1,9 @@
 {
   "name": "@cloudgraph/cg-provider-aws",
-  "version": "0.78.1",
+  "version": "0.79.0-alpha.5",
   "description": "cloud-graph provider plugin for AWS used to fetch AWS cloud data.",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
-    "tag": "latest",
     "access": "public"
   },
   "homepage": "https://www.cloudgraph.dev/",
@@ -18,10 +17,10 @@
     "version": ">0.2"
   },
   "scripts": {
-    "build": "yarn prepublish",
+    "build": "yarn prepack",
     "generate-types": "graphql-codegen --config codegen.yml",
     "prepare": "npx husky install && shx rm -rf .git/hooks && shx ln -s ../.husky .git/hooks",
-    "prepublish": "rm -rf dist && yarn generate-types && tsc && yarn cpx 'src/**/*.graphql' dist",
+    "prepack": "rm -rf dist && yarn generate-types && tsc && yarn cpx 'src/**/*.graphql' dist",
     "test": "NODE_ENV=test jest",
     "lint": "eslint --config .eslintrc.json --ext .js,.ts ./",
     "lint:fix": "eslint --fix --config .eslintrc.json --ext .js,.ts ./",
@@ -48,10 +47,10 @@
     "@autocloud/eslint-config": "^0.1.0",
     "@graphql-codegen/cli": "^2.4.0",
     "@graphql-codegen/typescript": "1.23.0",
-    "@semantic-release/changelog": "^5.0.1",
-    "@semantic-release/git": "^9.0.0",
-    "@semantic-release/gitlab": "^6.2.2",
-    "@semantic-release/npm": "^7.1.3",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^8.0.1",
+    "@semantic-release/npm": "^9.0.1",
     "@types/jest": "^26.0.24",
     "@types/lodash": "^4.14.170",
     "@types/node": "^15.12.4",
@@ -67,7 +66,7 @@
     "jest": "^27.0.6",
     "lint-staged": "^11.1.1",
     "prettier": "^2.3.2",
-    "semantic-release": "^17.4.4",
+    "semantic-release": "^19.0.2",
     "shx": "^0.3.3",
     "ts-jest": "^27.0.4"
   },

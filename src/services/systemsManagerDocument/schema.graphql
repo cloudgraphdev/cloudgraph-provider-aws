@@ -1,8 +1,4 @@
-type awsSystemsManagerDocument @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash])
-  region: String @search(by: [hash])
+type awsSystemsManagerDocument implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   createdDate: DateTime @search(by: [day])
   owner: String @search(by: [hash, regexp])

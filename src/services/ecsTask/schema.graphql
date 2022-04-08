@@ -1,7 +1,4 @@
-type awsEcsTask @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-	arn: String! @id @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash, regexp])
+type awsEcsTask implements awsBaseService @key(fields: "arn") {
   attachments: [awsEcsAttachment]
   attributes: [awsEcsAttribute]
   availabilityZone: String @search(by: [hash, regexp])
@@ -46,29 +43,29 @@ type awsEcsAttribute
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    name: String @search(by: [hash, regexp])
-    value: String @search(by: [hash, regexp])
-    targetType: String @search(by: [hash, regexp])
-    targetId: String @search(by: [hash])
-  }
+  id: String! @id @search(by: [hash])
+  name: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
+  targetType: String @search(by: [hash, regexp])
+  targetId: String @search(by: [hash])
+}
 
-type awsEcsContainerOverride 
+type awsEcsContainerOverride
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    name: String @search(by: [hash, regexp])
-    command: [String] @search(by: [hash])
-    environment: [awsEcsEnvironmentVariables]
-    environmentFiles: [awsEcsEnvironmentFile]
-    cpu: String @search(by: [hash, regexp])
-    memory: Int @search
-    memoryReservation: Int @search
-    resourceRequirements: [awsEcsResourceRequirement]
-  }
+  id: String! @id @search(by: [hash])
+  name: String @search(by: [hash, regexp])
+  command: [String] @search(by: [hash])
+  environment: [awsEcsEnvironmentVariables]
+  environmentFiles: [awsEcsEnvironmentFile]
+  cpu: String @search(by: [hash, regexp])
+  memory: Int @search
+  memoryReservation: Int @search
+  resourceRequirements: [awsEcsResourceRequirement]
+}
 
 type awsEcsEnvironmentVariables
   @generate(
@@ -76,10 +73,10 @@ type awsEcsEnvironmentVariables
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    name: String @search(by: [hash, regexp])
-    value: String @search(by: [hash, regexp])
-  }
+  id: String! @id @search(by: [hash])
+  name: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
+}
 
 type awsEcsEnvironmentFile
   @generate(
@@ -87,10 +84,10 @@ type awsEcsEnvironmentFile
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    value: String @search(by: [hash, regexp])
-    type: String @search(by: [hash, regexp])
-  }
+  id: String! @id @search(by: [hash])
+  value: String @search(by: [hash, regexp])
+  type: String @search(by: [hash, regexp])
+}
 
 type awsEcsResourceRequirement
   @generate(
@@ -98,54 +95,54 @@ type awsEcsResourceRequirement
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    value: String @search(by: [hash, regexp])
-    type: String @search(by: [hash, regexp])
-  }
+  id: String! @id @search(by: [hash])
+  value: String @search(by: [hash, regexp])
+  type: String @search(by: [hash, regexp])
+}
 
-type awsEcsInferenceAcceleratorOverride 
+type awsEcsInferenceAcceleratorOverride
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    deviceName: String @search(by: [hash, regexp])
-    deviceType: String @search(by: [hash, regexp])
-  }
+  id: String! @id @search(by: [hash])
+  deviceName: String @search(by: [hash, regexp])
+  deviceType: String @search(by: [hash, regexp])
+}
 
-type awsEcsTaskOverride 
+type awsEcsTaskOverride
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    containerOverrides: [awsEcsContainerOverride]
-    cpu: String @search(by: [hash, regexp])
-    inferenceAcceleratorOverrides: [awsEcsInferenceAcceleratorOverride]
-    executionRoleArn: String @search(by: [hash, regexp])
-    memory: String @search(by: [hash, regexp])
-    taskRoleArn: String @search(by: [hash, regexp])
-    ephemeralStorage: awsEcsEphemeralStorage
-  }
+  id: String! @id @search(by: [hash])
+  containerOverrides: [awsEcsContainerOverride]
+  cpu: String @search(by: [hash, regexp])
+  inferenceAcceleratorOverrides: [awsEcsInferenceAcceleratorOverride]
+  executionRoleArn: String @search(by: [hash, regexp])
+  memory: String @search(by: [hash, regexp])
+  taskRoleArn: String @search(by: [hash, regexp])
+  ephemeralStorage: awsEcsEphemeralStorage
+}
 
-type awsEcsInferenceAccelerator 
+type awsEcsInferenceAccelerator
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    deviceName: String @search(by: [hash, regexp])
-    deviceType: String @search(by: [hash, regexp])
-  }
+  id: String! @id @search(by: [hash])
+  deviceName: String @search(by: [hash, regexp])
+  deviceType: String @search(by: [hash, regexp])
+}
 
-type awsEcsEphemeralStorage 
+type awsEcsEphemeralStorage
   @generate(
     query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    sizeInGiB: Int @search
-  }
+  sizeInGiB: Int @search
+}
