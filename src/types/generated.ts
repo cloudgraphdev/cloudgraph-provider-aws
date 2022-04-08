@@ -1286,7 +1286,6 @@ export type AwsDynamoDbTable = AwsBaseService & {
   globalIndexes?: Maybe<Array<Maybe<AwsDynamoDbTableGlobalSecondaryIndexDescription>>>;
   globalTableVersion?: Maybe<Scalars['String']>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
-  id: Scalars['String'];
   itemCount?: Maybe<Scalars['Int']>;
   keySchema?: Maybe<Array<Maybe<AwsDynamoDbTableIndexKeySchema>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;

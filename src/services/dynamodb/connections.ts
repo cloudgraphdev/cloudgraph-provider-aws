@@ -29,7 +29,7 @@ export default ({
   } = dynamoDbTable
 
   /**
-   * Find MKS
+   * Find KMS
    * related to this dynamo db table
    */
   const kmsMasterKeyArn = sseDescription?.KMSMasterKeyArn
@@ -54,13 +54,13 @@ export default ({
    * Find IAM Roles
    * related to this dynamo db table
    */
-  const rolesArn: string[] = []
+  const roleArns: string[] = []
   replicas?.map(({ AutoScaling: autoScaling }) => {
-    rolesArn.push(
+    roleArns.push(
       autoScaling?.ReplicaProvisionedReadCapacityAutoScalingSettings
         ?.AutoScalingRoleArn
     )
-    rolesArn.push(
+    roleArns.push(
       autoScaling?.ReplicaProvisionedWriteCapacityAutoScalingSettings
         ?.AutoScalingRoleArn
     )
@@ -70,7 +70,7 @@ export default ({
     data.find(({ name }) => name === services.iamRole)
   if (roles?.data?.[globalRegionName]) {
     const dataAtRegion: RawAwsIamRole[] = roles.data[globalRegionName].filter(
-      ({ Arn }: RawAwsIamRole) => rolesArn?.includes(Arn)
+      ({ Arn }: RawAwsIamRole) => roleArns?.includes(Arn)
     )
     if (!isEmpty(dataAtRegion)) {
       for (const iamRole of dataAtRegion) {
