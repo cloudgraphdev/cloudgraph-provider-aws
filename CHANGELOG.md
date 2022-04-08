@@ -1,3 +1,10 @@
+# [0.79.0-alpha.5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.4...0.79.0-alpha.5) (2022-04-08)
+
+
+### Bug Fixes
+
+* Fixed error scanning iamUsers without enough permissions ([43b7d22](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/43b7d22c4b3c8b0056ec302f7ec8e7ec9646fa0f))
+
 # [0.79.0-alpha.4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.3...0.79.0-alpha.4) (2022-04-08)
 
 
