@@ -38,6 +38,7 @@ type awsEcsTask @key(fields: "arn") {
   ecsCluster: [awsEcsCluster] @hasInverse(field: ecsTask)
   ecsContainer: [awsEcsContainer] @hasInverse(field: ecsTask)
   ecsTaskDefinition: [awsEcsTaskDefinition] @hasInverse(field: ecsTask)
+  iamRoles: [awsIamRole] @hasInverse(field: ecsTask)
 }
 
 type awsEcsAttribute

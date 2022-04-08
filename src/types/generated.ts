@@ -2104,6 +2104,7 @@ export type AwsEcsTask = {
   executionStoppedAt?: Maybe<Scalars['String']>;
   group?: Maybe<Scalars['String']>;
   healthStatus?: Maybe<Scalars['String']>;
+  iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   id: Scalars['String'];
   inferenceAccelerators?: Maybe<Array<Maybe<AwsEcsInferenceAccelerator>>>;
   lastStatus?: Maybe<Scalars['String']>;
@@ -2136,6 +2137,7 @@ export type AwsEcsTaskDefinition = {
   ephemeralStorage?: Maybe<AwsEcsEphemeralStorage>;
   executionRoleArn?: Maybe<Scalars['String']>;
   family?: Maybe<Scalars['String']>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   id: Scalars['String'];
   inferenceAccelerators?: Maybe<Array<Maybe<AwsEcsInferenceAccelerator>>>;
   ipcMode?: Maybe<Scalars['String']>;
@@ -3191,6 +3193,8 @@ export type AwsIamRole = {
   createdAt?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
+  ecsTask?: Maybe<Array<Maybe<AwsEcsTask>>>;
+  ecsTaskDefinition?: Maybe<Array<Maybe<AwsEcsTaskDefinition>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
   glueJobs?: Maybe<Array<Maybe<AwsGlueJob>>>;
