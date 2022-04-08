@@ -1,3 +1,19 @@
+# [0.79.0-alpha.3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.2...0.79.0-alpha.3) (2022-04-08)
+
+
+### Features
+
+* **appSync:** add iamRole/wafV2WebAcl connections ([36b90f2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/36b90f256445568dd33d9f0fcbed8dc66531407a))
+
+# [0.79.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.1...0.79.0-alpha.2) (2022-04-08)
+
+
+### Features
+
+* Added iamInstanceProfile connection ([652f2f7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/652f2f7b9bf551cab37afa2893bea5bb504699c9))
+* Added IamRole connection to ec2 ([4ff22ec](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/4ff22ecb130345de06cd6afd06c15f2978c8a4c7))
+* Handle TODOs for EC2 ([832fc7b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/832fc7bdff1a02d89fbdbf50d1d030669d7568b9))
+
 # [0.79.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.78.2-alpha.1...0.79.0-alpha.1) (2022-04-07)
 
 

@@ -12,6 +12,7 @@ type awsWafV2WebAcl implements awsBaseService @key(fields: "arn") {
   customResponseBodies: [awsWafV2CustomResponseBody]
   loggingConfiguration: awsWafV2LoggingConfig
   cloudfront: [awsCloudfront] @hasInverse(field: webAcl)
+  appSync: [awsAppSync] @hasInverse(field: webAcl)
 }
 
 type awsWafV2Rule {

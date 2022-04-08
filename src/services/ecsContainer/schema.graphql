@@ -15,7 +15,7 @@ type awsEcsContainer implements awsBaseService @key(fields: "arn") {
   registeredAt: String @search(by: [hash, regexp])
   attachments: [awsEcsAttachment]
   tags: [awsRawTag]
-  ec2Instance: [awsEc2] @hasInverse(field: ecsContainer)
+  ec2Instances: [awsEc2] @hasInverse(field: ecsContainer)
   ecsTask: [awsEcsTask] @hasInverse(field: ecsContainer)
 }
 
