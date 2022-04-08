@@ -1,8 +1,4 @@
-type awsSageMakerProject @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash])
-  region: String @search(by: [hash, regexp])
+type awsSageMakerProject implements awsBaseService @key(fields: "arn") {
   projectName: String @search(by: [hash, regexp])
   projectArn: String @search(by: [hash, regexp])
   projectId: String @search(by: [hash, regexp])

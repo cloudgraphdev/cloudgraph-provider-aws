@@ -1,7 +1,4 @@
-type awsGuardDutyDetector @key(fields: "id") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  region: String @search(by: [hash, regexp])
+type awsGuardDutyDetector implements awsOptionalService @key(fields: "id") {
   createdAt: DateTime
   updatedAt: DateTime
   findingPublishingFrequency: String @search(by: [hash, regexp])
@@ -28,9 +25,9 @@ type awsGuardDutyMember {
 
 type awsGuardDutyDataSources {
   cloudTrail: awsGuardDutyDataSource
-    dnsLogs: awsGuardDutyDataSource
-    flowLogs: awsGuardDutyDataSource
-    s3Logs: awsGuardDutyDataSource
+  dnsLogs: awsGuardDutyDataSource
+  flowLogs: awsGuardDutyDataSource
+  s3Logs: awsGuardDutyDataSource
 }
 
 type awsGuardDutyDataSource {

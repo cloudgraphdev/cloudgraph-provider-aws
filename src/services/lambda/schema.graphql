@@ -1,8 +1,4 @@
-type awsLambda @key(fields: "arn") {
-  id: String! @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsLambda implements awsBaseService @key(fields: "arn") {
   description: String @search(by: [hash, regexp, fulltext])
   handler: String @search(by: [hash, regexp])
   kmsKeyArn: String @search(by: [hash, regexp])
@@ -24,7 +20,7 @@ type awsLambda @key(fields: "arn") {
   securityGroups: [awsSecurityGroup] @hasInverse(field: lambda)
   subnet: [awsSubnet] @hasInverse(field: lambda) #change to plural
   vpc: [awsVpc] @hasInverse(field: lambda)
-  cognitoUserPool: [awsCognitoUserPool] @hasInverse(field: lambda) #change to plural
+  cognitoUserPools: [awsCognitoUserPool] @hasInverse(field: lambdas)
   appSync: [awsAppSync] @hasInverse(field: lambda)
 }
 

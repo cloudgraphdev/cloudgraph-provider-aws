@@ -1,9 +1,5 @@
-type awsSecurityGroup @key(fields: "id") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
-  name: String! @search(by: [hash, regexp])
+type awsSecurityGroup implements awsBaseService @key(fields: "id") {
+  name: String @search(by: [hash, regexp])
   vpcId: String @search(by: [hash])
   description: String @search(by: [hash, regexp, fulltext])
   tags: [awsRawTag]
@@ -26,9 +22,12 @@ type awsSecurityGroup @key(fields: "id") {
   clientVpnEndpoint: [awsClientVpnEndpoint] @hasInverse(field: securityGroups) #change to plural
   codebuilds: [awsCodebuild] @hasInverse(field: securityGroups)
   managedAirflows: [awsManagedAirflow] @hasInverse(field: securityGroups)
-  elasticSearchDomains: [awsElasticSearchDomain] @hasInverse(field: securityGroups)
-  dmsReplicationInstances: [awsDmsReplicationInstance] @hasInverse(field: securityGroups)
-  sageMakerNotebookInstances: [awsSageMakerNotebookInstance] @hasInverse(field: securityGroups)
+  elasticSearchDomains: [awsElasticSearchDomain]
+    @hasInverse(field: securityGroups)
+  dmsReplicationInstances: [awsDmsReplicationInstance]
+    @hasInverse(field: securityGroups)
+  sageMakerNotebookInstances: [awsSageMakerNotebookInstance]
+    @hasInverse(field: securityGroups)
 }
 
 type awsSgOutboundRule

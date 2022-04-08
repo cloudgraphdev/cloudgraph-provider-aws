@@ -1,9 +1,5 @@
 #TODO add connection for userPool, identityPool, iamRole, cloudwatchLogs
-type awsElasticSearchDomain @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash])
-  region: String @search(by: [hash, regexp])
+type awsElasticSearchDomain implements awsBaseService @key(fields: "arn") {
   domainName: String @search(by: [hash, regexp])
   created: Boolean @search
   deleted: Boolean @search

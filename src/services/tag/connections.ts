@@ -150,7 +150,7 @@ export default ({
       )
       if (!isEmpty(dataAtRegion)) {
         for (const cloudtrail of dataAtRegion) {
-          const { TrailARN: id } = cloudtrail
+          const { id } = cloudtrail
           connections.push({
             id,
             resourceType: services.cloudtrail,
