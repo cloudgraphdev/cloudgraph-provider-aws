@@ -472,6 +472,7 @@ export type AwsAsg = AwsBaseService & {
   enabledMetrics?: Maybe<Array<Maybe<AwsEnabledMetrics>>>;
   healthCheckGracePeriod?: Maybe<Scalars['Int']>;
   healthCheckType?: Maybe<Scalars['String']>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   launchConfiguration?: Maybe<AwsLaunchConfiguration>;
   launchConfigurationName?: Maybe<Scalars['String']>;
   launchTemplateId?: Maybe<Scalars['String']>;
@@ -3048,6 +3049,7 @@ export type AwsIamPolicy = AwsBaseService & {
 
 export type AwsIamRole = AwsBaseService & {
   appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
+  asg?: Maybe<Array<Maybe<AwsAsg>>>;
   assumeRolePolicy?: Maybe<AwsIamJsonPolicy>;
   cloudFormationStack?: Maybe<Array<Maybe<AwsCloudFormationStack>>>;
   cloudFormationStackSet?: Maybe<Array<Maybe<AwsCloudFormationStackSet>>>;

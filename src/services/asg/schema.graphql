@@ -134,4 +134,5 @@ type awsAsg implements awsBaseService @key(fields: "arn") {
   securityGroups: [awsSecurityGroup] @hasInverse(field: asg)
   ebs: [awsEbs] @hasInverse(field: asg)
   subnet: [awsSubnet] @hasInverse(field: asg) #change to plural
+  iamRole: [awsIamRole] @hasInverse(field: asg)
 }
