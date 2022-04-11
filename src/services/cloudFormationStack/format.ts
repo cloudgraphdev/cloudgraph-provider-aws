@@ -124,7 +124,7 @@ export default ({
     timeoutInMinutes,
     capabilities,
     outputs: outputsList,
-    roleArn: roleArn || '', // TODO: create connection to IAM role if possible
+    roleArn: roleArn || '',
     tags: formatTagsFromMap(tags),
     enableTerminationProtection: enableTerminationProtection ? t.yes : t.no,
     parentId: parentId || '',

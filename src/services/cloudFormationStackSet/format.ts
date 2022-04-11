@@ -1,15 +1,17 @@
-import cuid from 'cuid';
+import cuid from 'cuid'
 import t from '../../properties/translations'
-import { AwsCloudFormationStackSet } from '../../types/generated';
+import { AwsCloudFormationStackSet } from '../../types/generated'
 
-import { formatTagsFromMap } from '../../utils/format';
-import { RawAwsCloudFormationStackSet } from './data';
+import { formatTagsFromMap } from '../../utils/format'
+import { RawAwsCloudFormationStackSet } from './data'
 
 export default ({
   service: rawData,
+  account: accountId,
   region,
 }: {
   service: RawAwsCloudFormationStackSet
+  account: string
   region: string
 }): AwsCloudFormationStackSet => {
   const {
@@ -30,25 +32,28 @@ export default ({
     OrganizationalUnitIds: organizationalUnitIds,
   } = rawData
 
-  const parameterList = parameters.map(({
-    ParameterKey: parameterKey,
-    ParameterValue: parameterValue,
-    UsePreviousValue: usePreviousValue,
-    ResolvedValue: resolvedValue,
-  }) => {
-    return {
-      id: cuid(),
-      parameterKey,
-      parameterValue,
-      usePreviousValue: usePreviousValue? t.yes : t.no,
-      resolvedValue,
+  const parameterList = parameters.map(
+    ({
+      ParameterKey: parameterKey,
+      ParameterValue: parameterValue,
+      UsePreviousValue: usePreviousValue,
+      ResolvedValue: resolvedValue,
+    }) => {
+      return {
+        id: cuid(),
+        parameterKey,
+        parameterValue,
+        usePreviousValue: usePreviousValue ? t.yes : t.no,
+        resolvedValue,
+      }
     }
-  })
+  )
 
   return {
     id: stackSetId,
     arn: stackSetARN,
     name: stackSetName,
+    accountId,
     description,
     status,
     templateBody,
@@ -60,18 +65,28 @@ export default ({
     driftDetectionDetail: {
       id: cuid(),
       driftStatus: stackSetDriftDetectionDetails?.DriftStatus || '',
-      driftDetectionStatus: stackSetDriftDetectionDetails?.DriftDetectionStatus || '',
-      lastDriftCheckTimestamp: stackSetDriftDetectionDetails?.LastDriftCheckTimestamp?.toISOString() || '',
-      totalStackInstancesCount: stackSetDriftDetectionDetails?.TotalStackInstancesCount || 0,
-      driftedStackInstancesCount: stackSetDriftDetectionDetails?.DriftedStackInstancesCount || 0,
-      inSyncStackInstancesCount: stackSetDriftDetectionDetails?.InSyncStackInstancesCount || 0,
-      inProgressStackInstancesCount: stackSetDriftDetectionDetails?.InProgressStackInstancesCount || 0,
-      failedStackInstancesCount: stackSetDriftDetectionDetails?.FailedStackInstancesCount || 0,
+      driftDetectionStatus:
+        stackSetDriftDetectionDetails?.DriftDetectionStatus || '',
+      lastDriftCheckTimestamp:
+        stackSetDriftDetectionDetails?.LastDriftCheckTimestamp?.toISOString() ||
+        '',
+      totalStackInstancesCount:
+        stackSetDriftDetectionDetails?.TotalStackInstancesCount || 0,
+      driftedStackInstancesCount:
+        stackSetDriftDetectionDetails?.DriftedStackInstancesCount || 0,
+      inSyncStackInstancesCount:
+        stackSetDriftDetectionDetails?.InSyncStackInstancesCount || 0,
+      inProgressStackInstancesCount:
+        stackSetDriftDetectionDetails?.InProgressStackInstancesCount || 0,
+      failedStackInstancesCount:
+        stackSetDriftDetectionDetails?.FailedStackInstancesCount || 0,
     },
     autoDeploymentConfig: {
       enabled: autoDeployment?.Enabled ? t.yes : t.no,
-      retainStacksOnAccountRemoval: autoDeployment?.RetainStacksOnAccountRemoval ? t.yes : t.no,
-    },    
+      retainStacksOnAccountRemoval: autoDeployment?.RetainStacksOnAccountRemoval
+        ? t.yes
+        : t.no,
+    },
     permissionModel,
     organizationalUnitIds,
     region,

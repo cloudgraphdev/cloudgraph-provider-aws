@@ -303,7 +303,7 @@ export const listVirtualMFADevices = async (
       try {
         iam.listVirtualMFADevices(
           args,
-          async (err: AWSError, data: ListVirtualMFADevicesResponse) => {
+          (err: AWSError, data: ListVirtualMFADevicesResponse) => {
             if (err) {
               errorLog.generateAwsErrorLog({
                 functionName: 'iam:listVirtualMFADevices',
@@ -311,12 +311,14 @@ export const listVirtualMFADevices = async (
               })
             }
 
-            const { VirtualMFADevices = [], IsTruncated, Marker } = data
+            if (!isEmpty(data)) {
+              const { VirtualMFADevices = [], IsTruncated, Marker } = data
 
-            virtualMFADeviceList.push(...VirtualMFADevices)
+              virtualMFADeviceList.push(...VirtualMFADevices)
 
-            if (IsTruncated) {
-              listAllVirtualMFADevices(Marker)
+              if (IsTruncated) {
+                listAllVirtualMFADevices(Marker)
+              }
             }
 
             resolve(virtualMFADeviceList)
@@ -345,19 +347,16 @@ export const listIamUsers = async (
     iam.listUsers(
       { Marker: marker },
       async (err: AWSError, data: ListUsersResponse) => {
-        /**
-         * No data
-         */
-
-        if (isEmpty(data)) {
-          return resolve(result)
-        }
-
         if (err) {
           errorLog.generateAwsErrorLog({
             functionName: 'iam:listUsers',
             err,
           })
+        }
+
+        // No data
+        if (isEmpty(data)) {
+          return resolve(result)
         }
 
         const { Users: users = [], IsTruncated, Marker } = data

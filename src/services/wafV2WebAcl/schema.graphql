@@ -1,8 +1,4 @@
-type awsWafV2WebAcl @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash])
-  region: String @search(by: [hash, regexp])
+type awsWafV2WebAcl implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp])
   ManagedByFirewallManager: Boolean @search
@@ -16,6 +12,7 @@ type awsWafV2WebAcl @key(fields: "arn") {
   customResponseBodies: [awsWafV2CustomResponseBody]
   loggingConfiguration: awsWafV2LoggingConfig
   cloudfront: [awsCloudfront] @hasInverse(field: webAcl)
+  appSync: [awsAppSync] @hasInverse(field: webAcl)
 }
 
 type awsWafV2Rule {

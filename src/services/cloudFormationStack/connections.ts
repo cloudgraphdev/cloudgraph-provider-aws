@@ -1,12 +1,10 @@
 import { ServiceConnection } from '@cloudgraph/sdk'
 import { Stack } from 'aws-sdk/clients/cloudformation'
 import isEmpty from 'lodash/isEmpty'
-import resources from '../../enums/resources'
 import services from '../../enums/services'
 import { RawAwsCloudFormationStack } from './data'
 import { RawAwsIamRole } from '../iamRole/data'
 import { TagMap } from '../../types'
-import { getIamId } from '../../utils/ids'
 import { globalRegionName } from '../../enums/regions'
 
 /**
@@ -84,14 +82,10 @@ export default ({
     )
     if (!isEmpty(dataAtRegion)) {
       for (const instance of dataAtRegion) {
-        const { RoleId: roleId, RoleName: roleName } = instance
+        const { Arn: arn }: RawAwsIamRole = instance
 
         connections.push({
-          id: getIamId({
-            resourceId: roleId,
-            resourceName: roleName,
-            resourceType: resources.iamRole,
-          }),
+          id: arn,
           resourceType: services.iamRole,
           relation: 'child',
           field: 'iamRole',
