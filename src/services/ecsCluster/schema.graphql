@@ -16,9 +16,10 @@ type awsEcsCluster implements awsBaseService @key(fields: "arn") {
   ecsService: [awsEcsService] @hasInverse(field: ecsCluster)
   ecsTask: [awsEcsTask] @hasInverse(field: ecsCluster)
   ecsTaskSet: [awsEcsTaskSet] @hasInverse(field: ecsCluster)
+  s3: [awsS3] @hasInverse(field: ecsCluster)
+  cloudwatchLog: [awsCloudwatchLog] @hasInverse(field: ecsCluster)
+  kms: [awsKms] @hasInverse(field: ecsCluster)
 }
-
-#TODO: add connections to cloudwatchLog, s3,
 
 type AwsEcsExecuteCommandLogConfiguration
   @generate(
