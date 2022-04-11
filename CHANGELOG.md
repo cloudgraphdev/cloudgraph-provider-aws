@@ -1,3 +1,12 @@
+# [0.79.0-alpha.6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.5...0.79.0-alpha.6) (2022-04-11)
+
+
+### Features
+
+* Handle TODOs for ecs cluster ([554dff7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/554dff7785dc2c69403a41416c7739625fd02263))
+* Update kms connection ([1e3e66d](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/1e3e66d41e886bbb39ad9f000167fa93c7313b26))
+* Updated README connections ([f536b73](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/f536b73f97c1f0ddbea687588e5d10f089fd2500))
+
 # [0.79.0-alpha.5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.4...0.79.0-alpha.5) (2022-04-08)
 
 
