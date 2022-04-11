@@ -23,7 +23,7 @@ export default ({
   const {
     NetworkAclId: id,
     VpcId: NaclVpcId,
-    Associations: naclSubnetAssociations,
+    Associations: naclSubnetAssociations = [],
   } = nacl
 
   const subnetIds = naclSubnetAssociations.map(({ SubnetId }) => SubnetId)
@@ -45,7 +45,7 @@ export default ({
     )
     if (!isEmpty(subnet)) {
       connections.push({
-        id: subnet.VpcId,
+        id: subnet.SubnetId,
         resourceType: services.subnet,
         relation: 'child',
         field: 'subnets',
