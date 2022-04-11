@@ -1,3 +1,10 @@
+# [0.79.0-alpha.8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.7...0.79.0-alpha.8) (2022-04-11)
+
+
+### Bug Fixes
+
+* Added iamRole connection to kinesisFirehose service ([dc17214](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/dc1721403a6d86aa1d7a00542dff237011514654))
+
 # [0.79.0-alpha.7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.6...0.79.0-alpha.7) (2022-04-11)
 
 
