@@ -1,7 +1,23 @@
-import t from '../../properties/translations'
+import { AliasListEntry } from 'aws-sdk/clients/kms'
+import cuid from 'cuid'
 import { AwsKms } from './data'
-import { AwsKms as AwsKmsType } from '../../types/generated'
+import { AwsKms as AwsKmsType, AwsKmsAliasListEntry } from '../../types/generated'
 import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
+
+export const formatAliases = (
+  aliases?: AliasListEntry[]
+): AwsKmsAliasListEntry[] => {
+  return (
+    aliases?.map(a => ({
+      id: cuid(),
+      aliasName: a.AliasName,
+      aliasArn: a.AliasArn,
+      targetKeyId: a.TargetKeyId,
+      creationDate: a.CreationDate?.toISOString(),
+      lastUpdatedDate: a.LastUpdatedDate?.toISOString(),
+    })) || []
+  )
+}
 
 /**
  * KMS
@@ -32,6 +48,7 @@ export default ({
     Origin: origin,
     DeletionDate: deletionDate,
     ValidTo: validTo,
+    Aliases: aliases = []
   } = key
 
   return {
@@ -47,10 +64,11 @@ export default ({
     keyState,
     customerMasterKeySpec,
     tags: formatTagsFromMap(Tags),
-    creationDate: creationDate ? creationDate.toString() : undefined,
+    creationDate: creationDate?.toISOString(),
     keyManager,
     origin,
-    deletionDate: deletionDate ? deletionDate.toString() : undefined,
-    validTo: validTo ? validTo.toString() : undefined,
+    deletionDate: deletionDate?.toISOString(),
+    validTo: validTo?.toISOString(),
+    aliases: formatAliases(aliases),
   }
 }

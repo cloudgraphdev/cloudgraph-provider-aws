@@ -26,6 +26,7 @@ type awsLambda @key(fields: "arn") {
   vpc: [awsVpc] @hasInverse(field: lambda)
   cognitoUserPool: [awsCognitoUserPool] @hasInverse(field: lambda) #change to plural
   appSync: [awsAppSync] @hasInverse(field: lambda)
+  secretsManager: [awsSecretsManager] @hasInverse(field: lambda)
 }
 
 type awsLambdaEnvironmentVariable

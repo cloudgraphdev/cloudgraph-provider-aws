@@ -3334,13 +3334,14 @@ export type AwsKinesisStream = {
 
 export type AwsKms = {
   accountId: Scalars['String'];
+  aliases?: Maybe<Array<Maybe<AwsKmsAliasListEntry>>>;
   arn: Scalars['String'];
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
   cloudwatchLog?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
-  creationDate?: Maybe<Scalars['String']>;
+  creationDate?: Maybe<Scalars['DateTime']>;
   customerMasterKeySpec?: Maybe<Scalars['String']>;
-  deletionDate?: Maybe<Scalars['String']>;
+  deletionDate?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
   dmsReplicationInstances?: Maybe<Array<Maybe<AwsDmsReplicationInstance>>>;
   efs?: Maybe<Array<Maybe<AwsEfs>>>;
@@ -3360,10 +3361,20 @@ export type AwsKms = {
   redshiftCluster?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
   region?: Maybe<Scalars['String']>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
+  secretsManager?: Maybe<Array<Maybe<AwsSecretsManager>>>;
   sns?: Maybe<Array<Maybe<AwsSns>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   usage?: Maybe<Scalars['String']>;
-  validTo?: Maybe<Scalars['String']>;
+  validTo?: Maybe<Scalars['DateTime']>;
+};
+
+export type AwsKmsAliasListEntry = {
+  aliasArn?: Maybe<Scalars['String']>;
+  aliasName?: Maybe<Scalars['String']>;
+  creationDate?: Maybe<Scalars['DateTime']>;
+  id: Scalars['String'];
+  lastUpdatedDate?: Maybe<Scalars['DateTime']>;
+  targetKeyId?: Maybe<Scalars['String']>;
 };
 
 export type AwsLambda = {
@@ -3385,6 +3396,7 @@ export type AwsLambda = {
   reservedConcurrentExecutions?: Maybe<Scalars['Int']>;
   role?: Maybe<Scalars['String']>;
   runtime?: Maybe<Scalars['String']>;
+  secretsManager?: Maybe<Array<Maybe<AwsSecretsManager>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   sourceCodeSize?: Maybe<Scalars['String']>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
@@ -3973,22 +3985,34 @@ export type AwsSecretsManager = {
   deletedDate?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
   id: Scalars['String'];
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
   kmsKeyId?: Maybe<Scalars['String']>;
+  lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   lastAccessedDate?: Maybe<Scalars['DateTime']>;
   lastChangedDate?: Maybe<Scalars['DateTime']>;
   lastRotatedDate?: Maybe<Scalars['DateTime']>;
   name?: Maybe<Scalars['String']>;
   owningService?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
+  replicationStatus?: Maybe<Array<Maybe<AwsSecretsManagerReplicationStatus>>>;
   rotationEnabled?: Maybe<Scalars['Boolean']>;
   rotationLambdaARN?: Maybe<Scalars['String']>;
   rotationRules?: Maybe<AwsSecretsManagerRotationRule>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
 };
 
+export type AwsSecretsManagerReplicationStatus = {
+  id: Scalars['String'];
+  kmsKeyId?: Maybe<Scalars['String']>;
+  lastAccessedDate?: Maybe<Scalars['DateTime']>;
+  region?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  statusMessage?: Maybe<Scalars['String']>;
+};
+
 export type AwsSecretsManagerRotationRule = {
   automaticallyAfterDays?: Maybe<Scalars['Int']>;
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['String'];
 };
 
 export type AwsSecurityGroup = {
