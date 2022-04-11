@@ -3392,6 +3392,7 @@ export type AwsNetworkAcl = AwsBaseService & {
   default?: Maybe<Scalars['Boolean']>;
   inboundRules?: Maybe<Array<Maybe<AwsNetworkAclRule>>>;
   outboundRules?: Maybe<Array<Maybe<AwsNetworkAclRule>>>;
+  subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   vpcId?: Maybe<Scalars['String']>;
@@ -3919,6 +3920,7 @@ export type AwsSubnet = AwsBaseService & {
   ipV6Cidr?: Maybe<Scalars['String']>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
+  nacls?: Maybe<Array<Maybe<AwsNetworkAcl>>>;
   natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
