@@ -1,8 +1,4 @@
-type awsEbs @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsEbs implements awsBaseService @key(fields: "arn") {
   attachments: [awsEbsAttachment]
   iops: Int @search
   size: String @search(by: [hash, regexp])

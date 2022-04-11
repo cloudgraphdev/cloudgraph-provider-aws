@@ -1,9 +1,5 @@
-type awsEcr @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-	arn: String! @id @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
-	createdAt: String @search(by: [hash, regexp])
+type awsEcr implements awsBaseService @key(fields: "arn") {
+  createdAt: String @search(by: [hash, regexp])
   encryptionConfig: awsEcrEncryptionConfiguration
   imageScanOnPush: Boolean @search
   imageTagMutability: String @search(by: [hash, regexp])

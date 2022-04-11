@@ -13,6 +13,10 @@ import DynamoDB, {
   TableNameList,
   ListTablesInput,
   ContinuousBackupsDescription,
+  DescribeTableReplicaAutoScalingOutput,
+  TableAutoScalingDescription,
+  ReplicaAutoScalingDescription,
+  ReplicaDescription,
 } from 'aws-sdk/clients/dynamodb'
 import { Config } from 'aws-sdk/lib/config'
 import { AWSError } from 'aws-sdk/lib/error'
@@ -31,11 +35,17 @@ const serviceName = 'DynamoDB'
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
-export interface RawAwsDynamoDbTable extends TableDescription {
+export interface RawAwsReplicaDescription extends ReplicaDescription {
+  AutoScaling?: ReplicaAutoScalingDescription
+}
+
+export interface RawAwsDynamoDbTable
+  extends Omit<TableDescription, 'Replicas'> {
   region: string
   ttlEnabled?: boolean
   pointInTimeRecoveryEnabled?: boolean
   Tags?: TagMap
+  Replicas?: RawAwsReplicaDescription[]
 }
 
 const checkIfEnabled = (status: string): boolean =>
@@ -220,6 +230,30 @@ const getTableBackupsDescription = async (
     )
   })
 
+const getTableReplicaAutoScaling = async (
+  dynamoDb: DynamoDB,
+  tableName: TableName
+): Promise<TableAutoScalingDescription> =>
+  new Promise(resolve => {
+    dynamoDb.describeTableReplicaAutoScaling(
+      {
+        TableName: tableName,
+      },
+      (err: AWSError, data: DescribeTableReplicaAutoScalingOutput) => {
+        if (err) {
+          errorLog.generateAwsErrorLog({
+            functionName: 'dynamodb:describeTableReplicaAutoScaling',
+            err,
+          })
+        }
+        if (!isEmpty(data)) {
+          resolve(data.TableAutoScalingDescription)
+        }
+        resolve({})
+      }
+    )
+  })
+
 export default async ({
   regions,
   config,
@@ -235,6 +269,7 @@ export default async ({
     const tagsPromises = []
     const ttlInfoPromises = []
     const backupInfoPromises = []
+    const tableReplicaAutoScalingPromises = []
 
     // First we get all table name for all regions
     regions.split(',').map(region => {
@@ -306,7 +341,7 @@ export default async ({
     logger.debug(lt.gettingTableTtlInfo)
     await Promise.all(ttlInfoPromises)
 
-    // Finally we get the backup information for each table
+    // Get the backup information for each table
     tableData.map(({ TableName, region }, idx) => {
       const dynamoDb = new DynamoDB({ ...config, region, endpoint })
       const backupInfoPromise = new Promise<void>(async resolveBackupInfo => {
@@ -320,6 +355,36 @@ export default async ({
     })
     logger.debug(lt.gettingTableBackupInfo)
     await Promise.all(backupInfoPromises)
+
+    // Finally we get the auto scaling settings for each table
+    tableData.map(({ TableName: tableName, region }, idx) => {
+      const dynamoDb = new DynamoDB({ ...config, region, endpoint })
+      const tableReplicaAutoScalingPromise = new Promise<void>(
+        async resolveTableReplicaAutoScaling => {
+          const globalSettings: TableAutoScalingDescription =
+            await getTableReplicaAutoScaling(dynamoDb, tableName)
+          tableData[idx].Replicas = tableData[idx].Replicas?.map(
+            ({ RegionName: regionName, ...rest }) => {
+              const autoScaling: ReplicaAutoScalingDescription =
+                globalSettings?.Replicas?.find(
+                  r => r.RegionName === regionName
+                ) || {}
+              return {
+                AutoScaling: autoScaling,
+                RegionName: regionName,
+                ...rest,
+              }
+            }
+          )
+          resolveTableReplicaAutoScaling()
+        }
+      )
+      tableReplicaAutoScalingPromises.push(tableReplicaAutoScalingPromise)
+    })
+
+    logger.debug(lt.gettingTableBackupInfo)
+    await Promise.all(tableReplicaAutoScalingPromises)
+
     errorLog.reset()
 
     resolve(groupBy(tableData, 'region'))

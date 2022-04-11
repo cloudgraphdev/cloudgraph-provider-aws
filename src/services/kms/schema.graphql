@@ -1,8 +1,4 @@
-type awsKms @key(fields: "id"){
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsKms implements awsBaseService @key(fields: "id") {
   description: String @search(by: [hash, regexp, fulltext])
   keyRotationEnabled: Boolean @search
   usage: String @search(by: [hash, regexp])
@@ -21,13 +17,18 @@ type awsKms @key(fields: "id"){
   redshiftCluster: [awsRedshiftCluster] @hasInverse(field: kms) #change to plural
   sns: [awsSns] @hasInverse(field: kms)
   eksCluster: [awsEksCluster] @hasInverse(field: kms) #change to plural
-  elastiCacheReplicationGroup: [awsElastiCacheReplicationGroup] @hasInverse(field: kms) #change to plural
+  elastiCacheReplicationGroup: [awsElastiCacheReplicationGroup]
+    @hasInverse(field: kms) #change to plural
   efs: [awsEfs] @hasInverse(field: kms)
   emrCluster: [awsEmrCluster] @hasInverse(field: kms) #change to plural
   cloudwatchLog: [awsCloudwatchLog] @hasInverse(field: kms)
   codebuilds: [awsCodebuild] @hasInverse(field: kms)
   elasticSearchDomains: [awsElasticSearchDomain] @hasInverse(field: kms)
   dmsReplicationInstances: [awsDmsReplicationInstance] @hasInverse(field: kms)
-  sageMakerNotebookInstances: [awsSageMakerNotebookInstance] @hasInverse(field: kms)
+  sageMakerNotebookInstances: [awsSageMakerNotebookInstance]
+    @hasInverse(field: kms)
   rdsClusterSnapshots: [awsRdsClusterSnapshot] @hasInverse(field: kms)
+  ecsCluster: [awsEcsCluster] @hasInverse(field: kms)
+  dynamodb: [awsDynamoDbTable] @hasInverse(field: kms)
+  cognitoUserPools: [awsCognitoUserPool] @hasInverse(field: kms)
 }

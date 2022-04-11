@@ -8,4 +8,5 @@ export default {
   route53HostedZone: ['route53Record'],
   emrCluster: ['emrInstance', 'emrStep'],
   ecsService: ['ecsTaskSet', 'ecsTaskDefinition'],
+  iamInstanceProfile: ['ec2Instance'],
 }

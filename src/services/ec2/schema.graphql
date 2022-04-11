@@ -72,11 +72,7 @@ type awsEc2KeyPair {
   tags: [awsRawTag]
 }
 
-type awsEc2 @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsEc2 implements awsBaseService @key(fields: "arn") {
   ami: String @search(by: [hash, regexp])
   tenancy: String @search(by: [hash, regexp])
   elasticIps: String @search(by: [hash, regexp])
@@ -96,7 +92,6 @@ type awsEc2 @key(fields: "arn") {
   sourceDestCheck: String @search(by: [hash, regexp])
   availabilityZone: String @search(by: [hash, regexp])
   cpuThreadsPerCore: Int @search
-  iamInstanceProfile: String @search(by: [hash, regexp]) # TODO: use to make a connection to a iamRole
   deletionProtection: String @search(by: [hash, regexp])
   dailyCost: awsTotalBillingInfo
   primaryNetworkInterface: String @search(by: [hash, regexp])
@@ -116,8 +111,12 @@ type awsEc2 @key(fields: "arn") {
   eip: [awsEip] @hasInverse(field: ec2Instance)
   networkInterfaces: [awsNetworkInterface] @hasInverse(field: ec2Instance)
   securityGroups: [awsSecurityGroup] @hasInverse(field: ec2Instance)
-  subnet: [awsSubnet] @hasInverse(field: ec2Instance) #change to plural
-  ecsContainer: [awsEcsContainer] @hasInverse(field: ec2Instance) #change to plural
+  subnets: [awsSubnet] @hasInverse(field: ec2Instances)
+  ecsContainer: [awsEcsContainer] @hasInverse(field: ec2Instances)
   emrInstance: [awsEmrInstance] @hasInverse(field: ec2Instance)
   systemsManagerInstance: [awsSystemsManagerInstance] @hasInverse(field: ec2Instance)
+  eksCluster: [awsEksCluster] @hasInverse(field: ec2Instances)
+  elasticBeanstalkEnv: [awsElasticBeanstalkEnv] @hasInverse(field: ec2Instances)
+  iamInstanceProfile: [awsIamInstanceProfile] @hasInverse(field: ec2Instances)
+  iamRole: [awsIamRole] @hasInverse(field: ec2Instances)
 }

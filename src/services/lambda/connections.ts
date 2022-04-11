@@ -7,6 +7,8 @@ import { SecurityGroup } from 'aws-sdk/clients/ec2'
 
 import services from '../../enums/services'
 import { RawAwsSubnet } from '../subnet/data'
+import { RawAwsIamRole } from '../iamRole/data'
+import { globalRegionName } from '../../enums/regions'
 
 export default ({
   service: lambda,
@@ -22,6 +24,7 @@ export default ({
   const {
     KMSKeyArn,
     FunctionArn: id,
+    Role,
     VpcConfig: { SecurityGroupIds: sgIds = [], SubnetIds: subnetIds = [] } = {},
   } = lambda
   const connections: ServiceConnection[] = []
@@ -83,10 +86,34 @@ export default ({
     if (!isEmpty(subnetsInRegion)) {
       for (const subnet of subnetsInRegion) {
         connections.push({
-          id:subnet.SubnetId,
+          id: subnet.SubnetId,
           resourceType: services.subnet,
           relation: 'child',
           field: 'subnet',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find IAM Role
+   * related to this lambda function
+   */
+  const iamRoles: {
+    name: string
+    data: { [property: string]: RawAwsIamRole[] }
+  } = data.find(({ name }) => name === services.iamRole)
+  if (iamRoles?.data?.[globalRegionName]) {
+    const iamRolesInRegion: RawAwsIamRole[] = iamRoles.data[
+      globalRegionName
+    ].filter(({ Arn }: RawAwsIamRole) => Arn === Role)
+    if (!isEmpty(iamRolesInRegion)) {
+      for (const role of iamRolesInRegion) {
+        connections.push({
+          id: role.Arn,
+          resourceType: services.iamRole,
+          relation: 'child',
+          field: 'iamRole',
         })
       }
     }

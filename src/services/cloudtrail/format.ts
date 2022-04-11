@@ -15,6 +15,7 @@ export default ({
   region: string
 }): AwsCloudtrail => {
   const {
+    id,
     Name: name,
     S3BucketName: s3BucketName,
     S3KeyPrefix: s3KeyPrefix,
@@ -54,14 +55,18 @@ export default ({
         id: cuid(),
         readWriteType: ReadWriteType,
         includeManagementEvents: IncludeManagementEvents,
-        dataResources: DataResources?.map(({ Type, Values }) => ({id: cuid(), type: Type, values : Values})) || [],
+        dataResources:
+          DataResources?.map(({ Type, Values }) => ({
+            id: cuid(),
+            type: Type,
+            values: Values,
+          })) || [],
       })
     )
   }
 
   const cloudTrail = {
-    id: arn,
-    cgId: cuid(),
+    id,
     arn,
     accountId: account,
     name,

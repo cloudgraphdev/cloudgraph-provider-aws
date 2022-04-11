@@ -1,7 +1,4 @@
-type awsIamRole @key(fields: "id") {
-  id: String! @id @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash, regexp])
+type awsIamRole implements awsBaseService @key(fields: "id") {
   name: String @search(by: [hash, regexp])
   path: String @search(by: [hash, regexp])
   assumeRolePolicy: awsIamJSONPolicy
@@ -20,7 +17,15 @@ type awsIamRole @key(fields: "id") {
   glueJobs: [awsGlueJob] @hasInverse(field: iamRole)
   managedAirflows: [awsManagedAirflow] @hasInverse(field: iamRoles)
   guardDutyDetectors: [awsGuardDutyDetector] @hasInverse(field: iamRole)
-  sageMakerNotebookInstances: [awsSageMakerNotebookInstance] @hasInverse(field: iamRole)
-  systemsManagerInstances: [awsSystemsManagerInstance] @hasInverse(field: iamRole)
+  sageMakerNotebookInstances: [awsSageMakerNotebookInstance]
+    @hasInverse(field: iamRole)
+  systemsManagerInstances: [awsSystemsManagerInstance]
+    @hasInverse(field: iamRole)
   iamInstanceProfiles: [awsIamInstanceProfile] @hasInverse(field: iamRole)
+  dynamodb: [awsDynamoDbTable] @hasInverse(field: iamRoles)
+  ec2Instances: [awsEc2] @hasInverse(field: iamRole)
+  cognitoUserPools: [awsCognitoUserPool] @hasInverse(field: iamRole)
+  appSync: [awsAppSync] @hasInverse(field: iamRoles)
+  lambda: [awsLambda] @hasInverse(field: iamRole)
+  kinesisFirehose: [awsKinesisFirehose] @hasInverse(field: iamRole)
 }

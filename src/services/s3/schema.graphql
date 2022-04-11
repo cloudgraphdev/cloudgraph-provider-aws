@@ -1,8 +1,4 @@
-type awsS3 @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsS3 implements awsBaseService @key(fields: "arn") {
   access: String @search(by: [hash, regexp])
   bucketOwnerName: String @search(by: [hash, regexp])
   requesterPays: String @search(by: [hash, regexp])
@@ -27,6 +23,7 @@ type awsS3 @key(fields: "arn") {
   cloudfrontDistribution: [awsCloudfront] @hasInverse(field: s3) #change to plural
   cloudtrail: [awsCloudtrail] @hasInverse(field: s3) #change to plural
   managedAirflows: [awsManagedAirflow] @hasInverse(field: s3)
+  ecsCluster: [awsEcsCluster] @hasInverse(field: s3)
 }
 
 # TODO: use getBucketReplication and getBucketNotificationConfiguration to make connections to lambda, sns, iamRole, SQS

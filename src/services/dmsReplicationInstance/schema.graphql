@@ -30,11 +30,7 @@ type AwsDmsReplicationInstanceVpcSecurityGroups {
   status: String @search(by: [hash, regexp])
 }
 
-type awsDmsReplicationInstance @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash])
-  region: String @search(by: [hash, regexp])
+type awsDmsReplicationInstance implements awsBaseService @key(fields: "arn") {
   replicationInstanceIdentifier: String @search(by: [hash, regexp])
   replicationInstanceClass: String @search(by: [hash, regexp])
   replicationInstanceStatus: String @search(by: [hash, regexp])
