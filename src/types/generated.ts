@@ -914,6 +914,7 @@ export type AwsCloudwatchLog = {
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
   cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
   creationTime?: Maybe<Scalars['String']>;
+  ecsCluster?: Maybe<Array<Maybe<AwsEcsCluster>>>;
   id: Scalars['String'];
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   kmsKeyId?: Maybe<Scalars['String']>;
@@ -1595,15 +1596,18 @@ export type AwsEcsCluster = AwsBaseService & {
   attachments?: Maybe<Array<Maybe<AwsEcsAttachment>>>;
   attachmentsStatus?: Maybe<Scalars['String']>;
   capacityProviders?: Maybe<Array<Maybe<Scalars['String']>>>;
+  cloudwatchLog?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
   clusterName?: Maybe<Scalars['String']>;
   configuration?: Maybe<AwsEcsClusterConfiguration>;
   defaultCapacityProviderStrategy?: Maybe<Array<Maybe<AwsEcsCapacityProviderStrategyItem>>>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
   ecsTask?: Maybe<Array<Maybe<AwsEcsTask>>>;
   ecsTaskSet?: Maybe<Array<Maybe<AwsEcsTaskSet>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
   pendingTasksCount?: Maybe<Scalars['Int']>;
   registeredContainerInstancesCount?: Maybe<Scalars['Int']>;
   runningTasksCount?: Maybe<Scalars['Int']>;
+  s3?: Maybe<Array<Maybe<AwsS3>>>;
   settings?: Maybe<Array<Maybe<AwsEcsClusterSettings>>>;
   statistics?: Maybe<Array<Maybe<AwsEcsStatistics>>>;
   status?: Maybe<Scalars['String']>;
@@ -3179,6 +3183,7 @@ export type AwsKms = AwsBaseService & {
   description?: Maybe<Scalars['String']>;
   dmsReplicationInstances?: Maybe<Array<Maybe<AwsDmsReplicationInstance>>>;
   dynamodb?: Maybe<Array<Maybe<AwsDynamoDbTable>>>;
+  ecsCluster?: Maybe<Array<Maybe<AwsEcsCluster>>>;
   efs?: Maybe<Array<Maybe<AwsEfs>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
   elastiCacheReplicationGroup?: Maybe<Array<Maybe<AwsElastiCacheReplicationGroup>>>;
@@ -3676,6 +3681,7 @@ export type AwsS3 = AwsBaseService & {
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
   corsConfiguration?: Maybe<Scalars['String']>;
   crossRegionReplication?: Maybe<Scalars['String']>;
+  ecsCluster?: Maybe<Array<Maybe<AwsEcsCluster>>>;
   encrypted?: Maybe<Scalars['String']>;
   ignorePublicAcls?: Maybe<Scalars['String']>;
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;

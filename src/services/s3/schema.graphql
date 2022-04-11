@@ -23,6 +23,7 @@ type awsS3 implements awsBaseService @key(fields: "arn") {
   cloudfrontDistribution: [awsCloudfront] @hasInverse(field: s3) #change to plural
   cloudtrail: [awsCloudtrail] @hasInverse(field: s3) #change to plural
   managedAirflows: [awsManagedAirflow] @hasInverse(field: s3)
+  ecsCluster: [awsEcsCluster] @hasInverse(field: s3)
 }
 
 # TODO: use getBucketReplication and getBucketNotificationConfiguration to make connections to lambda, sns, iamRole, SQS
