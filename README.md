@@ -3,6 +3,7 @@
 Use the CloudGraph AWS Provider to scan and normalize cloud infrastructure using the [AWS SDK](https://github.com/aws/aws-sdk-js)
 
 <!-- toc -->
+
 - [Docs](#install)
 - [Install](#install)
 - [Authentication](#authentication)
@@ -13,9 +14,10 @@ Use the CloudGraph AWS Provider to scan and normalize cloud infrastructure using
 
 # Docs
 
-⭐ [CloudGraph Readme](https://github.com/cloudgraphdev/cli)  
+⭐ [CloudGraph Readme](https://github.com/cloudgraphdev/cli)
 
 💻 [Full CloudGraph Documentation Including AWS Examples](https://docs.cloudgraph.dev)
+
 # Install
 
 Install the aws provider in CloudGraph
@@ -122,14 +124,14 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | iamServerCertificate        |                                                                                                                                                                                            |
 | iamUser                     | iamGroup                                                                                                                                                                                   |
 | iamPolicy                   | iamRole, iamGroup                                                                                                                                                                          |
-| iamRole                     | appSync, codebuild, configurationRecorder, ec2, iamInstanceProfile, iamPolicy, eksCluster, ecsService, flowLog, glueJob, managedAirflow, sageMakerNotebookInstance, systemsManagerInstance guardDutyDetector                                                                                                                                                 |
+| iamRole                     | appSync, codebuild, configurationRecorder, ec2, iamInstanceProfile, iamPolicy, eksCluster, ecsService, flowLog, glueJob, kinesisFirehose, lambda, managedAirflow, sageMakerNotebookInstance, systemsManagerInstance guardDutyDetector                                                                                                                                                 |
 | iamGroup                    | iamUser, iamPolicy                                                                                                                                                                         |
 | igw                         | vpc                                                                                                                                                                                        |
 | iot                         |                                                                                                                                                                                            |
-| kinesisFirehose             | kinesisStream, s3                                                                                                                                                                          |
+| kinesisFirehose             | iamRole, kinesisStream, s3                                                                                                                                                                          |
 | kinesisStream               | kinesisFirehose                                                                                                                                                                            |
 | kms                         | cloudtrail, cloudwatchLog, codebuild, ecsCluster, dmsReplicationInstance, efs, eksCluster, elastiCacheReplicationGroup, elasticSearchDomain, emrCluster, lambda, redshiftCluster, rdsClusterSnapshot, sageMakerNotebookInstance, secretsManager, sns                                                             |
-| lambda                      | appSync, cognitoUserPool, kms, secretsManager, securityGroup, subnet, vpc                                                                                                                                           |
+| lambda                      | appSync, cognitoUserPool, iamRole, kms, secretsManager, securityGroup, subnet, vpc                                                                                                                                           |
 | managedAirflow                      | iamRole, securityGroups, subnet, s3                                                                                                                                          |
 | nacl                        | vpc                                                                                                                                                                                        |
 | natGateway                  | networkInterface, subnet, vpc                                                                                                                                                              |
@@ -157,7 +159,6 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | transitGateway              | routeTable, transitGatewayAttachment, vpnConnection                                                                                                                                                                                           |
 | transitGatewayAttachment    | routeTable, transitGateway, vpc, vpnConnection                                                                                                                                                                            |
 | vpc                         | alb, codebuild, dmsReplicationInstance, ec2, eip, elb, ecsService, efsMountTarget, eksCluster igw, elastiCacheCluster, elasticSearchDomain, lambda, nacl, natGateway, networkInterface, rdsClusterSnapshot, rdsDbInstance, redshiftCluster, route53HostedZone, routeTable, subnet, flowLog, vpnGateway, transitGatewayAttachment |
-| vpnConnection               | customerGateway, transitGateway, transitGatewayAttachment, vpnGateway                                                                                                                                                                              |
-| vpnGateway                  | vpc, vpnConnection                                                                                                                                                                                        |
-| wafV2WebAcl                  | appSync                                                                                                                                                                                        |
-
+| vpnConnection               | customerGateway, transitGateway, transitGatewayAttachment, vpnGateway                                                                                                                                                                                                                                                            |
+| vpnGateway                  | vpc, vpnConnection                                                                                                                                                                                                                                                                                                               |
+| wafV2WebAcl                 | appSync                                                                                                                                                                                                                                                                                                                          |

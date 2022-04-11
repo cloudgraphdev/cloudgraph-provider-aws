@@ -5,7 +5,6 @@ type awsLambda implements awsBaseService @key(fields: "arn") {
   lastModified: String @search(by: [hash, regexp])
   memorySize: Int @search
   reservedConcurrentExecutions: Int @search
-  role: String @search(by: [hash, regexp]) # TODO: add iamRole connection here
   runtime: String @search(by: [hash, regexp])
   sourceCodeSize: String @search(by: [hash, regexp])
   timeout: Int @search
@@ -23,6 +22,7 @@ type awsLambda implements awsBaseService @key(fields: "arn") {
   cognitoUserPools: [awsCognitoUserPool] @hasInverse(field: lambdas)
   appSync: [awsAppSync] @hasInverse(field: lambda)
   secretsManager: [awsSecretsManager] @hasInverse(field: lambda)
+  iamRole: [awsIamRole] @hasInverse(field: lambda)
 }
 
 type awsLambdaEnvironmentVariable

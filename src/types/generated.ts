@@ -3064,6 +3064,8 @@ export type AwsIamRole = AwsBaseService & {
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   iamInstanceProfiles?: Maybe<Array<Maybe<AwsIamInstanceProfile>>>;
   inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
+  kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
+  lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
   maxSessionDuration?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
@@ -3138,6 +3140,7 @@ export type AwsKinesisFirehose = AwsBaseService & {
   encryptionConfig?: Maybe<AwsKinesisFirehoseEncryptionConfig>;
   failureDescriptionDetails?: Maybe<Scalars['String']>;
   failureDescriptionType?: Maybe<Scalars['String']>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   kinesisStream?: Maybe<Array<Maybe<AwsKinesisStream>>>;
   lastUpdateTimestamp?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
@@ -3222,6 +3225,7 @@ export type AwsLambda = AwsBaseService & {
   description?: Maybe<Scalars['String']>;
   environmentVariables?: Maybe<Array<Maybe<AwsLambdaEnvironmentVariable>>>;
   handler?: Maybe<Scalars['String']>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   kmsKeyArn?: Maybe<Scalars['String']>;
   lastModified?: Maybe<Scalars['String']>;
@@ -3229,7 +3233,6 @@ export type AwsLambda = AwsBaseService & {
   policy?: Maybe<AwsIamJsonPolicy>;
   policyRevisionId?: Maybe<Scalars['String']>;
   reservedConcurrentExecutions?: Maybe<Scalars['Int']>;
-  role?: Maybe<Scalars['String']>;
   runtime?: Maybe<Scalars['String']>;
   secretsManager?: Maybe<Array<Maybe<AwsSecretsManager>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
