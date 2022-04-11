@@ -36,20 +36,22 @@ export default ({
     data: { [property: string]: RawAwsSubnet[] }
   } = data.find(({ name }) => name === services.subnet)
   if (subnets?.data?.[region]) {
-    const subnet: RawAwsSubnet = subnets.data[region].find(
+    const dataAtRegion: RawAwsSubnet[] = subnets.data[region].filter(
       ({ SubnetId }: RawAwsSubnet) =>
         !isEmpty(subnetIds) &&
         subnetIds.filter(str =>
           str.toLowerCase().includes(SubnetId.toLowerCase())
         ).length > 0
     )
-    if (!isEmpty(subnet)) {
-      connections.push({
-        id: subnet.SubnetId,
-        resourceType: services.subnet,
-        relation: 'child',
-        field: 'subnets',
-      })
+    if (!isEmpty(dataAtRegion)) {
+      for (const subnet of dataAtRegion) {
+        connections.push({
+          id: subnet.SubnetId,
+          resourceType: services.subnet,
+          relation: 'child',
+          field: 'subnets',
+        })
+      }
     }
   }
 
