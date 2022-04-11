@@ -1,15 +1,12 @@
 import { RawAwsRdsCluster } from './data'
-import { 
-  AwsRdsCluster, 
-} from '../../types/generated'
+import { AwsRdsCluster } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
 
 export default ({
   service,
   account,
-  region
-}: 
-{
+  region,
+}: {
   service: RawAwsRdsCluster
   account: string
   region: string
