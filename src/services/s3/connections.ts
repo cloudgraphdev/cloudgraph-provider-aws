@@ -144,8 +144,8 @@ export default ({
     }
   }
 
-  const cfStackResult = {
+  const s3Result = {
     [id]: connections,
   }
-  return cfStackResult
+  return s3Result
 }
