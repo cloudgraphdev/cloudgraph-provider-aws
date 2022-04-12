@@ -208,6 +208,26 @@ export default ({
     }
   }
 
+  /**
+   * Find KMS
+   */
+  const kmsKeys = data.find(({ name }) => name === services.kms)
+  if (kmsKeys?.data?.[region]) {
+    const kmsKeyInRegion = kmsKeys.data[region].filter(
+      kmsKey => kmsKey.Arn === KmsKeyId
+    )
+    if (!isEmpty(kmsKeyInRegion)) {
+      for (const kms of kmsKeyInRegion) {
+        connections.push({
+          id: kms.KeyId,
+          resourceType: services.kms,
+          relation: 'child',
+          field: 'kms',
+        })
+      }
+    }
+  }
+
   const rdsClusterResult = {
     [id]: connections,
   }

@@ -17,7 +17,7 @@ export default ({
   [property: string]: ServiceConnection[]
 } => {
   const connections: ServiceConnection[] = []
-  const { DBInstanceArn: id, VpcSecurityGroups, DBSubnetGroup } = service
+  const { DBInstanceArn: id, VpcSecurityGroups, DBSubnetGroup, KmsKeyId } = service
 
   const sgIds = VpcSecurityGroups.map(
     ({ VpcSecurityGroupId }) => VpcSecurityGroupId
@@ -68,6 +68,26 @@ export default ({
           resourceType: services.subnet,
           relation: 'child',
           field: 'subnet',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find KMS
+   */
+  const kmsKeys = data.find(({ name }) => name === services.kms)
+  if (kmsKeys?.data?.[region]) {
+    const kmsKeyInRegion = kmsKeys.data[region].filter(
+      kmsKey => kmsKey.Arn === KmsKeyId
+    )
+    if (!isEmpty(kmsKeyInRegion)) {
+      for (const kms of kmsKeyInRegion) {
+        connections.push({
+          id: kms.KeyId,
+          resourceType: services.kms,
+          relation: 'child',
+          field: 'kms',
         })
       }
     }

@@ -31,6 +31,7 @@ type awsRdsDbInstance implements awsBaseService @key(fields: "arn") {
   licenseModel: String @search(by: [hash, regexp])
   tags: [awsRawTag]
   cluster: [awsRdsCluster] @hasInverse(field: instances)
+  kms: [awsKms] @hasInverse(field: rdsDbInstance)
   securityGroups: [awsSecurityGroup] @hasInverse(field: rdsDbInstance)
   subnet: [awsSubnet] @hasInverse(field: rdsDbInstance)
   vpc: [awsVpc] @hasInverse(field: rdsDbInstance)

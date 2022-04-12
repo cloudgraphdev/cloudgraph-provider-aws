@@ -53,4 +53,6 @@ type awsKms implements awsBaseService @key(fields: "id") {
     @hasInverse(field: activityStreamKms)
   rdsClusterPerformanceInsights: [awsRdsCluster]
     @hasInverse(field: performanceInsightsKms)
+  rdsCluster: [awsRdsCluster] @hasInverse(field: kms)
+  rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: kms)
 }
