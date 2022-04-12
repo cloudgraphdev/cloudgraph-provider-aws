@@ -22,6 +22,7 @@ type awsLambda implements awsBaseService @key(fields: "arn") {
   cognitoUserPools: [awsCognitoUserPool] @hasInverse(field: lambdas)
   appSync: [awsAppSync] @hasInverse(field: lambda)
   s3: [awsS3] @hasInverse(field: lambdas)
+  secretsManager: [awsSecretsManager] @hasInverse(field: lambda)
   iamRole: [awsIamRole] @hasInverse(field: lambda)
 }
 

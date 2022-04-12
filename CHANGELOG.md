@@ -1,3 +1,11 @@
+# [0.79.0-alpha.9](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.8...0.79.0-alpha.9) (2022-04-12)
+
+
+### Features
+
+* Handle TODOs for secrets manager ([d7a975d](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d7a975dc2a5ffdb784eef36c4a827d553e7ac1c3))
+* Update README file ([0ddf442](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/0ddf44211fe3f324371e6a21c6d5df3bc69facfb))
+
 # [0.79.0-alpha.8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.7...0.79.0-alpha.8) (2022-04-11)
 
 
