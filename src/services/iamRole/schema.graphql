@@ -33,4 +33,5 @@ type awsIamRole implements awsBaseService @key(fields: "id") {
     @hasInverse(field: monitoringIamRole)
   rdsClusterIamRoles: [awsRdsCluster] @hasInverse(field: iamRoles)
   cloudFormationStackSet: [awsCloudFormationStackSet] @hasInverse(field: iamRoles)
+  asg: [awsAsg] @hasInverse(field: iamRole)
 }
