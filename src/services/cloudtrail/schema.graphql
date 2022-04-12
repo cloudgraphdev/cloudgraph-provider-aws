@@ -20,7 +20,7 @@ type awsCloudtrail @key(fields: "cgId") {
   status: awsCloudtrailStatus
   eventSelectors: [awsCloudtrailEventSelector]
   tags: [awsRawTag]
-  s3: [awsS3] @hasInverse(field: cloudtrail)
+  s3: [awsS3] @hasInverse(field: cloudtrails)
   sns: [awsSns] @hasInverse(field: cloudtrail)
   kms: [awsKms] @hasInverse(field: cloudtrail)
   cloudwatchLog: [awsCloudwatchLog] @hasInverse(field: cloudtrail)
