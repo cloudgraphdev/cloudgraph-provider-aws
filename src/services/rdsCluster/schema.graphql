@@ -33,7 +33,10 @@ type awsRdsCluster implements awsBaseService @key(fields: "arn") {
   snapshots: [awsRdsClusterSnapshot] @hasInverse(field: cluster)
   securityGroups: [awsSecurityGroup] @hasInverse(field: rdsCluster)
   appSync: [awsAppSync] @hasInverse(field: rdsCluster)
+  monitoringIamRole: [awsIamRole] @hasInverse(field: rdsClusterMonitoringRole)
+  iamRoles: [awsIamRole] @hasInverse(field: rdsClusterIamRoles)
+  storageEncryptedKms: [awsKms] @hasInverse(field: rdsClusterStorageEncryption)
+  activityStreamKms: [awsKms] @hasInverse(field: rdsClusterActivityStream)
+  performanceInsightsKms: [awsKms]
+    @hasInverse(field: rdsClusterPerformanceInsights)
 }
-
-# TODO: create connection to iam roles using AssociatedRoles property AND DomainMemberships AND MonitoringRole
-# TODO: create connection to kms using all kms related fields

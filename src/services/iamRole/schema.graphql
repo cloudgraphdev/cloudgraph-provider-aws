@@ -29,4 +29,8 @@ type awsIamRole implements awsBaseService @key(fields: "id") {
   cognitoUserPools: [awsCognitoUserPool] @hasInverse(field: iamRole)
   appSync: [awsAppSync] @hasInverse(field: iamRoles)
   lambda: [awsLambda] @hasInverse(field: iamRole)
+  kinesisFirehose: [awsKinesisFirehose] @hasInverse(field: iamRole)
+  rdsClusterMonitoringRole: [awsRdsCluster]
+    @hasInverse(field: monitoringIamRole)
+  rdsClusterIamRoles: [awsRdsCluster] @hasInverse(field: iamRoles)
 }

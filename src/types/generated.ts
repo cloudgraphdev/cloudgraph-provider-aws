@@ -3068,11 +3068,14 @@ export type AwsIamRole = AwsBaseService & {
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   iamInstanceProfiles?: Maybe<Array<Maybe<AwsIamInstanceProfile>>>;
   inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
+  kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
   maxSessionDuration?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
+  rdsClusterIamRoles?: Maybe<Array<Maybe<AwsRdsCluster>>>;
+  rdsClusterMonitoringRole?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   systemsManagerInstances?: Maybe<Array<Maybe<AwsSystemsManagerInstance>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
@@ -3143,6 +3146,7 @@ export type AwsKinesisFirehose = AwsBaseService & {
   encryptionConfig?: Maybe<AwsKinesisFirehoseEncryptionConfig>;
   failureDescriptionDetails?: Maybe<Scalars['String']>;
   failureDescriptionType?: Maybe<Scalars['String']>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   kinesisStream?: Maybe<Array<Maybe<AwsKinesisStream>>>;
   lastUpdateTimestamp?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
@@ -3201,7 +3205,10 @@ export type AwsKms = AwsBaseService & {
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   origin?: Maybe<Scalars['String']>;
   policy?: Maybe<AwsIamJsonPolicy>;
+  rdsClusterActivityStream?: Maybe<Array<Maybe<AwsRdsCluster>>>;
+  rdsClusterPerformanceInsights?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsClusterSnapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
+  rdsClusterStorageEncryption?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   redshiftCluster?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   sns?: Maybe<Array<Maybe<AwsSns>>>;
@@ -3475,6 +3482,7 @@ export type AwsRawTag = {
 };
 
 export type AwsRdsCluster = AwsBaseService & {
+  activityStreamKms?: Maybe<Array<Maybe<AwsKms>>>;
   allocatedStorage?: Maybe<Scalars['Int']>;
   appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
   backupRetentionPeriod?: Maybe<Scalars['Int']>;
@@ -3495,10 +3503,13 @@ export type AwsRdsCluster = AwsBaseService & {
   hostedZoneId?: Maybe<Scalars['String']>;
   httpEndpointEnabled?: Maybe<Scalars['Boolean']>;
   iamDbAuthenticationEnabled?: Maybe<Scalars['Boolean']>;
+  iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   instances?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   kmsKey?: Maybe<Scalars['String']>;
+  monitoringIamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   multiAZ?: Maybe<Scalars['Boolean']>;
   percentProgress?: Maybe<Scalars['String']>;
+  performanceInsightsKms?: Maybe<Array<Maybe<AwsKms>>>;
   port?: Maybe<Scalars['Int']>;
   readerEndpoint?: Maybe<Scalars['String']>;
   replicationSourceIdentifier?: Maybe<Scalars['String']>;
@@ -3506,6 +3517,7 @@ export type AwsRdsCluster = AwsBaseService & {
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   snapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
   status?: Maybe<Scalars['String']>;
+  storageEncryptedKms?: Maybe<Array<Maybe<AwsKms>>>;
   subnets?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   username?: Maybe<Scalars['String']>;
