@@ -33,6 +33,7 @@ type awsRdsCluster implements awsBaseService @key(fields: "arn") {
   snapshots: [awsRdsClusterSnapshot] @hasInverse(field: cluster)
   securityGroups: [awsSecurityGroup] @hasInverse(field: rdsCluster)
   appSync: [awsAppSync] @hasInverse(field: rdsCluster)
+  route53HostedZone: [awsRoute53HostedZone] @hasInverse(field: rdsCluster)
   monitoringIamRole: [awsIamRole] @hasInverse(field: rdsClusterMonitoringRole)
   iamRoles: [awsIamRole] @hasInverse(field: rdsClusterIamRoles)
   storageEncryptedKms: [awsKms] @hasInverse(field: rdsClusterStorageEncryption)

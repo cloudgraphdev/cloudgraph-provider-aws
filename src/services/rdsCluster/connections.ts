@@ -4,6 +4,7 @@ import { SecurityGroup } from 'aws-sdk/clients/ec2'
 import { DBInstance, DBCluster } from 'aws-sdk/clients/rds'
 
 import services from '../../enums/services'
+import { RawAwsRoute53HostedZone } from '../route53HostedZone/data'
 import { RawAwsRdsClusterSnapshot } from '../rdsClusterSnapshot/data'
 import { RawAwsIamRole } from '../iamRole/data'
 import { AwsKms } from '../kms/data'
@@ -30,6 +31,7 @@ export default ({
     ActivityStreamKmsKeyId,
     PerformanceInsightsKMSKeyId,
     VpcSecurityGroups,
+    HostedZoneId: hostedZoneId,
   } = service
   const sgIds = VpcSecurityGroups.map(
     ({ VpcSecurityGroupId }) => VpcSecurityGroupId
@@ -203,6 +205,31 @@ export default ({
           resourceType: services.iamRole,
           relation: 'child',
           field: 'monitoringIamRole',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find Route53 hosted zones
+   */
+  const route53HostedZones: {
+    name: string
+    data: { [property: string]: RawAwsRoute53HostedZone[] }
+  } = data.find(({ name }) => name === services.route53HostedZone)
+
+  if (route53HostedZones?.data?.[region]) {
+    const instancesInRegion: RawAwsRoute53HostedZone[] = route53HostedZones.data[region].filter(
+      ({ Id }: RawAwsRoute53HostedZone) => Id === hostedZoneId
+    )
+    if (!isEmpty(instancesInRegion)) {
+      for (const instance of instancesInRegion) {
+        const { Id: id } = instance
+        connections.push({
+          id,
+          resourceType: services.route53HostedZone,
+          relation: 'child',
+          field: 'route53HostedZone',
         })
       }
     }

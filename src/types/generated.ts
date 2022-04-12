@@ -3529,6 +3529,7 @@ export type AwsRdsCluster = AwsBaseService & {
   readerEndpoint?: Maybe<Scalars['String']>;
   replicationSourceIdentifier?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
+  route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   snapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
   status?: Maybe<Scalars['String']>;
@@ -3674,6 +3675,7 @@ export type AwsRoute53HostedZone = AwsBaseService & {
   delegationSetId?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   nameServers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   route53Record?: Maybe<Array<Maybe<AwsRoute53Record>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
