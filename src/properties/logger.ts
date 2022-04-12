@@ -427,6 +427,7 @@ export default {
   gettingRotationStatus: 'Checking rotation status for each key...',
   gettingPolicies: 'Fetching default Policy for each key...',
   gettingTags: 'Fetching Tags for each key...',
+  gettingAliases: 'Fetching Aliases for each key...',
 
   /**
    * EKS
