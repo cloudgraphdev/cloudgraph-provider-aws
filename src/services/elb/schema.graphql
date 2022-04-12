@@ -1,9 +1,5 @@
-type awsElb @key(fields: "arn") {
-  id: String! @id @search(by: [hash, regexp])
+type awsElb implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
   dnsName: String @search(by: [hash, regexp])
   hostedZone: String @search(by: [hash, regexp])
   createdAt: String @search(by: [hash, regexp])

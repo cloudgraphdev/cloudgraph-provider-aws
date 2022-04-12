@@ -1,12 +1,8 @@
-type awsNatGateway @key(fields: "id") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-	arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
-	state: String @search(by: [hash, regexp])
+type awsNatGateway implements awsBaseService @key(fields: "id") {
+  state: String @search(by: [hash, regexp])
   createTime: String @search(by: [hash, regexp])
   dailyCost: awsTotalBillingInfo
-	tags: [awsRawTag]
+  tags: [awsRawTag]
   networkInterface: [awsNetworkInterface] @hasInverse(field: natGateway) #change to plural
   subnet: [awsSubnet] @hasInverse(field: natGateway) #change to plural
   vpc: [awsVpc] @hasInverse(field: natGateways)

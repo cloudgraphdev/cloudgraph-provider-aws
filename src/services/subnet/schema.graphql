@@ -1,8 +1,4 @@
-type awsSubnet @key(fields: "id") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsSubnet implements awsBaseService @key(fields: "id") {
   autoAssignPublicIpv4Address: String @search(by: [hash, regexp])
   autoAssignPublicIpv6Address: String @search(by: [hash, regexp])
   availabilityZone: String @search(by: [hash, regexp])
@@ -14,15 +10,16 @@ type awsSubnet @key(fields: "id") {
   tags: [awsRawTag]
   alb: [awsAlb] @hasInverse(field: subnet) #change to plural
   asg: [awsAsg] @hasInverse(field: subnet) #change to plural
-  ec2Instance: [awsEc2] @hasInverse(field: subnet) #change to plural
+  ec2Instances: [awsEc2] @hasInverse(field: subnets) #change to plural
   elb: [awsElb] @hasInverse(field: subnet) #change to plural
   lambda: [awsLambda] @hasInverse(field: subnet) #change to plural
+  nacls: [awsNetworkAcl] @hasInverse(field: subnets)
   natGateway: [awsNatGateway] @hasInverse(field: subnet) #change to plural
   networkInterface: [awsNetworkInterface] @hasInverse(field: subnet) #change to plural
   routeTable: [awsRouteTable] @hasInverse(field: subnet)
   vpc: [awsVpc] @hasInverse(field: subnets)
   rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: subnet) #change to plural
-  eksCluster: [awsEksCluster] @hasInverse(field: subnet) #change to plural
+  eksCluster: [awsEksCluster] @hasInverse(field: subnets)
   ecsService: [awsEcsService] @hasInverse(field: subnet) #change to plural
   efsMountTarget: [awsEfsMountTarget] @hasInverse(field: subnet) #change to plural
   flowLogs: [awsFlowLog] @hasInverse(field: subnet) #change to singular
@@ -31,6 +28,8 @@ type awsSubnet @key(fields: "id") {
   codebuilds: [awsCodebuild] @hasInverse(field: subnets)
   managedAirflows: [awsManagedAirflow] @hasInverse(field: subnets)
   elasticSearchDomains: [awsElasticSearchDomain] @hasInverse(field: subnets)
-  dmsReplicationInstances: [awsDmsReplicationInstance] @hasInverse(field: subnets)
-  sageMakerNotebookInstances: [awsSageMakerNotebookInstance] @hasInverse(field: subnet)
+  dmsReplicationInstances: [awsDmsReplicationInstance]
+    @hasInverse(field: subnets)
+  sageMakerNotebookInstances: [awsSageMakerNotebookInstance]
+    @hasInverse(field: subnet)
 }

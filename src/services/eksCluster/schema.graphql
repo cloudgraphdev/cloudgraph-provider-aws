@@ -1,8 +1,4 @@
-type awsEksCluster @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String! @search(by: [hash, regexp])
+type awsEksCluster implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   createdAt: String @search(by: [hash, regexp])
   version: String @search(by: [hash, regexp])
@@ -20,8 +16,9 @@ type awsEksCluster @key(fields: "arn") {
   iamRoles: [awsIamRole] @hasInverse(field: eksCluster)
   kms: [awsKms] @hasInverse(field: eksCluster)
   securityGroups: [awsSecurityGroup] @hasInverse(field: eksCluster)
-  subnet: [awsSubnet] @hasInverse(field: eksCluster) #change to plural
+  subnets: [awsSubnet] @hasInverse(field: eksCluster)
   vpc: [awsVpc] @hasInverse(field: eksClusters)
+  ec2Instances: [awsEc2] @hasInverse(field: eksCluster)
 }
 
 type awsEksVpcConfigResponse {

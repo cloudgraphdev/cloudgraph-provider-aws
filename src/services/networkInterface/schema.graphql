@@ -1,8 +1,4 @@
-type awsNetworkInterface @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsNetworkInterface implements awsBaseService @key(fields: "arn") {
   subnetId: String @search(by: [hash])
   macAddress: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp, fulltext])
@@ -22,7 +18,8 @@ type awsNetworkInterface @key(fields: "arn") {
   vpc: [awsVpc] @hasInverse(field: networkInterfaces)
   efsMountTarget: [awsEfsMountTarget] @hasInverse(field: networkInterface)
   flowLogs: [awsFlowLog] @hasInverse(field: networkInterface) #change to singular
-  sageMakerNotebookInstances: [awsSageMakerNotebookInstance] @hasInverse(field: networkInterface)
+  sageMakerNotebookInstances: [awsSageMakerNotebookInstance]
+    @hasInverse(field: networkInterface)
 }
 
 type awsNetworkInterfaceAttachment

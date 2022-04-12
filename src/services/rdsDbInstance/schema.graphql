@@ -1,8 +1,4 @@
-type awsRdsDbInstance @key(fields: "arn") {
-  id: String! @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsRdsDbInstance implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   port: Int @search
   address: String @search(by: [hash, regexp])
@@ -44,4 +40,3 @@ type awsRdsDbInstance @key(fields: "arn") {
 # TODO: add connection to kms using kmsKeyId AND PerformanceInsightsKMSKeyId AND ActivityStreamKmsKeyId
 # TODO: add connection to IAM role using DomainMembership AND MonitoringRoleArn AND AssociatedRoles
 # TODO: add connection to cloudwatchLog using EnhancedMonitoringResourceArn
-

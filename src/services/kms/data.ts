@@ -6,6 +6,7 @@ import isEmpty from 'lodash/isEmpty'
 import { AWSError, Request } from 'aws-sdk'
 import { Config } from 'aws-sdk/lib/config'
 import KMS, {
+  AliasListEntry,
   KeyListEntry,
   KeyMetadata,
   ListKeysRequest,
@@ -33,6 +34,7 @@ export type AwsKms = KeyListEntry &
     policy: string
     Tags: TagMap
     keyRotationEnabled: boolean
+    Aliases?: AliasListEntry[]
   }
 
 export default async ({
@@ -50,6 +52,7 @@ export default async ({
     const regionPromises = []
     const policyPromises = []
     const tagPromises = []
+    const aliasesPromises = []
 
     /**
      * Step 1) for all regions, list the kms keys
@@ -331,6 +334,50 @@ export default async ({
     })
 
     await Promise.all(tagPromises)
+
+    /**
+     * Step 6) get aliases for each key
+     */
+
+    logger.debug(lt.gettingAliases)
+
+    kmsData.map(({ region, KeyId }, idx) => {
+      const kms = new KMS({ ...config, region, endpoint })
+
+      const aliasesPromise = new Promise<void>(resolveAliases =>
+        kms.listAliases({ KeyId }, (err, data) => {
+          if (err) {
+            errorLog.generateAwsErrorLog({
+              functionName: 'kms:listAliases',
+              err,
+            })
+            resolveAliases()
+          }
+
+          /**
+           * No aliases data
+           */
+
+          if (isEmpty(data)) {
+            return resolveAliases()
+          }
+
+          /**
+           * Add the aliases to the key
+           */
+
+          const { Aliases: aliases } = data || {}
+
+          kmsData[idx].Aliases = aliases
+
+          resolveAliases()
+        })
+      )
+
+      aliasesPromises.push(aliasesPromise)
+    })
+
+    await Promise.all(aliasesPromises)
     errorLog.reset()
 
     resolve(groupBy(kmsData, 'region'))

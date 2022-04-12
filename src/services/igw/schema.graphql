@@ -1,8 +1,4 @@
-type awsIgw @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsIgw implements awsBaseService @key(fields: "arn") {
   owner: String @search(by: [hash, regexp])
   attachments: [awsIgwAttachment]
   tags: [awsRawTag]

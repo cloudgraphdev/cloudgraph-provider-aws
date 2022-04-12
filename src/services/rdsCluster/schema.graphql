@@ -1,8 +1,4 @@
-type awsRdsCluster @key(fields: "arn") {
-  id: String! @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsRdsCluster implements awsBaseService @key(fields: "arn") {
   allocatedStorage: Int @search
   backupRetentionPeriod: Int @search
   characterSetName: String @search(by: [hash, regexp])
@@ -37,8 +33,10 @@ type awsRdsCluster @key(fields: "arn") {
   snapshots: [awsRdsClusterSnapshot] @hasInverse(field: cluster)
   securityGroups: [awsSecurityGroup] @hasInverse(field: rdsCluster)
   appSync: [awsAppSync] @hasInverse(field: rdsCluster)
+  monitoringIamRole: [awsIamRole] @hasInverse(field: rdsClusterMonitoringRole)
+  iamRoles: [awsIamRole] @hasInverse(field: rdsClusterIamRoles)
+  storageEncryptedKms: [awsKms] @hasInverse(field: rdsClusterStorageEncryption)
+  activityStreamKms: [awsKms] @hasInverse(field: rdsClusterActivityStream)
+  performanceInsightsKms: [awsKms]
+    @hasInverse(field: rdsClusterPerformanceInsights)
 }
-
-# TODO: create connection to iam roles using AssociatedRoles property AND DomainMemberships AND MonitoringRole
-# TODO: create connection to kms using all kms related fields
- 

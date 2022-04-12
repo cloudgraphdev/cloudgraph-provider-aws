@@ -1,3 +1,109 @@
+# [0.79.0-alpha.13](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.12...0.79.0-alpha.13) (2022-04-12)
+
+
+### Features
+
+* **asg:** add iam role connection ([06285db](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/06285db82a8b2feb821d95446e3e0fe87c54cd51))
+
+# [0.79.0-alpha.12](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.11...0.79.0-alpha.12) (2022-04-12)
+
+
+### Bug Fixes
+
+* add connection between nacl and subnet services ([6ed6dee](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/6ed6dee345daa6342f651e5c00bb92178b259954))
+
+# [0.79.0-alpha.11](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.10...0.79.0-alpha.11) (2022-04-12)
+
+
+### Features
+
+* **s3:** Add connections to iamRole, lambda, sns and sqs services ([1ca01fd](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/1ca01fd9b1dabc110b87e0c74e3e63b5c0cb1099))
+* **s3:** Add connections to iamRole, lambda, sns and sqs services ([22a8cfd](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/22a8cfdbd1365a5b94fdbc91d54886b1135c9682))
+
+# [0.79.0-alpha.10](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.9...0.79.0-alpha.10) (2022-04-12)
+
+
+### Features
+
+* **cloudFormationStackSet:** add iam role connection ([e25bffb](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/e25bffb1f467706ff6a0cc752804a6b3738f6c8b))
+
+# [0.79.0-alpha.9](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.8...0.79.0-alpha.9) (2022-04-12)
+
+
+### Features
+
+* Handle TODOs for secrets manager ([d7a975d](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d7a975dc2a5ffdb784eef36c4a827d553e7ac1c3))
+* Update README file ([0ddf442](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/0ddf44211fe3f324371e6a21c6d5df3bc69facfb))
+
+# [0.79.0-alpha.8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.7...0.79.0-alpha.8) (2022-04-11)
+
+
+### Bug Fixes
+
+* Added iamRole connection to kinesisFirehose service ([dc17214](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/dc1721403a6d86aa1d7a00542dff237011514654))
+
+# [0.79.0-alpha.7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.6...0.79.0-alpha.7) (2022-04-11)
+
+
+### Bug Fixes
+
+* Added iamRole to lambda service ([ae6177d](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/ae6177de995975ab5194c5d2fcc8aaf98ec8d06d))
+
+# [0.79.0-alpha.6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.5...0.79.0-alpha.6) (2022-04-11)
+
+
+### Features
+
+* Handle TODOs for ecs cluster ([554dff7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/554dff7785dc2c69403a41416c7739625fd02263))
+* Update kms connection ([1e3e66d](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/1e3e66d41e886bbb39ad9f000167fa93c7313b26))
+* Updated README connections ([f536b73](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/f536b73f97c1f0ddbea687588e5d10f089fd2500))
+
+# [0.79.0-alpha.5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.4...0.79.0-alpha.5) (2022-04-08)
+
+
+### Bug Fixes
+
+* Fixed error scanning iamUsers without enough permissions ([43b7d22](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/43b7d22c4b3c8b0056ec302f7ec8e7ec9646fa0f))
+
+# [0.79.0-alpha.4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.3...0.79.0-alpha.4) (2022-04-08)
+
+
+### Features
+
+* Handle TODOs for dynamoDB ([d2b42ce](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d2b42cec491776ecebbedc30f691a49960cfd47e))
+* Handle TODOs for dynamoDB ([9b3ae42](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/9b3ae425097f06972f292f3c82930bd7f97bb5ac))
+
+# [0.79.0-alpha.3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.2...0.79.0-alpha.3) (2022-04-08)
+
+
+### Features
+
+* **appSync:** add iamRole/wafV2WebAcl connections ([36b90f2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/36b90f256445568dd33d9f0fcbed8dc66531407a))
+
+# [0.79.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.1...0.79.0-alpha.2) (2022-04-08)
+
+
+### Features
+
+* Added iamInstanceProfile connection ([652f2f7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/652f2f7b9bf551cab37afa2893bea5bb504699c9))
+* Added IamRole connection to ec2 ([4ff22ec](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/4ff22ecb130345de06cd6afd06c15f2978c8a4c7))
+* Handle TODOs for EC2 ([832fc7b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/832fc7bdff1a02d89fbdbf50d1d030669d7568b9))
+
+# [0.79.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.78.2-alpha.1...0.79.0-alpha.1) (2022-04-07)
+
+
+### Features
+
+* Handle TODOs for dynamoDB ([625701e](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/625701ea2a47b6be8bdf1fe910a541fd6f1ed132))
+* Handle TODOs for dynamoDB ([2911751](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/2911751e96908793dc1b042b07c28bba340f1134))
+
+## [0.78.2-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.78.1...0.78.2-alpha.1) (2022-04-06)
+
+
+### Bug Fixes
+
+* Standardized aws service schemas using base schema ([f0f7cfd](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/f0f7cfdc3b71a202f211ed7255ea6b0aa1e4988d))
+
 ## [0.78.1](https://gitlab.com/auto-cloud/cloudgraph/provider/cloudgraph-provider-aws/compare/0.78.0...0.78.1) (2022-03-29)
 
 

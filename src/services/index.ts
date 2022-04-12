@@ -569,10 +569,10 @@ export default class Provider extends CloudGraph.Client {
 
     const config = await this.getAwsConfig(account)
     const { accountId } = await this.getIdentity(account)
-    try {
-      for (const resource of resourceNames) {
-        const serviceClass = this.getService(resource)
-        if (serviceClass && serviceClass.getData) {
+    for (const resource of resourceNames) {
+      const serviceClass = this.getService(resource)
+      if (serviceClass && serviceClass.getData) {
+        try {
           const data = await serviceClass.getData({
             regions: configuredRegions,
             config,
@@ -587,17 +587,19 @@ export default class Provider extends CloudGraph.Client {
             data,
           })
           this.logger.success(`${resource} scan completed`)
-        } else {
-          this.logger.warn(
-            `Skipping service ${resource} as there was an issue getting data for it. Is it currently supported?`
+        } catch (error: any) {
+          this.logger.error(
+            `There was an error scanning AWS sdk data for ${resource} resource`
           )
+          this.logger.debug(error)
         }
+      } else {
+        this.logger.warn(
+          `Skipping service ${resource} as there was an issue getting data for it. Is it currently supported?`
+        )
       }
-      this.logger.success(`Account: ${accountId} scan completed`)
-    } catch (error: any) {
-      this.logger.error('There was an error scanning AWS sdk data')
-      this.logger.debug(error)
     }
+    this.logger.success(`Account: ${accountId} scan completed`)
     return result
   }
 

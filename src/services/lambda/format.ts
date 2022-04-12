@@ -1,9 +1,8 @@
 import isEmpty from 'lodash/isEmpty'
 import t from '../../properties/translations'
 import { AwsLambda } from '../../types/generated'
-import { formatTagsFromMap } from '../../utils/format'
+import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 import { RawAwsLambdaFunction } from './data'
-import { formatIamJsonPolicy } from '../../utils/format'
 
 /**
  * Lambda
@@ -11,7 +10,7 @@ import { formatIamJsonPolicy } from '../../utils/format'
 export default ({
   service: rawData,
   account,
-  region
+  region,
 }: {
   service: RawAwsLambdaFunction
   account: string
@@ -33,10 +32,7 @@ export default ({
     Version: version,
     reservedConcurrentExecutions: rawReservedConcurrentExecutions,
     VpcConfig: vpcConfig,
-    PolicyData: {
-      Policy: policy = '',
-      RevisionId: policyRevisionId = ''
-    }
+    PolicyData: { Policy: policy = '', RevisionId: policyRevisionId = '' },
   } = rawData
   const environmentVariables = []
   const secretNames = [t.pass, t.secret, t.private, t.cert]
@@ -53,7 +49,11 @@ export default ({
           }
         })
 
-        environmentVariables.push({ id: `${key}:${desiredValue}`, key, value: desiredValue })
+        environmentVariables.push({
+          id: `${key}:${desiredValue}`,
+          key,
+          value: desiredValue,
+        })
       })
     }
   }
@@ -65,7 +65,7 @@ export default ({
   const formattedVpcConfig = {
     vpcId: vpcConfig?.VpcId,
     subnetIds: vpcConfig?.SubnetIds,
-    securityGroupIds: vpcConfig?.SecurityGroupIds
+    securityGroupIds: vpcConfig?.SecurityGroupIds,
   }
 
   return {
@@ -79,7 +79,6 @@ export default ({
     lastModified,
     memorySize,
     reservedConcurrentExecutions,
-    role: handler,
     runtime,
     sourceCodeSize: `${codeSize * 0.001} Kb`,
     timeout,
