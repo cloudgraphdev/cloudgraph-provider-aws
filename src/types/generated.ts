@@ -701,6 +701,7 @@ export type AwsCloudFormationStackSet = AwsBaseService & {
   description?: Maybe<Scalars['String']>;
   driftDetectionDetail?: Maybe<AwsCloudFormationStackSetDriftDetectionDetail>;
   executionRoleName?: Maybe<Scalars['String']>;
+  iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   name?: Maybe<Scalars['String']>;
   organizationalUnitIds?: Maybe<Array<Maybe<Scalars['String']>>>;
   parameters?: Maybe<Array<Maybe<AwsCloudFormationStackSetParameter>>>;
@@ -3049,6 +3050,7 @@ export type AwsIamRole = AwsBaseService & {
   appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
   assumeRolePolicy?: Maybe<AwsIamJsonPolicy>;
   cloudFormationStack?: Maybe<Array<Maybe<AwsCloudFormationStack>>>;
+  cloudFormationStackSet?: Maybe<Array<Maybe<AwsCloudFormationStackSet>>>;
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
   cognitoUserPools?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   configurationRecorder?: Maybe<Array<Maybe<AwsConfigurationRecorder>>>;

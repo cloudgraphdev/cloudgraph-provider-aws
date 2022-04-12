@@ -1,14 +1,16 @@
 import CloudGraph from '@cloudgraph/sdk'
-
 import CloudFormationClass from '../src/services/cloudFormationStackSet'
-
-import { credentials, region } from '../src/properties/test'
+import IamRoleService from '../src/services/iamRole'
+import { account, credentials, region } from '../src/properties/test'
 import { initTestConfig } from '../src/utils'
 import { RawAwsCloudFormationStackSet } from '../src/services/cloudFormationStackSet/data'
+import services from '../src/enums/services'
 
 describe('Cloud formation Service Test: ', () => {
   let getDataResult
   let formatResult
+  let cfConnections
+  let cfStackSetId
 
   initTestConfig()
 
@@ -16,6 +18,7 @@ describe('Cloud formation Service Test: ', () => {
     async () =>
       new Promise<void>(async resolve => {
         try {
+          const iamRoleService = new IamRoleService({ logger: CloudGraph.logger })
           const cfClass = new CloudFormationClass({ logger: CloudGraph.logger })
 
           getDataResult = await cfClass.getData({
@@ -27,6 +30,29 @@ describe('Cloud formation Service Test: ', () => {
             (item: RawAwsCloudFormationStackSet) =>
               cfClass.format({ service: item, region })
           )
+
+          // Get IAM Role data
+          const securityGroupData = await iamRoleService.getData({
+            credentials,
+            regions: region,
+          })
+
+          const [cfStackSet] = getDataResult[region]
+          cfStackSetId = cfStackSet.StackSetId
+
+          cfConnections = cfClass.getConnections({
+            service: cfStackSet,
+            data: [
+              {
+                name: services.iamRole,
+                data: securityGroupData,
+                account,
+                region,
+              },
+            ],
+            region,
+            account,
+          })
         } catch (error) {
           console.error(error) // eslint-disable-line no-console
         }
@@ -65,6 +91,19 @@ describe('Cloud formation Service Test: ', () => {
           }),
         ])
       )
+    })
+  })
+
+  describe('connections', () => {
+    test('should verify the connection to iam roles', () => {
+      const iamRoleConnections = cfConnections[
+        cfStackSetId
+      ]?.filter(
+        connection => connection.resourceType === services.iamRole
+      )
+
+      expect(iamRoleConnections).toBeDefined()
+      expect(iamRoleConnections.length).toBe(1)
     })
   })
 })
