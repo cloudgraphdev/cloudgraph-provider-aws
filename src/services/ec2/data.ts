@@ -31,6 +31,9 @@ import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint } from '../../utils'
 import AwsErrorLog from '../../utils/errorLog'
 import { convertAwsTagsToTagMap } from '../../utils/format'
+import getIamInstanceProfiles, {
+  RawAwsInstanceProfile,
+} from '../iamInstanceProfile/data'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
@@ -54,6 +57,7 @@ export interface RawAwsEC2 extends Omit<Instance, 'Tags'> {
   IamInstanceProfile?: IamInstanceProfile
   cloudWatchMetricData?: any
   PlatformDetails?: string
+  IamRolesArn?: string[]
 }
 
 /**
@@ -63,9 +67,11 @@ export interface RawAwsEC2 extends Omit<Instance, 'Tags'> {
 export default async ({
   regions,
   config,
+  rawData,
 }: {
   regions: string
   config: Config
+  rawData: any
 }): Promise<{
   [region: string]: RawAwsEC2[]
 }> =>
@@ -623,6 +629,25 @@ export default async ({
     ec2Instances.map(({ InstanceId }, ec2Idx) => {
       ec2Instances[ec2Idx].IamInstanceProfile =
         iamInstanceProfile[InstanceId] || {}
+    })
+
+    // populate ec2Instances with the iamRoles Arn
+    const iamInstancesProfiles: RawAwsInstanceProfile[] =
+      Object.values(
+        await getIamInstanceProfiles({
+          config,
+          rawData,
+        })
+      )?.reduce((acc, val) => acc.concat(val), []) || []
+
+    ec2Instances.map(({ IamInstanceProfile: instanceProfile }, ec2Idx) => {
+      const instance = iamInstancesProfiles.find(
+        i => i.Arn === instanceProfile?.Arn
+      )
+      if (instance) {
+        ec2Instances[ec2Idx].IamRolesArn =
+          instance?.Roles?.map(r => r.Arn) || []
+      }
     })
 
     errorLog.reset()

@@ -36,6 +36,7 @@ type awsDynamoDbTableLocalSecondaryIndexDescription
     mutation: { add: false, delete: false }
     subscription: false
   ) {
+  id: String! @id
   name: String! @search(by: [hash, regexp])
   arn: String! @search(by: [hash, regexp])
   itemCount: Int @search
@@ -101,8 +102,36 @@ type awsDynamoDbTableReplicaGlobalSecondaryIndexDescription
     mutation: { add: false, delete: false }
     subscription: false
   ) {
+  id: String! @id
   name: String @search(by: [hash, regexp])
   readCapacityUnits: Int @search
+}
+
+type awsDynamoDbTableAutoScalingPolicyDescription
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  policyName: String @search(by: [hash, regexp])
+  disableScaleIn: Boolean @search
+  scaleInCooldown: Int @search
+  scaleOutCooldown: Int @search
+  targetValue: Int @search
+}
+
+type awsDynamoDbTableAutoScalingSettingsDescription
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  minimumUnits: Int @search
+  maximumUnits: Int @search
+  autoScalingDisabled: Boolean @search
+  autoScalingRoleArn: String @search(by: [hash, regexp])
+  scalingPolicies: [awsDynamoDbTableAutoScalingPolicyDescription]
 }
 
 type awsDynamoDbTableReplicaDescription
@@ -120,6 +149,8 @@ type awsDynamoDbTableReplicaDescription
   readCapacityUnits: Int @search
   globalSecondaryIndexes: [awsDynamoDbTableReplicaGlobalSecondaryIndexDescription]
   replicaInaccessibleDateTime: String @search(by: [hash, regexp])
+  provisionedReadCapacityAutoScalingSettings: awsDynamoDbTableAutoScalingSettingsDescription
+  provisionedWriteCapacityAutoScalingSettings: awsDynamoDbTableAutoScalingSettingsDescription
 }
 
 type awsDynamoDbTableRestoreSummary
@@ -146,11 +177,7 @@ type awsDynamoDbTableSseDescription
   inaccessibleEncryptionDateTime: String @search(by: [hash, regexp])
 }
 
-type awsDynamoDbTable @key(fields: "arn") {
-  id: String! @id @search(by: [hash, regexp])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash, regexp])
+type awsDynamoDbTable implements awsBaseService @key(fields: "arn") {
   attributes: [awsDynamoDbTableAttributes]
   billingModeSummary: awsDynamoDbTableBillingSummary
   creationDate: String! @search(by: [hash, regexp])
@@ -161,7 +188,7 @@ type awsDynamoDbTable @key(fields: "arn") {
   latestStreamArn: String @search(by: [hash, regexp])
   latestStreamLabel: String @search(by: [hash, regexp])
   localIndexes: [awsDynamoDbTableLocalSecondaryIndexDescription]
-  name: String! @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
   pointInTimeRecoveryEnabled: Boolean
   provisionedThroughput: awsDynamoDbTableProvisionedThroughputDescription
   replicas: [awsDynamoDbTableReplicaDescription]
@@ -173,6 +200,6 @@ type awsDynamoDbTable @key(fields: "arn") {
   tags: [awsRawTag]
   ttlEnabled: Boolean @search
   appSync: [awsAppSync] @hasInverse(field: dynamodb)
+  kms: [awsKms] @hasInverse(field: dynamodb)
+  iamRoles: [awsIamRole] @hasInverse(field: dynamodb)
 }
-
-#TODO: create conenction to iam roles using autoscalingRoleArn, also connect to KMS

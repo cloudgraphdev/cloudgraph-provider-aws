@@ -1,7 +1,4 @@
-type awsCloudfront @key(fields: "id") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
+type awsCloudfront implements awsBaseService @key(fields: "id") {
   etag: String @search(by: [hash, regexp])
   status: String @search(by: [hash])
   enabled: String @search(by: [hash])

@@ -1,12 +1,8 @@
-type awsVpc @key(fields: "id") {
-  accountId: String! @search(by: [hash])
-  arn: String! @id
-  region: String @search(by: [hash, regexp])
+type awsVpc implements awsBaseService @key(fields: "id") {
   defaultVpc: Boolean @search
   dhcpOptionsSet: String @search(by: [hash, regexp])
   enableDnsHostnames: Boolean @search
   enableDnsSupport: Boolean @search
-  id: String! @id @search(by: [hash])
   instanceTenancy: String @search(by: [hash, regexp])
   ipV4Cidr: String @search(by: [hash, regexp])
   ipV6Cidr: String @search(by: [hash, regexp])
@@ -32,7 +28,8 @@ type awsVpc @key(fields: "id") {
   efsMountTarget: [awsEfsMountTarget] @hasInverse(field: vpc) #change to plural
   flowLogs: [awsFlowLog] @hasInverse(field: vpc) #change to singular
   vpnGateway: [awsVpnGateway] @hasInverse(field: vpc)
-  transitGatewayAttachment: [awsTransitGatewayAttachment] @hasInverse(field: vpc)
+  transitGatewayAttachment: [awsTransitGatewayAttachment]
+    @hasInverse(field: vpc)
   elastiCacheCluster: [awsElastiCacheCluster] @hasInverse(field: vpc)
   codebuilds: [awsCodebuild] @hasInverse(field: vpc)
   elasticSearchDomains: [awsElasticSearchDomain] @hasInverse(field: vpc)

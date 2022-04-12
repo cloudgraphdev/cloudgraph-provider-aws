@@ -10,6 +10,9 @@ import { RawAwsDynamoDbTable } from '../dynamodb/data'
 import { RawAwsLambdaFunction } from '../lambda/data'
 import { RawAwsCognitoUserPool } from '../cognitoUserPool/data'
 import { RawAwsRdsCluster } from '../rdsCluster/data'
+import { RawAwsIamRole } from '../iamRole/data'
+import { globalRegionName } from '../../enums/regions'
+import { RawAwsWafV2WebAcl } from '../wafV2WebAcl/data'
 
 /**
  * AppSync
@@ -27,7 +30,7 @@ export default ({
   region: string
 }): { [key: string]: ServiceConnection[] } => {
   const connections: ServiceConnection[] = []
-  const { apiId: id, awsDataSources, userPoolConfig } = appSync
+  const { apiId: id, awsDataSources, userPoolConfig, wafWebAclArn } = appSync
 
   /**
    * Find cognito user pools
@@ -153,6 +156,60 @@ export default ({
     }
   }
 
+  /**
+   * Find related IAM Roles
+   */
+  const roles: { name: string; data: { [property: string]: any[] } } =
+    data.find(({ name }) => name === services.iamRole)
+
+  const roleArns = awsDataSources?.map(
+    ({ serviceRoleArn }) => serviceRoleArn
+  )
+
+  if (roles?.data?.[globalRegionName]) {
+    const dataAtRegion: RawAwsIamRole[] = roles.data[globalRegionName].filter(
+      role => roleArns.includes(role.Arn)
+    )
+    if (!isEmpty(dataAtRegion)) {
+      for (const instance of dataAtRegion) {
+        const { Arn: arn }: RawAwsIamRole = instance
+
+        connections.push({
+          id: arn,
+          resourceType: services.iamRole,
+          relation: 'child',
+          field: 'iamRoles',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find wafV2WebAcls
+   */
+  const acls: {
+    name: string
+    data: { [property: string]: RawAwsWafV2WebAcl[] }
+  } = data.find(({ name }) => name === services.wafV2WebAcl)
+
+  if (acls?.data) {
+    const allAcls = Object.values(acls.data).flat()
+    const dataInRegion: RawAwsWafV2WebAcl[] = allAcls.filter(
+      ({ ARN }: RawAwsWafV2WebAcl) => ARN === wafWebAclArn
+    )
+
+    if (!isEmpty(dataInRegion)) {
+      for (const acl of dataInRegion) {
+        connections.push({
+          id: acl.Id,
+          resourceType: services.wafV2WebAcl,
+          relation: 'child',
+          field: 'webAcl',
+        })
+      }
+    }
+  }
+  
   const appSyncResult = {
     [id]: connections,
   }

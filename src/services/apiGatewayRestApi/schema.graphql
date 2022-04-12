@@ -4,11 +4,7 @@ type awsApiGatewayEndpointConfiguration {
   vpcEndpointIds: [String] @search(by: [hash])
 }
 
-type awsApiGatewayRestApi @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsApiGatewayRestApi implements awsBaseService @key(fields: "arn") {
   description: String @search(by: [hash, regexp, fulltext])
   policy: awsIamJSONPolicy
   endpointConfiguration: awsApiGatewayEndpointConfiguration
@@ -21,5 +17,3 @@ type awsApiGatewayRestApi @key(fields: "arn") {
   resources: [awsApiGatewayResource] @hasInverse(field: restApi)
   route53Record: [awsRoute53Record] @hasInverse(field: restApi) #change to plural
 }
-
-

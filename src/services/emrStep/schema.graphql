@@ -1,7 +1,4 @@
-type awsEmrStep @key(fields: "id") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash, regexp])
-  region: String! @search(by: [hash, regexp])
+type awsEmrStep implements awsOptionalService @key(fields: "id") {
   name: String @search(by: [hash, regexp])
   config: awsEmrHadoopStepConfig
   actionOnFailure: String @search(by: [hash, regexp])

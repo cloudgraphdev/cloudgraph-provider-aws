@@ -1,10 +1,6 @@
-type awsSqs @key(fields: "arn"){
-  id: String! @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
-  queueUrl: String! @search(by: [hash, regexp, fulltext])
-  queueType: String! @search(by: [hash, regexp, fulltext])
+type awsSqs implements awsBaseService @key(fields: "arn") {
+  queueUrl: String @search(by: [hash, regexp, fulltext])
+  queueType: String @search(by: [hash, regexp, fulltext])
   approximateNumberOfMessages: Int @search
   approximateNumberOfMessagesNotVisible: Int @search
   approximateNumberOfMessagesDelayed: Int @search

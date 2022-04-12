@@ -1,8 +1,4 @@
-type awsConfigurationRecorder @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsConfigurationRecorder implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   roleARN: String @search(by: [hash, regexp])
   recordingGroup: awsRecordingGroup
@@ -34,4 +30,3 @@ type awsRecorderStatus
   lastStartTime: String @search(by: [hash, regexp])
   lastStopTime: String @search(by: [hash, regexp])
 }
-
