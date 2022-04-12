@@ -1115,8 +1115,12 @@ export type AwsCognitoIdentityPool = {
   accountId: Scalars['String'];
   allowClassicFlow?: Maybe<Scalars['String']>;
   allowUnauthenticatedIdentities?: Maybe<Scalars['String']>;
+  arn: Scalars['String'];
   cognitoIdentityProviders?: Maybe<Array<Maybe<AwsCognitoIdentityProviders>>>;
   developerProviderName?: Maybe<Scalars['String']>;
+  iamOpenIdConnectProviders?: Maybe<Array<Maybe<AwsIamOpenIdConnectProvider>>>;
+  iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
+  iamSamlProviders?: Maybe<Array<Maybe<AwsIamSamlProvider>>>;
   id: Scalars['String'];
   identityPoolName?: Maybe<Scalars['String']>;
   openIdConnectProviderARNs?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -3016,6 +3020,7 @@ export type AwsIamMfaDevice = {
 export type AwsIamOpenIdConnectProvider = {
   accountId: Scalars['String'];
   arn: Scalars['String'];
+  awsCognitoIdentityPool?: Maybe<Array<Maybe<AwsCognitoIdentityPool>>>;
   cgId?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   region?: Maybe<Scalars['String']>;
@@ -3051,6 +3056,7 @@ export type AwsIamRole = AwsBaseService & {
   appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
   asg?: Maybe<Array<Maybe<AwsAsg>>>;
   assumeRolePolicy?: Maybe<AwsIamJsonPolicy>;
+  awsCognitoIdentityPool?: Maybe<Array<Maybe<AwsCognitoIdentityPool>>>;
   cloudFormationStack?: Maybe<Array<Maybe<AwsCloudFormationStack>>>;
   cloudFormationStackSet?: Maybe<Array<Maybe<AwsCloudFormationStackSet>>>;
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
@@ -3083,6 +3089,7 @@ export type AwsIamRole = AwsBaseService & {
 };
 
 export type AwsIamSamlProvider = AwsOptionalService & {
+  awsCognitoIdentityPool?: Maybe<Array<Maybe<AwsCognitoIdentityPool>>>;
   createdDate?: Maybe<Scalars['String']>;
   validUntil?: Maybe<Scalars['String']>;
 };
