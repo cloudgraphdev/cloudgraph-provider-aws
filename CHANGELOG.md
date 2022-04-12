@@ -1,3 +1,10 @@
+# [0.79.0-alpha.10](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.9...0.79.0-alpha.10) (2022-04-12)
+
+
+### Features
+
+* **cloudFormationStackSet:** add iam role connection ([e25bffb](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/e25bffb1f467706ff6a0cc752804a6b3738f6c8b))
+
 # [0.79.0-alpha.9](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.8...0.79.0-alpha.9) (2022-04-12)
 
 
