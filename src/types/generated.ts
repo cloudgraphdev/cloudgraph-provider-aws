@@ -2490,7 +2490,9 @@ export type AwsElastiCacheUserGroupsUpdateStatus = {
 
 export type AwsElasticBeanstalkApp = AwsBaseService & {
   description?: Maybe<Scalars['String']>;
-  elasticBeanstalkEnv?: Maybe<Array<Maybe<AwsElasticBeanstalkEnv>>>;
+  elasticBeanstalkEnvs?: Maybe<Array<Maybe<AwsElasticBeanstalkEnv>>>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
+  iamServiceRole?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
 };
@@ -2500,7 +2502,7 @@ export type AwsElasticBeanstalkEnv = AwsBaseService & {
   cname?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   ec2Instances?: Maybe<Array<Maybe<AwsEc2>>>;
-  elasticBeanstalkApp?: Maybe<Array<Maybe<AwsElasticBeanstalkApp>>>;
+  elasticBeanstalkApps?: Maybe<Array<Maybe<AwsElasticBeanstalkApp>>>;
   endpointUrl?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   platformArn?: Maybe<Scalars['String']>;
@@ -3060,8 +3062,9 @@ export type AwsIamRole = AwsBaseService & {
   description?: Maybe<Scalars['String']>;
   dynamodb?: Maybe<Array<Maybe<AwsDynamoDbTable>>>;
   ec2Instances?: Maybe<Array<Maybe<AwsEc2>>>;
-  ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
-  eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
+  ecsServices?: Maybe<Array<Maybe<AwsEcsService>>>;
+  eksClusters?: Maybe<Array<Maybe<AwsEksCluster>>>;
+  elasticBeanstalkApps?: Maybe<Array<Maybe<AwsElasticBeanstalkApp>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
   glueJobs?: Maybe<Array<Maybe<AwsGlueJob>>>;
   guardDutyDetectors?: Maybe<Array<Maybe<AwsGuardDutyDetector>>>;

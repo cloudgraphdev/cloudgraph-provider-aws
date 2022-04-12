@@ -15,6 +15,7 @@ import { RawAwsManagedAirflow } from '../managedAirflow/data'
 import { RawAwsGuardDutyDetector } from '../guardDutyDetector/data'
 import { RawAwsSageMakerNotebookInstance } from '../sageMakerNotebookInstance/data'
 import { RawAwsSystemsManagerInstance } from '../systemsManagerInstance/data'
+import { RawAwsElasticBeanstalkApp } from '../elasticBeanstalkApplication/data'
 
 /**
  * IAM Role
@@ -81,7 +82,7 @@ export default ({
           id: serviceArn,
           resourceType: services.ecsService,
           relation: 'child',
-          field: 'ecsService',
+          field: 'ecsServices',
         })
       }
     }
@@ -225,6 +226,30 @@ export default ({
         resourceType: services.sageMakerNotebookInstance,
         relation: 'child',
         field: 'sageMakerNotebookInstances',
+      })
+    }
+  }
+
+  /**
+   * Find any elasticBeanstalkApp related data
+   */
+  const elasticBApps = data.find(
+    ({ name }) => name === services.elasticBeanstalkApp
+  )
+  if (elasticBApps?.data?.[region]) {
+    const dataAtRegion: RawAwsElasticBeanstalkApp[] = elasticBApps.data[
+      region
+    ].filter(
+      ({
+        ResourceLifecycleConfig: { ServiceRole: iamServiceRole } = {},
+      }: RawAwsElasticBeanstalkApp) => iamServiceRole === role.Arn
+    )
+    for (const elasticBApp of dataAtRegion) {
+      connections.push({
+        id: elasticBApp.ApplicationArn,
+        resourceType: services.elasticBeanstalkApp,
+        relation: 'child',
+        field: 'elasticBeanstalkApps',
       })
     }
   }

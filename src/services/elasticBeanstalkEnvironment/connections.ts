@@ -44,7 +44,7 @@ export default ({
           id: app.ApplicationArn,
           resourceType: services.elasticBeanstalkApp,
           relation: 'child',
-          field: 'elasticBeanstalkApp',
+          field: 'elasticBeanstalkApps',
         })
       }
     }
