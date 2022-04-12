@@ -13,6 +13,7 @@ type awsSubnet implements awsBaseService @key(fields: "id") {
   ec2Instances: [awsEc2] @hasInverse(field: subnets) #change to plural
   elb: [awsElb] @hasInverse(field: subnet) #change to plural
   lambda: [awsLambda] @hasInverse(field: subnet) #change to plural
+  nacls: [awsNetworkAcl] @hasInverse(field: subnets)
   natGateway: [awsNatGateway] @hasInverse(field: subnet) #change to plural
   networkInterface: [awsNetworkInterface] @hasInverse(field: subnet) #change to plural
   routeTable: [awsRouteTable] @hasInverse(field: subnet)
