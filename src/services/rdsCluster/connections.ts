@@ -4,8 +4,10 @@ import { SecurityGroup } from 'aws-sdk/clients/ec2'
 import { DBInstance, DBCluster } from 'aws-sdk/clients/rds'
 
 import services from '../../enums/services'
+import { RawAwsRdsCluster } from './data'
 import { RawAwsRdsClusterSnapshot } from '../rdsClusterSnapshot/data'
 import { RawAwsIamRole } from '../iamRole/data'
+import { RawAwsSubnet } from '../subnet/data'
 import { AwsKms } from '../kms/data'
 import { globalRegionName } from '../../enums/regions'
 
@@ -14,7 +16,7 @@ export default ({
   data,
   region,
 }: {
-  service: DBCluster
+  service: RawAwsRdsCluster
   data: Array<{ name: string; data: { [property: string]: any[] } }>
   region: string
 }): {
@@ -24,6 +26,7 @@ export default ({
   const {
     DBClusterArn: id,
     DBClusterIdentifier: clusterId,
+    dbSubnetGroups,
     MonitoringRoleArn: monitoringRoleArn,
     AssociatedRoles: associatedRoles = [],
     KmsKeyId,
@@ -203,6 +206,33 @@ export default ({
           resourceType: services.iamRole,
           relation: 'child',
           field: 'monitoringIamRole',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find Subnets
+   * related to this RDS Cluster
+   */
+  const subnets = data.find(({ name }) => name === services.subnet)
+  const subnetIds = dbSubnetGroups?.map(
+    ({ Subnets }) => Subnets?.map(subnet => subnet.SubnetIdentifier)
+  )
+  if (subnets?.data?.[region]) {
+    const subnetsInRegion = subnets.data[region].filter(
+      (subnet: RawAwsSubnet) =>
+        subnetIds.some(ids => ids.includes(subnet.SubnetId))
+    )
+    if (!isEmpty(subnetsInRegion)) {
+      for (const subnet of subnetsInRegion) {
+        const { SubnetId } = subnet
+
+        connections.push({
+          id: SubnetId,
+          resourceType: services.subnet,
+          relation: 'child',
+          field: 'subnets',
         })
       }
     }

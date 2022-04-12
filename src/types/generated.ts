@@ -3515,6 +3515,8 @@ export type AwsRdsCluster = AwsBaseService & {
   crossAccountClone?: Maybe<Scalars['Boolean']>;
   databaseName?: Maybe<Scalars['String']>;
   dbClusterIdentifier?: Maybe<Scalars['String']>;
+  dbClusterParameterGroup?: Maybe<Scalars['String']>;
+  dbSubnetGroup?: Maybe<Scalars['String']>;
   deletionProtection?: Maybe<Scalars['Boolean']>;
   encrypted?: Maybe<Scalars['Boolean']>;
   engine?: Maybe<Scalars['String']>;
@@ -3539,7 +3541,7 @@ export type AwsRdsCluster = AwsBaseService & {
   snapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
   status?: Maybe<Scalars['String']>;
   storageEncryptedKms?: Maybe<Array<Maybe<AwsKms>>>;
-  subnets?: Maybe<Scalars['String']>;
+  subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   username?: Maybe<Scalars['String']>;
 };
@@ -4007,6 +4009,7 @@ export type AwsSubnet = AwsBaseService & {
   nacls?: Maybe<Array<Maybe<AwsNetworkAcl>>>;
   natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;

@@ -4,6 +4,8 @@ import RDS, {
   TagListMessage,
   DescribeDBClustersMessage,
   DBClusterMessage,
+  DBSubnetGroup,
+  DBSubnetGroupMessage,
 } from 'aws-sdk/clients/rds'
 import { AWSError } from 'aws-sdk/lib/error'
 import groupBy from 'lodash/groupBy'
@@ -57,6 +59,29 @@ const listClustersForRegion = async rds =>
     listAllClusters()
   })
 
+const describeDBSubnetGroups = async (rds: RDS, DBSubnetGroupName: string): Promise<DBSubnetGroup[]> =>
+  new Promise(resolve => {
+    try {
+      rds.describeDBSubnetGroups(
+        { DBSubnetGroupName },
+        (err: AWSError, data: DBSubnetGroupMessage) => {
+          if (err) {
+            errorLog.generateAwsErrorLog({
+              functionName: 'rds:describeDBSubnetGroups',
+              err,
+            })
+            return resolve([])
+          }
+          if (!isEmpty(data)) {
+            resolve(data.DBSubnetGroups)
+          }
+        }
+      )
+    } catch (error) {
+      resolve([])
+    }
+  })
+
 const getResourceTags = async (rds: RDS, arn: string): Promise<TagMap> =>
   new Promise(resolve => {
     try {
@@ -80,6 +105,7 @@ const getResourceTags = async (rds: RDS, arn: string): Promise<TagMap> =>
   })
 
 export interface RawAwsRdsCluster extends DBCluster {
+  dbSubnetGroups: DBSubnetGroup[]
   Tags?: TagMap
   region: string
 }
@@ -104,10 +130,11 @@ export default async ({
 
         if (!isEmpty(clusters)) {
           rdsData.push(
-            ...clusters.map(cluster => ({
+            ...await Promise.all(clusters.map(async (cluster) => ({
               ...cluster,
+              dbSubnetGroups: await describeDBSubnetGroups(rds, cluster.DBSubnetGroup),
               region,
-            }))
+            })))
           )
         }
         resolveRegion()
