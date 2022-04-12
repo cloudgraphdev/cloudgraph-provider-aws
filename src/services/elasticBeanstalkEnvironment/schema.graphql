@@ -10,6 +10,7 @@ type awsElasticBeanstalkEnv implements awsBaseService @key(fields: "arn") {
   solutionStackName: String @search(by: [hash, regexp])
   tier: String @search(by: [hash])
   versionLabel: String @search(by: [hash, regexp])
+  iamRole: [awsIamRole] @hasInverse(field: elasticBeanstalkEnvs)
   tags: [awsRawTag]
   elasticBeanstalkApps: [awsElasticBeanstalkApp] @hasInverse(field: elasticBeanstalkEnvs)
   ec2Instances: [awsEc2] @hasInverse(field: elasticBeanstalkEnv)
@@ -27,5 +28,3 @@ type awsElasticBeanstalkEnvResource {
   name: String @search(by: [hash, regexp])
   value: [String] @search(by: [hash, regexp])
 }
-
-# TODO: add iam role based on OperationsRole field
