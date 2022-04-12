@@ -1,3 +1,11 @@
+# [0.79.0-alpha.11](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.10...0.79.0-alpha.11) (2022-04-12)
+
+
+### Features
+
+* **s3:** Add connections to iamRole, lambda, sns and sqs services ([1ca01fd](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/1ca01fd9b1dabc110b87e0c74e3e63b5c0cb1099))
+* **s3:** Add connections to iamRole, lambda, sns and sqs services ([22a8cfd](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/22a8cfdbd1365a5b94fdbc91d54886b1135c9682))
+
 # [0.79.0-alpha.10](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.9...0.79.0-alpha.10) (2022-04-12)
 
 
