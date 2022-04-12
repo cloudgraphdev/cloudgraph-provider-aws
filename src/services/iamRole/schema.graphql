@@ -20,8 +20,10 @@ type awsIamRole implements awsBaseService @key(fields: "id") {
   iamAttachedPolicies: [awsIamPolicy] @hasInverse(field: iamRoles)
   iamInstanceProfiles: [awsIamInstanceProfile] @hasInverse(field: iamRole)
   managedAirflows: [awsManagedAirflow] @hasInverse(field: iamRoles)
-  sageMakerNotebookInstances: [awsSageMakerNotebookInstance] @hasInverse(field: iamRole)
-  systemsManagerInstances: [awsSystemsManagerInstance] @hasInverse(field: iamRole)
+  sageMakerNotebookInstances: [awsSageMakerNotebookInstance]
+    @hasInverse(field: iamRole)
+  systemsManagerInstances: [awsSystemsManagerInstance]
+    @hasInverse(field: iamRole)
   s3: [awsS3] @hasInverse(field: iamRole)
   dynamodb: [awsDynamoDbTable] @hasInverse(field: iamRoles)
   ec2Instances: [awsEc2] @hasInverse(field: iamRole)

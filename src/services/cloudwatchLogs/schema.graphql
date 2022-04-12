@@ -15,6 +15,7 @@ type awsCloudwatchLog @key(fields: "arn") {
   cloudtrail: [awsCloudtrail] @hasInverse(field: cloudwatchLog)
   ecsCluster: [awsEcsCluster] @hasInverse(field: cloudwatchLog)
   rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: cloudwatchLogs)
+  managedAirflows: [awsManagedAirflow] @hasInverse(field: cloudwatchLogs)
 }
 
 type awsMetricFilter

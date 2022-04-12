@@ -922,6 +922,7 @@ export type AwsCloudwatchLog = {
   id: Scalars['String'];
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   kmsKeyId?: Maybe<Scalars['String']>;
+  managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
   metricFilterCount?: Maybe<Scalars['Int']>;
   metricFilters?: Maybe<Array<Maybe<AwsMetricFilter>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
@@ -3218,6 +3219,7 @@ export type AwsKms = AwsBaseService & {
   keyRotationEnabled?: Maybe<Scalars['Boolean']>;
   keyState?: Maybe<Scalars['String']>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
   origin?: Maybe<Scalars['String']>;
   policy?: Maybe<AwsIamJsonPolicy>;
   rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
@@ -3324,11 +3326,13 @@ export type AwsLcBlockDeviceMapping = {
 export type AwsManagedAirflow = AwsBaseService & {
   airflowConfigurationOptions?: Maybe<Array<Maybe<AwsRawTag>>>;
   airflowVersion?: Maybe<Scalars['String']>;
+  cloudwatchLogs?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
   createdAt?: Maybe<Scalars['DateTime']>;
   dagS3Path?: Maybe<Scalars['String']>;
   environmentClass?: Maybe<Scalars['String']>;
   executionRoleArn?: Maybe<Scalars['String']>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
   kmsKey?: Maybe<Scalars['String']>;
   lastUpdate?: Maybe<AwsManagedAirflowLastUpdate>;
   loggingConfiguration?: Maybe<AwsManagedAirflowLoggingConfig>;
