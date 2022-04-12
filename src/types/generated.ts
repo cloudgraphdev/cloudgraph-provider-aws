@@ -2298,6 +2298,7 @@ export type AwsEip = {
   ec2InstanceAssociationId?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   instanceId?: Maybe<Scalars['String']>;
+  isVpc?: Maybe<Scalars['String']>;
   networkBorderGroup?: Maybe<Scalars['String']>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   networkInterfaceId?: Maybe<Scalars['String']>;
@@ -2307,8 +2308,7 @@ export type AwsEip = {
   publicIpv4Pool?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
-  vpc?: Maybe<Scalars['String']>;
-  vpcs?: Maybe<Array<Maybe<AwsVpc>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
 export type AwsEksCertificate = {
@@ -4374,42 +4374,42 @@ export type AwsVgwTelemetry = {
 
 export type AwsVpc = {
   accountId: Scalars['String'];
-  alb?: Maybe<Array<Maybe<AwsAlb>>>;
+  albs?: Maybe<Array<Maybe<AwsAlb>>>;
   arn: Scalars['String'];
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
   defaultVpc?: Maybe<Scalars['Boolean']>;
   dhcpOptionsSet?: Maybe<Scalars['String']>;
   dmsReplicationInstances?: Maybe<Array<Maybe<AwsDmsReplicationInstance>>>;
-  ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
-  efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
-  eip?: Maybe<Array<Maybe<AwsEip>>>;
-  eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
+  ecsServices?: Maybe<Array<Maybe<AwsEcsService>>>;
+  efsMountTargets?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
+  eips?: Maybe<Array<Maybe<AwsEip>>>;
+  eksClusters?: Maybe<Array<Maybe<AwsEksCluster>>>;
   elastiCacheCluster?: Maybe<Array<Maybe<AwsElastiCacheCluster>>>;
   elasticSearchDomains?: Maybe<Array<Maybe<AwsElasticSearchDomain>>>;
-  elb?: Maybe<Array<Maybe<AwsElb>>>;
+  elbs?: Maybe<Array<Maybe<AwsElb>>>;
   enableDnsHostnames?: Maybe<Scalars['Boolean']>;
   enableDnsSupport?: Maybe<Scalars['Boolean']>;
-  flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
+  flowLog?: Maybe<Array<Maybe<AwsFlowLog>>>;
   id: Scalars['String'];
-  igw?: Maybe<Array<Maybe<AwsIgw>>>;
+  igws?: Maybe<Array<Maybe<AwsIgw>>>;
   instanceTenancy?: Maybe<Scalars['String']>;
   ipV4Cidr?: Maybe<Scalars['String']>;
   ipV6Cidr?: Maybe<Scalars['String']>;
-  lambda?: Maybe<Array<Maybe<AwsLambda>>>;
-  nacl?: Maybe<Array<Maybe<AwsNetworkAcl>>>;
-  natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
-  networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  lambdas?: Maybe<Array<Maybe<AwsLambda>>>;
+  nacls?: Maybe<Array<Maybe<AwsNetworkAcl>>>;
+  natGateways?: Maybe<Array<Maybe<AwsNatGateway>>>;
+  networkInterfaces?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   rdsClusterSnapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
-  rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
-  redshiftCluster?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
+  rdsDbInstances?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
+  redshiftClusters?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
   region?: Maybe<Scalars['String']>;
-  route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
-  routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
+  route53HostedZones?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
+  routeTables?: Maybe<Array<Maybe<AwsRouteTable>>>;
   state?: Maybe<Scalars['String']>;
-  subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
+  subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
-  transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
-  vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
+  transitGatewayAttachments?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
+  vpnGateways?: Maybe<Array<Maybe<AwsVpnGateway>>>;
 };
 
 export type AwsVpnConnection = {

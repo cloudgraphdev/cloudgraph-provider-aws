@@ -20,7 +20,7 @@ type awsSubnet @key(fields: "id") {
   natGateway: [awsNatGateway] @hasInverse(field: subnet) #change to plural
   networkInterface: [awsNetworkInterface] @hasInverse(field: subnet) #change to plural
   routeTable: [awsRouteTable] @hasInverse(field: subnet)
-  vpc: [awsVpc] @hasInverse(field: subnet)
+  vpc: [awsVpc] @hasInverse(field: subnets)
   rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: subnet) #change to plural
   eksCluster: [awsEksCluster] @hasInverse(field: subnet) #change to plural
   ecsService: [awsEcsService] @hasInverse(field: subnet) #change to plural

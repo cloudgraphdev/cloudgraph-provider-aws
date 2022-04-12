@@ -21,7 +21,7 @@ type awsEksCluster @key(fields: "arn") {
   kms: [awsKms] @hasInverse(field: eksCluster)
   securityGroups: [awsSecurityGroup] @hasInverse(field: eksCluster)
   subnet: [awsSubnet] @hasInverse(field: eksCluster) #change to plural
-  vpc: [awsVpc] @hasInverse(field: eksCluster)
+  vpc: [awsVpc] @hasInverse(field: eksClusters)
 }
 
 type awsEksVpcConfigResponse {

@@ -12,27 +12,25 @@ type awsVpc @key(fields: "id") {
   ipV6Cidr: String @search(by: [hash, regexp])
   state: String @search(by: [hash, regexp])
   tags: [awsRawTag]
-  alb: [awsAlb] @hasInverse(field: vpc) #change to plural
-  # ecs: [awsEcs] @hasInverse(field: vpc) TODO: Uncomment when ECS is added
-  eip: [awsEip] @hasInverse(field: vpcs) #change to plural
-  # eks: [awsEks] @hasInverse(field: vpc) TODO: Uncomment when EKS is added
-  elb: [awsElb] @hasInverse(field: vpc) #change to plural
-  igw: [awsIgw] @hasInverse(field: vpc) #change to plural
-  lambda: [awsLambda] @hasInverse(field: vpc) #change to plural
-  nacl: [awsNetworkAcl] @hasInverse(field: vpc) #change to plural
-  natGateway: [awsNatGateway] @hasInverse(field: vpc) #change to plural
-  networkInterface: [awsNetworkInterface] @hasInverse(field: vpc) #change to plural
-  rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: vpc) #change to plural
-  redshiftCluster: [awsRedshiftCluster] @hasInverse(field: vpc) #change to plural
-  route53HostedZone: [awsRoute53HostedZone] @hasInverse(field: vpc) #change to plural
-  routeTable: [awsRouteTable] @hasInverse(field: vpc) #change to plural
-  subnet: [awsSubnet] @hasInverse(field: vpc) #change to plural
-  eksCluster: [awsEksCluster] @hasInverse(field: vpc) #change to plural
-  ecsService: [awsEcsService] @hasInverse(field: vpc) #change to plural
-  efsMountTarget: [awsEfsMountTarget] @hasInverse(field: vpc) #change to plural
-  flowLogs: [awsFlowLog] @hasInverse(field: vpc) #change to singular
-  vpnGateway: [awsVpnGateway] @hasInverse(field: vpc)
-  transitGatewayAttachment: [awsTransitGatewayAttachment] @hasInverse(field: vpc)
+  albs: [awsAlb] @hasInverse(field: vpc)
+  eips: [awsEip] @hasInverse(field: vpc)
+  elbs: [awsElb] @hasInverse(field: vpc)
+  igws: [awsIgw] @hasInverse(field: vpc)
+  lambdas: [awsLambda] @hasInverse(field: vpc)
+  nacls: [awsNetworkAcl] @hasInverse(field: vpc)
+  natGateways: [awsNatGateway] @hasInverse(field: vpc)
+  networkInterfaces: [awsNetworkInterface] @hasInverse(field: vpc)
+  rdsDbInstances: [awsRdsDbInstance] @hasInverse(field: vpc)
+  redshiftClusters: [awsRedshiftCluster] @hasInverse(field: vpc)
+  route53HostedZones: [awsRoute53HostedZone] @hasInverse(field: vpc)
+  routeTables: [awsRouteTable] @hasInverse(field: vpc)
+  subnets: [awsSubnet] @hasInverse(field: vpc)
+  eksClusters: [awsEksCluster] @hasInverse(field: vpc)
+  ecsServices: [awsEcsService] @hasInverse(field: vpc)
+  efsMountTargets: [awsEfsMountTarget] @hasInverse(field: vpc)
+  flowLog: [awsFlowLog] @hasInverse(field: vpc)
+  vpnGateways: [awsVpnGateway] @hasInverse(field: vpc)
+  transitGatewayAttachments: [awsTransitGatewayAttachment] @hasInverse(field: vpc)
   elastiCacheCluster: [awsElastiCacheCluster] @hasInverse(field: vpc)
   codebuilds: [awsCodebuild] @hasInverse(field: vpc)
   elasticSearchDomains: [awsElasticSearchDomain] @hasInverse(field: vpc)

@@ -37,7 +37,7 @@ type awsRdsDbInstance @key(fields: "arn") {
   cluster: [awsRdsCluster] @hasInverse(field: instances)
   securityGroups: [awsSecurityGroup] @hasInverse(field: rdsDbInstance)
   subnet: [awsSubnet] @hasInverse(field: rdsDbInstance)
-  vpc: [awsVpc] @hasInverse(field: rdsDbInstance)
+  vpc: [awsVpc] @hasInverse(field: rdsDbInstances)
 }
 
 #TODO: add connection to route53HostedZone using hostedZoneId in Endpoint

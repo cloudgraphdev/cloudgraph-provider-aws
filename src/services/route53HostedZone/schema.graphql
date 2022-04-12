@@ -7,5 +7,5 @@ type awsRoute53HostedZone @key(fields: "arn") {
   delegationSetId: String @search(by: [hash])
   nameServers: [String] @search(by: [hash, regexp])
   route53Record: [awsRoute53Record] @hasInverse(field: route53HostedZone) #change to plural
-  vpc: [awsVpc] @hasInverse(field: route53HostedZone)
+  vpc: [awsVpc] @hasInverse(field: route53HostedZones)
 }
