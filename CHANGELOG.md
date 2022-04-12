@@ -1,3 +1,10 @@
+# [0.79.0-alpha.12](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.11...0.79.0-alpha.12) (2022-04-12)
+
+
+### Bug Fixes
+
+* add connection between nacl and subnet services ([6ed6dee](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/6ed6dee345daa6342f651e5c00bb92178b259954))
+
 # [0.79.0-alpha.11](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.10...0.79.0-alpha.11) (2022-04-12)
 
 
