@@ -47,12 +47,6 @@ type awsKms implements awsBaseService @key(fields: "id") {
   ecsCluster: [awsEcsCluster] @hasInverse(field: kms)
   dynamodb: [awsDynamoDbTable] @hasInverse(field: kms)
   cognitoUserPools: [awsCognitoUserPool] @hasInverse(field: kms)
-  rdsClusterStorageEncryption: [awsRdsCluster]
-    @hasInverse(field: storageEncryptedKms)
-  rdsClusterActivityStream: [awsRdsCluster]
-    @hasInverse(field: activityStreamKms)
-  rdsClusterPerformanceInsights: [awsRdsCluster]
-    @hasInverse(field: performanceInsightsKms)
   rdsCluster: [awsRdsCluster] @hasInverse(field: kms)
   rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: kms)
 }
