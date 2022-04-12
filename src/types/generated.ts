@@ -3212,10 +3212,12 @@ export type AwsKms = AwsBaseService & {
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   origin?: Maybe<Scalars['String']>;
   policy?: Maybe<AwsIamJsonPolicy>;
+  rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsClusterActivityStream?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsClusterPerformanceInsights?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsClusterSnapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
   rdsClusterStorageEncryption?: Maybe<Array<Maybe<AwsRdsCluster>>>;
+  rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   redshiftCluster?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   secretsManager?: Maybe<Array<Maybe<AwsSecretsManager>>>;
@@ -3528,6 +3530,7 @@ export type AwsRdsCluster = AwsBaseService & {
   iamDbAuthenticationEnabled?: Maybe<Scalars['Boolean']>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   instances?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
   kmsKey?: Maybe<Scalars['String']>;
   monitoringIamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   multiAZ?: Maybe<Scalars['Boolean']>;
@@ -3599,6 +3602,7 @@ export type AwsRdsDbInstance = AwsBaseService & {
   hostedZoneId?: Maybe<Scalars['String']>;
   iamDbAuthenticationEnabled?: Maybe<Scalars['Boolean']>;
   instanceClass?: Maybe<Scalars['String']>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
   kmsKey?: Maybe<Scalars['String']>;
   licenseModel?: Maybe<Scalars['String']>;
   multiAZ?: Maybe<Scalars['Boolean']>;

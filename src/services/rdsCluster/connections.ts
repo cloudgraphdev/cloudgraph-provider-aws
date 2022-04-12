@@ -212,12 +212,32 @@ export default ({
   }
 
   /**
+   * Find KMS
+   */
+  const kmsKeys = data.find(({ name }) => name === services.kms)
+  if (kmsKeys?.data?.[region]) {
+    const kmsKeyInRegion = kmsKeys.data[region].filter(
+      kmsKey => kmsKey.Arn === KmsKeyId
+    )
+    if (!isEmpty(kmsKeyInRegion)) {
+      for (const kms of kmsKeyInRegion) {
+        connections.push({
+          id: kms.KeyId,
+          resourceType: services.kms,
+          relation: 'child',
+          field: 'kms',
+        })
+      }
+    }
+  }
+
+  /**
    * Find Subnets
    * related to this RDS Cluster
    */
   const subnets = data.find(({ name }) => name === services.subnet)
-  const subnetIds = dbSubnetGroups?.map(
-    ({ Subnets }) => Subnets?.map(subnet => subnet.SubnetIdentifier)
+  const subnetIds = dbSubnetGroups?.map(({ Subnets }) =>
+    Subnets?.map(subnet => subnet.SubnetIdentifier)
   )
   if (subnets?.data?.[region]) {
     const subnetsInRegion = subnets.data[region].filter(
