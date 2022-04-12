@@ -22,6 +22,7 @@ type awsIamRole implements awsBaseService @key(fields: "id") {
   systemsManagerInstances: [awsSystemsManagerInstance]
     @hasInverse(field: iamRole)
   iamInstanceProfiles: [awsIamInstanceProfile] @hasInverse(field: iamRole)
+  s3: [awsS3] @hasInverse(field: iamRole)
   dynamodb: [awsDynamoDbTable] @hasInverse(field: iamRoles)
   ec2Instances: [awsEc2] @hasInverse(field: iamRole)
   cognitoUserPools: [awsCognitoUserPool] @hasInverse(field: iamRole)

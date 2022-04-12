@@ -18,7 +18,7 @@ type awsCloudfront implements awsBaseService @key(fields: "id") {
   origins: [awsCloudfrontOriginData]
   logging: awsCloudfrontLoggingConfig
   elb: [awsElb] @hasInverse(field: cloudfrontDistribution)
-  s3: [awsS3] @hasInverse(field: cloudfrontDistribution)
+  s3: [awsS3] @hasInverse(field: cloudfrontDistributions)
   tags: [awsRawTag]
   webAcl: [awsWafV2WebAcl] @hasInverse(field: cloudfront)
 }

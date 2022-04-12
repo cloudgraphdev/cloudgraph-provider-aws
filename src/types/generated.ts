@@ -3074,6 +3074,7 @@ export type AwsIamRole = AwsBaseService & {
   path?: Maybe<Scalars['String']>;
   rdsClusterIamRoles?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsClusterMonitoringRole?: Maybe<Array<Maybe<AwsRdsCluster>>>;
+  s3?: Maybe<Array<Maybe<AwsS3>>>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   systemsManagerInstances?: Maybe<Array<Maybe<AwsSystemsManagerInstance>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
@@ -3241,6 +3242,7 @@ export type AwsLambda = AwsBaseService & {
   policyRevisionId?: Maybe<Scalars['String']>;
   reservedConcurrentExecutions?: Maybe<Scalars['Int']>;
   runtime?: Maybe<Scalars['String']>;
+  s3?: Maybe<Array<Maybe<AwsS3>>>;
   secretsManager?: Maybe<Array<Maybe<AwsSecretsManager>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   sourceCodeSize?: Maybe<Scalars['String']>;
@@ -3704,26 +3706,61 @@ export type AwsS3 = AwsBaseService & {
   blockPublicPolicy?: Maybe<Scalars['String']>;
   bucketOwnerName?: Maybe<Scalars['String']>;
   bucketPolicies?: Maybe<Array<Maybe<AwsBucketPolicy>>>;
-  cloudfrontDistribution?: Maybe<Array<Maybe<AwsCloudfront>>>;
-  cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
+  cloudfrontDistributions?: Maybe<Array<Maybe<AwsCloudfront>>>;
+  cloudtrails?: Maybe<Array<Maybe<AwsCloudtrail>>>;
   corsConfiguration?: Maybe<Scalars['String']>;
   crossRegionReplication?: Maybe<Scalars['String']>;
   ecsCluster?: Maybe<Array<Maybe<AwsEcsCluster>>>;
   encrypted?: Maybe<Scalars['String']>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   ignorePublicAcls?: Maybe<Scalars['String']>;
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
+  lambdas?: Maybe<Array<Maybe<AwsLambda>>>;
   lifecycle?: Maybe<Scalars['String']>;
   logging?: Maybe<Scalars['String']>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
   mfa?: Maybe<Scalars['String']>;
+  notificationConfiguration?: Maybe<AwsS3NotificationConfiguration>;
   requesterPays?: Maybe<Scalars['String']>;
   restrictPublicBuckets?: Maybe<Scalars['String']>;
   size?: Maybe<Scalars['String']>;
+  sns?: Maybe<Array<Maybe<AwsSns>>>;
+  sqs?: Maybe<Array<Maybe<AwsSqs>>>;
   staticWebsiteHosting?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   totalNumberOfObjectsInBucket?: Maybe<Scalars['String']>;
   transferAcceleration?: Maybe<Scalars['String']>;
   versioning?: Maybe<Scalars['String']>;
+};
+
+export type AwsS3ConfigurationBase = {
+  events?: Maybe<Array<Maybe<Scalars['String']>>>;
+  filterRules?: Maybe<Array<Maybe<AwsS3FilterRule>>>;
+  id: Scalars['String'];
+};
+
+export type AwsS3FilterRule = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+export type AwsS3LambdaFunctionConfiguration = AwsS3ConfigurationBase & {
+  lambdaFunctionArn?: Maybe<Scalars['String']>;
+};
+
+export type AwsS3NotificationConfiguration = {
+  lambdaFunctionConfigurations?: Maybe<Array<Maybe<AwsS3LambdaFunctionConfiguration>>>;
+  queueConfigurations?: Maybe<Array<Maybe<AwsS3QueueConfiguration>>>;
+  topicConfigurations?: Maybe<Array<Maybe<AwsS3TopicConfiguration>>>;
+};
+
+export type AwsS3QueueConfiguration = AwsS3ConfigurationBase & {
+  queueArn?: Maybe<Scalars['String']>;
+};
+
+export type AwsS3TopicConfiguration = AwsS3ConfigurationBase & {
+  topicArn?: Maybe<Scalars['String']>;
 };
 
 export type AwsSageMakerExperiment = AwsBaseService & {
@@ -3899,6 +3936,7 @@ export type AwsSns = AwsBaseService & {
   displayName?: Maybe<Scalars['String']>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   policy?: Maybe<AwsIamJsonPolicy>;
+  s3?: Maybe<Array<Maybe<AwsS3>>>;
   subscriptions?: Maybe<Array<Maybe<AwsSnsSubscription>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
 };
@@ -3927,6 +3965,7 @@ export type AwsSqs = AwsBaseService & {
   queueType?: Maybe<Scalars['String']>;
   queueUrl?: Maybe<Scalars['String']>;
   receiveMessageWaitTimeSeconds?: Maybe<Scalars['String']>;
+  s3?: Maybe<Array<Maybe<AwsS3>>>;
   sqsManagedSseEnabled?: Maybe<Scalars['Boolean']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   visibilityTimeout?: Maybe<Scalars['String']>;
