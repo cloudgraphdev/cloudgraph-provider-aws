@@ -32,7 +32,7 @@ export default ({
     Tags: tags = {},
   } = rawData
 
-  const securityGroups = groups.map(({ GroupId }) => GroupId)
+  const securityGroupsIds = groups.map(({ GroupId }) => GroupId)
 
   const privateIps = privateIpAddresses.map(
     ({ PrivateIpAddress }) => PrivateIpAddress
@@ -46,7 +46,7 @@ export default ({
     accountId: account, 
     arn: networkInterfaceArn({region, account, id}),
     region,
-    subnetId, // TODO: Add subnet connection to network interface
+    subnetId,
     macAddress,
     privateIps,
     description,
@@ -54,7 +54,7 @@ export default ({
     status,
     vpcId,
     interfaceType,
-    securityGroups,
+    securityGroupsIds,
     privateDnsName,
     attachment: {
       attachmentId: attachment?.AttachmentId || '',

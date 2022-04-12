@@ -6,7 +6,7 @@ type awsNetworkInterface implements awsBaseService @key(fields: "arn") {
   status: String @search(by: [hash, regexp])
   vpcId: String @search(by: [hash])
   interfaceType: String @search(by: [hash, regexp])
-  securityGroups: [String] @search(by: [hash])
+  securityGroupsIds: [String] @search(by: [hash])
   privateDnsName: String @search(by: [hash, regexp])
   privateIps: [String] @search(by: [hash, regexp])
   attachment: awsNetworkInterfaceAttachment
@@ -20,6 +20,7 @@ type awsNetworkInterface implements awsBaseService @key(fields: "arn") {
   flowLogs: [awsFlowLog] @hasInverse(field: networkInterface) #change to singular
   sageMakerNotebookInstances: [awsSageMakerNotebookInstance]
     @hasInverse(field: networkInterface)
+  securityGroups: [awsSecurityGroup] @hasInverse(field: networkInterfaces)
 }
 
 type awsNetworkInterfaceAttachment

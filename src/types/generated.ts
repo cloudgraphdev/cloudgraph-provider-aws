@@ -3453,7 +3453,8 @@ export type AwsNetworkInterface = AwsBaseService & {
   privateDnsName?: Maybe<Scalars['String']>;
   privateIps?: Maybe<Array<Maybe<Scalars['String']>>>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
-  securityGroups?: Maybe<Array<Maybe<Scalars['String']>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  securityGroupsIds?: Maybe<Array<Maybe<Scalars['String']>>>;
   status?: Maybe<Scalars['String']>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   subnetId?: Maybe<Scalars['String']>;
@@ -3868,6 +3869,7 @@ export type AwsSecurityGroup = AwsBaseService & {
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
   name?: Maybe<Scalars['String']>;
+  networkInterfaces?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   outboundRuleCount?: Maybe<Scalars['Int']>;
   outboundRules?: Maybe<Array<Maybe<AwsSgOutboundRule>>>;
   owner?: Maybe<Scalars['String']>;
