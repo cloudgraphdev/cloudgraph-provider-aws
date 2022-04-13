@@ -1,3 +1,52 @@
+# [0.79.0-alpha.19](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.18...0.79.0-alpha.19) (2022-04-13)
+
+
+### Bug Fixes
+
+* Added missing connections to managedAirflow ([dbb9405](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/dbb94058dd22c0b538b4f9491e6874031747480f))
+
+# [0.79.0-alpha.18](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.17...0.79.0-alpha.18) (2022-04-13)
+
+
+### Bug Fixes
+
+* **elasticBeanstalkEnv:** add connections with alb, elb, ec2 and sqs services ([fe21ecd](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/fe21ecd924695395dde77a8704bf0e7edcb26c36))
+
+# [0.79.0-alpha.17](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.16...0.79.0-alpha.17) (2022-04-13)
+
+
+### Bug Fixes
+
+* Added missing connections to RDS DB Instance ([206bd29](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/206bd29fd9189d10ab628c07f206e5e6a4725bf6))
+
+
+### Features
+
+* **rds:** add kms connection cluster/dbInstance ([f501a4e](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/f501a4e079503d10841f1af32d3a12f13d277aa2))
+* **rdsCluster:** add route53HostedZone connection ([6480e7f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/6480e7f16c404ebb2c7f2f458aa95ae2db93f0dc))
+* **rdsCluster:** add subnet connection, add missing properties ([7706a02](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/7706a0243384d949f1c4adaf7ec0fa6dd1d4cd57))
+
+# [0.79.0-alpha.16](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.15...0.79.0-alpha.16) (2022-04-13)
+
+
+### Bug Fixes
+
+* iamInstanceProfile never returning when there's a permission's error ([63e6d4a](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/63e6d4a3b8622c5d14a082cc3d9f2eef338c670c))
+
+# [0.79.0-alpha.15](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.14...0.79.0-alpha.15) (2022-04-13)
+
+
+### Bug Fixes
+
+* add connection between networkInterface and securityGroup services ([8efe2aa](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/8efe2aa8e15536df124a666b05d5e08eec8e2f87))
+
+# [0.79.0-alpha.14](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.13...0.79.0-alpha.14) (2022-04-13)
+
+
+### Bug Fixes
+
+* **elasticBeanstalkApp:** add connection to iamRole, fixes to iamRole ([d5af1af](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d5af1af67656058e42874dd0260b7d1bf63310f5))
+
 # [0.79.0-alpha.13](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.12...0.79.0-alpha.13) (2022-04-12)
 
 

@@ -56,15 +56,19 @@ export const listInstancesProfiles = async (
               })
             }
 
-            const { InstanceProfiles = [], IsTruncated, Marker } = data
+            if (!isEmpty(data)) {
+              const { InstanceProfiles = [], IsTruncated, Marker } = data
 
-            instanceProfileList.push(...InstanceProfiles)
+              instanceProfileList.push(...InstanceProfiles)
 
-            if (IsTruncated) {
-              listAllInstanceProfiles(Marker)
+              if (IsTruncated) {
+                listAllInstanceProfiles(Marker)
+              }
+
+              resolve(instanceProfileList)
             }
 
-            resolve(instanceProfileList)
+            resolve([])
           }
         )
       } catch (error) {

@@ -17,6 +17,7 @@ type awsSqs implements awsBaseService @key(fields: "arn") {
   deduplicationScope: String @search(by: [hash, regexp])
   fifoThroughputLimit: String @search(by: [hash, regexp])
   contentBasedDeduplication: Boolean @search
+  elasticBeanstalkEnvs: [awsElasticBeanstalkEnv] @hasInverse(field: sqsQueues)
   tags: [awsRawTag]
   s3: [awsS3] @hasInverse(field: sqs)
 }

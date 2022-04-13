@@ -131,6 +131,7 @@ type awsAsg implements awsBaseService @key(fields: "arn") {
   tags: [awsRawTag]
   launchConfiguration: awsLaunchConfiguration
   ec2Instance: [awsEc2] @hasInverse(field: asg) #change to plural
+  elasticBeanstalkEnvs: [awsElasticBeanstalkEnv] @hasInverse(field: asgs)
   securityGroups: [awsSecurityGroup] @hasInverse(field: asg)
   ebs: [awsEbs] @hasInverse(field: asg)
   subnet: [awsSubnet] @hasInverse(field: asg) #change to plural

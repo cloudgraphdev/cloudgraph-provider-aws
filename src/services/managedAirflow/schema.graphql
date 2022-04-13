@@ -26,6 +26,8 @@ type awsManagedAirflow implements awsBaseService @key(fields: "arn") {
   subnets: [awsSubnet] @hasInverse(field: managedAirflows)
   securityGroups: [awsSecurityGroup] @hasInverse(field: managedAirflows)
   s3: [awsS3] @hasInverse(field: managedAirflows)
+  kms: [awsKms] @hasInverse(field: managedAirflows)
+  cloudwatchLogs: [awsCloudwatchLog] @hasInverse(field: managedAirflows)
 }
 
 type awsManagedAirflowNetworkConfig {

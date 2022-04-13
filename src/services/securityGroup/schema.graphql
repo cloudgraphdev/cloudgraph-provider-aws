@@ -22,6 +22,7 @@ type awsSecurityGroup implements awsBaseService @key(fields: "id") {
   clientVpnEndpoint: [awsClientVpnEndpoint] @hasInverse(field: securityGroups) #change to plural
   codebuilds: [awsCodebuild] @hasInverse(field: securityGroups)
   managedAirflows: [awsManagedAirflow] @hasInverse(field: securityGroups)
+  networkInterfaces: [awsNetworkInterface] @hasInverse(field: securityGroups)
   elasticSearchDomains: [awsElasticSearchDomain]
     @hasInverse(field: securityGroups)
   dmsReplicationInstances: [awsDmsReplicationInstance]

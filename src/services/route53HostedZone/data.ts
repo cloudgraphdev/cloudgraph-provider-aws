@@ -17,6 +17,7 @@ import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
 import AwsErrorLog from '../../utils/errorLog'
 import { ROUTE_53_CUSTOM_DELAY } from '../../config/constants'
+import { globalRegionName } from '../../enums/regions'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
@@ -128,7 +129,7 @@ export const getHostedZoneData = async (
               ...data.HostedZone,
               DelegationSet: data.DelegationSet,
               VPCs: data.VPCs,
-              region: 'global',
+              region: globalRegionName,
             })
 
             return resolveZone()

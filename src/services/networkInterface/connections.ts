@@ -6,6 +6,7 @@ import { RawAwsSubnet } from '../subnet/data'
 import { RawFlowLog } from '../flowLogs/data'
 import { RawNetworkInterface } from './data'
 import { RawAwsSageMakerNotebookInstance } from '../sageMakerNotebookInstance/data'
+import { AwsSecurityGroup } from '../securityGroup/data'
 
 export default ({
   service: networkInterface,
@@ -18,7 +19,8 @@ export default ({
 }): {
   [property: string]: ServiceConnection[]
 } => {
-  const { NetworkInterfaceId, SubnetId } = networkInterface
+  const { NetworkInterfaceId, SubnetId, Groups = [] } = networkInterface
+  const sgIds = Groups.map(({ GroupId }) => GroupId)
   const connections: ServiceConnection[] = []
   /**
    * Find Subnets used in Network Interface
@@ -84,6 +86,35 @@ export default ({
         relation: 'child',
         field: 'sageMakerNotebookInstances',
       })
+    }
+  }
+
+  /**
+   * Find related security groups
+   */
+  const securityGroups: {
+    name: string
+    data: { [property: string]: any[] }
+  } = data.find(({ name }) => name === services.sg)
+  if (securityGroups?.data?.[region]) {
+    const securityGroupsInRegion: AwsSecurityGroup[] = securityGroups.data[
+      region
+    ].filter(
+      ({ GroupId }: AwsSecurityGroup) =>
+        !isEmpty(sgIds) &&
+        sgIds.filter(str => str.toLowerCase().includes(GroupId.toLowerCase()))
+          .length > 0
+    )
+    if (!isEmpty(securityGroupsInRegion)) {
+      for (const securityGroup of securityGroupsInRegion) {
+        const { GroupId: id } = securityGroup
+        connections.push({
+          id,
+          resourceType: services.sg,
+          relation: 'child',
+          field: 'securityGroups',
+        })
+      }
     }
   }
 
