@@ -2504,6 +2504,7 @@ export type AwsElasticBeanstalkEnv = AwsBaseService & {
   ec2Instances?: Maybe<Array<Maybe<AwsEc2>>>;
   elasticBeanstalkApps?: Maybe<Array<Maybe<AwsElasticBeanstalkApp>>>;
   endpointUrl?: Maybe<Scalars['String']>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   name?: Maybe<Scalars['String']>;
   platformArn?: Maybe<Scalars['String']>;
   resources?: Maybe<Array<Maybe<AwsElasticBeanstalkEnvResource>>>;
@@ -3065,6 +3066,7 @@ export type AwsIamRole = AwsBaseService & {
   ecsServices?: Maybe<Array<Maybe<AwsEcsService>>>;
   eksClusters?: Maybe<Array<Maybe<AwsEksCluster>>>;
   elasticBeanstalkApps?: Maybe<Array<Maybe<AwsElasticBeanstalkApp>>>;
+  elasticBeanstalkEnvs?: Maybe<Array<Maybe<AwsElasticBeanstalkEnv>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
   glueJobs?: Maybe<Array<Maybe<AwsGlueJob>>>;
   guardDutyDetectors?: Maybe<Array<Maybe<AwsGuardDutyDetector>>>;

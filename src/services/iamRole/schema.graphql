@@ -13,6 +13,7 @@ type awsIamRole implements awsBaseService @key(fields: "id") {
   ecsServices: [awsEcsService] @hasInverse(field: iamRoles)
   eksClusters: [awsEksCluster] @hasInverse(field: iamRoles)
   elasticBeanstalkApps: [awsElasticBeanstalkApp] @hasInverse(field: iamRole)
+  elasticBeanstalkEnvs: [awsElasticBeanstalkEnv] @hasInverse(field: iamRole)
   flowLogs: [awsFlowLog] @hasInverse(field: iamRole)
   glueJobs: [awsGlueJob] @hasInverse(field: iamRole)
   guardDutyDetectors: [awsGuardDutyDetector] @hasInverse(field: iamRole)

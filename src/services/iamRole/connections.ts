@@ -16,6 +16,7 @@ import { RawAwsGuardDutyDetector } from '../guardDutyDetector/data'
 import { RawAwsSageMakerNotebookInstance } from '../sageMakerNotebookInstance/data'
 import { RawAwsSystemsManagerInstance } from '../systemsManagerInstance/data'
 import { RawAwsElasticBeanstalkApp } from '../elasticBeanstalkApplication/data'
+import { RawAwsElasticBeanstalkEnv } from '../elasticBeanstalkEnvironment/data'
 
 /**
  * IAM Role
@@ -250,6 +251,29 @@ export default ({
         resourceType: services.elasticBeanstalkApp,
         relation: 'child',
         field: 'elasticBeanstalkApps',
+      })
+    }
+  }
+
+  /**
+   * Find any elasticBeanstalkEnv related data
+   */
+  const elasticBEnvs = data.find(
+    ({ name }) => name === services.elasticBeanstalkEnv
+  )
+  if (elasticBEnvs?.data?.[region]) {
+    const dataAtRegion: RawAwsElasticBeanstalkEnv[] = elasticBEnvs.data[
+      region
+    ].filter(
+      ({ OperationsRole }: RawAwsElasticBeanstalkEnv) =>
+        OperationsRole === role.Arn
+    )
+    for (const elasticBEnv of dataAtRegion) {
+      connections.push({
+        id: elasticBEnv.EnvironmentId,
+        resourceType: services.elasticBeanstalkEnv,
+        relation: 'child',
+        field: 'elasticBeanstalkEnvs',
       })
     }
   }
