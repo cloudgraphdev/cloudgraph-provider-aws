@@ -257,6 +257,7 @@ export type AwsAlb = AwsBaseService & {
   dnsName?: Maybe<Scalars['String']>;
   dropInvalidHeaderFields?: Maybe<Scalars['String']>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
+  elasticBeanstalkEnvs?: Maybe<Array<Maybe<AwsElasticBeanstalkEnv>>>;
   hostedZone?: Maybe<Scalars['String']>;
   http2?: Maybe<Scalars['String']>;
   idleTimeout?: Maybe<Scalars['String']>;
@@ -469,6 +470,7 @@ export type AwsAsg = AwsBaseService & {
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   ec2InstanceIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  elasticBeanstalkEnvs?: Maybe<Array<Maybe<AwsElasticBeanstalkEnv>>>;
   enabledMetrics?: Maybe<Array<Maybe<AwsEnabledMetrics>>>;
   healthCheckGracePeriod?: Maybe<Scalars['Int']>;
   healthCheckType?: Maybe<Scalars['String']>;
@@ -2499,11 +2501,14 @@ export type AwsElasticBeanstalkApp = AwsBaseService & {
 };
 
 export type AwsElasticBeanstalkEnv = AwsBaseService & {
+  albs?: Maybe<Array<Maybe<AwsAlb>>>;
   applicationName?: Maybe<Scalars['String']>;
+  asgs?: Maybe<Array<Maybe<AwsAsg>>>;
   cname?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   ec2Instances?: Maybe<Array<Maybe<AwsEc2>>>;
-  elasticBeanstalkApps?: Maybe<Array<Maybe<AwsElasticBeanstalkApp>>>;
+  elasticBeanstalkApp?: Maybe<Array<Maybe<AwsElasticBeanstalkApp>>>;
+  elbs?: Maybe<Array<Maybe<AwsElb>>>;
   endpointUrl?: Maybe<Scalars['String']>;
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   name?: Maybe<Scalars['String']>;
@@ -2511,6 +2516,7 @@ export type AwsElasticBeanstalkEnv = AwsBaseService & {
   resources?: Maybe<Array<Maybe<AwsElasticBeanstalkEnvResource>>>;
   settings?: Maybe<Array<Maybe<AwsElasticBeanstalkEnvSetting>>>;
   solutionStackName?: Maybe<Scalars['String']>;
+  sqsQueues?: Maybe<Array<Maybe<AwsSqs>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   tier?: Maybe<Scalars['String']>;
   versionLabel?: Maybe<Scalars['String']>;
@@ -2680,6 +2686,7 @@ export type AwsElb = AwsBaseService & {
   crossZoneLoadBalancing?: Maybe<Scalars['String']>;
   dnsName?: Maybe<Scalars['String']>;
   ecsService?: Maybe<Array<Maybe<AwsEcsService>>>;
+  elasticBeanstalkEnvs?: Maybe<Array<Maybe<AwsElasticBeanstalkEnv>>>;
   healthCheck?: Maybe<AwsElbHealthCheck>;
   hostedZone?: Maybe<Scalars['String']>;
   idleTimeout?: Maybe<Scalars['String']>;
@@ -3971,6 +3978,7 @@ export type AwsSqs = AwsBaseService & {
   contentBasedDeduplication?: Maybe<Scalars['Boolean']>;
   deduplicationScope?: Maybe<Scalars['String']>;
   delaySeconds?: Maybe<Scalars['String']>;
+  elasticBeanstalkEnvs?: Maybe<Array<Maybe<AwsElasticBeanstalkEnv>>>;
   fifoQueue?: Maybe<Scalars['Boolean']>;
   fifoThroughputLimit?: Maybe<Scalars['String']>;
   kmsDataKeyReusePeriodSeconds?: Maybe<Scalars['String']>;

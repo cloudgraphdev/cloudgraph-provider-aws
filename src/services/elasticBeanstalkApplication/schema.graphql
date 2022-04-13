@@ -2,7 +2,7 @@ type awsElasticBeanstalkApp implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp])
   iamServiceRole: String @search(by: [hash, regexp])
-  elasticBeanstalkEnvs: [awsElasticBeanstalkEnv] @hasInverse(field: elasticBeanstalkApps)
+  elasticBeanstalkEnvs: [awsElasticBeanstalkEnv] @hasInverse(field: elasticBeanstalkApp)
   tags: [awsRawTag]
   iamRole: [awsIamRole] @hasInverse(field: elasticBeanstalkApps)
 }
