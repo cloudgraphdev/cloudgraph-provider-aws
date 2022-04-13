@@ -11,7 +11,7 @@ type awsElasticBeanstalkEnv implements awsBaseService @key(fields: "arn") {
   tier: String @search(by: [hash])
   versionLabel: String @search(by: [hash, regexp])
   tags: [awsRawTag]
-  elasticBeanstalkApp: [awsElasticBeanstalkApp] @hasInverse(field: elasticBeanstalkEnv)
+  elasticBeanstalkApps: [awsElasticBeanstalkApp] @hasInverse(field: elasticBeanstalkEnvs)
   ec2Instances: [awsEc2] @hasInverse(field: elasticBeanstalkEnv)
 }
 

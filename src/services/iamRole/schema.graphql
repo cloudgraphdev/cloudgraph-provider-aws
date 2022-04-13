@@ -7,21 +7,20 @@ type awsIamRole implements awsBaseService @key(fields: "id") {
   maxSessionDuration: Int @search
   tags: [awsRawTag]
   inlinePolicies: [String]
-  iamAttachedPolicies: [awsIamPolicy] @hasInverse(field: iamRoles)
-  eksCluster: [awsEksCluster] @hasInverse(field: iamRoles) #change to plural
-  ecsService: [awsEcsService] @hasInverse(field: iamRoles) #change to plural
-  flowLogs: [awsFlowLog] @hasInverse(field: iamRole)
   cloudFormationStack: [awsCloudFormationStack] @hasInverse(field: iamRole)
-  configurationRecorder: [awsConfigurationRecorder] @hasInverse(field: iamRole)
   codebuilds: [awsCodebuild] @hasInverse(field: iamRoles)
+  configurationRecorder: [awsConfigurationRecorder] @hasInverse(field: iamRole)
+  ecsServices: [awsEcsService] @hasInverse(field: iamRoles)
+  eksClusters: [awsEksCluster] @hasInverse(field: iamRoles)
+  elasticBeanstalkApps: [awsElasticBeanstalkApp] @hasInverse(field: iamRole)
+  flowLogs: [awsFlowLog] @hasInverse(field: iamRole)
   glueJobs: [awsGlueJob] @hasInverse(field: iamRole)
-  managedAirflows: [awsManagedAirflow] @hasInverse(field: iamRoles)
   guardDutyDetectors: [awsGuardDutyDetector] @hasInverse(field: iamRole)
-  sageMakerNotebookInstances: [awsSageMakerNotebookInstance]
-    @hasInverse(field: iamRole)
-  systemsManagerInstances: [awsSystemsManagerInstance]
-    @hasInverse(field: iamRole)
+  iamAttachedPolicies: [awsIamPolicy] @hasInverse(field: iamRoles)
   iamInstanceProfiles: [awsIamInstanceProfile] @hasInverse(field: iamRole)
+  managedAirflows: [awsManagedAirflow] @hasInverse(field: iamRoles)
+  sageMakerNotebookInstances: [awsSageMakerNotebookInstance] @hasInverse(field: iamRole)
+  systemsManagerInstances: [awsSystemsManagerInstance] @hasInverse(field: iamRole)
   s3: [awsS3] @hasInverse(field: iamRole)
   dynamodb: [awsDynamoDbTable] @hasInverse(field: iamRoles)
   ec2Instances: [awsEc2] @hasInverse(field: iamRole)
