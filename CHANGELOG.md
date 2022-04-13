@@ -1,3 +1,10 @@
+# [0.79.0-alpha.15](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.14...0.79.0-alpha.15) (2022-04-13)
+
+
+### Bug Fixes
+
+* add connection between networkInterface and securityGroup services ([8efe2aa](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/8efe2aa8e15536df124a666b05d5e08eec8e2f87))
+
 # [0.79.0-alpha.14](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.13...0.79.0-alpha.14) (2022-04-13)
 
 
