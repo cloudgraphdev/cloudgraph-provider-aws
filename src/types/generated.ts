@@ -919,6 +919,7 @@ export type AwsCloudwatchLog = {
   cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
   creationTime?: Maybe<Scalars['String']>;
   ecsCluster?: Maybe<Array<Maybe<AwsEcsCluster>>>;
+  elasticSearchDomains?: Maybe<Array<Maybe<AwsElasticSearchDomain>>>;
   id: Scalars['String'];
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   kmsKeyId?: Maybe<Scalars['String']>;
@@ -1122,6 +1123,7 @@ export type AwsCognitoIdentityPool = {
   arn: Scalars['String'];
   cognitoIdentityProviders?: Maybe<Array<Maybe<AwsCognitoIdentityProviders>>>;
   developerProviderName?: Maybe<Scalars['String']>;
+  elasticSearchDomains?: Maybe<Array<Maybe<AwsElasticSearchDomain>>>;
   iamOpenIdConnectProviders?: Maybe<Array<Maybe<AwsIamOpenIdConnectProvider>>>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   iamSamlProviders?: Maybe<Array<Maybe<AwsIamSamlProvider>>>;
@@ -1156,6 +1158,7 @@ export type AwsCognitoUserPool = AwsBaseService & {
   deviceConfigChallengeRequiredOnNewDevice?: Maybe<Scalars['String']>;
   deviceConfigDeviceOnlyRememberedOnUserPrompt?: Maybe<Scalars['String']>;
   domain?: Maybe<Scalars['String']>;
+  elasticSearchDomains?: Maybe<Array<Maybe<AwsElasticSearchDomain>>>;
   emailConfigConfigurationSet?: Maybe<Scalars['String']>;
   emailConfigEmailSendingAccount?: Maybe<Scalars['String']>;
   emailConfigFrom?: Maybe<Scalars['String']>;
@@ -2606,7 +2609,10 @@ export type AwsElasticSearchDomain = AwsBaseService & {
   advancedSecurityOptions?: Maybe<AwsElasticSearchAdvancedSecurityOptions>;
   autoTuneOptions?: Maybe<AwsElasticSearchAutoTuneOptions>;
   changeProcessDetails?: Maybe<AwsElasticSearchChangeProcessDetails>;
+  cloudwatchLogs?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
+  cognitoIdentityPool?: Maybe<Array<Maybe<AwsCognitoIdentityPool>>>;
   cognitoOptions?: Maybe<AwsElasticSearchCognitoOptions>;
+  cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   created?: Maybe<Scalars['Boolean']>;
   deleted?: Maybe<Scalars['Boolean']>;
   domainEndpointOptions?: Maybe<AwsElasticSearchDomainEndpointOptions>;
@@ -2617,6 +2623,7 @@ export type AwsElasticSearchDomain = AwsBaseService & {
   encryptionAtRestOptions?: Maybe<AwsElasticSearchEncryptionAtRestOptions>;
   endpoint?: Maybe<Scalars['String']>;
   endpoints?: Maybe<Array<Maybe<AwsRawTag>>>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   logPublishingOptions?: Maybe<Array<Maybe<AwsElasticSearchLogPublishingOption>>>;
   nodeToNodeEncryptionOptions?: Maybe<AwsElasticSearchNodeToNodeEncryptionOptions>;
@@ -3081,6 +3088,7 @@ export type AwsIamRole = AwsBaseService & {
   eksClusters?: Maybe<Array<Maybe<AwsEksCluster>>>;
   elasticBeanstalkApps?: Maybe<Array<Maybe<AwsElasticBeanstalkApp>>>;
   elasticBeanstalkEnvs?: Maybe<Array<Maybe<AwsElasticBeanstalkEnv>>>;
+  elasticSearchDomains?: Maybe<Array<Maybe<AwsElasticSearchDomain>>>;
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
   glueJobs?: Maybe<Array<Maybe<AwsGlueJob>>>;
