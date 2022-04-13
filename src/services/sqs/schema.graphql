@@ -18,4 +18,5 @@ type awsSqs implements awsBaseService @key(fields: "arn") {
   fifoThroughputLimit: String @search(by: [hash, regexp])
   contentBasedDeduplication: Boolean @search
   tags: [awsRawTag]
+  s3: [awsS3] @hasInverse(field: sqs)
 }

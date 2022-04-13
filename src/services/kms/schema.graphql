@@ -1,3 +1,17 @@
+type awsKmsAliasListEntry
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  aliasName: String @search(by: [hash, regexp])
+  aliasArn: String @search(by: [hash, regexp])
+  targetKeyId: String @search(by: [hash, regexp])
+  creationDate: DateTime @search(by: [day])
+  lastUpdatedDate: DateTime @search(by: [day])
+}
+
 type awsKms implements awsBaseService @key(fields: "id") {
   description: String @search(by: [hash, regexp, fulltext])
   keyRotationEnabled: Boolean @search
@@ -7,11 +21,12 @@ type awsKms implements awsBaseService @key(fields: "id") {
   keyState: String @search(by: [hash, regexp])
   customerMasterKeySpec: String @search(by: [hash, regexp])
   tags: [awsRawTag]
-  creationDate: String @search(by: [hash, regexp])
+  creationDate: DateTime @search(by: [day])
   keyManager: String @search(by: [hash, regexp])
   origin: String @search(by: [hash, regexp])
-  deletionDate: String @search(by: [hash, regexp])
-  validTo: String @search(by: [hash, regexp])
+  deletionDate: DateTime @search(by: [day])
+  validTo: DateTime @search(by: [day])
+  aliases: [awsKmsAliasListEntry]
   lambda: [awsLambda] @hasInverse(field: kms) #change to plural
   cloudtrail: [awsCloudtrail] @hasInverse(field: kms) #change to plural
   redshiftCluster: [awsRedshiftCluster] @hasInverse(field: kms) #change to plural
@@ -28,6 +43,7 @@ type awsKms implements awsBaseService @key(fields: "id") {
   sageMakerNotebookInstances: [awsSageMakerNotebookInstance]
     @hasInverse(field: kms)
   rdsClusterSnapshots: [awsRdsClusterSnapshot] @hasInverse(field: kms)
+  secretsManager: [awsSecretsManager] @hasInverse(field: kms)
   ecsCluster: [awsEcsCluster] @hasInverse(field: kms)
   dynamodb: [awsDynamoDbTable] @hasInverse(field: kms)
   cognitoUserPools: [awsCognitoUserPool] @hasInverse(field: kms)

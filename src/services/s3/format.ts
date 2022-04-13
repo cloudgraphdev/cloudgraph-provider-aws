@@ -3,6 +3,7 @@ import isEmpty from 'lodash/isEmpty'
 
 import {
   GetBucketVersioningOutput,
+  NotificationConfiguration,
   Policy,
   PolicyStatus,
   PublicAccessBlockConfiguration,
@@ -47,6 +48,7 @@ export default ({
       ReqPaymentConfig: reqPaymentConfig,
       StaticWebsiteInfo: staticWebsiteInfo,
       VersioningInfo: versioningInfo,
+      NotificationConfiguration: notificationConfiguration,
     } = {
       AccelerationConfig: '',
       BucketOwnerData: { DisplayName: '' },
@@ -62,6 +64,7 @@ export default ({
       ReqPaymentConfig: '',
       StaticWebsiteInfo: {},
       VersioningInfo: {},
+      NotificationConfiguration: {},
     },
   } = rawData
 
@@ -172,6 +175,52 @@ export default ({
     })
   }
 
+  let notificationConfigurationData = {
+    topicConfigurations: [],
+    queueConfigurations: [],
+    lambdaFunctionConfigurations: [],
+  }
+
+  if (!isEmpty(notificationConfiguration)) {
+    const {
+      TopicConfigurations: topicConfigurations = [],
+      QueueConfigurations: queueConfigurations = [],
+      LambdaFunctionConfigurations: lambdaFunctionConfigurations = [],
+    }: NotificationConfiguration = notificationConfiguration
+    notificationConfigurationData = {
+      topicConfigurations: topicConfigurations?.map(tc => ({
+        id: tc.Id || cuid(),
+        topicArn: tc.TopicArn,
+        events: tc.Events || [],
+        filterRules: tc.Filter?.Key?.FilterRules?.map(r => ({
+          id: cuid(),
+          name: r.Name,
+          value: r.Value,  
+        })) || [],
+      })) || [],
+      queueConfigurations: queueConfigurations?.map(qc => ({
+        id: qc.Id || cuid(),
+        queueArn: qc.QueueArn,
+        events: qc.Events || [],
+        filterRules: qc.Filter?.Key?.FilterRules?.map(r => ({
+          id: cuid(),
+          name: r.Name,
+          value: r.Value,  
+        })) || [],
+      })) || [],
+      lambdaFunctionConfigurations: lambdaFunctionConfigurations?.map(lc => ({
+        id: lc.Id || cuid(),
+        lambdaFunctionArn: lc.LambdaFunctionArn,
+        events: lc.Events || [],
+        filterRules: lc.Filter?.Key?.FilterRules?.map(r => ({
+          id: cuid(),
+          name: r.Name,
+          value: r.Value,  
+        })) || [],
+      })) || [],
+    }
+  }
+
   // // Format S3 Tags
   const s3Tags = formatTagsFromMap(tags)
 
@@ -201,6 +250,7 @@ export default ({
       ? `${awsBucketItemsLimit}+`
       : `${total}`,
     transferAcceleration: accelerationStatus,
+    notificationConfiguration: notificationConfigurationData,
   }
   return s3
 }

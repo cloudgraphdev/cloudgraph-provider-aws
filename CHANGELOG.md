@@ -1,3 +1,40 @@
+# [0.79.0-alpha.13](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.12...0.79.0-alpha.13) (2022-04-12)
+
+
+### Features
+
+* **asg:** add iam role connection ([06285db](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/06285db82a8b2feb821d95446e3e0fe87c54cd51))
+
+# [0.79.0-alpha.12](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.11...0.79.0-alpha.12) (2022-04-12)
+
+
+### Bug Fixes
+
+* add connection between nacl and subnet services ([6ed6dee](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/6ed6dee345daa6342f651e5c00bb92178b259954))
+
+# [0.79.0-alpha.11](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.10...0.79.0-alpha.11) (2022-04-12)
+
+
+### Features
+
+* **s3:** Add connections to iamRole, lambda, sns and sqs services ([1ca01fd](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/1ca01fd9b1dabc110b87e0c74e3e63b5c0cb1099))
+* **s3:** Add connections to iamRole, lambda, sns and sqs services ([22a8cfd](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/22a8cfdbd1365a5b94fdbc91d54886b1135c9682))
+
+# [0.79.0-alpha.10](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.9...0.79.0-alpha.10) (2022-04-12)
+
+
+### Features
+
+* **cloudFormationStackSet:** add iam role connection ([e25bffb](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/e25bffb1f467706ff6a0cc752804a6b3738f6c8b))
+
+# [0.79.0-alpha.9](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.8...0.79.0-alpha.9) (2022-04-12)
+
+
+### Features
+
+* Handle TODOs for secrets manager ([d7a975d](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d7a975dc2a5ffdb784eef36c4a827d553e7ac1c3))
+* Update README file ([0ddf442](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/0ddf44211fe3f324371e6a21c6d5df3bc69facfb))
+
 # [0.79.0-alpha.8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.7...0.79.0-alpha.8) (2022-04-11)
 
 
