@@ -1,3 +1,10 @@
+# [0.79.0-alpha.13](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.12...0.79.0-alpha.13) (2022-04-12)
+
+
+### Features
+
+* **asg:** add iam role connection ([06285db](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/06285db82a8b2feb821d95446e3e0fe87c54cd51))
+
 # [0.79.0-alpha.12](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.11...0.79.0-alpha.12) (2022-04-12)
 
 
