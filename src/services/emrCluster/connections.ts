@@ -4,6 +4,7 @@ import { RawAwsEmrCluster } from '../emrCluster/data'
 import { RawAwsSubnet } from '../subnet/data'
 import { RawAwsIamRole } from '../iamRole/data'
 import services from '../../enums/services'
+import { globalRegionName } from '../../enums/regions'
 
 export default ({
   service,
@@ -80,8 +81,10 @@ export default ({
     data: { [property: string]: any[] }
   } = data.find(({ name }) => name === services.iamRole)
 
-  if (iamRoles?.data?.[region]) {
-    const iamRolesInRegion: RawAwsIamRole[] = iamRoles.data[region].filter(
+  if (iamRoles?.data?.[globalRegionName]) {
+    const iamRolesInRegion: RawAwsIamRole[] = iamRoles.data[
+      globalRegionName
+    ].filter(
       ({ RoleName }: RawAwsIamRole) =>
         RoleName === ServiceRole || RoleName === AutoScalingRole
     )
