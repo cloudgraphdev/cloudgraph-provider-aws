@@ -49,4 +49,5 @@ type awsKms implements awsBaseService @key(fields: "id") {
   cognitoUserPools: [awsCognitoUserPool] @hasInverse(field: kms)
   rdsCluster: [awsRdsCluster] @hasInverse(field: kms)
   rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: kms)
+  managedAirflows: [awsManagedAirflow] @hasInverse(field: kms)
 }
