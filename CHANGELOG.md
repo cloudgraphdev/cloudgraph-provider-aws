@@ -1,3 +1,10 @@
+# [0.79.0-alpha.14](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.13...0.79.0-alpha.14) (2022-04-13)
+
+
+### Bug Fixes
+
+* **elasticBeanstalkApp:** add connection to iamRole, fixes to iamRole ([d5af1af](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d5af1af67656058e42874dd0260b7d1bf63310f5))
+
 # [0.79.0-alpha.13](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.12...0.79.0-alpha.13) (2022-04-12)
 
 
