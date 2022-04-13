@@ -922,6 +922,7 @@ export type AwsCloudwatchLog = {
   kmsKeyId?: Maybe<Scalars['String']>;
   metricFilterCount?: Maybe<Scalars['Int']>;
   metricFilters?: Maybe<Array<Maybe<AwsMetricFilter>>>;
+  rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   region?: Maybe<Scalars['String']>;
   retentionInDays?: Maybe<Scalars['Int']>;
   storedBytes?: Maybe<Scalars['String']>;
@@ -3079,8 +3080,8 @@ export type AwsIamRole = AwsBaseService & {
   maxSessionDuration?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
-  rdsClusterIamRoles?: Maybe<Array<Maybe<AwsRdsCluster>>>;
-  rdsClusterMonitoringRole?: Maybe<Array<Maybe<AwsRdsCluster>>>;
+  rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
+  rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   s3?: Maybe<Array<Maybe<AwsS3>>>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   systemsManagerInstances?: Maybe<Array<Maybe<AwsSystemsManagerInstance>>>;
@@ -3212,10 +3213,9 @@ export type AwsKms = AwsBaseService & {
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   origin?: Maybe<Scalars['String']>;
   policy?: Maybe<AwsIamJsonPolicy>;
-  rdsClusterActivityStream?: Maybe<Array<Maybe<AwsRdsCluster>>>;
-  rdsClusterPerformanceInsights?: Maybe<Array<Maybe<AwsRdsCluster>>>;
+  rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsClusterSnapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
-  rdsClusterStorageEncryption?: Maybe<Array<Maybe<AwsRdsCluster>>>;
+  rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   redshiftCluster?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   secretsManager?: Maybe<Array<Maybe<AwsSecretsManager>>>;
@@ -3503,7 +3503,6 @@ export type AwsRawTag = {
 };
 
 export type AwsRdsCluster = AwsBaseService & {
-  activityStreamKms?: Maybe<Array<Maybe<AwsKms>>>;
   allocatedStorage?: Maybe<Scalars['Int']>;
   appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
   backupRetentionPeriod?: Maybe<Scalars['Int']>;
@@ -3515,6 +3514,8 @@ export type AwsRdsCluster = AwsBaseService & {
   crossAccountClone?: Maybe<Scalars['Boolean']>;
   databaseName?: Maybe<Scalars['String']>;
   dbClusterIdentifier?: Maybe<Scalars['String']>;
+  dbClusterParameterGroup?: Maybe<Scalars['String']>;
+  dbSubnetGroup?: Maybe<Scalars['String']>;
   deletionProtection?: Maybe<Scalars['Boolean']>;
   encrypted?: Maybe<Scalars['Boolean']>;
   engine?: Maybe<Scalars['String']>;
@@ -3526,20 +3527,19 @@ export type AwsRdsCluster = AwsBaseService & {
   iamDbAuthenticationEnabled?: Maybe<Scalars['Boolean']>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   instances?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
   kmsKey?: Maybe<Scalars['String']>;
-  monitoringIamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   multiAZ?: Maybe<Scalars['Boolean']>;
   percentProgress?: Maybe<Scalars['String']>;
-  performanceInsightsKms?: Maybe<Array<Maybe<AwsKms>>>;
   port?: Maybe<Scalars['Int']>;
   readerEndpoint?: Maybe<Scalars['String']>;
   replicationSourceIdentifier?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
+  route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   snapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
   status?: Maybe<Scalars['String']>;
-  storageEncryptedKms?: Maybe<Array<Maybe<AwsKms>>>;
-  subnets?: Maybe<Scalars['String']>;
+  subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   username?: Maybe<Scalars['String']>;
 };
@@ -3585,6 +3585,7 @@ export type AwsRdsDbInstance = AwsBaseService & {
   autoMinorVersionUpgrade?: Maybe<Scalars['Boolean']>;
   availabilityZone?: Maybe<Scalars['String']>;
   certificateAuthority?: Maybe<Scalars['String']>;
+  cloudwatchLogs?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
   cluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   copyTagsToSnapshot?: Maybe<Scalars['Boolean']>;
   createdTime?: Maybe<Scalars['String']>;
@@ -3596,7 +3597,9 @@ export type AwsRdsDbInstance = AwsBaseService & {
   failoverPriority?: Maybe<Scalars['Int']>;
   hostedZoneId?: Maybe<Scalars['String']>;
   iamDbAuthenticationEnabled?: Maybe<Scalars['Boolean']>;
+  iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   instanceClass?: Maybe<Scalars['String']>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
   kmsKey?: Maybe<Scalars['String']>;
   licenseModel?: Maybe<Scalars['String']>;
   multiAZ?: Maybe<Scalars['Boolean']>;
@@ -3607,6 +3610,7 @@ export type AwsRdsDbInstance = AwsBaseService & {
   port?: Maybe<Scalars['Int']>;
   publiclyAccessible?: Maybe<Scalars['Boolean']>;
   resourceId?: Maybe<Scalars['String']>;
+  route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   status?: Maybe<Scalars['String']>;
   storageType?: Maybe<Scalars['String']>;
@@ -3680,6 +3684,8 @@ export type AwsRoute53HostedZone = AwsBaseService & {
   delegationSetId?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   nameServers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
+  rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   route53Record?: Maybe<Array<Maybe<AwsRoute53Record>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
@@ -4007,6 +4013,7 @@ export type AwsSubnet = AwsBaseService & {
   nacls?: Maybe<Array<Maybe<AwsNetworkAcl>>>;
   natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
