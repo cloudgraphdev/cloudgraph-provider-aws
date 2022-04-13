@@ -1,3 +1,17 @@
+# [0.79.0-alpha.17](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.16...0.79.0-alpha.17) (2022-04-13)
+
+
+### Bug Fixes
+
+* Added missing connections to RDS DB Instance ([206bd29](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/206bd29fd9189d10ab628c07f206e5e6a4725bf6))
+
+
+### Features
+
+* **rds:** add kms connection cluster/dbInstance ([f501a4e](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/f501a4e079503d10841f1af32d3a12f13d277aa2))
+* **rdsCluster:** add route53HostedZone connection ([6480e7f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/6480e7f16c404ebb2c7f2f458aa95ae2db93f0dc))
+* **rdsCluster:** add subnet connection, add missing properties ([7706a02](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/7706a0243384d949f1c4adaf7ec0fa6dd1d4cd57))
+
 # [0.79.0-alpha.16](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.15...0.79.0-alpha.16) (2022-04-13)
 
 
