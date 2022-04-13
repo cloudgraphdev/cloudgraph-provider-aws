@@ -1,3 +1,10 @@
+# [0.79.0-alpha.16](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.15...0.79.0-alpha.16) (2022-04-13)
+
+
+### Bug Fixes
+
+* iamInstanceProfile never returning when there's a permission's error ([63e6d4a](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/63e6d4a3b8622c5d14a082cc3d9f2eef338c670c))
+
 # [0.79.0-alpha.15](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.14...0.79.0-alpha.15) (2022-04-13)
 
 
