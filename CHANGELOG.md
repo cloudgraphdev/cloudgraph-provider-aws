@@ -1,3 +1,10 @@
+# [0.79.0-alpha.18](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.17...0.79.0-alpha.18) (2022-04-13)
+
+
+### Bug Fixes
+
+* **elasticBeanstalkEnv:** add connections with alb, elb, ec2 and sqs services ([fe21ecd](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/fe21ecd924695395dde77a8704bf0e7edcb26c36))
+
 # [0.79.0-alpha.17](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.16...0.79.0-alpha.17) (2022-04-13)
 
 
