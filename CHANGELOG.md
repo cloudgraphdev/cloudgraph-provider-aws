@@ -1,3 +1,10 @@
+# [0.79.0-alpha.19](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.18...0.79.0-alpha.19) (2022-04-13)
+
+
+### Bug Fixes
+
+* Added missing connections to managedAirflow ([dbb9405](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/dbb94058dd22c0b538b4f9491e6874031747480f))
+
 # [0.79.0-alpha.18](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.17...0.79.0-alpha.18) (2022-04-13)
 
 
