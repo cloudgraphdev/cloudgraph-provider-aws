@@ -1,3 +1,10 @@
+# [0.79.0-alpha.20](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.19...0.79.0-alpha.20) (2022-04-14)
+
+
+### Features
+
+* **cognitoIdentityPool:** add iamRole/iamOpenIdConnectProvider/iamSamlProvider connections, generate arn ([3ba9610](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/3ba9610af535f9b84f229ce6abcfcf1e43664d45))
+
 # [0.79.0-alpha.19](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.18...0.79.0-alpha.19) (2022-04-13)
 
 
