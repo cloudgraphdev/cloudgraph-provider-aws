@@ -310,7 +310,7 @@ export default ({
           id: elasticBeanstalkEnv.EnvironmentId,
           resourceType: services.elasticBeanstalkEnv,
           relation: 'child',
-          field: 'elasticBeanstalkEnv',
+          field: 'elasticBeanstalkEnvs',
         })
       }
     }
