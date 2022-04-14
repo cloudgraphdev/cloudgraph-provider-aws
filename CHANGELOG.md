@@ -1,3 +1,10 @@
+# [0.79.0-alpha.21](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.20...0.79.0-alpha.21) (2022-04-14)
+
+
+### Bug Fixes
+
+* Created iamRole connection for emrCluster ([80a39e1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/80a39e19046ad46a2897f667171b271b5a1f9cc7))
+
 # [0.79.0-alpha.20](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.19...0.79.0-alpha.20) (2022-04-14)
 
 
