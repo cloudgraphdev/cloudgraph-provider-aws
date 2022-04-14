@@ -273,6 +273,7 @@ export type AwsAlb = AwsBaseService & {
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   type?: Maybe<Scalars['String']>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  webAcl?: Maybe<Array<Maybe<AwsWafV2WebAcl>>>;
 };
 
 export type AwsAlbListener = {
@@ -338,6 +339,7 @@ export type AwsApiGatewayStage = AwsBaseService & {
   restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   variables?: Maybe<Array<Maybe<AwsApiGatewayStageVariable>>>;
+  webAcl?: Maybe<Array<Maybe<AwsWafV2WebAcl>>>;
   xrayTracing?: Maybe<Scalars['Boolean']>;
 };
 
@@ -4575,6 +4577,8 @@ export type AwsWafV2VisibilityConfig = {
 
 export type AwsWafV2WebAcl = AwsBaseService & {
   ManagedByFirewallManager?: Maybe<Scalars['Boolean']>;
+  albs?: Maybe<Array<Maybe<AwsAlb>>>;
+  apiGatewayStages?: Maybe<Array<Maybe<AwsApiGatewayStage>>>;
   appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
   capacity?: Maybe<Scalars['Int']>;
   cloudfront?: Maybe<Array<Maybe<AwsCloudfront>>>;

@@ -22,6 +22,7 @@ type awsAlb implements awsBaseService @key(fields: "arn") {
   listeners: [awsAlbListener]
   subnet: [awsSubnet] @hasInverse(field: alb) #change to plural
   elasticBeanstalkEnvs: [awsElasticBeanstalkEnv] @hasInverse(field: albs)
+  webAcl: [awsWafV2WebAcl] @hasInverse(field: albs)
 }
 
 type awsAlbListener

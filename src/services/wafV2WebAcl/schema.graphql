@@ -13,6 +13,8 @@ type awsWafV2WebAcl implements awsBaseService @key(fields: "arn") {
   loggingConfiguration: awsWafV2LoggingConfig
   cloudfront: [awsCloudfront] @hasInverse(field: webAcl)
   appSync: [awsAppSync] @hasInverse(field: webAcl)
+  apiGatewayStages: [awsApiGatewayStage] @hasInverse(field: webAcl)
+  albs: [awsAlb] @hasInverse(field: webAcl)
 }
 
 type awsWafV2Rule {

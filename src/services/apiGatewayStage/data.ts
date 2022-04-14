@@ -39,6 +39,7 @@ export interface RawAwsApiGatewayStage extends Omit<Stage, 'Tags'> {
   restApiId: string
   Tags?: TagMap
   region: string
+  arn: string
 }
 
 const getStages = async ({ apiGw, restApiId }): Promise<ListOfStage> =>
@@ -133,11 +134,19 @@ export default async ({
       })
       const additionalPromise = new Promise<void>(async resolveAdditional => {
         const stages = await getStages({ apiGw, restApiId })
+        const arn = apiGatewayRestApiArn({
+          restApiArn: apiGatewayArn({ region }),
+          id: restApiId,
+        })
         apiGatewayStages.push(
           ...stages.map(stage => ({
             ...stage,
             restApiId,
             region,
+            arn: apiGatewayStageArn({
+              restApiArn: arn,
+              name: stage.stageName,
+            }),
           }))
         )
 
@@ -152,7 +161,7 @@ export default async ({
 
     // get all tags for each stage
     apiGatewayStages.map(stage => {
-      const { stageName, restApiId, region } = stage
+      const { arn, region } = stage
       const apiGw = new APIGW({
         ...config,
         region,
@@ -160,16 +169,9 @@ export default async ({
         ...customRetrySettings,
       })
       const tagsPromise = new Promise<void>(async resolveTags => {
-        const arn = apiGatewayRestApiArn({
-          restApiArn: apiGatewayArn({ region }),
-          id: restApiId,
-        })
         stage.Tags = await getTags({
           apiGw,
-          arn: apiGatewayStageArn({
-            restApiArn: arn,
-            name: stageName,
-          }),
+          arn,
         })
         resolveTags()
       })
