@@ -1,4 +1,3 @@
-#TODO: add iamRole connection here
 type awsEmrCluster implements awsBaseService @key(fields: "arn") {
   status: AwsEmrClusterStatus
   ec2InstanceAttributes: AwsEmrClusterEc2InstanceAttributes
@@ -12,12 +11,10 @@ type awsEmrCluster implements awsBaseService @key(fields: "arn") {
   terminationProtected: Boolean @search
   visibleToAllUsers: Boolean @search
   applications: [AwsEmrClusterApplication]
-  serviceRole: String @search(by: [hash, regexp])
   normalizedInstanceHours: Int @search
   masterPublicDnsName: String @search(by: [hash, regexp])
   configurations: [AwsEmrClusterConfiguration]
   securityConfiguration: String @search(by: [hash, regexp])
-  autoScalingRole: String @search(by: [hash, regexp])
   scaleDownBehavior: String @search(by: [hash, regexp])
   customAmiId: String @search(by: [hash, regexp])
   ebsRootVolumeSize: Int @search
@@ -29,6 +26,7 @@ type awsEmrCluster implements awsBaseService @key(fields: "arn") {
   tags: [awsRawTag]
   kms: [awsKms] @hasInverse(field: emrCluster)
   subnet: [awsSubnet] @hasInverse(field: emrCluster) #change to plural
+  iamRoles: [awsIamRole] @hasInverse(field: emrCluster)
 }
 
 type AwsEmrClusterApplication
