@@ -1,3 +1,10 @@
+# [0.79.0-alpha.22](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.21...0.79.0-alpha.22) (2022-04-14)
+
+
+### Bug Fixes
+
+* **elasticSearchDomain:** add cloudwatchLogs, cognitoIdentityPool, cognitoUserPool, iamRole connections ([694d298](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/694d298af419a8f18f55ccebb5fc21b06574c930))
+
 # [0.79.0-alpha.21](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.20...0.79.0-alpha.21) (2022-04-14)
 
 
