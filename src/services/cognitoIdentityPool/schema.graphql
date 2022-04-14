@@ -34,6 +34,7 @@ type awsCognitoIdentityPool @key(fields: "id") {
   cognitoIdentityProviders: [awsCognitoIdentityProviders]
   samlProviderARNs: [String] @search
   tags: [awsRawTag]
+  elasticSearchDomains: [awsElasticSearchDomain] @hasInverse(field: cognitoIdentityPool)
   iamRoles: [awsIamRole] @hasInverse(field: awsCognitoIdentityPool)
   iamOpenIdConnectProviders: [awsIamOpenIdConnectProvider] @hasInverse(field: awsCognitoIdentityPool)
   iamSamlProviders: [awsIamSamlProvider] @hasInverse(field: awsCognitoIdentityPool)

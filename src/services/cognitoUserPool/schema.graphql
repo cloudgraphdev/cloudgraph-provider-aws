@@ -124,4 +124,5 @@ type awsCognitoUserPool implements awsBaseService @key(fields: "id") {
   kms: [awsKms] @hasInverse(field: cognitoUserPools)
   ses: [awsSes] @hasInverse(field: cognitoUserPools)
   iamRole: [awsIamRole] @hasInverse(field: cognitoUserPools)
+  elasticSearchDomains: [awsElasticSearchDomain] @hasInverse(field: cognitoUserPool)
 }
