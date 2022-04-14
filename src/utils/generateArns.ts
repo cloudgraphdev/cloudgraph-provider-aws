@@ -260,3 +260,13 @@ export const ssmDocumentArn = ({
   account: string
   name: string
 }): string => `arn:aws:ssm:${region}:${account}:document/${name}`
+
+export const cognitoIdentityPoolArn = ({
+  region,
+  account,
+  identityPoolId,
+}: {
+  region: string
+  account: string
+  identityPoolId: string
+}): string => `arn:aws:cognito-identity:${region}:${account}:identitypool/${identityPoolId}`
