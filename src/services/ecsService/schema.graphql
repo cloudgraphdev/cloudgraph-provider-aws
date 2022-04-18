@@ -29,7 +29,7 @@ type awsEcsService implements awsBaseService @key(fields: "arn") {
   ecsTaskDefinition: [awsEcsTaskDefinition] @hasInverse(field: ecsService)
   ecsTaskSet: [awsEcsTaskSet] @hasInverse(field: ecsService)
   elb: [awsElb] @hasInverse(field: ecsService)
-  iamRoles: [awsIamRole] @hasInverse(field: ecsService)
+  iamRoles: [awsIamRole] @hasInverse(field: ecsServices)
   securityGroups: [awsSecurityGroup] @hasInverse(field: ecsService)
   subnet: [awsSubnet] @hasInverse(field: ecsService) #change to plural
   vpc: [awsVpc] @hasInverse(field: ecsServices)

@@ -47,6 +47,7 @@ export default {
   [services.iamUser]: 'iamUsers',
   [services.kinesisStream]: 'kinesisStreams',
   [services.lambda]: 'lambdaFunctions',
+  [services.managedAirflow]: 'managedAirflows',
   [services.nat]: 'natGateway',
   [services.networkInterface]: 'networkInterfaces',
   [services.organization]: 'organizations',

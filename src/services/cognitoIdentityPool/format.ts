@@ -1,10 +1,12 @@
-import { IdentityProviders } from 'aws-sdk/clients/cognitoidentity';
-import cuid from 'cuid';
+import { IdentityProviders } from 'aws-sdk/clients/cognitoidentity'
+import cuid from 'cuid'
 import t from '../../properties/translations'
-
-import { AwsCognitoIdentityPool, AwsSupportedLoginProvider } from '../../types/generated';
-import { formatTagsFromMap } from '../../utils/format';
-import { RawAwsCognitoIdentityPool } from './data';
+import { AwsCognitoIdentityPool, AwsSupportedLoginProvider } from '../../types/generated'
+import { formatTagsFromMap } from '../../utils/format'
+import { RawAwsCognitoIdentityPool } from './data'
+import {
+  cognitoIdentityPoolArn,
+} from '../../utils/generateArns'
 
 /**
  * Cognito Identity Pool
@@ -53,9 +55,12 @@ export default ({
     serverSideTokenCheck: serverSideTokenCheck? t.yes : t.no,
   })) || []
 
+  const arn = cognitoIdentityPoolArn({ region, account, identityPoolId })
+
   const identityPool  = {
     id: identityPoolId,
     accountId: account,
+    arn,
     identityPoolName,
     allowUnauthenticatedIdentities: allowUnauthenticatedIdentities? t.yes : t.no,
     allowClassicFlow: allowClassicFlow? t.yes : t.no,

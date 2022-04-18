@@ -1,6 +1,7 @@
 import COGID, {
   IdentityPool,
   IdentityPoolShortDescription,
+  GetIdentityPoolRolesResponse,
 } from 'aws-sdk/clients/cognitoidentity'
 import { Config } from 'aws-sdk/lib/config'
 
@@ -25,6 +26,7 @@ const MAX_RESULTS = 60
 
 export interface RawAwsCognitoIdentityPool
   extends Omit<IdentityPool, 'IdentityPoolTags'> {
+  identityPoolRoles: GetIdentityPoolRolesResponse
   region: string
   Tags: TagMap
 }
@@ -91,6 +93,27 @@ const describeIdentityPool = async ({
   return null
 }
 
+const getIdentityPoolRoles = async ({
+  cogId,
+  IdentityPoolId,
+}: {
+  cogId: COGID
+  IdentityPoolId: string
+}): Promise<GetIdentityPoolRolesResponse> => {
+  try {
+    return await cogId
+      .getIdentityPoolRoles({ IdentityPoolId })
+      .promise()
+
+  } catch (err) {
+    errorLog.generateAwsErrorLog({
+      functionName: 'cognitoIdentityPool:getIdentityPoolRoles',
+      err,
+    })
+  }
+  return null
+}
+
 const listIdentityPoolData = async ({
   cogId,
   region,
@@ -106,8 +129,13 @@ const listIdentityPoolData = async ({
       cogId,
       IdentityPoolId: identityPoolId.IdentityPoolId,
     })
+    const identityPoolRoles = await getIdentityPoolRoles({
+      cogId,
+      IdentityPoolId: identityPoolId.IdentityPoolId,
+    })
     identityPoolData.push({
       ...identityPool,
+      identityPoolRoles,
       region,
     })
   }

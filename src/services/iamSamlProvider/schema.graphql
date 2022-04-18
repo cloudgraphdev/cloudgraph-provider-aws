@@ -1,4 +1,5 @@
 type awsIamSamlProvider implements awsOptionalService @key(fields: "id") {
   validUntil: String @search(by: [hash, regexp])
   createdDate: String @search(by: [hash, regexp])
+  awsCognitoIdentityPool: [awsCognitoIdentityPool] @hasInverse(field: iamSamlProviders)
 }

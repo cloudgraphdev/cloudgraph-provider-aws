@@ -23,6 +23,7 @@ type awsElb implements awsBaseService @key(fields: "arn") {
   route53Record: [awsRoute53Record] @hasInverse(field: elb) #change to plural
   subnet: [awsSubnet] @hasInverse(field: elb) #change to plural
   ecsService: [awsEcsService] @hasInverse(field: elb)
+  elasticBeanstalkEnvs: [awsElasticBeanstalkEnv] @hasInverse(field: elbs)
 }
 
 type awsElbSourceSecurityGroup

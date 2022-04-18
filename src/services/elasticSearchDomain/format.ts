@@ -87,7 +87,6 @@ export default ({
     securityGroupIds: vpcOptions?.SecurityGroupIds
   }
 
-  // TODO: create connections for cognito and role arn
   const formattedCognioOptions = {
     enabled: cognitoOptions?.Enabled,
     userPoolId: cognitoOptions?.UserPoolId,
@@ -110,7 +109,6 @@ export default ({
     value: advancedOptions[key]
   }))
 
-  // TODO: create connections for cloud watch logs groups
   const mappedLogPublishingOptions = Object.keys(logPublishingOptions ?? {}).map(key => ({
     id: cuid(),
     key,

@@ -15,6 +15,8 @@ import { RawAwsManagedAirflow } from '../managedAirflow/data'
 import { RawAwsGuardDutyDetector } from '../guardDutyDetector/data'
 import { RawAwsSageMakerNotebookInstance } from '../sageMakerNotebookInstance/data'
 import { RawAwsSystemsManagerInstance } from '../systemsManagerInstance/data'
+import { RawAwsElasticBeanstalkApp } from '../elasticBeanstalkApplication/data'
+import { RawAwsElasticBeanstalkEnv } from '../elasticBeanstalkEnvironment/data'
 
 /**
  * IAM Role
@@ -81,7 +83,7 @@ export default ({
           id: serviceArn,
           resourceType: services.ecsService,
           relation: 'child',
-          field: 'ecsService',
+          field: 'ecsServices',
         })
       }
     }
@@ -225,6 +227,53 @@ export default ({
         resourceType: services.sageMakerNotebookInstance,
         relation: 'child',
         field: 'sageMakerNotebookInstances',
+      })
+    }
+  }
+
+  /**
+   * Find any elasticBeanstalkApp related data
+   */
+  const elasticBApps = data.find(
+    ({ name }) => name === services.elasticBeanstalkApp
+  )
+  if (elasticBApps?.data?.[region]) {
+    const dataAtRegion: RawAwsElasticBeanstalkApp[] = elasticBApps.data[
+      region
+    ].filter(
+      ({
+        ResourceLifecycleConfig: { ServiceRole: iamServiceRole } = {},
+      }: RawAwsElasticBeanstalkApp) => iamServiceRole === role.Arn
+    )
+    for (const elasticBApp of dataAtRegion) {
+      connections.push({
+        id: elasticBApp.ApplicationArn,
+        resourceType: services.elasticBeanstalkApp,
+        relation: 'child',
+        field: 'elasticBeanstalkApps',
+      })
+    }
+  }
+
+  /**
+   * Find any elasticBeanstalkEnv related data
+   */
+  const elasticBEnvs = data.find(
+    ({ name }) => name === services.elasticBeanstalkEnv
+  )
+  if (elasticBEnvs?.data?.[region]) {
+    const dataAtRegion: RawAwsElasticBeanstalkEnv[] = elasticBEnvs.data[
+      region
+    ].filter(
+      ({ OperationsRole }: RawAwsElasticBeanstalkEnv) =>
+        OperationsRole === role.Arn
+    )
+    for (const elasticBEnv of dataAtRegion) {
+      connections.push({
+        id: elasticBEnv.EnvironmentId,
+        resourceType: services.elasticBeanstalkEnv,
+        relation: 'child',
+        field: 'elasticBeanstalkEnvs',
       })
     }
   }
