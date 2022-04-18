@@ -32,4 +32,5 @@ type awsApiGatewayStage implements awsBaseService @key(fields: "arn") {
   variables: [awsApiGatewayStageVariable]
   tags: [awsRawTag]
   restApi: [awsApiGatewayRestApi] @hasInverse(field: stages)
+  webAcl: [awsWafV2WebAcl] @hasInverse(field: apiGatewayStages)
 }
