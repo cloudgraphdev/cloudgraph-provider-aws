@@ -1,3 +1,10 @@
+# [0.79.0-alpha.24](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.23...0.79.0-alpha.24) (2022-04-18)
+
+
+### Bug Fixes
+
+* **ec2:** fix connection field to elasticBeanstalkEnv ([e2fd077](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/e2fd07799b82213abcd5a0776f34a6c1b7d3d215))
+
 # [0.79.0-alpha.23](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.22...0.79.0-alpha.23) (2022-04-18)
 
 
