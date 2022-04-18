@@ -1,3 +1,10 @@
+# [0.79.0-alpha.25](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.24...0.79.0-alpha.25) (2022-04-18)
+
+
+### Bug Fixes
+
+* Renamed base class name for some services ([7b19d61](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/7b19d6172b943ced574757d53dff00133206bb8e))
+
 # [0.79.0-alpha.24](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.23...0.79.0-alpha.24) (2022-04-18)
 
 
