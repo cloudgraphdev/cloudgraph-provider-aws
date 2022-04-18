@@ -24,6 +24,7 @@ type awsEcsTaskDefinition implements awsBaseService @key(fields: "arn") {
   ecsService: [awsEcsService] @hasInverse(field: ecsTaskDefinition)
   ecsTask: [awsEcsTask] @hasInverse(field: ecsTaskDefinition)
   ecsTaskSet: [awsEcsTaskSet] @hasInverse(field: ecsTaskDefinition)
+  iamRole: [awsIamRole] @hasInverse(field: ecsTaskDefinition)
 }
 
 type awsEcsContainerDefinition

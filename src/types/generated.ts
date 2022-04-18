@@ -2057,6 +2057,7 @@ export type AwsEcsTask = AwsBaseService & {
   executionStoppedAt?: Maybe<Scalars['String']>;
   group?: Maybe<Scalars['String']>;
   healthStatus?: Maybe<Scalars['String']>;
+  iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   inferenceAccelerators?: Maybe<Array<Maybe<AwsEcsInferenceAccelerator>>>;
   lastStatus?: Maybe<Scalars['String']>;
   launchType?: Maybe<Scalars['String']>;
@@ -2086,6 +2087,7 @@ export type AwsEcsTaskDefinition = AwsBaseService & {
   ephemeralStorage?: Maybe<AwsEcsEphemeralStorage>;
   executionRoleArn?: Maybe<Scalars['String']>;
   family?: Maybe<Scalars['String']>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   inferenceAccelerators?: Maybe<Array<Maybe<AwsEcsInferenceAccelerator>>>;
   ipcMode?: Maybe<Scalars['String']>;
   memory?: Maybe<Scalars['String']>;
@@ -3085,6 +3087,8 @@ export type AwsIamRole = AwsBaseService & {
   dynamodb?: Maybe<Array<Maybe<AwsDynamoDbTable>>>;
   ec2Instances?: Maybe<Array<Maybe<AwsEc2>>>;
   ecsServices?: Maybe<Array<Maybe<AwsEcsService>>>;
+  ecsTask?: Maybe<Array<Maybe<AwsEcsTask>>>;
+  ecsTaskDefinition?: Maybe<Array<Maybe<AwsEcsTaskDefinition>>>;
   eksClusters?: Maybe<Array<Maybe<AwsEksCluster>>>;
   elasticBeanstalkApps?: Maybe<Array<Maybe<AwsElasticBeanstalkApp>>>;
   elasticBeanstalkEnvs?: Maybe<Array<Maybe<AwsElasticBeanstalkEnv>>>;
