@@ -24,7 +24,6 @@ type awsIamRole implements awsBaseService @key(fields: "id") {
     @hasInverse(field: iamRole)
   systemsManagerInstances: [awsSystemsManagerInstance]
     @hasInverse(field: iamRole)
-  iamInstanceProfiles: [awsIamInstanceProfile] @hasInverse(field: iamRole)
   ecsTask: [awsEcsTask] @hasInverse(field: iamRoles)
   ecsTaskDefinition: [awsEcsTaskDefinition] @hasInverse(field: iamRole)
   s3: [awsS3] @hasInverse(field: iamRole)
