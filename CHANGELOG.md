@@ -1,3 +1,10 @@
+# [0.79.0-alpha.26](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.25...0.79.0-alpha.26) (2022-04-18)
+
+
+### Bug Fixes
+
+* Added missing connections to waf ([623537b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/623537b01ccfe4123e8aec1c56ad3c0037cc6efa))
+
 # [0.79.0-alpha.25](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.24...0.79.0-alpha.25) (2022-04-18)
 
 
