@@ -4,4 +4,5 @@ type awsIamOpenIdConnectProvider @key(fields: "id") {
   accountId: String! @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
   cgId: String @search(by: [hash, regexp])
+  awsCognitoIdentityPool: [awsCognitoIdentityPool] @hasInverse(field: iamOpenIdConnectProviders)
 }

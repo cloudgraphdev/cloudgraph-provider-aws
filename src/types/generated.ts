@@ -919,6 +919,7 @@ export type AwsCloudwatchLog = {
   cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
   creationTime?: Maybe<Scalars['String']>;
   ecsCluster?: Maybe<Array<Maybe<AwsEcsCluster>>>;
+  elasticSearchDomains?: Maybe<Array<Maybe<AwsElasticSearchDomain>>>;
   id: Scalars['String'];
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   kmsKeyId?: Maybe<Scalars['String']>;
@@ -1119,8 +1120,13 @@ export type AwsCognitoIdentityPool = {
   accountId: Scalars['String'];
   allowClassicFlow?: Maybe<Scalars['String']>;
   allowUnauthenticatedIdentities?: Maybe<Scalars['String']>;
+  arn: Scalars['String'];
   cognitoIdentityProviders?: Maybe<Array<Maybe<AwsCognitoIdentityProviders>>>;
   developerProviderName?: Maybe<Scalars['String']>;
+  elasticSearchDomains?: Maybe<Array<Maybe<AwsElasticSearchDomain>>>;
+  iamOpenIdConnectProviders?: Maybe<Array<Maybe<AwsIamOpenIdConnectProvider>>>;
+  iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
+  iamSamlProviders?: Maybe<Array<Maybe<AwsIamSamlProvider>>>;
   id: Scalars['String'];
   identityPoolName?: Maybe<Scalars['String']>;
   openIdConnectProviderARNs?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -1152,6 +1158,7 @@ export type AwsCognitoUserPool = AwsBaseService & {
   deviceConfigChallengeRequiredOnNewDevice?: Maybe<Scalars['String']>;
   deviceConfigDeviceOnlyRememberedOnUserPrompt?: Maybe<Scalars['String']>;
   domain?: Maybe<Scalars['String']>;
+  elasticSearchDomains?: Maybe<Array<Maybe<AwsElasticSearchDomain>>>;
   emailConfigConfigurationSet?: Maybe<Scalars['String']>;
   emailConfigEmailSendingAccount?: Maybe<Scalars['String']>;
   emailConfigFrom?: Maybe<Scalars['String']>;
@@ -2604,7 +2611,10 @@ export type AwsElasticSearchDomain = AwsBaseService & {
   advancedSecurityOptions?: Maybe<AwsElasticSearchAdvancedSecurityOptions>;
   autoTuneOptions?: Maybe<AwsElasticSearchAutoTuneOptions>;
   changeProcessDetails?: Maybe<AwsElasticSearchChangeProcessDetails>;
+  cloudwatchLogs?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
+  cognitoIdentityPool?: Maybe<Array<Maybe<AwsCognitoIdentityPool>>>;
   cognitoOptions?: Maybe<AwsElasticSearchCognitoOptions>;
+  cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   created?: Maybe<Scalars['Boolean']>;
   deleted?: Maybe<Scalars['Boolean']>;
   domainEndpointOptions?: Maybe<AwsElasticSearchDomainEndpointOptions>;
@@ -2615,6 +2625,7 @@ export type AwsElasticSearchDomain = AwsBaseService & {
   encryptionAtRestOptions?: Maybe<AwsElasticSearchEncryptionAtRestOptions>;
   endpoint?: Maybe<Scalars['String']>;
   endpoints?: Maybe<Array<Maybe<AwsRawTag>>>;
+  iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   logPublishingOptions?: Maybe<Array<Maybe<AwsElasticSearchLogPublishingOption>>>;
   nodeToNodeEncryptionOptions?: Maybe<AwsElasticSearchNodeToNodeEncryptionOptions>;
@@ -2740,12 +2751,12 @@ export type AwsElbSourceSecurityGroup = {
 
 export type AwsEmrCluster = AwsBaseService & {
   applications?: Maybe<Array<Maybe<AwsEmrClusterApplication>>>;
-  autoScalingRole?: Maybe<Scalars['String']>;
   autoTerminate?: Maybe<Scalars['Boolean']>;
   configurations?: Maybe<Array<Maybe<AwsEmrClusterConfiguration>>>;
   customAmiId?: Maybe<Scalars['String']>;
   ebsRootVolumeSize?: Maybe<Scalars['Int']>;
   ec2InstanceAttributes?: Maybe<AwsEmrClusterEc2InstanceAttributes>;
+  iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   instanceCollectionType?: Maybe<Scalars['String']>;
   kerberosAttributes?: Maybe<AwsEmrClusterKerberosAttributes>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
@@ -2761,7 +2772,6 @@ export type AwsEmrCluster = AwsBaseService & {
   runningAmiVersion?: Maybe<Scalars['String']>;
   scaleDownBehavior?: Maybe<Scalars['String']>;
   securityConfiguration?: Maybe<Scalars['String']>;
-  serviceRole?: Maybe<Scalars['String']>;
   status?: Maybe<AwsEmrClusterStatus>;
   stepConcurrencyLevel?: Maybe<Scalars['Int']>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
@@ -3030,6 +3040,7 @@ export type AwsIamMfaDevice = {
 export type AwsIamOpenIdConnectProvider = {
   accountId: Scalars['String'];
   arn: Scalars['String'];
+  awsCognitoIdentityPool?: Maybe<Array<Maybe<AwsCognitoIdentityPool>>>;
   cgId?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   region?: Maybe<Scalars['String']>;
@@ -3065,6 +3076,7 @@ export type AwsIamRole = AwsBaseService & {
   appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
   asg?: Maybe<Array<Maybe<AwsAsg>>>;
   assumeRolePolicy?: Maybe<AwsIamJsonPolicy>;
+  awsCognitoIdentityPool?: Maybe<Array<Maybe<AwsCognitoIdentityPool>>>;
   cloudFormationStack?: Maybe<Array<Maybe<AwsCloudFormationStack>>>;
   cloudFormationStackSet?: Maybe<Array<Maybe<AwsCloudFormationStackSet>>>;
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
@@ -3080,6 +3092,8 @@ export type AwsIamRole = AwsBaseService & {
   eksClusters?: Maybe<Array<Maybe<AwsEksCluster>>>;
   elasticBeanstalkApps?: Maybe<Array<Maybe<AwsElasticBeanstalkApp>>>;
   elasticBeanstalkEnvs?: Maybe<Array<Maybe<AwsElasticBeanstalkEnv>>>;
+  elasticSearchDomains?: Maybe<Array<Maybe<AwsElasticSearchDomain>>>;
+  emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
   glueJobs?: Maybe<Array<Maybe<AwsGlueJob>>>;
   guardDutyDetectors?: Maybe<Array<Maybe<AwsGuardDutyDetector>>>;
@@ -3101,6 +3115,7 @@ export type AwsIamRole = AwsBaseService & {
 };
 
 export type AwsIamSamlProvider = AwsOptionalService & {
+  awsCognitoIdentityPool?: Maybe<Array<Maybe<AwsCognitoIdentityPool>>>;
   createdDate?: Maybe<Scalars['String']>;
   validUntil?: Maybe<Scalars['String']>;
 };

@@ -1,3 +1,24 @@
+# [0.79.0-alpha.22](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.21...0.79.0-alpha.22) (2022-04-14)
+
+
+### Bug Fixes
+
+* **elasticSearchDomain:** add cloudwatchLogs, cognitoIdentityPool, cognitoUserPool, iamRole connections ([694d298](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/694d298af419a8f18f55ccebb5fc21b06574c930))
+
+# [0.79.0-alpha.21](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.20...0.79.0-alpha.21) (2022-04-14)
+
+
+### Bug Fixes
+
+* Created iamRole connection for emrCluster ([80a39e1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/80a39e19046ad46a2897f667171b271b5a1f9cc7))
+
+# [0.79.0-alpha.20](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.19...0.79.0-alpha.20) (2022-04-14)
+
+
+### Features
+
+* **cognitoIdentityPool:** add iamRole/iamOpenIdConnectProvider/iamSamlProvider connections, generate arn ([3ba9610](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/3ba9610af535f9b84f229ce6abcfcf1e43664d45))
+
 # [0.79.0-alpha.19](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.18...0.79.0-alpha.19) (2022-04-13)
 
 
