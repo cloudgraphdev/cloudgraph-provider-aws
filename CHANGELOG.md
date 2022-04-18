@@ -1,3 +1,16 @@
+# [0.79.0-alpha.23](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.22...0.79.0-alpha.23) (2022-04-18)
+
+
+### Bug Fixes
+
+* removed duplicate declaration introduced on merge ([dd14cf8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/dd14cf87e01c0b8f7e15bcd0b34135d1646bc3d2))
+
+
+### Features
+
+* Handle TODOs for ecs task ([b469773](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/b469773e9364edd65a2f2dd6c9728c3b0536e944))
+* Updated README file ([5187b76](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/5187b76b550b5bcfed36a4e6e2fa3b45920864b2))
+
 # [0.79.0-alpha.22](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.21...0.79.0-alpha.22) (2022-04-14)
 
 
