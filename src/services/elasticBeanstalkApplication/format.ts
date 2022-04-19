@@ -19,6 +19,7 @@ export default ({
     ApplicationName: name,
     Description: description,
     Tags = {},
+    ResourceLifecycleConfig: { ServiceRole: iamServiceRole } = {},
   } = application
 
   return {
@@ -28,6 +29,7 @@ export default ({
     name,
     description,
     region,
+    iamServiceRole,
     tags: formatTagsFromMap(Tags),
   }
 }

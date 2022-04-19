@@ -14,9 +14,34 @@ const scopes = {
   regional: 'REGIONAL',
 }
 
+const resources = [
+  { name: 'elasticloadbalancing', type: 'APPLICATION_LOAD_BALANCER' },
+  { name: 'apigateway', type: 'API_GATEWAY' },
+  { name: 'appsync', type: 'APPSYNC' },
+]
+
 export interface RawAwsWafV2WebAcl extends WAFV2.WebACL {
   region: string
   loggingConfiguration: WAFV2.LoggingConfiguration
+  wafResources: { [resource: string]: string[] }
+}
+
+const listResources = async (
+  client: WAFV2,
+  wafArn: string
+): Promise<{ [resource: string]: string[] }> => {
+  const wafResources = {}
+  for (const { name, type } of resources) {
+    const { ResourceArns } = (await client
+      .listResourcesForWebACL({
+        WebACLArn: wafArn,
+        ResourceType: type,
+      })
+      .promise()) ?? { ResourceArns: [] }
+
+    wafResources[name] = ResourceArns
+  }
+  return wafResources
 }
 
 /**
@@ -72,12 +97,15 @@ export default async ({
             .promise()
           wafData.loggingConfiguration =
             loggingConfiguration.LoggingConfiguration
+
+          wafData.wafResources = await listResources(client, arn)
         } catch (err) {
           errorLog.generateAwsErrorLog({ functionName: 'getWebACL', err })
         }
         result.push({
           ...wafData?.WebACL,
           loggingConfiguration: wafData?.loggingConfiguration,
+          wafResources: wafData?.wafResources,
           region,
         })
       }

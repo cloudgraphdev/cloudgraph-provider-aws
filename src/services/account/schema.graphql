@@ -1,5 +1,4 @@
-type awsAccount @key(fields: "id") {
-  id: String! @id @search(by: [hash])
+type awsAccount implements awsOptionalService @key(fields: "id") {
   regions: [String] @search(by: [hash])
   albs: [awsAlb]
   apiGatewayResources: [awsApiGatewayResource]

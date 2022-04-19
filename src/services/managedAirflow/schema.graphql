@@ -1,63 +1,61 @@
-type awsManagedAirflow @key(fields: "arn") {
-    id: String! @id @search(by: [hash])
-    arn: String! @id @search(by: [hash, regexp])
-    accountId: String! @search(by: [hash])
-    region: String @search(by: [hash, regexp])
-    airflowConfigurationOptions: [awsRawTag]
-    airflowVersion: String @search(by: [hash, regexp])
-    kmsKey: String @search(by: [hash, regexp])
-    createdAt: DateTime
-    dagS3Path: String @search(by: [hash, regexp])
-    environmentClass: String @search(by: [hash, regexp])
-    executionRoleArn: String @search(by: [hash, regexp])
-    lastUpdate: awsManagedAirflowLastUpdate
-    loggingConfiguration: awsManagedAirflowLoggingConfig
-    maxWorkers: Int @search
-    minWorkers: Int @search
-    name: String @search(by: [hash, regexp])
-    networkConfiguration: awsManagedAirflowNetworkConfig
-    pluginsS3Path: String @search(by: [hash, regexp])
-    requirementsS3Path: String @search(by: [hash, regexp])
-    schedulers: Int @search
-    serviceRoleArn: String @search(by: [hash, regexp])
-    sourceBucketArn: String @search(by: [hash, regexp])
-    status: String @search(by: [hash, regexp])
-    tags: [awsRawTag]
-    webserverAccessMode: String @search(by: [hash, regexp])
-    webserverUrl: String @search(by: [hash, regexp])
-    weeklyMaintenanceWindowStart: String @search(by: [hash, regexp])
-    iamRoles: [awsIamRole] @hasInverse(field: managedAirflows)
-    subnets: [awsSubnet] @hasInverse(field: managedAirflows)
-    securityGroups: [awsSecurityGroup] @hasInverse(field: managedAirflows)
-    s3: [awsS3] @hasInverse(field: managedAirflows)
-  }
+type awsManagedAirflow implements awsBaseService @key(fields: "arn") {
+  airflowConfigurationOptions: [awsRawTag]
+  airflowVersion: String @search(by: [hash, regexp])
+  kmsKey: String @search(by: [hash, regexp])
+  createdAt: DateTime
+  dagS3Path: String @search(by: [hash, regexp])
+  environmentClass: String @search(by: [hash, regexp])
+  executionRoleArn: String @search(by: [hash, regexp])
+  lastUpdate: awsManagedAirflowLastUpdate
+  loggingConfiguration: awsManagedAirflowLoggingConfig
+  maxWorkers: Int @search
+  minWorkers: Int @search
+  name: String @search(by: [hash, regexp])
+  networkConfiguration: awsManagedAirflowNetworkConfig
+  pluginsS3Path: String @search(by: [hash, regexp])
+  requirementsS3Path: String @search(by: [hash, regexp])
+  schedulers: Int @search
+  serviceRoleArn: String @search(by: [hash, regexp])
+  sourceBucketArn: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
+  tags: [awsRawTag]
+  webserverAccessMode: String @search(by: [hash, regexp])
+  webserverUrl: String @search(by: [hash, regexp])
+  weeklyMaintenanceWindowStart: String @search(by: [hash, regexp])
+  iamRoles: [awsIamRole] @hasInverse(field: managedAirflows)
+  subnets: [awsSubnet] @hasInverse(field: managedAirflows)
+  securityGroups: [awsSecurityGroup] @hasInverse(field: managedAirflows)
+  s3: [awsS3] @hasInverse(field: managedAirflows)
+  kms: [awsKms] @hasInverse(field: managedAirflows)
+  cloudwatchLogs: [awsCloudwatchLog] @hasInverse(field: managedAirflows)
+}
 
-  type awsManagedAirflowNetworkConfig {
-    subnetIds: [String] @search(by: [hash, regexp])
-    securityGroupIds: [String] @search(by: [hash, regexp])
-  }
+type awsManagedAirflowNetworkConfig {
+  subnetIds: [String] @search(by: [hash, regexp])
+  securityGroupIds: [String] @search(by: [hash, regexp])
+}
 
-  type awsManagedAirflowLastUpdate {
-    createdAt: DateTime
-    error: awsManagedAirflowLastUpdateError
-    status: String @search(by: [hash, regexp])
-  }
+type awsManagedAirflowLastUpdate {
+  createdAt: DateTime
+  error: awsManagedAirflowLastUpdateError
+  status: String @search(by: [hash, regexp])
+}
 
-  type awsManagedAirflowLastUpdateError {
-    errorCode: String @search(by: [hash, regexp])
-    errorMessage: String @search(by: [hash, regexp])
-  }
+type awsManagedAirflowLastUpdateError {
+  errorCode: String @search(by: [hash, regexp])
+  errorMessage: String @search(by: [hash, regexp])
+}
 
-  type awsManagedAirflowLoggingConfig {
-    dagProcessingLogs: awsManagedAirflowLogging
-    schedulerLogs: awsManagedAirflowLogging
-    taskLogs: awsManagedAirflowLogging
-    webserverLogs: awsManagedAirflowLogging
-    workerLogs: awsManagedAirflowLogging
-  }
+type awsManagedAirflowLoggingConfig {
+  dagProcessingLogs: awsManagedAirflowLogging
+  schedulerLogs: awsManagedAirflowLogging
+  taskLogs: awsManagedAirflowLogging
+  webserverLogs: awsManagedAirflowLogging
+  workerLogs: awsManagedAirflowLogging
+}
 
-  type awsManagedAirflowLogging {
-    cloudWatchLogGroupArn: String @search(by: [hash, regexp])
-    enabled: Boolean @search
-    logLevel: String @search(by: [hash, regexp])
-  }
+type awsManagedAirflowLogging {
+  cloudWatchLogGroupArn: String @search(by: [hash, regexp])
+  enabled: Boolean @search
+  logLevel: String @search(by: [hash, regexp])
+}

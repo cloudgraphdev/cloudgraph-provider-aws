@@ -30,6 +30,7 @@ import S3, {
   ListBucketsOutput,
   ListObjectsV2Output,
   LoggingEnabled,
+  NotificationConfiguration,
   Object as S3Object,
   Owner,
   Payer,
@@ -301,6 +302,29 @@ const getBucketWebsite = async (s3: S3, name: BucketName) =>
     )
   })
 
+const getBucketNotificationConfiguration = async (s3: S3, name: BucketName) =>
+  new Promise<NotificationConfiguration | any>(resolve => {
+    s3.getBucketNotificationConfiguration(
+      {
+        Bucket: name,
+      },
+      (err: AWSError, data: NotificationConfiguration) => {
+        if (err) {
+          errorLog.generateAwsErrorLog({
+            functionName: 's3:getBucketNotificationConfiguration',
+            err,
+          })
+        }
+
+        if (!isEmpty(data)) {
+          resolve(data)
+        }
+
+        resolve({})
+      }
+    )
+  })
+
 const getBucketAdditionalInfo = async (s3: S3, name: BucketName) =>
   new Promise<any>(async resolve => {
     const promises = [
@@ -318,6 +342,7 @@ const getBucketAdditionalInfo = async (s3: S3, name: BucketName) =>
       getBucketTagging(s3, name),
       getBucketVersioning(s3, name),
       getBucketWebsite(s3, name),
+      getBucketNotificationConfiguration(s3, name),
     ]
 
     const [
@@ -335,6 +360,7 @@ const getBucketAdditionalInfo = async (s3: S3, name: BucketName) =>
       Tags,
       VersioningInfo,
       WebsiteInfo,
+      NotificationConfig,
     ] = (await Promise.allSettled(promises)).map(
       /** We force the PromiseFulfilledResult interface
        *  because all promises that we input to Promise.allSettled
@@ -364,6 +390,7 @@ const getBucketAdditionalInfo = async (s3: S3, name: BucketName) =>
       Tags: convertAwsTagsToTagMap(Tags),
       VersioningInfo,
       StaticWebsiteInfo: WebsiteInfo,
+      NotificationConfiguration: NotificationConfig,
     })
   })
 
@@ -455,6 +482,7 @@ export interface RawAwsS3 {
     ReqPaymentConfig: Payer
     StaticWebsiteInfo?: GetBucketWebsiteOutput
     VersioningInfo?: GetBucketVersioningOutput
+    NotificationConfiguration?: NotificationConfiguration
   }
   Tags: TagMap
   Contents?: S3Object[]

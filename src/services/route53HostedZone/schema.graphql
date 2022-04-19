@@ -1,11 +1,10 @@
-type awsRoute53HostedZone @key(fields: "arn") {
-  id: String! @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
+type awsRoute53HostedZone implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   comment: String @search(by: [hash, regexp, fulltext])
   delegationSetId: String @search(by: [hash])
   nameServers: [String] @search(by: [hash, regexp])
+  rdsCluster: [awsRdsCluster] @hasInverse(field: route53HostedZone)
   route53Record: [awsRoute53Record] @hasInverse(field: route53HostedZone) #change to plural
-  vpc: [awsVpc] @hasInverse(field: route53HostedZone)
+  vpc: [awsVpc] @hasInverse(field: route53HostedZones)
+  rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: route53HostedZone)
 }

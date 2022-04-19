@@ -2,10 +2,11 @@ import { ServiceConnection } from '@cloudgraph/sdk'
 import { isEmpty } from 'lodash'
 import { RawAwsEmrCluster } from '../emrCluster/data'
 import { RawAwsSubnet } from '../subnet/data'
+import { RawAwsIamRole } from '../iamRole/data'
 import services from '../../enums/services'
+import { globalRegionName } from '../../enums/regions'
 
 export default ({
-  account,
   service,
   data,
   region,
@@ -17,7 +18,13 @@ export default ({
 }): {
   [property: string]: ServiceConnection[]
 } => {
-  const { ClusterArn: id, Ec2InstanceAttributes, LogEncryptionKmsKeyId } = service
+  const {
+    ClusterArn: id,
+    Ec2InstanceAttributes,
+    LogEncryptionKmsKeyId,
+    ServiceRole,
+    AutoScalingRole,
+  } = service
   const connections: ServiceConnection[] = []
   const subnetId = Ec2InstanceAttributes?.Ec2SubnetId
 
@@ -26,8 +33,8 @@ export default ({
    */
   const kmsKeys = data.find(({ name }) => name === services.kms)
   if (kmsKeys?.data?.[region]) {
-    const kmsKeyInRegion = kmsKeys.data[region].filter(kmsKey =>
-      kmsKey.Arn === LogEncryptionKmsKeyId
+    const kmsKeyInRegion = kmsKeys.data[region].filter(
+      kmsKey => kmsKey.Arn === LogEncryptionKmsKeyId
     )
 
     if (!isEmpty(kmsKeyInRegion)) {
@@ -61,6 +68,34 @@ export default ({
           resourceType: services.subnet,
           relation: 'child',
           field: 'subnet',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find IAM Roles
+   */
+  const iamRoles: {
+    name: string
+    data: { [property: string]: any[] }
+  } = data.find(({ name }) => name === services.iamRole)
+
+  if (iamRoles?.data?.[globalRegionName]) {
+    const iamRolesInRegion: RawAwsIamRole[] = iamRoles.data[
+      globalRegionName
+    ].filter(
+      ({ RoleName }: RawAwsIamRole) =>
+        RoleName === ServiceRole || RoleName === AutoScalingRole
+    )
+
+    if (!isEmpty(iamRolesInRegion)) {
+      for (const role of iamRolesInRegion) {
+        connections.push({
+          id: role.Arn,
+          resourceType: services.iamRole,
+          relation: 'child',
+          field: 'iamRoles',
         })
       }
     }

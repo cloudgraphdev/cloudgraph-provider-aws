@@ -10,6 +10,7 @@ import IAM, {
 
 import { Config } from 'aws-sdk/lib/config'
 import { AWSError } from 'aws-sdk/lib/error'
+import { flatMap } from 'lodash'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import { AwsTag, TagMap } from '../../types'
 
@@ -17,6 +18,7 @@ import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
 import AwsErrorLog from '../../utils/errorLog'
 import { globalRegionName } from '../../enums/regions'
+import services from '../../enums/services'
 
 import {
   IAM_CUSTOM_DELAY,
@@ -54,15 +56,19 @@ export const listInstancesProfiles = async (
               })
             }
 
-            const { InstanceProfiles = [], IsTruncated, Marker } = data
+            if (!isEmpty(data)) {
+              const { InstanceProfiles = [], IsTruncated, Marker } = data
 
-            instanceProfileList.push(...InstanceProfiles)
+              instanceProfileList.push(...InstanceProfiles)
 
-            if (IsTruncated) {
-              listAllInstanceProfiles(Marker)
+              if (IsTruncated) {
+                listAllInstanceProfiles(Marker)
+              }
+
+              resolve(instanceProfileList)
             }
 
-            resolve(instanceProfileList)
+            resolve([])
           }
         )
       } catch (error) {
@@ -111,49 +117,60 @@ export interface RawAwsInstanceProfile extends Omit<InstanceProfile, 'Tags'> {
 
 export default async ({
   config,
+  rawData,
 }: {
-  regions: string
   config: Config
+  rawData: any
 }): Promise<{
   [region: string]: RawAwsInstanceProfile[]
 }> =>
   new Promise(async resolve => {
-    const instancesProfilesResult: RawAwsInstanceProfile[] = []
+    let instancesProfilesResult: RawAwsInstanceProfile[] = []
     const tagsPromises = []
 
-    const client = new IAM({
-      ...config,
-      region: globalRegionName,
-      endpoint,
-      ...customRetrySettings,
-    })
+    const existingData: RawAwsInstanceProfile[] =
+      flatMap(
+        rawData.find(({ name }) => name === services.iamInstanceProfile)?.data
+      ) || []
 
-    const instancesProfiles = await listInstancesProfiles(client)
+    if (isEmpty(existingData)) {
+      const client = new IAM({
+        ...config,
+        region: globalRegionName,
+        endpoint,
+        ...customRetrySettings,
+      })
 
-    if (!isEmpty(instancesProfiles)) {
-      instancesProfiles.map(
-        ({ Tags, InstanceProfileName, ...instancesProfile }, idx) => {
-          instancesProfilesResult.push({
-            InstanceProfileName,
-            ...instancesProfile,
-            region: globalRegionName,
-          })
+      const instancesProfiles = await listInstancesProfiles(client)
 
-          const tagsPromise = new Promise<void>(async resolveTags => {
-            instancesProfilesResult[idx].Tags = await getTags({
-              iam: client,
-              name: InstanceProfileName,
+      if (!isEmpty(instancesProfiles)) {
+        instancesProfiles.map(
+          ({ Tags, InstanceProfileName, ...instancesProfile }, idx) => {
+            instancesProfilesResult.push({
+              InstanceProfileName,
+              ...instancesProfile,
+              region: globalRegionName,
             })
-            resolveTags()
-          })
-          tagsPromises.push(tagsPromise)
-        }
-      )
-    }
 
-    logger.debug(lt.foundInstanceProfiles(instancesProfiles.length))
-    await Promise.all(tagsPromises)
-    errorLog.reset()
+            const tagsPromise = new Promise<void>(async resolveTags => {
+              instancesProfilesResult[idx].Tags = await getTags({
+                iam: client,
+                name: InstanceProfileName,
+              })
+              resolveTags()
+            })
+            tagsPromises.push(tagsPromise)
+          }
+        )
+      }
+
+      logger.debug(lt.foundInstanceProfiles(instancesProfiles.length))
+      await Promise.all(tagsPromises)
+      errorLog.reset()
+    } else {
+      // Uses existing data
+      instancesProfilesResult = existingData
+    }
 
     resolve(groupBy(instancesProfilesResult, 'region'))
   })

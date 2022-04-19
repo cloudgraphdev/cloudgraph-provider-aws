@@ -4,17 +4,17 @@ type awsMixedInstancesPolicy
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    launchTemplateId: String @search(by: [hash, regexp])
-    launchTemplateName: String @search(by: [hash, regexp])
-    launchTemplateVersion: String @search(by: [hash, regexp])
-    launchTemplateOverrides: [awsLaunchTemplateOverrides]
-    instDistrOnDemandAllocationStrategy: String @search(by: [hash, regexp])
-    instDistrOnDemandBaseCapacity: Int
-    instDistrOnDemandPercentageAboveBaseCapacity: Int
-    instDistrSpotAllocationStrategy: String @search(by: [hash, regexp])
-    instDistrSpotInstancePools: Int
-    instDistrSpotMaxPrice: String @search(by: [hash, regexp])
-  }
+  launchTemplateId: String @search(by: [hash, regexp])
+  launchTemplateName: String @search(by: [hash, regexp])
+  launchTemplateVersion: String @search(by: [hash, regexp])
+  launchTemplateOverrides: [awsLaunchTemplateOverrides]
+  instDistrOnDemandAllocationStrategy: String @search(by: [hash, regexp])
+  instDistrOnDemandBaseCapacity: Int
+  instDistrOnDemandPercentageAboveBaseCapacity: Int
+  instDistrSpotAllocationStrategy: String @search(by: [hash, regexp])
+  instDistrSpotInstancePools: Int
+  instDistrSpotMaxPrice: String @search(by: [hash, regexp])
+}
 
 type awsLaunchTemplateOverrides
   @generate(
@@ -22,13 +22,13 @@ type awsLaunchTemplateOverrides
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id
-    instanceType: String
-    weightedCapacity: String
-    launchTemplateId: String @search(by: [hash, regexp])
-    launchTemplateName: String @search(by: [hash, regexp])
-    launchTemplateVersion: String @search(by: [hash, regexp])
-  }
+  id: String! @id
+  instanceType: String
+  weightedCapacity: String
+  launchTemplateId: String @search(by: [hash, regexp])
+  launchTemplateName: String @search(by: [hash, regexp])
+  launchTemplateVersion: String @search(by: [hash, regexp])
+}
 
 type awsSuspendedProcess
   @generate(
@@ -36,10 +36,10 @@ type awsSuspendedProcess
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id
-    processName: String! @search(by: [hash, regexp])
-    suspensionReason: String @search(by: [hash, regexp])
-  }
+  id: String! @id
+  processName: String! @search(by: [hash, regexp])
+  suspensionReason: String @search(by: [hash, regexp])
+}
 
 type awsEnabledMetrics
   @generate(
@@ -47,22 +47,22 @@ type awsEnabledMetrics
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id
-    metric: String! @search(by: [hash, regexp])
-    granularity: String @search(by: [hash, regexp])
-  }
+  id: String! @id
+  metric: String! @search(by: [hash, regexp])
+  granularity: String @search(by: [hash, regexp])
+}
 
-type  awsLcBlockDeviceMapping
+type awsLcBlockDeviceMapping
   @generate(
     query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id
-    virtualName: String @search(by: [hash, regexp])
-    deviceName: String @search(by: [hash, regexp])
-    noDevice: String @search(by: [hash, regexp])
-  }
+  id: String! @id
+  virtualName: String @search(by: [hash, regexp])
+  deviceName: String @search(by: [hash, regexp])
+  noDevice: String @search(by: [hash, regexp])
+}
 
 type awsLaunchConfiguration
   @generate(
@@ -70,35 +70,31 @@ type awsLaunchConfiguration
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    launchConfigurationName: String @search(by: [hash, regexp])
-    launchConfigurationARN: String @search(by: [hash, regexp])
-    imageId: String @search(by: [hash, regexp])
-    keyName: String @search(by: [hash, regexp])
-    securityGroups: [String] @search(by: [hash])
-    classicLinkVPCId: String @search(by: [hash, regexp])
-    classicLinkVPCSecurityGroups: [String] @search(by: [hash])
-    userData: String @search(by: [hash, regexp])
-    instanceType: String @search(by: [hash, regexp])
-    kernelId: String @search(by: [hash, regexp])
-    ramdiskId: String @search(by: [hash, regexp])
-    blockDeviceMappings: [awsLcBlockDeviceMapping]
-    instanceMonitoring: String @search(by: [hash, regexp])
-    spotPrice: String @search(by: [hash, regexp])
-    iamInstanceProfile: String @search(by: [hash, regexp])
-    ebsOptimized: String @search(by: [hash, regexp])
-    associatePublicIpAddress: String @search(by: [hash, regexp])
-    placementTenancy: String @search(by: [hash, regexp])
-    metadataOptHttpTokens: String @search(by: [hash, regexp])
-    metadataOptHttpPutResponseHopLimit: Int @search
-    metadataOptHttpEndpoint: String @search(by: [hash, regexp])
-  }
+  launchConfigurationName: String @search(by: [hash, regexp])
+  launchConfigurationARN: String @search(by: [hash, regexp])
+  imageId: String @search(by: [hash, regexp])
+  keyName: String @search(by: [hash, regexp])
+  securityGroups: [String] @search(by: [hash])
+  classicLinkVPCId: String @search(by: [hash, regexp])
+  classicLinkVPCSecurityGroups: [String] @search(by: [hash])
+  userData: String @search(by: [hash, regexp])
+  instanceType: String @search(by: [hash, regexp])
+  kernelId: String @search(by: [hash, regexp])
+  ramdiskId: String @search(by: [hash, regexp])
+  blockDeviceMappings: [awsLcBlockDeviceMapping]
+  instanceMonitoring: String @search(by: [hash, regexp])
+  spotPrice: String @search(by: [hash, regexp])
+  iamInstanceProfile: String @search(by: [hash, regexp])
+  ebsOptimized: String @search(by: [hash, regexp])
+  associatePublicIpAddress: String @search(by: [hash, regexp])
+  placementTenancy: String @search(by: [hash, regexp])
+  metadataOptHttpTokens: String @search(by: [hash, regexp])
+  metadataOptHttpPutResponseHopLimit: Int @search
+  metadataOptHttpEndpoint: String @search(by: [hash, regexp])
+}
 
 #TODO: add iam role connection here
-type awsAsg @key(fields: "arn") {
-  id: String! @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String! @search(by: [hash, regexp])
+type awsAsg implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   launchConfigurationName: String @search(by: [hash, regexp])
   launchTemplateId: String @search(by: [hash, regexp])
@@ -135,7 +131,9 @@ type awsAsg @key(fields: "arn") {
   tags: [awsRawTag]
   launchConfiguration: awsLaunchConfiguration
   ec2Instance: [awsEc2] @hasInverse(field: asg) #change to plural
+  elasticBeanstalkEnvs: [awsElasticBeanstalkEnv] @hasInverse(field: asgs)
   securityGroups: [awsSecurityGroup] @hasInverse(field: asg)
   ebs: [awsEbs] @hasInverse(field: asg)
   subnet: [awsSubnet] @hasInverse(field: asg) #change to plural
+  iamRole: [awsIamRole] @hasInverse(field: asg)
 }

@@ -1,8 +1,59 @@
-type awsS3 @key(fields: "arn") {
+type awsBucketPolicy
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  policy: awsIamJSONPolicy
+}
+
+type awsS3FilterRule
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
   id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+  name: String @search(by: [hash])
+  value: String @search(by: [hash])
+}
+
+interface awsS3ConfigurationBase
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  events: [String] @search(by: [hash])
+  filterRules: [awsS3FilterRule]
+}
+
+type awsS3TopicConfiguration implements awsS3ConfigurationBase {
+  topicArn: String @search(by: [hash])
+}
+
+type awsS3QueueConfiguration implements awsS3ConfigurationBase {
+  queueArn: String @search(by: [hash])
+}
+
+type awsS3LambdaFunctionConfiguration implements awsS3ConfigurationBase {
+  lambdaFunctionArn: String @search(by: [hash])
+}
+
+type awsS3NotificationConfiguration
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  topicConfigurations: [awsS3TopicConfiguration]
+  queueConfigurations: [awsS3QueueConfiguration]
+  lambdaFunctionConfigurations: [awsS3LambdaFunctionConfiguration]
+}
+
+type awsS3 implements awsBaseService @key(fields: "arn") {
   access: String @search(by: [hash, regexp])
   bucketOwnerName: String @search(by: [hash, regexp])
   requesterPays: String @search(by: [hash, regexp])
@@ -21,22 +72,16 @@ type awsS3 @key(fields: "arn") {
   mfa: String @search(by: [hash, regexp])
   versioning: String @search(by: [hash, regexp])
   staticWebsiteHosting: String @search(by: [hash, regexp])
+  notificationConfiguration: awsS3NotificationConfiguration
   bucketPolicies: [awsBucketPolicy]
   kinesisFirehose: [awsKinesisFirehose] @hasInverse(field: s3)
   tags: [awsRawTag]
-  cloudfrontDistribution: [awsCloudfront] @hasInverse(field: s3) #change to plural
-  cloudtrail: [awsCloudtrail] @hasInverse(field: s3) #change to plural
+  cloudfrontDistributions: [awsCloudfront] @hasInverse(field: s3)
+  cloudtrails: [awsCloudtrail] @hasInverse(field: s3)
   managedAirflows: [awsManagedAirflow] @hasInverse(field: s3)
-}
-
-# TODO: use getBucketReplication and getBucketNotificationConfiguration to make connections to lambda, sns, iamRole, SQS
-
-type awsBucketPolicy
-  @generate(
-    query: { get: false, query: true, aggregate: false }
-    mutation: { add: false, delete: false }
-    subscription: false
-  ) {
-  id: String! @id
-  policy: awsIamJSONPolicy
+  iamRole: [awsIamRole] @hasInverse(field: s3)
+  lambdas: [awsLambda] @hasInverse(field: s3)
+  sns: [awsSns] @hasInverse(field: s3)
+  sqs: [awsSqs] @hasInverse(field: s3)
+  ecsCluster: [awsEcsCluster] @hasInverse(field: s3)
 }

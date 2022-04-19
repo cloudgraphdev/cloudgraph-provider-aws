@@ -6,6 +6,7 @@ import CloudTrail, {
   TrailInfo,
 } from 'aws-sdk/clients/cloudtrail'
 import { Config } from 'aws-sdk/lib/config'
+import cuid from 'cuid'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
@@ -23,6 +24,7 @@ const endpoint = initTestEndpoint(serviceName)
  */
 
 export interface RawAwsCloudTrail extends Trail {
+  id: string
   TrailStatus: GetTrailStatusResponse
   EventSelectors: EventSelector[]
   Tags: TagMap
@@ -177,6 +179,7 @@ export default async ({
 
           cloudTrailData.push({
             ...trail,
+            id: cuid(),
             TrailStatus: trailStatus || {},
             EventSelectors: trailEvents,
             Tags: convertAwsTagsToTagMap(

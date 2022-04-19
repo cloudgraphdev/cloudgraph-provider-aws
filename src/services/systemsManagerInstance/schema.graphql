@@ -1,8 +1,4 @@
-type awsSystemsManagerInstance @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  arn: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  region: String @search(by: [hash, regexp])
+type awsSystemsManagerInstance implements awsBaseService @key(fields: "arn") {
   instanceId: String @search(by: [hash, regexp])
   pingStatus: String @search(by: [hash, regexp])
   lastPingDateTime: DateTime @search(by: [day])

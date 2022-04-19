@@ -16,11 +16,7 @@ type awsGlueJobNotificationProperty {
   notifyDelayAfter: Int @search
 }
 
-type awsGlueJob @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash])
-  region: String @search(by: [hash, regexp])
+type awsGlueJob implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp])
   logUri: String @search(by: [hash, regexp])
