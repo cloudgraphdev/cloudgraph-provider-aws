@@ -15,7 +15,7 @@ type awsNetworkInterface implements awsBaseService @key(fields: "arn") {
   eip: [awsEip] @hasInverse(field: networkInterface)
   natGateway: [awsNatGateway] @hasInverse(field: networkInterface)
   subnet: [awsSubnet] @hasInverse(field: networkInterface)
-  vpc: [awsVpc] @hasInverse(field: networkInterface)
+  vpc: [awsVpc] @hasInverse(field: networkInterfaces)
   efsMountTarget: [awsEfsMountTarget] @hasInverse(field: networkInterface)
   flowLogs: [awsFlowLog] @hasInverse(field: networkInterface) #change to singular
   sageMakerNotebookInstances: [awsSageMakerNotebookInstance]

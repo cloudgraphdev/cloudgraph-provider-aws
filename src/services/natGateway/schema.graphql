@@ -5,5 +5,5 @@ type awsNatGateway implements awsBaseService @key(fields: "id") {
   tags: [awsRawTag]
   networkInterface: [awsNetworkInterface] @hasInverse(field: natGateway) #change to plural
   subnet: [awsSubnet] @hasInverse(field: natGateway) #change to plural
-  vpc: [awsVpc] @hasInverse(field: natGateway)
+  vpc: [awsVpc] @hasInverse(field: natGateways)
 }

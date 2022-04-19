@@ -17,7 +17,7 @@ type awsAlb implements awsBaseService @key(fields: "arn") {
   tags: [awsRawTag]
   securityGroups: [awsSecurityGroup] @hasInverse(field: alb)
   ec2Instance: [awsEc2] @hasInverse(field: alb) #change to plural
-  vpc: [awsVpc] @hasInverse(field: alb)
+  vpc: [awsVpc] @hasInverse(field: albs)
   route53Record: [awsRoute53Record] @hasInverse(field: alb) #change to plural
   listeners: [awsAlbListener]
   subnet: [awsSubnet] @hasInverse(field: alb) #change to plural

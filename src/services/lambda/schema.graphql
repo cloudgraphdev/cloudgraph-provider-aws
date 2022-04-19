@@ -18,7 +18,7 @@ type awsLambda implements awsBaseService @key(fields: "arn") {
   kms: [awsKms] @hasInverse(field: lambda)
   securityGroups: [awsSecurityGroup] @hasInverse(field: lambda)
   subnet: [awsSubnet] @hasInverse(field: lambda) #change to plural
-  vpc: [awsVpc] @hasInverse(field: lambda)
+  vpc: [awsVpc] @hasInverse(field: lambdas)
   cognitoUserPools: [awsCognitoUserPool] @hasInverse(field: lambdas)
   appSync: [awsAppSync] @hasInverse(field: lambda)
   s3: [awsS3] @hasInverse(field: lambdas)

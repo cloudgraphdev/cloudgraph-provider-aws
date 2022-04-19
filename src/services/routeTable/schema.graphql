@@ -6,7 +6,7 @@ type awsRouteTable implements awsBaseService @key(fields: "arn") {
   subnetAssociations: [String]
   tags: [awsRawTag]
   subnet: [awsSubnet] @hasInverse(field: routeTable) #change to plural
-  vpc: [awsVpc] @hasInverse(field: routeTable)
+  vpc: [awsVpc] @hasInverse(field: routeTables)
   transitGateway: [awsTransitGateway] @hasInverse(field: routeTable)
   transitGatewayAttachment: [awsTransitGatewayAttachment]
     @hasInverse(field: routeTable)

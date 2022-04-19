@@ -20,5 +20,5 @@ type awsRedshiftCluster implements awsBaseService @key(fields: "arn") {
   publiclyAccessible: Boolean @search
   tags: [awsRawTag]
   kms: [awsKms] @hasInverse(field: redshiftCluster)
-  vpc: [awsVpc] @hasInverse(field: redshiftCluster)
+  vpc: [awsVpc] @hasInverse(field: redshiftClusters)
 }

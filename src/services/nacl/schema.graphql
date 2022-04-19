@@ -4,7 +4,7 @@ type awsNetworkAcl implements awsBaseService @key(fields: "id") {
   outboundRules: [awsNetworkAclRule]
   associatedSubnets: [awsNetworkAclAssociatedSubnet]
   tags: [awsRawTag]
-  vpc: [awsVpc] @hasInverse(field: nacl)
+  vpc: [awsVpc] @hasInverse(field: nacls)
   subnets: [awsSubnet] @hasInverse(field: nacls)
   vpcId: String @search(by: [hash, regexp])
 }

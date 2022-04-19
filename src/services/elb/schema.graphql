@@ -19,7 +19,7 @@ type awsElb implements awsBaseService @key(fields: "arn") {
   tags: [awsRawTag]
   cloudfrontDistribution: [awsCloudfront] @hasInverse(field: elb)
   securityGroups: [awsSecurityGroup] @hasInverse(field: elb)
-  vpc: [awsVpc] @hasInverse(field: elb)
+  vpc: [awsVpc] @hasInverse(field: elbs)
   route53Record: [awsRoute53Record] @hasInverse(field: elb) #change to plural
   subnet: [awsSubnet] @hasInverse(field: elb) #change to plural
   ecsService: [awsEcsService] @hasInverse(field: elb)

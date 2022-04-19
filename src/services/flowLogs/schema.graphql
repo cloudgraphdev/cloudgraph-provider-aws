@@ -12,7 +12,7 @@ type awsFlowLog implements awsOptionalService @key(fields: "id") {
   format: String @search(by: [hash, regexp, fulltext])
   maxAggregationInterval: Int @search
   tags: [awsRawTag]
-  vpc: [awsVpc] @hasInverse(field: flowLogs)
+  vpc: [awsVpc] @hasInverse(field: flowLog)
   iamRole: [awsIamRole] @hasInverse(field: flowLogs)
   networkInterface: [awsNetworkInterface] @hasInverse(field: flowLogs) #change to plural
   subnet: [awsSubnet] @hasInverse(field: flowLogs) #change to plural

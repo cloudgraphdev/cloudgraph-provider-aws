@@ -17,7 +17,7 @@ type awsEksCluster implements awsBaseService @key(fields: "arn") {
   kms: [awsKms] @hasInverse(field: eksCluster)
   securityGroups: [awsSecurityGroup] @hasInverse(field: eksCluster)
   subnets: [awsSubnet] @hasInverse(field: eksCluster)
-  vpc: [awsVpc] @hasInverse(field: eksCluster)
+  vpc: [awsVpc] @hasInverse(field: eksClusters)
   ec2Instances: [awsEc2] @hasInverse(field: eksCluster)
 }
 

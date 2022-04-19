@@ -2,7 +2,7 @@ type awsIgw implements awsBaseService @key(fields: "arn") {
   owner: String @search(by: [hash, regexp])
   attachments: [awsIgwAttachment]
   tags: [awsRawTag]
-  vpc: [awsVpc] @hasInverse(field: igw)
+  vpc: [awsVpc] @hasInverse(field: igws)
 }
 
 type awsIgwAttachment {

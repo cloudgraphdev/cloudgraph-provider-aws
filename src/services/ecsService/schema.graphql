@@ -32,7 +32,7 @@ type awsEcsService implements awsBaseService @key(fields: "arn") {
   iamRoles: [awsIamRole] @hasInverse(field: ecsServices)
   securityGroups: [awsSecurityGroup] @hasInverse(field: ecsService)
   subnet: [awsSubnet] @hasInverse(field: ecsService) #change to plural
-  vpc: [awsVpc] @hasInverse(field: ecsService)
+  vpc: [awsVpc] @hasInverse(field: ecsServices)
 }
 
 type awsEcsDeployment
