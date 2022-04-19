@@ -1,3 +1,10 @@
+# [0.79.0-alpha.27](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.26...0.79.0-alpha.27) (2022-04-19)
+
+
+### Bug Fixes
+
+* transitGatewayAttachment failed to insert data because duplicate XID found ([f88537c](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/f88537c381311d0d803f981a5dd119459f8c0061))
+
 # [0.79.0-alpha.26](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.25...0.79.0-alpha.26) (2022-04-18)
 
 
