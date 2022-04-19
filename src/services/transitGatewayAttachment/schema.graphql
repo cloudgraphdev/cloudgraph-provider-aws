@@ -1,4 +1,8 @@
-type awsTransitGatewayAttachment implements awsBaseService @key(fields: "arn") {
+type awsTransitGatewayAttachment @key(fields: "arn") {
+  id: String! @search(by: [hash])
+  accountId: String! @search(by: [hash])
+  arn: String! @id @search(by: [hash, regexp])
+  region: String @search(by: [hash, regexp])
   transitGatewayId: String @search(by: [hash])
   transitGatewayOwnerId: String @search(by: [hash])
   resourceOwnerId: String @search(by: [hash])
