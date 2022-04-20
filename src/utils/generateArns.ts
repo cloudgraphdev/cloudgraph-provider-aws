@@ -284,3 +284,13 @@ export const flowLogsArn = ({
   account: string
   flowLogId: string
 }): string => `arn:aws:ec2:${region}:${account}:vpc-flow-log/${flowLogId}`
+
+export const guardDutyArn = ({
+  region,
+  account,
+  detectorId,
+}: {
+  region: string
+  account: string
+  detectorId: string
+}): string => `arn:aws:guardduty:${region}:${account}:detector/${detectorId}`
