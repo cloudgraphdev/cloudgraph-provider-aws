@@ -1,3 +1,11 @@
+# [0.79.0-alpha.28](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.27...0.79.0-alpha.28) (2022-04-21)
+
+
+### Bug Fixes
+
+* Generated ARN for flowLogs ([1d372a9](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/1d372a93083dbc2d1ae9e6ef3f4cd32a720fbf1a))
+* Generated ARN for guardDuty ([39f43b5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/39f43b5dff9449a860823aa9b1effc6e6b271a59))
+
 # [0.79.0-alpha.27](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.26...0.79.0-alpha.27) (2022-04-19)
 
 
