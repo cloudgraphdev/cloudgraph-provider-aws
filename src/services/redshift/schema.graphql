@@ -1,8 +1,4 @@
-type awsRedshiftCluster @key(fields: "arn") {
-  id: String! @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String! @search(by: [hash, regexp])
+type awsRedshiftCluster implements awsBaseService @key(fields: "arn") {
   allowVersionUpgrade: Boolean @search
   automatedSnapshotRetentionPeriod: Int @search
   availabilityZone: String @search(by: [hash, regexp])
@@ -24,5 +20,5 @@ type awsRedshiftCluster @key(fields: "arn") {
   publiclyAccessible: Boolean @search
   tags: [awsRawTag]
   kms: [awsKms] @hasInverse(field: redshiftCluster)
-  vpc: [awsVpc] @hasInverse(field: redshiftCluster)
+  vpc: [awsVpc] @hasInverse(field: redshiftClusters)
 }

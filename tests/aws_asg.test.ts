@@ -3,6 +3,7 @@ import CloudGraph, { ServiceConnection } from '@cloudgraph/sdk'
 import EC2Service from '../src/services/ec2'
 import SGService from '../src/services/securityGroup'
 import EBSService from '../src/services/ebs'
+import IAMRoleService from '../src/services/iamRole'
 import AsgClass from '../src/services/asg'
 import { RawAwsAsg } from '../src/services/asg/data'
 import { initTestConfig } from '../src/utils'
@@ -26,6 +27,7 @@ describe.skip('ASG Service Test: ', () => {
           const ec2Class = new EC2Service({ logger: CloudGraph.logger })
           const sgService = new SGService({ logger: CloudGraph.logger })
           const ebsService = new EBSService({ logger: CloudGraph.logger })
+          const iamRoleService = new IAMRoleService({ logger: CloudGraph.logger })
 
           getDataResult = await asgClass.getData({
             credentials,
@@ -48,6 +50,12 @@ describe.skip('ASG Service Test: ', () => {
 
           // Get EBS data
           const ebsData = await ebsService.getData({
+            credentials,
+            regions: region,
+          })
+
+          // Get IAM Role data
+          const iamRoleData = await iamRoleService.getData({
             credentials,
             regions: region,
           })
@@ -76,6 +84,12 @@ describe.skip('ASG Service Test: ', () => {
                 account,
                 region,
               },
+              {
+                name: services.iamRole,
+                data: iamRoleData,
+                account,
+                region,
+              }
             ],
             region,
           })
@@ -149,6 +163,15 @@ describe.skip('ASG Service Test: ', () => {
 
       expect(ebsConnections).toBeDefined()
       expect(ebsConnections.length).toBe(1)
+    })
+
+    test('should verify the connection to iam', async () => {
+      const iamConnections = asgConnections[asgId].filter(
+        connection => connection.resourceType === services.iamRole
+      )
+
+      expect(iamConnections).toBeDefined()
+      expect(iamConnections.length).toBe(1)
     })
   })
 })

@@ -1,8 +1,4 @@
-type awsEfs @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-	arn: String! @id @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsEfs implements awsBaseService @key(fields: "arn") {
   ownerId: String @search(by: [hash])
   creationToken: String @search(by: [hash])
   fileSystemId: String @search(by: [hash])

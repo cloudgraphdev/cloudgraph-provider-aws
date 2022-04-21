@@ -2,11 +2,6 @@ import cuid from 'cuid'
 
 import { RawAwsApiGatewayStage } from './data'
 import { AwsApiGatewayStage as AwsAGStageType } from '../../types/generated'
-import {
-  apiGatewayArn,
-  apiGatewayRestApiArn,
-  apiGatewayStageArn,
-} from '../../utils/generateArns'
 import { formatTagsFromMap } from '../../utils/format'
 
 export default ({
@@ -17,6 +12,7 @@ export default ({
   account: string
 }): AwsAGStageType => {
   const {
+    arn,
     stageName: name,
     description,
     cacheClusterEnabled,
@@ -26,18 +22,9 @@ export default ({
     clientCertificateId,
     tracingEnabled,
     variables: vars = {},
-    restApiId,
     tags = {},
     region,
   } = service
-
-  const arn = apiGatewayStageArn({
-    restApiArn: apiGatewayRestApiArn({
-      restApiArn: apiGatewayArn({ region }),
-      id: restApiId,
-    }),
-    name,
-  })
 
   const variables = Object.entries(vars).map(([k, v]) => ({
     id: cuid(),

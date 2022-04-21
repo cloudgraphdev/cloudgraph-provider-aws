@@ -143,3 +143,7 @@ export const checkAndMergeConnections = (
   }
   return connectionsToMerge
 }
+
+export const caseInsensitiveIncludes = (arr: string[], s1: string): boolean =>
+  !isEmpty(arr) &&
+  arr.filter(str => str.toLowerCase().includes(s1.toLowerCase())).length > 0

@@ -41,7 +41,7 @@ export default ({
     accountId: account,
     arn: eipAllocationArn({region, account, id}),
     region,
-    vpc: domain === 'vpc' ? t.yes : t.no,
+    isVpc: domain === 'vpc' ? t.yes : t.no,
     customerOwnedIp,
     customerOwnedIpv4Pool,
     domain,

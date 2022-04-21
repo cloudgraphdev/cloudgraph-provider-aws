@@ -2,6 +2,7 @@ import cuid from 'cuid'
 import { formatTagsFromMap } from '../../utils/format'
 import { AwsGuardDutyDetector } from '../../types/generated'
 import { RawAwsGuardDutyDetector } from './data'
+import { guardDutyArn } from '../../utils/generateArns'
 
 /**
  * GuardDutyDetector
@@ -25,21 +26,21 @@ export default ({
     UpdatedAt: updatedAt,
     DataSources: dataSources,
     members = [],
-    Tags
+    Tags,
   } = rawData
 
   const formattedDataSources = {
     cloudTrail: {
-      status: dataSources?.CloudTrail?.Status
+      status: dataSources?.CloudTrail?.Status,
     },
     dnsLogs: {
-      status: dataSources?.DNSLogs?.Status
+      status: dataSources?.DNSLogs?.Status,
     },
     flowLogs: {
-      status: dataSources?.FlowLogs?.Status
+      status: dataSources?.FlowLogs?.Status,
     },
     s3Logs: {
-      status: dataSources?.S3Logs?.Status
+      status: dataSources?.S3Logs?.Status,
     },
     // kubernetes: { TODO: k8s logs support, maybe need to update aws sdk?
     //   auditLogs: {
@@ -56,11 +57,12 @@ export default ({
     email: member?.Email,
     relationshipStatus: member?.RelationshipStatus,
     invitedAt: new Date(member?.InvitedAt)?.toISOString(),
-    updatedAt: new Date(member?.UpdatedAt)?.toISOString()
+    updatedAt: new Date(member?.UpdatedAt)?.toISOString(),
   }))
 
   return {
     id,
+    arn: guardDutyArn({ region, account, detectorId: id }),
     region,
     accountId: account,
     createdAt: new Date(createdAt)?.toISOString(),
@@ -70,6 +72,6 @@ export default ({
     status,
     members: mappedMembers,
     dataSources: formattedDataSources,
-    tags: formatTagsFromMap(Tags ?? {})
+    tags: formatTagsFromMap(Tags ?? {}),
   }
 }

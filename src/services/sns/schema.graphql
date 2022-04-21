@@ -1,8 +1,4 @@
-type awsSns @key(fields: "arn") {
-  id: String! @search(by: [hash])
-  accountId: String! @search(by: [hash])
-	arn: String! @id @search(by: [hash, regexp])
-  region: String! @search(by: [hash, regexp])
+type awsSns implements awsBaseService @key(fields: "arn") {
   tags: [awsRawTag]
   policy: awsIamJSONPolicy
   displayName: String @search(by: [hash, regexp])
@@ -12,16 +8,17 @@ type awsSns @key(fields: "arn") {
   kms: [awsKms] @hasInverse(field: sns)
   cloudwatch: [awsCloudwatch] @hasInverse(field: sns)
   cloudFormationStack: [awsCloudFormationStack] @hasInverse(field: sns)
+  s3: [awsS3] @hasInverse(field: sns)
 }
 
-type awsSnsSubscription 
+type awsSnsSubscription
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id
-    arn: String @search(by: [hash, regexp])
-    endpoint: String @search(by: [hash, regexp])
-    protocol: String @search(by: [hash, regexp])
-  }
+  id: String! @id
+  arn: String @search(by: [hash, regexp])
+  endpoint: String @search(by: [hash, regexp])
+  protocol: String @search(by: [hash, regexp])
+}

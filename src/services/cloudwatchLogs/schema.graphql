@@ -3,6 +3,7 @@ type awsCloudwatchLog @key(fields: "arn") {
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
+  cgId: String @search(by: [hash, regexp])
   creationTime: String @search(by: [hash])
   retentionInDays: Int @search
   metricFilterCount: Int @search
@@ -12,6 +13,10 @@ type awsCloudwatchLog @key(fields: "arn") {
   kms: [awsKms] @hasInverse(field: cloudwatchLog)
   cloudwatch: [awsCloudwatch] @hasInverse(field: cloudwatchLog)
   cloudtrail: [awsCloudtrail] @hasInverse(field: cloudwatchLog)
+  ecsCluster: [awsEcsCluster] @hasInverse(field: cloudwatchLog)
+  elasticSearchDomains: [awsElasticSearchDomain] @hasInverse(field: cloudwatchLogs)
+  rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: cloudwatchLogs)
+  managedAirflows: [awsManagedAirflow] @hasInverse(field: cloudwatchLogs)
 }
 
 type awsMetricFilter

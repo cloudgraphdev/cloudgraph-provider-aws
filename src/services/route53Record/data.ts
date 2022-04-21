@@ -21,6 +21,7 @@ import {
 } from '../route53HostedZone/data'
 import { ROUTE_53_CUSTOM_DELAY } from '../../config/constants'
 import services from '../../enums/services'
+import { globalRegionName } from '../../enums/regions'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
@@ -115,7 +116,7 @@ const listRecordsForHostedZone = async ({
        * If there are not, then add the records to the zone's records
        */
       for (const record of records) {
-        recordData.push({ ...record, HostedZoneId, region: 'global' })
+        recordData.push({ ...record, HostedZoneId, region: globalRegionName })
       }
 
       /**

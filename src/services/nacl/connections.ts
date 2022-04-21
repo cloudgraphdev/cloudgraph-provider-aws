@@ -2,6 +2,7 @@ import { ServiceConnection } from '@cloudgraph/sdk'
 import isEmpty from 'lodash/isEmpty'
 
 import services from '../../enums/services'
+import { RawAwsSubnet } from '../subnet/data'
 import { RawAwsVpc } from '../vpc/data'
 import { RawAwsNetworkAcl } from './data'
 
@@ -19,9 +20,40 @@ export default ({
   service: RawAwsNetworkAcl
 }): { [key: string]: ServiceConnection[] } => {
   const connections: ServiceConnection[] = []
-  const { NetworkAclId: id, VpcId: NaclVpcId } = nacl
+  const {
+    NetworkAclId: id,
+    VpcId: NaclVpcId,
+    Associations: naclSubnetAssociations = [],
+  } = nacl
 
-  // TODO: Add subnet connection
+  const subnetIds = naclSubnetAssociations.map(({ SubnetId }) => SubnetId)
+
+  /**
+   * Find related Subnets
+   */
+  const subnets: {
+    name: string
+    data: { [property: string]: RawAwsSubnet[] }
+  } = data.find(({ name }) => name === services.subnet)
+  if (subnets?.data?.[region]) {
+    const dataAtRegion: RawAwsSubnet[] = subnets.data[region].filter(
+      ({ SubnetId }: RawAwsSubnet) =>
+        !isEmpty(subnetIds) &&
+        subnetIds.filter(str =>
+          str.toLowerCase().includes(SubnetId.toLowerCase())
+        ).length > 0
+    )
+    if (!isEmpty(dataAtRegion)) {
+      for (const subnet of dataAtRegion) {
+        connections.push({
+          id: subnet.SubnetId,
+          resourceType: services.subnet,
+          relation: 'child',
+          field: 'subnets',
+        })
+      }
+    }
+  }
 
   /**
    * Find related Vpc

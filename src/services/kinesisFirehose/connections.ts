@@ -8,6 +8,8 @@ import { TagMap } from '../../types'
 import services from '../../enums/services'
 import { RawAwsS3 } from '../s3/data'
 import { s3BucketArn } from '../../utils/generateArns'
+import { globalRegionName } from '../../enums/regions'
+import { RawAwsIamRole } from '../iamRole/data'
 
 /**
  * Kinesis Firehose
@@ -26,7 +28,11 @@ export default ({
   region: string
 }): { [key: string]: ServiceConnection[] } => {
   const connections: ServiceConnection[] = []
-  const { DeliveryStreamARN: id, Destinations: destinations = [] } = firehose
+  const {
+    DeliveryStreamARN: id,
+    Destinations: destinations = [],
+    Source = {},
+  } = firehose
 
   const kinesisStreamSourceARN =
     firehose.Source?.KinesisStreamSourceDescription?.KinesisStreamARN
@@ -63,10 +69,8 @@ export default ({
 
   if (!isEmpty(destinations)) {
     destinations.map((destination: DestinationDescription) => {
-      const {
-        ExtendedS3DestinationDescription,
-        S3DestinationDescription,
-      } = destination
+      const { ExtendedS3DestinationDescription, S3DestinationDescription } =
+        destination
       const s3DestinationDescription =
         ExtendedS3DestinationDescription || S3DestinationDescription
       if (s3DestinationDescription) {
@@ -92,6 +96,32 @@ export default ({
       }
       // TODO Redshift, Elasticsearch, Splunk, HttpEndpoint
     })
+  }
+
+  /**
+   * Find related IAM Roles
+   */
+  const roles: { name: string; data: { [property: string]: any[] } } =
+    data.find(({ name }) => name === services.iamRole)
+  if (
+    roles?.data?.[globalRegionName] &&
+    Source?.KinesisStreamSourceDescription?.RoleARN
+  ) {
+    const dataAtRegion: RawAwsIamRole[] = roles.data[globalRegionName].filter(
+      role => role.Arn === Source.KinesisStreamSourceDescription.RoleARN
+    )
+    if (!isEmpty(dataAtRegion)) {
+      for (const instance of dataAtRegion) {
+        const { Arn: roleId } = instance
+
+        connections.push({
+          id: roleId,
+          resourceType: services.iamRole,
+          relation: 'child',
+          field: 'iamRole',
+        })
+      }
+    }
   }
 
   const kinesisFirehoseResult = {

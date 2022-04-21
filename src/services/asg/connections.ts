@@ -10,6 +10,8 @@ import { SecurityGroup, Volume } from 'aws-sdk/clients/ec2'
 import { isEmpty } from 'lodash'
 import services from '../../enums/services'
 import { RawAwsSubnet } from '../subnet/data'
+import { RawAwsIamRole } from '../iamRole/data'
+import { globalRegionName } from '../../enums/regions'
 
 /**
  * ASG
@@ -34,6 +36,7 @@ export default ({
     AutoScalingGroupARN: id,
     Instances: instances = [],
     VPCZoneIdentifier: commaSeparatedSubnetIds = '',
+    ServiceLinkedRoleARN: roleArn,
   } = asg
 
   const { SecurityGroups: sgIds = [] } = asg.LaunchConfiguration
@@ -137,6 +140,29 @@ export default ({
           resourceType: services.subnet,
           relation: 'child',
           field: 'subnet',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find related IAM Roles
+   */
+  const roles: { name: string; data: { [property: string]: any[] } } =
+    data.find(({ name }) => name === services.iamRole)
+  if (roles?.data?.[globalRegionName]) {
+    const dataAtRegion: RawAwsIamRole[] = roles.data[globalRegionName].filter(
+      role => role.Arn === roleArn
+    )
+    if (!isEmpty(dataAtRegion)) {
+      for (const instance of dataAtRegion) {
+        const { Arn: arn }: RawAwsIamRole = instance
+
+        connections.push({
+          id: arn,
+          resourceType: services.iamRole,
+          relation: 'child',
+          field: 'iamRole',
         })
       }
     }

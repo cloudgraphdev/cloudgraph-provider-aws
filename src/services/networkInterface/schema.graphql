@@ -1,8 +1,4 @@
-type awsNetworkInterface @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsNetworkInterface implements awsBaseService @key(fields: "arn") {
   subnetId: String @search(by: [hash])
   macAddress: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp, fulltext])
@@ -10,7 +6,7 @@ type awsNetworkInterface @key(fields: "arn") {
   status: String @search(by: [hash, regexp])
   vpcId: String @search(by: [hash])
   interfaceType: String @search(by: [hash, regexp])
-  securityGroups: [String] @search(by: [hash])
+  securityGroupsIds: [String] @search(by: [hash])
   privateDnsName: String @search(by: [hash, regexp])
   privateIps: [String] @search(by: [hash, regexp])
   attachment: awsNetworkInterfaceAttachment
@@ -19,10 +15,12 @@ type awsNetworkInterface @key(fields: "arn") {
   eip: [awsEip] @hasInverse(field: networkInterface)
   natGateway: [awsNatGateway] @hasInverse(field: networkInterface)
   subnet: [awsSubnet] @hasInverse(field: networkInterface)
-  vpc: [awsVpc] @hasInverse(field: networkInterface)
+  vpc: [awsVpc] @hasInverse(field: networkInterfaces)
   efsMountTarget: [awsEfsMountTarget] @hasInverse(field: networkInterface)
   flowLogs: [awsFlowLog] @hasInverse(field: networkInterface) #change to singular
-  sageMakerNotebookInstances: [awsSageMakerNotebookInstance] @hasInverse(field: networkInterface)
+  sageMakerNotebookInstances: [awsSageMakerNotebookInstance]
+    @hasInverse(field: networkInterface)
+  securityGroups: [awsSecurityGroup] @hasInverse(field: networkInterfaces)
 }
 
 type awsNetworkInterfaceAttachment

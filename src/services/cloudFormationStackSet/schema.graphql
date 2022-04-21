@@ -4,12 +4,12 @@ type awsCloudFormationStackSetParameter
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    parameterKey: String @search(by: [hash, regexp])
-    parameterValue: String @search(by: [hash, regexp])
-    usePreviousValue: String @search(by: [hash, regexp])
-    resolvedValue: String @search(by: [hash, regexp])
-  }
+  id: String! @id @search(by: [hash])
+  parameterKey: String @search(by: [hash, regexp])
+  parameterValue: String @search(by: [hash, regexp])
+  usePreviousValue: String @search(by: [hash, regexp])
+  resolvedValue: String @search(by: [hash, regexp])
+}
 
 type awsCloudFormationStackSetDriftDetectionDetail
   @generate(
@@ -17,12 +17,12 @@ type awsCloudFormationStackSetDriftDetectionDetail
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    parameterKey: String @search(by: [hash, regexp])
-    parameterValue: String @search(by: [hash, regexp])
-    usePreviousValue: String @search(by: [hash, regexp])
-    resolvedValue: String @search(by: [hash, regexp])
-  }
+  id: String! @id @search(by: [hash])
+  parameterKey: String @search(by: [hash, regexp])
+  parameterValue: String @search(by: [hash, regexp])
+  usePreviousValue: String @search(by: [hash, regexp])
+  resolvedValue: String @search(by: [hash, regexp])
+}
 
 type awsCloudFormationStackSetDriftDetectionDetail {
   id: String! @search(by: [hash])
@@ -40,24 +40,20 @@ type awsCloudFormationStackAutoDeploymentConfig {
   enabled: String @search(by: [hash, regexp])
   retainStacksOnAccountRemoval: String @search(by: [hash, regexp])
 }
-# TODO: add accountId to cloudFormationStackSet
-type awsCloudFormationStackSet @key(fields: "arn") {
-  id: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String! @search(by: [hash, regexp])
+
+type awsCloudFormationStackSet implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp])
   status: String @search(by: [hash, regexp])
   templateBody: String @search(by: [hash, regexp])
   parameters: [awsCloudFormationStackSetParameter]
   capabilities: [String] @search
-  tags:  [awsRawTag]
+  tags: [awsRawTag]
   administrationRoleARN: String @search(by: [hash, regexp])
   executionRoleName: String @search(by: [hash, regexp])
   driftDetectionDetail: awsCloudFormationStackSetDriftDetectionDetail
   autoDeploymentConfig: awsCloudFormationStackAutoDeploymentConfig
   permissionModel: String @search(by: [hash, regexp])
   organizationalUnitIds: [String] @search
+  iamRoles: [awsIamRole] @hasInverse(field: cloudFormationStackSet)
 }
-
-# TODO: add iam role connection using AdministrationRoleARN (also see if a connection can be made using ExecutionRoleName)

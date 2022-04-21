@@ -1,8 +1,4 @@
-type awsRouteTable @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsRouteTable implements awsBaseService @key(fields: "arn") {
   vpcId: String @search(by: [hash])
   routes: [awsRoute]
   mainRouteTable: Boolean @search
@@ -10,9 +6,10 @@ type awsRouteTable @key(fields: "arn") {
   subnetAssociations: [String]
   tags: [awsRawTag]
   subnet: [awsSubnet] @hasInverse(field: routeTable) #change to plural
-  vpc: [awsVpc] @hasInverse(field: routeTable)
+  vpc: [awsVpc] @hasInverse(field: routeTables)
   transitGateway: [awsTransitGateway] @hasInverse(field: routeTable)
-  transitGatewayAttachment: [awsTransitGatewayAttachment] @hasInverse(field: routeTable)
+  transitGatewayAttachment: [awsTransitGatewayAttachment]
+    @hasInverse(field: routeTable)
 }
 
 type awsRoute

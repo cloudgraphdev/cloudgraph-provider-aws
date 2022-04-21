@@ -1,8 +1,4 @@
-type awsRdsDbInstance @key(fields: "arn") {
-  id: String! @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsRdsDbInstance implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   port: Int @search
   address: String @search(by: [hash, regexp])
@@ -35,13 +31,11 @@ type awsRdsDbInstance @key(fields: "arn") {
   licenseModel: String @search(by: [hash, regexp])
   tags: [awsRawTag]
   cluster: [awsRdsCluster] @hasInverse(field: instances)
+  kms: [awsKms] @hasInverse(field: rdsDbInstance)
   securityGroups: [awsSecurityGroup] @hasInverse(field: rdsDbInstance)
   subnet: [awsSubnet] @hasInverse(field: rdsDbInstance)
-  vpc: [awsVpc] @hasInverse(field: rdsDbInstance)
+  vpc: [awsVpc] @hasInverse(field: rdsDbInstances)
+  cloudwatchLogs: [awsCloudwatchLog] @hasInverse(field: rdsDbInstance)
+  route53HostedZone: [awsRoute53HostedZone] @hasInverse(field: rdsDbInstance)
+  iamRoles: [awsIamRole] @hasInverse(field: rdsDbInstance)
 }
-
-#TODO: add connection to route53HostedZone using hostedZoneId in Endpoint
-# TODO: add connection to kms using kmsKeyId AND PerformanceInsightsKMSKeyId AND ActivityStreamKmsKeyId
-# TODO: add connection to IAM role using DomainMembership AND MonitoringRoleArn AND AssociatedRoles
-# TODO: add connection to cloudwatchLog using EnhancedMonitoringResourceArn
-

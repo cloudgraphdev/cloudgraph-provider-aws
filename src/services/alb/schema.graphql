@@ -1,9 +1,5 @@
-type awsAlb @key(fields: "arn") {
-  id: String! @id @search(by: [hash, regexp])
+type awsAlb implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash, regexp])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
   dnsName: String @search(by: [hash, regexp])
   scheme: String @search(by: [hash, regexp])
   type: String @search(by: [hash, regexp])
@@ -21,10 +17,12 @@ type awsAlb @key(fields: "arn") {
   tags: [awsRawTag]
   securityGroups: [awsSecurityGroup] @hasInverse(field: alb)
   ec2Instance: [awsEc2] @hasInverse(field: alb) #change to plural
-  vpc: [awsVpc] @hasInverse(field: alb)
+  vpc: [awsVpc] @hasInverse(field: albs)
   route53Record: [awsRoute53Record] @hasInverse(field: alb) #change to plural
   listeners: [awsAlbListener]
   subnet: [awsSubnet] @hasInverse(field: alb) #change to plural
+  elasticBeanstalkEnvs: [awsElasticBeanstalkEnv] @hasInverse(field: albs)
+  webAcl: [awsWafV2WebAcl] @hasInverse(field: albs)
 }
 
 type awsAlbListener
