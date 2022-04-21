@@ -9,6 +9,7 @@ export const apiGatewayMethodArn = ({ resourceArn, httpMethod }) =>
   `${resourceArn}/methods/${httpMethod}`
 export const route53HostedZoneArn = ({ id }: { id: string }): string =>
   `arn:aws:route53:::hostedzone/${id}`
+
 export const routeTableArn = ({
   region,
   account,
@@ -69,7 +70,7 @@ export const kmsArn = ({
   region: string
   account: string
   id: string
-}) : string => `arn:aws:kms:${region}:${account}:key/${id}`
+}): string => `arn:aws:kms:${region}:${account}:key/${id}`
 
 export const ecsContainerArn = ({
   region,
@@ -105,7 +106,7 @@ export const ebsVolumeArn = ({
   region,
   account,
   id,
-} : {
+}: {
   region: string
   account: string
   id: string
@@ -115,7 +116,7 @@ export const ec2InstanceArn = ({
   region,
   account,
   id,
-} : {
+}: {
   region: string
   account: string
   id: string
@@ -125,7 +126,7 @@ export const eipAllocationArn = ({
   region,
   account,
   id,
-} : {
+}: {
   region: string
   account: string
   id: string
@@ -135,17 +136,18 @@ export const elbArn = ({
   region,
   account,
   name,
-} : {
+}: {
   region: string
   account: string
   name: string
-}): string => `arn:aws:elasticloadbalancing:${region}:${account}:loadbalancer/${name}`
+}): string =>
+  `arn:aws:elasticloadbalancing:${region}:${account}:loadbalancer/${name}`
 
 export const igwArn = ({
   region,
   account,
   id,
-} : {
+}: {
   region: string
   account: string
   id: string
@@ -155,7 +157,7 @@ export const networkInterfaceArn = ({
   region,
   account,
   id,
-} : {
+}: {
   region: string
   account: string
   id: string
@@ -165,7 +167,7 @@ export const securityGroupArn = ({
   region,
   account,
   id,
-} : {
+}: {
   region: string
   account: string
   id: string
@@ -175,7 +177,7 @@ export const vpcArn = ({
   region,
   account,
   id,
-} : {
+}: {
   region: string
   account: string
   id: string
@@ -185,7 +187,7 @@ export const clientVpnEndpointArn = ({
   region,
   account,
   id,
-} : {
+}: {
   region: string
   account: string
   id: string
@@ -195,7 +197,7 @@ export const vpnConnectionArn = ({
   region,
   account,
   id,
-} : {
+}: {
   region: string
   account: string
   id: string
@@ -205,11 +207,12 @@ export const transitGatewayAttachmentArn = ({
   region,
   account,
   id,
-} : {
+}: {
   region: string
   account: string
   id: string
-}): string => `arn:aws:ec2:${region}:${account}:transit-gateway-attachment/${id}`
+}): string =>
+  `arn:aws:ec2:${region}:${account}:transit-gateway-attachment/${id}`
 
 export const configurationRecorderArn = ({
   region,
@@ -224,7 +227,7 @@ export const configurationRecorderArn = ({
 export const athenaDataCatalogArn = ({
   region,
   account,
-  name
+  name,
 }: {
   region: string
   account: string
@@ -234,7 +237,7 @@ export const athenaDataCatalogArn = ({
 export const glueJobArn = ({
   region,
   account,
-  name
+  name,
 }: {
   region: string
   account: string
@@ -244,7 +247,7 @@ export const glueJobArn = ({
 export const ssmManagedInstanceArn = ({
   region,
   account,
-  name
+  name,
 }: {
   region: string
   account: string
@@ -254,7 +257,7 @@ export const ssmManagedInstanceArn = ({
 export const ssmDocumentArn = ({
   region,
   account,
-  name
+  name,
 }: {
   region: string
   account: string
@@ -269,4 +272,25 @@ export const cognitoIdentityPoolArn = ({
   region: string
   account: string
   identityPoolId: string
-}): string => `arn:aws:cognito-identity:${region}:${account}:identitypool/${identityPoolId}`
+}): string =>
+  `arn:aws:cognito-identity:${region}:${account}:identitypool/${identityPoolId}`
+
+export const flowLogsArn = ({
+  region,
+  account,
+  flowLogId,
+}: {
+  region: string
+  account: string
+  flowLogId: string
+}): string => `arn:aws:ec2:${region}:${account}:vpc-flow-log/${flowLogId}`
+
+export const guardDutyArn = ({
+  region,
+  account,
+  detectorId,
+}: {
+  region: string
+  account: string
+  detectorId: string
+}): string => `arn:aws:guardduty:${region}:${account}:detector/${detectorId}`
