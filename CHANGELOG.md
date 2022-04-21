@@ -1,3 +1,56 @@
+# [0.79.0-beta.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.78.1...0.79.0-beta.1) (2022-04-21)
+
+
+### Bug Fixes
+
+* add connection between nacl and subnet services ([6ed6dee](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/6ed6dee345daa6342f651e5c00bb92178b259954))
+* add connection between networkInterface and securityGroup services ([8efe2aa](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/8efe2aa8e15536df124a666b05d5e08eec8e2f87))
+* Added iamRole connection to kinesisFirehose service ([dc17214](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/dc1721403a6d86aa1d7a00542dff237011514654))
+* Added iamRole to lambda service ([ae6177d](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/ae6177de995975ab5194c5d2fcc8aaf98ec8d06d))
+* Added missing connections to managedAirflow ([dbb9405](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/dbb94058dd22c0b538b4f9491e6874031747480f))
+* Added missing connections to RDS DB Instance ([206bd29](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/206bd29fd9189d10ab628c07f206e5e6a4725bf6))
+* Added missing connections to waf ([623537b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/623537b01ccfe4123e8aec1c56ad3c0037cc6efa))
+* Created iamRole connection for emrCluster ([80a39e1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/80a39e19046ad46a2897f667171b271b5a1f9cc7))
+* **ec2:** fix connection field to elasticBeanstalkEnv ([e2fd077](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/e2fd07799b82213abcd5a0776f34a6c1b7d3d215))
+* **elasticBeanstalkApp:** add connection to iamRole, fixes to iamRole ([d5af1af](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d5af1af67656058e42874dd0260b7d1bf63310f5))
+* **elasticBeanstalkEnv:** add connections with alb, elb, ec2 and sqs services ([fe21ecd](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/fe21ecd924695395dde77a8704bf0e7edcb26c36))
+* **elasticSearchDomain:** add cloudwatchLogs, cognitoIdentityPool, cognitoUserPool, iamRole connections ([694d298](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/694d298af419a8f18f55ccebb5fc21b06574c930))
+* Fixed error scanning iamUsers without enough permissions ([43b7d22](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/43b7d22c4b3c8b0056ec302f7ec8e7ec9646fa0f))
+* Generated ARN for flowLogs ([1d372a9](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/1d372a93083dbc2d1ae9e6ef3f4cd32a720fbf1a))
+* Generated ARN for guardDuty ([39f43b5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/39f43b5dff9449a860823aa9b1effc6e6b271a59))
+* iamInstanceProfile never returning when there's a permission's error ([63e6d4a](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/63e6d4a3b8622c5d14a082cc3d9f2eef338c670c))
+* removed duplicate declaration introduced on merge ([dd14cf8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/dd14cf87e01c0b8f7e15bcd0b34135d1646bc3d2))
+* Renamed base class name for some services ([7b19d61](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/7b19d6172b943ced574757d53dff00133206bb8e))
+* Standardized aws service schemas using base schema ([f0f7cfd](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/f0f7cfdc3b71a202f211ed7255ea6b0aa1e4988d))
+* transitGatewayAttachment failed to insert data because duplicate XID found ([f88537c](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/f88537c381311d0d803f981a5dd119459f8c0061))
+
+
+### Features
+
+* Added iamInstanceProfile connection ([652f2f7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/652f2f7b9bf551cab37afa2893bea5bb504699c9))
+* Added IamRole connection to ec2 ([4ff22ec](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/4ff22ecb130345de06cd6afd06c15f2978c8a4c7))
+* **appSync:** add iamRole/wafV2WebAcl connections ([36b90f2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/36b90f256445568dd33d9f0fcbed8dc66531407a))
+* **asg:** add iam role connection ([06285db](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/06285db82a8b2feb821d95446e3e0fe87c54cd51))
+* **cloudFormationStackSet:** add iam role connection ([e25bffb](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/e25bffb1f467706ff6a0cc752804a6b3738f6c8b))
+* **cognitoIdentityPool:** add iamRole/iamOpenIdConnectProvider/iamSamlProvider connections, generate arn ([3ba9610](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/3ba9610af535f9b84f229ce6abcfcf1e43664d45))
+* Handle TODOs for dynamoDB ([d2b42ce](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d2b42cec491776ecebbedc30f691a49960cfd47e))
+* Handle TODOs for dynamoDB ([9b3ae42](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/9b3ae425097f06972f292f3c82930bd7f97bb5ac))
+* Handle TODOs for dynamoDB ([625701e](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/625701ea2a47b6be8bdf1fe910a541fd6f1ed132))
+* Handle TODOs for dynamoDB ([2911751](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/2911751e96908793dc1b042b07c28bba340f1134))
+* Handle TODOs for EC2 ([832fc7b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/832fc7bdff1a02d89fbdbf50d1d030669d7568b9))
+* Handle TODOs for ecs cluster ([554dff7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/554dff7785dc2c69403a41416c7739625fd02263))
+* Handle TODOs for ecs task ([b469773](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/b469773e9364edd65a2f2dd6c9728c3b0536e944))
+* Handle TODOs for secrets manager ([d7a975d](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d7a975dc2a5ffdb784eef36c4a827d553e7ac1c3))
+* **rds:** add kms connection cluster/dbInstance ([f501a4e](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/f501a4e079503d10841f1af32d3a12f13d277aa2))
+* **rdsCluster:** add route53HostedZone connection ([6480e7f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/6480e7f16c404ebb2c7f2f458aa95ae2db93f0dc))
+* **rdsCluster:** add subnet connection, add missing properties ([7706a02](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/7706a0243384d949f1c4adaf7ec0fa6dd1d4cd57))
+* **s3:** Add connections to iamRole, lambda, sns and sqs services ([1ca01fd](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/1ca01fd9b1dabc110b87e0c74e3e63b5c0cb1099))
+* **s3:** Add connections to iamRole, lambda, sns and sqs services ([22a8cfd](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/22a8cfdbd1365a5b94fdbc91d54886b1135c9682))
+* Update kms connection ([1e3e66d](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/1e3e66d41e886bbb39ad9f000167fa93c7313b26))
+* Update README file ([0ddf442](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/0ddf44211fe3f324371e6a21c6d5df3bc69facfb))
+* Updated README connections ([f536b73](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/f536b73f97c1f0ddbea687588e5d10f089fd2500))
+* Updated README file ([5187b76](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/5187b76b550b5bcfed36a4e6e2fa3b45920864b2))
+
 # [0.79.0-alpha.28](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0-alpha.27...0.79.0-alpha.28) (2022-04-21)
 
 
