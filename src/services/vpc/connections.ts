@@ -6,16 +6,14 @@ import {
   InternetGateway,
   NatGateway,
   NetworkInterface,
-  // NetworkAcl, // TODO: Uncomment when adding NACL
   SecurityGroup,
-  // Subnet,
   Vpc,
 } from 'aws-sdk/clients/ec2'
-// import { Cluster } from 'aws-sdk/clients/eks' // TODO: Uncomment when adding EKS
+
 import { DBInstance } from 'aws-sdk/clients/rds'
 import { LoadBalancer } from 'aws-sdk/clients/elbv2'
 import { FunctionConfiguration } from 'aws-sdk/clients/lambda'
-// import { LoadBalancerDescription } from 'aws-sdk/clients/elb' // TODO: Uncomment when adding ELB
+import { LoadBalancerDescription } from 'aws-sdk/clients/elb'
 
 import services from '../../enums/services'
 import { RawAwsSubnet } from '../subnet/data'
@@ -24,15 +22,21 @@ import { RawAwsEcsService } from '../ecsService/data'
 import { RawAwsElasticSearchDomain } from '../elasticSearchDomain/data'
 import { RawAwsDmsReplicationInstance } from '../dmsReplicationInstance/data'
 import { RawAwsRdsClusterSnapshot } from '../rdsClusterSnapshot/data'
+import { RawAwsEksCluster } from '../eksCluster/data'
+import { RawAwsNetworkAcl } from '../nacl/data'
+import { elbArn } from '../../utils/generateArns'
+
 /**
- * ALBs
+ * VPCs
  */
 
 export default ({
+  account,
   service: vpc,
   data,
   region,
 }: {
+  account: string
   service: Vpc
   data: Array<{ name: string; data: { [property: string]: any[] } }>
   region: string
@@ -49,7 +53,6 @@ export default ({
   const sgs = data.find(({ name }) => name === services.sg)
   const sgIds =
     sgs?.data?.[region]?.map(({ GroupId }: SecurityGroup) => GroupId) || []
-  // TODO: Implement when Subnet service is fully ready
   const subnets = data.find(({ name }) => name === services.subnet)
   const subnetIds =
     subnets?.data?.[region]?.map(({ SubnetId }: RawAwsSubnet) => SubnetId) || []
@@ -67,13 +70,13 @@ export default ({
         id: instance.LoadBalancerArn,
         resourceType: services.alb,
         relation: 'child',
-        field: 'alb',
+        field: 'albs',
       })
     }
   }
 
   /**
-   * Find any ECS service related data
+   * Find any DMS replication instance related data
    */
   const replications = data.find(
     ({ name }) => name === services.dmsReplicationInstance
@@ -81,10 +84,12 @@ export default ({
   if (replications?.data?.[region]) {
     const dataAtRegion: RawAwsDmsReplicationInstance[] = replications.data[
       region
-    ].filter(({ ReplicationSubnetGroup = {} }: RawAwsDmsReplicationInstance) => {
-      const vpcId = ReplicationSubnetGroup.VpcId
-      return id === vpcId
-    })
+    ].filter(
+      ({ ReplicationSubnetGroup = {} }: RawAwsDmsReplicationInstance) => {
+        const vpcId = ReplicationSubnetGroup.VpcId
+        return id === vpcId
+      }
+    )
 
     for (const instance of dataAtRegion) {
       connections.push({
@@ -114,7 +119,7 @@ export default ({
         id: instance.serviceArn,
         resourceType: services.ecsService,
         relation: 'child',
-        field: 'ecsService',
+        field: 'ecsServices',
       })
     }
   }
@@ -132,7 +137,7 @@ export default ({
         id: eip.AllocationId,
         resourceType: services.eip,
         relation: 'child',
-        field: 'eip',
+        field: 'eips',
       })
     }
   }
@@ -155,24 +160,24 @@ export default ({
       })
     }
   }
+
   /**
-   * Find any EKS related data
+   * Find any EKS cluster related data
    */
-  // TODO: Uncomment and check if arn is the correct id when adding EKS
-  // const eksS = data.find(({ name }) => name === services.eks)
-  // if (eksS?.data?.[region]) {
-  //   const dataAtRegion: Cluster[] = eksS.data[region].filter(
-  //     ({ resourcesVpcConfig: { vpcId } }: Cluster) => vpcId === id
-  //   )
-  //   for (const eks of dataAtRegion) {
-  //     connections.push({
-  //       id: eks.arn,
-  //       resourceType: services.eks,
-  //       relation: 'child',
-  //       field: 'eks',
-  //     })
-  //   }
-  // }
+  const eksClusters = data.find(({ name }) => name === services.eksCluster)
+  if (eksClusters?.data?.[region]) {
+    const dataAtRegion: RawAwsEksCluster[] = eksClusters.data[region].filter(
+      ({ resourcesVpcConfig: { vpcId } }: RawAwsEksCluster) => vpcId === id
+    )
+    for (const eksCluster of dataAtRegion) {
+      connections.push({
+        id: eksCluster.arn,
+        resourceType: services.eksCluster,
+        relation: 'child',
+        field: 'eksClusters',
+      })
+    }
+  }
 
   /**
    * Find any FlowLog related data
@@ -187,7 +192,7 @@ export default ({
         id: flowLog.FlowLogId,
         resourceType: services.flowLog,
         relation: 'child',
-        field: 'flowLogs',
+        field: 'flowLog',
       })
     }
   }
@@ -206,10 +211,11 @@ export default ({
         id: igw.InternetGatewayId,
         resourceType: services.igw,
         relation: 'child',
-        field: 'igw',
+        field: 'igws',
       })
     }
   }
+
   /**
    * Find any Lambda related data
    */
@@ -231,28 +237,30 @@ export default ({
         id: lambda.FunctionArn,
         resourceType: services.lambda,
         relation: 'child',
-        field: 'lambda',
+        field: 'lambdas',
       })
     }
   }
+
   /**
    * Find any NAT related data
    */
   const nats = data.find(({ name }) => name === services.nat)
   if (nats?.data?.[region]) {
     const dataAtRegion: NatGateway[] = nats.data[region].filter(
-      // TODO: Implement when Subnet service is fully ready
-      ({ VpcId /* , SubnetId */ }: NatGateway) => VpcId === id // || subnetIds.includes(SubnetId)
+      ({ VpcId, SubnetId }: NatGateway) =>
+        VpcId === id || subnetIds.includes(SubnetId)
     )
     for (const nat of dataAtRegion) {
       connections.push({
         id: nat.NatGatewayId,
         resourceType: services.nat,
         relation: 'child',
-        field: 'natGateway',
+        field: 'natGateways',
       })
     }
   }
+
   /**
    * Find any Network Interface related data
    */
@@ -261,18 +269,19 @@ export default ({
   )
   if (netInterfaces?.data?.[region]) {
     const dataAtRegion: NetworkInterface[] = netInterfaces.data[region].filter(
-      // TODO: Implement when Subnet service is fully ready
-      ({ VpcId /* , SubnetId */ }: NetworkInterface) => VpcId === id // || subnetIds.includes(SubnetId)
+      ({ VpcId, SubnetId }: NetworkInterface) =>
+        VpcId === id || subnetIds.includes(SubnetId)
     )
     for (const net of dataAtRegion) {
       connections.push({
         id: net.NetworkInterfaceId,
         resourceType: services.networkInterface,
         relation: 'child',
-        field: 'networkInterface',
+        field: 'networkInterfaces',
       })
     }
   }
+
   /**
    * Find any RDS Instance related data
    */
@@ -281,7 +290,7 @@ export default ({
   )
   if (rdsDbInstances?.data?.[region] && sgs?.data?.[region]) {
     const dataAtRegion: DBInstance[] = rdsDbInstances.data[region].filter(
-      ({ DBSubnetGroup }) => DBSubnetGroup.VpcId === id
+      ({ DBSubnetGroup: { VpcId } = {} }: DBInstance) => VpcId === id
     )
 
     for (const rds of dataAtRegion) {
@@ -289,7 +298,7 @@ export default ({
         id: rds.DBInstanceArn,
         resourceType: services.rdsDbInstance,
         relation: 'child',
-        field: 'rdsDbInstance',
+        field: 'rdsDbInstances',
       })
     }
   }
@@ -297,13 +306,13 @@ export default ({
   /**
    * Find any RDS Cluster Snapshot related data
    */
-   const snapshots = data.find(
+  const snapshots = data.find(
     ({ name }) => name === services.rdsClusterSnapshot
   )
   if (snapshots?.data?.[region]) {
-    const dataAtRegion: RawAwsRdsClusterSnapshot[] = snapshots.data[region].filter(
-      ({ VpcId }: RawAwsRdsClusterSnapshot) => VpcId === id
-    )
+    const dataAtRegion: RawAwsRdsClusterSnapshot[] = snapshots.data[
+      region
+    ].filter(({ VpcId }: RawAwsRdsClusterSnapshot) => VpcId === id)
 
     for (const snapshot of dataAtRegion) {
       connections.push({
@@ -327,10 +336,50 @@ export default ({
         id: subnet.SubnetId,
         resourceType: services.subnet,
         relation: 'child',
-        field: 'subnet',
+        field: 'subnets',
       })
     }
   }
+
+  /**
+   * Find any ELB Instances
+   */
+  const elbInstances = data.find(({ name }) => name === services.elb)
+  if (elbInstances?.data?.[region]) {
+    const dataAtRegion: LoadBalancerDescription[] = elbInstances.data[
+      region
+    ].filter(({ VPCId: vpcId }: LoadBalancerDescription) => vpcId === id)
+    for (const instance of dataAtRegion) {
+      const { LoadBalancerName: loadBalancerName }: LoadBalancerDescription =
+        instance
+      connections.push({
+        id: elbArn({ region, account, name: loadBalancerName }),
+        resourceType: services.elb,
+        relation: 'child',
+        field: 'elbs',
+      })
+    }
+  }
+
+  /**
+   * Find any Network ACL
+   */
+  const nacls: { name: string; data: { [property: string]: any[] } } =
+    data.find(({ name }) => name === services.nacl)
+  if (nacls?.data?.[region]) {
+    const dataAtRegion: RawAwsNetworkAcl[] = nacls.data[region].filter(
+      ({ VpcId: vpcId }: RawAwsNetworkAcl) => vpcId === id
+    )
+    for (const instance of dataAtRegion) {
+      connections.push({
+        id: instance.NetworkAclId,
+        resourceType: services.nacl,
+        relation: 'child',
+        field: 'nacls',
+      })
+    }
+  }
+
   const VpcResult = {
     [id]: connections,
   }

@@ -1,8 +1,4 @@
-type awsElasticBeanstalkEnv @key(fields: "arn") {
-  id: String! @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsElasticBeanstalkEnv implements awsBaseService @key(fields: "arn") {
   applicationName: String @search(by: [hash, regexp])
   cname: String @search(by: [hash])
   description: String @search(by: [hash, regexp])
@@ -14,7 +10,13 @@ type awsElasticBeanstalkEnv @key(fields: "arn") {
   solutionStackName: String @search(by: [hash, regexp])
   tier: String @search(by: [hash])
   versionLabel: String @search(by: [hash, regexp])
-  elasticBeanstalkApp: [awsElasticBeanstalkApp] @hasInverse(field: elasticBeanstalkEnv)
+  asgs: [awsAsg] @hasInverse(field: elasticBeanstalkEnvs)
+  albs: [awsAlb] @hasInverse(field: elasticBeanstalkEnvs)
+  ec2Instances: [awsEc2] @hasInverse(field: elasticBeanstalkEnv)
+  elbs: [awsElb] @hasInverse(field: elasticBeanstalkEnvs)
+  elasticBeanstalkApp: [awsElasticBeanstalkApp] @hasInverse(field: elasticBeanstalkEnvs)
+  iamRole: [awsIamRole] @hasInverse(field: elasticBeanstalkEnvs)
+  sqsQueues: [awsSqs] @hasInverse(field: elasticBeanstalkEnvs)
   tags: [awsRawTag]
 }
 
@@ -30,6 +32,3 @@ type awsElasticBeanstalkEnvResource {
   name: String @search(by: [hash, regexp])
   value: [String] @search(by: [hash, regexp])
 }
-
-
-# TODO: add iam role based on OperationsRole field

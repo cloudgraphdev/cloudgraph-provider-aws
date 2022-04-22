@@ -5,6 +5,7 @@ import { account, credentials, region } from '../src/properties/test'
 import services from '../src/enums/services'
 import Subnet from '../src/services/subnet'
 import SecurityGroup from '../src/services/securityGroup'
+import KMS from '../src/services/kms'
 
 // TODO: Localstack Pro Tier
 describe.skip('RDS DB Instance Service Test: ', () => {
@@ -19,6 +20,7 @@ describe.skip('RDS DB Instance Service Test: ', () => {
     try {
       const subnetService = new Subnet({ logger: CloudGraph.logger })
       const sgService = new SecurityGroup({ logger: CloudGraph.logger })
+      const kmsService = new KMS({ logger: CloudGraph.logger })
       const classInstance = new RDSDbInstance({
         logger: CloudGraph.logger,
       })
@@ -43,6 +45,12 @@ describe.skip('RDS DB Instance Service Test: ', () => {
         regions: region,
       })
 
+      // Get kms data
+      const kmsData = await kmsService.getData({
+        credentials,
+        regions: region,
+      })
+
       const [cluster] = getDataResult[region]
       rdsDbInstanceId = cluster.DBInstanceArn
 
@@ -58,6 +66,12 @@ describe.skip('RDS DB Instance Service Test: ', () => {
           {
             name: services.sg,
             data: sgData,
+            account,
+            region,
+          },
+          {
+            name: services.kms,
+            data: kmsData,
             account,
             region,
           },
@@ -188,6 +202,15 @@ describe.skip('RDS DB Instance Service Test: ', () => {
 
       expect(sgConnections).toBeDefined()
       expect(sgConnections.length).toBe(1)
+    })
+
+    test('should verify the connection to kms', () => {
+      const kmsConnections = rdsDbInstanceConnections[rdsDbInstanceId]?.filter(
+        connection => connection.resourceType === services.kms
+      )
+
+      expect(kmsConnections).toBeDefined()
+      expect(kmsConnections.length).toBe(1)
     })
   })
 })

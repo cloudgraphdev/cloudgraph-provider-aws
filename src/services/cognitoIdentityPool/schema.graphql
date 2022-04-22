@@ -22,6 +22,7 @@ type awsCognitoIdentityProviders
 
 type awsCognitoIdentityPool @key(fields: "id") {
   id: String! @id @search(by: [hash])
+  arn: String! @search(by: [hash])
   accountId: String! @search(by: [hash])
   region: String @search(by: [hash, regexp])
   identityPoolName: String @search(by: [hash, regexp])
@@ -33,8 +34,8 @@ type awsCognitoIdentityPool @key(fields: "id") {
   cognitoIdentityProviders: [awsCognitoIdentityProviders]
   samlProviderARNs: [String] @search
   tags: [awsRawTag]
+  elasticSearchDomains: [awsElasticSearchDomain] @hasInverse(field: cognitoIdentityPool)
+  iamRoles: [awsIamRole] @hasInverse(field: awsCognitoIdentityPool)
+  iamOpenIdConnectProviders: [awsIamOpenIdConnectProvider] @hasInverse(field: awsCognitoIdentityPool)
+  iamSamlProviders: [awsIamSamlProvider] @hasInverse(field: awsCognitoIdentityPool)
 }
-
-# TODO: add an arn for identity pool see here: https://docs.aws.amazon.com/cognito/latest/developerguide/security_iam_service-with-iam.html
-#TODO: add connections to iamSamlProvider and iamOpenIdConnectProvider
-#TODO: try to add connection to iam role using getIdentityPoolRoles 

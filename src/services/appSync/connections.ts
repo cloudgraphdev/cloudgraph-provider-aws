@@ -10,6 +10,8 @@ import { RawAwsDynamoDbTable } from '../dynamodb/data'
 import { RawAwsLambdaFunction } from '../lambda/data'
 import { RawAwsCognitoUserPool } from '../cognitoUserPool/data'
 import { RawAwsRdsCluster } from '../rdsCluster/data'
+import { RawAwsIamRole } from '../iamRole/data'
+import { globalRegionName } from '../../enums/regions'
 
 /**
  * AppSync
@@ -148,6 +150,32 @@ export default ({
           resourceType: services.rdsCluster,
           relation: 'child',
           field: 'rdsCluster',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find related IAM Roles
+   */
+  const roles: { name: string; data: { [property: string]: any[] } } =
+    data.find(({ name }) => name === services.iamRole)
+
+  const roleArns = awsDataSources?.map(({ serviceRoleArn }) => serviceRoleArn)
+
+  if (roles?.data?.[globalRegionName]) {
+    const dataAtRegion: RawAwsIamRole[] = roles.data[globalRegionName].filter(
+      role => roleArns.includes(role.Arn)
+    )
+    if (!isEmpty(dataAtRegion)) {
+      for (const instance of dataAtRegion) {
+        const { Arn: arn }: RawAwsIamRole = instance
+
+        connections.push({
+          id: arn,
+          resourceType: services.iamRole,
+          relation: 'child',
+          field: 'iamRoles',
         })
       }
     }

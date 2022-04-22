@@ -1,16 +1,12 @@
-type awsNetworkAcl @key(fields: "id") {
-  id: String! @id @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash, regexp])
-  region: String! @search(by: [hash, regexp])
+type awsNetworkAcl implements awsBaseService @key(fields: "id") {
   default: Boolean
   inboundRules: [awsNetworkAclRule]
   outboundRules: [awsNetworkAclRule]
   associatedSubnets: [awsNetworkAclAssociatedSubnet]
   tags: [awsRawTag]
-  vpc: [awsVpc] @hasInverse(field: nacl)
-  # subnet: [awsSubnet] @hasInverse(field: nacl) #change to plural
-  vpcId: String! @search(by: [hash, regexp])
+  vpc: [awsVpc] @hasInverse(field: nacls)
+  subnets: [awsSubnet] @hasInverse(field: nacls)
+  vpcId: String @search(by: [hash, regexp])
 }
 
 type awsNetworkAclRule

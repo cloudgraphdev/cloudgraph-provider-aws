@@ -1,9 +1,4 @@
-#TODO: add iamRole connection here
-type awsEmrCluster @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash, regexp])
-  region: String! @search(by: [hash, regexp])
+type awsEmrCluster implements awsBaseService @key(fields: "arn") {
   status: AwsEmrClusterStatus
   ec2InstanceAttributes: AwsEmrClusterEc2InstanceAttributes
   instanceCollectionType: String @search(by: [hash, regexp])
@@ -16,12 +11,10 @@ type awsEmrCluster @key(fields: "arn") {
   terminationProtected: Boolean @search
   visibleToAllUsers: Boolean @search
   applications: [AwsEmrClusterApplication]
-  serviceRole: String @search(by: [hash, regexp])
   normalizedInstanceHours: Int @search
   masterPublicDnsName: String @search(by: [hash, regexp])
   configurations: [AwsEmrClusterConfiguration]
   securityConfiguration: String @search(by: [hash, regexp])
-  autoScalingRole: String @search(by: [hash, regexp])
   scaleDownBehavior: String @search(by: [hash, regexp])
   customAmiId: String @search(by: [hash, regexp])
   ebsRootVolumeSize: Int @search
@@ -33,32 +26,33 @@ type awsEmrCluster @key(fields: "arn") {
   tags: [awsRawTag]
   kms: [awsKms] @hasInverse(field: emrCluster)
   subnet: [awsSubnet] @hasInverse(field: emrCluster) #change to plural
+  iamRoles: [awsIamRole] @hasInverse(field: emrCluster)
 }
 
-type AwsEmrClusterApplication 
+type AwsEmrClusterApplication
   @generate(
     query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    name: String @search(by: [hash, regexp])
-    version: String @search(by: [hash, regexp])
-    args: [String] @search(by: [hash])
-    additionalInfo: [AwsStringMap]
-  }
+  id: String! @id @search(by: [hash])
+  name: String @search(by: [hash, regexp])
+  version: String @search(by: [hash, regexp])
+  args: [String] @search(by: [hash])
+  additionalInfo: [AwsStringMap]
+}
 
-type AwsEmrClusterConfiguration 
+type AwsEmrClusterConfiguration
   @generate(
     query: { get: false, query: false, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    classification: String @search(by: [hash, regexp])
-    configurations: [AwsEmrClusterConfiguration]
-    properties: [AwsStringMap]
-  }
+  id: String! @id @search(by: [hash])
+  classification: String @search(by: [hash, regexp])
+  configurations: [AwsEmrClusterConfiguration]
+  properties: [AwsStringMap]
+}
 
 type AwsEmrClusterPlacementGroupConfig
   @generate(
@@ -66,10 +60,10 @@ type AwsEmrClusterPlacementGroupConfig
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    instanceRole: String @search(by: [hash, regexp])
-    placementStrategy: String @search(by: [hash, regexp])
-  }
+  id: String! @id @search(by: [hash])
+  instanceRole: String @search(by: [hash, regexp])
+  placementStrategy: String @search(by: [hash, regexp])
+}
 
 type AwsStringMap
   @generate(
@@ -77,10 +71,10 @@ type AwsStringMap
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    key: String @search(by: [hash, regexp])
-    value: String @search(by: [hash, regexp])
-  }
+  id: String! @id @search(by: [hash])
+  key: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
+}
 
 type AwsEmrClusterStatus
   @generate(

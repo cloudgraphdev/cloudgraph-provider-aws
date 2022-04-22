@@ -1,5 +1,6 @@
 import { AwsFlowLog } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
+import { flowLogsArn } from '../../utils/generateArns'
 import { RawFlowLog } from './data'
 
 /**
@@ -37,6 +38,11 @@ export default ({
 
   const flowLog = {
     id,
+    arn: flowLogsArn({
+      region,
+      account,
+      flowLogId: id,
+    }),
     region,
     accountId: account,
     deliverLogsErrorMessage,

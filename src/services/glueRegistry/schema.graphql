@@ -1,8 +1,4 @@
-type awsGlueRegistry @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash])
-  region: String @search(by: [hash, regexp])
+type awsGlueRegistry implements awsBaseService @key(fields: "arn") {
   registryName: String @search(by: [hash, regexp])
   registryArn: String @search(by: [hash, regexp])
   status: String @search(by: [hash, regexp])

@@ -10,6 +10,7 @@ import { SecurityGroup } from 'aws-sdk/clients/ec2'
 
 import services from '../../enums/services'
 import { RawAwsSubnet } from '../subnet/data'
+import { RawAwsVpc } from '../vpc/data'
 import { elbArn } from '../../utils/generateArns'
 
 /**
@@ -77,7 +78,7 @@ export default ({
 
   if (vpcs?.data?.[region]) {
     const vpc = vpcs.data[region].find(
-      ({ VpcId }: SecurityGroup) => VpcId === vpcId
+      ({ VpcId }: RawAwsVpc) => VpcId === vpcId
     )
 
     if (vpc) {

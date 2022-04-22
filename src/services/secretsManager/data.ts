@@ -1,4 +1,8 @@
-import SM, { SecretListEntry } from 'aws-sdk/clients/secretsmanager'
+import SM, {
+  SecretListEntry,
+  DescribeSecretResponse,
+  ReplicationStatusType,
+} from 'aws-sdk/clients/secretsmanager'
 import { AWSError } from 'aws-sdk/lib/error'
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
@@ -22,7 +26,32 @@ const endpoint = initTestEndpoint(serviceName)
 export interface RawAwsSecretsManager extends Omit<SecretListEntry, 'Tags'> {
   region: string
   Tags: TagMap
+  ReplicationStatus?: ReplicationStatusType[]
 }
+
+const getSecretDetails = async (
+  sm: SM,
+  secretId: string
+): Promise<DescribeSecretResponse> =>
+  new Promise(resolve => {
+    sm.describeSecret(
+      {
+        SecretId: secretId,
+      },
+      (err: AWSError, data: DescribeSecretResponse) => {
+        if (err) {
+          errorLog.generateAwsErrorLog({
+            functionName: 'sm:describeSecret',
+            err,
+          })
+        }
+        if (!isEmpty(data)) {
+          resolve(data)
+        }
+        resolve({})
+      }
+    )
+  })
 
 export default async ({
   regions,
@@ -34,6 +63,7 @@ export default async ({
   new Promise(async resolve => {
     const smData: RawAwsSecretsManager[] = []
     const regionPromises = []
+    const secretsDetailsPromises = []
 
     regions.split(',').map(region => {
       const regionPromise = new Promise<void>(resolveSecretsManagerData => {
@@ -73,8 +103,24 @@ export default async ({
       })
       regionPromises.push(regionPromise)
     })
-
     await Promise.all(regionPromises)
+
+    smData.map(({ ARN: arn, region }, idx) => {
+      const sm = new SM({ ...config, region, endpoint })
+      const secretDetailsPromise = new Promise<void>(
+        async resolveSecretDetails => {
+          const secretDetails: DescribeSecretResponse = await getSecretDetails(
+            sm,
+            arn
+          )
+          smData[idx].ReplicationStatus = secretDetails?.ReplicationStatus || []
+          resolveSecretDetails()
+        }
+      )
+      secretsDetailsPromises.push(secretDetailsPromise)
+    })
+    await Promise.all(secretsDetailsPromises)
+
     errorLog.reset()
 
     resolve(groupBy(smData, 'region'))

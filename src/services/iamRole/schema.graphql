@@ -1,7 +1,4 @@
-type awsIamRole @key(fields: "id") {
-  id: String! @id @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash, regexp])
+type awsIamRole implements awsBaseService @key(fields: "id") {
   name: String @search(by: [hash, regexp])
   path: String @search(by: [hash, regexp])
   assumeRolePolicy: awsIamJSONPolicy
@@ -10,17 +7,38 @@ type awsIamRole @key(fields: "id") {
   maxSessionDuration: Int @search
   tags: [awsRawTag]
   inlinePolicies: [String]
-  iamAttachedPolicies: [awsIamPolicy] @hasInverse(field: iamRoles)
-  eksCluster: [awsEksCluster] @hasInverse(field: iamRoles) #change to plural
-  ecsService: [awsEcsService] @hasInverse(field: iamRoles) #change to plural
-  flowLogs: [awsFlowLog] @hasInverse(field: iamRole)
   cloudFormationStack: [awsCloudFormationStack] @hasInverse(field: iamRole)
-  configurationRecorder: [awsConfigurationRecorder] @hasInverse(field: iamRole)
   codebuilds: [awsCodebuild] @hasInverse(field: iamRoles)
+  configurationRecorder: [awsConfigurationRecorder] @hasInverse(field: iamRole)
+  ecsServices: [awsEcsService] @hasInverse(field: iamRoles)
+  eksClusters: [awsEksCluster] @hasInverse(field: iamRoles)
+  elasticBeanstalkApps: [awsElasticBeanstalkApp] @hasInverse(field: iamRole)
+  elasticBeanstalkEnvs: [awsElasticBeanstalkEnv] @hasInverse(field: iamRole)
+  flowLogs: [awsFlowLog] @hasInverse(field: iamRole)
   glueJobs: [awsGlueJob] @hasInverse(field: iamRole)
-  managedAirflows: [awsManagedAirflow] @hasInverse(field: iamRoles)
   guardDutyDetectors: [awsGuardDutyDetector] @hasInverse(field: iamRole)
-  sageMakerNotebookInstances: [awsSageMakerNotebookInstance] @hasInverse(field: iamRole)
-  systemsManagerInstances: [awsSystemsManagerInstance] @hasInverse(field: iamRole)
+  iamAttachedPolicies: [awsIamPolicy] @hasInverse(field: iamRoles)
   iamInstanceProfiles: [awsIamInstanceProfile] @hasInverse(field: iamRole)
+  managedAirflows: [awsManagedAirflow] @hasInverse(field: iamRoles)
+  sageMakerNotebookInstances: [awsSageMakerNotebookInstance]
+    @hasInverse(field: iamRole)
+  systemsManagerInstances: [awsSystemsManagerInstance]
+    @hasInverse(field: iamRole)
+  ecsTask: [awsEcsTask] @hasInverse(field: iamRoles)
+  ecsTaskDefinition: [awsEcsTaskDefinition] @hasInverse(field: iamRole)
+  s3: [awsS3] @hasInverse(field: iamRole)
+  dynamodb: [awsDynamoDbTable] @hasInverse(field: iamRoles)
+  ec2Instances: [awsEc2] @hasInverse(field: iamRole)
+  cognitoUserPools: [awsCognitoUserPool] @hasInverse(field: iamRole)
+  appSync: [awsAppSync] @hasInverse(field: iamRoles)
+  lambda: [awsLambda] @hasInverse(field: iamRole)
+  kinesisFirehose: [awsKinesisFirehose] @hasInverse(field: iamRole)
+  rdsCluster: [awsRdsCluster] @hasInverse(field: iamRoles)
+  cloudFormationStackSet: [awsCloudFormationStackSet]
+    @hasInverse(field: iamRoles)
+  asg: [awsAsg] @hasInverse(field: iamRole)
+  awsCognitoIdentityPool: [awsCognitoIdentityPool] @hasInverse(field: iamRoles)
+  rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: iamRoles)
+  elasticSearchDomains: [awsElasticSearchDomain] @hasInverse(field: iamRole)
+  emrCluster: [awsEmrCluster] @hasInverse(field: iamRoles)
 }
