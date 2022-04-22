@@ -13,7 +13,7 @@ type awsCloudfront @key(fields: "id") {
   ipv6Enabled: String @search(by: [hash])
   defaultRootObject: String @search(by: [hash])
   webAclId: String @search(by: [hash])
-  geoRestrictions: String @search(by: [hash, regexp])
+  geoRestriction: awsCloudfrontGeoRestriction
   customErrorResponses: [awsCloudfrontCustomErrorResponse]
   defaultCacheBehavior: awsCloudfrontCacheBehavior
   orderedCacheBehaviors: [awsCloudfrontCacheBehavior]
@@ -96,4 +96,9 @@ type awsCloudfrontLoggingConfig {
   includeCookies: Boolean @search
   bucket: String @search(by: [hash, regexp])
   prefix: String @search(by: [hash, regexp])
+}
+
+type awsCloudfrontGeoRestriction {
+  restrictionType: String @search(by: [hash, regexp])
+  locations: [String] @search(by: [hash, regexp])
 }
