@@ -38,7 +38,6 @@ export default ({
     stoppedAt,
     stoppedReason,
     stoppingAt,
-    taskDefinitionArn,
     version,
     ephemeralStorage,
     Tags,

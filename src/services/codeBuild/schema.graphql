@@ -1,5 +1,5 @@
 type awsCodebuildLogsConfig {
-  cloudWatchLogs: awsCodebuildCloudWatchLogs,
+  cloudWatchLogs: awsCodebuildCloudWatchLogs
   s3Logs: awsCodebuildS3Logs
 }
 
@@ -22,11 +22,11 @@ type awsCodebuildBadge {
 }
 
 type awsCodebuildEnvironment {
-  type: String @search(by: [hash, regexp]),
-  image: String @search(by: [hash, regexp]),
-  computeType: String @search(by: [hash, regexp]),
-  environmentVariables: [awsCodebuildEnvironmentVariables],
-  privilegedMode: Boolean @search,
+  type: String @search(by: [hash, regexp])
+  image: String @search(by: [hash, regexp])
+  computeType: String @search(by: [hash, regexp])
+  environmentVariables: [awsCodebuildEnvironmentVariables]
+  privilegedMode: Boolean @search
   certificate: String @search(by: [hash, regexp])
   registryCredential: awsCodebuildEnvRegistryCredentials
   imagePullCredentialsType: String @search(by: [hash, regexp])
@@ -39,8 +39,8 @@ type awsCodebuildEnvRegistryCredentials {
 
 type awsCodebuildEnvironmentVariables {
   id: String! @id
-  name: String @search(by: [hash, regexp]),
-  value: String @search(by: [hash, regexp]),
+  name: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
   type: String @search(by: [hash, regexp])
 }
 
@@ -48,18 +48,17 @@ type awsCodebuildCache {
   type: String @search(by: [hash, regexp])
   location: String @search(by: [hash, regexp])
   modes: [String] @search(by: [hash, regexp])
-
 }
 
 type awsCodebuildArtifacts {
   id: String! @id
-  type: String @search(by: [hash, regexp]),
-  location: String @search(by: [hash, regexp]),
-  path: String @search(by: [hash, regexp]),
-  namespaceType: String @search(by: [hash, regexp]),
-  name: String @search(by: [hash, regexp]),
-  packaging: String @search(by: [hash, regexp]),
-  overrideArtifactName: Boolean @search,
+  type: String @search(by: [hash, regexp])
+  location: String @search(by: [hash, regexp])
+  path: String @search(by: [hash, regexp])
+  namespaceType: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  packaging: String @search(by: [hash, regexp])
+  overrideArtifactName: Boolean @search
   encryptionDisabled: Boolean @search
   artifactIdentifier: String @search(by: [hash, regexp])
   bucketOwnerAccess: String @search(by: [hash, regexp])
@@ -67,11 +66,11 @@ type awsCodebuildArtifacts {
 
 type awsCodebuildSource {
   id: String! @id
-  type: String @search(by: [hash, regexp]),
-  location: String @search(by: [hash, regexp]),
-  gitCloneDepth: Int @search,
-  gitSubmodulesConfig: awsCodebuildGitSubmodulesConfig,
-  buildspec: String @search(by: [hash, regexp]),
+  type: String @search(by: [hash, regexp])
+  location: String @search(by: [hash, regexp])
+  gitCloneDepth: Int @search
+  gitSubmodulesConfig: awsCodebuildGitSubmodulesConfig
+  buildspec: String @search(by: [hash, regexp])
   auth: awsCodebuildSourceAuth
   reportBuildStatus: Boolean @search
   buildStatusConfig: awsCodebuildSourceStatusConfig
@@ -148,17 +147,13 @@ type awsCodeBuildFilterGroup {
   excludeMatchedPattern: Boolean @search
 }
 
-type awsCodebuild @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash])
-  region: String @search(by: [hash, regexp])
+type awsCodebuild implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp])
   source: awsCodebuildSource
-  secondarySources: [awsCodebuildSource],
+  secondarySources: [awsCodebuildSource]
   sourceVersion: String @search(by: [hash])
-  secondarySourceVersions: [awsCodebuildSecondarySourceVersion],
+  secondarySourceVersions: [awsCodebuildSecondarySourceVersion]
   artifacts: awsCodebuildArtifacts
   secondaryArtifacts: [awsCodebuildArtifacts]
   cache: awsCodebuildCache
@@ -185,4 +180,4 @@ type awsCodebuild @key(fields: "arn") {
   vpc: [awsVpc] @hasInverse(field: codebuilds)
   securityGroups: [awsSecurityGroup] @hasInverse(field: codebuilds)
   subnets: [awsSubnet] @hasInverse(field: codebuilds)
-  }
+}

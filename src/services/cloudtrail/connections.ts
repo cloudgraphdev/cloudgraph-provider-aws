@@ -1,12 +1,11 @@
 import isEmpty from 'lodash/isEmpty'
 
 import { ServiceConnection } from '@cloudgraph/sdk'
-import { Trail } from 'aws-sdk/clients/cloudtrail'
-import { TagMap } from '../../types'
 import { s3BucketArn } from '../../utils/generateArns'
 import { gets3BucketId } from '../../utils/ids'
 import { RawAwsLogGroup } from '../cloudwatchLogs/data'
 import { RawAwsCloudwatch } from '../cloudwatch/data'
+import { RawAwsCloudTrail } from './data'
 import services from '../../enums/services'
 
 /**
@@ -19,16 +18,13 @@ export default ({
   region,
 }: {
   data: { name: string; data: { [property: string]: any[] } }[]
-  service: Trail & {
-    Tags: TagMap
-    region: string
-  }
+  service: RawAwsCloudTrail
   region: string
 }): { [key: string]: ServiceConnection[] } => {
   const connections: ServiceConnection[] = []
 
   const {
-    TrailARN: id,
+    id,
     S3BucketName: s3BucketName,
     SnsTopicARN: snsTopicARN,
     KmsKeyId: kmsKeyId,

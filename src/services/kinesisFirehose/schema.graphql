@@ -1,34 +1,30 @@
-#TODO: add iam role connection
-type awsKinesisFirehose @key(fields: "arn") {
-    id: String! @id @search(by: [hash])
-    accountId: String! @search(by: [hash])
-    arn: String! @id @search(by: [hash, regexp])
-    region: String @search(by: [hash, regexp])
-    name: String! @search(by: [hash, regexp])
-    deliveryStreamStatus: String! @search(by: [hash, regexp])
-    failureDescriptionType: String! @search(by: [hash, regexp])
-    failureDescriptionDetails: String! @search(by: [hash, regexp])
-    encryptionConfig: awsKinesisFirehoseEncryptionConfig
-    deliveryStreamType: String! @search(by: [hash, regexp])
-    versionId: String! @search(by: [hash, regexp])
-    createTimestamp: String @search(by: [hash, regexp])
-    lastUpdateTimestamp: String @search(by: [hash, regexp])
-    source: awsKinesisFirehoseSource
-    kinesisStream: [awsKinesisStream] @hasInverse(field: kinesisFirehose)
-    s3: [awsS3] @hasInverse(field: kinesisFirehose)
-    tags: [awsRawTag]
+type awsKinesisFirehose implements awsBaseService @key(fields: "arn") {
+  name: String @search(by: [hash, regexp])
+  deliveryStreamStatus: String @search(by: [hash, regexp])
+  failureDescriptionType: String @search(by: [hash, regexp])
+  failureDescriptionDetails: String @search(by: [hash, regexp])
+  encryptionConfig: awsKinesisFirehoseEncryptionConfig
+  deliveryStreamType: String @search(by: [hash, regexp])
+  versionId: String @search(by: [hash, regexp])
+  createTimestamp: String @search(by: [hash, regexp])
+  lastUpdateTimestamp: String @search(by: [hash, regexp])
+  source: awsKinesisFirehoseSource
+  kinesisStream: [awsKinesisStream] @hasInverse(field: kinesisFirehose)
+  s3: [awsS3] @hasInverse(field: kinesisFirehose)
+  iamRole: [awsIamRole] @hasInverse(field: kinesisFirehose)
+  tags: [awsRawTag]
 }
 
 type awsKinesisFirehoseEncryptionConfig {
-    keyARN: String @search(by: [hash, regexp])
-    keyType: String @search(by: [hash, regexp])
-    status: String @search(by: [hash, regexp])
-    failureDescriptionType: String @search(by: [hash, regexp])
-    failureDescriptionDetails: String @search(by: [hash, regexp])
+  keyARN: String @search(by: [hash, regexp])
+  keyType: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
+  failureDescriptionType: String @search(by: [hash, regexp])
+  failureDescriptionDetails: String @search(by: [hash, regexp])
 }
 
 type awsKinesisFirehoseSource {
-    kinesisStreamARN: String @search(by: [hash, regexp])
-    roleARN: String @search(by: [hash, regexp])
-    deliveryStartTimestamp: String @search(by: [hash, regexp])
+  kinesisStreamARN: String @search(by: [hash, regexp])
+  roleARN: String @search(by: [hash, regexp])
+  deliveryStartTimestamp: String @search(by: [hash, regexp])
 }

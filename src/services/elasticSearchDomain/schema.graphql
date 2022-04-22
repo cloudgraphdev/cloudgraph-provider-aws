@@ -1,9 +1,4 @@
-#TODO add connection for userPool, identityPool, iamRole, cloudwatchLogs
-type awsElasticSearchDomain @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash])
-  region: String @search(by: [hash, regexp])
+type awsElasticSearchDomain implements awsBaseService @key(fields: "arn") {
   domainName: String @search(by: [hash, regexp])
   created: Boolean @search
   deleted: Boolean @search
@@ -32,6 +27,10 @@ type awsElasticSearchDomain @key(fields: "arn") {
   subnets: [awsSubnet] @hasInverse(field: elasticSearchDomains)
   securityGroups: [awsSecurityGroup] @hasInverse(field: elasticSearchDomains)
   kms: [awsKms] @hasInverse(field: elasticSearchDomains)
+  cognitoIdentityPool: [awsCognitoIdentityPool] @hasInverse(field: elasticSearchDomains)
+  cognitoUserPool: [awsCognitoUserPool] @hasInverse(field: elasticSearchDomains)
+  iamRole: [awsIamRole] @hasInverse(field: elasticSearchDomains)
+  cloudwatchLogs: [awsCloudwatchLog] @hasInverse(field: elasticSearchDomains)
 }
 
 type awsElasticSearchClusterConfig {

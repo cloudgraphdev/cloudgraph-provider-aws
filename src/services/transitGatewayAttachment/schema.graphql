@@ -1,5 +1,5 @@
 type awsTransitGatewayAttachment @key(fields: "arn") {
-  id: String! @id @search(by: [hash])
+  id: String! @search(by: [hash])
   accountId: String! @search(by: [hash])
   arn: String! @id @search(by: [hash, regexp])
   region: String @search(by: [hash, regexp])
@@ -12,8 +12,9 @@ type awsTransitGatewayAttachment @key(fields: "arn") {
   transitGatewayRouteTableId: String @search(by: [hash])
   creationTime: String @search(by: [hash, regexp])
   tags: [awsRawTag]
-  transitGateway: [awsTransitGateway] @hasInverse(field: transitGatewayAttachment)
+  transitGateway: [awsTransitGateway]
+    @hasInverse(field: transitGatewayAttachment)
   routeTable: [awsRouteTable] @hasInverse(field: transitGatewayAttachment)
-  vpc: [awsVpc] @hasInverse(field: transitGatewayAttachment)
+  vpc: [awsVpc] @hasInverse(field: transitGatewayAttachments)
   vpnConnection: [awsVpnConnection] @hasInverse(field: transitGatewayAttachment)
 }

@@ -2,10 +2,12 @@ import {
   KeySchemaElement,
   Projection,
   ProvisionedThroughputDescription,
+  AutoScalingSettingsDescription,
 } from 'aws-sdk/clients/dynamodb'
 import cuid from 'cuid'
+import { isEmpty } from 'lodash'
 import { RawAwsDynamoDbTable } from './data'
-import { formatTagsFromMap } from '../../utils/format';
+import { formatTagsFromMap } from '../../utils/format'
 import {
   AwsDynamoDbTable,
   AwsDynamoDbTableAttributes,
@@ -19,6 +21,7 @@ import {
   AwsDynamoDbTableRestoreSummary,
   AwsDynamoDbTableSseDescription,
   AwsDynamoDbTableStreamSpecification,
+  AwsDynamoDbTableAutoScalingSettingsDescription,
 } from '../../types/generated'
 
 const formatKeySchema = (
@@ -41,12 +44,16 @@ const formatProvisionedThroughput = (
     WriteCapacityUnits: writeCapacityUnits,
   } = provisionedThroughput
   return {
-    ...(lastIncreaseDateTime ? {
-      lastIncreaseDateTime: lastIncreaseDateTime.toString()
-    } : {}),
-    ...(lastDecreaseDateTime ? {
-      lastDecreaseDateTime: lastDecreaseDateTime.toString(),
-    } : {}),
+    ...(lastIncreaseDateTime
+      ? {
+          lastIncreaseDateTime: lastIncreaseDateTime.toString(),
+        }
+      : {}),
+    ...(lastDecreaseDateTime
+      ? {
+          lastDecreaseDateTime: lastDecreaseDateTime.toString(),
+        }
+      : {}),
     numberOfDecreasesToday,
     readCapacityUnits,
     writeCapacityUnits,
@@ -64,13 +71,48 @@ const formatProjection = (
   }
 }
 
+const formatAutoScalingSettingsDescription = (
+  setting: AutoScalingSettingsDescription = {}
+): AwsDynamoDbTableAutoScalingSettingsDescription => {
+  if (isEmpty(setting)) {
+    return {}
+  }
+  const {
+    MinimumUnits: minimumUnits,
+    MaximumUnits: maximumUnits,
+    AutoScalingDisabled: autoScalingDisabled,
+    AutoScalingRoleArn: autoScalingRoleArn,
+    ScalingPolicies: scalingPolicies = [],
+  } = setting
+
+  return {
+    minimumUnits,
+    maximumUnits,
+    autoScalingDisabled,
+    autoScalingRoleArn,
+    scalingPolicies: scalingPolicies?.map(
+      ({
+        PolicyName: policyName,
+        TargetTrackingScalingPolicyConfiguration: config,
+      }) => ({
+        id: cuid(),
+        policyName,
+        disableScaleIn: config?.DisableScaleIn,
+        scaleInCooldown: config?.ScaleInCooldown,
+        ScaleOutCooldown: config?.ScaleOutCooldown,
+        targetValue: config?.TargetValue,
+      })
+    ),
+  }
+}
+
 /**
  * DynamoDB
  */
 export default ({
   service: dynamoDbTable,
   account,
-  region
+  region,
 }: {
   service: RawAwsDynamoDbTable
   account: string
@@ -128,10 +170,12 @@ export default ({
 
   const billingModeSummary: AwsDynamoDbTableBillingSummary = {
     billingMode,
-    ...(lastUpdateToPayPerRequestDateTime ? {
-      lastUpdateToPayPerRequestDateTime:
-        lastUpdateToPayPerRequestDateTime.toString(),
-    } : {}),
+    ...(lastUpdateToPayPerRequestDateTime
+      ? {
+          lastUpdateToPayPerRequestDateTime:
+            lastUpdateToPayPerRequestDateTime.toString(),
+        }
+      : {}),
   }
 
   const globalIndexes: AwsDynamoDbTableGlobalSecondaryIndexDescription[] =
@@ -170,6 +214,7 @@ export default ({
         Projection: localndexProjection = {},
         IndexSizeBytes: sizeInBytes,
       }) => ({
+        id: cuid(),
         name: IndexName,
         arn,
         itemCount: ItemCount,
@@ -187,8 +232,14 @@ export default ({
       ReplicaStatusPercentProgress,
       KMSMasterKeyId,
       ProvisionedThroughputOverride,
-      GlobalSecondaryIndexes: ReplicasGlobalSecondaryIndexes,
+      GlobalSecondaryIndexes: ReplicasGlobalSecondaryIndexes = [],
       ReplicaInaccessibleDateTime,
+      AutoScaling: {
+        ReplicaProvisionedReadCapacityAutoScalingSettings:
+          readCapacityAutoScalingSettings = {},
+        ReplicaProvisionedWriteCapacityAutoScalingSettings:
+          writeCapacityAutoScalingSettings = {},
+      } = {},
     }) => ({
       id: cuid(),
       regionName,
@@ -203,11 +254,17 @@ export default ({
           ProvisionedThroughputOverride: {
             ReadCapacityUnits: readCapacityUnits,
           },
-        }) => ({ name: IndexName, readCapacityUnits })
+        }) => ({ id: cuid(), name: IndexName, readCapacityUnits })
       ),
-      ...(ReplicaInaccessibleDateTime ? {
-        replicaInaccessibleDateTime: ReplicaInaccessibleDateTime.toString(),
-      }  : {}),
+      ...(ReplicaInaccessibleDateTime
+        ? {
+            replicaInaccessibleDateTime: ReplicaInaccessibleDateTime.toString(),
+          }
+        : {}),
+      provisionedReadCapacityAutoScalingSettings:
+        formatAutoScalingSettingsDescription(readCapacityAutoScalingSettings),
+      provisionedWriteCapacityAutoScalingSettings:
+        formatAutoScalingSettingsDescription(writeCapacityAutoScalingSettings),
     })
   )
 
@@ -215,19 +272,23 @@ export default ({
     sourceBackupArn,
     sourceTableArn,
     ...(restoreDateTime ? { restoreDateTime: restoreDateTime.toString() } : {}),
-    ...(restoreInProgress ? {
-      restoreInProgress: restoreInProgress.toString(),
-    } : {}),
+    ...(restoreInProgress
+      ? {
+          restoreInProgress: restoreInProgress.toString(),
+        }
+      : {}),
   }
 
   const sseDescription: AwsDynamoDbTableSseDescription = {
     status: sseStatus,
     sseType,
     kmsMasterKeyArn: sseKmsMasterKeyArn,
-    ...(sseInaccessibleEncryptionDateTime ? {
-      inaccessibleEncryptionDateTime:
-        sseInaccessibleEncryptionDateTime.toString(),
-    } : {}),
+    ...(sseInaccessibleEncryptionDateTime
+      ? {
+          inaccessibleEncryptionDateTime:
+            sseInaccessibleEncryptionDateTime.toString(),
+        }
+      : {}),
   }
 
   const streamSpecification: AwsDynamoDbTableStreamSpecification = {

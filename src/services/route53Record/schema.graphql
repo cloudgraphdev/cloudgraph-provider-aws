@@ -1,6 +1,4 @@
-type awsRoute53Record @key(fields: "id") {
-  id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
+type awsRoute53Record implements awsOptionalService @key(fields: "id") {
   zoneId: String @search(by: [hash])
   alias: awsRoute53Alias
   type: String @search(by: [hash, regexp])

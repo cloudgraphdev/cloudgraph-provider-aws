@@ -4,14 +4,14 @@ type awsCognitoUserPoolPasswordPolicy
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    minimumLength: Int @search
-    requireUppercase: String @search(by: [hash, regexp])
-    requireLowercase: String @search(by: [hash, regexp])
-    requireNumbers: String @search(by: [hash, regexp])
-    requireSymbols: String @search(by: [hash, regexp])
-    temporaryPasswordValidityDays: Int @search
-  }
+  id: String! @id @search(by: [hash])
+  minimumLength: Int @search
+  requireUppercase: String @search(by: [hash, regexp])
+  requireLowercase: String @search(by: [hash, regexp])
+  requireNumbers: String @search(by: [hash, regexp])
+  requireSymbols: String @search(by: [hash, regexp])
+  temporaryPasswordValidityDays: Int @search
+}
 
 type awsCognitoUserPoolLambdaConfig
   @generate(
@@ -19,41 +19,41 @@ type awsCognitoUserPoolLambdaConfig
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    preSignUp: String @search(by: [hash, regexp])
-    customMessage: String @search(by: [hash, regexp])
-    postConfirmation: String @search(by: [hash, regexp])
-    preAuthentication: String @search(by: [hash, regexp])
-    postAuthentication: String @search(by: [hash, regexp])
-    defineAuthChallenge: String @search(by: [hash, regexp])
-    createAuthChallenge: String @search(by: [hash, regexp])
-    verifyAuthChallengeResponse: String @search(by: [hash, regexp])
-    preTokenGeneration: String @search(by: [hash, regexp])
-    userMigration: String @search(by: [hash, regexp])
-    customSMSSenderLambdaVersion: String @search(by: [hash, regexp])
-    customSMSSenderLambdaArn: String @search(by: [hash, regexp])
-    customEmailSenderLambdaVersion: String @search(by: [hash, regexp])
-    customEmailSenderLambdaArn: String @search(by: [hash, regexp])
-    kmsKeyID: String @search(by: [hash, regexp])
-  }
+  id: String! @id @search(by: [hash])
+  preSignUp: String @search(by: [hash, regexp])
+  customMessage: String @search(by: [hash, regexp])
+  postConfirmation: String @search(by: [hash, regexp])
+  preAuthentication: String @search(by: [hash, regexp])
+  postAuthentication: String @search(by: [hash, regexp])
+  defineAuthChallenge: String @search(by: [hash, regexp])
+  createAuthChallenge: String @search(by: [hash, regexp])
+  verifyAuthChallengeResponse: String @search(by: [hash, regexp])
+  preTokenGeneration: String @search(by: [hash, regexp])
+  userMigration: String @search(by: [hash, regexp])
+  customSMSSenderLambdaVersion: String @search(by: [hash, regexp])
+  customSMSSenderLambdaArn: String @search(by: [hash, regexp])
+  customEmailSenderLambdaVersion: String @search(by: [hash, regexp])
+  customEmailSenderLambdaArn: String @search(by: [hash, regexp])
+  kmsKeyID: String @search(by: [hash, regexp])
+}
 
-type  awsCognitoUserPoolSchemaAttribute
+type awsCognitoUserPoolSchemaAttribute
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    name: String @search(by: [hash, regexp]),
-    attributeDataType: String @search(by: [hash, regexp]),
-    developerOnlyAttribute: String @search(by: [hash, regexp]),
-    mutable: String @search(by: [hash, regexp]),
-    required: String @search(by: [hash, regexp]),
-    numberAttributeConstraintsMinValue: String @search(by: [hash, regexp]),
-    numberAttributeConstraintsMaxValue: String @search(by: [hash, regexp]),
-    stringAttributeConstraintsMinValue: String @search(by: [hash, regexp]),
-    stringAttributeConstraintsMaxValue: String @search(by: [hash, regexp]),
-  }
+  id: String! @id @search(by: [hash])
+  name: String @search(by: [hash, regexp])
+  attributeDataType: String @search(by: [hash, regexp])
+  developerOnlyAttribute: String @search(by: [hash, regexp])
+  mutable: String @search(by: [hash, regexp])
+  required: String @search(by: [hash, regexp])
+  numberAttributeConstraintsMinValue: String @search(by: [hash, regexp])
+  numberAttributeConstraintsMaxValue: String @search(by: [hash, regexp])
+  stringAttributeConstraintsMinValue: String @search(by: [hash, regexp])
+  stringAttributeConstraintsMaxValue: String @search(by: [hash, regexp])
+}
 
 type awsAccountRecoverySetting
   @generate(
@@ -61,16 +61,12 @@ type awsAccountRecoverySetting
     mutation: { add: false, delete: false }
     subscription: false
   ) {
-    id: String! @id @search(by: [hash])
-    priority: Int @search
-    name: String @search(by: [hash, regexp])
-  }
-
-type awsCognitoUserPool @key(fields: "id") {
   id: String! @id @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+  priority: Int @search
+  name: String @search(by: [hash, regexp])
+}
+
+type awsCognitoUserPool implements awsBaseService @key(fields: "id") {
   name: String @search(by: [hash, regexp])
   policies: awsCognitoUserPoolPasswordPolicy
   lambdaConfig: awsCognitoUserPoolLambdaConfig
@@ -87,13 +83,17 @@ type awsCognitoUserPool @key(fields: "id") {
   verificationMessageTemplateSmsMessage: String @search(by: [hash, regexp])
   verificationMessageTemplateEmailMessage: String @search(by: [hash, regexp])
   verificationMessageTemplateEmailSubject: String @search(by: [hash, regexp])
-  verificationMessageTemplateEmailMessageByLink: String @search(by: [hash, regexp])
-  verificationMessageTemplateEmailSubjectByLink: String @search(by: [hash, regexp])
-  verificationMessageTemplateDefaultEmailOption: String @search(by: [hash, regexp])
+  verificationMessageTemplateEmailMessageByLink: String
+    @search(by: [hash, regexp])
+  verificationMessageTemplateEmailSubjectByLink: String
+    @search(by: [hash, regexp])
+  verificationMessageTemplateDefaultEmailOption: String
+    @search(by: [hash, regexp])
   smsAuthenticationMessage: String @search(by: [hash, regexp])
   mfaConfiguration: String @search(by: [hash, regexp])
   deviceConfigChallengeRequiredOnNewDevice: String @search(by: [hash, regexp])
-  deviceConfigDeviceOnlyRememberedOnUserPrompt: String @search(by: [hash, regexp])
+  deviceConfigDeviceOnlyRememberedOnUserPrompt: String
+    @search(by: [hash, regexp])
   estimatedNumberOfUsers: Int @search
   emailConfigSourceArn: String @search(by: [hash, regexp])
   emailConfigReplyToEmailAddress: String @search(by: [hash, regexp])
@@ -106,18 +106,23 @@ type awsCognitoUserPool @key(fields: "id") {
   emailConfigurationFailure: String @search(by: [hash, regexp])
   domain: String @search(by: [hash, regexp])
   customDomain: String @search(by: [hash, regexp])
-  adminCreateUserConfigAllowAdminCreateUserOnly: String @search(by: [hash, regexp])
+  adminCreateUserConfigAllowAdminCreateUserOnly: String
+    @search(by: [hash, regexp])
   adminCreateUserConfigUnusedAccountValidityDays: Int @search
-  adminCreateUserConfigInviteMessageTemplateSMSMessage: String @search(by: [hash, regexp])
-  adminCreateUserConfigInviteMessageTemplateEmailMessage: String @search(by: [hash, regexp])
-  adminCreateUserConfigInviteMessageTemplateEmailSubject: String @search(by: [hash, regexp])
+  adminCreateUserConfigInviteMessageTemplateSMSMessage: String
+    @search(by: [hash, regexp])
+  adminCreateUserConfigInviteMessageTemplateEmailMessage: String
+    @search(by: [hash, regexp])
+  adminCreateUserConfigInviteMessageTemplateEmailSubject: String
+    @search(by: [hash, regexp])
   userPoolAddOnsAdvancedSecurityMode: String @search(by: [hash, regexp])
   usernameConfigurationCaseSensitive: String @search(by: [hash, regexp])
   accountRecoverySettings: [awsAccountRecoverySetting]
   tags: [awsRawTag]
-  lambda: [awsLambda] @hasInverse(field: cognitoUserPool) #change to plural
+  lambdas: [awsLambda] @hasInverse(field: cognitoUserPools)
   appSync: [awsAppSync] @hasInverse(field: cognitoUserPool)
+  kms: [awsKms] @hasInverse(field: cognitoUserPools)
+  ses: [awsSes] @hasInverse(field: cognitoUserPools)
+  iamRole: [awsIamRole] @hasInverse(field: cognitoUserPools)
+  elasticSearchDomains: [awsElasticSearchDomain] @hasInverse(field: cognitoUserPool)
 }
-
-# TODO: add connetion to kms
-# TODO: add connection to iamRole using SmsConfiguration.SnsCallerArn

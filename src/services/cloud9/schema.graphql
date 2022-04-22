@@ -1,8 +1,4 @@
-type awsCloud9Environment @key(fields: "arn") {
-  id: String! @search(by: [hash, regexp])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String! @search(by: [hash, regexp])
-  accountId: String! @search(by: [hash, regexp])
+type awsCloud9Environment implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp])
   type: String @search(by: [hash, regexp])

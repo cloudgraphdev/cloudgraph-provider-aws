@@ -1,14 +1,11 @@
-type awsRdsCluster @key(fields: "arn") {
-  id: String! @search(by: [hash])
-  accountId: String! @search(by: [hash])
-  arn: String! @id @search(by: [hash, regexp])
-  region: String @search(by: [hash, regexp])
+type awsRdsCluster implements awsBaseService @key(fields: "arn") {
   allocatedStorage: Int @search
   backupRetentionPeriod: Int @search
   characterSetName: String @search(by: [hash, regexp])
   databaseName: String @search(by: [hash, regexp])
   dbClusterIdentifier: String @search(by: [hash])
-  subnets: String @search(by: [hash])
+  dbClusterParameterGroup: String @search(by: [hash])
+  dbSubnetGroup: String @search(by: [hash])
   status: String @search(by: [hash, regexp])
   percentProgress: String @search(by: [hash, regexp])
   readerEndpoint: String @search(by: [hash, regexp])
@@ -36,9 +33,9 @@ type awsRdsCluster @key(fields: "arn") {
   instances: [awsRdsDbInstance] @hasInverse(field: cluster)
   snapshots: [awsRdsClusterSnapshot] @hasInverse(field: cluster)
   securityGroups: [awsSecurityGroup] @hasInverse(field: rdsCluster)
+  subnets: [awsSubnet] @hasInverse(field: rdsCluster)
   appSync: [awsAppSync] @hasInverse(field: rdsCluster)
+  kms: [awsKms] @hasInverse(field: rdsCluster)
+  route53HostedZone: [awsRoute53HostedZone] @hasInverse(field: rdsCluster)
+  iamRoles: [awsIamRole] @hasInverse(field: rdsCluster)
 }
-
-# TODO: create connection to iam roles using AssociatedRoles property AND DomainMemberships AND MonitoringRole
-# TODO: create connection to kms using all kms related fields
- 
