@@ -1,3 +1,10 @@
+# [0.80.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.80.0-alpha.1...0.80.0-alpha.2) (2022-04-25)
+
+
+### Bug Fixes
+
+* Included rawPolicy for aws services ([6ee5cef](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/6ee5cef489b35613c4bf47f0c3b5d9d4a06fcbfa))
+
 # [0.80.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0...0.80.0-alpha.1) (2022-04-25)
 
 
