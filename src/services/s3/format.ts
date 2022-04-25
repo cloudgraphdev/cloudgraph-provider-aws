@@ -81,12 +81,6 @@ export default ({
     }`
   }
 
-  const bucketPolicies: { id: string; policy: Policy }[] = []
-
-  if (!isEmpty(policy)) {
-    bucketPolicies.push({ id: cuid(), policy })
-  }
-
   let publicAccessBlockData = {
     blockPublicAcls: t.no,
     ignorePublicAcls: t.no,
@@ -238,10 +232,8 @@ export default ({
     accountId: account,
     arn: s3BucketArn({ name }),
     bucketOwnerName,
-    bucketPolicies: bucketPolicies.map(bp => ({
-      id: cuid(),
-      policy: formatIamJsonPolicy(bp.policy)
-    })),
+    policy: formatIamJsonPolicy(policy),
+    rawPolicy: policy,
     region,
     requesterPays: reqPaymentConfig === 'Requester' ? t.enabled : t.disabled,
     size,

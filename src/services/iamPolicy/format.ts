@@ -34,6 +34,7 @@ export default ({
     arn,
     accountId: arn.includes(GLOBAL_ARN_PREFIX) ? 'global' : account, // Uses global for AWS managed policies
     path,
+    rawPolicy: policyContent,
     policyContent: formatIamJsonPolicy(policyContent),
     description,
     tags: policyTags,

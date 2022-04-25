@@ -73,7 +73,8 @@ type awsS3 implements awsBaseService @key(fields: "arn") {
   versioning: String @search(by: [hash, regexp])
   staticWebsiteHosting: String @search(by: [hash, regexp])
   notificationConfiguration: awsS3NotificationConfiguration
-  bucketPolicies: [awsBucketPolicy]
+  policy: awsIamJSONPolicy
+  rawPolicy: String @search(by: [hash, regexp])
   kinesisFirehose: [awsKinesisFirehose] @hasInverse(field: s3)
   tags: [awsRawTag]
   cloudfrontDistributions: [awsCloudfront] @hasInverse(field: s3)

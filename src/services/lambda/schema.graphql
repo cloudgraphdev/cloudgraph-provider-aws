@@ -13,6 +13,7 @@ type awsLambda implements awsBaseService @key(fields: "arn") {
   environmentVariables: [awsLambdaEnvironmentVariable]
   vpcConfig: awsLambdaVpcConfig
   policyRevisionId: String @search(by: [hash, regexp])
+  rawPolicy: String @search(by: [hash, regexp])
   policy: awsIamJSONPolicy
   tags: [awsRawTag]
   kms: [awsKms] @hasInverse(field: lambda)

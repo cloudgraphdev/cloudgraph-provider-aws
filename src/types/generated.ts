@@ -322,6 +322,7 @@ export type AwsApiGatewayRestApi = AwsBaseService & {
   endpointConfiguration?: Maybe<AwsApiGatewayEndpointConfiguration>;
   minimumCompressionSize?: Maybe<Scalars['Int']>;
   policy?: Maybe<AwsIamJsonPolicy>;
+  rawPolicy?: Maybe<Scalars['String']>;
   resources?: Maybe<Array<Maybe<AwsApiGatewayResource>>>;
   route53Record?: Maybe<Array<Maybe<AwsRoute53Record>>>;
   stages?: Maybe<Array<Maybe<AwsApiGatewayStage>>>;
@@ -2637,6 +2638,7 @@ export type AwsElasticSearchDomain = AwsBaseService & {
   logPublishingOptions?: Maybe<Array<Maybe<AwsElasticSearchLogPublishingOption>>>;
   nodeToNodeEncryptionOptions?: Maybe<AwsElasticSearchNodeToNodeEncryptionOptions>;
   processing?: Maybe<Scalars['Boolean']>;
+  rawPolicy?: Maybe<Scalars['String']>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   serviceSoftwareOptions?: Maybe<AwsElasticSearchServiceSoftwareOptions>;
   snapshotOptions?: Maybe<AwsElasticSearchSnapshotOptions>;
@@ -3076,6 +3078,7 @@ export type AwsIamPolicy = AwsBaseService & {
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
   policyContent?: Maybe<AwsIamJsonPolicy>;
+  rawPolicy?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
 };
 
@@ -3113,6 +3116,7 @@ export type AwsIamRole = AwsBaseService & {
   maxSessionDuration?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
+  rawPolicy?: Maybe<Scalars['String']>;
   rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   s3?: Maybe<Array<Maybe<AwsS3>>>;
@@ -3248,6 +3252,7 @@ export type AwsKms = AwsBaseService & {
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
   origin?: Maybe<Scalars['String']>;
   policy?: Maybe<AwsIamJsonPolicy>;
+  rawPolicy?: Maybe<Scalars['String']>;
   rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsClusterSnapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
@@ -3282,6 +3287,7 @@ export type AwsLambda = AwsBaseService & {
   memorySize?: Maybe<Scalars['Int']>;
   policy?: Maybe<AwsIamJsonPolicy>;
   policyRevisionId?: Maybe<Scalars['String']>;
+  rawPolicy?: Maybe<Scalars['String']>;
   reservedConcurrentExecutions?: Maybe<Scalars['Int']>;
   runtime?: Maybe<Scalars['String']>;
   s3?: Maybe<Array<Maybe<AwsS3>>>;
@@ -3757,7 +3763,6 @@ export type AwsS3 = AwsBaseService & {
   blockPublicAcls?: Maybe<Scalars['String']>;
   blockPublicPolicy?: Maybe<Scalars['String']>;
   bucketOwnerName?: Maybe<Scalars['String']>;
-  bucketPolicies?: Maybe<Array<Maybe<AwsBucketPolicy>>>;
   cloudfrontDistributions?: Maybe<Array<Maybe<AwsCloudfront>>>;
   cloudtrails?: Maybe<Array<Maybe<AwsCloudtrail>>>;
   corsConfiguration?: Maybe<Scalars['String']>;
@@ -3773,6 +3778,8 @@ export type AwsS3 = AwsBaseService & {
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
   mfa?: Maybe<Scalars['String']>;
   notificationConfiguration?: Maybe<AwsS3NotificationConfiguration>;
+  policy?: Maybe<AwsIamJsonPolicy>;
+  rawPolicy?: Maybe<Scalars['String']>;
   requesterPays?: Maybe<Scalars['String']>;
   restrictPublicBuckets?: Maybe<Scalars['String']>;
   size?: Maybe<Scalars['String']>;
@@ -3989,6 +3996,7 @@ export type AwsSns = AwsBaseService & {
   displayName?: Maybe<Scalars['String']>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   policy?: Maybe<AwsIamJsonPolicy>;
+  rawPolicy?: Maybe<Scalars['String']>;
   s3?: Maybe<Array<Maybe<AwsS3>>>;
   subscriptions?: Maybe<Array<Maybe<AwsSnsSubscription>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
@@ -4018,6 +4026,7 @@ export type AwsSqs = AwsBaseService & {
   policy?: Maybe<AwsIamJsonPolicy>;
   queueType?: Maybe<Scalars['String']>;
   queueUrl?: Maybe<Scalars['String']>;
+  rawPolicy?: Maybe<Scalars['String']>;
   receiveMessageWaitTimeSeconds?: Maybe<Scalars['String']>;
   s3?: Maybe<Array<Maybe<AwsS3>>>;
   sqsManagedSseEnabled?: Maybe<Scalars['Boolean']>;
