@@ -1,3 +1,10 @@
+# [0.80.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0...0.80.0-alpha.1) (2022-04-25)
+
+
+### Features
+
+* Add restrictionType to Cloudfront, geoRestriction ([a51e670](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/a51e67087ab2721026cbcc32e96ecb089852468c))
+
 # [0.79.0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.78.1...0.79.0) (2022-04-22)
 
 
