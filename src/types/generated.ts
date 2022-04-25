@@ -749,7 +749,7 @@ export type AwsCloudfront = AwsBaseService & {
   elb?: Maybe<Array<Maybe<AwsElb>>>;
   enabled?: Maybe<Scalars['String']>;
   etag?: Maybe<Scalars['String']>;
-  geoRestrictions?: Maybe<Scalars['String']>;
+  geoRestriction?: Maybe<AwsCloudfrontGeoRestriction>;
   httpVersion?: Maybe<Scalars['String']>;
   ipv6Enabled?: Maybe<Scalars['String']>;
   lastModified?: Maybe<Scalars['String']>;
@@ -795,6 +795,11 @@ export type AwsCloudfrontCustomOriginConfig = {
   originProtocolPolicy?: Maybe<Scalars['String']>;
   originReadTimeout?: Maybe<Scalars['Int']>;
   originSslProtocols?: Maybe<AwsCloudfrontOriginSslProtocols>;
+};
+
+export type AwsCloudfrontGeoRestriction = {
+  locations?: Maybe<Array<Maybe<Scalars['String']>>>;
+  restrictionType?: Maybe<Scalars['String']>;
 };
 
 export type AwsCloudfrontLoggingConfig = {
