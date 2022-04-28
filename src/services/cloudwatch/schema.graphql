@@ -14,7 +14,6 @@ type awsCloudwatch implements awsBaseService @key(fields: "arn") {
   cloudwatchLog: [awsCloudwatchLog] @hasInverse(field: cloudwatch)
   sns: [awsSns] @hasInverse(field: cloudwatch)
   cloudtrail: [awsCloudtrail] @hasInverse(field: cloudwatch)
-  cloudfront: [awsCloudfront] @hasInverse(field: cloudwatch)
 }
 
 type awsCloudwatchDimensions
