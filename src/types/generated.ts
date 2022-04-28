@@ -4213,8 +4213,12 @@ export type AwsTransitGateway = AwsBaseService & {
   vpnEcmpSupport?: Maybe<Scalars['String']>;
 };
 
-export type AwsTransitGatewayAttachment = AwsBaseService & {
+export type AwsTransitGatewayAttachment = {
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
   creationTime?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
   resourceOwnerId?: Maybe<Scalars['String']>;
   resourceType?: Maybe<Scalars['String']>;
