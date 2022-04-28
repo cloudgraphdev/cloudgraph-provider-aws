@@ -743,6 +743,7 @@ export type AwsCloudFormationStackSetParameter = {
 
 export type AwsCloudfront = AwsBaseService & {
   callerReference?: Maybe<Scalars['String']>;
+  cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
   customErrorResponses?: Maybe<Array<Maybe<AwsCloudfrontCustomErrorResponse>>>;
   defaultCacheBehavior?: Maybe<AwsCloudfrontCacheBehavior>;
   defaultRootObject?: Maybe<Scalars['String']>;
@@ -898,6 +899,7 @@ export type AwsCloudtrailStatus = {
 export type AwsCloudwatch = AwsBaseService & {
   actions?: Maybe<Array<Maybe<Scalars['String']>>>;
   actionsEnabled?: Maybe<Scalars['String']>;
+  cloudfront?: Maybe<Array<Maybe<AwsCloudfront>>>;
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
   cloudwatchLog?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
   comparisonOperator?: Maybe<Scalars['String']>;
@@ -4226,8 +4228,12 @@ export type AwsTransitGateway = AwsBaseService & {
   vpnEcmpSupport?: Maybe<Scalars['String']>;
 };
 
-export type AwsTransitGatewayAttachment = AwsBaseService & {
+export type AwsTransitGatewayAttachment = {
+  accountId: Scalars['String'];
+  arn: Scalars['String'];
   creationTime?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
   resourceOwnerId?: Maybe<Scalars['String']>;
   resourceType?: Maybe<Scalars['String']>;
