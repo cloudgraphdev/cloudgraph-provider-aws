@@ -552,9 +552,7 @@ export type AwsBaseService = {
   region?: Maybe<Scalars['String']>;
 };
 
-export type AwsBilling = {
-  accountId: Scalars['String'];
-  id: Scalars['String'];
+export type AwsBilling = AwsOptionalService & {
   last30Days?: Maybe<Array<Maybe<AwsServiceBillingInfo>>>;
   last30DaysDailyAverage?: Maybe<Array<Maybe<AwsServiceBillingInfo>>>;
   monthToDate?: Maybe<Array<Maybe<AwsServiceBillingInfo>>>;
@@ -2872,7 +2870,7 @@ export type AwsFederatedAuthentication = {
   selfServiceSamlProviderArn?: Maybe<Scalars['String']>;
 };
 
-export type AwsFlowLog = AwsOptionalService & {
+export type AwsFlowLog = AwsBaseService & {
   creationTime?: Maybe<Scalars['String']>;
   deliverLogsErrorMessage?: Maybe<Scalars['String']>;
   deliverLogsPermissionArn?: Maybe<Scalars['String']>;

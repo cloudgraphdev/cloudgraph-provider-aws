@@ -1,5 +1,5 @@
 export default `mutation($input: [AddawsBillingInput!]!) {
-  addawsBilling(input: $input) {
+  addawsBilling(input: $input, upsert: true) {
     numUids
   }
 }`

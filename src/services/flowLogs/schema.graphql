@@ -1,4 +1,4 @@
-type awsFlowLog implements awsOptionalService @key(fields: "id") {
+type awsFlowLog implements awsBaseService @key(fields: "arn") {
   creationTime: String @search(by: [hash, regexp])
   deliverLogsErrorMessage: String @search(by: [hash, regexp, fulltext])
   deliverLogsPermissionArn: String @search(by: [hash, regexp])
