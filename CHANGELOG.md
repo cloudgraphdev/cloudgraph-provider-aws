@@ -1,3 +1,15 @@
+# [0.80.0-alpha.3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.80.0-alpha.2...0.80.0-alpha.3) (2022-04-28)
+
+
+### Bug Fixes
+
+* Fixed some duplication issues without destroying data first ([7d798b4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/7d798b48fede8baa1b5cfb2c6f30a9096a6937a3))
+
+
+### Features
+
+* Add cloudfront connection to cloudwatch service ([4fdf50c](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/4fdf50c98ca9b4f0aeb6b2322771d75c6f3084a5))
+
 # [0.80.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.80.0-alpha.1...0.80.0-alpha.2) (2022-04-25)
 
 
