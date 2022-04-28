@@ -479,7 +479,6 @@ export default {
    * Transit Gateway Attachment
    */
    fetchedTransitGatewayAttachments: (num: number): string => `Found ${num} Transit Gateway Attachments`,
-   fetchedTransitGatewayVpcAttachments: (num: number): string => `Found ${num} Transit Gateway VPC Attachments`,
   /**
    * VPN Gateway
    */

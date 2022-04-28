@@ -7,10 +7,6 @@ import EC2, {
   DescribeTransitGatewayAttachmentsResult,
   TransitGatewayAttachmentList,
   TransitGatewayAttachment,
-  DescribeTransitGatewayVpcAttachmentsResult,
-  TransitGatewayVpcAttachmentList,
-  TransitGatewayVpcAttachment,
-  DescribeTransitGatewayVpcAttachmentsRequest,
 } from 'aws-sdk/clients/ec2'
 
 import { Config } from 'aws-sdk/lib/config'
@@ -56,6 +52,7 @@ const listTransitGatewayAttachmentsData = async ({
             err,
           })
         }
+
         if (!isEmpty(data)) {
           const {
             NextToken: nextToken,
@@ -87,67 +84,6 @@ const listTransitGatewayAttachmentsData = async ({
     )
   })
 
-const listTransitGatewayVpcAttachmentsData = async ({
-  ec2,
-  region,
-  nextToken: NextToken = '',
-}: {
-  ec2: EC2
-  region: string
-  nextToken?: string
-}): Promise<(TransitGatewayVpcAttachment & { region: string })[]> =>
-  new Promise<(TransitGatewayVpcAttachment & { region: string })[]>(resolve => {
-    let transitGatewayVpcAttachmentData: (TransitGatewayVpcAttachment & {
-      region: string
-    })[] = []
-    const transitGatewayVpcAttachmentList: TransitGatewayVpcAttachmentList = []
-    let args: DescribeTransitGatewayVpcAttachmentsRequest = {}
-
-    if (NextToken) {
-      args = { ...args, NextToken }
-    }
-
-    ec2.describeTransitGatewayVpcAttachments(
-      args,
-      (err: AWSError, data: DescribeTransitGatewayVpcAttachmentsResult) => {
-        if (err) {
-          errorLog.generateAwsErrorLog({
-            functionName: 'ec2:describeTransitGatewayVpcAttachments',
-            err,
-          })
-        }
-
-        if (!isEmpty(data)) {
-          const {
-            NextToken: nextToken,
-            TransitGatewayVpcAttachments: transitGatewayVpcAttachments = [],
-          } = data
-
-          transitGatewayVpcAttachmentList.push(...transitGatewayVpcAttachments)
-
-          logger.debug(
-            lt.fetchedTransitGatewayVpcAttachments(
-              transitGatewayVpcAttachments.length
-            )
-          )
-
-          if (nextToken) {
-            listTransitGatewayVpcAttachmentsData({ ec2, region, nextToken })
-          }
-
-          transitGatewayVpcAttachmentData = transitGatewayVpcAttachmentList.map(
-            vpcAttachment => ({
-              ...vpcAttachment,
-              region,
-            })
-          )
-        }
-
-        resolve(transitGatewayVpcAttachmentData)
-      }
-    )
-  })
-
 /**
  * Transit Gateway Attachment
  */
@@ -156,7 +92,6 @@ export interface RawAwsTransitGatewayAttachment
   extends Omit<TransitGatewayAttachment, 'Tags'> {
   region: string
   Tags?: TagMap
-  SubnetIds?: string[]
 }
 
 export default async ({
@@ -183,24 +118,11 @@ export default async ({
           })
 
         if (!isEmpty(transitGatewayAttachments)) {
-          // Get Transit Gateway Vpc Attachment Data
-          const transitGatewayVpcAttachments =
-            await listTransitGatewayVpcAttachmentsData({
-              ec2,
-              region,
-            })
-
           for (const attachment of transitGatewayAttachments) {
             transitGatewayAttachmentsResult.push({
               ...attachment,
               region,
               Tags: convertAwsTagsToTagMap(attachment.Tags as AwsTag[]),
-              SubnetIds:
-                transitGatewayVpcAttachments?.find(
-                  a =>
-                    a.TransitGatewayAttachmentId ===
-                    attachment.TransitGatewayAttachmentId
-                )?.SubnetIds || [],
             })
           }
         }
