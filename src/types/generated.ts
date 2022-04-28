@@ -4054,6 +4054,7 @@ export type AwsSubnet = AwsBaseService & {
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   state?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
@@ -4225,6 +4226,7 @@ export type AwsTransitGatewayAttachment = {
   resourceType?: Maybe<Scalars['String']>;
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
   state?: Maybe<Scalars['String']>;
+  subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
   transitGatewayId?: Maybe<Scalars['String']>;

@@ -2,13 +2,13 @@ import isEmpty from 'lodash/isEmpty'
 
 import { ServiceConnection } from '@cloudgraph/sdk'
 
-import { TransitGatewayAttachment, TagList } from 'aws-sdk/clients/ec2'
-
 import services from '../../enums/services'
 import { RawAwsVpnConnection } from '../vpnConnection/data'
 import { RawAwsVpc } from '../vpc/data'
 import { RawAwsTransitGateway } from '../transitGateway/data'
+import { RawAwsTransitGatewayAttachment } from '../transitGatewayAttachment/data'
 import { RawAwsRouteTable } from '../routeTable/data'
+import { RawAwsSubnet } from '../subnet/data'
 
 /**
  * Transit Gateway Attachment
@@ -21,9 +21,7 @@ export default ({
 }: {
   account: string
   data: { name: string; data: { [property: string]: any[] } }[]
-  service: TransitGatewayAttachment & {
-    Tags?: TagList
-  }
+  service: RawAwsTransitGatewayAttachment
   region: string
 }): { [key: string]: ServiceConnection[] } => {
   const connections: ServiceConnection[] = []
@@ -32,6 +30,7 @@ export default ({
     TransitGatewayId: transitGatewayId,
     Association: association,
     ResourceId: resourceId,
+    SubnetIds: subnetIds,
   } = transitGatewayAttachment
 
   /**
@@ -142,6 +141,29 @@ export default ({
           resourceType: services.vpnConnection,
           relation: 'child',
           field: 'vpnConnection',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find Subnets
+   * related to this Transit Gateway Attachment
+   */
+  const subnets = data.find(({ name }) => name === services.subnet)
+  if (subnets?.data?.[region]) {
+    const subnetsInRegion = subnets.data[region].filter(
+      ({ SubnetId }: RawAwsSubnet) => subnetIds.includes(SubnetId)
+    )
+    if (!isEmpty(subnetsInRegion)) {
+      for (const subnet of subnetsInRegion) {
+        const { SubnetId }: RawAwsSubnet = subnet
+
+        connections.push({
+          id: SubnetId,
+          resourceType: services.subnet,
+          relation: 'child',
+          field: 'subnets',
         })
       }
     }
