@@ -8,6 +8,7 @@ type awsSqs implements awsBaseService @key(fields: "arn") {
   maximumMessageSize: Int @search
   messageRetentionPeriod: String @search(by: [hash, regexp])
   delaySeconds: String @search(by: [hash, regexp])
+  rawPolicy: String @search(by: [hash, regexp])
   policy: awsIamJSONPolicy
   receiveMessageWaitTimeSeconds: String @search(by: [hash, regexp])
   kmsMasterKeyId: String @search(by: [hash, regexp])

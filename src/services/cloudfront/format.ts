@@ -4,7 +4,6 @@ import {
   Origin,
 } from 'aws-sdk/clients/cloudfront'
 import cuid from 'cuid'
-import isEmpty from 'lodash/isEmpty'
 
 import t from '../../properties/translations'
 import { formatTagsFromMap } from '../../utils/format'
@@ -118,7 +117,7 @@ export default ({
       CallerReference: callerReference,
       DefaultRootObject: defaultRootObject,
       HttpVersion: httpVersion,
-      Restrictions: { GeoRestriction: { Items: geoRestrictions = [] } } = {
+      Restrictions: { GeoRestriction: { Items: locations = [], RestrictionType: restrictionType = ''} } = {
         GeoRestriction: { RestrictionType: '', Items: [], Quantity: 0 },
       },
       Logging: logging,
@@ -237,9 +236,10 @@ export default ({
     domainName,
     enabled: enabled ? t.yes : t.no,
     etag,
-    geoRestrictions: !isEmpty(geoRestrictions)
-      ? geoRestrictions.join(',')
-      : 'none',
+    geoRestriction: {
+      restrictionType,
+      locations,
+    },
     httpVersion,
     ipv6Enabled: isIpv6Enabled ? t.yes : t.no,
     lastModified: lastModified.toISOString(),

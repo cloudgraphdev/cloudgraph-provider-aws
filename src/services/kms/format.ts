@@ -1,7 +1,10 @@
 import { AliasListEntry } from 'aws-sdk/clients/kms'
 import cuid from 'cuid'
 import { AwsKms } from './data'
-import { AwsKms as AwsKmsType, AwsKmsAliasListEntry } from '../../types/generated'
+import {
+  AwsKms as AwsKmsType,
+  AwsKmsAliasListEntry,
+} from '../../types/generated'
 import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 
 export const formatAliases = (
@@ -26,7 +29,7 @@ export const formatAliases = (
 export default ({
   service: key,
   account,
-  region
+  region,
 }: {
   service: AwsKms
   account: string
@@ -48,7 +51,7 @@ export default ({
     Origin: origin,
     DeletionDate: deletionDate,
     ValidTo: validTo,
-    Aliases: aliases = []
+    Aliases: aliases = [],
   } = key
 
   return {
@@ -59,6 +62,7 @@ export default ({
     description,
     keyRotationEnabled,
     usage,
+    rawPolicy: policy,
     policy: formatIamJsonPolicy(policy),
     enabled,
     keyState,

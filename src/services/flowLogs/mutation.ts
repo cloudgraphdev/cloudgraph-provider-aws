@@ -1,5 +1,5 @@
 export default `mutation($input: [AddawsFlowLogInput!]!) {
-  addawsFlowLog(input: $input) {
+  addawsFlowLog(input: $input, upsert: true) {
     numUids
   }
 }`

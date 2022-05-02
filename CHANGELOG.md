@@ -1,3 +1,70 @@
+# [0.80.0-beta.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0...0.80.0-beta.1) (2022-05-02)
+
+
+### Bug Fixes
+
+* Fixed some duplication issues without destroying data first ([7d798b4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/7d798b48fede8baa1b5cfb2c6f30a9096a6937a3))
+* Included rawPolicy for aws services ([6ee5cef](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/6ee5cef489b35613c4bf47f0c3b5d9d4a06fcbfa))
+
+
+### Features
+
+* Add Additional data to transit gateway attachment ([35a560c](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/35a560cdd4eb408767275adee309d95a6badae73))
+* Add cloudfront connection to cloudwatch service ([d2936d6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d2936d654189e56a021da946c76ab51b82b76276))
+* Add restrictionType to Cloudfront, geoRestriction ([a51e670](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/a51e67087ab2721026cbcc32e96ecb089852468c))
+
+
+### Reverts
+
+* Revert "feat: Add cloudfront connection to cloudwatch service" ([7ae11b8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/7ae11b853f7c62f07aa12471cd1f6f00326942e6))
+* Revert "Update README file conenctions" ([b27810f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/b27810fb62fee7926ffd9fb1e6e74f2f53479649))
+
+# [0.80.0-alpha.5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.80.0-alpha.4...0.80.0-alpha.5) (2022-05-02)
+
+
+### Features
+
+* Add cloudfront connection to cloudwatch service ([d2936d6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d2936d654189e56a021da946c76ab51b82b76276))
+
+# [0.80.0-alpha.4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.80.0-alpha.3...0.80.0-alpha.4) (2022-05-02)
+
+
+### Features
+
+* Add Additional data to transit gateway attachment ([35a560c](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/35a560cdd4eb408767275adee309d95a6badae73))
+
+
+### Reverts
+
+* Revert "feat: Add cloudfront connection to cloudwatch service" ([7ae11b8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/7ae11b853f7c62f07aa12471cd1f6f00326942e6))
+* Revert "Update README file conenctions" ([b27810f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/b27810fb62fee7926ffd9fb1e6e74f2f53479649))
+
+# [0.80.0-alpha.3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.80.0-alpha.2...0.80.0-alpha.3) (2022-04-28)
+
+
+### Bug Fixes
+
+* Fixed some duplication issues without destroying data first ([7d798b4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/7d798b48fede8baa1b5cfb2c6f30a9096a6937a3))
+
+
+### Features
+
+* Add cloudfront connection to cloudwatch service ([4fdf50c](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/4fdf50c98ca9b4f0aeb6b2322771d75c6f3084a5))
+
+# [0.80.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.80.0-alpha.1...0.80.0-alpha.2) (2022-04-25)
+
+
+### Bug Fixes
+
+* Included rawPolicy for aws services ([6ee5cef](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/6ee5cef489b35613c4bf47f0c3b5d9d4a06fcbfa))
+
+# [0.80.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0...0.80.0-alpha.1) (2022-04-25)
+
+
+### Features
+
+* Add restrictionType to Cloudfront, geoRestriction ([a51e670](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/a51e67087ab2721026cbcc32e96ecb089852468c))
+
 # [0.79.0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.78.1...0.79.0) (2022-04-22)
 
 

@@ -6,6 +6,7 @@ type awsElasticSearchDomain implements awsBaseService @key(fields: "arn") {
   processing: Boolean @search
   upgradeProcessing: Boolean @search
   elasticSearchVersion: String @search(by: [hash, regexp])
+  rawPolicy: String @search(by: [hash, regexp])
   accessPolicies: awsIamJSONPolicy
   endpoints: [awsRawTag]
   elasticSearchClusterConfig: awsElasticSearchClusterConfig

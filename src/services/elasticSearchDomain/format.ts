@@ -48,7 +48,7 @@ export default ({
   const mappedEndpoints = Object.keys(endpoints ?? {}).map(key => ({
     id: cuid(),
     key,
-    value: endpoints[key]
+    value: endpoints[key],
   }))
 
   const formattedElasticSearchClusterConfig = {
@@ -58,62 +58,64 @@ export default ({
     dedicatedMasterCount: elasticSearchClusterconfig?.DedicatedMasterCount,
     zoneAwarenessEnabled: elasticSearchClusterconfig?.ZoneAwarenessEnabled,
     zoneAwarenessConfig: {
-      availabilityZoneCount: elasticSearchClusterconfig?.ZoneAwarenessConfig?.AvailabilityZoneCount
+      availabilityZoneCount:
+        elasticSearchClusterconfig?.ZoneAwarenessConfig?.AvailabilityZoneCount,
     },
     dedicatedMasterType: elasticSearchClusterconfig?.DedicatedMasterType,
     warmEnabled: elasticSearchClusterconfig?.WarmEnabled,
     warmType: elasticSearchClusterconfig?.WarmType,
     warmCount: elasticSearchClusterconfig?.WarmCount,
     coldStorageOptions: {
-      enabled: elasticSearchClusterconfig?.ColdStorageOptions?.Enabled
-    }
+      enabled: elasticSearchClusterconfig?.ColdStorageOptions?.Enabled,
+    },
   }
 
   const formattedEbsOptions = {
     ebsEnabled: ebsOptions?.EBSEnabled,
     volumeType: ebsOptions?.VolumeType,
     volumeSize: ebsOptions?.VolumeSize,
-    iops: ebsOptions?.Iops
+    iops: ebsOptions?.Iops,
   }
 
   const formattedSnapshotOptions = {
-    automatedSnapshotStartHour: snapshotOptions?.AutomatedSnapshotStartHour
+    automatedSnapshotStartHour: snapshotOptions?.AutomatedSnapshotStartHour,
   }
 
   const formattedVpcOptions = {
     vpcId: vpcOptions?.VPCId,
     subnetIds: vpcOptions?.SubnetIds,
     availabilityZones: vpcOptions?.AvailabilityZones,
-    securityGroupIds: vpcOptions?.SecurityGroupIds
+    securityGroupIds: vpcOptions?.SecurityGroupIds,
   }
 
   const formattedCognioOptions = {
     enabled: cognitoOptions?.Enabled,
     userPoolId: cognitoOptions?.UserPoolId,
     identityPoolId: cognitoOptions?.IdentityPoolId,
-    roleArn: cognitoOptions?.RoleArn
+    roleArn: cognitoOptions?.RoleArn,
   }
 
   const formattedEncryptionAtRestOptions = {
     enabled: encryptionAtRestOptions?.Enabled,
-    kmsKeyId: encryptionAtRestOptions?.KmsKeyId
+    kmsKeyId: encryptionAtRestOptions?.KmsKeyId,
   }
 
   const formattedNodeToNodeEncryptionOptions = {
-    enabled: nodeToNodeEncryptionOptions?.Enabled
+    enabled: nodeToNodeEncryptionOptions?.Enabled,
   }
 
   const mappedAdvancedOptions = Object.keys(advancedOptions ?? {}).map(key => ({
     id: cuid(),
     key,
-    value: advancedOptions[key]
+    value: advancedOptions[key],
   }))
 
   const mappedLogPublishingOptions = Object.keys(logPublishingOptions ?? {}).map(key => ({
     id: cuid(),
     key,
     enabled: logPublishingOptions[key]?.Enabled,
-    cloudWatchLogsLogGroupArn: logPublishingOptions[key]?.CloudWatchLogsLogGroupArn
+    cloudWatchLogsLogGroupArn:
+      logPublishingOptions[key]?.CloudWatchLogsLogGroupArn,
   }))
 
   const formattedServiceSoftwareOptions = {
@@ -123,8 +125,9 @@ export default ({
     cancellable: serviceSoftwareOptions?.Cancellable,
     updateStatus: serviceSoftwareOptions?.UpdateStatus,
     description: serviceSoftwareOptions?.Description,
-    automatedUpdateDate: serviceSoftwareOptions?.AutomatedUpdateDate?.toISOString(),
-    optionalDeployment: serviceSoftwareOptions?.OptionalDeployment
+    automatedUpdateDate:
+      serviceSoftwareOptions?.AutomatedUpdateDate?.toISOString(),
+    optionalDeployment: serviceSoftwareOptions?.OptionalDeployment,
   }
 
   const formattedDomainEndpointOptions = {
@@ -132,34 +135,39 @@ export default ({
     tlsSecurityPolicy: domainEndpointOptions?.TLSSecurityPolicy,
     customEndpointEnabled: domainEndpointOptions?.CustomEndpointEnabled,
     customEndpoint: domainEndpointOptions?.CustomEndpoint,
-    customEndpointCertificateArn: domainEndpointOptions?.CustomEndpointCertificateArn
+    customEndpointCertificateArn:
+      domainEndpointOptions?.CustomEndpointCertificateArn,
   }
 
   const formattedAdvancedSecurityOptions = {
     enabled: advancedSecurityOptions?.Enabled,
-    internalUserDatabaseEnabled: advancedSecurityOptions?.InternalUserDatabaseEnabled,
+    internalUserDatabaseEnabled:
+      advancedSecurityOptions?.InternalUserDatabaseEnabled,
     samlOptions: {
       enabled: advancedSecurityOptions?.SAMLOptions?.Enabled,
       idp: {
-        metadataContent: advancedSecurityOptions?.SAMLOptions?.Idp?.MetadataContent,
-        entityId: advancedSecurityOptions?.SAMLOptions?.Idp?.EntityId
+        metadataContent:
+          advancedSecurityOptions?.SAMLOptions?.Idp?.MetadataContent,
+        entityId: advancedSecurityOptions?.SAMLOptions?.Idp?.EntityId,
       },
       subjectKey: advancedSecurityOptions?.SAMLOptions?.SubjectKey,
       rolesKey: advancedSecurityOptions?.SAMLOptions?.RolesKey,
-      sessionTimeoutMinutes: advancedSecurityOptions?.SAMLOptions?.SessionTimeoutMinutes
+      sessionTimeoutMinutes:
+        advancedSecurityOptions?.SAMLOptions?.SessionTimeoutMinutes,
     },
-    anonymousAuthDisableDate: advancedSecurityOptions?.AnonymousAuthDisableDate?.toISOString(),
-    anonymousAuthEnabled: advancedSecurityOptions?.AnonymousAuthEnabled
+    anonymousAuthDisableDate:
+      advancedSecurityOptions?.AnonymousAuthDisableDate?.toISOString(),
+    anonymousAuthEnabled: advancedSecurityOptions?.AnonymousAuthEnabled,
   }
 
   const formattedAutoTuneOptions = {
     state: autoTuneOptions?.State,
-    errorMessage: autoTuneOptions?.ErrorMessage
+    errorMessage: autoTuneOptions?.ErrorMessage,
   }
 
   const formattedChangeProgressDetails = {
     changeId: changeProcessDetails?.ChangeId,
-    message: changeProcessDetails?.Message
+    message: changeProcessDetails?.Message,
   }
 
   return {
@@ -173,6 +181,7 @@ export default ({
     processing,
     upgradeProcessing,
     elasticSearchVersion,
+    rawPolicy: accessPolicies,
     accessPolicies: formatIamJsonPolicy(accessPolicies),
     domainName,
     endpoints: mappedEndpoints,
@@ -190,6 +199,6 @@ export default ({
     advancedSecurityOptions: formattedAdvancedSecurityOptions,
     autoTuneOptions: formattedAutoTuneOptions,
     changeProcessDetails: formattedChangeProgressDetails,
-    tags: formatTagsFromMap(tags ?? {})
+    tags: formatTagsFromMap(tags ?? {}),
   }
 }

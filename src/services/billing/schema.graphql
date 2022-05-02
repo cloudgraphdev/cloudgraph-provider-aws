@@ -1,6 +1,4 @@
-type awsBilling {
-  id: String! @id @search(by: [hash])
-  accountId: String! @id @search(by: [hash])
+type awsBilling implements awsOptionalService @key(fields: "id") {
   totalCostMonthToDate: awsTotalBillingInfo
   totalCostLast30Days: awsTotalBillingInfo
   monthToDateDailyAverage: [awsServiceBillingInfo]
