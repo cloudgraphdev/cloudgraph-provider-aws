@@ -1,3 +1,10 @@
+# [0.80.0-alpha.5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.80.0-alpha.4...0.80.0-alpha.5) (2022-05-02)
+
+
+### Features
+
+* Add cloudfront connection to cloudwatch service ([d2936d6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d2936d654189e56a021da946c76ab51b82b76276))
+
 # [0.80.0-alpha.4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.80.0-alpha.3...0.80.0-alpha.4) (2022-05-02)
 
 
