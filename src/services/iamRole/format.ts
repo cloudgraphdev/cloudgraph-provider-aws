@@ -38,6 +38,7 @@ export default ({
     path,
     createdAt: createdAt?.toISOString() || '',
     description,
+    rawPolicy: assumeRolePolicy,
     assumeRolePolicy: formatIamJsonPolicy(assumeRolePolicy),
     maxSessionDuration,
     inlinePolicies,

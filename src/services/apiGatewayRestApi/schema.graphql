@@ -6,6 +6,7 @@ type awsApiGatewayEndpointConfiguration {
 
 type awsApiGatewayRestApi implements awsBaseService @key(fields: "arn") {
   description: String @search(by: [hash, regexp, fulltext])
+  rawPolicy: String @search(by: [hash, regexp])
   policy: awsIamJSONPolicy
   endpointConfiguration: awsApiGatewayEndpointConfiguration
   apiKeySource: String @search(by: [hash])

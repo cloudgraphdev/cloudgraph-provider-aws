@@ -2,6 +2,7 @@ type awsIamPolicy implements awsBaseService @key(fields: "id") {
   name: String @search(by: [hash, regexp])
   path: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp])
+  rawPolicy: String @search(by: [hash, regexp])
   policyContent: awsIamJSONPolicy
   tags: [awsRawTag]
   iamRoles: [awsIamRole] @hasInverse(field: iamAttachedPolicies)

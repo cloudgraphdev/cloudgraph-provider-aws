@@ -8,24 +8,22 @@ import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
  * SQS
  */
 
-export default ({ 
+export default ({
   service: key,
   account,
-  region
-}:{
+  region,
+}: {
   service: AwsSqs
   account: string
   region: string
 }): AwsSqsType => {
-  const {
-    queueUrl,
-    Tags = {},
-  } = key
+  const { queueUrl, Tags = {} } = key
 
   const {
     QueueArn: arn,
     ApproximateNumberOfMessages: approximateNumberOfMessages,
-    ApproximateNumberOfMessagesNotVisible: approximateNumberOfMessagesNotVisible,
+    ApproximateNumberOfMessagesNotVisible:
+      approximateNumberOfMessagesNotVisible,
     ApproximateNumberOfMessagesDelayed: approximateNumberOfMessagesDelayed,
     VisibilityTimeout: visibilityTimeout,
     MaximumMessageSize: maximumMessageSize,
@@ -50,14 +48,21 @@ export default ({
     queueUrl,
     queueType: arn.includes('.fifo') ? t.fifo : t.standard,
     approximateNumberOfMessages: parseInt(approximateNumberOfMessages, 10),
-    approximateNumberOfMessagesNotVisible: parseInt(approximateNumberOfMessagesNotVisible, 10),
-    approximateNumberOfMessagesDelayed: parseInt(approximateNumberOfMessagesDelayed, 10),
+    approximateNumberOfMessagesNotVisible: parseInt(
+      approximateNumberOfMessagesNotVisible,
+      10
+    ),
+    approximateNumberOfMessagesDelayed: parseInt(
+      approximateNumberOfMessagesDelayed,
+      10
+    ),
     visibilityTimeout: getTime(visibilityTimeout),
     maximumMessageSize: Math.round(
       parseInt(maximumMessageSize, 10) * 0.001 // This is a conversion from bytes to Kbytes
     ),
     messageRetentionPeriod: getTime(messageRetentionPeriod),
     delaySeconds: `${delaySeconds} ${t.seconds}`,
+    rawPolicy: policy,
     policy: formatIamJsonPolicy(policy),
     receiveMessageWaitTimeSeconds: getTime(receiveMessageWaitTimeSeconds),
     kmsMasterKeyId,
