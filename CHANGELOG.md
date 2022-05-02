@@ -1,3 +1,16 @@
+# [0.80.0-alpha.4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.80.0-alpha.3...0.80.0-alpha.4) (2022-05-02)
+
+
+### Features
+
+* Add Additional data to transit gateway attachment ([35a560c](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/35a560cdd4eb408767275adee309d95a6badae73))
+
+
+### Reverts
+
+* Revert "feat: Add cloudfront connection to cloudwatch service" ([7ae11b8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/7ae11b853f7c62f07aa12471cd1f6f00326942e6))
+* Revert "Update README file conenctions" ([b27810f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/b27810fb62fee7926ffd9fb1e6e74f2f53479649))
+
 # [0.80.0-alpha.3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.80.0-alpha.2...0.80.0-alpha.3) (2022-04-28)
 
 
