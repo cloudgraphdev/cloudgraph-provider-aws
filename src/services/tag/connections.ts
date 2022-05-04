@@ -64,6 +64,7 @@ import { RawAwsElasticSearchDomain } from '../elasticSearchDomain/data'
 import { RawAwsSystemsManagerDocument } from '../systemsManagerDocument/data'
 import { RawAwsRdsClusterSnapshot } from '../rdsClusterSnapshot/data'
 import { RawAwsInstanceProfile } from '../iamInstanceProfile/data'
+import { RawAwsAnalyzerSummary} from '../iamAccessAnalyzer/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -1686,6 +1687,33 @@ export default ({
             resourceType: services.iamInstanceProfile,
             relation: 'child',
             field: 'iamInstanceProfiles',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related IAM Analyzers
+     */
+    const iamAnalyzers: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.iamAccessAnalyzer)
+    if (iamAnalyzers?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        iamAnalyzers.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { arn: id }: RawAwsAnalyzerSummary =
+            instance
+
+          connections.push({
+            id,
+            resourceType: services.iamAccessAnalyzer,
+            relation: 'child',
+            field: 'iamAccessAnalyzers',
           })
         }
       }

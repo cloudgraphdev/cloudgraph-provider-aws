@@ -183,6 +183,7 @@ export type AwsAccount = AwsOptionalService & {
   glueJobs?: Maybe<Array<Maybe<AwsGlueJob>>>;
   glueRegistries?: Maybe<Array<Maybe<AwsGlueRegistry>>>;
   guardDutyDetectors?: Maybe<Array<Maybe<AwsGuardDutyDetector>>>;
+  iamAccessAnalyzers?: Maybe<Array<Maybe<AwsIamAccessAnalyzer>>>;
   iamGroups?: Maybe<Array<Maybe<AwsIamGroup>>>;
   iamInstanceProfiles?: Maybe<Array<Maybe<AwsIamInstanceProfile>>>;
   iamOpenIdConnectProviders?: Maybe<Array<Maybe<AwsIamOpenIdConnectProvider>>>;
@@ -2986,6 +2987,17 @@ export type AwsGuardDutyMember = {
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
+export type AwsIamAccessAnalyzer = AwsBaseService & {
+  createdAt?: Maybe<Scalars['DateTime']>;
+  lastResourceAnalyzed?: Maybe<Scalars['String']>;
+  lastResourceAnalyzedAt?: Maybe<Scalars['DateTime']>;
+  name?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  statusReasonCode?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  type?: Maybe<Scalars['String']>;
+};
+
 export type AwsIamAccessKey = {
   accessKeyId: Scalars['String'];
   createDate?: Maybe<Scalars['String']>;
@@ -4169,6 +4181,7 @@ export type AwsTag = {
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
   guardDutyDetectors?: Maybe<Array<Maybe<AwsGuardDutyDetector>>>;
+  iamAccessAnalyzers?: Maybe<Array<Maybe<AwsIamAccessAnalyzer>>>;
   iamInstanceProfiles?: Maybe<Array<Maybe<AwsIamInstanceProfile>>>;
   iamPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;

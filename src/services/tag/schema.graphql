@@ -34,6 +34,7 @@ type awsTag @key(fields: "id") {
   ecr: [awsEcr]
   subnet: [awsSubnet]
   secretsManager: [awsSecretsManager]
+  iamAccessAnalyzers: [awsIamAccessAnalyzer]
   iamUsers: [awsIamUser]
   iamRoles: [awsIamRole]
   iamPolicies: [awsIamPolicy]
