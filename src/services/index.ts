@@ -18,6 +18,7 @@ import resources from '../enums/resources'
 import services from '../enums/services'
 import serviceMap from '../enums/serviceMap'
 import schemasMap from '../enums/schemasMap'
+import serviceProperties from '../enums/properties'
 import relations from '../enums/relations'
 import { Credentials } from '../types'
 import { obfuscateSensitiveString } from '../utils/format'
@@ -34,6 +35,7 @@ export const enums = {
   regions,
   resources,
   schemasMap,
+  serviceProperties,
 }
 
 export default class Provider extends CloudGraph.Client {
@@ -552,8 +554,11 @@ export default class Provider extends CloudGraph.Client {
     account: Account,
     opts?: Opts
   ): Promise<rawDataInterface[]> {
-    let { regions: configuredRegions, resources: configuredResources } =
-      this.config
+    let {
+      regions: configuredRegions,
+      resources: configuredResources,
+      properties = {},
+    } = this.config
     const result: rawDataInterface[] = []
     if (!configuredRegions) {
       configuredRegions = this.properties.regions.join(',')
@@ -579,6 +584,11 @@ export default class Provider extends CloudGraph.Client {
             opts,
             account: accountId,
             rawData: result,
+            params: properties[resource]
+              ? {
+                  ...properties[resource],
+                }
+              : undefined,
           })
           result.push({
             className: serviceClass.constructor.name,

@@ -394,8 +394,11 @@ const getBucketAdditionalInfo = async (s3: S3, name: BucketName) =>
     })
   })
 
-const listBucketsForRegion = async (s3: S3, resolveRegion: () => void) =>
-  new Promise<{ buckets: Bucket[]; ownerId: Owner }>(resolve => {
+const listBucketsForRegion = async (
+  s3: S3,
+  resolveRegion: () => void
+): Promise<{ buckets: Bucket[]; ownerId: Owner }> =>
+  new Promise(resolve => {
     s3.listBuckets((err: AWSError, data: ListBucketsOutput) => {
       /**
        * No Data for the region
@@ -424,8 +427,12 @@ const listBucketsForRegion = async (s3: S3, resolveRegion: () => void) =>
     })
   })
 
-const listBucketObjects = async (s3: S3, name: BucketName) =>
-  new Promise<S3Object[]>(resolve => {
+const listBucketObjects = async (
+  s3: S3,
+  name: BucketName,
+  params?: { [field: string]: any }
+): Promise<S3Object[]> =>
+  new Promise(resolve => {
     const contents: S3Object[] = []
     /**
      * S3 Buckets can get quite large, so we limit the total number
@@ -433,7 +440,7 @@ const listBucketObjects = async (s3: S3, name: BucketName) =>
      */
     const opts: any = {
       Bucket: name,
-      MaxKeys: awsBucketItemsLimit,
+      ...(params ?? { MaxKeys: awsBucketItemsLimit }),
     }
     const listAllObjects = (token?: string) => {
       if (token) {
@@ -495,9 +502,11 @@ export interface RawAwsS3 {
 export default async ({
   regions,
   config,
+  params,
 }: {
   regions: string
   config: Config
+  params: any
 }): Promise<{
   [region: string]: RawAwsS3[]
 }> =>
@@ -552,7 +561,11 @@ export default async ({
           s3ForcePathStyle: true,
         })
         logger.debug(lt.gettingBucketBasicInfo(Name))
-        const bucketObjectList: S3Object[] = await listBucketObjects(s3, Name)
+        const bucketObjectList: S3Object[] = await listBucketObjects(
+          s3,
+          Name,
+          params
+        )
 
         bucketData[idx].Contents = []
         if (!isEmpty(bucketObjectList)) {
