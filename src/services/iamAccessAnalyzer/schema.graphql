@@ -1,0 +1,10 @@
+type awsIamAccessAnalyzer implements awsBaseService @key(fields: "id") {
+  createdAt: DateTime @search(by: [day])
+  lastResourceAnalyzed: String @search(by: [hash, regexp])
+  lastResourceAnalyzedAt: DateTime @search(by: [day])
+  name: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
+  statusReasonCode: String @search(by: [hash, regexp])
+  type: String @search(by: [hash, regexp])
+  tags: [awsRawTag]
+}
