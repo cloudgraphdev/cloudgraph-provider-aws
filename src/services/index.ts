@@ -3,6 +3,7 @@ import CloudGraph, {
   Opts,
   ProviderData,
   sortResourcesDependencies,
+  generateEntityMutations,
 } from '@cloudgraph/sdk'
 import { loadFilesSync } from '@graphql-tools/load-files'
 import { mergeTypeDefs } from '@graphql-tools/merge'
@@ -804,6 +805,7 @@ export default class Provider extends CloudGraph.Client {
         const existingServiceIdx = result.entities.findIndex(({ name }) => {
           return name === serviceData.name
         })
+        const schemaName = schemasMap[serviceData.name]
         if (existingServiceIdx > -1) {
           const existingData = result.entities[existingServiceIdx].data
           for (const currentEntity of entities) {
@@ -822,14 +824,14 @@ export default class Provider extends CloudGraph.Client {
           result.entities[existingServiceIdx] = {
             className: serviceClass.constructor.name,
             name: serviceData.name,
-            mutation: serviceClass.mutation,
+            mutation: generateEntityMutations(schemaName),
             data: [...existingData, ...entities],
           }
         } else {
           result.entities.push({
             className: serviceClass.constructor.name,
             name: serviceData.name,
-            mutation: serviceClass.mutation,
+            mutation: generateEntityMutations(schemaName),
             data: entities,
           })
         }
