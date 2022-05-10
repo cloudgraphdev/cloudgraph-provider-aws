@@ -1,3 +1,10 @@
+# [0.81.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0-alpha.1...0.81.0-alpha.2) (2022-05-10)
+
+
+### Bug Fixes
+
+* fixed services that returned only the first page of paged results ([fcbd78b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/fcbd78bbbabefca9e7e4c37ec9b28618601a2e3d))
+
 # [0.81.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.80.0...0.81.0-alpha.1) (2022-05-04)
 
 
