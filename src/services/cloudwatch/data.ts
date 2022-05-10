@@ -76,9 +76,9 @@ const listMetricAlarmsForRegion = async ({
             if (nextToken) {
               logger.debug(lt.foundMoreCloudwatchAlarms(metricAlarms.length))
               listAllAlarms(nextToken)
+            } else {
+              resolve(metricAlarmsList)
             }
-
-            resolve(metricAlarmsList)
           }
         )
       } catch (error) {
@@ -88,7 +88,10 @@ const listMetricAlarmsForRegion = async ({
     listAllAlarms()
   })
 
-const getResourceTags = async (cloudwatch: CloudWatch, arn: string) =>
+const getResourceTags = async (
+  cloudwatch: CloudWatch,
+  arn: string
+): Promise<TagMap> =>
   new Promise<TagMap>(resolve => {
     try {
       cloudwatch.listTagsForResource(

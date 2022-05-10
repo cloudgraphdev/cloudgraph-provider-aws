@@ -66,9 +66,9 @@ const getResources = async ({ apiGw, restApiId }): Promise<ListOfResource> =>
 
             if (position) {
               listAllResources(position)
+            } else {
+              resolve(resourceList)
             }
-
-            resolve(resourceList)
           }
         )
       } catch (error) {

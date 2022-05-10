@@ -394,7 +394,10 @@ const getBucketAdditionalInfo = async (s3: S3, name: BucketName) =>
     })
   })
 
-const listBucketsForRegion = async (s3: S3, resolveRegion: () => void) =>
+const listBucketsForRegion = async (
+  s3: S3,
+  resolveRegion: () => void
+): Promise<{ buckets: Bucket[]; ownerId: Owner }> =>
   new Promise<{ buckets: Bucket[]; ownerId: Owner }>(resolve => {
     s3.listBuckets((err: AWSError, data: ListBucketsOutput) => {
       /**
@@ -424,7 +427,10 @@ const listBucketsForRegion = async (s3: S3, resolveRegion: () => void) =>
     })
   })
 
-const listBucketObjects = async (s3: S3, name: BucketName) =>
+const listBucketObjects = async (
+  s3: S3,
+  name: BucketName
+): Promise<S3Object[]> =>
   new Promise<S3Object[]>(resolve => {
     const contents: S3Object[] = []
     /**
@@ -435,7 +441,7 @@ const listBucketObjects = async (s3: S3, name: BucketName) =>
       Bucket: name,
       MaxKeys: awsBucketItemsLimit,
     }
-    const listAllObjects = (token?: string) => {
+    const listAllObjects = (token?: string): void => {
       if (token) {
         opts.ContinuationToken = token
       }
@@ -455,9 +461,9 @@ const listBucketObjects = async (s3: S3, name: BucketName) =>
         if (IsTruncated && contents.length < awsBucketItemsLimit) {
           logger.debug(lt.foundAnotherThousand)
           listAllObjects(NextContinuationToken)
+        } else {
+          resolve(contents)
         }
-
-        resolve(contents)
       })
     }
     listAllObjects()

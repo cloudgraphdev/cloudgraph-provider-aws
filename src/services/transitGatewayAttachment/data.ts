@@ -25,63 +25,59 @@ const endpoint = initTestEndpoint(serviceName)
 
 const listTransitGatewayAttachmentsData = async ({
   ec2,
-  region,
-  nextToken: NextToken = '',
+  resolveRegion,
 }: {
   ec2: EC2
-  region: string
-  nextToken?: string
-}): Promise<(TransitGatewayAttachment & { region: string })[]> =>
-  new Promise<(TransitGatewayAttachment & { region: string })[]>(resolve => {
-    let transitGatewayAttachmentData: (TransitGatewayAttachment & {
-      region: string
-    })[] = []
+  resolveRegion: () => void
+}): Promise<TransitGatewayAttachment[]> =>
+  new Promise<TransitGatewayAttachment[]>(resolve => {
     const transitGatewayAttachmentList: TransitGatewayAttachmentList = []
     let args: DescribeTransitGatewayAttachmentsRequest = {}
 
-    if (NextToken) {
-      args = { ...args, NextToken }
-    }
-
-    ec2.describeTransitGatewayAttachments(
-      args,
-      (err: AWSError, data: DescribeTransitGatewayAttachmentsResult) => {
-        if (err) {
-          errorLog.generateAwsErrorLog({
-            functionName: 'ec2:describeTransitGatewayAttachments',
-            err,
-          })
-        }
-
-        if (!isEmpty(data)) {
-          const {
-            NextToken: nextToken,
-            TransitGatewayAttachments: transitGatewayAttachments = [],
-          } = data
-
-          transitGatewayAttachmentList.push(...transitGatewayAttachments)
-
-          logger.debug(
-            lt.fetchedTransitGatewayAttachments(
-              transitGatewayAttachments.length
-            )
-          )
-
-          if (nextToken) {
-            listTransitGatewayAttachmentsData({ ec2, region, nextToken })
-          }
-
-          transitGatewayAttachmentData = transitGatewayAttachmentList.map(
-            attachment => ({
-              ...attachment,
-              region,
-            })
-          )
-        }
-
-        resolve(transitGatewayAttachmentData)
+    const listTransitGatewayAttachments = (token?: string): void => {
+      if (token) {
+        args = { ...args, NextToken: token }
       }
-    )
+      try {
+        ec2.describeTransitGatewayAttachments(
+          args,
+          (err: AWSError, data: DescribeTransitGatewayAttachmentsResult) => {
+            if (err) {
+              errorLog.generateAwsErrorLog({
+                functionName: 'ec2:describeTransitGatewayAttachments',
+                err,
+              })
+            }
+
+            if (isEmpty(data)) {
+              return resolveRegion()
+            }
+
+            const {
+              NextToken: nextToken,
+              TransitGatewayAttachments: transitGatewayAttachments = [],
+            } = data
+
+            transitGatewayAttachmentList.push(...transitGatewayAttachments)
+
+            logger.debug(
+              lt.fetchedTransitGatewayAttachments(
+                transitGatewayAttachments.length
+              )
+            )
+
+            if (nextToken) {
+              listTransitGatewayAttachments(nextToken)
+            } else {
+              resolve(transitGatewayAttachmentList)
+            }
+          }
+        )
+      } catch (error) {
+        resolve([])
+      }
+    }
+    listTransitGatewayAttachments()
   })
 
 /**
@@ -109,12 +105,12 @@ export default async ({
     const regionPromises = regions.split(',').map(region => {
       const ec2 = new EC2({ ...config, region, endpoint })
 
-      return new Promise<void>(async resolveTransitGatewayAttachmentData => {
+      return new Promise<void>(async resolveRegion => {
         // Get Transit Gateway Attachment Data
         const transitGatewayAttachments =
           await listTransitGatewayAttachmentsData({
             ec2,
-            region,
+            resolveRegion,
           })
 
         if (!isEmpty(transitGatewayAttachments)) {
@@ -127,7 +123,7 @@ export default async ({
           }
         }
 
-        resolveTransitGatewayAttachmentData()
+        resolveRegion()
       })
     })
 

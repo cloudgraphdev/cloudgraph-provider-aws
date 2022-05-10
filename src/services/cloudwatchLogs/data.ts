@@ -76,7 +76,9 @@ const listLogGroupsForRegion = async ({
               region,
             }))
 
-            resolve(logGroupsData)
+            if (!nextToken) {
+              resolve(logGroupsData)
+            }
           }
         )
       } catch (error) {

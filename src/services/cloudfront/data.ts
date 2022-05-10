@@ -75,9 +75,9 @@ const listCloudfrontDistributions = async (
 
           if (IsTruncated) {
             listDistributions(nextToken)
+          } else {
+            resolve(distributions)
           }
-
-          resolve(distributions)
         }
       )
     }

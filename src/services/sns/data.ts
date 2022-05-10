@@ -40,47 +40,57 @@ export interface RawAwsSns extends Topic {
   Tags?: TagMap
 }
 
-const listSnsTopicArnsForRegion = async ({ sns, resolveRegion }) =>
+const listSnsTopicArnsForRegion = async ({
+  sns,
+  resolveRegion,
+}: {
+  sns: SNS
+  resolveRegion: () => void
+}): Promise<Topic[]> =>
   new Promise<Topic[]>(resolve => {
     const topicArnList: Topic[] = []
     const listTopicArnNameOpts: ListTopicsInput = {}
-    const listTopicArns = (nextToken?: string) => {
-      if (nextToken) {
-        listTopicArnNameOpts.NextToken = nextToken
+    const listTopicArns = (token?: string): void => {
+      if (token) {
+        listTopicArnNameOpts.NextToken = token
       }
-      sns.listTopics(
-        listTopicArnNameOpts,
-        (err: AWSError, listTopicArnsOutput: ListTopicsResponse) => {
-          if (err) {
-            errorLog.generateAwsErrorLog({
-              functionName: 'sns:listTopics',
-              err,
-            })
-          }
-          /**
-           * No SNS data for this region
-           */
-          if (isEmpty(listTopicArnsOutput)) {
-            return resolveRegion()
-          }
+      try {
+        sns.listTopics(
+          listTopicArnNameOpts,
+          (err: AWSError, listTopicArnsOutput: ListTopicsResponse) => {
+            if (err) {
+              errorLog.generateAwsErrorLog({
+                functionName: 'sns:listTopics',
+                err,
+              })
+            }
+            /**
+             * No SNS data for this region
+             */
+            if (isEmpty(listTopicArnsOutput)) {
+              return resolveRegion()
+            }
 
-          const { Topics, NextToken: nextToken } = listTopicArnsOutput
+            const { Topics, NextToken: nextToken } = listTopicArnsOutput
 
-          /**
-           * No SNS Topics for this region
-           */
-          if (isEmpty(Topics)) {
-            return resolveRegion()
+            /**
+             * No SNS Topics for this region
+             */
+            if (isEmpty(Topics)) {
+              return resolveRegion()
+            }
+            topicArnList.push(...Topics)
+
+            if (nextToken) {
+              listTopicArns(nextToken)
+            } else {
+              resolve(topicArnList)
+            }
           }
-          topicArnList.push(...Topics)
-
-          if (nextToken) {
-            listTopicArns(nextToken)
-          }
-
-          resolve(topicArnList)
-        }
-      )
+        )
+      } catch (error) {
+        resolve([])
+      }
     }
     listTopicArns()
   })
@@ -137,7 +147,7 @@ const getTopicSubscriptions = async (
     const listSubscriptionsOpts: ListSubscriptionsByTopicInput = {
       TopicArn: arn,
     }
-    const listAllTags = (token?: string) => {
+    const listAllSubscriptions = (token?: string): void => {
       if (token) {
         listSubscriptionsOpts.NextToken = token
       }
@@ -157,17 +167,17 @@ const getTopicSubscriptions = async (
 
             if (NextToken) {
               logger.debug(lt.foundAnotherThousand)
-              listAllTags(NextToken)
+              listAllSubscriptions(NextToken)
+            } else {
+              resolveSubscriptions(subscriptions)
             }
-
-            resolveSubscriptions(subscriptions)
           }
         )
       } catch (error) {
         resolveSubscriptions([])
       }
     }
-    listAllTags()
+    listAllSubscriptions()
   })
 
 export default async ({
