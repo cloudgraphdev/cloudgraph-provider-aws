@@ -23,11 +23,13 @@ const serviceName = 'ElastiCache cluster'
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
-const getElasticacheClusters = async elastiCache =>
+const getElasticacheClusters = async (
+  elastiCache: Elasticache
+): Promise<CacheCluster[]> =>
   new Promise<CacheCluster[]>(resolve => {
     const clusterList: CacheCluster[] = []
     const descClustersOpts: CacheClusterMessage = {}
-    const listAllClusters = (token?: string) => {
+    const listAllClusters = (token?: string): void => {
       if (token) {
         descClustersOpts.Marker = token
       }
@@ -47,9 +49,9 @@ const getElasticacheClusters = async elastiCache =>
 
             if (Marker) {
               listAllClusters(Marker)
+            } else {
+              resolve(clusterList)
             }
-
-            resolve(clusterList)
           }
         )
       } catch (error) {

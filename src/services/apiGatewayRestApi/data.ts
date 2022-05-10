@@ -64,9 +64,9 @@ export const getRestApisForRegion = async (
 
           if (position) {
             listAllRestApis(position)
+          } else {
+            resolve(restApiList)
           }
-
-          resolve(restApiList)
         })
       } catch (error) {
         resolve([])

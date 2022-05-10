@@ -23,11 +23,14 @@ const serviceName = 'EMR instance'
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
-const listEmrClusterSteps = async (emr: EMR, clusterId: string) =>
+const listEmrClusterSteps = async (
+  emr: EMR,
+  clusterId: string
+): Promise<Step[]> =>
   new Promise<Step[]>(resolve => {
     const clusterStepList: ClusterSummary[] = []
     const listStepsOpts: ListStepsInput = { ClusterId: clusterId }
-    const listSteps = (marker?: string) => {
+    const listSteps = (marker?: string): void => {
       if (marker) {
         listStepsOpts.Marker = marker
       }
@@ -52,9 +55,9 @@ const listEmrClusterSteps = async (emr: EMR, clusterId: string) =>
         if (nextToken) {
           logger.debug(lt.foundAnotherFiftySteps(clusterId))
           listSteps(nextToken)
+        } else {
+          resolve(clusterStepList)
         }
-
-        resolve(clusterStepList)
       })
     }
     listSteps()
