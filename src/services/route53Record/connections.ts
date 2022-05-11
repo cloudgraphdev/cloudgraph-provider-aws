@@ -52,7 +52,11 @@ export default ({
 
     if (!isEmpty(elbsInRegion)) {
       for (const instance of elbsInRegion) {
-        const { LoadBalancerName: lbName, region: elbRegion, account: elbAccount } = instance
+        const {
+          LoadBalancerName: lbName,
+          region: elbRegion,
+          account: elbAccount,
+        } = instance
 
         connections.push({
           id: elbArn({ region: elbRegion, account: elbAccount, name: lbName }),
@@ -107,7 +111,7 @@ export default ({
   if (!isEmpty(restApis)) {
     const restApisInRegion = restApis.filter(
       ({ domainNames }: RawAwsApiGatewayRestApi) =>
-        domainNames.find(({ domainName }) => name.includes(domainName))
+        domainNames.find(dn => name.includes(dn))
     )
 
     if (!isEmpty(restApisInRegion)) {

@@ -50,6 +50,8 @@ type awsTag @key(fields: "id") {
   ecsContainer: [awsEcsContainer]
   ecsService: [awsEcsService]
   ecsTask: [awsEcsTask]
+  apiGatewayDomainName: [awsApiGatewayDomainName]
+  apiGatewayHttpApi: [awsApiGatewayHttpApi]
   apiGatewayRestApi: [awsApiGatewayRestApi]
   apiGatewayStage: [awsApiGatewayStage]
   elastiCacheCluster: [awsElastiCacheCluster]

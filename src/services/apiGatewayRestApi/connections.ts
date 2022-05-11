@@ -1,23 +1,26 @@
 import { ServiceConnection } from '@cloudgraph/sdk'
-import { RestApi } from 'aws-sdk/clients/apigateway'
 import { isEmpty } from 'lodash'
 
+import { RawAwsApiGatewayRestApi } from './data'
 import { RawAwsApiGatewayResource } from '../apiGatewayResource/data'
 import { RawAwsApiGatewayStage } from '../apiGatewayStage/data'
 import {
   apiGatewayRestApiArn,
   apiGatewayStageArn,
   apiGatewayArn,
+  domainNameArn,
 } from '../../utils/generateArns'
-
+import { RawAwsApiGatewayDomainName } from '../apiGatewayDomainName/data'
 import services from '../../enums/services'
 
 export default ({
   service,
   data,
   region,
+  account,
 }: {
-  service: RestApi
+  account: string
+  service: RawAwsApiGatewayRestApi
   data: Array<{ name: string; data: { [property: string]: any[] } }>
   region: string
 }): {
@@ -75,6 +78,37 @@ export default ({
           resourceType: services.apiGatewayStage,
           relation: 'child',
           field: 'stages',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find Domain Names
+   */
+   const domainNames: {
+    name: string
+    data: { [property: string]: RawAwsApiGatewayDomainName[] }
+  } = data.find(({ name }) => name === services.apiGatewayDomainName)
+  if (domainNames?.data?.[region]) {
+    const domainNamesInRegion: RawAwsApiGatewayDomainName[] = domainNames.data[
+      region
+    ].filter(({ ApiMappings }: RawAwsApiGatewayDomainName) =>
+      ApiMappings.find(m => m.ApiId === id)
+    )
+    if (!isEmpty(domainNamesInRegion)) {
+      for (const domain of domainNamesInRegion) {
+        const { DomainName: domainName, region: domainRegion } = domain
+        const arn = domainNameArn({
+          region: domainRegion,
+          account,
+          name: domainName,
+        })
+        connections.push({
+          id: arn,
+          resourceType: services.apiGatewayDomainName,
+          relation: 'child',
+          field: 'domainNames',
         })
       }
     }

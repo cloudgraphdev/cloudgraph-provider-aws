@@ -2,6 +2,8 @@ import services from './services'
 
 export default {
   [services.alb]: 'albs',
+  [services.apiGatewayDomainName]: 'apiGatewayDomainNames',
+  [services.apiGatewayHttpApi]: 'apiGatewayHttpApis',
   [services.apiGatewayResource]: 'apiGatewayResources',
   [services.apiGatewayRestApi]: 'apiGatewayRestApis',
   [services.apiGatewayStage]: 'apiGatewayStages',

@@ -95,6 +95,8 @@ import SageMakerNotebookInstance from '../services/sageMakerNotebookInstance'
 import SystemsManagerInstance from '../services/systemsManagerInstance'
 import SystemsManagerDocument from '../services/systemsManagerDocument'
 import RdsClusterSnapshot from '../services/rdsClusterSnapshot'
+import APIGatewayDomainName from '../services/apiGatewayDomainName'
+import APIGatewayHttpApi from '../services/apiGatewayHttpApi'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -104,6 +106,8 @@ export default {
   account: Account,
   [services.appSync]: AppSync,
   [services.alb]: ALB,
+  [services.apiGatewayDomainName]: APIGatewayDomainName,
+  [services.apiGatewayHttpApi]: APIGatewayHttpApi,
   [services.apiGatewayResource]: APIGatewayResource,
   [services.apiGatewayRestApi]: APIGatewayRestApi,
   [services.apiGatewayStage]: APIGatewayStage,
