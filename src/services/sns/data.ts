@@ -19,13 +19,21 @@ import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import AwsErrorLog from '../../utils/errorLog'
-import { initTestEndpoint } from '../../utils'
+import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
+import {
+  MAX_FAILED_AWS_REQUEST_RETRIES,
+  SNS_CUSTOM_DELAY,
+} from '../../config/constants'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'SNS'
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
+const customRetrySettings = setAwsRetryOptions({
+  maxRetries: MAX_FAILED_AWS_REQUEST_RETRIES,
+  baseDelay: SNS_CUSTOM_DELAY,
+})
 
 /**
  * SNS
@@ -155,13 +163,18 @@ const getTopicSubscriptions = async (
         sns.listSubscriptionsByTopic(
           listSubscriptionsOpts,
           (err: AWSError, data: ListSubscriptionsByTopicResponse) => {
-            const { Subscriptions, NextToken } = data || {}
             if (err) {
               errorLog.generateAwsErrorLog({
                 functionName: 'sns:listSubscriptionsByTopic',
                 err,
               })
             }
+
+            if (isEmpty(data)) {
+              resolveSubscriptions([])
+            }
+
+            const { Subscriptions, NextToken } = data || {}
 
             subscriptions.push(...Subscriptions)
 
@@ -196,7 +209,12 @@ export default async ({
 
     // First we get all sns topics arn for all regions
     regions.split(',').map(region => {
-      const sns = new SNS({ ...config, region, endpoint })
+      const sns = new SNS({
+        ...config,
+        region,
+        endpoint,
+        ...customRetrySettings,
+      })
       const regionPromise = new Promise<void>(async resolveRegion => {
         const snsTopicArnList = await listSnsTopicArnsForRegion({
           sns,
