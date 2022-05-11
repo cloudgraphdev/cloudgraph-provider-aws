@@ -21,8 +21,8 @@ import { convertAwsTagsToTagMap } from '../../utils/format'
 import AwsErrorLog from '../../utils/errorLog'
 import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
 import {
-  API_GATEWAY_CUSTOM_DELAY,
   MAX_FAILED_AWS_REQUEST_RETRIES,
+  SNS_CUSTOM_DELAY,
 } from '../../config/constants'
 
 const lt = { ...awsLoggerText }
@@ -32,7 +32,7 @@ const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({
   maxRetries: MAX_FAILED_AWS_REQUEST_RETRIES,
-  baseDelay: API_GATEWAY_CUSTOM_DELAY,
+  baseDelay: SNS_CUSTOM_DELAY,
 })
 
 /**
