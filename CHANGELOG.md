@@ -1,3 +1,11 @@
+# [0.81.0-alpha.3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0-alpha.2...0.81.0-alpha.3) (2022-05-11)
+
+
+### Bug Fixes
+
+* Added validations and retry settings ([200c7f2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/200c7f238c1b4f5142770e357ea4fc4a1e16d155))
+* Added validations and retry settings ([fec06cb](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/fec06cb6d869099797a017b582dcbbfbac17c60d))
+
 # [0.81.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0-alpha.1...0.81.0-alpha.2) (2022-05-10)
 
 
