@@ -67,6 +67,7 @@ import { RawAwsRdsClusterSnapshot } from '../rdsClusterSnapshot/data'
 import { RawAwsInstanceProfile } from '../iamInstanceProfile/data'
 import { RawAwsApiGatewayHttpApi } from '../apiGatewayHttpApi/data'
 import { RawAwsApiGatewayDomainName } from '../apiGatewayDomainName/data'
+import { RawAwsAnalyzerSummary } from '../iamAccessAnalyzer/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -1695,9 +1696,35 @@ export default ({
     }
 
     /**
+     * Find related IAM Analyzers
+     */
+    const iamAnalyzers: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.iamAccessAnalyzer)
+    if (iamAnalyzers?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        iamAnalyzers.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { arn: id }: RawAwsAnalyzerSummary = instance
+
+          connections.push({
+            id,
+            resourceType: services.iamAccessAnalyzer,
+            relation: 'child',
+            field: 'iamAccessAnalyzers',
+          })
+        }
+      }
+    }
+
+    /**
      * Find related API Gateway Http Apis
      */
-     const httpApis: {
+    const httpApis: {
       name: string
       data: { [property: string]: any[] }
     } = data.find(({ name }) => name === services.apiGatewayHttpApi)
@@ -1708,8 +1735,7 @@ export default ({
       )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
-          const { ApiId: id }: RawAwsApiGatewayHttpApi =
-            instance
+          const { ApiId: id }: RawAwsApiGatewayHttpApi = instance
 
           connections.push({
             id,
@@ -1724,7 +1750,7 @@ export default ({
     /**
      * Find related API Gateway Domain Names
      */
-     const domainNames: {
+    const domainNames: {
       name: string
       data: { [property: string]: any[] }
     } = data.find(({ name }) => name === services.apiGatewayDomainName)
@@ -1735,12 +1761,16 @@ export default ({
       )
       if (!isEmpty(dataAtRegion)) {
         for (const instance of dataAtRegion) {
-            const { DomainName: domainName, region: domainRegion, account }: RawAwsApiGatewayDomainName = instance
-        const arn = domainNameArn({
-          region: domainRegion,
-          account,
-          name: domainName,
-        })
+          const {
+            DomainName: domainName,
+            region: domainRegion,
+            account,
+          }: RawAwsApiGatewayDomainName = instance
+          const arn = domainNameArn({
+            region: domainRegion,
+            account,
+            name: domainName,
+          })
           connections.push({
             id: arn,
             resourceType: services.apiGatewayDomainName,

@@ -1,3 +1,10 @@
+# [0.81.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.80.0...0.81.0-alpha.1) (2022-05-04)
+
+
+### Features
+
+* Add AWS IAM Access analyzer service ([cc3ae64](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/cc3ae64366e60f915ec1f4194ebc7cccf9969576))
+
 # [0.80.0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0...0.80.0) (2022-05-02)
 
 

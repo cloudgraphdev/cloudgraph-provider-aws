@@ -56,6 +56,7 @@ export default {
   [services.emrCluster]: 'awsEmrCluster',
   [services.emrInstance]: 'awsEmrInstance',
   [services.emrStep]: 'awsEmrStep',
+  [services.iamAccessAnalyzer]: 'awsIamAccessAnalyzer',
   [services.iamGroup]: 'awsIamGroup',
   [services.iamOpenIdConnectProvider]: 'awsIamOpenIdConnectProvider',
   [services.iamPasswordPolicy]: 'awsIamPasswordPolicy',

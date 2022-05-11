@@ -58,6 +58,7 @@ import SES from '../services/ses'
 import SQS from '../services/sqs'
 import VPC from '../services/vpc'
 import ECR from '../services/ecr'
+import IamAccessAnalyzer from '../services/iamAccessAnalyzer'
 import IamGroup from '../services/iamGroup'
 import IamUser from '../services/iamUser'
 import IamRole from '../services/iamRole'
@@ -175,6 +176,7 @@ export default {
   [services.s3]: S3,
   [services.secretsManager]: SecretsManager,
   [services.ses]: SES,
+  [services.iamAccessAnalyzer]: IamAccessAnalyzer,
   [services.iamUser]: IamUser,
   [services.iamGroup]: IamGroup,
   [services.iamRole]: IamRole,

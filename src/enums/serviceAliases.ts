@@ -38,6 +38,7 @@ export default {
   [services.glueJob]: 'glueJobs',
   [services.glueRegistry]: 'glueRegistries',
   [services.guardDutyDetector]: 'guardDutyDetectors',
+  [services.iamAccessAnalyzer]: 'iamAccessAnalyzers',
   [services.iamGroup]: 'iamGroups',
   [services.iamOpenIdConnectProvider]: 'iamOpenIdConnectProviders',
   [services.iamPasswordPolicy]: 'iamPasswordPolicies',
