@@ -1,3 +1,10 @@
+# [0.81.0-alpha.5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0-alpha.4...0.81.0-alpha.5) (2022-05-12)
+
+
+### Bug Fixes
+
+* Added ACL Grants needed for aws cis 1.3.0-3.3 rule ([88dd8ce](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/88dd8ce8c43a17e11051d0919730acc6f3025cd0))
+
 # [0.81.0-alpha.4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0-alpha.3...0.81.0-alpha.4) (2022-05-12)
 
 
