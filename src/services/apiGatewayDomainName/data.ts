@@ -50,10 +50,14 @@ export const getDomainNamesForRegion = async (
             }
 
             if (isEmpty(data)) {
-              resolve([])
+              return resolve([])
             }
 
             const { NextToken: nextToken, Items: items = [] } = data || {}
+
+            if (isEmpty(items)) {
+              return resolve([])
+            }
 
             logger.debug(lt.fetchedApiGwDomainNames(items.length))
 
@@ -96,13 +100,20 @@ const getAPIMappings = (
             }
 
             if (isEmpty(data)) {
-              resolve({
+              return resolve({
                 domainName,
                 apiMappings: [],
               })
             }
 
             const { NextToken: nextToken, Items: apiMappings = [] } = data || {}
+
+            if (isEmpty(apiMappings)) {
+              return resolve({
+                domainName,
+                apiMappings: [],
+              })
+            }
 
             apiMappingList.push(...apiMappings)
 

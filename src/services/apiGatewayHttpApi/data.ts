@@ -49,11 +49,15 @@ export const getHttpApisForRegion = async (apiGw: APIGW): Promise<Api[]> =>
           }
 
           if (isEmpty(data)) {
-            resolve([])
+            return resolve([])
           }
 
           const { NextToken: nextToken, Items: items = [] } = data || {}
           
+          if (isEmpty(items)) {
+            return resolve([])
+          }
+
           httpApiList.push(...items)
 
           if (nextToken) {
