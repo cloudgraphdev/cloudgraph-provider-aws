@@ -243,6 +243,12 @@ export default ({
       : `${total}`,
     transferAcceleration: accelerationStatus,
     notificationConfiguration: notificationConfigurationData,
+    aclGrants: grants?.map(g => ({
+      id: cuid(),
+      granteeType: g.Grantee?.Type,
+      granteeUri: g.Grantee?.URI,
+      permission: g.Permission,
+    })) || [],
   }
   return s3
 }
