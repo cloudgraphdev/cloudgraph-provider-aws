@@ -3760,6 +3760,7 @@ export type AwsRouteTable = AwsBaseService & {
 
 export type AwsS3 = AwsBaseService & {
   access?: Maybe<Scalars['String']>;
+  aclGrants?: Maybe<Array<Maybe<AwsS3AclGrant>>>;
   blockPublicAcls?: Maybe<Scalars['String']>;
   blockPublicPolicy?: Maybe<Scalars['String']>;
   bucketOwnerName?: Maybe<Scalars['String']>;
@@ -3790,6 +3791,13 @@ export type AwsS3 = AwsBaseService & {
   totalNumberOfObjectsInBucket?: Maybe<Scalars['String']>;
   transferAcceleration?: Maybe<Scalars['String']>;
   versioning?: Maybe<Scalars['String']>;
+};
+
+export type AwsS3AclGrant = {
+  granteeType?: Maybe<Scalars['String']>;
+  granteeUri?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  permission?: Maybe<Scalars['String']>;
 };
 
 export type AwsS3ConfigurationBase = {
