@@ -296,7 +296,7 @@ export const listVirtualMFADevices = async (
   new Promise(resolve => {
     const virtualMFADeviceList: VirtualMFADevice[] = []
     let args: ListVirtualMFADevicesRequest = {}
-    const listAllVirtualMFADevices = (marker?: string) => {
+    const listAllVirtualMFADevices = (marker?: string): void => {
       if (marker) {
         args = { ...args, Marker: marker }
       }
@@ -311,17 +311,19 @@ export const listVirtualMFADevices = async (
               })
             }
 
-            if (!isEmpty(data)) {
-              const { VirtualMFADevices = [], IsTruncated, Marker } = data
-
-              virtualMFADeviceList.push(...VirtualMFADevices)
-
-              if (IsTruncated) {
-                listAllVirtualMFADevices(Marker)
-              }
+            if (isEmpty(data)) {
+              return resolve([])
             }
 
-            resolve(virtualMFADeviceList)
+            const { VirtualMFADevices = [], IsTruncated, Marker } = data
+
+            virtualMFADeviceList.push(...VirtualMFADevices)
+
+            if (IsTruncated) {
+              listAllVirtualMFADevices(Marker)
+            } else {
+              resolve(virtualMFADeviceList)
+            }
           }
         )
       } catch (error) {

@@ -21,11 +21,13 @@ const serviceName = 'ElastiCache replication group'
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
-const getElasticacheReplicationGroups = async elastiCache =>
+const getElasticacheReplicationGroups = async (
+  elastiCache: Elasticache
+): Promise<ReplicationGroup[]> =>
   new Promise<ReplicationGroup[]>(resolve => {
     const groupList: ReplicationGroup[] = []
     const descGroupOpts: DescribeReplicationGroupsMessage = {}
-    const listAllGroups = (token?: string) => {
+    const listAllGroups = (token?: string): void => {
       if (token) {
         descGroupOpts.Marker = token
       }
@@ -45,9 +47,9 @@ const getElasticacheReplicationGroups = async elastiCache =>
 
             if (Marker) {
               listAllGroups(Marker)
+            } else {
+              resolve(groupList)
             }
-
-            resolve(groupList)
           }
         )
       } catch (error) {

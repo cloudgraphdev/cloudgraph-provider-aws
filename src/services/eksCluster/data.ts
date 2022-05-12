@@ -23,11 +23,17 @@ const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const MAX_ITEMS = 100
 
-const listClustersForRegion = async ({ eks, resolveRegion }) =>
+const listClustersForRegion = async ({ 
+  eks, 
+  resolveRegion,
+}: {
+  eks: EKS
+  resolveRegion: () => void
+}): Promise<string[]> =>
   new Promise<string[]>(resolve => {
     const clusterList: string[] = []
     const listClustersOpts: ListClustersRequest = {}
-    const listAllClusters = (token?: string) => {
+    const listAllClusters = (token?: string): void => {
       listClustersOpts.maxResults = MAX_ITEMS
       if (token) {
         listClustersOpts.nextToken = token
@@ -55,9 +61,10 @@ const listClustersForRegion = async ({ eks, resolveRegion }) =>
             if (nextToken) {
               logger.debug(lt.foundMoreEKSClusters(clusters.length))
               listAllClusters(nextToken)
+            } else {
+              resolve(clusterList)
             }
 
-            resolve(clusterList)
           }
         )
       } catch (error) {

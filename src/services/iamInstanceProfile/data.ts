@@ -41,7 +41,7 @@ export const listInstancesProfiles = async (
   new Promise(resolve => {
     const instanceProfileList: InstanceProfile[] = []
     let args: ListInstanceProfilesRequest = {}
-    const listAllInstanceProfiles = (marker?: string) => {
+    const listAllInstanceProfiles = (marker?: string): void => {
       if (marker) {
         args = { ...args, Marker: marker }
       }
@@ -56,19 +56,19 @@ export const listInstancesProfiles = async (
               })
             }
 
-            if (!isEmpty(data)) {
-              const { InstanceProfiles = [], IsTruncated, Marker } = data
-
-              instanceProfileList.push(...InstanceProfiles)
-
-              if (IsTruncated) {
-                listAllInstanceProfiles(Marker)
-              }
-
-              resolve(instanceProfileList)
+            if (isEmpty(data)) {
+              return resolve([])
             }
 
-            resolve([])
+            const { InstanceProfiles = [], IsTruncated, Marker } = data
+
+            instanceProfileList.push(...InstanceProfiles)
+
+            if (IsTruncated) {
+              listAllInstanceProfiles(Marker)
+            } else {
+              resolve(instanceProfileList)
+            }
           }
         )
       } catch (error) {

@@ -21,11 +21,11 @@ const serviceName = 'RDS DB instance'
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
-const listDBInstancesForRegion = async rds =>
+const listDBInstancesForRegion = async (rds: RDS): Promise<DBInstance[]> =>
   new Promise<DBInstance[]>(resolve => {
     const dbInstanceList: DBInstance[] = []
     const descDBInstancesOpts: DescribeDBInstancesMessage = {}
-    const listAllDBInstances = (token?: string) => {
+    const listAllDBInstances = (token?: string): void => {
       if (token) {
         descDBInstancesOpts.Marker = token
       }
@@ -45,9 +45,9 @@ const listDBInstancesForRegion = async rds =>
 
             if (Marker) {
               listAllDBInstances(Marker)
+            } else {
+              resolve(dbInstanceList)
             }
-
-            resolve(dbInstanceList)
           }
         )
       } catch (error) {

@@ -32,7 +32,7 @@ export default ({
     Policy: policy,
     DisplayName: displayName,
     DeliveryPolicy: deliveryPolicy,
-    subscriptions,
+    subscriptions = [],
   } = service
 
   return {
@@ -45,6 +45,6 @@ export default ({
     policy: formatIamJsonPolicy(policy),
     displayName,
     deliveryPolicy,
-    subscriptions: subscriptions.map(awsSNSSubscriptionConverter),
+    subscriptions: subscriptions?.map(awsSNSSubscriptionConverter) || [],
   }
 }

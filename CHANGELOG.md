@@ -1,3 +1,26 @@
+# [0.81.0-alpha.4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0-alpha.3...0.81.0-alpha.4) (2022-05-12)
+
+
+### Bug Fixes
+
+* Added missing return to resolve promise ([904b25d](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/904b25dc52e019b0bcf7da6f8051a63f3a7e8a56))
+* Added SSLCertificateId needed for the NIST 16.5 rule ([def7137](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/def7137e0d0e4e1c4afdc6345fc0b4a3640fc22d))
+
+# [0.81.0-alpha.3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0-alpha.2...0.81.0-alpha.3) (2022-05-11)
+
+
+### Bug Fixes
+
+* Added validations and retry settings ([200c7f2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/200c7f238c1b4f5142770e357ea4fc4a1e16d155))
+* Added validations and retry settings ([fec06cb](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/fec06cb6d869099797a017b582dcbbfbac17c60d))
+
+# [0.81.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0-alpha.1...0.81.0-alpha.2) (2022-05-10)
+
+
+### Bug Fixes
+
+* fixed services that returned only the first page of paged results ([fcbd78b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/fcbd78bbbabefca9e7e4c37ec9b28618601a2e3d))
+
 # [0.81.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.80.0...0.81.0-alpha.1) (2022-05-04)
 
 

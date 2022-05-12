@@ -68,16 +68,16 @@ const listCloudfrontDistributions = async (
            * No Distributions Found
            */
           if (isEmpty(Items)) {
-            resolve([])
+            return resolve([])
           }
 
           distributions.push(...Items)
 
           if (IsTruncated) {
             listDistributions(nextToken)
+          } else {
+            resolve(distributions)
           }
-
-          resolve(distributions)
         }
       )
     }
