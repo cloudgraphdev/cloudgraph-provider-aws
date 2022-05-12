@@ -2752,6 +2752,7 @@ export type AwsElbListener = {
   loadBalancerPort?: Maybe<Scalars['Int']>;
   loadBalancerProtocol?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  sslCertificateId?: Maybe<Scalars['String']>;
 };
 
 export type AwsElbSourceSecurityGroup = {
