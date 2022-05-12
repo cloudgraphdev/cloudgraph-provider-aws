@@ -171,10 +171,14 @@ const getTopicSubscriptions = async (
             }
 
             if (isEmpty(data)) {
-              resolveSubscriptions([])
+              return resolveSubscriptions([])
             }
 
             const { Subscriptions, NextToken } = data || {}
+
+            if (isEmpty(Subscriptions)) {
+              return resolveSubscriptions([])
+            }
 
             subscriptions.push(...Subscriptions)
 
