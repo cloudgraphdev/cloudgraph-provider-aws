@@ -294,3 +294,14 @@ export const guardDutyArn = ({
   account: string
   detectorId: string
 }): string => `arn:aws:guardduty:${region}:${account}:detector/${detectorId}`
+
+export const domainNameArn = ({
+  region,
+  account,
+  name,
+}: {
+  region: string
+  account: string
+  name: string
+}): string =>
+  `arn:aws:apigategay:${region}:${account}:domainname/${name}`

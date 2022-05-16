@@ -1,0 +1,27 @@
+type awsApiGatewayCors {
+  allowCredentials: Boolean @search
+  allowHeaders: [String] @search(by: [hash, regexp])
+  allowMethods: [String] @search(by: [hash, regexp])
+  allowOrigins: [String] @search(by: [hash, regexp])
+  exposeHeaders: [String] @search(by: [hash, regexp])
+  maxAge: Int @search
+}
+
+type awsApiGatewayHttpApi implements awsBaseService @key(fields: "arn") {
+  apiEndpoint: String @search(by: [hash, regexp])
+  apiGatewayManaged: Boolean @search
+  apiKeySelectionExpression: String @search(by: [hash, regexp])
+  corsConfiguration: awsApiGatewayCors
+  createdDate: DateTime @search(by: [day])
+  description: String @search(by: [hash, regexp])
+  disableSchemaValidation: Boolean @search
+  disableExecuteApiEndpoint: Boolean @search
+  importInfo: [String] @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  protocolType: String @search(by: [hash, regexp])
+  routeSelectionExpression: String @search(by: [hash, regexp])
+  version: String @search(by: [hash, regexp])
+  warnings: [String] @search(by: [hash, regexp])
+  tags: [awsRawTag]
+  domainNames: [awsApiGatewayDomainName] @hasInverse(field: httpApis)
+}
