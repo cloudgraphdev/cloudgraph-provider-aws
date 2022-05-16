@@ -1,3 +1,11 @@
+# [0.81.0-alpha.6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0-alpha.5...0.81.0-alpha.6) (2022-05-16)
+
+
+### Features
+
+* Add apiGatewayHttpApi (apiGatewayV2) service ([e02c6cb](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/e02c6cb1a35d231190021e18481d144229a9f8a7))
+* Added missing return to resolve promise ([179132a](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/179132ae000acc32e0e11d647611d8c1bb26ee04))
+
 # [0.81.0-alpha.5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0-alpha.4...0.81.0-alpha.5) (2022-05-12)
 
 
