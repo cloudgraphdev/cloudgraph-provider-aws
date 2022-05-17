@@ -17,4 +17,5 @@ type awsApiGatewayRestApi implements awsBaseService @key(fields: "arn") {
   stages: [awsApiGatewayStage] @hasInverse(field: restApi)
   resources: [awsApiGatewayResource] @hasInverse(field: restApi)
   route53Record: [awsRoute53Record] @hasInverse(field: restApi) #change to plural
+  domainNames: [awsApiGatewayDomainName] @hasInverse(field: restApis)
 }

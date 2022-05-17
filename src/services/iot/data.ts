@@ -22,11 +22,17 @@ const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const MAX_ITEMS = 250
 
-const listThingsForRegion = async ({ iot, resolveRegion }) =>
+const listThingsForRegion = async ({
+  iot,
+  resolveRegion,
+}: {
+  iot: IoT
+  resolveRegion: () => void
+}): Promise<ThingAttributeList> =>
   new Promise<ThingAttributeList>(resolve => {
     const thingAttributeList: ThingAttributeList = []
     const listThingsOpts: ListThingsRequest = {}
-    const listAllThings = (token?: string) => {
+    const listAllThings = (token?: string): void => {
       listThingsOpts.maxResults = MAX_ITEMS
       if (token) {
         listThingsOpts.nextToken = token
@@ -54,9 +60,9 @@ const listThingsForRegion = async ({ iot, resolveRegion }) =>
             if (nextToken) {
               logger.debug(lt.foundMoreIoTThings(things.length))
               listAllThings(nextToken)
+            } else {
+              resolve(thingAttributeList)
             }
-
-            resolve(thingAttributeList)
           }
         )
       } catch (error) {

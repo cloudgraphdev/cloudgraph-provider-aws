@@ -1,6 +1,8 @@
 type awsAccount implements awsOptionalService @key(fields: "id") {
   regions: [String] @search(by: [hash])
   albs: [awsAlb]
+  apiGatewayDomainNames: [awsApiGatewayDomainName]
+  apiGatewayHttpApis: [awsApiGatewayHttpApi]
   apiGatewayResources: [awsApiGatewayResource]
   apiGatewayRestApis: [awsApiGatewayRestApi]
   apiGatewayStages: [awsApiGatewayStage]
@@ -49,6 +51,7 @@ type awsAccount implements awsOptionalService @key(fields: "id") {
   glueJobs: [awsGlueJob]
   glueRegistries: [awsGlueRegistry]
   guardDutyDetectors: [awsGuardDutyDetector]
+  iamAccessAnalyzers: [awsIamAccessAnalyzer]
   iamGroups: [awsIamGroup]
   iamOpenIdConnectProviders: [awsIamOpenIdConnectProvider]
   iamPasswordPolicies: [awsIamPasswordPolicy]

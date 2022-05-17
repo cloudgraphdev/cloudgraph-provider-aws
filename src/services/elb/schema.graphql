@@ -72,4 +72,5 @@ type awsElbListener
   loadBalancerProtocol: String
   instancePort: Int
   instanceProtocol: String
+  sslCertificateId: String
 }

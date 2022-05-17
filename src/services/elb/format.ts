@@ -63,6 +63,7 @@ export default ({
           LoadBalancerPort,
           InstanceProtocol,
           InstancePort,
+          SSLCertificateId,
         },
       }) => {
         return {
@@ -74,6 +75,7 @@ export default ({
           loadBalancerProtocol: Protocol,
           instancePort: InstancePort,
           instanceProtocol: InstanceProtocol,
+          sslCertificateId: SSLCertificateId,
         }
       }
     )

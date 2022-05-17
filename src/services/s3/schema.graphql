@@ -53,6 +53,18 @@ type awsS3NotificationConfiguration
   lambdaFunctionConfigurations: [awsS3LambdaFunctionConfiguration]
 }
 
+type awsS3AclGrant
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  granteeType: String @search(by: [hash])
+  granteeUri: String @search(by: [hash])
+  permission: String @search(by: [hash])
+}
+
 type awsS3 implements awsBaseService @key(fields: "arn") {
   access: String @search(by: [hash, regexp])
   bucketOwnerName: String @search(by: [hash, regexp])
@@ -75,6 +87,7 @@ type awsS3 implements awsBaseService @key(fields: "arn") {
   notificationConfiguration: awsS3NotificationConfiguration
   policy: awsIamJSONPolicy
   rawPolicy: String @search(by: [hash, regexp])
+  aclGrants: [awsS3AclGrant]
   kinesisFirehose: [awsKinesisFirehose] @hasInverse(field: s3)
   tags: [awsRawTag]
   cloudfrontDistributions: [awsCloudfront] @hasInverse(field: s3)

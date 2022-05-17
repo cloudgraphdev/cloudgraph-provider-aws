@@ -64,10 +64,10 @@ const listReposForRegion = async ({
             if (nextToken) {
               logger.debug(lt.foundMoreECRRepos(repositories.length))
               listAllRepos(nextToken)
+            } else {
+              logger.debug(lt.fetchedECRRepos(repositoryList.length))
+              resolve(repositoryList)
             }
-
-            logger.debug(lt.fetchedECRRepos(repositoryList.length))
-            resolve(repositoryList)
           }
         )
       } catch (error) {

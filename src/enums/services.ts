@@ -1,5 +1,7 @@
 export default {
   alb: 'alb',
+  apiGatewayDomainName: 'apiGatewayDomainName',
+  apiGatewayHttpApi: 'apiGatewayHttpApi',
   apiGatewayResource: 'apiGatewayResource',
   apiGatewayRestApi: 'apiGatewayRestApi',
   apiGatewayStage: 'apiGatewayStage',
@@ -48,6 +50,7 @@ export default {
   emrCluster: 'emrCluster',
   emrInstance: 'emrInstance',
   emrStep: 'emrStep',
+  iamAccessAnalyzer: 'iamAccessAnalyzer',
   iamUser: 'iamUser',
   iamGroup: 'iamGroup',
   iamRole: 'iamRole',

@@ -123,10 +123,13 @@ const listEbsVolumes = async ({
       const ebsVolumes = []
 
       for (const { Tags, SnapshotId, ...volume } of volumes) {
-        const snapshotAttributes = await listEbsSnapshotAttribute({
-          ec2,
-          snapshotId: SnapshotId,
-        })
+        let snapshotAttributes: CreateVolumePermission[] = []
+        if (SnapshotId) {
+          snapshotAttributes = await listEbsSnapshotAttribute({
+            ec2,
+            snapshotId: SnapshotId,
+          })
+        }
         ebsVolumes.push({
           ...volume,
           region,
