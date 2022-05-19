@@ -28,11 +28,17 @@ const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const MAX_ITEMS = 25
 
-const listEnvironmentsForRegion = async ({ cloud9, resolveRegion }) =>
+const listEnvironmentsForRegion = async ({ 
+  cloud9, 
+  resolveRegion,
+}: {
+  cloud9: Cloud9
+  resolveRegion: () => void
+}): Promise<EnvironmentId[]> =>
   new Promise<EnvironmentId[]>(resolve => {
     const environmentIdList: EnvironmentIdList = []
     const listEnvironmentsOpts: ListEnvironmentsRequest = {}
-    const listAllEnvironments = (token?: string) => {
+    const listAllEnvironments = (token?: string): void => {
       if (token) {
         listEnvironmentsOpts.nextToken = token
       }
@@ -61,9 +67,9 @@ const listEnvironmentsForRegion = async ({ cloud9, resolveRegion }) =>
                 lt.foundMoreCloud9Environments(environmentIds.length)
               )
               listAllEnvironments(nextToken)
+            } else {
+              resolve(environmentIdList)
             }
-
-            resolve(environmentIdList)
           }
         )
       } catch (error) {

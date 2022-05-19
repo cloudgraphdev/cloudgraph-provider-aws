@@ -25,55 +25,55 @@ const endpoint = initTestEndpoint(serviceName)
 
 const listTransitGatewaysData = async ({
   ec2,
-  region,
-  nextToken: NextToken = '',
+  resolveRegion,
 }: {
   ec2: EC2
-  region: string
-  nextToken?: string
-}): Promise<(TransitGateway & { region: string })[]> =>
-  new Promise<(TransitGateway & { region: string })[]>(resolve => {
-    let transitGatewayData: (TransitGateway & { region: string })[] = []
+  resolveRegion: () => void
+}): Promise<TransitGateway[]> =>
+  new Promise<TransitGateway[]>(resolve => {
     const transitGatewayList: TransitGatewayList = []
     let args: DescribeTransitGatewaysRequest = {}
 
-    if (NextToken) {
-      args = { ...args, NextToken }
-    }
-
-    ec2.describeTransitGateways(
-      args,
-      (err: AWSError, data: DescribeTransitGatewaysResult) => {
-        if (err) {
-          errorLog.generateAwsErrorLog({
-            functionName: 'ec2:describeTransitGateways',
-            err,
-          })
-        }
-
-        if (!isEmpty(data)) {
-          const {
-            NextToken: nextToken,
-            TransitGateways: transitGateways = [],
-          } = data
-
-          transitGatewayList.push(...transitGateways)
-
-          logger.debug(lt.fetchedTransitGateways(transitGateways.length))
-
-          if (nextToken) {
-            listTransitGatewaysData({ ec2, region, nextToken })
-          }
-
-          transitGatewayData = transitGatewayList.map(gateway => ({
-            ...gateway,
-            region,
-          }))
-        }
-
-        resolve(transitGatewayData)
+    const listTransitGateways = (token?: string): void => {
+      if (token) {
+        args = { ...args, NextToken: token }
       }
-    )
+      try {
+        ec2.describeTransitGateways(
+          args,
+          (err: AWSError, data: DescribeTransitGatewaysResult) => {
+            if (err) {
+              errorLog.generateAwsErrorLog({
+                functionName: 'ec2:describeTransitGateways',
+                err,
+              })
+            }
+
+            if (isEmpty(data)) {
+              return resolveRegion()
+            }
+
+            const {
+              NextToken: nextToken,
+              TransitGateways: transitGateways = [],
+            } = data
+
+            transitGatewayList.push(...transitGateways)
+
+            logger.debug(lt.fetchedTransitGateways(transitGateways.length))
+
+            if (nextToken) {
+              listTransitGateways(nextToken)
+            } else {
+              resolve(transitGatewayList)
+            }
+          }
+        )
+      } catch (error) {
+        resolve([])
+      }
+    }
+    listTransitGateways()
   })
 
 /**
@@ -99,9 +99,12 @@ export default async ({
     const regionPromises = regions.split(',').map(region => {
       const ec2 = new EC2({ ...config, region, endpoint })
 
-      return new Promise<void>(async resolveTransitGatewayData => {
+      return new Promise<void>(async resolveRegion => {
         // Get Transit Gateway Data
-        const transitGateways = await listTransitGatewaysData({ ec2, region })
+        const transitGateways = await listTransitGatewaysData({
+          ec2,
+          resolveRegion,
+        })
 
         if (!isEmpty(transitGateways)) {
           for (const gateway of transitGateways) {
@@ -113,7 +116,7 @@ export default async ({
           }
         }
 
-        resolveTransitGatewayData()
+        resolveRegion()
       })
     })
 

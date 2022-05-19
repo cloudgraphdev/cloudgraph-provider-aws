@@ -1,3 +1,67 @@
+# [0.81.0-beta.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.80.0...0.81.0-beta.1) (2022-05-17)
+
+
+### Bug Fixes
+
+* Added ACL Grants needed for aws cis 1.3.0-3.3 rule ([88dd8ce](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/88dd8ce8c43a17e11051d0919730acc6f3025cd0))
+* Added missing return to resolve promise ([904b25d](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/904b25dc52e019b0bcf7da6f8051a63f3a7e8a56))
+* Added SSLCertificateId needed for the NIST 16.5 rule ([def7137](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/def7137e0d0e4e1c4afdc6345fc0b4a3640fc22d))
+* Added validations and retry settings ([200c7f2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/200c7f238c1b4f5142770e357ea4fc4a1e16d155))
+* Added validations and retry settings ([fec06cb](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/fec06cb6d869099797a017b582dcbbfbac17c60d))
+* fixed services that returned only the first page of paged results ([fcbd78b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/fcbd78bbbabefca9e7e4c37ec9b28618601a2e3d))
+
+
+### Features
+
+* Add apiGatewayHttpApi (apiGatewayV2) service ([e02c6cb](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/e02c6cb1a35d231190021e18481d144229a9f8a7))
+* Add AWS IAM Access analyzer service ([cc3ae64](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/cc3ae64366e60f915ec1f4194ebc7cccf9969576))
+* Added missing return to resolve promise ([179132a](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/179132ae000acc32e0e11d647611d8c1bb26ee04))
+
+# [0.81.0-alpha.6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0-alpha.5...0.81.0-alpha.6) (2022-05-16)
+
+
+### Features
+
+* Add apiGatewayHttpApi (apiGatewayV2) service ([e02c6cb](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/e02c6cb1a35d231190021e18481d144229a9f8a7))
+* Added missing return to resolve promise ([179132a](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/179132ae000acc32e0e11d647611d8c1bb26ee04))
+
+# [0.81.0-alpha.5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0-alpha.4...0.81.0-alpha.5) (2022-05-12)
+
+
+### Bug Fixes
+
+* Added ACL Grants needed for aws cis 1.3.0-3.3 rule ([88dd8ce](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/88dd8ce8c43a17e11051d0919730acc6f3025cd0))
+
+# [0.81.0-alpha.4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0-alpha.3...0.81.0-alpha.4) (2022-05-12)
+
+
+### Bug Fixes
+
+* Added missing return to resolve promise ([904b25d](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/904b25dc52e019b0bcf7da6f8051a63f3a7e8a56))
+* Added SSLCertificateId needed for the NIST 16.5 rule ([def7137](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/def7137e0d0e4e1c4afdc6345fc0b4a3640fc22d))
+
+# [0.81.0-alpha.3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0-alpha.2...0.81.0-alpha.3) (2022-05-11)
+
+
+### Bug Fixes
+
+* Added validations and retry settings ([200c7f2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/200c7f238c1b4f5142770e357ea4fc4a1e16d155))
+* Added validations and retry settings ([fec06cb](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/fec06cb6d869099797a017b582dcbbfbac17c60d))
+
+# [0.81.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0-alpha.1...0.81.0-alpha.2) (2022-05-10)
+
+
+### Bug Fixes
+
+* fixed services that returned only the first page of paged results ([fcbd78b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/fcbd78bbbabefca9e7e4c37ec9b28618601a2e3d))
+
+# [0.81.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.80.0...0.81.0-alpha.1) (2022-05-04)
+
+
+### Features
+
+* Add AWS IAM Access analyzer service ([cc3ae64](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/cc3ae64366e60f915ec1f4194ebc7cccf9969576))
+
 # [0.80.0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.79.0...0.80.0) (2022-05-02)
 
 

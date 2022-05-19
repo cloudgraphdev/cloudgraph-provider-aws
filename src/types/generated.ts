@@ -135,6 +135,8 @@ export type AwsAccessLogSettings = {
 
 export type AwsAccount = AwsOptionalService & {
   albs?: Maybe<Array<Maybe<AwsAlb>>>;
+  apiGatewayDomainNames?: Maybe<Array<Maybe<AwsApiGatewayDomainName>>>;
+  apiGatewayHttpApis?: Maybe<Array<Maybe<AwsApiGatewayHttpApi>>>;
   apiGatewayResources?: Maybe<Array<Maybe<AwsApiGatewayResource>>>;
   apiGatewayRestApis?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
   apiGatewayStages?: Maybe<Array<Maybe<AwsApiGatewayStage>>>;
@@ -183,6 +185,7 @@ export type AwsAccount = AwsOptionalService & {
   glueJobs?: Maybe<Array<Maybe<AwsGlueJob>>>;
   glueRegistries?: Maybe<Array<Maybe<AwsGlueRegistry>>>;
   guardDutyDetectors?: Maybe<Array<Maybe<AwsGuardDutyDetector>>>;
+  iamAccessAnalyzers?: Maybe<Array<Maybe<AwsIamAccessAnalyzer>>>;
   iamGroups?: Maybe<Array<Maybe<AwsIamGroup>>>;
   iamInstanceProfiles?: Maybe<Array<Maybe<AwsIamInstanceProfile>>>;
   iamOpenIdConnectProviders?: Maybe<Array<Maybe<AwsIamOpenIdConnectProvider>>>;
@@ -294,10 +297,60 @@ export type AwsAlbListenerSettings = {
   sslPolicy?: Maybe<Scalars['String']>;
 };
 
+export type AwsApiGatewayCors = {
+  allowCredentials?: Maybe<Scalars['Boolean']>;
+  allowHeaders?: Maybe<Array<Maybe<Scalars['String']>>>;
+  allowMethods?: Maybe<Array<Maybe<Scalars['String']>>>;
+  allowOrigins?: Maybe<Array<Maybe<Scalars['String']>>>;
+  exposeHeaders?: Maybe<Array<Maybe<Scalars['String']>>>;
+  maxAge?: Maybe<Scalars['Int']>;
+};
+
+export type AwsApiGatewayDomainName = AwsBaseService & {
+  apiMappingSelectionExpression?: Maybe<Scalars['String']>;
+  configurations?: Maybe<Array<Maybe<AwsApiGatewayDomainNameConfiguration>>>;
+  domainName?: Maybe<Scalars['String']>;
+  httpApis?: Maybe<Array<Maybe<AwsApiGatewayHttpApi>>>;
+  restApis?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+};
+
+export type AwsApiGatewayDomainNameConfiguration = {
+  apiGatewayDomainName?: Maybe<Scalars['String']>;
+  certificateArn?: Maybe<Scalars['String']>;
+  certificateName?: Maybe<Scalars['String']>;
+  certificateUploadDate?: Maybe<Scalars['DateTime']>;
+  domainNameStatus?: Maybe<Scalars['String']>;
+  domainNameStatusMessage?: Maybe<Scalars['String']>;
+  endpointType?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  ownershipVerificationCertificateArn?: Maybe<Scalars['String']>;
+  securityPolicy?: Maybe<Scalars['String']>;
+};
+
 export type AwsApiGatewayEndpointConfiguration = {
   id?: Maybe<Scalars['ID']>;
   types?: Maybe<Array<Maybe<Scalars['String']>>>;
   vpcEndpointIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsApiGatewayHttpApi = AwsBaseService & {
+  apiEndpoint?: Maybe<Scalars['String']>;
+  apiGatewayManaged?: Maybe<Scalars['Boolean']>;
+  apiKeySelectionExpression?: Maybe<Scalars['String']>;
+  corsConfiguration?: Maybe<AwsApiGatewayCors>;
+  createdDate?: Maybe<Scalars['DateTime']>;
+  description?: Maybe<Scalars['String']>;
+  disableExecuteApiEndpoint?: Maybe<Scalars['Boolean']>;
+  disableSchemaValidation?: Maybe<Scalars['Boolean']>;
+  domainNames?: Maybe<Array<Maybe<AwsApiGatewayDomainName>>>;
+  importInfo?: Maybe<Array<Maybe<Scalars['String']>>>;
+  name?: Maybe<Scalars['String']>;
+  protocolType?: Maybe<Scalars['String']>;
+  routeSelectionExpression?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  version?: Maybe<Scalars['String']>;
+  warnings?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type AwsApiGatewayMethod = {
@@ -319,6 +372,7 @@ export type AwsApiGatewayRestApi = AwsBaseService & {
   binaryMediaTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
   createdDate?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  domainNames?: Maybe<Array<Maybe<AwsApiGatewayDomainName>>>;
   endpointConfiguration?: Maybe<AwsApiGatewayEndpointConfiguration>;
   minimumCompressionSize?: Maybe<Scalars['Int']>;
   policy?: Maybe<AwsIamJsonPolicy>;
@@ -2751,6 +2805,7 @@ export type AwsElbListener = {
   loadBalancerPort?: Maybe<Scalars['Int']>;
   loadBalancerProtocol?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  sslCertificateId?: Maybe<Scalars['String']>;
 };
 
 export type AwsElbSourceSecurityGroup = {
@@ -2984,6 +3039,17 @@ export type AwsGuardDutyMember = {
   masterId?: Maybe<Scalars['String']>;
   relationshipStatus?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type AwsIamAccessAnalyzer = AwsBaseService & {
+  createdAt?: Maybe<Scalars['DateTime']>;
+  lastResourceAnalyzed?: Maybe<Scalars['String']>;
+  lastResourceAnalyzedAt?: Maybe<Scalars['DateTime']>;
+  name?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  statusReasonCode?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  type?: Maybe<Scalars['String']>;
 };
 
 export type AwsIamAccessKey = {
@@ -3760,6 +3826,7 @@ export type AwsRouteTable = AwsBaseService & {
 
 export type AwsS3 = AwsBaseService & {
   access?: Maybe<Scalars['String']>;
+  aclGrants?: Maybe<Array<Maybe<AwsS3AclGrant>>>;
   blockPublicAcls?: Maybe<Scalars['String']>;
   blockPublicPolicy?: Maybe<Scalars['String']>;
   bucketOwnerName?: Maybe<Scalars['String']>;
@@ -3790,6 +3857,13 @@ export type AwsS3 = AwsBaseService & {
   totalNumberOfObjectsInBucket?: Maybe<Scalars['String']>;
   transferAcceleration?: Maybe<Scalars['String']>;
   versioning?: Maybe<Scalars['String']>;
+};
+
+export type AwsS3AclGrant = {
+  granteeType?: Maybe<Scalars['String']>;
+  granteeUri?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  permission?: Maybe<Scalars['String']>;
 };
 
 export type AwsS3ConfigurationBase = {
@@ -4133,6 +4207,8 @@ export type AwsSystemsManagerInstance = AwsBaseService & {
 
 export type AwsTag = {
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
+  apiGatewayDomainName?: Maybe<Array<Maybe<AwsApiGatewayDomainName>>>;
+  apiGatewayHttpApi?: Maybe<Array<Maybe<AwsApiGatewayHttpApi>>>;
   apiGatewayRestApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
   apiGatewayStage?: Maybe<Array<Maybe<AwsApiGatewayStage>>>;
   appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
@@ -4169,6 +4245,7 @@ export type AwsTag = {
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
   guardDutyDetectors?: Maybe<Array<Maybe<AwsGuardDutyDetector>>>;
+  iamAccessAnalyzers?: Maybe<Array<Maybe<AwsIamAccessAnalyzer>>>;
   iamInstanceProfiles?: Maybe<Array<Maybe<AwsIamInstanceProfile>>>;
   iamPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;

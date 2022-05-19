@@ -23,11 +23,11 @@ const serviceName = 'RDS DB cluster'
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
-const listClustersForRegion = async rds =>
+const listClustersForRegion = async (rds: RDS): Promise<DBCluster[]> =>
   new Promise<DBCluster[]>(resolve => {
     const clusterList: DBCluster[] = []
     const descClustersOpts: DescribeDBClustersMessage = {}
-    const listAllClusters = (token?: string) => {
+    const listAllClusters = (token?: string): void => {
       if (token) {
         descClustersOpts.Marker = token
       }
@@ -47,9 +47,9 @@ const listClustersForRegion = async rds =>
 
             if (Marker) {
               listAllClusters(Marker)
+            } else {
+              resolve(clusterList)
             }
-
-            resolve(clusterList)
           }
         )
       } catch (error) {
@@ -59,7 +59,10 @@ const listClustersForRegion = async rds =>
     listAllClusters()
   })
 
-const describeDBSubnetGroups = async (rds: RDS, DBSubnetGroupName: string): Promise<DBSubnetGroup[]> =>
+const describeDBSubnetGroups = async (
+  rds: RDS,
+  DBSubnetGroupName: string
+): Promise<DBSubnetGroup[]> =>
   new Promise(resolve => {
     try {
       rds.describeDBSubnetGroups(
@@ -130,11 +133,16 @@ export default async ({
 
         if (!isEmpty(clusters)) {
           rdsData.push(
-            ...await Promise.all(clusters.map(async (cluster) => ({
-              ...cluster,
-              dbSubnetGroups: await describeDBSubnetGroups(rds, cluster.DBSubnetGroup),
-              region,
-            })))
+            ...(await Promise.all(
+              clusters.map(async cluster => ({
+                ...cluster,
+                dbSubnetGroups: await describeDBSubnetGroups(
+                  rds,
+                  cluster.DBSubnetGroup
+                ),
+                region,
+              }))
+            ))
           )
         }
         resolveRegion()

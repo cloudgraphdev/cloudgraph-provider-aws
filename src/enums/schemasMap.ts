@@ -6,6 +6,8 @@ import services from './services'
 export default {
   account: 'awsAccount',
   [services.alb]: 'awsAlb',
+  [services.apiGatewayDomainName]: 'awsApiGatewayDomainName',
+  [services.apiGatewayHttpApi]: 'awsApiGatewayHttpApi',
   [services.apiGatewayResource]: 'awsApiGatewayResource',
   [services.apiGatewayRestApi]: 'awsApiGatewayRestApi',
   [services.apiGatewayStage]: 'awsApiGatewayStage',
@@ -54,6 +56,7 @@ export default {
   [services.emrCluster]: 'awsEmrCluster',
   [services.emrInstance]: 'awsEmrInstance',
   [services.emrStep]: 'awsEmrStep',
+  [services.iamAccessAnalyzer]: 'awsIamAccessAnalyzer',
   [services.iamGroup]: 'awsIamGroup',
   [services.iamOpenIdConnectProvider]: 'awsIamOpenIdConnectProvider',
   [services.iamPasswordPolicy]: 'awsIamPasswordPolicy',

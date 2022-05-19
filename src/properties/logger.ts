@@ -668,4 +668,8 @@ export default {
    * Configuration Recorder Status
    */
    fetchedConfigurationRecorderStatus: (num: number): string => `Fetched ${num} Configuration Recorder Status`,
+  /**
+   * Access Analyzers
+   */
+  fetchedaccessAnalyzers: (num: number): string => `Found ${num} Access Analyzers`,
 }

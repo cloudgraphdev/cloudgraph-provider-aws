@@ -22,7 +22,10 @@ const serviceName = 'EMR cluster'
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
-const getEmrClusterDescription = async (emr: EMR, clusterId: string) =>
+const getEmrClusterDescription = async (
+  emr: EMR,
+  clusterId: string
+): Promise<Cluster> =>
   new Promise(resolve => {
     emr.describeCluster(
       { ClusterId: clusterId },
@@ -42,11 +45,14 @@ const getEmrClusterDescription = async (emr: EMR, clusterId: string) =>
     )
   })
 
-export const getEmrClusters = async (emr: EMR, region: string) =>
+export const getEmrClusters = async (
+  emr: EMR,
+  region: string
+): Promise<ClusterSummary[]> =>
   new Promise<ClusterSummary[]>(resolve => {
     const clusterList: ClusterSummary[] = []
     const listClustersOpts: ListClustersInput = {}
-    const listClusters = (marker?: string) => {
+    const listClusters = (marker?: string): void => {
       if (marker) {
         listClustersOpts.Marker = marker
       }
@@ -82,9 +88,9 @@ export const getEmrClusters = async (emr: EMR, region: string) =>
           if (nextToken) {
             logger.debug(lt.foundAnotherFiftyClusters(region))
             listClusters(nextToken)
+          } else {
+            resolve(clusterList)
           }
-
-          resolve(clusterList)
         }
       )
     }
@@ -108,13 +114,16 @@ export default async ({
      * Get all the EMR clusters for this region
      */
     let numOfClusters = 0
-    let clusterData: RawAwsEmrCluster[] = []
+    const clusterData: RawAwsEmrCluster[] = []
     await Promise.all(
       regions.split(',').map(
         region =>
           new Promise<void>(async resolveEmrClusters => {
             const emr = new EMR({ ...config, region, endpoint })
-            const clusterList: Cluster[] = await getEmrClusters(emr, region)
+            const clusterList: ClusterSummary[] = await getEmrClusters(
+              emr,
+              region
+            )
 
             if (!isEmpty(clusterList)) {
               numOfClusters += clusterList.length
