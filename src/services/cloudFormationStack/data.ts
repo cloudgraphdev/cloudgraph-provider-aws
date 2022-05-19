@@ -42,24 +42,28 @@ const getAllStacks = async (cf: CloudFormation): Promise<Stack[]> =>
         opts.NextToken = token
       }
 
-      cf.describeStacks(opts, (err: AWSError, data: DescribeStacksOutput) => {
-        const { Stacks = [], NextToken } = data || {}
+      try {
+        cf.describeStacks(opts, (err: AWSError, data: DescribeStacksOutput) => {
+          const { Stacks = [], NextToken } = data || {}
 
-        if (err) {
-          errorLog.generateAwsErrorLog({
-            functionName: 'CloudFormationStack:describeStacks',
-            err,
-          })
-        }
+          if (err) {
+            errorLog.generateAwsErrorLog({
+              functionName: 'CloudFormationStack:describeStacks',
+              err,
+            })
+          }
 
-        fullStacks.push(...Stacks)
+          fullStacks.push(...Stacks)
 
-        if (NextToken) {
-          listAllStacks(NextToken)
-        }
-
-        resolve(fullStacks)
-      })
+          if (NextToken) {
+            listAllStacks(NextToken)
+          } else {
+            resolve(fullStacks)
+          }
+        })
+      } catch (error) {
+        resolve([])
+      }
     }
     listAllStacks()
   })

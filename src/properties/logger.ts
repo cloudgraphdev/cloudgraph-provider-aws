@@ -672,4 +672,8 @@ export default {
    * Vpc Endpoints
    */
    fetchedVpcEndpoints: (num: number): string => `Fetched ${num} Vpc Endpoints`,
+  /**
+   * Access Analyzers
+   */
+  fetchedaccessAnalyzers: (num: number): string => `Found ${num} Access Analyzers`,
 }

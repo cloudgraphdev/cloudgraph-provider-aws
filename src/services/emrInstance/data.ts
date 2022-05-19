@@ -22,42 +22,50 @@ const serviceName = 'EMR instance'
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
-const getInstancesPerCluster = async (emr: EMR, clusterId: string) =>
+const getInstancesPerCluster = async (
+  emr: EMR,
+  clusterId: string
+): Promise<Instance[]> =>
   new Promise<Instance[]>(resolve => {
     const instanceList: Instance[] = []
     const listInstancesOpts: ListInstancesInput = { ClusterId: clusterId }
-    const listInstances = (marker?: string) => {
+    const listInstances = (marker?: string): void => {
       if (marker) {
         listInstancesOpts.Marker = marker
       }
-      emr.listInstances(
-        listInstancesOpts,
-        (err: AWSError, data: ListInstancesOutput) => {
-          if (err) {
-            errorLog.generateAwsErrorLog({
-              functionName: 'emr:listInstances',
-              err,
-            })
+
+      try {
+        emr.listInstances(
+          listInstancesOpts,
+          (err: AWSError, data: ListInstancesOutput) => {
+            if (err) {
+              errorLog.generateAwsErrorLog({
+                functionName: 'emr:listInstances',
+                err,
+              })
+            }
+            /**
+             * No EMR instances data for this cluster
+             */
+            if (isEmpty(data)) {
+              return resolve([])
+            }
+  
+            const { Instances = [], Marker: nextToken } = data
+  
+            instanceList.push(...Instances)
+  
+            if (nextToken) {
+              logger.debug(lt.foundAnotherTwoThousandInstances(clusterId))
+              listInstances(nextToken)
+            } else {
+              resolve(instanceList)
+            }
           }
-          /**
-           * No EMR instances data for this cluster
-           */
-          if (isEmpty(data)) {
-            return resolve([])
-          }
-
-          const { Instances = [], Marker: nextToken } = data
-
-          instanceList.push(...Instances)
-
-          if (nextToken) {
-            logger.debug(lt.foundAnotherTwoThousandInstances(clusterId))
-            listInstances(nextToken)
-          }
-
-          resolve(instanceList)
-        }
-      )
+        )
+      } catch (error) {
+        resolve([])
+      }
     }
     listInstances()
   })

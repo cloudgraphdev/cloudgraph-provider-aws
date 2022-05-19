@@ -41,11 +41,11 @@ const listApplications = async (
          * No EB Applications for this region
          */
         if (isEmpty(data)) {
-          resolve([])
+          return resolve([])
         }
         const { Applications = [] } = data || {}
         if (isEmpty(Applications)) {
-          resolve([])
+          return resolve([])
         }
         resolve(Applications)
       }
@@ -72,11 +72,11 @@ export const getResourceTags = async (
          * No EB Applications for this region
          */
         if (isEmpty(data)) {
-          resolveTags({})
+          return resolveTags({})
         }
         const { ResourceTags: tags } = data || {}
         if (isEmpty(tags)) {
-          resolveTags({})
+          return resolveTags({})
         }
         resolveTags(convertAwsTagsToTagMap(tags as AwsTag[]))
       }

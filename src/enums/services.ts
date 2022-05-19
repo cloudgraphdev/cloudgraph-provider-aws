@@ -48,6 +48,7 @@ export default {
   emrCluster: 'emrCluster',
   emrInstance: 'emrInstance',
   emrStep: 'emrStep',
+  iamAccessAnalyzer: 'iamAccessAnalyzer',
   iamUser: 'iamUser',
   iamGroup: 'iamGroup',
   iamRole: 'iamRole',

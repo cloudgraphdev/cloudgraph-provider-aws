@@ -19,13 +19,21 @@ import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import AwsErrorLog from '../../utils/errorLog'
-import { initTestEndpoint } from '../../utils'
+import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
+import {
+  MAX_FAILED_AWS_REQUEST_RETRIES,
+  SNS_CUSTOM_DELAY,
+} from '../../config/constants'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'SNS'
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
+const customRetrySettings = setAwsRetryOptions({
+  maxRetries: MAX_FAILED_AWS_REQUEST_RETRIES,
+  baseDelay: SNS_CUSTOM_DELAY,
+})
 
 /**
  * SNS
@@ -40,47 +48,57 @@ export interface RawAwsSns extends Topic {
   Tags?: TagMap
 }
 
-const listSnsTopicArnsForRegion = async ({ sns, resolveRegion }) =>
+const listSnsTopicArnsForRegion = async ({
+  sns,
+  resolveRegion,
+}: {
+  sns: SNS
+  resolveRegion: () => void
+}): Promise<Topic[]> =>
   new Promise<Topic[]>(resolve => {
     const topicArnList: Topic[] = []
     const listTopicArnNameOpts: ListTopicsInput = {}
-    const listTopicArns = (nextToken?: string) => {
-      if (nextToken) {
-        listTopicArnNameOpts.NextToken = nextToken
+    const listTopicArns = (token?: string): void => {
+      if (token) {
+        listTopicArnNameOpts.NextToken = token
       }
-      sns.listTopics(
-        listTopicArnNameOpts,
-        (err: AWSError, listTopicArnsOutput: ListTopicsResponse) => {
-          if (err) {
-            errorLog.generateAwsErrorLog({
-              functionName: 'sns:listTopics',
-              err,
-            })
-          }
-          /**
-           * No SNS data for this region
-           */
-          if (isEmpty(listTopicArnsOutput)) {
-            return resolveRegion()
-          }
+      try {
+        sns.listTopics(
+          listTopicArnNameOpts,
+          (err: AWSError, listTopicArnsOutput: ListTopicsResponse) => {
+            if (err) {
+              errorLog.generateAwsErrorLog({
+                functionName: 'sns:listTopics',
+                err,
+              })
+            }
+            /**
+             * No SNS data for this region
+             */
+            if (isEmpty(listTopicArnsOutput)) {
+              return resolveRegion()
+            }
 
-          const { Topics, NextToken: nextToken } = listTopicArnsOutput
+            const { Topics, NextToken: nextToken } = listTopicArnsOutput
 
-          /**
-           * No SNS Topics for this region
-           */
-          if (isEmpty(Topics)) {
-            return resolveRegion()
+            /**
+             * No SNS Topics for this region
+             */
+            if (isEmpty(Topics)) {
+              return resolveRegion()
+            }
+            topicArnList.push(...Topics)
+
+            if (nextToken) {
+              listTopicArns(nextToken)
+            } else {
+              resolve(topicArnList)
+            }
           }
-          topicArnList.push(...Topics)
-
-          if (nextToken) {
-            listTopicArns(nextToken)
-          }
-
-          resolve(topicArnList)
-        }
-      )
+        )
+      } catch (error) {
+        resolve([])
+      }
     }
     listTopicArns()
   })
@@ -137,7 +155,7 @@ const getTopicSubscriptions = async (
     const listSubscriptionsOpts: ListSubscriptionsByTopicInput = {
       TopicArn: arn,
     }
-    const listAllTags = (token?: string) => {
+    const listAllSubscriptions = (token?: string): void => {
       if (token) {
         listSubscriptionsOpts.NextToken = token
       }
@@ -145,7 +163,6 @@ const getTopicSubscriptions = async (
         sns.listSubscriptionsByTopic(
           listSubscriptionsOpts,
           (err: AWSError, data: ListSubscriptionsByTopicResponse) => {
-            const { Subscriptions, NextToken } = data || {}
             if (err) {
               errorLog.generateAwsErrorLog({
                 functionName: 'sns:listSubscriptionsByTopic',
@@ -153,21 +170,31 @@ const getTopicSubscriptions = async (
               })
             }
 
+            if (isEmpty(data)) {
+              return resolveSubscriptions([])
+            }
+
+            const { Subscriptions, NextToken } = data || {}
+
+            if (isEmpty(Subscriptions)) {
+              return resolveSubscriptions([])
+            }
+
             subscriptions.push(...Subscriptions)
 
             if (NextToken) {
               logger.debug(lt.foundAnotherThousand)
-              listAllTags(NextToken)
+              listAllSubscriptions(NextToken)
+            } else {
+              resolveSubscriptions(subscriptions)
             }
-
-            resolveSubscriptions(subscriptions)
           }
         )
       } catch (error) {
         resolveSubscriptions([])
       }
     }
-    listAllTags()
+    listAllSubscriptions()
   })
 
 export default async ({
@@ -186,7 +213,12 @@ export default async ({
 
     // First we get all sns topics arn for all regions
     regions.split(',').map(region => {
-      const sns = new SNS({ ...config, region, endpoint })
+      const sns = new SNS({
+        ...config,
+        region,
+        endpoint,
+        ...customRetrySettings,
+      })
       const regionPromise = new Promise<void>(async resolveRegion => {
         const snsTopicArnList = await listSnsTopicArnsForRegion({
           sns,

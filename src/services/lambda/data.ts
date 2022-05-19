@@ -75,9 +75,9 @@ const listFunctionsForRegion = async ({
             if (NextMarker) {
               logger.debug(lt.foundMoreLambdas(Functions.length))
               listAllFunctions(NextMarker)
+            } else {
+              resolve(functionsList)
             }
-
-            resolve(functionsList)
           }
         )
       } catch (error) {

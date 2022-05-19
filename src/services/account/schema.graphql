@@ -49,6 +49,7 @@ type awsAccount implements awsOptionalService @key(fields: "id") {
   glueJobs: [awsGlueJob]
   glueRegistries: [awsGlueRegistry]
   guardDutyDetectors: [awsGuardDutyDetector]
+  iamAccessAnalyzers: [awsIamAccessAnalyzer]
   iamGroups: [awsIamGroup]
   iamOpenIdConnectProviders: [awsIamOpenIdConnectProvider]
   iamPasswordPolicies: [awsIamPasswordPolicy]

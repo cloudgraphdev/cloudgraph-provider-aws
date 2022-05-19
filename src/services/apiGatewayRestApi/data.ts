@@ -64,9 +64,9 @@ export const getRestApisForRegion = async (
 
           if (position) {
             listAllRestApis(position)
+          } else {
+            resolve(restApiList)
           }
-
-          resolve(restApiList)
         })
       } catch (error) {
         resolve([])
@@ -113,7 +113,7 @@ const getAPIMappings = (
            * No Data for the region
            */
           if (isEmpty(data)) {
-            resolveBasePathMapping({
+            return resolveBasePathMapping({
               domainName,
               restApiData: [],
             })
