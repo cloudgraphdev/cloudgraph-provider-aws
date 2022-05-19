@@ -21,6 +21,7 @@ type awsNetworkInterface implements awsBaseService @key(fields: "arn") {
   sageMakerNotebookInstances: [awsSageMakerNotebookInstance]
     @hasInverse(field: networkInterface)
   securityGroups: [awsSecurityGroup] @hasInverse(field: networkInterfaces)
+  vpcEndpoint: [awsVpcEndpoint] @hasInverse(field: networkInterfaces)
 }
 
 type awsNetworkInterfaceAttachment

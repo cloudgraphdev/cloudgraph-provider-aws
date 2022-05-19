@@ -29,6 +29,7 @@ type awsSecurityGroup implements awsBaseService @key(fields: "id") {
     @hasInverse(field: securityGroups)
   sageMakerNotebookInstances: [awsSageMakerNotebookInstance]
     @hasInverse(field: securityGroups)
+  vpcEndpoints: [awsVpcEndpoint] @hasInverse(field: securityGroups)
 }
 
 type awsSgOutboundRule

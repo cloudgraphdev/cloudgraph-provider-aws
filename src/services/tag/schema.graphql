@@ -73,6 +73,7 @@ type awsTag @key(fields: "id") {
   dmsReplicationInstances: [awsDmsReplicationInstance]
   systemsManagerDocuments: [awsSystemsManagerDocument]
   managedPrefixLists: [awsManagedPrefixList]
+  vpcEndpoints: [awsVpcEndpoint]
 }
 
 type awsRawTag

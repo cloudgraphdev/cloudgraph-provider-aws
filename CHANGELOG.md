@@ -16,6 +16,19 @@
 * Add apiGatewayHttpApi (apiGatewayV2) service ([e02c6cb](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/e02c6cb1a35d231190021e18481d144229a9f8a7))
 * Add AWS IAM Access analyzer service ([cc3ae64](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/cc3ae64366e60f915ec1f4194ebc7cccf9969576))
 * Added missing return to resolve promise ([179132a](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/179132ae000acc32e0e11d647611d8c1bb26ee04))
+# [0.81.0-alpha.8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0-alpha.7...0.81.0-alpha.8) (2022-05-19)
+
+
+### Features
+
+* Add vpcEndpoint service ([a33a61f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/a33a61f1b5cd9f0a4bc49682f0ef44e4d2880283))
+
+# [0.81.0-alpha.7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0-alpha.6...0.81.0-alpha.7) (2022-05-19)
+
+
+### Bug Fixes
+
+* **services:** fix route table service mainRouteTable property ([e99287b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/e99287b91828e57715d240f23a5cc0276799da12))
 
 # [0.81.0-beta.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.80.0...0.81.0-beta.1) (2022-05-17)
 

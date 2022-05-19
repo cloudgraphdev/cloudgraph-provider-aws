@@ -54,7 +54,7 @@ export default ({
   const routeTableTags = formatTagsFromMap(tags)
 
   const mainRouteTable =
-    id === (associations.find(({ Main }) => Main) || {})[id]
+    id === (associations.find(({ Main }) => Main) || {}).RouteTableId
 
   const routeTable = {
     id,
