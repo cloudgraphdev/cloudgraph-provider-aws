@@ -46,6 +46,7 @@ import {
   redshiftArn,
   elbArn,
   ssmDocumentArn,
+  domainNameArn,
 } from '../../utils/generateArns'
 import { RawAwsEksCluster } from '../eksCluster/data'
 import { RawAwsEcsCluster } from '../ecsCluster/data'
@@ -65,6 +66,8 @@ import { RawAwsSystemsManagerDocument } from '../systemsManagerDocument/data'
 import { RawAwsRdsClusterSnapshot } from '../rdsClusterSnapshot/data'
 import { RawAwsInstanceProfile } from '../iamInstanceProfile/data'
 import { RawAwsVpcEndpoint } from '../vpcEndpoint/data'
+import { RawAwsApiGatewayHttpApi } from '../apiGatewayHttpApi/data'
+import { RawAwsApiGatewayDomainName } from '../apiGatewayDomainName/data'
 import { RawAwsAnalyzerSummary } from '../iamAccessAnalyzer/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
@@ -1714,6 +1717,66 @@ export default ({
             resourceType: services.iamAccessAnalyzer,
             relation: 'child',
             field: 'iamAccessAnalyzers',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related API Gateway Http Apis
+     */
+    const httpApis: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.apiGatewayHttpApi)
+    if (httpApis?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        httpApis.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { ApiId: id }: RawAwsApiGatewayHttpApi = instance
+
+          connections.push({
+            id,
+            resourceType: services.apiGatewayHttpApi,
+            relation: 'child',
+            field: 'apiGatewayHttpApi',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related API Gateway Domain Names
+     */
+    const domainNames: {
+      name: string
+      data: { [property: string]: any[] }
+    } = data.find(({ name }) => name === services.apiGatewayDomainName)
+    if (domainNames?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        domainNames.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const {
+            DomainName: domainName,
+            region: domainRegion,
+            account,
+          }: RawAwsApiGatewayDomainName = instance
+          const arn = domainNameArn({
+            region: domainRegion,
+            account,
+            name: domainName,
+          })
+          connections.push({
+            id: arn,
+            resourceType: services.apiGatewayDomainName,
+            relation: 'child',
+            field: 'apiGatewayDomainName',
           })
         }
       }

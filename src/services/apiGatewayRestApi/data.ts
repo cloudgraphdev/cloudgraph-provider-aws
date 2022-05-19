@@ -5,11 +5,8 @@ import APIGW, {
   ListOfRestApi,
   GetRestApisRequest,
   Tags,
-  GetDomainNamesRequest,
-  DomainNames,
-  BasePathMappings,
-  DomainName,
 } from 'aws-sdk/clients/apigateway'
+import APIGWv2, { DomainName } from 'aws-sdk/clients/apigatewayv2'
 import { AWSError } from 'aws-sdk/lib/error'
 import { Config } from 'aws-sdk/lib/config'
 import isEmpty from 'lodash/isEmpty'
@@ -20,11 +17,15 @@ import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint, setAwsRetryOptions } from '../../utils'
 import AwsErrorLog from '../../utils/errorLog'
 import { API_GATEWAY_CUSTOM_DELAY } from '../../config/constants'
+import services from '../../enums/services'
+import {
+  RawAwsApiGatewayDomainName,
+  getDomainNamesForRegion,
+} from '../apiGatewayDomainName/data'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const MAX_REST_API = 500
-const MAX_DOMAIN_NAMES = 500
 const serviceName = 'API Gateway Rest API'
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
@@ -35,7 +36,7 @@ const customRetrySettings = setAwsRetryOptions({
 export interface RawAwsApiGatewayRestApi extends Omit<RestApi, 'Tags'> {
   accountId: string
   Tags: TagMap
-  domainNames: (DomainName & { restApiData?: string[] })[]
+  domainNames: string[]
   region: string
 }
 
@@ -100,93 +101,24 @@ export const getTags = async ({
     }
   })
 
-const getAPIMappings = (
-  apiGw: APIGW,
-  domainName: string
-): Promise<{ domainName: string; restApiData: string[] }> =>
-  new Promise<{ domainName: string; restApiData: string[] }>(
-    resolveBasePathMapping =>
-      apiGw.getBasePathMappings(
-        { domainName },
-        (err: AWSError, data: BasePathMappings) => {
-          /**
-           * No Data for the region
-           */
-          if (isEmpty(data)) {
-            return resolveBasePathMapping({
-              domainName,
-              restApiData: [],
-            })
-          }
-
-          if (err) {
-            errorLog.generateAwsErrorLog({
-              functionName: 'apiGw:getBasePathMappings',
-              err,
-            })
-          }
-
-          const { items: restApiData = [] } = data || {}
-
-          resolveBasePathMapping({
-            domainName,
-            restApiData: restApiData.map(({ restApiId }) => restApiId),
-          })
-        }
-      )
-  )
-
-export const getDomainNamesForRegion = async (
-  apiGw: APIGW
-): Promise<DomainName[]> =>
-  new Promise(async resolve => {
-    const getDomainNamesOpts: GetDomainNamesRequest = {
-      limit: MAX_DOMAIN_NAMES,
-    }
-
-    try {
-      apiGw.getDomainNames(
-        getDomainNamesOpts,
-        (err: AWSError, data: DomainNames) => {
-          if (err) {
-            errorLog.generateAwsErrorLog({
-              functionName: 'apiGw:getDomainNames',
-              err,
-            })
-          }
-
-          const { items = [] } = data || {}
-
-          logger.debug(lt.fetchedApiGwDomainNames(items.length))
-
-          /**
-           * No API Gateway Domain Names Found
-           */
-
-          if (!isEmpty(items)) {
-            resolve(items)
-          } else {
-            resolve([])
-          }
-        }
-      )
-    } catch (error) {
-      resolve([])
-    }
-  })
-
 export default async ({
   regions,
   config,
+  rawData,
 }: {
   regions: string
   config: Config
+  rawData: any
 }): Promise<{ [property: string]: RawAwsApiGatewayRestApi[] }> =>
   new Promise(async resolve => {
     const apiGatewayData = []
-    let domainNamesData: (DomainName & { restApiData?: string[] })[] = []
+    let domainNamesData: DomainName[] = []
     const regionPromises = []
     const tagsPromises = []
+
+    const existingData: { [property: string]: RawAwsApiGatewayDomainName[] } =
+      rawData.find(({ name }) => name === services.apiGatewayDomainName)
+        ?.data || {}
 
     regions.split(',').map(region => {
       const apiGw = new APIGW({
@@ -196,24 +128,24 @@ export default async ({
         ...customRetrySettings,
       })
       const regionPromise = new Promise<void>(async resolveRegion => {
-        domainNamesData = await getDomainNamesForRegion(apiGw)
-        const mappingPromises = domainNamesData.map(({ domainName }) =>
-          getAPIMappings(apiGw, domainName)
-        )
-        const mappingData = await Promise.all(mappingPromises)
+        if (isEmpty(existingData)) {
+          const apiGwV2 = new APIGWv2({
+            ...config,
+            region,
+            endpoint,
+            ...customRetrySettings,
+          })
+          domainNamesData = await getDomainNamesForRegion(apiGwV2)
+        } else {
+          domainNamesData = existingData[region] || []
+        }
+
         const restApiList = await getRestApisForRegion(apiGw)
         if (!isEmpty(restApiList)) {
           apiGatewayData.push(
             ...restApiList.map(restApi => ({
               ...restApi,
-              domainNames: domainNamesData.map(domain => ({
-                ...domain,
-                restApiData: (
-                  mappingData?.find(
-                    ({ domainName }) => domainName === domain.domainName
-                  ) || { restApiData: [] }
-                ).restApiData,
-              })),
+              domainNames: domainNamesData?.map(domain => domain.DomainName) || [],
               region,
             }))
           )

@@ -6,6 +6,8 @@ import services from './services'
 export default {
   account: 'awsAccount',
   [services.alb]: 'awsAlb',
+  [services.apiGatewayDomainName]: 'awsApiGatewayDomainName',
+  [services.apiGatewayHttpApi]: 'awsApiGatewayHttpApi',
   [services.apiGatewayResource]: 'awsApiGatewayResource',
   [services.apiGatewayRestApi]: 'awsApiGatewayRestApi',
   [services.apiGatewayStage]: 'awsApiGatewayStage',

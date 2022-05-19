@@ -1,0 +1,26 @@
+type awsApiGatewayDomainNameConfiguration
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  apiGatewayDomainName: String @search(by: [hash, regexp])
+  certificateArn: String @search(by: [hash, regexp])
+  certificateName: String @search(by: [hash, regexp])
+  certificateUploadDate: DateTime @search(by: [day])
+  domainNameStatus: String @search(by: [hash, regexp])
+  domainNameStatusMessage: String @search(by: [hash, regexp])
+  endpointType: String @search(by: [hash, regexp])
+  securityPolicy: String @search(by: [hash, regexp])
+  ownershipVerificationCertificateArn: String @search(by: [hash, regexp])
+}
+
+type awsApiGatewayDomainName implements awsBaseService @key(fields: "arn") {
+  domainName: String @search(by: [hash, regexp])
+  apiMappingSelectionExpression: String @search(by: [hash, regexp])
+  configurations: [awsApiGatewayDomainNameConfiguration]
+  tags: [awsRawTag]
+  httpApis: [awsApiGatewayHttpApi] @hasInverse(field: domainNames)
+  restApis: [awsApiGatewayRestApi] @hasInverse(field: domainNames)
+}

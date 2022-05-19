@@ -1,5 +1,7 @@
 export default {
   alb: 'alb',
+  apiGatewayDomainName: 'apiGatewayDomainName',
+  apiGatewayHttpApi: 'apiGatewayHttpApi',
   apiGatewayResource: 'apiGatewayResource',
   apiGatewayRestApi: 'apiGatewayRestApi',
   apiGatewayStage: 'apiGatewayStage',

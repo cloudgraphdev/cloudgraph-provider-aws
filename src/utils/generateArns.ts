@@ -304,3 +304,14 @@ export const vpcEndpointArn = ({
   account: string
   id: string
 }): string => `arn:aws:ec2:${region}:${account}:vpcendpoint/${id}`
+
+export const domainNameArn = ({
+  region,
+  account,
+  name,
+}: {
+  region: string
+  account: string
+  name: string
+}): string =>
+  `arn:aws:apigategay:${region}:${account}:domainname/${name}`
