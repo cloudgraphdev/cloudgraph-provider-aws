@@ -229,6 +229,7 @@ export type AwsAccount = AwsOptionalService & {
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
   transitGatewayAttachments?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  vpcEndpoints?: Maybe<Array<Maybe<AwsVpcEndpoint>>>;
   vpnConnections?: Maybe<Array<Maybe<AwsVpnConnection>>>;
   vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
   wafV2WebAcl?: Maybe<Array<Maybe<AwsWafV2WebAcl>>>;
@@ -3574,6 +3575,7 @@ export type AwsNetworkInterface = AwsBaseService & {
   subnetId?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  vpcEndpoint?: Maybe<Array<Maybe<AwsVpcEndpoint>>>;
   vpcId?: Maybe<Scalars['String']>;
 };
 
@@ -3821,6 +3823,7 @@ export type AwsRouteTable = AwsBaseService & {
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
   transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  vpcEndpoints?: Maybe<Array<Maybe<AwsVpcEndpoint>>>;
   vpcId?: Maybe<Scalars['String']>;
 };
 
@@ -4006,6 +4009,7 @@ export type AwsSecurityGroup = AwsBaseService & {
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  vpcEndpoints?: Maybe<Array<Maybe<AwsVpcEndpoint>>>;
   vpcId?: Maybe<Scalars['String']>;
 };
 
@@ -4141,6 +4145,7 @@ export type AwsSubnet = AwsBaseService & {
   state?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  vpcEndpoints?: Maybe<Array<Maybe<AwsVpcEndpoint>>>;
 };
 
 export type AwsSupportedLoginProvider = {
@@ -4276,6 +4281,7 @@ export type AwsTag = {
   transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
   value: Scalars['String'];
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  vpcEndpoints?: Maybe<Array<Maybe<AwsVpcEndpoint>>>;
   vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
   vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
 };
@@ -4373,7 +4379,26 @@ export type AwsVpc = AwsBaseService & {
   subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   transitGatewayAttachments?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
+  vpcEndpoints?: Maybe<Array<Maybe<AwsVpcEndpoint>>>;
   vpnGateways?: Maybe<Array<Maybe<AwsVpnGateway>>>;
+};
+
+export type AwsVpcEndpoint = AwsBaseService & {
+  creationTimestamp?: Maybe<Scalars['DateTime']>;
+  lastErrorCode?: Maybe<Scalars['String']>;
+  lastErrorMessage?: Maybe<Scalars['String']>;
+  networkInterfaces?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  policyDocument?: Maybe<Scalars['String']>;
+  privateDnsEnabled?: Maybe<Scalars['Boolean']>;
+  requesterManaged?: Maybe<Scalars['Boolean']>;
+  routeTables?: Maybe<Array<Maybe<AwsRouteTable>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  serviceName?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  type?: Maybe<Scalars['String']>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
 export type AwsVpnConnection = AwsBaseService & {

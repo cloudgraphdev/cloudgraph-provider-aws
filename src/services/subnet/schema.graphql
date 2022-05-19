@@ -33,4 +33,5 @@ type awsSubnet implements awsBaseService @key(fields: "id") {
   sageMakerNotebookInstances: [awsSageMakerNotebookInstance]
     @hasInverse(field: subnet)
   rdsCluster: [awsRdsCluster] @hasInverse(field: subnets)
+  vpcEndpoints: [awsVpcEndpoint] @hasInverse(field: subnets)
 }
