@@ -1,3 +1,10 @@
+# [0.81.0-alpha.7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0-alpha.6...0.81.0-alpha.7) (2022-05-19)
+
+
+### Bug Fixes
+
+* **services:** fix route table service mainRouteTable property ([e99287b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/e99287b91828e57715d240f23a5cc0276799da12))
+
 # [0.81.0-beta.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.80.0...0.81.0-beta.1) (2022-05-17)
 
 
