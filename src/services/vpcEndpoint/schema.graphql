@@ -1,0 +1,17 @@
+type awsVpcEndpoint implements awsBaseService @key(fields: "arn") {
+  type: String @search(by: [hash, regexp])
+  serviceName: String @search(by: [hash, regexp])
+  state: String @search(by: [hash, regexp])
+  policyDocument: String @search(by: [hash, regexp])
+  privateDnsEnabled: Boolean @search
+  requesterManaged: Boolean @search
+  creationTimestamp: DateTime @search(by: [day])
+  lastErrorMessage: String @search(by: [hash, regexp])
+  lastErrorCode: String @search(by: [hash, regexp])
+  tags: [awsRawTag]
+  vpc: [awsVpc] @hasInverse(field: vpcEndpoints)
+  routeTables: [awsRouteTable] @hasInverse(field: vpcEndpoints)
+  subnets: [awsSubnet] @hasInverse(field: vpcEndpoints)
+  securityGroups: [awsSecurityGroup] @hasInverse(field: vpcEndpoints)
+  networkInterfaces: [awsNetworkInterface] @hasInverse(field: vpcEndpoint)
+}

@@ -64,6 +64,7 @@ import { RawAwsElasticSearchDomain } from '../elasticSearchDomain/data'
 import { RawAwsSystemsManagerDocument } from '../systemsManagerDocument/data'
 import { RawAwsRdsClusterSnapshot } from '../rdsClusterSnapshot/data'
 import { RawAwsInstanceProfile } from '../iamInstanceProfile/data'
+import { RawAwsVpcEndpoint } from '../vpcEndpoint/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -1686,6 +1687,32 @@ export default ({
             resourceType: services.iamInstanceProfile,
             relation: 'child',
             field: 'iamInstanceProfiles',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related Vpc Endpoints
+     */
+    const vpcEndpoints: {
+      name: string
+      data: { [property: string]: RawAwsVpcEndpoint[] }
+    } = data.find(({ name }) => name === services.vpcEndpoint)
+    if (vpcEndpoints?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        vpcEndpoints.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { VpcEndpointId: id }: RawAwsVpcEndpoint = instance
+
+          connections.push({
+            id,
+            resourceType: services.vpcEndpoint,
+            relation: 'child',
+            field: 'vpcEndpoints',
           })
         }
       }

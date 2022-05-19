@@ -8,8 +8,8 @@ type awsRouteTable implements awsBaseService @key(fields: "arn") {
   subnet: [awsSubnet] @hasInverse(field: routeTable) #change to plural
   vpc: [awsVpc] @hasInverse(field: routeTables)
   transitGateway: [awsTransitGateway] @hasInverse(field: routeTable)
-  transitGatewayAttachment: [awsTransitGatewayAttachment]
-    @hasInverse(field: routeTable)
+  transitGatewayAttachment: [awsTransitGatewayAttachment] @hasInverse(field: routeTable)
+  vpcEndpoints: [awsVpcEndpoint] @hasInverse(field: routeTables)
 }
 
 type awsRoute

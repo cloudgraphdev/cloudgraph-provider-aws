@@ -69,6 +69,7 @@ type awsTag @key(fields: "id") {
   elasticSearchDomains: [awsElasticSearchDomain]
   dmsReplicationInstances: [awsDmsReplicationInstance]
   systemsManagerDocuments: [awsSystemsManagerDocument]
+  vpcEndpoints: [awsVpcEndpoint]
 }
 
 type awsRawTag
