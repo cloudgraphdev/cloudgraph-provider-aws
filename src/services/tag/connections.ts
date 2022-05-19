@@ -68,6 +68,7 @@ import { RawAwsInstanceProfile } from '../iamInstanceProfile/data'
 import { RawAwsApiGatewayHttpApi } from '../apiGatewayHttpApi/data'
 import { RawAwsApiGatewayDomainName } from '../apiGatewayDomainName/data'
 import { RawAwsAnalyzerSummary } from '../iamAccessAnalyzer/data'
+import { RawAwsManagedPrefixList } from '../managedPrefixList/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -1776,6 +1777,32 @@ export default ({
             resourceType: services.apiGatewayDomainName,
             relation: 'child',
             field: 'apiGatewayDomainName',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related Managed Prefix Lists
+     */
+     const managedPrefixLists: {
+      name: string
+      data: { [property: string]: RawAwsManagedPrefixList[] }
+    } = data.find(({ name }) => name === services.managedPrefixList)
+    if (managedPrefixLists?.data?.[region]) {
+      const dataAtRegion: RawAwsManagedPrefixList[] = findServiceInstancesWithTag(
+        tag,
+        managedPrefixLists.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { PrefixListId: id }: RawAwsManagedPrefixList = instance
+
+          connections.push({
+            id,
+            resourceType: services.managedPrefixList,
+            relation: 'child',
+            field: 'managedPrefixLists',
           })
         }
       }

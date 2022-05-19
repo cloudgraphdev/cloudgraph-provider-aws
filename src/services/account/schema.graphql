@@ -68,6 +68,7 @@ type awsAccount implements awsOptionalService @key(fields: "id") {
   kms: [awsKms]
   lambdaFunctions: [awsLambda]
   managedAirflows: [awsManagedAirflow]
+  managedPrefixLists: [awsManagedPrefixList]
   nacl: [awsNetworkAcl]
   natGateway: [awsNatGateway]
   networkInterfaces: [awsNetworkInterface]

@@ -51,6 +51,7 @@ export default {
   [services.kinesisStream]: 'kinesisStreams',
   [services.lambda]: 'lambdaFunctions',
   [services.managedAirflow]: 'managedAirflows',
+  [services.managedPrefixList]: 'managedPrefixLists',
   [services.nat]: 'natGateway',
   [services.networkInterface]: 'networkInterfaces',
   [services.organization]: 'organizations',

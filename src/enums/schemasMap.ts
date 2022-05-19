@@ -73,6 +73,7 @@ export default {
   [services.kms]: 'awsKms',
   [services.lambda]: 'awsLambda',
   [services.managedAirflow]: 'awsManagedAirflow',
+  [services.managedPrefixList]: 'awsManagedPrefixList',
   [services.nacl]: 'awsNetworkAcl',
   [services.nat]: 'awsNatGateway',
   [services.networkInterface]: 'awsNetworkInterface',
