@@ -1,3 +1,10 @@
+# [0.82.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.1-alpha.1...0.82.0-alpha.1) (2022-05-23)
+
+
+### Features
+
+* Add vpcEndpoint service ([a33a61f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/a33a61f1b5cd9f0a4bc49682f0ef44e4d2880283))
+
 ## [0.81.1-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0...0.81.1-alpha.1) (2022-05-23)
 
 
