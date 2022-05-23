@@ -305,3 +305,13 @@ export const domainNameArn = ({
   name: string
 }): string =>
   `arn:aws:apigategay:${region}:${account}:domainname/${name}`
+
+export const transitGatewayRouteTableArn = ({
+  region,
+  account,
+  id,
+}: {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:transit-gateway-routetable/${id}`

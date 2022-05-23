@@ -69,6 +69,8 @@ export default {
   [services.subnet]: 'subnets',
   [services.systemsManagerDocument]: 'systemsManagerDocuments',
   [services.systemsManagerInstance]: 'systemsManagerInstances',
+  [services.transitGateway]: 'transitGateways',
   [services.transitGatewayAttachment]: 'transitGatewayAttachments',
+  [services.transitGatewayRouteTable]: 'transitGatewayRouteTables',
   [services.vpnConnection]: 'vpnConnections',
 }

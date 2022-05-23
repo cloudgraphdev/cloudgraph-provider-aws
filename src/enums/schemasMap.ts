@@ -99,6 +99,7 @@ export default {
   [services.systemsManagerDocument]: 'awsSystemsManagerDocument',
   [services.transitGateway]: 'awsTransitGateway',
   [services.transitGatewayAttachment]: 'awsTransitGatewayAttachment',
+  [services.transitGatewayRouteTable]: 'awsTransitGatewayRouteTable',
   [services.vpnConnection]: 'awsVpnConnection',
   [services.organization]: 'awsOrganization',
   [services.wafV2WebAcl]: 'awsWafV2WebAcl',

@@ -1,0 +1,9 @@
+type awsTransitGatewayRouteTable implements awsBaseService @key(fields: "arn") {
+  state: String @search(by: [hash, regexp])
+  defaultAssociationRouteTable: Boolean @search
+  defaultPropagationRouteTable: Boolean @search
+  creationTime: DateTime @search(by: [day])
+  tags: [awsRawTag]
+  transitGateway: [awsTransitGateway] @hasInverse(field: routeTables)
+  transitGatewayAttachment: [awsTransitGatewayAttachment] @hasInverse(field: routeTable)
+}

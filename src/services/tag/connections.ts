@@ -68,6 +68,7 @@ import { RawAwsInstanceProfile } from '../iamInstanceProfile/data'
 import { RawAwsApiGatewayHttpApi } from '../apiGatewayHttpApi/data'
 import { RawAwsApiGatewayDomainName } from '../apiGatewayDomainName/data'
 import { RawAwsAnalyzerSummary } from '../iamAccessAnalyzer/data'
+import { RawAwsTransitGatewayRouteTable } from '../transitGatewayRouteTable/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -1776,6 +1777,32 @@ export default ({
             resourceType: services.apiGatewayDomainName,
             relation: 'child',
             field: 'apiGatewayDomainName',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related Transit Gateway Route tables
+     */
+     const transitGatewayRouteTables: {
+      name: string
+      data: { [property: string]: RawAwsTransitGatewayRouteTable[] }
+    } = data.find(({ name }) => name === services.transitGatewayRouteTable)
+    if (transitGatewayRouteTables?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        transitGatewayRouteTables.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { TransitGatewayRouteTableId: id }: RawAwsTransitGatewayRouteTable = instance
+
+          connections.push({
+            id,
+            resourceType: services.transitGatewayRouteTable,
+            relation: 'child',
+            field: 'transitGatewayRouteTables',
           })
         }
       }

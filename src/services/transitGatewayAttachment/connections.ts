@@ -8,7 +8,7 @@ import services from '../../enums/services'
 import { RawAwsVpnConnection } from '../vpnConnection/data'
 import { RawAwsVpc } from '../vpc/data'
 import { RawAwsTransitGateway } from '../transitGateway/data'
-import { RawAwsRouteTable } from '../routeTable/data'
+import { RawAwsTransitGatewayRouteTable } from '../transitGatewayRouteTable/data'
 
 /**
  * Transit Gateway Attachment
@@ -64,27 +64,27 @@ export default ({
   }
 
   /**
-   * Find Route Tables
+   * Find Transit Gateway Route Table
    * related to this Transit Gateway Attachment
    */
   const routeTables: {
     name: string
-    data: { [property: string]: any[] }
-  } = data.find(({ name }) => name === services.routeTable)
+    data: { [property: string]: RawAwsTransitGatewayRouteTable[] }
+  } = data.find(({ name }) => name === services.transitGatewayRouteTable)
 
   if (routeTables?.data?.[region]) {
-    const associatedRouteTables: RawAwsRouteTable[] = routeTables.data[
+    const associatedRouteTables: RawAwsTransitGatewayRouteTable[] = routeTables.data[
       region
     ].filter(
-      ({ RouteTableId }: RawAwsRouteTable) =>
-        RouteTableId === association?.TransitGatewayRouteTableId
+      ({ TransitGatewayRouteTableId }: RawAwsTransitGatewayRouteTable) =>
+      TransitGatewayRouteTableId === association?.TransitGatewayRouteTableId
     )
 
     if (!isEmpty(associatedRouteTables)) {
       for (const routeTable of associatedRouteTables) {
         connections.push({
-          id: routeTable.RouteTableId,
-          resourceType: services.routeTable,
+          id: routeTable.TransitGatewayRouteTableId,
+          resourceType: services.transitGatewayRouteTable,
           relation: 'child',
           field: 'routeTable',
         })

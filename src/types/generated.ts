@@ -226,8 +226,9 @@ export type AwsAccount = AwsOptionalService & {
   subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
   systemsManagerDocuments?: Maybe<Array<Maybe<AwsSystemsManagerDocument>>>;
   systemsManagerInstances?: Maybe<Array<Maybe<AwsSystemsManagerInstance>>>;
-  transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
   transitGatewayAttachments?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
+  transitGatewayRouteTables?: Maybe<Array<Maybe<AwsTransitGatewayRouteTable>>>;
+  transitGateways?: Maybe<Array<Maybe<AwsTransitGateway>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   vpnConnections?: Maybe<Array<Maybe<AwsVpnConnection>>>;
   vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
@@ -3818,8 +3819,6 @@ export type AwsRouteTable = AwsBaseService & {
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   subnetAssociations?: Maybe<Array<Maybe<Scalars['String']>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
-  transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
-  transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   vpcId?: Maybe<Scalars['String']>;
 };
@@ -4274,6 +4273,7 @@ export type AwsTag = {
   systemsManagerDocuments?: Maybe<Array<Maybe<AwsSystemsManagerDocument>>>;
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
   transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
+  transitGatewayRouteTables?: Maybe<Array<Maybe<AwsTransitGatewayRouteTable>>>;
   value: Scalars['String'];
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
@@ -4296,7 +4296,7 @@ export type AwsTransitGateway = AwsBaseService & {
   dnsSupport?: Maybe<Scalars['String']>;
   ownerId?: Maybe<Scalars['String']>;
   propagationDefaultRouteTableId?: Maybe<Scalars['String']>;
-  routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
+  routeTables?: Maybe<Array<Maybe<AwsTransitGatewayRouteTable>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
   vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
@@ -4312,7 +4312,7 @@ export type AwsTransitGatewayAttachment = {
   resourceId?: Maybe<Scalars['String']>;
   resourceOwnerId?: Maybe<Scalars['String']>;
   resourceType?: Maybe<Scalars['String']>;
-  routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
+  routeTable?: Maybe<Array<Maybe<AwsTransitGatewayRouteTable>>>;
   state?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
@@ -4321,6 +4321,16 @@ export type AwsTransitGatewayAttachment = {
   transitGatewayRouteTableId?: Maybe<Scalars['String']>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
+};
+
+export type AwsTransitGatewayRouteTable = AwsBaseService & {
+  creationTime?: Maybe<Scalars['DateTime']>;
+  defaultAssociationRouteTable?: Maybe<Scalars['Boolean']>;
+  defaultPropagationRouteTable?: Maybe<Scalars['Boolean']>;
+  state?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
+  transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
 };
 
 export type AwsTunelOptions = {

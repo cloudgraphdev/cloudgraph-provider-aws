@@ -92,6 +92,7 @@ export default {
   systemsManagerDocument: 'systemsManagerDocument',
   transitGateway: 'transitGateway',
   transitGatewayAttachment: 'transitGatewayAttachment',
+  transitGatewayRouteTable: 'transitGatewayRouteTable',
   vpc: 'vpc',
   vpnConnection: 'vpnConnection',
   vpnGateway: 'vpnGateway',

@@ -98,6 +98,7 @@ import SystemsManagerDocument from '../services/systemsManagerDocument'
 import RdsClusterSnapshot from '../services/rdsClusterSnapshot'
 import APIGatewayDomainName from '../services/apiGatewayDomainName'
 import APIGatewayHttpApi from '../services/apiGatewayHttpApi'
+import TransitGatewayRouteTable from '../services/transitGatewayRouteTable'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -195,6 +196,7 @@ export default {
   [services.ecsTaskSet]: EcsTaskSet,
   [services.transitGateway]: TransitGateway,
   [services.transitGatewayAttachment]: TransitGatewayAttachment,
+  [services.transitGatewayRouteTable]: TransitGatewayRouteTable,
   [services.customerGateway]: CustomerGateway,
   [services.vpnGateway]: VpnGateway,
   [services.vpnConnection]: VpnConnection,
