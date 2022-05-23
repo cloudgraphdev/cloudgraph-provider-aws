@@ -3518,11 +3518,20 @@ export type AwsMixedInstancesPolicy = {
 export type AwsNatGateway = AwsBaseService & {
   createTime?: Maybe<Scalars['String']>;
   dailyCost?: Maybe<AwsTotalBillingInfo>;
+  natGatewayAddresses?: Maybe<Array<Maybe<AwsNatGatewayAddress>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   state?: Maybe<Scalars['String']>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+};
+
+export type AwsNatGatewayAddress = {
+  allocationId?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  networkInterfaceId?: Maybe<Scalars['String']>;
+  privateIp?: Maybe<Scalars['String']>;
+  publicIp?: Maybe<Scalars['String']>;
 };
 
 export type AwsNetworkAcl = AwsBaseService & {
