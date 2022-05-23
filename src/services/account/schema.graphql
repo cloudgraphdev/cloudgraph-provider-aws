@@ -95,6 +95,7 @@ type awsAccount implements awsOptionalService @key(fields: "id") {
   transitGatewayAttachments: [awsTransitGatewayAttachment]
   transitGatewayRouteTables: [awsTransitGatewayRouteTable]
   vpc: [awsVpc]
+  vpcEndpoints: [awsVpcEndpoint]
   vpnConnections: [awsVpnConnection]
   vpnGateway: [awsVpnGateway]
   wafV2WebAcl: [awsWafV2WebAcl]

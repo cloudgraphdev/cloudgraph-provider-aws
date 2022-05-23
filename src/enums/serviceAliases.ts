@@ -72,5 +72,6 @@ export default {
   [services.transitGateway]: 'transitGateways',
   [services.transitGatewayAttachment]: 'transitGatewayAttachments',
   [services.transitGatewayRouteTable]: 'transitGatewayRouteTables',
+  [services.vpcEndpoint]: 'vpcEndpoints',
   [services.vpnConnection]: 'vpnConnections',
 }
