@@ -1,3 +1,10 @@
+# [0.82.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.1...0.82.0-alpha.2) (2022-05-23)
+
+
+### Bug Fixes
+
+* **services:** fix nat gateway service data ([1d0303e](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/1d0303ef27ec55a91eb27e015d877fbc428c211d))
+
 # [0.82.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.1-alpha.1...0.82.0-alpha.1) (2022-05-23)
 
 
