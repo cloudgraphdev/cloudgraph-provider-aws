@@ -65,6 +65,7 @@ import { RawAwsElasticSearchDomain } from '../elasticSearchDomain/data'
 import { RawAwsSystemsManagerDocument } from '../systemsManagerDocument/data'
 import { RawAwsRdsClusterSnapshot } from '../rdsClusterSnapshot/data'
 import { RawAwsInstanceProfile } from '../iamInstanceProfile/data'
+import { RawAwsVpcEndpoint } from '../vpcEndpoint/data'
 import { RawAwsApiGatewayHttpApi } from '../apiGatewayHttpApi/data'
 import { RawAwsApiGatewayDomainName } from '../apiGatewayDomainName/data'
 import { RawAwsAnalyzerSummary } from '../iamAccessAnalyzer/data'
@@ -1776,6 +1777,32 @@ export default ({
             resourceType: services.apiGatewayDomainName,
             relation: 'child',
             field: 'apiGatewayDomainName',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related Vpc Endpoints
+     */
+    const vpcEndpoints: {
+      name: string
+      data: { [property: string]: RawAwsVpcEndpoint[] }
+    } = data.find(({ name }) => name === services.vpcEndpoint)
+    if (vpcEndpoints?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        vpcEndpoints.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { VpcEndpointId: id }: RawAwsVpcEndpoint = instance
+
+          connections.push({
+            id,
+            resourceType: services.vpcEndpoint,
+            relation: 'child',
+            field: 'vpcEndpoints',
           })
         }
       }
