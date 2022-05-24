@@ -93,6 +93,7 @@ export default {
   transitGateway: 'transitGateway',
   transitGatewayAttachment: 'transitGatewayAttachment',
   vpc: 'vpc',
+  vpcEndpoint: 'vpcEndpoint',
   vpcPeeringConnection: 'vpcPeeringConnection',
   vpnConnection: 'vpnConnection',
   vpnGateway: 'vpnGateway',

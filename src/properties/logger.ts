@@ -668,6 +668,10 @@ export default {
    * Configuration Recorder Status
    */
    fetchedConfigurationRecorderStatus: (num: number): string => `Fetched ${num} Configuration Recorder Status`,
+   /**
+   * Vpc Endpoints
+   */
+   fetchedVpcEndpoints: (num: number): string => `Fetched ${num} Vpc Endpoints`,
   /**
    * Access Analyzers
    */

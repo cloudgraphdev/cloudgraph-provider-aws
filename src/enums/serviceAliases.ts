@@ -70,6 +70,7 @@ export default {
   [services.systemsManagerDocument]: 'systemsManagerDocuments',
   [services.systemsManagerInstance]: 'systemsManagerInstances',
   [services.transitGatewayAttachment]: 'transitGatewayAttachments',
+  [services.vpcEndpoint]: 'vpcEndpoints',
   [services.vpnConnection]: 'vpnConnections',
   [services.vpcPeeringConnection]: 'vpcPeeringConnections',
 }

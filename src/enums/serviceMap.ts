@@ -96,6 +96,7 @@ import SageMakerNotebookInstance from '../services/sageMakerNotebookInstance'
 import SystemsManagerInstance from '../services/systemsManagerInstance'
 import SystemsManagerDocument from '../services/systemsManagerDocument'
 import RdsClusterSnapshot from '../services/rdsClusterSnapshot'
+import VpcEndpoint from '../services/vpcEndpoint'
 import APIGatewayDomainName from '../services/apiGatewayDomainName'
 import APIGatewayHttpApi from '../services/apiGatewayHttpApi'
 import VpcPeeringConnection from '../services/vpcPeeringConnection'
@@ -163,6 +164,7 @@ export default {
   [services.sg]: AwsSecurityGroup,
   [services.subnet]: AwsSubnet,
   [services.vpc]: VPC,
+  [services.vpcEndpoint]: VpcEndpoint,
   [services.vpcPeeringConnection]: VpcPeeringConnection,
   [services.sqs]: SQS,
   [services.rdsCluster]: RDSCluster,

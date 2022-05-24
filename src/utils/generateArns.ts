@@ -295,6 +295,16 @@ export const guardDutyArn = ({
   detectorId: string
 }): string => `arn:aws:guardduty:${region}:${account}:detector/${detectorId}`
 
+export const vpcEndpointArn = ({
+  region,
+  account,
+  id,
+}: {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:vpcendpoint/${id}`
+
 export const domainNameArn = ({
   region,
   account,
