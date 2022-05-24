@@ -1,0 +1,53 @@
+type awsVpcPeeringConnectionCidrBlock
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  cidrBlock: String @search(by: [hash, regexp])
+}
+
+type awsVpcPeeringConnectionIpv6CidrBlock
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  ipv6CidrBlock: String @search(by: [hash, regexp])
+}
+
+type awsVpcPeeringConnectionOptionsDescription
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  allowDnsResolutionFromRemoteVpc: Boolean @search
+  allowEgressFromLocalClassicLinkToRemoteVpc: Boolean @search
+  allowEgressFromLocalVpcToRemoteClassicLink: Boolean @search
+}
+
+type awsVpcPeeringConnectionVpcInfo
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  cidrBlock: String @search(by: [hash, regexp])
+  ipv6CidrBlockSet: [awsVpcPeeringConnectionIpv6CidrBlock]
+  cidrBlockSet: [awsVpcPeeringConnectionCidrBlock]
+  peeringOptions: awsVpcPeeringConnectionOptionsDescription
+  vpcId: String @search(by: [hash])
+}
+
+type awsVpcPeeringConnection implements awsBaseService @key(fields: "arn") {
+  accepterVpcInfo: awsVpcPeeringConnectionVpcInfo
+  expirationTime: DateTime @search(by: [day])
+  requesterVpcInfo: awsVpcPeeringConnectionVpcInfo
+  statusCode: String @search(by: [hash, regexp])
+  statusMessage: String @search(by: [hash, regexp])
+  tags: [awsRawTag]
+  vpc: [awsVpc] @hasInverse(field: vpcPeeringConnection)
+}
