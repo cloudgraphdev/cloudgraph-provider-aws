@@ -4338,10 +4338,19 @@ export type AwsTransitGatewayAttachment = {
   vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
 };
 
+export type AwsTransitGatewayRoute = {
+  destinationCidrBlock?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  prefixListId?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
 export type AwsTransitGatewayRouteTable = AwsBaseService & {
   creationTime?: Maybe<Scalars['DateTime']>;
   defaultAssociationRouteTable?: Maybe<Scalars['Boolean']>;
   defaultPropagationRouteTable?: Maybe<Scalars['Boolean']>;
+  routes?: Maybe<Array<Maybe<AwsTransitGatewayRoute>>>;
   state?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;

@@ -1,3 +1,4 @@
+import cuid from 'cuid'
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsTransitGatewayRouteTable } from './data'
 import { AwsTransitGatewayRouteTable } from '../../types/generated'
@@ -23,6 +24,7 @@ export default ({
     DefaultPropagationRouteTable: defaultPropagationRouteTable,
     CreationTime: creationTime,
     Tags: tags,
+    Routes: routes = [],
   } = rawData
 
   const transitGatewayRouteTable = {
@@ -35,6 +37,14 @@ export default ({
     defaultPropagationRouteTable,
     creationTime: creationTime?.toISOString(),
     tags: formatTagsFromMap(tags),
+    routes:
+      routes?.map(r => ({
+        id: cuid(),
+        destinationCidrBlock: r.DestinationCidrBlock,
+        type: r.Type,
+        state: r.State,
+        prefixListId: r.PrefixListId,
+      })) || [],
   }
 
   return transitGatewayRouteTable

@@ -1,8 +1,22 @@
+type awsTransitGatewayRoute
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  destinationCidrBlock: String @search(by: [hash, regexp])
+  type: String @search(by: [hash, regexp])
+  state: String @search(by: [hash, regexp])
+  prefixListId: String @search(by: [hash])
+}
+
 type awsTransitGatewayRouteTable implements awsBaseService @key(fields: "arn") {
   state: String @search(by: [hash, regexp])
   defaultAssociationRouteTable: Boolean @search
   defaultPropagationRouteTable: Boolean @search
   creationTime: DateTime @search(by: [day])
+  routes: [awsTransitGatewayRoute]
   tags: [awsRawTag]
   transitGateway: [awsTransitGateway] @hasInverse(field: routeTables)
   transitGatewayAttachment: [awsTransitGatewayAttachment] @hasInverse(field: routeTable)

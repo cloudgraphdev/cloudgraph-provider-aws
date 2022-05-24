@@ -5,6 +5,9 @@ import isEmpty from 'lodash/isEmpty'
 import EC2, {
   DescribeTransitGatewayRouteTablesRequest,
   DescribeTransitGatewayRouteTablesResult,
+  SearchTransitGatewayRoutesRequest,
+  SearchTransitGatewayRoutesResult,
+  TransitGatewayRoute,
   TransitGatewayRouteTable,
 } from 'aws-sdk/clients/ec2'
 
@@ -83,6 +86,43 @@ const listTransitGatewayRouteTablesData = async ({
     listTransitGatewayRouteTables()
   })
 
+const searchTransitGatewayRoutes = async ({
+  ec2,
+  transitGatewayRouteTableId,
+}: {
+  ec2: EC2
+  transitGatewayRouteTableId: string
+}): Promise<TransitGatewayRoute[]> =>
+  new Promise<TransitGatewayRoute[]>(resolve => {
+    const args: SearchTransitGatewayRoutesRequest = {
+      TransitGatewayRouteTableId: transitGatewayRouteTableId,
+      Filters: [
+        {
+          Name: 'type',
+          Values: ['propagated', 'static'],
+        },
+      ],
+    }
+    ec2.searchTransitGatewayRoutes(
+      args,
+      (err: AWSError, data: SearchTransitGatewayRoutesResult) => {
+        if (err) {
+          errorLog.generateAwsErrorLog({
+            functionName: 'ec2:searchTransitGatewayRoutes',
+            err,
+          })
+        }
+
+        if (!isEmpty(data)) {
+          const { Routes: routes = [] } = data
+          resolve(routes)
+        }
+
+        resolve([])
+      }
+    )
+  })
+
 /**
  * Transit Gateway Route Table
  */
@@ -90,6 +130,7 @@ export interface RawAwsTransitGatewayRouteTable
   extends Omit<TransitGatewayRouteTable, 'Tags'> {
   region: string
   Tags?: TagMap
+  Routes?: TransitGatewayRoute[]
 }
 
 export default async ({
@@ -103,6 +144,7 @@ export default async ({
 }> =>
   new Promise(async resolve => {
     const transitGatewayRouteTableResult: RawAwsTransitGatewayRouteTable[] = []
+    const routesPromises = []
 
     const regionPromises = regions.split(',').map(region => {
       const ec2 = new EC2({ ...config, region, endpoint })
@@ -130,7 +172,30 @@ export default async ({
     })
 
     await Promise.all(regionPromises)
-    errorLog.reset()
 
+    transitGatewayRouteTableResult.map(
+      (
+        { TransitGatewayRouteTableId: transitGatewayRouteTableId, region },
+        idx
+      ) => {
+        const ec2 = new EC2({ ...config, region, endpoint })
+        const routePromise = new Promise<void>(async resolveRoute => {
+          const routes: TransitGatewayRoute[] =
+            await searchTransitGatewayRoutes({
+              ec2,
+              transitGatewayRouteTableId,
+            })
+          transitGatewayRouteTableResult[idx] = {
+            ...transitGatewayRouteTableResult[idx],
+            Routes: routes || [],
+          }
+          resolveRoute()
+        })
+        routesPromises.push(routePromise)
+      }
+    )
+    await Promise.all(routesPromises)
+
+    errorLog.reset()
     resolve(groupBy(transitGatewayRouteTableResult, 'region'))
   })
