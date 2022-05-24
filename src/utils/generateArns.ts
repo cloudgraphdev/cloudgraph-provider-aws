@@ -325,3 +325,13 @@ export const vpcPeeringConnectionArn = ({
   account: string
   id: string
 }): string => `arn:aws:ec2:${region}:${account}:vpc-peering-connection/${id}`
+
+export const transitGatewayRouteTableArn = ({
+  region,
+  account,
+  id,
+}: {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:transit-gateway-routetable/${id}`

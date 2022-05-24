@@ -64,6 +64,7 @@ type awsTag @key(fields: "id") {
   customerGateway: [awsCustomerGateway]
   transitGateway: [awsTransitGateway]
   transitGatewayAttachment: [awsTransitGatewayAttachment]
+  transitGatewayRouteTables: [awsTransitGatewayRouteTable]
   vpnGateway: [awsVpnGateway]
   clientVpnEndpoint: [awsClientVpnEndpoint]
   vpnConnection: [awsVpnConnection]

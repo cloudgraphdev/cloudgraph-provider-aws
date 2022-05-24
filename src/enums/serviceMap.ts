@@ -99,6 +99,7 @@ import RdsClusterSnapshot from '../services/rdsClusterSnapshot'
 import VpcEndpoint from '../services/vpcEndpoint'
 import APIGatewayDomainName from '../services/apiGatewayDomainName'
 import APIGatewayHttpApi from '../services/apiGatewayHttpApi'
+import TransitGatewayRouteTable from '../services/transitGatewayRouteTable'
 import VpcPeeringConnection from '../services/vpcPeeringConnection'
 
 /**
@@ -199,6 +200,7 @@ export default {
   [services.ecsTaskSet]: EcsTaskSet,
   [services.transitGateway]: TransitGateway,
   [services.transitGatewayAttachment]: TransitGatewayAttachment,
+  [services.transitGatewayRouteTable]: TransitGatewayRouteTable,
   [services.customerGateway]: CustomerGateway,
   [services.vpnGateway]: VpnGateway,
   [services.vpnConnection]: VpnConnection,

@@ -69,6 +69,7 @@ import { RawAwsVpcEndpoint } from '../vpcEndpoint/data'
 import { RawAwsApiGatewayHttpApi } from '../apiGatewayHttpApi/data'
 import { RawAwsApiGatewayDomainName } from '../apiGatewayDomainName/data'
 import { RawAwsAnalyzerSummary } from '../iamAccessAnalyzer/data'
+import { RawAwsTransitGatewayRouteTable } from '../transitGatewayRouteTable/data'
 import { RawAwsVpcPeeringConnection } from '../vpcPeeringConnection/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
@@ -1830,6 +1831,32 @@ export default ({
             resourceType: services.vpcPeeringConnection,
             relation: 'child',
             field: 'vpcPeeringConnections',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related Transit Gateway Route tables
+     */
+     const transitGatewayRouteTables: {
+      name: string
+      data: { [property: string]: RawAwsTransitGatewayRouteTable[] }
+    } = data.find(({ name }) => name === services.transitGatewayRouteTable)
+    if (transitGatewayRouteTables?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        transitGatewayRouteTables.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { TransitGatewayRouteTableId: id }: RawAwsTransitGatewayRouteTable = instance
+
+          connections.push({
+            id,
+            resourceType: services.transitGatewayRouteTable,
+            relation: 'child',
+            field: 'transitGatewayRouteTables',
           })
         }
       }
