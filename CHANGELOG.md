@@ -1,3 +1,12 @@
+# [0.82.0-alpha.4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.3...0.82.0-alpha.4) (2022-05-24)
+
+
+### Features
+
+* Add service transitGatewayRouteTable ([519d968](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/519d968766e8c141453bcba7a4a02f137bf35be1))
+* Add transit gateway routes ([4090630](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/40906306d906e97aa9fd4c988a3185f2448b49d7))
+* Updated README file ([0b4f774](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/0b4f7740f56d34c47a87bff0316c104169a246f8))
+
 # [0.82.0-alpha.3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.2...0.82.0-alpha.3) (2022-05-24)
 
 
