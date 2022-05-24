@@ -4313,7 +4313,7 @@ export type AwsTransitGateway = AwsBaseService & {
   propagationDefaultRouteTableId?: Maybe<Scalars['String']>;
   routeTables?: Maybe<Array<Maybe<AwsTransitGatewayRouteTable>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
-  transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
+  transitGatewayAttachments?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
   vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
   vpnEcmpSupport?: Maybe<Scalars['String']>;
 };
@@ -4343,7 +4343,15 @@ export type AwsTransitGatewayRoute = {
   id: Scalars['String'];
   prefixListId?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
+  transitGatewayAttachments?: Maybe<Array<Maybe<AwsTransitGatewayRouteAttachment>>>;
   type?: Maybe<Scalars['String']>;
+};
+
+export type AwsTransitGatewayRouteAttachment = {
+  id: Scalars['String'];
+  resourceId?: Maybe<Scalars['String']>;
+  resourceType?: Maybe<Scalars['String']>;
+  transitGatewayAttachmentId?: Maybe<Scalars['String']>;
 };
 
 export type AwsTransitGatewayRouteTable = AwsBaseService & {
@@ -4354,7 +4362,8 @@ export type AwsTransitGatewayRouteTable = AwsBaseService & {
   state?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
-  transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
+  transitGatewayAttachments?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
+  transitGatewayId?: Maybe<Scalars['String']>;
 };
 
 export type AwsTunelOptions = {
@@ -4438,7 +4447,7 @@ export type AwsVpnConnection = AwsBaseService & {
   state?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   transitGateway?: Maybe<Array<Maybe<AwsTransitGateway>>>;
-  transitGatewayAttachment?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
+  transitGatewayAttachments?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
   transitGatewayId?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
   vgwTelemetry?: Maybe<Array<Maybe<AwsVgwTelemetry>>>;

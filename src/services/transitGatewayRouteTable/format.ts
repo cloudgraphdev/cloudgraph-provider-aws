@@ -23,6 +23,7 @@ export default ({
     DefaultAssociationRouteTable: defaultAssociationRouteTable,
     DefaultPropagationRouteTable: defaultPropagationRouteTable,
     CreationTime: creationTime,
+    TransitGatewayId: transitGatewayId,
     Tags: tags,
     Routes: routes = [],
   } = rawData
@@ -36,6 +37,7 @@ export default ({
     defaultAssociationRouteTable,
     defaultPropagationRouteTable,
     creationTime: creationTime?.toISOString(),
+    transitGatewayId,
     tags: formatTagsFromMap(tags),
     routes:
       routes?.map(r => ({
@@ -44,6 +46,12 @@ export default ({
         type: r.Type,
         state: r.State,
         prefixListId: r.PrefixListId,
+        transitGatewayAttachments: r.TransitGatewayAttachments?.map(a => ({
+          id: cuid(),
+          resourceId: a.ResourceId,
+          transitGatewayAttachmentId: a.TransitGatewayAttachmentId,
+          resourceType: a.ResourceType,
+        })) || [],
       })) || [],
   }
 
