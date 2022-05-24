@@ -74,4 +74,5 @@ export default {
   [services.transitGatewayRouteTable]: 'transitGatewayRouteTables',
   [services.vpcEndpoint]: 'vpcEndpoints',
   [services.vpnConnection]: 'vpnConnections',
+  [services.vpcPeeringConnection]: 'vpcPeeringConnections',
 }

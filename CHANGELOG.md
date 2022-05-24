@@ -1,3 +1,10 @@
+# [0.82.0-alpha.3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.2...0.82.0-alpha.3) (2022-05-24)
+
+
+### Features
+
+* **services:** Add service vpcPeeringConnection ([b5bda76](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/b5bda76de47268f12390b4f554067e6347187da3))
+
 # [0.82.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.1...0.82.0-alpha.2) (2022-05-23)
 
 

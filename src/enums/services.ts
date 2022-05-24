@@ -95,6 +95,7 @@ export default {
   transitGatewayRouteTable: 'transitGatewayRouteTable',
   vpc: 'vpc',
   vpcEndpoint: 'vpcEndpoint',
+  vpcPeeringConnection: 'vpcPeeringConnection',
   vpnConnection: 'vpnConnection',
   vpnGateway: 'vpnGateway',
   wafV2WebAcl: 'wafV2WebAcl',

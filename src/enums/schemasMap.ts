@@ -80,6 +80,7 @@ export default {
   [services.subnet]: 'awsSubnet',
   [services.vpc]: 'awsVpc',
   [services.vpcEndpoint]: 'awsVpcEndpoint',
+  [services.vpcPeeringConnection]: 'awsVpcPeeringConnection',
   [services.vpnGateway]: 'awsVpnGateway',
   [services.sqs]: 'awsSqs',
   [services.rdsCluster]: 'awsRdsCluster',

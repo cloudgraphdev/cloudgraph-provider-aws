@@ -73,6 +73,7 @@ type awsTag @key(fields: "id") {
   elasticSearchDomains: [awsElasticSearchDomain]
   dmsReplicationInstances: [awsDmsReplicationInstance]
   systemsManagerDocuments: [awsSystemsManagerDocument]
+  vpcPeeringConnections: [awsVpcPeeringConnection]
   vpcEndpoints: [awsVpcEndpoint]
 }
 
