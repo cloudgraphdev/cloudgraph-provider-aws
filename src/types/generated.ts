@@ -231,6 +231,7 @@ export type AwsAccount = AwsOptionalService & {
   transitGatewayAttachments?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   vpcEndpoints?: Maybe<Array<Maybe<AwsVpcEndpoint>>>;
+  vpcPeeringConnections?: Maybe<Array<Maybe<AwsVpcPeeringConnection>>>;
   vpnConnections?: Maybe<Array<Maybe<AwsVpnConnection>>>;
   vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
   wafV2WebAcl?: Maybe<Array<Maybe<AwsWafV2WebAcl>>>;
@@ -3536,11 +3537,20 @@ export type AwsMixedInstancesPolicy = {
 export type AwsNatGateway = AwsBaseService & {
   createTime?: Maybe<Scalars['String']>;
   dailyCost?: Maybe<AwsTotalBillingInfo>;
+  natGatewayAddresses?: Maybe<Array<Maybe<AwsNatGatewayAddress>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   state?: Maybe<Scalars['String']>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+};
+
+export type AwsNatGatewayAddress = {
+  allocationId?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  networkInterfaceId?: Maybe<Scalars['String']>;
+  privateIp?: Maybe<Scalars['String']>;
+  publicIp?: Maybe<Scalars['String']>;
 };
 
 export type AwsNetworkAcl = AwsBaseService & {
@@ -4301,6 +4311,7 @@ export type AwsTag = {
   value: Scalars['String'];
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   vpcEndpoints?: Maybe<Array<Maybe<AwsVpcEndpoint>>>;
+  vpcPeeringConnections?: Maybe<Array<Maybe<AwsVpcPeeringConnection>>>;
   vpnConnection?: Maybe<Array<Maybe<AwsVpnConnection>>>;
   vpnGateway?: Maybe<Array<Maybe<AwsVpnGateway>>>;
 };
@@ -4399,6 +4410,7 @@ export type AwsVpc = AwsBaseService & {
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   transitGatewayAttachments?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
   vpcEndpoints?: Maybe<Array<Maybe<AwsVpcEndpoint>>>;
+  vpcPeeringConnection?: Maybe<Array<Maybe<AwsVpcPeeringConnection>>>;
   vpnGateways?: Maybe<Array<Maybe<AwsVpnGateway>>>;
 };
 
@@ -4418,6 +4430,40 @@ export type AwsVpcEndpoint = AwsBaseService & {
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   type?: Maybe<Scalars['String']>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+};
+
+export type AwsVpcPeeringConnection = AwsBaseService & {
+  accepterVpcInfo?: Maybe<AwsVpcPeeringConnectionVpcInfo>;
+  expirationTime?: Maybe<Scalars['DateTime']>;
+  requesterVpcInfo?: Maybe<AwsVpcPeeringConnectionVpcInfo>;
+  statusCode?: Maybe<Scalars['String']>;
+  statusMessage?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+};
+
+export type AwsVpcPeeringConnectionCidrBlock = {
+  cidrBlock?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+};
+
+export type AwsVpcPeeringConnectionIpv6CidrBlock = {
+  id: Scalars['String'];
+  ipv6CidrBlock?: Maybe<Scalars['String']>;
+};
+
+export type AwsVpcPeeringConnectionOptionsDescription = {
+  allowDnsResolutionFromRemoteVpc?: Maybe<Scalars['Boolean']>;
+  allowEgressFromLocalClassicLinkToRemoteVpc?: Maybe<Scalars['Boolean']>;
+  allowEgressFromLocalVpcToRemoteClassicLink?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsVpcPeeringConnectionVpcInfo = {
+  cidrBlock?: Maybe<Scalars['String']>;
+  cidrBlockSet?: Maybe<Array<Maybe<AwsVpcPeeringConnectionCidrBlock>>>;
+  ipv6CidrBlockSet?: Maybe<Array<Maybe<AwsVpcPeeringConnectionIpv6CidrBlock>>>;
+  peeringOptions?: Maybe<AwsVpcPeeringConnectionOptionsDescription>;
+  vpcId?: Maybe<Scalars['String']>;
 };
 
 export type AwsVpnConnection = AwsBaseService & {

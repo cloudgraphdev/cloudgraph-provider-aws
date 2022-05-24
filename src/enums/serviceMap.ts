@@ -100,6 +100,7 @@ import VpcEndpoint from '../services/vpcEndpoint'
 import APIGatewayDomainName from '../services/apiGatewayDomainName'
 import APIGatewayHttpApi from '../services/apiGatewayHttpApi'
 import ManagedPrefixList from '../services/managedPrefixList'
+import VpcPeeringConnection from '../services/vpcPeeringConnection'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -166,6 +167,7 @@ export default {
   [services.subnet]: AwsSubnet,
   [services.vpc]: VPC,
   [services.vpcEndpoint]: VpcEndpoint,
+  [services.vpcPeeringConnection]: VpcPeeringConnection,
   [services.sqs]: SQS,
   [services.rdsCluster]: RDSCluster,
   [services.rdsClusterSnapshot]: RdsClusterSnapshot,
