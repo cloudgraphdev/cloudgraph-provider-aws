@@ -479,6 +479,10 @@ export default {
    * Transit Gateway Attachment
    */
    fetchedTransitGatewayAttachments: (num: number): string => `Found ${num} Transit Gateway Attachments`,
+   /**
+   * Transit Gateway Route Tables
+   */
+    fetchedTransitGatewayRouteTables: (num: number): string => `Found ${num} Transit Gateway Route Tables`,
   /**
    * VPN Gateway
    */
@@ -668,6 +672,10 @@ export default {
    * Configuration Recorder Status
    */
    fetchedConfigurationRecorderStatus: (num: number): string => `Fetched ${num} Configuration Recorder Status`,
+   /**
+   * Vpc Endpoints
+   */
+   fetchedVpcEndpoints: (num: number): string => `Fetched ${num} Vpc Endpoints`,
   /**
    * Access Analyzers
    */
@@ -677,4 +685,8 @@ export default {
    */
   fetchedManagedPrefixLists: (num: number): string => `Found ${num} Managed Prefix Lists`,
   fetchedManagedPrefixListEntries: (num: number): string => `Found ${num} Managed Prefix List Entries`,
+  /**
+   * Vpc Peering Connections
+   */
+  fetchedVpcPeeringConnections: (num: number): string => `Found ${num} Vpc Peering Connections`,
 }

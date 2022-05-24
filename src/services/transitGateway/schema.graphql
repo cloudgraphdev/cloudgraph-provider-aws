@@ -11,7 +11,7 @@ type awsTransitGateway implements awsBaseService @key(fields: "arn") {
   propagationDefaultRouteTableId: String @search(by: [hash, regexp])
   tags: [awsRawTag]
   vpnConnection: [awsVpnConnection] @hasInverse(field: transitGateway)
-  routeTable: [awsRouteTable] @hasInverse(field: transitGateway)
-  transitGatewayAttachment: [awsTransitGatewayAttachment]
+  routeTables: [awsTransitGatewayRouteTable] @hasInverse(field: transitGateway)
+  transitGatewayAttachments: [awsTransitGatewayAttachment]
     @hasInverse(field: transitGateway)
 }
