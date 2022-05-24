@@ -71,4 +71,5 @@ export default {
   [services.systemsManagerInstance]: 'systemsManagerInstances',
   [services.transitGatewayAttachment]: 'transitGatewayAttachments',
   [services.vpnConnection]: 'vpnConnections',
+  [services.vpcPeeringConnection]: 'vpcPeeringConnections',
 }

@@ -68,6 +68,7 @@ import { RawAwsInstanceProfile } from '../iamInstanceProfile/data'
 import { RawAwsApiGatewayHttpApi } from '../apiGatewayHttpApi/data'
 import { RawAwsApiGatewayDomainName } from '../apiGatewayDomainName/data'
 import { RawAwsAnalyzerSummary } from '../iamAccessAnalyzer/data'
+import { RawAwsVpcPeeringConnection } from '../vpcPeeringConnection/data'
 
 const findServiceInstancesWithTag = (tag: any, service: any): any => {
   const { id } = tag
@@ -1776,6 +1777,32 @@ export default ({
             resourceType: services.apiGatewayDomainName,
             relation: 'child',
             field: 'apiGatewayDomainName',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related Vpc Peering Connections
+     */
+     const vpcPeeringConnections: {
+      name: string
+      data: { [property: string]: RawAwsVpcPeeringConnection[] }
+    } = data.find(({ name }) => name === services.vpcPeeringConnection)
+    if (vpcPeeringConnections?.data?.[region]) {
+      const dataAtRegion = findServiceInstancesWithTag(
+        tag,
+        vpcPeeringConnections.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { VpcPeeringConnectionId: id }: RawAwsVpcPeeringConnection = instance
+
+          connections.push({
+            id,
+            resourceType: services.vpcPeeringConnection,
+            relation: 'child',
+            field: 'vpcPeeringConnections',
           })
         }
       }

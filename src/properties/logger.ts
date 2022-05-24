@@ -672,4 +672,8 @@ export default {
    * Access Analyzers
    */
   fetchedaccessAnalyzers: (num: number): string => `Found ${num} Access Analyzers`,
+  /**
+   * Vpc Peering Connections
+   */
+  fetchedVpcPeeringConnections: (num: number): string => `Found ${num} Vpc Peering Connections`,
 }
