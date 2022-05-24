@@ -98,6 +98,7 @@ import SystemsManagerDocument from '../services/systemsManagerDocument'
 import RdsClusterSnapshot from '../services/rdsClusterSnapshot'
 import APIGatewayDomainName from '../services/apiGatewayDomainName'
 import APIGatewayHttpApi from '../services/apiGatewayHttpApi'
+import ManagedPrefixList from '../services/managedPrefixList'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -156,6 +157,7 @@ export default {
   [services.kms]: AwsKms,
   [services.lambda]: Lambda,
   [services.managedAirflow]: ManagedAirflow,
+  [services.managedPrefixList]: ManagedPrefixList,
   [services.nacl]: NetworkAcl,
   [services.nat]: NATGateway,
   [services.networkInterface]: NetworkInterface,
