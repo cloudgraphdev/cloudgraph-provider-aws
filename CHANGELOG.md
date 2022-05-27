@@ -1,3 +1,10 @@
+# [0.82.0-alpha.5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.4...0.82.0-alpha.5) (2022-05-27)
+
+
+### Bug Fixes
+
+* **services:** add additional data to rdsCluster ([cd2d8d5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/cd2d8d5f547d39fefc1d87d589f66c7ed664b4d3))
+
 # [0.82.0-alpha.4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.3...0.82.0-alpha.4) (2022-05-24)
 
 
