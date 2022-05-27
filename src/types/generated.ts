@@ -3634,12 +3634,14 @@ export type AwsRdsCluster = AwsBaseService & {
   copyTagsToSnapshot?: Maybe<Scalars['Boolean']>;
   createdTime?: Maybe<Scalars['String']>;
   crossAccountClone?: Maybe<Scalars['Boolean']>;
+  customEndpoints?: Maybe<Array<Maybe<Scalars['String']>>>;
   databaseName?: Maybe<Scalars['String']>;
   dbClusterIdentifier?: Maybe<Scalars['String']>;
   dbClusterParameterGroup?: Maybe<Scalars['String']>;
   dbSubnetGroup?: Maybe<Scalars['String']>;
   deletionProtection?: Maybe<Scalars['Boolean']>;
   encrypted?: Maybe<Scalars['Boolean']>;
+  endpoint?: Maybe<Scalars['String']>;
   engine?: Maybe<Scalars['String']>;
   engineMode?: Maybe<Scalars['String']>;
   engineVersion?: Maybe<Scalars['String']>;
