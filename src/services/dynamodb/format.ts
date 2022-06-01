@@ -99,7 +99,7 @@ const formatAutoScalingSettingsDescription = (
         policyName,
         disableScaleIn: config?.DisableScaleIn,
         scaleInCooldown: config?.ScaleInCooldown,
-        ScaleOutCooldown: config?.ScaleOutCooldown,
+        scaleOutCooldown: config?.ScaleOutCooldown,
         targetValue: config?.TargetValue,
       })
     ),
