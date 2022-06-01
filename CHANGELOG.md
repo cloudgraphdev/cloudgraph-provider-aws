@@ -1,3 +1,10 @@
+# [0.82.0-alpha.6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.5...0.82.0-alpha.6) (2022-06-01)
+
+
+### Bug Fixes
+
+* **services:** fix dynamodb wrong property name ([e7f67c8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/e7f67c80a708d74e7318b2a59e468ea538937735))
+
 # [0.82.0-alpha.5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.4...0.82.0-alpha.5) (2022-05-27)
 
 
