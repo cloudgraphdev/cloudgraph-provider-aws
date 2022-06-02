@@ -1,3 +1,10 @@
+# [0.82.0-alpha.8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.7...0.82.0-alpha.8) (2022-06-02)
+
+
+### Features
+
+* **services:** Add managedPrefixList service ([da49a74](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/da49a7431224b498873ce0ecf224c8e49860be78))
+
 # [0.82.0-alpha.7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.6...0.82.0-alpha.7) (2022-06-02)
 
 
