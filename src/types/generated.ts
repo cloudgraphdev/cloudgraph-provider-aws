@@ -202,6 +202,7 @@ export type AwsAccount = AwsOptionalService & {
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   lambdaFunctions?: Maybe<Array<Maybe<AwsLambda>>>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
+  managedPrefixLists?: Maybe<Array<Maybe<AwsManagedPrefixList>>>;
   nacl?: Maybe<Array<Maybe<AwsNetworkAcl>>>;
   natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   networkInterfaces?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
@@ -3486,6 +3487,23 @@ export type AwsManagedAirflowNetworkConfig = {
   subnetIds?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
+export type AwsManagedPrefixList = AwsBaseService & {
+  addressFamily?: Maybe<Scalars['String']>;
+  entries?: Maybe<Array<Maybe<AwsManagedPrefixListEntry>>>;
+  maxEntries?: Maybe<Scalars['Int']>;
+  name?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  stateMessage?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  version?: Maybe<Scalars['Int']>;
+};
+
+export type AwsManagedPrefixListEntry = {
+  cidr?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+};
+
 export type AwsMetricFilter = {
   creationTime?: Maybe<Scalars['String']>;
   filterName?: Maybe<Scalars['String']>;
@@ -4273,6 +4291,7 @@ export type AwsTag = {
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
+  managedPrefixLists?: Maybe<Array<Maybe<AwsManagedPrefixList>>>;
   nacl?: Maybe<Array<Maybe<AwsNetworkAcl>>>;
   natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;

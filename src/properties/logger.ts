@@ -681,6 +681,11 @@ export default {
    */
   fetchedaccessAnalyzers: (num: number): string => `Found ${num} Access Analyzers`,
   /**
+   * Managed Prefix Lists
+   */
+  fetchedManagedPrefixLists: (num: number): string => `Found ${num} Managed Prefix Lists`,
+  fetchedManagedPrefixListEntries: (num: number): string => `Found ${num} Managed Prefix List Entries`,
+  /**
    * Vpc Peering Connections
    */
   fetchedVpcPeeringConnections: (num: number): string => `Found ${num} Vpc Peering Connections`,

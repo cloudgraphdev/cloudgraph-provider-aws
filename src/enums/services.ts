@@ -67,6 +67,7 @@ export default {
   kms: 'kms',
   lambda: 'lambda',
   managedAirflow: 'managedAirflow',
+  managedPrefixList: 'managedPrefixList',
   nacl: 'nacl',
   nat: 'nat',
   networkInterface: 'networkInterface',

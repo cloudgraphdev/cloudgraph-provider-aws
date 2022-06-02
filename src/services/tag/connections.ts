@@ -69,6 +69,7 @@ import { RawAwsVpcEndpoint } from '../vpcEndpoint/data'
 import { RawAwsApiGatewayHttpApi } from '../apiGatewayHttpApi/data'
 import { RawAwsApiGatewayDomainName } from '../apiGatewayDomainName/data'
 import { RawAwsAnalyzerSummary } from '../iamAccessAnalyzer/data'
+import { RawAwsManagedPrefixList } from '../managedPrefixList/data'
 import { RawAwsTransitGatewayRouteTable } from '../transitGatewayRouteTable/data'
 import { RawAwsVpcPeeringConnection } from '../vpcPeeringConnection/data'
 
@@ -1857,6 +1858,32 @@ export default ({
             resourceType: services.transitGatewayRouteTable,
             relation: 'child',
             field: 'transitGatewayRouteTables',
+          })
+        }
+      }
+    }
+
+    /**
+     * Find related Managed Prefix Lists
+     */
+     const managedPrefixLists: {
+      name: string
+      data: { [property: string]: RawAwsManagedPrefixList[] }
+    } = data.find(({ name }) => name === services.managedPrefixList)
+    if (managedPrefixLists?.data?.[region]) {
+      const dataAtRegion: RawAwsManagedPrefixList[] = findServiceInstancesWithTag(
+        tag,
+        managedPrefixLists.data[region]
+      )
+      if (!isEmpty(dataAtRegion)) {
+        for (const instance of dataAtRegion) {
+          const { PrefixListId: id }: RawAwsManagedPrefixList = instance
+
+          connections.push({
+            id,
+            resourceType: services.managedPrefixList,
+            relation: 'child',
+            field: 'managedPrefixLists',
           })
         }
       }
