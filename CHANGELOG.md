@@ -1,3 +1,10 @@
+# [0.82.0-alpha.7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.6...0.82.0-alpha.7) (2022-06-02)
+
+
+### Bug Fixes
+
+* **services:** Fixed cloudtrail bug where no data was returned ([4d0c5ac](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/4d0c5ac1ee70f2bf80dcbc59e6c8643fc6b5d30e))
+
 # [0.82.0-alpha.6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.5...0.82.0-alpha.6) (2022-06-01)
 
 
