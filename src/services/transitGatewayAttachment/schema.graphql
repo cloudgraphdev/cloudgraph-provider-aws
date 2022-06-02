@@ -13,8 +13,9 @@ type awsTransitGatewayAttachment @key(fields: "arn") {
   creationTime: String @search(by: [hash, regexp])
   tags: [awsRawTag]
   transitGateway: [awsTransitGateway]
-    @hasInverse(field: transitGatewayAttachment)
-  routeTable: [awsRouteTable] @hasInverse(field: transitGatewayAttachment)
+    @hasInverse(field: transitGatewayAttachments)
+  routeTable: [awsTransitGatewayRouteTable] @hasInverse(field: transitGatewayAttachments)
   vpc: [awsVpc] @hasInverse(field: transitGatewayAttachments)
-  vpnConnection: [awsVpnConnection] @hasInverse(field: transitGatewayAttachment)
+  vpnConnection: [awsVpnConnection] @hasInverse(field: transitGatewayAttachments)
+  # TODO: Add vpcPeeringConnection when the service is available
 }

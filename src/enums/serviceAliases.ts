@@ -51,6 +51,7 @@ export default {
   [services.kinesisStream]: 'kinesisStreams',
   [services.lambda]: 'lambdaFunctions',
   [services.managedAirflow]: 'managedAirflows',
+  [services.managedPrefixList]: 'managedPrefixLists',
   [services.nat]: 'natGateway',
   [services.networkInterface]: 'networkInterfaces',
   [services.organization]: 'organizations',
@@ -69,6 +70,10 @@ export default {
   [services.subnet]: 'subnets',
   [services.systemsManagerDocument]: 'systemsManagerDocuments',
   [services.systemsManagerInstance]: 'systemsManagerInstances',
+  [services.transitGateway]: 'transitGateways',
   [services.transitGatewayAttachment]: 'transitGatewayAttachments',
+  [services.transitGatewayRouteTable]: 'transitGatewayRouteTables',
+  [services.vpcEndpoint]: 'vpcEndpoints',
   [services.vpnConnection]: 'vpnConnections',
+  [services.vpcPeeringConnection]: 'vpcPeeringConnections',
 }

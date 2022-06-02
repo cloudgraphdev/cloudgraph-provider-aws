@@ -2,8 +2,17 @@ type awsNatGateway implements awsBaseService @key(fields: "id") {
   state: String @search(by: [hash, regexp])
   createTime: String @search(by: [hash, regexp])
   dailyCost: awsTotalBillingInfo
+  natGatewayAddresses: [awsNatGatewayAddress]
   tags: [awsRawTag]
   networkInterface: [awsNetworkInterface] @hasInverse(field: natGateway) #change to plural
   subnet: [awsSubnet] @hasInverse(field: natGateway) #change to plural
   vpc: [awsVpc] @hasInverse(field: natGateways)
+}
+
+type awsNatGatewayAddress {
+  id: String! @id
+  allocationId: String @search(by: [hash, regexp])
+  networkInterfaceId: String @search(by: [hash, regexp])
+  privateIp: String @search(by: [hash, regexp])
+  publicIp: String @search(by: [hash, regexp])
 }

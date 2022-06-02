@@ -295,6 +295,16 @@ export const guardDutyArn = ({
   detectorId: string
 }): string => `arn:aws:guardduty:${region}:${account}:detector/${detectorId}`
 
+export const vpcEndpointArn = ({
+  region,
+  account,
+  id,
+}: {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:vpcendpoint/${id}`
+
 export const domainNameArn = ({
   region,
   account,
@@ -305,3 +315,23 @@ export const domainNameArn = ({
   name: string
 }): string =>
   `arn:aws:apigategay:${region}:${account}:domainname/${name}`
+
+export const vpcPeeringConnectionArn = ({
+  region,
+  account,
+  id,
+}: {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:vpc-peering-connection/${id}`
+
+export const transitGatewayRouteTableArn = ({
+  region,
+  account,
+  id,
+}: {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:transit-gateway-routetable/${id}`
