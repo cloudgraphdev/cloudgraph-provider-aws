@@ -64,6 +64,7 @@ type awsTag @key(fields: "id") {
   customerGateway: [awsCustomerGateway]
   transitGateway: [awsTransitGateway]
   transitGatewayAttachment: [awsTransitGatewayAttachment]
+  transitGatewayRouteTables: [awsTransitGatewayRouteTable]
   vpnGateway: [awsVpnGateway]
   clientVpnEndpoint: [awsClientVpnEndpoint]
   vpnConnection: [awsVpnConnection]
@@ -72,6 +73,9 @@ type awsTag @key(fields: "id") {
   elasticSearchDomains: [awsElasticSearchDomain]
   dmsReplicationInstances: [awsDmsReplicationInstance]
   systemsManagerDocuments: [awsSystemsManagerDocument]
+  managedPrefixLists: [awsManagedPrefixList]
+  vpcPeeringConnections: [awsVpcPeeringConnection]
+  vpcEndpoints: [awsVpcEndpoint]
 }
 
 type awsRawTag

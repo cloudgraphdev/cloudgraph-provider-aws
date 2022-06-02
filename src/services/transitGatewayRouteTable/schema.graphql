@@ -1,0 +1,37 @@
+type awsTransitGatewayRouteAttachment
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  resourceId: String @search(by: [hash])
+  transitGatewayAttachmentId: String @search(by: [hash])
+  resourceType: String @search(by: [hash, regexp])
+}
+
+type awsTransitGatewayRoute
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  destinationCidrBlock: String @search(by: [hash, regexp])
+  type: String @search(by: [hash, regexp])
+  state: String @search(by: [hash, regexp])
+  prefixListId: String @search(by: [hash])
+  transitGatewayAttachments: [awsTransitGatewayRouteAttachment]
+}
+
+type awsTransitGatewayRouteTable implements awsBaseService @key(fields: "arn") {
+  state: String @search(by: [hash, regexp])
+  defaultAssociationRouteTable: Boolean @search
+  defaultPropagationRouteTable: Boolean @search
+  creationTime: DateTime @search(by: [day])
+  transitGatewayId: String @search(by: [hash])
+  routes: [awsTransitGatewayRoute]
+  tags: [awsRawTag]
+  transitGateway: [awsTransitGateway] @hasInverse(field: routeTables)
+  transitGatewayAttachments: [awsTransitGatewayAttachment] @hasInverse(field: routeTable)
+}

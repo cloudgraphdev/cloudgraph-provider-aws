@@ -1,3 +1,4 @@
+import cuid from 'cuid'
 import { AwsNatGateway } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
 import { natGatewayArn } from '../../utils/generateArns'
@@ -20,8 +21,18 @@ export default ({
     NatGatewayId: id,
     State: state,
     CreateTime: createTime,
+    NatGatewayAddresses: natGatewayAddresses,
     Tags
   } = rawData
+
+
+  const mappedAddresses = natGatewayAddresses?.map(({ AllocationId, NetworkInterfaceId, PrivateIp, PublicIp }) => ({
+    id: cuid(),
+    allocationId: AllocationId,
+    networkInterfaceId: NetworkInterfaceId,
+    privateIp: PrivateIp,
+    publicIp: PublicIp
+  })) ?? []
 
   return {
     id,
@@ -30,6 +41,7 @@ export default ({
     arn: natGatewayArn({ region, account, id }),
     region,
     state,
+    natGatewayAddresses: mappedAddresses,
     createTime: createTime.toUTCString(),
   }
 }

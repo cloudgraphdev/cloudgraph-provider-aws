@@ -1,3 +1,68 @@
+# [0.82.0-alpha.8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.7...0.82.0-alpha.8) (2022-06-02)
+
+
+### Features
+
+* **services:** Add managedPrefixList service ([da49a74](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/da49a7431224b498873ce0ecf224c8e49860be78))
+
+# [0.82.0-alpha.7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.6...0.82.0-alpha.7) (2022-06-02)
+
+
+### Bug Fixes
+
+* **services:** Fixed cloudtrail bug where no data was returned ([4d0c5ac](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/4d0c5ac1ee70f2bf80dcbc59e6c8643fc6b5d30e))
+
+# [0.82.0-alpha.6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.5...0.82.0-alpha.6) (2022-06-01)
+
+
+### Bug Fixes
+
+* **services:** fix dynamodb wrong property name ([e7f67c8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/e7f67c80a708d74e7318b2a59e468ea538937735))
+
+# [0.82.0-alpha.5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.4...0.82.0-alpha.5) (2022-05-27)
+
+
+### Bug Fixes
+
+* **services:** add additional data to rdsCluster ([cd2d8d5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/cd2d8d5f547d39fefc1d87d589f66c7ed664b4d3))
+
+# [0.82.0-alpha.4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.3...0.82.0-alpha.4) (2022-05-24)
+
+
+### Features
+
+* Add service transitGatewayRouteTable ([519d968](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/519d968766e8c141453bcba7a4a02f137bf35be1))
+* Add transit gateway routes ([4090630](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/40906306d906e97aa9fd4c988a3185f2448b49d7))
+* Updated README file ([0b4f774](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/0b4f7740f56d34c47a87bff0316c104169a246f8))
+
+# [0.82.0-alpha.3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.2...0.82.0-alpha.3) (2022-05-24)
+
+
+### Features
+
+* **services:** Add service vpcPeeringConnection ([b5bda76](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/b5bda76de47268f12390b4f554067e6347187da3))
+
+# [0.82.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0-alpha.1...0.82.0-alpha.2) (2022-05-23)
+
+
+### Bug Fixes
+
+* **services:** fix nat gateway service data ([1d0303e](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/1d0303ef27ec55a91eb27e015d877fbc428c211d))
+
+# [0.82.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.1-alpha.1...0.82.0-alpha.1) (2022-05-23)
+
+
+### Features
+
+* Add vpcEndpoint service ([a33a61f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/a33a61f1b5cd9f0a4bc49682f0ef44e4d2880283))
+
+## [0.81.1-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0...0.81.1-alpha.1) (2022-05-23)
+
+
+### Bug Fixes
+
+* **services:** fix route table service mainRouteTable property ([e99287b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/e99287b91828e57715d240f23a5cc0276799da12))
+
 # [0.81.0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.80.0...0.81.0) (2022-05-19)
 
 

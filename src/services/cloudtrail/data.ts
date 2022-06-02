@@ -122,10 +122,10 @@ const listTrailTagData = async (
 
 const getTrailStatus = async (
   cloudTrail: CloudTrail,
-  { Name }: Trail
+  { TrailARN }: Trail
 ): Promise<GetTrailStatusResponse | null> => {
   try {
-    const data = await cloudTrail.getTrailStatus({ Name }).promise()
+    const data = await cloudTrail.getTrailStatus({ Name: TrailARN }).promise()
     return data
   } catch (err) {
     errorLog.generateAwsErrorLog({
@@ -138,11 +138,11 @@ const getTrailStatus = async (
 
 const getEventSelectors = async (
   cloudTrail: CloudTrail,
-  { Name }: Trail
+  { TrailARN }: Trail
 ): Promise<EventSelector[]> => {
   try {
     const { EventSelectors: eventSelectors = [] } = await cloudTrail
-      .getEventSelectors({ TrailName: Name })
+      .getEventSelectors({ TrailName: TrailARN })
       .promise()
     return eventSelectors
   } catch (err) {

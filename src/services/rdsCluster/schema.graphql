@@ -8,7 +8,9 @@ type awsRdsCluster implements awsBaseService @key(fields: "arn") {
   dbSubnetGroup: String @search(by: [hash])
   status: String @search(by: [hash, regexp])
   percentProgress: String @search(by: [hash, regexp])
+  endpoint: String @search(by: [hash, regexp])
   readerEndpoint: String @search(by: [hash, regexp])
+  customEndpoints: [String] @search(by: [hash, regexp])
   multiAZ: Boolean @search
   engine: String @search(by: [hash, regexp])
   engineVersion: String @search(by: [hash, regexp])
