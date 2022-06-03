@@ -1,6 +1,5 @@
-import cuid from 'cuid'
 import { parseString } from '@fast-csv/parse'
-import CloudGraph from '@cloudgraph/sdk'
+import CloudGraph, { generateUniqueId } from '@cloudgraph/sdk'
 import isArray from 'lodash/isArray'
 import toString from 'lodash/toString'
 import { AwsRawTag, AwsIamJsonPolicy } from '../types/generated'
@@ -91,17 +90,17 @@ export const formatIamJsonPolicy = (json: string): AwsIamJsonPolicy => {
 
   const formatPrincipal = principal => {
     if (!principal) return null
-     return Object.entries(principal).map(([key, value]) => {
+    return Object.entries(principal).map(([key, value]) => {
       const conVal = (isArray(value) ? value : [value]) || []
       return {
         key: key === '0' ? '' : key.toString(),
         value: conVal.map(val => toString(val)),
       }
-     })
+    })
   }
 
   return {
-    id: cuid(),
+    id: generateUniqueId(json),
     version: object.Version,
     statement: statement.map(el => ({
       action: isArray(el.Action) ? el.Action : [toString(el.Action)],
