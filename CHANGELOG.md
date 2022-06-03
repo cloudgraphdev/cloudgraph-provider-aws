@@ -1,3 +1,10 @@
+## [0.82.1-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0...0.82.1-alpha.1) (2022-06-03)
+
+
+### Bug Fixes
+
+* **services:** fix for rds db instance ([5052362](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/5052362387b0ea11a6c6eb842c4b02d904b6b2d9))
+
 # [0.82.0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0...0.82.0) (2022-06-02)
 
 
