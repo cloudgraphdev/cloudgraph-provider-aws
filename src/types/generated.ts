@@ -3836,6 +3836,7 @@ export type AwsS3 = AwsBaseService & {
   crossRegionReplication?: Maybe<Scalars['String']>;
   ecsCluster?: Maybe<Array<Maybe<AwsEcsCluster>>>;
   encrypted?: Maybe<Scalars['String']>;
+  encryptionRules?: Maybe<Array<Maybe<AwsS3ServerSideEncryptionConfiguration>>>;
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   ignorePublicAcls?: Maybe<Scalars['String']>;
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
@@ -3890,6 +3891,12 @@ export type AwsS3NotificationConfiguration = {
 
 export type AwsS3QueueConfiguration = AwsS3ConfigurationBase & {
   queueArn?: Maybe<Scalars['String']>;
+};
+
+export type AwsS3ServerSideEncryptionConfiguration = {
+  id: Scalars['String'];
+  kmsMasterKeyID?: Maybe<Scalars['String']>;
+  sseAlgorithm?: Maybe<Scalars['String']>;
 };
 
 export type AwsS3TopicConfiguration = AwsS3ConfigurationBase & {

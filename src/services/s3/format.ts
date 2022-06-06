@@ -7,6 +7,7 @@ import {
   Policy,
   PolicyStatus,
   PublicAccessBlockConfiguration,
+  ServerSideEncryptionConfiguration,
 } from 'aws-sdk/clients/s3'
 
 import { AwsS3 } from '../../types/generated'
@@ -138,10 +139,16 @@ export default ({
     corsAdditions.corsConfiguration = t.yes
   }
 
-  const encryptionAdditions = { encrypted: t.no }
+  const encryptionAdditions = { encrypted: t.no, encryptionRules: [] }
 
   if (!isEmpty(encryptionInfo)) {
+    const { Rules } = encryptionInfo as ServerSideEncryptionConfiguration
     encryptionAdditions.encrypted = t.yes
+    encryptionAdditions.encryptionRules = Rules.map(r => ({
+      id: cuid(),
+      sseAlgorithm: r.ApplyServerSideEncryptionByDefault?.SSEAlgorithm,
+      kmsMasterKeyID: r.ApplyServerSideEncryptionByDefault?.KMSMasterKeyID,
+    }))
   }
 
   const replicationAdditions = { crossRegionReplication: t.disabled }
@@ -182,36 +189,42 @@ export default ({
       LambdaFunctionConfigurations: lambdaFunctionConfigurations = [],
     }: NotificationConfiguration = notificationConfiguration
     notificationConfigurationData = {
-      topicConfigurations: topicConfigurations?.map(tc => ({
-        id: tc.Id || cuid(),
-        topicArn: tc.TopicArn,
-        events: tc.Events || [],
-        filterRules: tc.Filter?.Key?.FilterRules?.map(r => ({
-          id: cuid(),
-          name: r.Name,
-          value: r.Value,  
+      topicConfigurations:
+        topicConfigurations?.map(tc => ({
+          id: tc.Id || cuid(),
+          topicArn: tc.TopicArn,
+          events: tc.Events || [],
+          filterRules:
+            tc.Filter?.Key?.FilterRules?.map(r => ({
+              id: cuid(),
+              name: r.Name,
+              value: r.Value,
+            })) || [],
         })) || [],
-      })) || [],
-      queueConfigurations: queueConfigurations?.map(qc => ({
-        id: qc.Id || cuid(),
-        queueArn: qc.QueueArn,
-        events: qc.Events || [],
-        filterRules: qc.Filter?.Key?.FilterRules?.map(r => ({
-          id: cuid(),
-          name: r.Name,
-          value: r.Value,  
+      queueConfigurations:
+        queueConfigurations?.map(qc => ({
+          id: qc.Id || cuid(),
+          queueArn: qc.QueueArn,
+          events: qc.Events || [],
+          filterRules:
+            qc.Filter?.Key?.FilterRules?.map(r => ({
+              id: cuid(),
+              name: r.Name,
+              value: r.Value,
+            })) || [],
         })) || [],
-      })) || [],
-      lambdaFunctionConfigurations: lambdaFunctionConfigurations?.map(lc => ({
-        id: lc.Id || cuid(),
-        lambdaFunctionArn: lc.LambdaFunctionArn,
-        events: lc.Events || [],
-        filterRules: lc.Filter?.Key?.FilterRules?.map(r => ({
-          id: cuid(),
-          name: r.Name,
-          value: r.Value,  
+      lambdaFunctionConfigurations:
+        lambdaFunctionConfigurations?.map(lc => ({
+          id: lc.Id || cuid(),
+          lambdaFunctionArn: lc.LambdaFunctionArn,
+          events: lc.Events || [],
+          filterRules:
+            lc.Filter?.Key?.FilterRules?.map(r => ({
+              id: cuid(),
+              name: r.Name,
+              value: r.Value,
+            })) || [],
         })) || [],
-      })) || [],
     }
   }
 
@@ -243,12 +256,13 @@ export default ({
       : `${total}`,
     transferAcceleration: accelerationStatus,
     notificationConfiguration: notificationConfigurationData,
-    aclGrants: grants?.map(g => ({
-      id: cuid(),
-      granteeType: g.Grantee?.Type,
-      granteeUri: g.Grantee?.URI,
-      permission: g.Permission,
-    })) || [],
+    aclGrants:
+      grants?.map(g => ({
+        id: cuid(),
+        granteeType: g.Grantee?.Type,
+        granteeUri: g.Grantee?.URI,
+        permission: g.Permission,
+      })) || [],
   }
   return s3
 }
