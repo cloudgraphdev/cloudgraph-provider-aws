@@ -1,5 +1,6 @@
+import { generateUniqueId } from '@cloudgraph/sdk'
 import { AliasListEntry } from 'aws-sdk/clients/kms'
-import cuid from 'cuid'
+
 import { AwsKms } from './data'
 import {
   AwsKms as AwsKmsType,
@@ -12,7 +13,9 @@ export const formatAliases = (
 ): AwsKmsAliasListEntry[] => {
   return (
     aliases?.map(a => ({
-      id: cuid(),
+      id: generateUniqueId({
+        ...a,
+      }),
       aliasName: a.AliasName,
       aliasArn: a.AliasArn,
       targetKeyId: a.TargetKeyId,

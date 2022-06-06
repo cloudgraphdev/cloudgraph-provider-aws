@@ -1,4 +1,5 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { AwsEbs } from '../../types/generated'
 import t from '../../properties/translations'
 import { formatTagsFromMap } from '../../utils/format'
@@ -37,7 +38,7 @@ export default ({
   // Format volume permissions
   const volumePermissions = permissions.map(permission => {
     return {
-      id: cuid(),
+      id: generateUniqueId({ ...permission }),
       group: permission.Group,
       userId: permission.UserId,
     }

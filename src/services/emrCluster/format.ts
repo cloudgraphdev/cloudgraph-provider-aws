@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
 import { Configuration } from 'aws-sdk/clients/emr'
 import { AwsEmrCluster } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
@@ -61,12 +61,19 @@ export default ({
   } = ec2InstanceAttributes ?? {}
 
   const applications = service?.Applications?.map(app => ({
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      ...app,
+    }),
     name: app.Name,
     version: app.Version,
     args: app.Args,
     additionalInfo: Object.keys(app.AdditionalInfo || {})?.map(key => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        key,
+        value: app.AdditionalInfo[key],
+      }),
       key,
       value: app.AdditionalInfo[key],
     })),
@@ -81,18 +88,28 @@ export default ({
   } = kerberosAttributes ?? {}
 
   const configConverter = (config: Configuration) => ({
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      ...config,
+    }),
     classification: config.Classification,
     configurations: config.Configurations?.map(child => configConverter(child)),
     properties: Object.keys(config.Properties || {})?.map(key => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        key,
+        value: config.Properties[key],
+      }),
       key,
       value: config.Properties[key],
     })),
   })
 
   const placementGroups = service.PlacementGroups?.map(pg => ({
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      ...pg,
+    }),
     instanceRole: pg.InstanceRole,
     placementStrategy: pg.PlacementStrategy,
   }))

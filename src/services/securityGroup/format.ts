@@ -1,5 +1,4 @@
-import { toCamel } from '@cloudgraph/sdk'
-import cuid from 'cuid'
+import { generateUniqueId, toCamel } from '@cloudgraph/sdk'
 
 import t from '../../properties/translations'
 import { AwsSecurityGroup } from './data'
@@ -30,6 +29,8 @@ export default ({
     Description: description,
     VpcId: vpcId,
   } = rawData
+
+  const arn = securityGroupArn({ region, account, id })
 
   const { ipPermissions: ingress, ipPermissionsEgress: egress } =
     toCamel(rawData)
@@ -72,7 +73,12 @@ export default ({
       ;(rule.ipRanges || []).map(
         ({ cidrIp, description: ipRangesDescription = '' }) => {
           allRules.push({
-            id: cuid(),
+            id: generateUniqueId({
+              arn,
+              cidrIp,
+              ipRangesDescription,
+              ipRanges: 'ipRanges',
+            }),
             [direction]: cidrIp,
             description: ipRangesDescription,
           })
@@ -81,7 +87,12 @@ export default ({
       ;(rule.ipv6Ranges || []).map(
         ({ cidrIpv6, description: ipv6RangesDescription = '' }) => {
           allRules.push({
-            id: cuid(),
+            id: generateUniqueId({
+              arn,
+              cidrIpv6,
+              ipv6RangesDescription,
+              ipv6Ranges: 'ipv6Ranges',
+            }),
             [direction]: cidrIpv6,
             description: ipv6RangesDescription,
           })
@@ -90,7 +101,12 @@ export default ({
       ;(rule.prefixListIds || []).map(
         ({ prefixListId, description: prefixListIdsDescription = '' }) => {
           allRules.push({
-            id: cuid(),
+            id: generateUniqueId({
+              arn,
+              prefixListId,
+              prefixListIdsDescription,
+              prefixListIds: 'prefixListIds',
+            }),
             [direction]: prefixListId,
             description: prefixListIdsDescription,
           })
@@ -105,7 +121,15 @@ export default ({
           description: descriptionUserIdGroupPairs = '',
         }) => {
           allRules.push({
-            id: cuid(),
+            id: generateUniqueId({
+              arn,
+              groupId,
+              descriptionUserIdGroupPairs,
+              groupName,
+              peeringStatus,
+              userId,
+              userIdGroupPairs: 'userIdGroupPairs',
+            }),
             [direction]: groupId,
             description: descriptionUserIdGroupPairs,
             groupName,
@@ -133,7 +157,7 @@ export default ({
     name,
     vpcId,
     accountId: account,
-    arn: securityGroupArn({ region, account, id }),
+    arn,
     region,
     description,
     tags: formatTagsFromMap(Tags),

@@ -1,5 +1,6 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
 import { Subscription } from 'aws-sdk/clients/sns'
+
 import { RawAwsSns } from './data'
 import { AwsSns, AwsSnsSubscription } from '../../types/generated'
 import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
@@ -11,7 +12,9 @@ import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 const awsSNSSubscriptionConverter = (
   subscription: Subscription
 ): AwsSnsSubscription => ({
-  id: cuid(),
+  id: generateUniqueId({
+    ...subscription,
+  }),
   arn: subscription.SubscriptionArn,
   endpoint: subscription.Endpoint,
   protocol: subscription.Protocol,

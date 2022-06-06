@@ -1,22 +1,28 @@
 import { IdentityProviders } from 'aws-sdk/clients/cognitoidentity'
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import t from '../../properties/translations'
-import { AwsCognitoIdentityPool, AwsSupportedLoginProvider } from '../../types/generated'
+import {
+  AwsCognitoIdentityPool,
+  AwsSupportedLoginProvider,
+} from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsCognitoIdentityPool } from './data'
-import {
-  cognitoIdentityPoolArn,
-} from '../../utils/generateArns'
+import { cognitoIdentityPoolArn } from '../../utils/generateArns'
 
 /**
  * Cognito Identity Pool
  */
 
-const formatSupportedLoginProviders = (supportedLoginProviders: IdentityProviders): AwsSupportedLoginProvider[] => {
+const formatSupportedLoginProviders = (
+  supportedLoginProviders: IdentityProviders
+): AwsSupportedLoginProvider[] => {
   const result: AwsSupportedLoginProvider[] = []
   if (supportedLoginProviders) {
-    for (const [identityProvider, identityProviderId] of Object.entries(supportedLoginProviders)) {
-      result.push({identityProvider, identityProviderId })
+    for (const [identityProvider, identityProviderId] of Object.entries(
+      supportedLoginProviders
+    )) {
+      result.push({ identityProvider, identityProviderId })
     }
   }
   return result
@@ -44,27 +50,39 @@ export default ({
     Tags: identityPoolTags,
   } = rawData
 
-  const cognitoIdentityProviderList = cognitoIdentityProviders?.map(({
-    ProviderName: providerName,
-    ClientId: clientId,
-    ServerSideTokenCheck: serverSideTokenCheck,
-  }) => ({
-    id: cuid(),
-    providerName,
-    clientId,
-    serverSideTokenCheck: serverSideTokenCheck? t.yes : t.no,
-  })) || []
+  const cognitoIdentityProviderList =
+    cognitoIdentityProviders?.map(
+      ({
+        ProviderName: providerName,
+        ClientId: clientId,
+        ServerSideTokenCheck: serverSideTokenCheck,
+      }) => ({
+        id: generateUniqueId({
+          identityPoolId,
+          providerName,
+          clientId,
+          serverSideTokenCheck,
+        }),
+        providerName,
+        clientId,
+        serverSideTokenCheck: serverSideTokenCheck ? t.yes : t.no,
+      })
+    ) || []
 
   const arn = cognitoIdentityPoolArn({ region, account, identityPoolId })
 
-  const identityPool  = {
+  const identityPool = {
     id: identityPoolId,
     accountId: account,
     arn,
     identityPoolName,
-    allowUnauthenticatedIdentities: allowUnauthenticatedIdentities? t.yes : t.no,
-    allowClassicFlow: allowClassicFlow? t.yes : t.no,
-    supportedLoginProviders: formatSupportedLoginProviders(supportedLoginProviders),
+    allowUnauthenticatedIdentities: allowUnauthenticatedIdentities
+      ? t.yes
+      : t.no,
+    allowClassicFlow: allowClassicFlow ? t.yes : t.no,
+    supportedLoginProviders: formatSupportedLoginProviders(
+      supportedLoginProviders
+    ),
     developerProviderName,
     openIdConnectProviderARNs,
     cognitoIdentityProviders: cognitoIdentityProviderList,

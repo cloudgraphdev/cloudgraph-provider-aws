@@ -1,9 +1,9 @@
+import { generateUniqueId } from '@cloudgraph/sdk'
 import {
   CacheBehavior,
   DefaultCacheBehavior,
   Origin,
 } from 'aws-sdk/clients/cloudfront'
-import cuid from 'cuid'
 
 import t from '../../properties/translations'
 import { formatTagsFromMap } from '../../utils/format'
@@ -45,7 +45,9 @@ export const createCacheBehavior = (
   }
 
   return {
-    id: cuid(),
+    id: generateUniqueId({
+      ...cache,
+    }),
     allowedMethods,
     cachedMethods,
     compress: compress ? t.yes : t.no,
@@ -87,7 +89,9 @@ export const createDefaultCacheBehavior = (
   }
 
   return {
-    id: cuid(),
+    id: generateUniqueId({
+      ...cache,
+    }),
     allowedMethods,
     cachedMethods,
     compress: compress ? t.yes : t.no,
@@ -117,7 +121,12 @@ export default ({
       CallerReference: callerReference,
       DefaultRootObject: defaultRootObject,
       HttpVersion: httpVersion,
-      Restrictions: { GeoRestriction: { Items: locations = [], RestrictionType: restrictionType = ''} } = {
+      Restrictions: {
+        GeoRestriction: {
+          Items: locations = [],
+          RestrictionType: restrictionType = '',
+        },
+      } = {
         GeoRestriction: { RestrictionType: '', Items: [], Quantity: 0 },
       },
       Logging: logging,
@@ -155,7 +164,12 @@ export default ({
       ResponseCode: responseCode,
       ResponsePagePath: responsePagePath,
     }) => ({
-      id: cuid(),
+      id: generateUniqueId({
+        errorCachingMinTtl,
+        errorCode,
+        responseCode,
+        responsePagePath,
+      }),
       errorCachingMinTtl: `${errorCachingMinTtl} ${t.seconds}`,
       errorCode,
       responseCode,
@@ -172,45 +186,53 @@ export default ({
   }
 
   const origins: AwsCloudfrontOriginData[] = originData.map(
-    ({
-      CustomHeaders: { Items: customHeader = [] },
-      CustomOriginConfig: {
-        HTTPPort: httpPort,
-        HTTPSPort: httpsPort,
-        OriginProtocolPolicy: originProtocolPolicy,
-        OriginSslProtocols: { Quantity: quantity, Items: items },
-        OriginReadTimeout: originReadTimeout,
-        OriginKeepaliveTimeout: originKeepaliveTimeout,
-      } = {
-        HTTPPort: null,
-        HTTPSPort: null,
-        OriginProtocolPolicy: null,
-        OriginSslProtocols: { Quantity: 0, Items: [] },
-        OriginReadTimeout: null,
-        OriginKeepaliveTimeout: null,
-      },
-      DomainName: domainName,
-      Id: originId,
-      OriginPath: originPath,
-    }: Origin) => ({
-      id: cuid(),
-      customHeaders: customHeader.map(({ HeaderName, HeaderValue }) => ({
-        id: cuid(),
-        name: HeaderName,
-        value: HeaderValue,
-      })),
-      customOriginConfig: {
-        httpPort,
-        httpsPort,
-        originProtocolPolicy,
-        originSslProtocols: { quantity, items },
-        originReadTimeout,
-        originKeepaliveTimeout,
-      },
-      domainName,
-      originId,
-      originPath,
-    })
+    (origin: Origin) => {
+      const {
+        CustomHeaders: { Items: customHeader = [] },
+        CustomOriginConfig: {
+          HTTPPort: httpPort,
+          HTTPSPort: httpsPort,
+          OriginProtocolPolicy: originProtocolPolicy,
+          OriginSslProtocols: { Quantity: quantity, Items: items },
+          OriginReadTimeout: originReadTimeout,
+          OriginKeepaliveTimeout: originKeepaliveTimeout,
+        } = {
+          HTTPPort: null,
+          HTTPSPort: null,
+          OriginProtocolPolicy: null,
+          OriginSslProtocols: { Quantity: 0, Items: [] },
+          OriginReadTimeout: null,
+          OriginKeepaliveTimeout: null,
+        },
+        DomainName: domainName,
+        Id: originId,
+        OriginPath: originPath,
+      } = origin
+      return {
+        id: generateUniqueId({
+          ...origin,
+        }),
+        customHeaders: customHeader.map(({ HeaderName, HeaderValue }) => ({
+          id: generateUniqueId({
+            HeaderName,
+            HeaderValue,
+          }),
+          name: HeaderName,
+          value: HeaderValue,
+        })),
+        customOriginConfig: {
+          httpPort,
+          httpsPort,
+          originProtocolPolicy,
+          originSslProtocols: { quantity, items },
+          originReadTimeout,
+          originKeepaliveTimeout,
+        },
+        domainName,
+        originId,
+        originPath,
+      }
+    }
   )
 
   const loggingConfig: AwsCloudfrontLoggingConfig = logging

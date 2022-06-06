@@ -1,4 +1,5 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { formatTagsFromMap } from '../../utils/format'
 import { AwsGuardDutyDetector } from '../../types/generated'
 import { RawAwsGuardDutyDetector } from './data'
@@ -29,6 +30,8 @@ export default ({
     Tags,
   } = rawData
 
+  const arn = guardDutyArn({ region, account, detectorId: id })
+
   const formattedDataSources = {
     cloudTrail: {
       status: dataSources?.CloudTrail?.Status,
@@ -50,7 +53,10 @@ export default ({
   }
 
   const mappedMembers = members?.map(member => ({
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      ...member,
+    }),
     accountId: member?.AccountId,
     detectorId: member?.DetectorId,
     masterId: member?.MasterId,
@@ -62,7 +68,7 @@ export default ({
 
   return {
     id,
-    arn: guardDutyArn({ region, account, detectorId: id }),
+    arn,
     region,
     accountId: account,
     createdAt: new Date(createdAt)?.toISOString(),

@@ -1,5 +1,5 @@
 // import { formatTagsFromMap } from '../../utils/format' // TODO: Build this
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
 import { TableMetadata, Column } from 'aws-sdk/clients/athena'
 import { AwsAthenaDataCatalog } from '../../types/generated'
 import { RawAwsAthenaDataCatalog } from './data'
@@ -10,10 +10,12 @@ import { athenaDataCatalogArn } from '../../utils/generateArns'
  */
 const formatColumns = (column: Column) => {
   return {
-    id: cuid(),
+    id: generateUniqueId({
+      ...column,
+    }),
     name: column.Name,
     type: column.Type,
-    comment: column.Comment
+    comment: column.Comment,
   }
 }
 const formatMetadata = (metadata: TableMetadata) => {
@@ -22,13 +24,15 @@ const formatMetadata = (metadata: TableMetadata) => {
     createTime: metadata.CreateTime?.toISOString(),
     lastAccessTime: metadata.LastAccessTime?.toISOString(),
     tableType: metadata.TableType,
-    columns: metadata.Columns?.map(formatColumns),  
+    columns: metadata.Columns?.map(formatColumns),
     partitionKeys: metadata.PartitionKeys?.map(formatColumns),
     parameters: Object.keys(metadata.Parameters ?? {}).map(key => ({
-      id: cuid(),
+      id: generateUniqueId({
+        ...metadata,
+      }),
       key,
-      value: metadata.Parameters[key]
-    }))
+      value: metadata.Parameters[key],
+    })),
   }
 }
 export default ({
@@ -42,15 +46,22 @@ export default ({
 }): AwsAthenaDataCatalog => {
   const { CatalogName: catalogName, Type: type, databases = [] } = rawData
   const formattedDatabases = databases.map(val => ({
-    id: cuid(),
+    id: generateUniqueId({
+      catalogName,
+      ...val,
+    }),
     name: val.Name,
     description: val.Description,
     parameters: Object.keys(val.Parameters ?? {}).map(key => ({
-      id: cuid(),
+      id: generateUniqueId({
+        catalogName,
+        key,
+        value: val.Parameters[key],
+      }),
       key,
-      value: val.Parameters[key]
+      value: val.Parameters[key],
     })),
-    metadata: formatMetadata(val.metadata)
+    metadata: formatMetadata(val.metadata),
   }))
   const arn = athenaDataCatalogArn({ region, account, name: catalogName })
   return {
@@ -60,6 +71,6 @@ export default ({
     accountId: account,
     catalogName,
     type,
-    databases: formattedDatabases
+    databases: formattedDatabases,
   }
 }
