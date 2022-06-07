@@ -76,7 +76,7 @@ const tagsByRoleName = async (
   iam: IAM,
   { RoleName }: Role
 ): Promise<{ RoleName: string; Tags: TagMap }> =>
-  new Promise(resolveUserPolicies => {
+  new Promise(resolve => {
     iam.listRoleTags(
       { RoleName },
       (err: AWSError, data: ListRoleTagsResponse) => {
@@ -90,13 +90,13 @@ const tagsByRoleName = async (
         if (!isEmpty(data)) {
           const { Tags: tags = [] } = data
 
-          resolveUserPolicies({
+          resolve({
             RoleName,
             Tags: convertAwsTagsToTagMap(tags),
           })
         }
 
-        resolveUserPolicies(null)
+        resolve(null)
       }
     )
   })
@@ -105,7 +105,7 @@ const policiesByRoleName = async (
   iam: IAM,
   { RoleName }: Role
 ): Promise<{ RoleName: string; Policies: string[] }> =>
-  new Promise(resolveUserPolicies => {
+  new Promise(resolve => {
     iam.listRolePolicies(
       { RoleName },
       (err: AWSError, data: ListRolePoliciesResponse) => {
@@ -119,10 +119,10 @@ const policiesByRoleName = async (
         if (!isEmpty(data)) {
           const { PolicyNames = [] } = data
 
-          resolveUserPolicies({ RoleName, Policies: PolicyNames })
+          resolve({ RoleName, Policies: PolicyNames })
         }
 
-        resolveUserPolicies(null)
+        resolve(null)
       }
     )
   })
@@ -131,7 +131,7 @@ const managedPoliciesByRoleName = async (
   iam: IAM,
   { RoleName }: Role
 ): Promise<{ RoleName: string; ManagedPolicies: AttachedPolicy[] }> =>
-  new Promise(resolveUserPolicies => {
+  new Promise(resolve => {
     iam.listAttachedRolePolicies(
       { RoleName },
       (err: AWSError, data: ListAttachedRolePoliciesResponse) => {
@@ -145,13 +145,13 @@ const managedPoliciesByRoleName = async (
         if (!isEmpty(data)) {
           const { AttachedPolicies = [] } = data
 
-          resolveUserPolicies({
+          resolve({
             RoleName,
             ManagedPolicies: AttachedPolicies,
           })
         }
 
-        resolveUserPolicies(null)
+        resolve(null)
       }
     )
   })
