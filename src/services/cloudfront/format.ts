@@ -17,94 +17,6 @@ import {
 } from '../../types/generated'
 import { RawAwsCloudfront } from './data'
 
-export const createCacheBehavior = (
-  cache: CacheBehavior
-): AwsCloudfrontCacheBehavior => {
-  const {
-    AllowedMethods: {
-      Items: allowedMethods = [],
-      CachedMethods: { Items: cachedMethods = [] } = { Items: [] },
-    } = {},
-    Compress: compress,
-    DefaultTTL: defaultTtl,
-    ForwardedValues: {
-      Headers: { Items: headers } = {},
-      QueryString: queryString,
-    } = {},
-    MaxTTL: maxTtl,
-    MinTTL: minTtl,
-    PathPattern: patternPath,
-    SmoothStreaming: smoothStreaming,
-    TargetOriginId: targetOriginId,
-    ViewerProtocolPolicy: viewerProtocolPolicy,
-  } = cache
-
-  const forwardedValues = {
-    headers,
-    queryString: queryString ? t.yes : t.no,
-  }
-
-  return {
-    id: generateUniqueId({
-      ...cache,
-    }),
-    allowedMethods,
-    cachedMethods,
-    compress: compress ? t.yes : t.no,
-    defaultTtl: defaultTtl ? `${defaultTtl} ${t.seconds}` : null,
-    forwardedValues,
-    maxTtl: maxTtl ? `${maxTtl} ${t.seconds}` : null,
-    minTtl: minTtl ? `${minTtl} ${t.seconds}` : null,
-    patternPath,
-    smoothStreaming: smoothStreaming ? t.yes : t.no,
-    targetOriginId,
-    viewerProtocolPolicy,
-  }
-}
-
-export const createDefaultCacheBehavior = (
-  cache: DefaultCacheBehavior
-): AwsCloudfrontCacheBehavior => {
-  const {
-    AllowedMethods: {
-      Items: allowedMethods = [],
-      CachedMethods: { Items: cachedMethods = [] } = { Items: [] },
-    } = {},
-    Compress: compress,
-    DefaultTTL: defaultTtl,
-    ForwardedValues: {
-      Headers: { Items: headers } = {},
-      QueryString: queryString,
-    } = {},
-    MaxTTL: maxTtl,
-    MinTTL: minTtl,
-    SmoothStreaming: smoothStreaming,
-    TargetOriginId: targetOriginId,
-    ViewerProtocolPolicy: viewerProtocolPolicy,
-  } = cache
-
-  const forwardedValues = {
-    headers,
-    queryString: queryString ? t.yes : t.no,
-  }
-
-  return {
-    id: generateUniqueId({
-      ...cache,
-    }),
-    allowedMethods,
-    cachedMethods,
-    compress: compress ? t.yes : t.no,
-    defaultTtl: defaultTtl ? `${defaultTtl} ${t.seconds}` : null,
-    forwardedValues,
-    maxTtl: maxTtl ? `${maxTtl} ${t.seconds}` : null,
-    minTtl: minTtl ? `${minTtl} ${t.seconds}` : null,
-    smoothStreaming: smoothStreaming ? t.yes : t.no,
-    targetOriginId,
-    viewerProtocolPolicy,
-  }
-}
-
 /**
  * CloudFront
  */
@@ -157,6 +69,96 @@ export default ({
     Tags = {},
   }: RawAwsCloudfront = service
 
+  const createCacheBehavior = (
+    cache: CacheBehavior
+  ): AwsCloudfrontCacheBehavior => {
+    const {
+      AllowedMethods: {
+        Items: allowedMethods = [],
+        CachedMethods: { Items: cachedMethods = [] } = { Items: [] },
+      } = {},
+      Compress: compress,
+      DefaultTTL: defaultTtl,
+      ForwardedValues: {
+        Headers: { Items: headers } = {},
+        QueryString: queryString,
+      } = {},
+      MaxTTL: maxTtl,
+      MinTTL: minTtl,
+      PathPattern: patternPath,
+      SmoothStreaming: smoothStreaming,
+      TargetOriginId: targetOriginId,
+      ViewerProtocolPolicy: viewerProtocolPolicy,
+    } = cache
+
+    const forwardedValues = {
+      headers,
+      queryString: queryString ? t.yes : t.no,
+    }
+
+    return {
+      id: generateUniqueId({
+        arn,
+        ...cache,
+      }),
+      allowedMethods,
+      cachedMethods,
+      compress: compress ? t.yes : t.no,
+      defaultTtl: defaultTtl ? `${defaultTtl} ${t.seconds}` : null,
+      forwardedValues,
+      maxTtl: maxTtl ? `${maxTtl} ${t.seconds}` : null,
+      minTtl: minTtl ? `${minTtl} ${t.seconds}` : null,
+      patternPath,
+      smoothStreaming: smoothStreaming ? t.yes : t.no,
+      targetOriginId,
+      viewerProtocolPolicy,
+    }
+  }
+
+  const createDefaultCacheBehavior = (
+    cache: DefaultCacheBehavior
+  ): AwsCloudfrontCacheBehavior => {
+    const {
+      AllowedMethods: {
+        Items: allowedMethods = [],
+        CachedMethods: { Items: cachedMethods = [] } = { Items: [] },
+      } = {},
+      Compress: compress,
+      DefaultTTL: defaultTtl,
+      ForwardedValues: {
+        Headers: { Items: headers } = {},
+        QueryString: queryString,
+      } = {},
+      MaxTTL: maxTtl,
+      MinTTL: minTtl,
+      SmoothStreaming: smoothStreaming,
+      TargetOriginId: targetOriginId,
+      ViewerProtocolPolicy: viewerProtocolPolicy,
+    } = cache
+
+    const forwardedValues = {
+      headers,
+      queryString: queryString ? t.yes : t.no,
+    }
+
+    return {
+      id: generateUniqueId({
+        arn,
+        ...cache,
+      }),
+      allowedMethods,
+      cachedMethods,
+      compress: compress ? t.yes : t.no,
+      defaultTtl: defaultTtl ? `${defaultTtl} ${t.seconds}` : null,
+      forwardedValues,
+      maxTtl: maxTtl ? `${maxTtl} ${t.seconds}` : null,
+      minTtl: minTtl ? `${minTtl} ${t.seconds}` : null,
+      smoothStreaming: smoothStreaming ? t.yes : t.no,
+      targetOriginId,
+      viewerProtocolPolicy,
+    }
+  }
+
   const customErrorResponses: AwsCloudfrontCustomErrorResponse[] = cer.map(
     ({
       ErrorCachingMinTTL: errorCachingMinTtl,
@@ -165,6 +167,7 @@ export default ({
       ResponsePagePath: responsePagePath,
     }) => ({
       id: generateUniqueId({
+        arn,
         errorCachingMinTtl,
         errorCode,
         responseCode,
@@ -210,10 +213,12 @@ export default ({
       } = origin
       return {
         id: generateUniqueId({
+          arn,
           ...origin,
         }),
         customHeaders: customHeader.map(({ HeaderName, HeaderValue }) => ({
           id: generateUniqueId({
+            arn,
             HeaderName,
             HeaderValue,
           }),

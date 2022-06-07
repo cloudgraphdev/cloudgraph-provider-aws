@@ -71,13 +71,15 @@ export default ({
        */
 
       ;(rule.ipRanges || []).map(
-        ({ cidrIp, description: ipRangesDescription = '' }) => {
+        ({ cidrIp, description: ipRangesDescription = '' }, index) => {
           allRules.push({
             id: generateUniqueId({
               arn,
+              protocol,
+              portRange,
               cidrIp,
               ipRangesDescription,
-              ipRanges: 'ipRanges',
+              ipRanges: `ipRanges_${index}`,
             }),
             [direction]: cidrIp,
             description: ipRangesDescription,
@@ -85,13 +87,15 @@ export default ({
         }
       )
       ;(rule.ipv6Ranges || []).map(
-        ({ cidrIpv6, description: ipv6RangesDescription = '' }) => {
+        ({ cidrIpv6, description: ipv6RangesDescription = '' }, index) => {
           allRules.push({
             id: generateUniqueId({
               arn,
+              protocol,
+              portRange,
               cidrIpv6,
               ipv6RangesDescription,
-              ipv6Ranges: 'ipv6Ranges',
+              ipv6Ranges: `ipv6Ranges_${index}`,
             }),
             [direction]: cidrIpv6,
             description: ipv6RangesDescription,
@@ -99,13 +103,18 @@ export default ({
         }
       )
       ;(rule.prefixListIds || []).map(
-        ({ prefixListId, description: prefixListIdsDescription = '' }) => {
+        (
+          { prefixListId, description: prefixListIdsDescription = '' },
+          index
+        ) => {
           allRules.push({
             id: generateUniqueId({
               arn,
+              protocol,
+              portRange,
               prefixListId,
               prefixListIdsDescription,
-              prefixListIds: 'prefixListIds',
+              prefixListIds: `prefixListIds_${index}`,
             }),
             [direction]: prefixListId,
             description: prefixListIdsDescription,
@@ -113,22 +122,27 @@ export default ({
         }
       )
       ;(rule.userIdGroupPairs || []).map(
-        ({
-          groupId,
-          userId = '',
-          groupName = '',
-          peeringStatus = '',
-          description: descriptionUserIdGroupPairs = '',
-        }) => {
+        (
+          {
+            groupId,
+            userId = '',
+            groupName = '',
+            peeringStatus = '',
+            description: descriptionUserIdGroupPairs = '',
+          },
+          index
+        ) => {
           allRules.push({
             id: generateUniqueId({
               arn,
+              protocol,
+              portRange,
               groupId,
               descriptionUserIdGroupPairs,
               groupName,
               peeringStatus,
               userId,
-              userIdGroupPairs: 'userIdGroupPairs',
+              userIdGroupPairs: `userIdGroupPairs_${index}`,
             }),
             [direction]: groupId,
             description: descriptionUserIdGroupPairs,

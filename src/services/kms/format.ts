@@ -8,23 +8,6 @@ import {
 } from '../../types/generated'
 import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 
-export const formatAliases = (
-  aliases?: AliasListEntry[]
-): AwsKmsAliasListEntry[] => {
-  return (
-    aliases?.map(a => ({
-      id: generateUniqueId({
-        ...a,
-      }),
-      aliasName: a.AliasName,
-      aliasArn: a.AliasArn,
-      targetKeyId: a.TargetKeyId,
-      creationDate: a.CreationDate?.toISOString(),
-      lastUpdatedDate: a.LastUpdatedDate?.toISOString(),
-    })) || []
-  )
-}
-
 /**
  * KMS
  */
@@ -56,6 +39,24 @@ export default ({
     ValidTo: validTo,
     Aliases: aliases = [],
   } = key
+
+  const formatAliases = (
+    aliases?: AliasListEntry[]
+  ): AwsKmsAliasListEntry[] => {
+    return (
+      aliases?.map(a => ({
+        id: generateUniqueId({
+          arn,
+          ...a,
+        }),
+        aliasName: a.AliasName,
+        aliasArn: a.AliasArn,
+        targetKeyId: a.TargetKeyId,
+        creationDate: a.CreationDate?.toISOString(),
+        lastUpdatedDate: a.LastUpdatedDate?.toISOString(),
+      })) || []
+    )
+  }
 
   return {
     accountId: account,

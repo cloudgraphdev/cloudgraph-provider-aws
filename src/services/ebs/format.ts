@@ -34,11 +34,12 @@ export default ({
     VolumeId: id,
     Tags: tags,
   } = rawData
+  const arn = ebsVolumeArn({ region, account, id })
 
   // Format volume permissions
   const volumePermissions = permissions.map(permission => {
     return {
-      id: generateUniqueId({ ...permission }),
+      id: generateUniqueId({ arn, ...permission }),
       group: permission.Group,
       userId: permission.UserId,
     }
@@ -61,7 +62,7 @@ export default ({
   const ebs = {
     id,
     accountId: account,
-    arn: ebsVolumeArn({ region, account, id }),
+    arn,
     region,
     attachments: volumeAttachments,
     iops,
