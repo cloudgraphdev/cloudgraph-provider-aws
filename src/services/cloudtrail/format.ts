@@ -1,5 +1,6 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
 import { isEmpty } from 'lodash'
+
 import t from '../../properties/translations'
 import { AwsCloudtrail } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
@@ -52,12 +53,21 @@ export default ({
   if (!isEmpty(EventSelectors)) {
     eventSelectors = EventSelectors.map(
       ({ ReadWriteType, IncludeManagementEvents, DataResources }) => ({
-        id: cuid(),
+        id: generateUniqueId({
+          arn,
+          ReadWriteType,
+          IncludeManagementEvents,
+          DataResources,
+        }),
         readWriteType: ReadWriteType,
         includeManagementEvents: IncludeManagementEvents,
         dataResources:
           DataResources?.map(({ Type, Values }) => ({
-            id: cuid(),
+            id: generateUniqueId({
+              arn,
+              Type,
+              Values,
+            }),
             type: Type,
             values: Values,
           })) || [],

@@ -1,4 +1,5 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { RawAwsApiGatewayDomainName } from './data'
 import { AwsApiGatewayDomainName } from '../../types/generated'
 import { domainNameArn } from '../../utils/generateArns'
@@ -29,19 +30,23 @@ export default ({
     region,
     domainName,
     apiMappingSelectionExpression,
-    configurations: domainNameConfigurations?.map(dn => ({
-      id: cuid(),
-      apiGatewayDomainName: dn.ApiGatewayDomainName,
-      certificateArn: dn.CertificateArn,
-      certificateName: dn.CertificateName,
-      certificateUploadDate: dn.CertificateUploadDate?.toDateString(),
-      domainNameStatus: dn.DomainNameStatus,
-      domainNameStatusMessage: dn.DomainNameStatusMessage,
-      endpointType: dn.EndpointType,
-      securityPolicy: dn.SecurityPolicy,
-      ownershipVerificationCertificateArn:
-        dn.OwnershipVerificationCertificateArn,
-    })) || [],
+    configurations:
+      domainNameConfigurations?.map(dn => ({
+        id: generateUniqueId({
+          arn,
+          ...dn,
+        }),
+        apiGatewayDomainName: dn.ApiGatewayDomainName,
+        certificateArn: dn.CertificateArn,
+        certificateName: dn.CertificateName,
+        certificateUploadDate: dn.CertificateUploadDate?.toDateString(),
+        domainNameStatus: dn.DomainNameStatus,
+        domainNameStatusMessage: dn.DomainNameStatusMessage,
+        endpointType: dn.EndpointType,
+        securityPolicy: dn.SecurityPolicy,
+        ownershipVerificationCertificateArn:
+          dn.OwnershipVerificationCertificateArn,
+      })) || [],
     tags: formatTagsFromMap(tags),
   }
 }

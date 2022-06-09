@@ -1,4 +1,5 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsManagedPrefixList } from './data'
 import { AwsManagedPrefixList } from '../../types/generated'
@@ -40,11 +41,15 @@ export default ({
     stateMessage,
     maxEntries,
     version,
-    entries: entries?.map(e => ({
-      id: cuid(),
-      cidr: e.Cidr,
-      description: e.Description,
-    })) || [],
+    entries:
+      entries?.map(e => ({
+        id: generateUniqueId({
+          arn,
+          ...e,
+        }),
+        cidr: e.Cidr,
+        description: e.Description,
+      })) || [],
     tags: formatTagsFromMap(tags),
   }
 

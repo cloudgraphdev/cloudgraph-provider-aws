@@ -1,34 +1,50 @@
+import { generateUniqueId } from '@cloudgraph/sdk'
 import { VpcPeeringConnectionVpcInfo } from 'aws-sdk/clients/ec2'
-import cuid from 'cuid'
 import { isEmpty } from 'lodash'
+
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsVpcPeeringConnection } from './data'
-import { AwsVpcPeeringConnection, AwsVpcPeeringConnectionVpcInfo } from '../../types/generated'
+import {
+  AwsVpcPeeringConnection,
+  AwsVpcPeeringConnectionVpcInfo,
+} from '../../types/generated'
 import { vpcPeeringConnectionArn } from '../../utils/generateArns'
 
 const formatVpcInfo = (
   vpcInfo: VpcPeeringConnectionVpcInfo
 ): AwsVpcPeeringConnectionVpcInfo => {
-
   if (isEmpty(vpcInfo)) {
     return {}
   }
 
   return {
     cidrBlock: vpcInfo.CidrBlock,
-    ipv6CidrBlockSet: vpcInfo.Ipv6CidrBlockSet?.map( c => ({
-      id: cuid(),
-      ipv6CidrBlock: c.Ipv6CidrBlock,
-    })) || [],
-    cidrBlockSet: vpcInfo.CidrBlockSet?.map( c => ({
-      id: cuid(),
-      cidrBlock: c.CidrBlock,
-    })) || [],
-    peeringOptions: vpcInfo.PeeringOptions ? {
-      allowDnsResolutionFromRemoteVpc : vpcInfo.PeeringOptions.AllowDnsResolutionFromRemoteVpc,
-      allowEgressFromLocalClassicLinkToRemoteVpc : vpcInfo.PeeringOptions.AllowEgressFromLocalClassicLinkToRemoteVpc,
-      allowEgressFromLocalVpcToRemoteClassicLink : vpcInfo.PeeringOptions.AllowEgressFromLocalVpcToRemoteClassicLink,
-    } : {},
+    ipv6CidrBlockSet:
+      vpcInfo.Ipv6CidrBlockSet?.map(c => ({
+        id: generateUniqueId({
+          cidrBlock: vpcInfo.CidrBlock,
+          ...vpcInfo.Ipv6CidrBlockSet,
+        }),
+        ipv6CidrBlock: c.Ipv6CidrBlock,
+      })) || [],
+    cidrBlockSet:
+      vpcInfo.CidrBlockSet?.map(c => ({
+        id: generateUniqueId({
+          cidrBlock: vpcInfo.CidrBlock,
+          ...vpcInfo.CidrBlockSet,
+        }),
+        cidrBlock: c.CidrBlock,
+      })) || [],
+    peeringOptions: vpcInfo.PeeringOptions
+      ? {
+          allowDnsResolutionFromRemoteVpc:
+            vpcInfo.PeeringOptions.AllowDnsResolutionFromRemoteVpc,
+          allowEgressFromLocalClassicLinkToRemoteVpc:
+            vpcInfo.PeeringOptions.AllowEgressFromLocalClassicLinkToRemoteVpc,
+          allowEgressFromLocalVpcToRemoteClassicLink:
+            vpcInfo.PeeringOptions.AllowEgressFromLocalVpcToRemoteClassicLink,
+        }
+      : {},
     vpcId: vpcInfo.VpcId,
   }
 }
@@ -58,7 +74,7 @@ export default ({
   const vpcPeeringConnection = {
     id,
     accountId: account,
-    arn: vpcPeeringConnectionArn({region, account, id}),
+    arn: vpcPeeringConnectionArn({ region, account, id }),
     region,
     accepterVpcInfo: formatVpcInfo(accepterVpcInfo),
     expirationTime: expirationTime?.toISOString(),

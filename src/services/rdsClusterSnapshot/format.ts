@@ -1,4 +1,5 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { formatTagsFromMap } from '../../utils/format'
 import { AwsRdsClusterSnapshot } from '../../types/generated'
 import { RawAwsRdsClusterSnapshot } from './data'
@@ -42,11 +43,16 @@ export default ({
     attributes,
   } = rawData
 
-  const mappedAttributes = attributes?.map(({ AttributeName, AttributeValues }) => ({
-    id: cuid(),
-    name: AttributeName,
-    values: AttributeValues
-  }))
+  const mappedAttributes = attributes?.map(
+    ({ AttributeName, AttributeValues }) => ({
+      id: generateUniqueId({
+        AttributeName,
+        AttributeValues,
+      }),
+      name: AttributeName,
+      values: AttributeValues,
+    })
+  )
 
   return {
     id: dbClusterSnapshotIdentifier,
@@ -73,6 +79,6 @@ export default ({
     iamDatabaseAuthenticationEnabled,
     sourceDBClusterSnapshotArn,
     tags: formatTagsFromMap(Tags ?? {}),
-    attributes: mappedAttributes
+    attributes: mappedAttributes,
   }
 }

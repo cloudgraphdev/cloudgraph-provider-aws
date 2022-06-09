@@ -1,4 +1,5 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { AwsElasticSearchDomain } from '../../types/generated'
 import { RawAwsElasticSearchDomain } from './data'
 import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
@@ -46,7 +47,11 @@ export default ({
   } = rawData
 
   const mappedEndpoints = Object.keys(endpoints ?? {}).map(key => ({
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      key,
+      value: endpoints[key],
+    }),
     key,
     value: endpoints[key],
   }))
@@ -105,13 +110,23 @@ export default ({
   }
 
   const mappedAdvancedOptions = Object.keys(advancedOptions ?? {}).map(key => ({
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      key,
+      value: advancedOptions[key],
+    }),
     key,
     value: advancedOptions[key],
   }))
 
-  const mappedLogPublishingOptions = Object.keys(logPublishingOptions ?? {}).map(key => ({
-    id: cuid(),
+  const mappedLogPublishingOptions = Object.keys(
+    logPublishingOptions ?? {}
+  ).map(key => ({
+    id: generateUniqueId({
+      arn,
+      key,
+      ...logPublishingOptions[key],
+    }),
     key,
     enabled: logPublishingOptions[key]?.Enabled,
     cloudWatchLogsLogGroupArn:
