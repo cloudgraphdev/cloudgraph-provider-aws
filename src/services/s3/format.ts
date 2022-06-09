@@ -1,10 +1,9 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
 import isEmpty from 'lodash/isEmpty'
 
 import {
   GetBucketVersioningOutput,
   NotificationConfiguration,
-  Policy,
   PolicyStatus,
   PublicAccessBlockConfiguration,
   ServerSideEncryptionConfiguration,
@@ -68,6 +67,8 @@ export default ({
       NotificationConfiguration: {},
     },
   } = rawData
+
+  const arn = s3BucketArn({ name })
 
   let size = '0 Kb'
   const total = bucketContents.length
@@ -145,7 +146,10 @@ export default ({
     const { Rules } = encryptionInfo as ServerSideEncryptionConfiguration
     encryptionAdditions.encrypted = t.yes
     encryptionAdditions.encryptionRules = Rules.map(r => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...r,
+      }),
       sseAlgorithm: r.ApplyServerSideEncryptionByDefault?.SSEAlgorithm,
       kmsMasterKeyID: r.ApplyServerSideEncryptionByDefault?.KMSMasterKeyID,
     }))
@@ -191,36 +195,60 @@ export default ({
     notificationConfigurationData = {
       topicConfigurations:
         topicConfigurations?.map(tc => ({
-          id: tc.Id || cuid(),
+          id:
+            tc.Id ||
+            generateUniqueId({
+              arn,
+              ...tc,
+            }),
           topicArn: tc.TopicArn,
           events: tc.Events || [],
           filterRules:
             tc.Filter?.Key?.FilterRules?.map(r => ({
-              id: cuid(),
+              id: generateUniqueId({
+                arn,
+                ...r,
+              }),
               name: r.Name,
               value: r.Value,
             })) || [],
         })) || [],
       queueConfigurations:
         queueConfigurations?.map(qc => ({
-          id: qc.Id || cuid(),
+          id:
+            qc.Id ||
+            generateUniqueId({
+              arn,
+              ...qc,
+            }),
           queueArn: qc.QueueArn,
           events: qc.Events || [],
           filterRules:
             qc.Filter?.Key?.FilterRules?.map(r => ({
-              id: cuid(),
+              id: generateUniqueId({
+                arn,
+                ...r,
+              }),
               name: r.Name,
               value: r.Value,
             })) || [],
         })) || [],
       lambdaFunctionConfigurations:
         lambdaFunctionConfigurations?.map(lc => ({
-          id: lc.Id || cuid(),
+          id:
+            lc.Id ||
+            generateUniqueId({
+              arn,
+              ...lc,
+            }),
           lambdaFunctionArn: lc.LambdaFunctionArn,
           events: lc.Events || [],
           filterRules:
             lc.Filter?.Key?.FilterRules?.map(r => ({
-              id: cuid(),
+              id: generateUniqueId({
+                arn,
+                ...lc,
+              }),
               name: r.Name,
               value: r.Value,
             })) || [],
@@ -258,7 +286,10 @@ export default ({
     notificationConfiguration: notificationConfigurationData,
     aclGrants:
       grants?.map(g => ({
-        id: cuid(),
+        id: generateUniqueId({
+          arn,
+          ...g,
+        }),
         granteeType: g.Grantee?.Type,
         granteeUri: g.Grantee?.URI,
         permission: g.Permission,

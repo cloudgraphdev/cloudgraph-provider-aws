@@ -1,5 +1,6 @@
 // import { formatTagsFromMap } from '../../utils/format' // TODO: Build this
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { AwsManagedAirflow } from '../../types/generated'
 import { RawAwsManagedAirflow } from './data'
 import { formatTagsFromMap } from '../../utils/format'
@@ -28,10 +29,7 @@ export default ({
     ExecutionRoleArn: executionRoleArn,
     LastUpdate: {
       CreatedAt: lastUpdateCreatedAt,
-      Error: {
-        ErrorCode: errorCode,
-        ErrorMessage: errorMessage
-      } = {},
+      Error: { ErrorCode: errorCode, ErrorMessage: errorMessage } = {},
       Status: lastUpdateStatus,
     } = {},
     LoggingConfiguration: {
@@ -66,7 +64,7 @@ export default ({
     Name: name,
     NetworkConfiguration: {
       SecurityGroupIds: securityGroupIds,
-      SubnetIds: subnetIds
+      SubnetIds: subnetIds,
     } = {},
     PluginsS3Path: pluginsS3Path,
     RequirementsS3Path: requirementsS3Path,
@@ -83,7 +81,11 @@ export default ({
   const mappedAirflowConfigurationOptions = Object.keys(
     AirflowConfigurationOptions
   ).map(key => ({
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      key,
+      value: AirflowConfigurationOptions[key],
+    }),
     key,
     value: AirflowConfigurationOptions[key],
   }))
@@ -105,8 +107,8 @@ export default ({
       status: lastUpdateStatus,
       error: {
         errorCode,
-        errorMessage
-      }
+        errorMessage,
+      },
     },
     loggingConfiguration: {
       dagProcessingLogs: {
@@ -137,7 +139,7 @@ export default ({
     },
     networkConfiguration: {
       subnetIds,
-      securityGroupIds
+      securityGroupIds,
     },
     maxWorkers,
     minWorkers,
@@ -151,6 +153,6 @@ export default ({
     tags: formatTagsFromMap(Tags),
     webserverAccessMode,
     webserverUrl,
-    weeklyMaintenanceWindowStart
+    weeklyMaintenanceWindowStart,
   }
 }

@@ -96,8 +96,12 @@ import SageMakerNotebookInstance from '../services/sageMakerNotebookInstance'
 import SystemsManagerInstance from '../services/systemsManagerInstance'
 import SystemsManagerDocument from '../services/systemsManagerDocument'
 import RdsClusterSnapshot from '../services/rdsClusterSnapshot'
+import VpcEndpoint from '../services/vpcEndpoint'
 import APIGatewayDomainName from '../services/apiGatewayDomainName'
 import APIGatewayHttpApi from '../services/apiGatewayHttpApi'
+import ManagedPrefixList from '../services/managedPrefixList'
+import TransitGatewayRouteTable from '../services/transitGatewayRouteTable'
+import VpcPeeringConnection from '../services/vpcPeeringConnection'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -156,12 +160,15 @@ export default {
   [services.kms]: AwsKms,
   [services.lambda]: Lambda,
   [services.managedAirflow]: ManagedAirflow,
+  [services.managedPrefixList]: ManagedPrefixList,
   [services.nacl]: NetworkAcl,
   [services.nat]: NATGateway,
   [services.networkInterface]: NetworkInterface,
   [services.sg]: AwsSecurityGroup,
   [services.subnet]: AwsSubnet,
   [services.vpc]: VPC,
+  [services.vpcEndpoint]: VpcEndpoint,
+  [services.vpcPeeringConnection]: VpcPeeringConnection,
   [services.sqs]: SQS,
   [services.rdsCluster]: RDSCluster,
   [services.rdsClusterSnapshot]: RdsClusterSnapshot,
@@ -195,6 +202,7 @@ export default {
   [services.ecsTaskSet]: EcsTaskSet,
   [services.transitGateway]: TransitGateway,
   [services.transitGatewayAttachment]: TransitGatewayAttachment,
+  [services.transitGatewayRouteTable]: TransitGatewayRouteTable,
   [services.customerGateway]: CustomerGateway,
   [services.vpnGateway]: VpnGateway,
   [services.vpnConnection]: VpnConnection,

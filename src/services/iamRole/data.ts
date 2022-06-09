@@ -5,7 +5,7 @@ import isEmpty from 'lodash/isEmpty'
 import { AWSError } from 'aws-sdk/lib/error'
 
 import IAM, {
-  AttachedPolicy,
+  AttachedPolicy, GetRoleResponse,
   ListAttachedRolePoliciesResponse,
   ListRolePoliciesResponse,
   ListRolesResponse,
@@ -43,11 +43,40 @@ export interface RawAwsIamRole extends Omit<Role, 'Tags'> {
   Tags?: TagMap
 }
 
+const roleByRoleName = async (
+    iam: IAM,
+    { RoleName }: Role
+): Promise<{RoleName: string; Role: Role}> =>
+    new Promise(resolve => {
+        iam.getRole(
+            { RoleName },
+            (err: AWSError, data: GetRoleResponse) => {
+                if (err) {
+                    errorLog.generateAwsErrorLog({
+                        err,
+                        functionName: 'iam:getRole',
+                    })
+                }
+
+                if (!isEmpty(data)) {
+                    const {Role} = data
+
+                    resolve({
+                        RoleName,
+                        Role,
+                    })
+                }
+
+                resolve(null)
+            }
+        )
+    })
+
 const tagsByRoleName = async (
   iam: IAM,
   { RoleName }: Role
 ): Promise<{ RoleName: string; Tags: TagMap }> =>
-  new Promise(resolveUserPolicies => {
+  new Promise(resolve => {
     iam.listRoleTags(
       { RoleName },
       (err: AWSError, data: ListRoleTagsResponse) => {
@@ -61,13 +90,13 @@ const tagsByRoleName = async (
         if (!isEmpty(data)) {
           const { Tags: tags = [] } = data
 
-          resolveUserPolicies({
+          resolve({
             RoleName,
             Tags: convertAwsTagsToTagMap(tags),
           })
         }
 
-        resolveUserPolicies(null)
+        resolve(null)
       }
     )
   })
@@ -76,7 +105,7 @@ const policiesByRoleName = async (
   iam: IAM,
   { RoleName }: Role
 ): Promise<{ RoleName: string; Policies: string[] }> =>
-  new Promise(resolveUserPolicies => {
+  new Promise(resolve => {
     iam.listRolePolicies(
       { RoleName },
       (err: AWSError, data: ListRolePoliciesResponse) => {
@@ -90,10 +119,10 @@ const policiesByRoleName = async (
         if (!isEmpty(data)) {
           const { PolicyNames = [] } = data
 
-          resolveUserPolicies({ RoleName, Policies: PolicyNames })
+          resolve({ RoleName, Policies: PolicyNames })
         }
 
-        resolveUserPolicies(null)
+        resolve(null)
       }
     )
   })
@@ -102,7 +131,7 @@ const managedPoliciesByRoleName = async (
   iam: IAM,
   { RoleName }: Role
 ): Promise<{ RoleName: string; ManagedPolicies: AttachedPolicy[] }> =>
-  new Promise(resolveUserPolicies => {
+  new Promise(resolve => {
     iam.listAttachedRolePolicies(
       { RoleName },
       (err: AWSError, data: ListAttachedRolePoliciesResponse) => {
@@ -116,13 +145,13 @@ const managedPoliciesByRoleName = async (
         if (!isEmpty(data)) {
           const { AttachedPolicies = [] } = data
 
-          resolveUserPolicies({
+          resolve({
             RoleName,
             ManagedPolicies: AttachedPolicies,
           })
         }
 
-        resolveUserPolicies(null)
+        resolve(null)
       }
     )
   })
@@ -136,6 +165,7 @@ export const listIamRoles = async (
     const policiesByRoleNamePromises = []
     const tagsByRoleNamePromises = []
     const managedPoliciesByRoleNamePromises = []
+    const roleByRoleNamePromises: Promise<{RoleName: string; Role: Role}>[] = []
 
     iam.listRoles(
       { Marker: marker },
@@ -155,6 +185,7 @@ export const listIamRoles = async (
             managedPoliciesByRoleNamePromises.push(
               managedPoliciesByRoleName(iam, role)
             )
+            roleByRoleNamePromises.push(roleByRoleName(iam, role))
           })
 
           const tags = await Promise.all(tagsByRoleNamePromises)
@@ -162,6 +193,7 @@ export const listIamRoles = async (
           const managedPolicies = await Promise.all(
             managedPoliciesByRoleNamePromises
           )
+          const detailedRoles = await Promise.all(roleByRoleNamePromises)
 
           result.push(
             ...roles.map(
@@ -173,6 +205,7 @@ export const listIamRoles = async (
                   ),
                   ...role,
                   region: globalRegionName,
+                  RoleLastUsed: detailedRoles?.find(r => r.RoleName === RoleName)?.Role.RoleLastUsed,
                   Policies:
                     policies
                       ?.filter(p => p?.RoleName === RoleName)

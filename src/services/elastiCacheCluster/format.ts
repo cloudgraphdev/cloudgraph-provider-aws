@@ -1,4 +1,5 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { AwsElastiCacheCluster } from '../../types/generated'
 import { RawAwsElastiCacheCluster } from './data'
 import { formatTagsFromMap } from '../../utils/format'
@@ -78,7 +79,10 @@ export default ({
       authTokenStatus: pendingModifiedValues?.AuthTokenStatus,
       logDeliveryConfigurations:
         pendingModifiedValues?.LogDeliveryConfigurations?.map(config => ({
-          id: cuid(),
+          id: generateUniqueId({
+            arn,
+            ...config,
+          }),
           logType: config.LogType,
           destinationType: config.DestinationType,
           destinationDetails: {
@@ -100,7 +104,10 @@ export default ({
       topicStatus: notificationConfiguration?.TopicStatus,
     },
     cacheSecurityGroups: cacheSecurityGroups?.map(sg => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...sg,
+      }),
       cacheSecurityGroupName: sg.CacheSecurityGroupName,
       status: sg.Status,
     })),
@@ -110,7 +117,10 @@ export default ({
       cacheNodeIdsToReboot: cacheParameterGroup?.CacheNodeIdsToReboot,
     },
     cacheNodes: cacheNodes?.map(node => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...node,
+      }),
       cacheNodeId: node.CacheNodeId,
       cacheNodeStatus: node.CacheNodeStatus,
       cacheNodeCreateTime: node.CacheNodeCreateTime?.toISOString(),
@@ -133,7 +143,10 @@ export default ({
     atRestEncryptionEnabled,
     replicationGroupLogDeliveryEnabled,
     logDeliveryConfigurations: logDeliveryConfigurations?.map(config => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...config,
+      }),
       logType: config.LogType,
       destinationType: config.DestinationType,
       destinationDetails: {

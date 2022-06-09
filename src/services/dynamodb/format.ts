@@ -1,11 +1,12 @@
+import { generateUniqueId } from '@cloudgraph/sdk'
 import {
   KeySchemaElement,
   Projection,
   ProvisionedThroughputDescription,
   AutoScalingSettingsDescription,
 } from 'aws-sdk/clients/dynamodb'
-import cuid from 'cuid'
 import { isEmpty } from 'lodash'
+
 import { RawAwsDynamoDbTable } from './data'
 import { formatTagsFromMap } from '../../utils/format'
 import {
@@ -28,7 +29,10 @@ const formatKeySchema = (
   KeySchema: KeySchemaElement[]
 ): AwsDynamoDbTableIndexKeySchema[] =>
   KeySchema.map(({ AttributeName: attributeName, KeyType: keyType }) => ({
-    id: cuid(),
+    id: generateUniqueId({
+      attributeName,
+      keyType,
+    }),
     attributeName,
     keyType,
   }))
@@ -95,11 +99,15 @@ const formatAutoScalingSettingsDescription = (
         PolicyName: policyName,
         TargetTrackingScalingPolicyConfiguration: config,
       }) => ({
-        id: cuid(),
+        id: generateUniqueId({
+          setting,
+          policyName,
+          config,
+        }),
         policyName,
         disableScaleIn: config?.DisableScaleIn,
         scaleInCooldown: config?.ScaleInCooldown,
-        ScaleOutCooldown: config?.ScaleOutCooldown,
+        scaleOutCooldown: config?.ScaleOutCooldown,
         targetValue: config?.TargetValue,
       })
     ),
@@ -162,7 +170,11 @@ export default ({
 
   const attributes: AwsDynamoDbTableAttributes[] = AttributeDefinitions.map(
     ({ AttributeName, AttributeType: type }) => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        AttributeName,
+        type,
+      }),
       name: AttributeName,
       type,
     })
@@ -190,7 +202,17 @@ export default ({
         Backfilling: backfilling,
         ProvisionedThroughput: globalIndexProvisionedThroughput = {},
       }) => ({
-        id: cuid(),
+        id: generateUniqueId({
+          arn,
+          IndexName,
+          KeySchema,
+          ItemCount,
+          globalIndexProjection,
+          sizeInBytes,
+          status,
+          backfilling,
+          globalIndexProvisionedThroughput,
+        }),
         name: IndexName,
         arn,
         itemCount: ItemCount,
@@ -214,7 +236,14 @@ export default ({
         Projection: localndexProjection = {},
         IndexSizeBytes: sizeInBytes,
       }) => ({
-        id: cuid(),
+        id: generateUniqueId({
+          arn,
+          IndexName,
+          KeySchema,
+          ItemCount,
+          localndexProjection,
+          sizeInBytes,
+        }),
         name: IndexName,
         arn,
         itemCount: ItemCount,
@@ -225,47 +254,64 @@ export default ({
     )
 
   const replicas: AwsDynamoDbTableReplicaDescription[] = Replicas.map(
-    ({
-      RegionName: regionName,
-      ReplicaStatus,
-      ReplicaStatusDescription,
-      ReplicaStatusPercentProgress,
-      KMSMasterKeyId,
-      ProvisionedThroughputOverride,
-      GlobalSecondaryIndexes: ReplicasGlobalSecondaryIndexes = [],
-      ReplicaInaccessibleDateTime,
-      AutoScaling: {
-        ReplicaProvisionedReadCapacityAutoScalingSettings:
-          readCapacityAutoScalingSettings = {},
-        ReplicaProvisionedWriteCapacityAutoScalingSettings:
-          writeCapacityAutoScalingSettings = {},
-      } = {},
-    }) => ({
-      id: cuid(),
-      regionName,
-      status: ReplicaStatus,
-      statusDescription: ReplicaStatusDescription,
-      statusPercentProgress: ReplicaStatusPercentProgress,
-      kmsMasterKeyId: KMSMasterKeyId,
-      provisionedThroughput: ProvisionedThroughputOverride,
-      globalSecondaryIndexes: ReplicasGlobalSecondaryIndexes.map(
-        ({
-          IndexName,
-          ProvisionedThroughputOverride: {
-            ReadCapacityUnits: readCapacityUnits,
-          },
-        }) => ({ id: cuid(), name: IndexName, readCapacityUnits })
-      ),
-      ...(ReplicaInaccessibleDateTime
-        ? {
-            replicaInaccessibleDateTime: ReplicaInaccessibleDateTime.toString(),
-          }
-        : {}),
-      provisionedReadCapacityAutoScalingSettings:
-        formatAutoScalingSettingsDescription(readCapacityAutoScalingSettings),
-      provisionedWriteCapacityAutoScalingSettings:
-        formatAutoScalingSettingsDescription(writeCapacityAutoScalingSettings),
-    })
+    replica => {
+      const {
+        RegionName: regionName,
+        ReplicaStatus,
+        ReplicaStatusDescription,
+        ReplicaStatusPercentProgress,
+        KMSMasterKeyId,
+        ProvisionedThroughputOverride,
+        GlobalSecondaryIndexes: ReplicasGlobalSecondaryIndexes = [],
+        ReplicaInaccessibleDateTime,
+        AutoScaling: {
+          ReplicaProvisionedReadCapacityAutoScalingSettings:
+            readCapacityAutoScalingSettings = {},
+          ReplicaProvisionedWriteCapacityAutoScalingSettings:
+            writeCapacityAutoScalingSettings = {},
+        } = {},
+      } = replica
+      return {
+        id: generateUniqueId({
+          arn,
+          ...replica,
+        }),
+        regionName,
+        status: ReplicaStatus,
+        statusDescription: ReplicaStatusDescription,
+        statusPercentProgress: ReplicaStatusPercentProgress,
+        kmsMasterKeyId: KMSMasterKeyId,
+        provisionedThroughput: ProvisionedThroughputOverride,
+        globalSecondaryIndexes: ReplicasGlobalSecondaryIndexes.map(
+          ({
+            IndexName,
+            ProvisionedThroughputOverride: {
+              ReadCapacityUnits: readCapacityUnits,
+            },
+          }) => ({
+            id: generateUniqueId({
+              arn,
+              IndexName,
+              ProvisionedThroughputOverride,
+            }),
+            name: IndexName,
+            readCapacityUnits,
+          })
+        ),
+        ...(ReplicaInaccessibleDateTime
+          ? {
+              replicaInaccessibleDateTime:
+                ReplicaInaccessibleDateTime.toString(),
+            }
+          : {}),
+        provisionedReadCapacityAutoScalingSettings:
+          formatAutoScalingSettingsDescription(readCapacityAutoScalingSettings),
+        provisionedWriteCapacityAutoScalingSettings:
+          formatAutoScalingSettingsDescription(
+            writeCapacityAutoScalingSettings
+          ),
+      }
+    }
   )
 
   const restoreSummary: AwsDynamoDbTableRestoreSummary = {

@@ -1,0 +1,21 @@
+type awsManagedPrefixListEntry
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  cidr: String @search(by: [hash])
+  description: String @search(by: [hash])
+}
+
+type awsManagedPrefixList implements awsBaseService @key(fields: "arn") {
+  addressFamily: String @search(by: [hash, regexp])
+  state: String @search(by: [hash, regexp])
+  stateMessage: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  maxEntries: Int @search
+  version: Int @search
+  entries: [awsManagedPrefixListEntry]
+  tags: [awsRawTag]
+}

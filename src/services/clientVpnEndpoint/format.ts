@@ -1,4 +1,5 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsClientVpnEndpoint } from './data'
 import { AwsClientVpnEndpoint } from '../../types/generated'
@@ -39,6 +40,8 @@ export default ({
     ClientConnectOptions: clientConnectOptions,
   } = rawData
 
+  const arn = clientVpnEndpointArn({ region, account, id })
+
   // Client Vpn Endpoint Tags
   const clientVpnEndpointTags = formatTagsFromMap(tags)
 
@@ -47,7 +50,11 @@ export default ({
     associatedTargetNetworkSet?.map(
       ({ NetworkId: networkId, NetworkType: networkType }) => {
         return {
-          id: cuid(),
+          id: generateUniqueId({
+            arn,
+            networkId,
+            networkType,
+          }),
           networkId,
           networkType,
         }
@@ -64,17 +71,25 @@ export default ({
         FederatedAuthentication: federatedAuthentication,
       }) => {
         return {
-          id: cuid(),
+          id: generateUniqueId({
+            arn,
+            type,
+            activeDirectory,
+            mutualAuthentication,
+            federatedAuthentication,
+          }),
           type: type?.toString(),
           activeDirectory: {
             directoryId: activeDirectory?.DirectoryId,
           },
           mutualAuthentication: {
-            clientRootCertificateChain: mutualAuthentication?.ClientRootCertificateChain,
+            clientRootCertificateChain:
+              mutualAuthentication?.ClientRootCertificateChain,
           },
           federatedAuthentication: {
             samlProviderArn: federatedAuthentication?.SamlProviderArn,
-            selfServiceSamlProviderArn: federatedAuthentication?.SelfServiceSamlProviderArn,
+            selfServiceSamlProviderArn:
+              federatedAuthentication?.SelfServiceSamlProviderArn,
           },
         }
       }
@@ -83,7 +98,7 @@ export default ({
   const clientVpnEndpoint = {
     id,
     accountId: account,
-    arn: clientVpnEndpointArn({ region, account, id }),
+    arn,
     region,
     status,
     creationTime,
