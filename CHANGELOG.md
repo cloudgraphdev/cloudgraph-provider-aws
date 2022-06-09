@@ -1,3 +1,18 @@
+# [0.83.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.1-alpha.1...0.83.0-alpha.1) (2022-06-09)
+
+
+### Bug Fixes
+
+* **deps:** update sdk dep ([bc8f98a](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/bc8f98a17f32103ed88ecf1e4e0505f30caff87e))
+
+
+### Features
+
+* **iamRole:** Add lastUsedDate ([9c7bd36](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/9c7bd36bac04f83482f967e4ac7e990ccdd49f40))
+* Replaced cuid library for generateUniqueId util ([aca3e8f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/aca3e8f33faf445d71c951a6c327ed9095a76255))
+* Replaced cuid with unique ids for policies ([30ad96c](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/30ad96c771b18adf3084a39b0f5eb5ab8954d923))
+* Solved duplication issues ([896e813](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/896e81371780b2b57b630b112dcd2848735fb423))
+
 ## [0.82.1-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0...0.82.1-alpha.1) (2022-06-03)
 
 
