@@ -5,6 +5,7 @@ type awsIamRole implements awsBaseService @key(fields: "id") {
   assumeRolePolicy: awsIamJSONPolicy
   description: String @search(by: [hash, regexp])
   createdAt: String @search(by: [hash, regexp])
+  lastUsedDate: DateTime @search(by: [day])
   maxSessionDuration: Int @search
   tags: [awsRawTag]
   inlinePolicies: [String]

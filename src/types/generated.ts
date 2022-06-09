@@ -3182,6 +3182,7 @@ export type AwsIamRole = AwsBaseService & {
   inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  lastUsedDate?: Maybe<Scalars['DateTime']>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
   maxSessionDuration?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
