@@ -110,4 +110,5 @@ type awsS3 implements awsBaseService @key(fields: "arn") {
   sns: [awsSns] @hasInverse(field: s3)
   sqs: [awsSqs] @hasInverse(field: s3)
   ecsCluster: [awsEcsCluster] @hasInverse(field: s3)
+  kms: [awsKms] @hasInverse(field: s3)
 }

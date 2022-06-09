@@ -3323,6 +3323,7 @@ export type AwsKms = AwsBaseService & {
   rdsClusterSnapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   redshiftCluster?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
+  s3?: Maybe<Array<Maybe<AwsS3>>>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   secretsManager?: Maybe<Array<Maybe<AwsSecretsManager>>>;
   sns?: Maybe<Array<Maybe<AwsSns>>>;
@@ -3840,6 +3841,7 @@ export type AwsS3 = AwsBaseService & {
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   ignorePublicAcls?: Maybe<Scalars['String']>;
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
   lambdas?: Maybe<Array<Maybe<AwsLambda>>>;
   lifecycle?: Maybe<Scalars['String']>;
   logging?: Maybe<Scalars['String']>;
