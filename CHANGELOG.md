@@ -1,3 +1,15 @@
+# [0.83.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.1...0.83.0-alpha.2) (2022-06-13)
+
+
+### Bug Fixes
+
+* **services:** Added encryption rules data to s3 service ([dde6694](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/dde6694fcb5af38f8919c291454e736620d4fe89))
+
+
+### Features
+
+* **service:** Added default encryption kms connection ([a999cf7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/a999cf71b6db5ae579ef72051d58ac8e2c85d7b8))
+
 # [0.83.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.1-alpha.1...0.83.0-alpha.1) (2022-06-09)
 
 
