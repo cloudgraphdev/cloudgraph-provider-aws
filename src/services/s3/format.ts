@@ -6,6 +6,7 @@ import {
   NotificationConfiguration,
   PolicyStatus,
   PublicAccessBlockConfiguration,
+  ServerSideEncryptionConfiguration,
 } from 'aws-sdk/clients/s3'
 
 import { AwsS3 } from '../../types/generated'
@@ -139,10 +140,19 @@ export default ({
     corsAdditions.corsConfiguration = t.yes
   }
 
-  const encryptionAdditions = { encrypted: t.no }
+  const encryptionAdditions = { encrypted: t.no, encryptionRules: [] }
 
   if (!isEmpty(encryptionInfo)) {
+    const { Rules } = encryptionInfo as ServerSideEncryptionConfiguration
     encryptionAdditions.encrypted = t.yes
+    encryptionAdditions.encryptionRules = Rules.map(r => ({
+      id: generateUniqueId({
+        arn,
+        ...r,
+      }),
+      sseAlgorithm: r.ApplyServerSideEncryptionByDefault?.SSEAlgorithm,
+      kmsMasterKeyID: r.ApplyServerSideEncryptionByDefault?.KMSMasterKeyID,
+    }))
   }
 
   const replicationAdditions = { crossRegionReplication: t.disabled }
