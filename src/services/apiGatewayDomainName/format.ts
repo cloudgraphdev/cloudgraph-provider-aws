@@ -39,7 +39,7 @@ export default ({
         apiGatewayDomainName: dn.ApiGatewayDomainName,
         certificateArn: dn.CertificateArn,
         certificateName: dn.CertificateName,
-        certificateUploadDate: dn.CertificateUploadDate?.toDateString(),
+        certificateUploadDate: dn.CertificateUploadDate?.toISOString(),
         domainNameStatus: dn.DomainNameStatus,
         domainNameStatusMessage: dn.DomainNameStatusMessage,
         endpointType: dn.EndpointType,
