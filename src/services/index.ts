@@ -603,26 +603,6 @@ export default class Provider extends CloudGraph.Client {
     return result
   }
 
-  private enhanceData({ data, ...config }: EnhancerConfig): ProviderData {
-    let enhanceData = {
-      entities: data.entities,
-      connections: data.connections,
-    }
-    for (const { name, enhancer } of enhancers) {
-      try {
-        enhanceData = enhancer({ ...config, data: enhanceData })
-      } catch (error: any) {
-        this.logger.error(
-          `There was an error enriching AWS data with ${name} data`
-        )
-        this.logger.debug(error)
-        return enhanceData
-      }
-    }
-
-    return enhanceData
-  }
-
   private logMemory(log?: string) {
     // eslint-disable-next-line no-console
     console.log(log)
@@ -636,6 +616,28 @@ export default class Provider extends CloudGraph.Client {
     }
     // eslint-disable-next-line no-console
     console.log(memoryUsage)
+  }
+
+  private enhanceData({ data, ...config }: EnhancerConfig): ProviderData {
+    let enhanceData = {
+      entities: data.entities,
+      connections: data.connections,
+    }
+    for (const { name, enhancer } of enhancers) {
+      try {
+        this.logMemory(`enhancer data: ${name}`)
+        enhanceData = enhancer({ ...config, data: enhanceData })
+        this.logMemory(`enhancer data: ${name} - END`)
+      } catch (error: any) {
+        this.logger.error(
+          `There was an error enriching AWS data with ${name} data`
+        )
+        this.logger.debug(error)
+        return enhanceData
+      }
+    }
+
+    return enhanceData
   }
 
   /**
