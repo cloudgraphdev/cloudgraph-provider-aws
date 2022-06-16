@@ -623,6 +623,21 @@ export default class Provider extends CloudGraph.Client {
     return enhanceData
   }
 
+  private logMemory(log?: string) {
+    // eslint-disable-next-line no-console
+    console.log(log)
+    const formatMemoryUsage = data => `${Math.round((data / 1024 / 1024) * 100) / 100} MB`
+    const memoryData = process.memoryUsage()
+    const memoryUsage = {
+      rss: `${formatMemoryUsage(memoryData.rss)}`,
+      heapTotal: `${formatMemoryUsage(memoryData.heapTotal)}`,
+      heapUsed: `${formatMemoryUsage(memoryData.heapUsed)}`,
+      external: `${formatMemoryUsage(memoryData.external)}`,
+    }
+    // eslint-disable-next-line no-console
+    console.log(memoryUsage)
+  }
+
   /**
    * getData is used to fetch all provider data specified in the config for the provider
    * @param opts: A set of optional values to configure how getData works
@@ -705,9 +720,11 @@ export default class Provider extends CloudGraph.Client {
         })
         if (!crawledAccounts.find(val => val === accountId)) {
           crawledAccounts.push(accountId)
+          this.logMemory('this.getRawData...')
           const newRawData = await this.getRawData(account, opts)
           mergedRawData = this.mergeRawData(mergedRawData, newRawData)
           rawData = [...rawData, ...newRawData]
+          this.logMemory('this.getRawData... END')
         } else {
           this.logger.warn(
             // eslint-disable-next-line max-len
@@ -721,6 +738,7 @@ export default class Provider extends CloudGraph.Client {
     }
     // Handle global tag entities
     try {
+      this.logMemory('Handle global tag entities....')
       for (const { data: entityData } of rawData) {
         for (const region of Object.keys(entityData)) {
           const dataAtRegion = entityData[region] ?? []
@@ -752,6 +770,7 @@ export default class Provider extends CloudGraph.Client {
       } else {
         rawData.push(tags)
       }
+      this.logMemory('Handle global tag entities... END')
     } catch (error: any) {
       this.logger.error('There was an error aggregating AWS tags')
       this.logger.debug(error)
@@ -761,6 +780,7 @@ export default class Provider extends CloudGraph.Client {
       try {
         const serviceClass = this.getService(serviceData.name)
         const entities: any[] = []
+        this.logMemory(`getConnections serviceData.name: ${serviceData.name} ...`)
         for (const region of Object.keys(serviceData.data)) {
           const data = serviceData.data[region]
           if (!isEmpty(data)) {
@@ -794,6 +814,7 @@ export default class Provider extends CloudGraph.Client {
             })
           }
         }
+        this.logMemory(`getConnections serviceData.name: ${serviceData.name} ... END`)
         /**
          * we have 2 things to check here, both dealing with multi-account senarios
          * 1. Do we already have an entity by this name in the result (i.e. both accounts have vpcs)
@@ -806,6 +827,7 @@ export default class Provider extends CloudGraph.Client {
         const existingServiceIdx = result.entities.findIndex(({ name }) => {
           return name === serviceData.name
         })
+        this.logMemory('Check multi-account...')
         if (existingServiceIdx > -1) {
           const existingData = result.entities[existingServiceIdx].data
           for (const currentEntity of entities) {
@@ -835,6 +857,7 @@ export default class Provider extends CloudGraph.Client {
             data: entities,
           })
         }
+        this.logMemory('Check multi-account... END')
       } catch (error: any) {
         this.logger.error(
           `There was an error formatting/connecting service ${serviceData.name}`
@@ -842,7 +865,7 @@ export default class Provider extends CloudGraph.Client {
         this.logger.debug(error)
       }
     }
-
+    this.logMemory('Handle connection entities... END')
     return this.enhanceData({
       accounts: accounts.data[globalRegion],
       configuredRegions,
