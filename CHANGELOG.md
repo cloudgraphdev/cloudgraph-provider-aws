@@ -1,3 +1,10 @@
+# [0.83.0-alpha.3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.2...0.83.0-alpha.3) (2022-06-17)
+
+
+### Bug Fixes
+
+* **apiGatewayDomainName:** use ISO string in conversion ([04866de](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/04866deb8a74827b1f855cea0dab71c7e30ef5bc))
+
 # [0.83.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.1...0.83.0-alpha.2) (2022-06-13)
 
 
