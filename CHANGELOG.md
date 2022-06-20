@@ -1,3 +1,10 @@
+# [0.83.0-alpha.4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.3...0.83.0-alpha.4) (2022-06-20)
+
+
+### Bug Fixes
+
+* Released memory usage fix ([b6d242b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/b6d242b20e2ece71e07874466c21277d47ca18fa))
+
 # [0.83.0-alpha.3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.2...0.83.0-alpha.3) (2022-06-17)
 
 
