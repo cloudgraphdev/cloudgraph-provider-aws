@@ -786,10 +786,7 @@ export default class Provider extends CloudGraph.Client {
                     connections
                   )
                 }
-                result.connections = {
-                  ...result.connections,
-                  ...serviceConnections,
-                }
+                Object.assign(result.connections, serviceConnections)
               }
             })
           }
