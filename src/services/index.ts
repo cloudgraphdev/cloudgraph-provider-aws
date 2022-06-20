@@ -786,7 +786,6 @@ export default class Provider extends CloudGraph.Client {
                     connections
                   )
                 }
-
                 Object.assign(result.connections, serviceConnections)
               }
             })
@@ -835,7 +834,7 @@ export default class Provider extends CloudGraph.Client {
         }
       } catch (error: any) {
         this.logger.error(
-          `There was an error formatting/connecting service ${serviceData.name}`
+          `There was an error formatting/connecting service ${serviceData.name} `
         )
         this.logger.debug(error)
       }
