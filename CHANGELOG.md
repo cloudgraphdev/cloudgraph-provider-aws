@@ -1,3 +1,10 @@
+# [0.83.0-alpha.6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.5...0.83.0-alpha.6) (2022-06-20)
+
+
+### Bug Fixes
+
+* Optional chaining for last used details ([751a86b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/751a86b9911a67d916aee7b7e36ab6eb4101f5ba))
+
 # [0.83.0-alpha.5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.4...0.83.0-alpha.5) (2022-06-20)
 
 
