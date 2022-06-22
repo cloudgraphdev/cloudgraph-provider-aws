@@ -1,3 +1,10 @@
+# [0.83.0-alpha.7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.6...0.83.0-alpha.7) (2022-06-22)
+
+
+### Bug Fixes
+
+* **performance:** improve tags processing time ([def9b1f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/def9b1ff63257508d644f562ba1f9cb24f009d66))
+
 # [0.83.0-alpha.6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.5...0.83.0-alpha.6) (2022-06-20)
 
 
