@@ -762,6 +762,7 @@ export default class Provider extends CloudGraph.Client {
         const serviceClass = this.getService(serviceData.name)
         const entities: any[] = []
         for (const region of Object.keys(serviceData.data)) {
+          await new Promise(resolve => setTimeout(resolve, 10)) // free the main nodejs thread to process other requests
           const data = serviceData.data[region]
           if (!isEmpty(data)) {
             data.forEach((service: any) => {
