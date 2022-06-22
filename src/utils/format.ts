@@ -8,8 +8,6 @@ import {
   AwsIamJsonPolicyCondition,
   AwsIamJsonPolicyPrincipal,
   AwsIamJsonPolicyStatement,
-} from '../types/generated'
-import {
   AwsTag,
   RawAwsIamJsonPolicy,
   RawAwsIamJsonPolicyStatement,
