@@ -3107,6 +3107,9 @@ export type AwsIamJsonPolicyStatement = {
   condition?: Maybe<Array<Maybe<AwsIamJsonPolicyCondition>>>;
   effect?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
+  notAction?: Maybe<Array<Maybe<Scalars['String']>>>;
+  notPrincipal?: Maybe<Array<Maybe<AwsIamJsonPolicyPrincipal>>>;
+  notResource?: Maybe<Array<Maybe<Scalars['String']>>>;
   principal?: Maybe<Array<Maybe<AwsIamJsonPolicyPrincipal>>>;
   resource?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
