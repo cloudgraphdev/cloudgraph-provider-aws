@@ -1,3 +1,10 @@
+# [0.83.0-alpha.8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.7...0.83.0-alpha.8) (2022-06-23)
+
+
+### Bug Fixes
+
+* add missing statement elements needed for the policy definitions ([f09656b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/f09656bac77b65e76a5896f024be88e5d3105fbf))
+
 # [0.83.0-alpha.7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.6...0.83.0-alpha.7) (2022-06-22)
 
 
