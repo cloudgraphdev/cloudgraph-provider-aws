@@ -33,6 +33,9 @@ type awsIamJSONPolicyStatement
   effect: String @search(by: [hash, regexp])
   principal: [awsIamJSONPolicyPrincipal]
   resource: [String] @search(by: [hash])
+  notAction: [String] @search(by: [hash])
+  notPrincipal: [awsIamJSONPolicyPrincipal]
+  notResource: [String] @search(by: [hash])
 }
 
 type awsIamJSONPolicyCondition
