@@ -22,7 +22,7 @@ export interface RawAwsIamJsonPolicyStatementCondition {
   // Condition operator
   [key: string]: {
     // Condition key: Condition value
-    [key: string]: string | number
+    [key: string]: string | number | string[] | number []
   }
 }
 
