@@ -1,3 +1,8 @@
+type awsIamRoleInlinePolicy {
+  name: String @search(by: [hash, regexp])
+  document: awsIamJSONPolicy
+}
+
 type awsIamRole implements awsBaseService @key(fields: "id") {
   name: String @search(by: [hash, regexp])
   path: String @search(by: [hash, regexp])
@@ -8,9 +13,7 @@ type awsIamRole implements awsBaseService @key(fields: "id") {
   lastUsedDate: DateTime @search(by: [day])
   maxSessionDuration: Int @search
   tags: [awsRawTag]
-  inlinePolicies: [String]
-  rawInlinePolicies: [String] @search(by: [hash, regexp])
-  inlineFormattedPolicies: [awsIamJSONPolicy]
+  inlinePolicies: [awsIamRoleInlinePolicy]
   cloudFormationStack: [awsCloudFormationStack] @hasInverse(field: iamRole)
   codebuilds: [awsCodebuild] @hasInverse(field: iamRoles)
   configurationRecorder: [awsConfigurationRecorder] @hasInverse(field: iamRole)
@@ -22,7 +25,7 @@ type awsIamRole implements awsBaseService @key(fields: "id") {
   glueJobs: [awsGlueJob] @hasInverse(field: iamRole)
   guardDutyDetectors: [awsGuardDutyDetector] @hasInverse(field: iamRole)
   iamAttachedPolicies: [awsIamPolicy] @hasInverse(field: iamRoles)
-  iamPermissionBoundaryPolicy: [awsIamPolicy] @hasInverse(field: permissionboundaryOf)
+  iamPermissionBoundaryPolicy: [awsIamPolicy] @hasInverse(field: permissionBoundaryOf)
   iamInstanceProfiles: [awsIamInstanceProfile] @hasInverse(field: iamRole)
   managedAirflows: [awsManagedAirflow] @hasInverse(field: iamRoles)
   sageMakerNotebookInstances: [awsSageMakerNotebookInstance]

@@ -24,8 +24,7 @@ export default ({
     RoleLastUsed,
     AssumeRolePolicyDocument: assumeRolePolicy = '',
     MaxSessionDuration: maxSessionDuration = 0,
-    InlinePoliciesName: inlinePolicies = [],
-    InlinePoliciesDocuments: inlineFormattedPolicies,
+    InlinePolicies: inlinePolicies = [],
     Tags: tags = {},
   } = rawData
 
@@ -44,10 +43,12 @@ export default ({
     rawPolicy: assumeRolePolicy,
     assumeRolePolicy: formatIamJsonPolicy(assumeRolePolicy),
     maxSessionDuration,
-    inlinePolicies,
-    inlineFormattedPolicies: inlineFormattedPolicies.map(p =>
-      formatIamJsonPolicy(p)
-    ),
+    inlinePolicies: inlinePolicies.map(
+      ({ name: inlinePolicyName, document: inlinePolicyDocument }) => ({
+        name: inlinePolicyName,
+        document: formatIamJsonPolicy(inlinePolicyDocument),
+      })
+    ) ?? [],
     tags: roleTags,
   }
   return role

@@ -9,7 +9,6 @@ import IAM, {
   GetAccountAuthorizationDetailsResponse,
   GetRoleResponse,
   ListAttachedRolePoliciesResponse,
-  ListRolePoliciesResponse,
   ListRolesResponse,
   ListRoleTagsResponse,
   Role,
@@ -44,8 +43,7 @@ export interface RawAwsIamRole extends Omit<Role, 'Tags'> {
   region: string
   Tags?: TagMap
   PermissionsBoundaryArn: string
-  InlinePoliciesName: string[]
-  InlinePoliciesDocuments: string[]
+  InlinePolicies: Array<{ name: string; document: string }>
 }
 
 const roleByRoleName = async (
@@ -96,32 +94,6 @@ const tagsByRoleName = async (
             RoleName,
             Tags: convertAwsTagsToTagMap(tags),
           })
-        }
-
-        resolve(null)
-      }
-    )
-  })
-
-const policiesByRoleName = async (
-  iam: IAM,
-  { RoleName }: Role
-): Promise<{ RoleName: string; Policies: string[] }> =>
-  new Promise(resolve => {
-    iam.listRolePolicies(
-      { RoleName },
-      (err: AWSError, data: ListRolePoliciesResponse) => {
-        if (err) {
-          errorLog.generateAwsErrorLog({
-            functionName: 'iam:listRolePolicies',
-            err,
-          })
-        }
-
-        if (!isEmpty(data)) {
-          const { PolicyNames = [] } = data
-
-          resolve({ RoleName, Policies: PolicyNames })
         }
 
         resolve(null)
@@ -196,7 +168,6 @@ export const listIamRoles = async ({
 }): Promise<RawAwsIamRole[]> =>
   new Promise(resolve => {
     const result: RawAwsIamRole[] = []
-    const policiesByRoleNamePromises = []
     const tagsByRoleNamePromises = []
     const managedPoliciesByRoleNamePromises = []
     const roleByRoleNamePromises: Promise<{ RoleName: string; Role: Role }>[] =
@@ -216,7 +187,6 @@ export const listIamRoles = async ({
 
           roles.map(role => {
             tagsByRoleNamePromises.push(tagsByRoleName(iam, role))
-            policiesByRoleNamePromises.push(policiesByRoleName(iam, role))
             managedPoliciesByRoleNamePromises.push(
               managedPoliciesByRoleName(iam, role)
             )
@@ -224,7 +194,6 @@ export const listIamRoles = async ({
           })
 
           const tags = await Promise.all(tagsByRoleNamePromises)
-          const policies = await Promise.all(policiesByRoleNamePromises)
           const managedPolicies = await Promise.all(
             managedPoliciesByRoleNamePromises
           )
@@ -249,11 +218,6 @@ export const listIamRoles = async ({
                   RoleLastUsed: detailedRoles?.find(
                     r => r?.RoleName === RoleName
                   )?.Role.RoleLastUsed,
-                  InlinePoliciesName:
-                    policies
-                      ?.filter(p => p?.RoleName === RoleName)
-                      .map(p => p.Policies)
-                      .reduce((current, acc) => [...acc, ...current], []) || [],
                   ManagedPolicies:
                     managedPolicies
                       ?.filter(p => p?.RoleName === RoleName)
@@ -262,9 +226,12 @@ export const listIamRoles = async ({
                   Tags: tags.find(t => t?.RoleName === RoleName)?.Tags || {},
                   PermissionsBoundaryArn:
                     PermissionsBoundary.PermissionsBoundaryArn,
-                  InlinePoliciesDocuments: roleAuthorizationDetails
+                  InlinePolicies: roleAuthorizationDetails
                     .find(rAD => rAD.RoleName === RoleName)
-                    .RolePolicyList.map(rPl => rPl.PolicyDocument),
+                    .RolePolicyList.map(rPl => ({
+                      name: rPl.PolicyName,
+                      document: rPl.PolicyDocument,
+                    })),
                 }
               }
             )
