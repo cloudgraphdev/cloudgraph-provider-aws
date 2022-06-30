@@ -8,6 +8,7 @@ type awsIamPolicy implements awsBaseService @key(fields: "id") {
   iamRoles: [awsIamRole] @hasInverse(field: iamAttachedPolicies)
   iamGroups: [awsIamGroup] @hasInverse(field: iamAttachedPolicies)
   iamUsers: [awsIamUser] @hasInverse(field: iamAttachedPolicies)
+  permissionboundaryOf: [awsIamRole] @hasInverse(field: iamPermissionBoundaryPolicy)
 }
 
 type awsIamJSONPolicy

@@ -9,6 +9,8 @@ type awsIamRole implements awsBaseService @key(fields: "id") {
   maxSessionDuration: Int @search
   tags: [awsRawTag]
   inlinePolicies: [String]
+  rawInlinePolicies: [String] @search(by: [hash, regexp])
+  inlineFormattedPolicies: [awsIamJSONPolicy]
   cloudFormationStack: [awsCloudFormationStack] @hasInverse(field: iamRole)
   codebuilds: [awsCodebuild] @hasInverse(field: iamRoles)
   configurationRecorder: [awsConfigurationRecorder] @hasInverse(field: iamRole)
@@ -20,6 +22,7 @@ type awsIamRole implements awsBaseService @key(fields: "id") {
   glueJobs: [awsGlueJob] @hasInverse(field: iamRole)
   guardDutyDetectors: [awsGuardDutyDetector] @hasInverse(field: iamRole)
   iamAttachedPolicies: [awsIamPolicy] @hasInverse(field: iamRoles)
+  iamPermissionBoundaryPolicy: [awsIamPolicy] @hasInverse(field: permissionboundaryOf)
   iamInstanceProfiles: [awsIamInstanceProfile] @hasInverse(field: iamRole)
   managedAirflows: [awsManagedAirflow] @hasInverse(field: iamRoles)
   sageMakerNotebookInstances: [awsSageMakerNotebookInstance]

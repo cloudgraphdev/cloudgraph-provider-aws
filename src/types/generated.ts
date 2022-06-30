@@ -3150,6 +3150,7 @@ export type AwsIamPolicy = AwsBaseService & {
   iamUsers?: Maybe<Array<Maybe<AwsIamUser>>>;
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
+  permissionboundaryOf?: Maybe<Array<Maybe<AwsIamRole>>>;
   policyContent?: Maybe<AwsIamJsonPolicy>;
   rawPolicy?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
@@ -3182,6 +3183,8 @@ export type AwsIamRole = AwsBaseService & {
   guardDutyDetectors?: Maybe<Array<Maybe<AwsGuardDutyDetector>>>;
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   iamInstanceProfiles?: Maybe<Array<Maybe<AwsIamInstanceProfile>>>;
+  iamPermissionBoundaryPolicy?: Maybe<Array<Maybe<AwsIamPolicy>>>;
+  inlineFormattedPolicies?: Maybe<Array<Maybe<AwsIamJsonPolicy>>>;
   inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
@@ -3190,6 +3193,7 @@ export type AwsIamRole = AwsBaseService & {
   maxSessionDuration?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
+  rawInlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
   rawPolicy?: Maybe<Scalars['String']>;
   rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
