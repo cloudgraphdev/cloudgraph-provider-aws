@@ -1,3 +1,4 @@
+import cuid from 'cuid'
 import { AwsIamRole } from '../../types/generated'
 import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 
@@ -45,6 +46,7 @@ export default ({
     maxSessionDuration,
     inlinePolicies: inlinePolicies.map(
       ({ name: inlinePolicyName, document: inlinePolicyDocument }) => ({
+        id: cuid(),
         name: inlinePolicyName,
         document: formatIamJsonPolicy(inlinePolicyDocument),
       })
