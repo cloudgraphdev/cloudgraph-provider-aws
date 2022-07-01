@@ -47,7 +47,10 @@ export default ({
     inlinePolicies:
       inlinePolicies.map(
         ({ name: inlinePolicyName, document: inlinePolicyDocument }) => ({
-          id: generateUniqueId({ inlinePolicyName, inlinePolicyDocument }),
+          id: generateUniqueId({
+            name: inlinePolicyName,
+            document: formatIamJsonPolicy(inlinePolicyDocument),
+          }),
           name: inlinePolicyName,
           document: formatIamJsonPolicy(inlinePolicyDocument),
         })
