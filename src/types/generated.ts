@@ -3150,6 +3150,7 @@ export type AwsIamPolicy = AwsBaseService & {
   iamUsers?: Maybe<Array<Maybe<AwsIamUser>>>;
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
+  permissionBoundaryOf?: Maybe<Array<Maybe<AwsIamRole>>>;
   policyContent?: Maybe<AwsIamJsonPolicy>;
   rawPolicy?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
@@ -3182,7 +3183,8 @@ export type AwsIamRole = AwsBaseService & {
   guardDutyDetectors?: Maybe<Array<Maybe<AwsGuardDutyDetector>>>;
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   iamInstanceProfiles?: Maybe<Array<Maybe<AwsIamInstanceProfile>>>;
-  inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
+  iamPermissionBoundaryPolicy?: Maybe<Array<Maybe<AwsIamPolicy>>>;
+  inlinePolicies?: Maybe<Array<Maybe<AwsIamRoleInlinePolicy>>>;
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   lastUsedDate?: Maybe<Scalars['DateTime']>;
@@ -3197,6 +3199,11 @@ export type AwsIamRole = AwsBaseService & {
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   systemsManagerInstances?: Maybe<Array<Maybe<AwsSystemsManagerInstance>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+};
+
+export type AwsIamRoleInlinePolicy = {
+  document?: Maybe<AwsIamJsonPolicy>;
+  name?: Maybe<Scalars['String']>;
 };
 
 export type AwsIamSamlProvider = AwsOptionalService & {

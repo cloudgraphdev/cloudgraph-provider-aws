@@ -1,3 +1,4 @@
+import cuid from 'cuid'
 import { AwsIamRole } from '../../types/generated'
 import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 
@@ -24,7 +25,7 @@ export default ({
     RoleLastUsed,
     AssumeRolePolicyDocument: assumeRolePolicy = '',
     MaxSessionDuration: maxSessionDuration = 0,
-    Policies: inlinePolicies = [],
+    InlinePolicies: inlinePolicies = [],
     Tags: tags = {},
   } = rawData
 
@@ -43,7 +44,13 @@ export default ({
     rawPolicy: assumeRolePolicy,
     assumeRolePolicy: formatIamJsonPolicy(assumeRolePolicy),
     maxSessionDuration,
-    inlinePolicies,
+    inlinePolicies: inlinePolicies.map(
+      ({ name: inlinePolicyName, document: inlinePolicyDocument }) => ({
+        id: cuid(),
+        name: inlinePolicyName,
+        document: formatIamJsonPolicy(inlinePolicyDocument),
+      })
+    ) ?? [],
     tags: roleTags,
   }
   return role

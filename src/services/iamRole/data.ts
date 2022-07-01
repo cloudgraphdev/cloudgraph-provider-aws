@@ -6,12 +6,13 @@ import { AWSError } from 'aws-sdk/lib/error'
 
 import IAM, {
   AttachedPolicy,
+  GetAccountAuthorizationDetailsResponse,
   GetRoleResponse,
   ListAttachedRolePoliciesResponse,
-  ListRolePoliciesResponse,
   ListRolesResponse,
   ListRoleTagsResponse,
   Role,
+  RoleDetail,
 } from 'aws-sdk/clients/iam'
 import { Config } from 'aws-sdk/lib/config'
 
@@ -38,10 +39,11 @@ const customRetrySettings = setAwsRetryOptions({
 })
 
 export interface RawAwsIamRole extends Omit<Role, 'Tags'> {
-  Policies: string[]
   ManagedPolicies: AttachedPolicy[]
   region: string
   Tags?: TagMap
+  PermissionsBoundaryArn: string
+  InlinePolicies: Array<{ name: string; document: string }>
 }
 
 const roleByRoleName = async (
@@ -99,32 +101,6 @@ const tagsByRoleName = async (
     )
   })
 
-const policiesByRoleName = async (
-  iam: IAM,
-  { RoleName }: Role
-): Promise<{ RoleName: string; Policies: string[] }> =>
-  new Promise(resolve => {
-    iam.listRolePolicies(
-      { RoleName },
-      (err: AWSError, data: ListRolePoliciesResponse) => {
-        if (err) {
-          errorLog.generateAwsErrorLog({
-            functionName: 'iam:listRolePolicies',
-            err,
-          })
-        }
-
-        if (!isEmpty(data)) {
-          const { PolicyNames = [] } = data
-
-          resolve({ RoleName, Policies: PolicyNames })
-        }
-
-        resolve(null)
-      }
-    )
-  })
-
 const managedPoliciesByRoleName = async (
   iam: IAM,
   { RoleName }: Role
@@ -154,13 +130,44 @@ const managedPoliciesByRoleName = async (
     )
   })
 
-export const listIamRoles = async (
+export const getAccountAuthorizationDetails = async (
   iam: IAM,
   marker?: string
-): Promise<RawAwsIamRole[]> =>
+): Promise<RoleDetail[]> =>
+  new Promise(resolve => {
+    const result: RoleDetail[] = []
+    iam.getAccountAuthorizationDetails(
+      { Filter: ['Role'], Marker: marker },
+      async (err: AWSError, data: GetAccountAuthorizationDetailsResponse) => {
+        if (err) {
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:getAccountAuthorizationDetails',
+            err,
+          })
+        }
+        if (!isEmpty(data) && !isEmpty(data.RoleDetailList)) {
+          const { Marker, IsTruncated, RoleDetailList } = data
+          result.push(...RoleDetailList)
+          if (IsTruncated) {
+            result.push(...(await getAccountAuthorizationDetails(iam, Marker)))
+          }
+          resolve(result)
+        }
+      }
+    )
+  })
+
+export const listIamRoles = async ({
+  iam,
+  marker,
+  roleAuthorizationDetails,
+}: {
+  iam: IAM
+  marker?: string
+  roleAuthorizationDetails: RoleDetail[]
+}): Promise<RawAwsIamRole[]> =>
   new Promise(resolve => {
     const result: RawAwsIamRole[] = []
-    const policiesByRoleNamePromises = []
     const tagsByRoleNamePromises = []
     const managedPoliciesByRoleNamePromises = []
     const roleByRoleNamePromises: Promise<{ RoleName: string; Role: Role }>[] =
@@ -180,7 +187,6 @@ export const listIamRoles = async (
 
           roles.map(role => {
             tagsByRoleNamePromises.push(tagsByRoleName(iam, role))
-            policiesByRoleNamePromises.push(policiesByRoleName(iam, role))
             managedPoliciesByRoleNamePromises.push(
               managedPoliciesByRoleName(iam, role)
             )
@@ -188,7 +194,6 @@ export const listIamRoles = async (
           })
 
           const tags = await Promise.all(tagsByRoleNamePromises)
-          const policies = await Promise.all(policiesByRoleNamePromises)
           const managedPolicies = await Promise.all(
             managedPoliciesByRoleNamePromises
           )
@@ -196,7 +201,13 @@ export const listIamRoles = async (
 
           result.push(
             ...roles.map(
-              ({ RoleName, AssumeRolePolicyDocument, Tags, ...role }) => {
+              ({
+                RoleName,
+                AssumeRolePolicyDocument,
+                PermissionsBoundary,
+                Tags,
+                ...role
+              }) => {
                 return {
                   RoleName,
                   AssumeRolePolicyDocument: decodeURIComponent(
@@ -207,24 +218,33 @@ export const listIamRoles = async (
                   RoleLastUsed: detailedRoles?.find(
                     r => r?.RoleName === RoleName
                   )?.Role.RoleLastUsed,
-                  Policies:
-                    policies
-                      ?.filter(p => p?.RoleName === RoleName)
-                      .map(p => p.Policies)
-                      .reduce((current, acc) => [...acc, ...current], []) || [],
                   ManagedPolicies:
                     managedPolicies
                       ?.filter(p => p?.RoleName === RoleName)
                       .map(p => p.ManagedPolicies)
                       .reduce((current, acc) => [...acc, ...current], []) || [],
                   Tags: tags.find(t => t?.RoleName === RoleName)?.Tags || {},
+                  PermissionsBoundaryArn:
+                    PermissionsBoundary.PermissionsBoundaryArn,
+                  InlinePolicies: roleAuthorizationDetails
+                    .find(rAD => rAD.RoleName === RoleName)
+                    .RolePolicyList.map(rPl => ({
+                      name: rPl.PolicyName,
+                      document: rPl.PolicyDocument,
+                    })),
                 }
               }
             )
           )
 
           if (IsTruncated) {
-            result.push(...(await listIamRoles(iam, Marker)))
+            result.push(
+              ...(await listIamRoles({
+                iam,
+                marker: Marker,
+                roleAuthorizationDetails,
+              }))
+            )
           }
 
           resolve(result)
@@ -259,8 +279,12 @@ export default async ({
 
     logger.debug(lt.lookingForIamRoles)
 
+    // Fetch role authorization details first
+    const roleAuthorizationDetails = await getAccountAuthorizationDetails(
+      client
+    )
     // Fetch IAM Roles
-    rolesData = await listIamRoles(client)
+    rolesData = await listIamRoles({ iam: client, roleAuthorizationDetails })
 
     errorLog.reset()
     logger.debug(lt.foundRoles(rolesData.length))
