@@ -1,3 +1,10 @@
+# [0.83.0-alpha.9](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.8...0.83.0-alpha.9) (2022-07-01)
+
+
+### Bug Fixes
+
+* **iamRole:** added iamBoundaryPermissionPolicy relation and inline policies json documents ([3a713f6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/3a713f66327610f0ae2f3b2200b82f62a6754a08))
+
 # [0.83.0-alpha.8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.7...0.83.0-alpha.8) (2022-06-23)
 
 
