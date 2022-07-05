@@ -3203,6 +3203,7 @@ export type AwsIamRole = AwsBaseService & {
 
 export type AwsIamRoleInlinePolicy = {
   document?: Maybe<AwsIamJsonPolicy>;
+  id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
 };
 

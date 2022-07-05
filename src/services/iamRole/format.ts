@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
 import { AwsIamRole } from '../../types/generated'
 import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 
@@ -44,13 +44,17 @@ export default ({
     rawPolicy: assumeRolePolicy,
     assumeRolePolicy: formatIamJsonPolicy(assumeRolePolicy),
     maxSessionDuration,
-    inlinePolicies: inlinePolicies.map(
-      ({ name: inlinePolicyName, document: inlinePolicyDocument }) => ({
-        id: cuid(),
-        name: inlinePolicyName,
-        document: formatIamJsonPolicy(inlinePolicyDocument),
-      })
-    ) ?? [],
+    inlinePolicies:
+      inlinePolicies.map(
+        ({ name: inlinePolicyName, document: inlinePolicyDocument }) => ({
+          id: generateUniqueId({
+            name: inlinePolicyName,
+            document: formatIamJsonPolicy(inlinePolicyDocument),
+          }),
+          name: inlinePolicyName,
+          document: formatIamJsonPolicy(inlinePolicyDocument),
+        })
+      ) ?? [],
     tags: roleTags,
   }
   return role
