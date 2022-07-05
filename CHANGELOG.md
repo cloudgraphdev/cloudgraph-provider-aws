@@ -1,3 +1,10 @@
+# [0.83.0-alpha.10](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.9...0.83.0-alpha.10) (2022-07-05)
+
+
+### Bug Fixes
+
+* **iamRole:** replace inlinePolicies id gen method from cuid to generateUniqueId ([15de961](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/15de96133012fc9a8a037f46c1b4cda2627195dc))
+
 # [0.83.0-alpha.9](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.8...0.83.0-alpha.9) (2022-07-01)
 
 
