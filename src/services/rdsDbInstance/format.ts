@@ -69,7 +69,7 @@ export default ({
     resourceId,
     engine,
     engineVersion,
-    createdTime: createdTime.toISOString(),
+    createdTime: createdTime?.toISOString(),
     copyTagsToSnapshot,
     deletionProtection,
     dBInstanceIdentifier,

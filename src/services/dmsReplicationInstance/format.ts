@@ -1,7 +1,8 @@
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { formatTagsFromMap } from '../../utils/format' // TODO: Build this
 import { AwsDmsReplicationInstance } from '../../types/generated'
 import { RawAwsDmsReplicationInstance } from './data'
-import cuid from 'cuid'
 
 /**
  * DmsReplicationInstance
@@ -34,7 +35,8 @@ export default ({
     KmsKeyId: kmsKeyId,
     ReplicationInstancePrivateIpAddress: replicationInstancePrivateIpAddress,
     ReplicationInstancePublicIpAddress: replicationInstancePublicIpAddress,
-    ReplicationInstancePrivateIpAddresses: replicationInstancePrivateIpAddresses,
+    ReplicationInstancePrivateIpAddresses:
+      replicationInstancePrivateIpAddresses,
     ReplicationInstancePublicIpAddresses: replicationInstancePublicIpAddresses,
     PubliclyAccessible: publiclyAccessible,
     SecondaryAvailabilityZone: secondaryAvailabilityZone,
@@ -43,32 +45,47 @@ export default ({
     Tags: tags,
   } = rawData
 
-  const mappedVpcSecurityGroups = vpcSecurityGroups?.map(({ VpcSecurityGroupId, Status }) => ({
-    id: cuid(),
-    status: Status,
-    vpcSecurityGroupId: VpcSecurityGroupId
-  }))
+  const mappedVpcSecurityGroups = vpcSecurityGroups?.map(
+    ({ VpcSecurityGroupId, Status }) => ({
+      id: generateUniqueId({
+        arn,
+        Status,
+        VpcSecurityGroupId,
+      }),
+      status: Status,
+      vpcSecurityGroupId: VpcSecurityGroupId,
+    })
+  )
 
   const formattedReplicationSubnetGroup = {
-    replicationSubnetGroupIdentifier: replicationSubnetGroup?.ReplicationSubnetGroupIdentifier,
-    replicationSubnetGroupDescription: replicationSubnetGroup?.ReplicationSubnetGroupDescription,
+    replicationSubnetGroupIdentifier:
+      replicationSubnetGroup?.ReplicationSubnetGroupIdentifier,
+    replicationSubnetGroupDescription:
+      replicationSubnetGroup?.ReplicationSubnetGroupDescription,
     vpcId: replicationSubnetGroup?.VpcId,
     subnetGroupStatus: replicationSubnetGroup?.SubnetGroupStatus,
-    subnets: replicationSubnetGroup?.Subnets?.map(({ SubnetAvailabilityZone, SubnetIdentifier, SubnetStatus }) => ({
-      id: cuid(),
-      subnetAvailabilityZone: {
-        name: SubnetAvailabilityZone?.Name
-      },
-      subnetIdentifier: SubnetIdentifier,
-      subnetStatus: SubnetStatus
-    }))
+    subnets: replicationSubnetGroup?.Subnets?.map(
+      ({ SubnetAvailabilityZone, SubnetIdentifier, SubnetStatus }) => ({
+        id: generateUniqueId({
+          arn,
+          SubnetAvailabilityZone,
+          SubnetIdentifier,
+          SubnetStatus,
+        }),
+        subnetAvailabilityZone: {
+          name: SubnetAvailabilityZone?.Name,
+        },
+        subnetIdentifier: SubnetIdentifier,
+        subnetStatus: SubnetStatus,
+      })
+    ),
   }
 
   const formattedPendingModifiedValues = {
     replicationInstanceClass: pendingModifiedValues?.ReplicationInstanceClass,
     allocatedStorage: pendingModifiedValues?.AllocatedStorage,
     multiAZ: pendingModifiedValues?.MultiAZ,
-    engineVersion: pendingModifiedValues?.EngineVersion
+    engineVersion: pendingModifiedValues?.EngineVersion,
   }
 
   return {
@@ -98,6 +115,6 @@ export default ({
     freeUntil: freeUntil?.toISOString(),
     secondaryAvailabilityZone,
     dnsNameServers,
-    tags: formatTagsFromMap(tags ?? {})
+    tags: formatTagsFromMap(tags ?? {}),
   }
 }

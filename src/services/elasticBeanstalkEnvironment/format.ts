@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
 import isEmpty from 'lodash/isEmpty'
 import {
   AwsElasticBeanstalkEnv,
@@ -45,7 +45,12 @@ export default ({
       .flatMap(({ OptionSettings }) => OptionSettings)
       .map(
         ({ Namespace: namespace, OptionName: optionName, Value: value }) => ({
-          id: cuid(),
+          id: generateUniqueId({
+            arn,
+            namespace,
+            optionName,
+            value,
+          }),
           optionName,
           value,
           namespace,
@@ -57,11 +62,15 @@ export default ({
 
   if (!isEmpty(resources)) {
     envResources = Object.entries(resources).map(([key, item]) => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        key,
+        item,
+      }),
       name: key,
       /* We ask for the type because resources(EnvironmentResourceDescription)
          is an object with whose property types can be string, array of strings
-         or array of objects that can contain a single property named Name or Id */ 
+         or array of objects that can contain a single property named Name or Id */
       value:
         typeof item === 'string' ? [item] : item.map(i => i.Name || i.Id || i),
     }))

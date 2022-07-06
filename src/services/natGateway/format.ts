@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
 import { AwsNatGateway } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
 import { natGatewayArn } from '../../utils/generateArns'
@@ -16,23 +16,30 @@ export default ({
   service: RawAwsNATGateway
   account: string
   region: string
-}) : AwsNatGateway => {
+}): AwsNatGateway => {
   const {
     NatGatewayId: id,
     State: state,
     CreateTime: createTime,
     NatGatewayAddresses: natGatewayAddresses,
-    Tags
+    Tags,
   } = rawData
 
-
-  const mappedAddresses = natGatewayAddresses?.map(({ AllocationId, NetworkInterfaceId, PrivateIp, PublicIp }) => ({
-    id: cuid(),
-    allocationId: AllocationId,
-    networkInterfaceId: NetworkInterfaceId,
-    privateIp: PrivateIp,
-    publicIp: PublicIp
-  })) ?? []
+  const mappedAddresses =
+    natGatewayAddresses?.map(
+      ({ AllocationId, NetworkInterfaceId, PrivateIp, PublicIp }) => ({
+        id: generateUniqueId({
+          AllocationId,
+          NetworkInterfaceId,
+          PrivateIp,
+          PublicIp,
+        }),
+        allocationId: AllocationId,
+        networkInterfaceId: NetworkInterfaceId,
+        privateIp: PrivateIp,
+        publicIp: PublicIp,
+      })
+    ) ?? []
 
   return {
     id,

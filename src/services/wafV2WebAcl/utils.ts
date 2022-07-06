@@ -1,3 +1,4 @@
+import { generateUniqueId } from '@cloudgraph/sdk'
 import {
   Statement,
   TextTransformations,
@@ -11,24 +12,25 @@ import {
   FirewallManagerRuleGroups,
 } from 'aws-sdk/clients/wafv2'
 import { Blob } from 'buffer'
-import cuid from 'cuid'
 import { isEmpty } from 'lodash'
 
 /**
  * WafV2WebAcl
  */
 
-export const mapTextTransformations = (transforms: TextTransformations = []) => {
+export const mapTextTransformations = (
+  transforms: TextTransformations = []
+) => {
   return transforms.map(transform => ({
-    id: cuid(),
+    id: generateUniqueId({
+      ...transform,
+    }),
     priority: transform.Priority,
     type: transform.Type,
   }))
 }
 
-export const formatSearchString = (
-  searchString: SearchString = ''
-): string => {
+export const formatSearchString = (searchString: SearchString = ''): string => {
   if (searchString instanceof Blob) {
     return 'blob'
   }
@@ -44,7 +46,9 @@ export const formatSearchString = (
 
 export const formatFieldToMatch = (fieldToMatch: FieldToMatch) => {
   return {
-    id: cuid(),
+    id: generateUniqueId({
+      ...fieldToMatch,
+    }),
     singleHeader: {
       name: fieldToMatch?.SingleHeader?.Name,
     },
@@ -120,7 +124,10 @@ export const formatRuleStatement = (statement: Statement = {}) => {
     arn: RuleGroupReferenceStatement?.ARN,
     excludedRules: RuleGroupReferenceStatement?.ExcludedRules?.map(
       excludedRule => ({
-        id: cuid(),
+        id: generateUniqueId({
+          arn: RuleGroupReferenceStatement?.ARN,
+          ...excludedRule,
+        }),
         name: excludedRule.Name,
       })
     ),
@@ -174,7 +181,9 @@ export const formatRuleStatement = (statement: Statement = {}) => {
     version: ManagedRuleGroupStatement?.Version,
     excludedRules: ManagedRuleGroupStatement?.ExcludedRules?.map(
       excludedRule => ({
-        id: cuid(),
+        id: generateUniqueId({
+          ...excludedRule,
+        }),
         name: excludedRule.Name,
       })
     ),
@@ -189,7 +198,9 @@ export const formatRuleStatement = (statement: Statement = {}) => {
   }
 
   return {
-    id: cuid(),
+    id: generateUniqueId({
+      ...statement,
+    }),
     byteMatchStatement: formattedByteMatchStatement,
     sqliMatchStatement: formattedSqliMatchStatement,
     xssMatchStatement: formattedXssMatchStatement,
@@ -216,7 +227,9 @@ export const formatRuleAction = (action: RuleAction = {}) => {
       responseCode: Block?.CustomResponse?.ResponseCode,
       customResponseBodyKey: Block?.CustomResponse?.CustomResponseBodyKey,
       responseHeaders: Block?.CustomResponse?.ResponseHeaders?.map(header => ({
-        id: cuid(),
+        id: generateUniqueId({
+          ...action,
+        }),
         name: header.Name,
         value: header.Value,
       })),
@@ -227,7 +240,9 @@ export const formatRuleAction = (action: RuleAction = {}) => {
     customRequestHandling: {
       insertHeaders: Allow?.CustomRequestHandling?.InsertHeaders?.map(
         header => ({
-          id: cuid(),
+          id: generateUniqueId({
+            ...header,
+          }),
           name: header.Name,
           value: header.Value,
         })
@@ -239,7 +254,9 @@ export const formatRuleAction = (action: RuleAction = {}) => {
     customRequestHandling: {
       insertHeaders: Count?.CustomRequestHandling?.InsertHeaders?.map(
         header => ({
-          id: cuid(),
+          id: generateUniqueId({
+            ...header,
+          }),
           name: header.Name,
           value: header.Value,
         })
@@ -261,7 +278,9 @@ export const formatRuleOverrideAction = (action: OverrideAction = {}) => {
     customRequestHandling: {
       insertHeaders: Count?.CustomRequestHandling?.InsertHeaders?.map(
         header => ({
-          id: cuid(),
+          id: generateUniqueId({
+            ...header,
+          }),
           name: header.Name,
           value: header.Value,
         })
@@ -279,7 +298,9 @@ export const formatRuleOverrideAction = (action: OverrideAction = {}) => {
 
 export const formatRuleLabels = (labels: Labels) => {
   return labels?.map(label => ({
-    id: cuid(),
+    id: generateUniqueId({
+      ...label,
+    }),
     name: label.Name,
   }))
 }
@@ -300,7 +321,10 @@ export const formatDefaultAction = (action: DefaultAction = {}) => {
       responseCode: Block?.CustomResponse?.ResponseCode,
       customResponseBodyKey: Block?.CustomResponse?.CustomResponseBodyKey,
       responseHeaders: Block?.CustomResponse?.ResponseHeaders?.map(header => ({
-        id: cuid(),
+        id: generateUniqueId({
+          ...Block?.CustomResponse,
+          ...header,
+        }),
         name: header.Name,
         value: header.Value,
       })),
@@ -311,7 +335,10 @@ export const formatDefaultAction = (action: DefaultAction = {}) => {
     customRequestHandling: {
       insertHeaders: Allow?.CustomRequestHandling?.InsertHeaders?.map(
         header => ({
-          id: cuid(),
+          id: generateUniqueId({
+            ...Allow?.CustomRequestHandling,
+            ...header,
+          }),
           name: header.Name,
           value: header.Value,
         })
@@ -329,7 +356,9 @@ export const formatFirewallManagerRuleGroups = (
   ruleGroups: FirewallManagerRuleGroups
 ) => {
   return ruleGroups?.map(ruleGroup => ({
-    id: cuid(),
+    id: generateUniqueId({
+      ...ruleGroup,
+    }),
     name: ruleGroup.Name,
     priority: ruleGroup.Priority,
     firewallManagerStatement: {
@@ -345,7 +374,9 @@ export const formatFirewallManagerRuleGroups = (
         excludedRules:
           ruleGroup?.FirewallManagerStatement?.ManagedRuleGroupStatement?.ExcludedRules?.map(
             excludedRule => ({
-              id: cuid(),
+              id: generateUniqueId({
+                ...excludedRule,
+              }),
               name: excludedRule.Name,
             })
           ),
@@ -360,7 +391,9 @@ export const formatFirewallManagerRuleGroups = (
         excludedRules:
           ruleGroup?.FirewallManagerStatement?.RuleGroupReferenceStatement?.ExcludedRules?.map(
             excludedRule => ({
-              id: cuid(),
+              id: generateUniqueId({
+                ...excludedRule,
+              }),
               name: excludedRule.Name,
             })
           ),

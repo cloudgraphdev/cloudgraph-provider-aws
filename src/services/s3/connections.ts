@@ -32,6 +32,7 @@ export default ({
         TopicConfigurations: topicConfigurations,
         QueueConfigurations: queueConfigurations,
       },
+      EncryptionInfo: encryptionInfo,
     },
   } = service
 
@@ -139,6 +140,31 @@ export default ({
           resourceType: services.sqs,
           relation: 'child',
           field: 'sqs',
+        })
+      }
+    }
+  }
+
+  /**
+   * Find KMS
+   * related to the S3
+   */
+  const kmsKeyIds = encryptionInfo?.Rules?.map(
+    r => r.ApplyServerSideEncryptionByDefault?.KMSMasterKeyID
+  )
+  const kmsKeys = data.find(({ name }) => name === services.kms)
+  if (kmsKeys?.data?.[region] && kmsKeyIds?.length > 0) {
+    const kmsKeyInRegion = kmsKeys.data[region].filter(kmsKey =>
+      kmsKeyIds.includes(kmsKey.Arn)
+    )
+
+    if (!isEmpty(kmsKeyInRegion)) {
+      for (const kms of kmsKeyInRegion) {
+        connections.push({
+          id: kms.KeyId,
+          resourceType: services.kms,
+          relation: 'child',
+          field: 'kms',
         })
       }
     }

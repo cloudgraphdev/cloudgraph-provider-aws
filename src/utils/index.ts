@@ -133,10 +133,7 @@ export const checkAndMergeConnections = (
           )
         }
       } else {
-        connections = {
-          ...connections,
-          ...connectionsToMerge,
-        }
+        Object.assign(connections, connectionsToMerge)
       }
     }
     return connections

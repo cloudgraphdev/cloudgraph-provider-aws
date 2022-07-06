@@ -6,11 +6,13 @@ import { AWSError } from 'aws-sdk/lib/error'
 
 import IAM, {
   AttachedPolicy,
+  GetAccountAuthorizationDetailsResponse,
+  GetRoleResponse,
   ListAttachedRolePoliciesResponse,
-  ListRolePoliciesResponse,
   ListRolesResponse,
   ListRoleTagsResponse,
   Role,
+  RoleDetail,
 } from 'aws-sdk/clients/iam'
 import { Config } from 'aws-sdk/lib/config'
 
@@ -37,17 +39,44 @@ const customRetrySettings = setAwsRetryOptions({
 })
 
 export interface RawAwsIamRole extends Omit<Role, 'Tags'> {
-  Policies: string[]
   ManagedPolicies: AttachedPolicy[]
   region: string
   Tags?: TagMap
+  PermissionsBoundaryArn?: string
+  InlinePolicies: Array<{ name: string; document: string }>
 }
+
+const roleByRoleName = async (
+  iam: IAM,
+  { RoleName }: Role
+): Promise<{ RoleName: string; Role: Role }> =>
+  new Promise(resolve => {
+    iam.getRole({ RoleName }, (err: AWSError, data: GetRoleResponse) => {
+      if (err) {
+        errorLog.generateAwsErrorLog({
+          err,
+          functionName: 'iam:getRole',
+        })
+      }
+
+      if (!isEmpty(data)) {
+        const { Role } = data
+
+        resolve({
+          RoleName,
+          Role,
+        })
+      }
+
+      resolve(null)
+    })
+  })
 
 const tagsByRoleName = async (
   iam: IAM,
   { RoleName }: Role
 ): Promise<{ RoleName: string; Tags: TagMap }> =>
-  new Promise(resolveUserPolicies => {
+  new Promise(resolve => {
     iam.listRoleTags(
       { RoleName },
       (err: AWSError, data: ListRoleTagsResponse) => {
@@ -61,39 +90,13 @@ const tagsByRoleName = async (
         if (!isEmpty(data)) {
           const { Tags: tags = [] } = data
 
-          resolveUserPolicies({
+          resolve({
             RoleName,
             Tags: convertAwsTagsToTagMap(tags),
           })
         }
 
-        resolveUserPolicies(null)
-      }
-    )
-  })
-
-const policiesByRoleName = async (
-  iam: IAM,
-  { RoleName }: Role
-): Promise<{ RoleName: string; Policies: string[] }> =>
-  new Promise(resolveUserPolicies => {
-    iam.listRolePolicies(
-      { RoleName },
-      (err: AWSError, data: ListRolePoliciesResponse) => {
-        if (err) {
-          errorLog.generateAwsErrorLog({
-            functionName: 'iam:listRolePolicies',
-            err,
-          })
-        }
-
-        if (!isEmpty(data)) {
-          const { PolicyNames = [] } = data
-
-          resolveUserPolicies({ RoleName, Policies: PolicyNames })
-        }
-
-        resolveUserPolicies(null)
+        resolve(null)
       }
     )
   })
@@ -102,7 +105,7 @@ const managedPoliciesByRoleName = async (
   iam: IAM,
   { RoleName }: Role
 ): Promise<{ RoleName: string; ManagedPolicies: AttachedPolicy[] }> =>
-  new Promise(resolveUserPolicies => {
+  new Promise(resolve => {
     iam.listAttachedRolePolicies(
       { RoleName },
       (err: AWSError, data: ListAttachedRolePoliciesResponse) => {
@@ -116,26 +119,63 @@ const managedPoliciesByRoleName = async (
         if (!isEmpty(data)) {
           const { AttachedPolicies = [] } = data
 
-          resolveUserPolicies({
+          resolve({
             RoleName,
             ManagedPolicies: AttachedPolicies,
           })
         }
 
-        resolveUserPolicies(null)
+        resolve(null)
       }
     )
   })
 
-export const listIamRoles = async (
+export interface RoleInlinePolicyMap {
+  [key: string]: Array<{ name: string; document: string }>
+}
+
+export const getAccountAuthorizationDetails = async (
   iam: IAM,
   marker?: string
-): Promise<RawAwsIamRole[]> =>
+): Promise<RoleDetail[]> =>
+  new Promise(resolve => {
+    const result: RoleDetail[] = []
+    iam.getAccountAuthorizationDetails(
+      { Filter: ['Role'], Marker: marker },
+      async (err: AWSError, data: GetAccountAuthorizationDetailsResponse) => {
+        if (err) {
+          errorLog.generateAwsErrorLog({
+            functionName: 'iam:getAccountAuthorizationDetails',
+            err,
+          })
+        }
+        if (!isEmpty(data) && !isEmpty(data.RoleDetailList)) {
+          const { Marker, IsTruncated, RoleDetailList } = data
+          result.push(...RoleDetailList)
+          if (IsTruncated) {
+            result.push(...(await getAccountAuthorizationDetails(iam, Marker)))
+          }
+          resolve(result)
+        }
+      }
+    )
+  })
+
+export const listIamRoles = async ({
+  iam,
+  marker,
+  roleInlinePolicyMap,
+}: {
+  iam: IAM
+  marker?: string
+  roleInlinePolicyMap: RoleInlinePolicyMap
+}): Promise<RawAwsIamRole[]> =>
   new Promise(resolve => {
     const result: RawAwsIamRole[] = []
-    const policiesByRoleNamePromises = []
     const tagsByRoleNamePromises = []
     const managedPoliciesByRoleNamePromises = []
+    const roleByRoleNamePromises: Promise<{ RoleName: string; Role: Role }>[] =
+      []
 
     iam.listRoles(
       { Marker: marker },
@@ -151,21 +191,27 @@ export const listIamRoles = async (
 
           roles.map(role => {
             tagsByRoleNamePromises.push(tagsByRoleName(iam, role))
-            policiesByRoleNamePromises.push(policiesByRoleName(iam, role))
             managedPoliciesByRoleNamePromises.push(
               managedPoliciesByRoleName(iam, role)
             )
+            roleByRoleNamePromises.push(roleByRoleName(iam, role))
           })
 
           const tags = await Promise.all(tagsByRoleNamePromises)
-          const policies = await Promise.all(policiesByRoleNamePromises)
           const managedPolicies = await Promise.all(
             managedPoliciesByRoleNamePromises
           )
+          const detailedRoles = await Promise.all(roleByRoleNamePromises)
 
           result.push(
             ...roles.map(
-              ({ RoleName, AssumeRolePolicyDocument, Tags, ...role }) => {
+              ({
+                RoleName,
+                AssumeRolePolicyDocument,
+                PermissionsBoundary,
+                Tags,
+                ...role
+              }) => {
                 return {
                   RoleName,
                   AssumeRolePolicyDocument: decodeURIComponent(
@@ -173,24 +219,35 @@ export const listIamRoles = async (
                   ),
                   ...role,
                   region: globalRegionName,
-                  Policies:
-                    policies
-                      ?.filter(p => p?.RoleName === RoleName)
-                      .map(p => p.Policies)
-                      .reduce((current, acc) => [...acc, ...current], []) || [],
+                  RoleLastUsed: detailedRoles?.find(
+                    r => r?.RoleName === RoleName
+                  )?.Role.RoleLastUsed,
                   ManagedPolicies:
                     managedPolicies
                       ?.filter(p => p?.RoleName === RoleName)
                       .map(p => p.ManagedPolicies)
                       .reduce((current, acc) => [...acc, ...current], []) || [],
                   Tags: tags.find(t => t?.RoleName === RoleName)?.Tags || {},
+                  ...(PermissionsBoundary?.PermissionsBoundaryArn
+                    ? {
+                        PermissionsBoundaryArn:
+                          PermissionsBoundary?.PermissionsBoundaryArn,
+                      }
+                    : {}),
+                  InlinePolicies: roleInlinePolicyMap[RoleName] ?? [],
                 }
               }
             )
           )
 
           if (IsTruncated) {
-            result.push(...(await listIamRoles(iam, Marker)))
+            result.push(
+              ...(await listIamRoles({
+                iam,
+                marker: Marker,
+                roleInlinePolicyMap,
+              }))
+            )
           }
 
           resolve(result)
@@ -225,8 +282,22 @@ export default async ({
 
     logger.debug(lt.lookingForIamRoles)
 
+    // Fetch role authorization details first
+    const roleAuthorizationDetails: RoleDetail[] =
+      await getAccountAuthorizationDetails(client)
+    // Create inlinePolicies map
+      const roleInlinePolicyMap: RoleInlinePolicyMap = {}
+    roleAuthorizationDetails.map(roleDetail => {
+      roleInlinePolicyMap[roleDetail.RoleName] = roleDetail.RolePolicyList.map(
+        ({ PolicyName, PolicyDocument }) => ({
+          name: PolicyName,
+          // PolicyDocument is URI encoded
+          document: decodeURIComponent(PolicyDocument),
+        })
+      )
+    })
     // Fetch IAM Roles
-    rolesData = await listIamRoles(client)
+    rolesData = await listIamRoles({ iam: client, roleInlinePolicyMap })
 
     errorLog.reset()
     logger.debug(lt.foundRoles(rolesData.length))

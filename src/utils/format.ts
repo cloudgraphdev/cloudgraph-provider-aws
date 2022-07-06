@@ -1,10 +1,20 @@
-import cuid from 'cuid'
 import { parseString } from '@fast-csv/parse'
-import CloudGraph from '@cloudgraph/sdk'
+import CloudGraph, { generateUniqueId } from '@cloudgraph/sdk'
 import isArray from 'lodash/isArray'
 import toString from 'lodash/toString'
-import { AwsRawTag, AwsIamJsonPolicy } from '../types/generated'
-import { AwsTag, TagMap } from '../types'
+import {
+  AwsRawTag,
+  AwsIamJsonPolicy,
+  AwsIamJsonPolicyCondition,
+  AwsIamJsonPolicyPrincipal,
+  AwsIamJsonPolicyStatement,
+  AwsTag,
+  RawAwsIamJsonPolicy,
+  RawAwsIamJsonPolicyStatement,
+  RawAwsIamJsonPolicyStatementCondition,
+  RawAwsIamJsonPolicyStatementPrincipal,
+  TagMap,
+} from '../types'
 
 const { logger } = CloudGraph
 
@@ -47,6 +57,7 @@ export const camelize = (key: string): string =>
  */
 export const pascalize = (key: string): string => {
   const camelized = camelize(key)
+  // TODO: Change to String.slice?
   return camelized.substr(0, 1).toUpperCase() + camelized.substr(1)
 }
 
@@ -66,7 +77,7 @@ export const parseCSV = (csv: string): Promise<any[]> =>
   })
 
 export const formatIamJsonPolicy = (json: string): AwsIamJsonPolicy => {
-  let object
+  let object: RawAwsIamJsonPolicy
   try {
     object = JSON.parse(json.replace(/\\"/g, '"'))
   } catch (err) {
@@ -76,7 +87,9 @@ export const formatIamJsonPolicy = (json: string): AwsIamJsonPolicy => {
   const statement = isArray(object.Statement)
     ? object.Statement
     : [object.Statement]
-  const formatCondition = condition => {
+  const formatCondition = (
+    condition: RawAwsIamJsonPolicyStatementCondition
+  ): AwsIamJsonPolicyCondition[] => {
     if (!condition) return null
     return Object.entries(condition).map(([key, value = {}]) => {
       const entry = Object.entries(value)[0] || []
@@ -89,26 +102,37 @@ export const formatIamJsonPolicy = (json: string): AwsIamJsonPolicy => {
     })
   }
 
-  const formatPrincipal = principal => {
+  const formatPrincipal = (
+    principal: RawAwsIamJsonPolicyStatementPrincipal
+  ): AwsIamJsonPolicyPrincipal[] => {
     if (!principal) return null
-     return Object.entries(principal).map(([key, value]) => {
+    return Object.entries(principal).map(([key, value]) => {
       const conVal = (isArray(value) ? value : [value]) || []
       return {
         key: key === '0' ? '' : key.toString(),
         value: conVal.map(val => toString(val)),
       }
-     })
+    })
   }
 
   return {
-    id: cuid(),
+    id: generateUniqueId(json),
     version: object.Version,
-    statement: statement.map(el => ({
-      action: isArray(el.Action) ? el.Action : [toString(el.Action)],
-      condition: formatCondition(el.Condition),
-      effect: el.Effect,
-      principal: formatPrincipal(el.Principal),
-      resource: isArray(el.Resource) ? el.Resource : [toString(el.Resource)],
-    })),
+    statement: statement.map(
+      (el: RawAwsIamJsonPolicyStatement): AwsIamJsonPolicyStatement => ({
+        action: isArray(el.Action) ? el.Action : [toString(el.Action)],
+        notAction: isArray(el.NotAction)
+          ? el.NotAction
+          : [toString(el.NotAction)],
+        condition: formatCondition(el.Condition),
+        effect: el.Effect,
+        principal: formatPrincipal(el.Principal),
+        notPrincipal: formatPrincipal(el.NotPrincipal),
+        resource: isArray(el.Resource) ? el.Resource : [toString(el.Resource)],
+        notResource: isArray(el.NotResource)
+          ? el.NotResource
+          : [toString(el.NotResource)],
+      })
+    ),
   }
 }

@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
 import { AwsCloudwatchLog } from '../../types/generated'
 import { RawAwsLogGroup } from './data'
 
@@ -34,16 +34,36 @@ export default ({
       metricTransformations,
     }) => {
       return {
-        id: cuid(),
+        id: generateUniqueId({
+          arn,
+          filterName,
+          filterPattern,
+          filterCreationDate,
+          filterLogGroupName,
+          metricTransformations,
+        }),
         filterName,
         filterPattern,
         creationTime: filterCreationDate?.toString() || '',
         logGroupName: filterLogGroupName,
         metricTransformations:
           metricTransformations?.map(
-            ({ metricName, metricNamespace, metricValue, defaultValue, unit }) => {
+            ({
+              metricName,
+              metricNamespace,
+              metricValue,
+              defaultValue,
+              unit,
+            }) => {
               return {
-                id: cuid(),
+                id: generateUniqueId({
+                  arn,
+                  metricName,
+                  metricNamespace,
+                  metricValue,
+                  defaultValue,
+                  unit,
+                }),
                 metricName,
                 metricNamespace,
                 metricValue,

@@ -65,6 +65,17 @@ type awsS3AclGrant
   permission: String @search(by: [hash])
 }
 
+type awsS3ServerSideEncryptionConfiguration
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  sseAlgorithm: String @search(by: [hash])
+  kmsMasterKeyID: String @search(by: [hash])
+}
+
 type awsS3 implements awsBaseService @key(fields: "arn") {
   access: String @search(by: [hash, regexp])
   bucketOwnerName: String @search(by: [hash, regexp])
@@ -74,6 +85,7 @@ type awsS3 implements awsBaseService @key(fields: "arn") {
   transferAcceleration: String @search(by: [hash, regexp])
   corsConfiguration: String @search(by: [hash, regexp])
   encrypted: String @search(by: [hash, regexp])
+  encryptionRules: [awsS3ServerSideEncryptionConfiguration]
   lifecycle: String @search(by: [hash, regexp])
   logging: String @search(by: [hash, regexp])
   blockPublicAcls: String @search(by: [hash, regexp])
@@ -98,4 +110,5 @@ type awsS3 implements awsBaseService @key(fields: "arn") {
   sns: [awsSns] @hasInverse(field: s3)
   sqs: [awsSqs] @hasInverse(field: s3)
   ecsCluster: [awsEcsCluster] @hasInverse(field: s3)
+  kms: [awsKms] @hasInverse(field: s3)
 }

@@ -1,3 +1,121 @@
+# [0.83.0-alpha.11](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.10...0.83.0-alpha.11) (2022-07-06)
+
+
+### Bug Fixes
+
+* **iamRole:** iamPermissionsBoundary and inlinePolicies bug fixes ([9923ba3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/9923ba3ab2da93477a05a689b7db34fdb08b71f5))
+
+# [0.83.0-alpha.10](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.9...0.83.0-alpha.10) (2022-07-05)
+
+
+### Bug Fixes
+
+* **iamRole:** replace inlinePolicies id gen method from cuid to generateUniqueId ([15de961](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/15de96133012fc9a8a037f46c1b4cda2627195dc))
+
+# [0.83.0-alpha.9](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.8...0.83.0-alpha.9) (2022-07-01)
+
+
+### Bug Fixes
+
+* **iamRole:** added iamBoundaryPermissionPolicy relation and inline policies json documents ([3a713f6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/3a713f66327610f0ae2f3b2200b82f62a6754a08))
+
+# [0.83.0-alpha.8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.7...0.83.0-alpha.8) (2022-06-23)
+
+
+### Bug Fixes
+
+* add missing statement elements needed for the policy definitions ([f09656b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/f09656bac77b65e76a5896f024be88e5d3105fbf))
+
+# [0.83.0-alpha.7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.6...0.83.0-alpha.7) (2022-06-22)
+
+
+### Bug Fixes
+
+* **performance:** improve tags processing time ([def9b1f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/def9b1ff63257508d644f562ba1f9cb24f009d66))
+
+# [0.83.0-alpha.6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.5...0.83.0-alpha.6) (2022-06-20)
+
+
+### Bug Fixes
+
+* Optional chaining for last used details ([751a86b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/751a86b9911a67d916aee7b7e36ab6eb4101f5ba))
+
+# [0.83.0-alpha.5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.4...0.83.0-alpha.5) (2022-06-20)
+
+
+### Bug Fixes
+
+* Released memory usage fix ([1674215](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/16742153c68f37c8ea47548ead3e20fec8586ca6))
+
+# [0.83.0-alpha.4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.3...0.83.0-alpha.4) (2022-06-20)
+
+
+### Bug Fixes
+
+* Released memory usage fix ([b6d242b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/b6d242b20e2ece71e07874466c21277d47ca18fa))
+
+# [0.83.0-alpha.3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.2...0.83.0-alpha.3) (2022-06-17)
+
+
+### Bug Fixes
+
+* **apiGatewayDomainName:** use ISO string in conversion ([04866de](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/04866deb8a74827b1f855cea0dab71c7e30ef5bc))
+
+# [0.83.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0-alpha.1...0.83.0-alpha.2) (2022-06-13)
+
+
+### Bug Fixes
+
+* **services:** Added encryption rules data to s3 service ([dde6694](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/dde6694fcb5af38f8919c291454e736620d4fe89))
+
+
+### Features
+
+* **service:** Added default encryption kms connection ([a999cf7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/a999cf71b6db5ae579ef72051d58ac8e2c85d7b8))
+
+# [0.83.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.1-alpha.1...0.83.0-alpha.1) (2022-06-09)
+
+
+### Bug Fixes
+
+* **deps:** update sdk dep ([bc8f98a](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/bc8f98a17f32103ed88ecf1e4e0505f30caff87e))
+
+
+### Features
+
+* **iamRole:** Add lastUsedDate ([9c7bd36](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/9c7bd36bac04f83482f967e4ac7e990ccdd49f40))
+* Replaced cuid library for generateUniqueId util ([aca3e8f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/aca3e8f33faf445d71c951a6c327ed9095a76255))
+* Replaced cuid with unique ids for policies ([30ad96c](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/30ad96c771b18adf3084a39b0f5eb5ab8954d923))
+* Solved duplication issues ([896e813](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/896e81371780b2b57b630b112dcd2848735fb423))
+
+## [0.82.1-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0...0.82.1-alpha.1) (2022-06-03)
+
+
+### Bug Fixes
+
+* **services:** fix for rds db instance ([5052362](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/5052362387b0ea11a6c6eb842c4b02d904b6b2d9))
+
+# [0.82.0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0...0.82.0) (2022-06-02)
+
+
+### Bug Fixes
+
+* **services:** add additional data to rdsCluster ([cd2d8d5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/cd2d8d5f547d39fefc1d87d589f66c7ed664b4d3))
+* **services:** fix dynamodb wrong property name ([e7f67c8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/e7f67c80a708d74e7318b2a59e468ea538937735))
+* **services:** fix nat gateway service data ([1d0303e](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/1d0303ef27ec55a91eb27e015d877fbc428c211d))
+* **services:** fix route table service mainRouteTable property ([e99287b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/e99287b91828e57715d240f23a5cc0276799da12))
+* **services:** Fixed cloudtrail bug where no data was returned ([4d0c5ac](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/4d0c5ac1ee70f2bf80dcbc59e6c8643fc6b5d30e))
+
+
+### Features
+
+* Add service transitGatewayRouteTable ([519d968](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/519d968766e8c141453bcba7a4a02f137bf35be1))
+* Add transit gateway routes ([4090630](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/40906306d906e97aa9fd4c988a3185f2448b49d7))
+* Add vpcEndpoint service ([a33a61f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/a33a61f1b5cd9f0a4bc49682f0ef44e4d2880283))
+* **services:** Add managedPrefixList service ([da49a74](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/da49a7431224b498873ce0ecf224c8e49860be78))
+* **services:** Add service vpcPeeringConnection ([b5bda76](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/b5bda76de47268f12390b4f554067e6347187da3))
+* Updated README file ([0b4f774](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/0b4f7740f56d34c47a87bff0316c104169a246f8))
+
 # [0.82.0-beta.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.81.0...0.82.0-beta.1) (2022-06-02)
 
 

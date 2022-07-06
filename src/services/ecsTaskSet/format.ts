@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
 import { AwsEcsTaskSet } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsEcsTaskSet } from './data'
@@ -49,17 +49,26 @@ export default ({
     updatedAt: updatedAt.toISOString(),
     launchType,
     capacityProviderStrategy: capacityProviderStrategy?.map(strat => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...strat,
+      }),
       ...strat,
     })),
     platformVersion,
     networkConfiguration,
     loadBalancers: loadBalancers?.map(lb => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...lb,
+      }),
       ...lb,
     })),
     serviceRegistries: serviceRegistries?.map(registry => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...registry,
+      }),
       ...registry,
     })),
     scale,

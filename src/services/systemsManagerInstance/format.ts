@@ -1,5 +1,6 @@
 // import { formatTagsFromMap } from '../../utils/format' // TODO: Build this
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { AwsSystemsManagerInstance } from '../../types/generated'
 import { RawAwsSystemsManagerInstance } from './data'
 import { ssmManagedInstanceArn } from '../../utils/generateArns'
@@ -46,8 +47,10 @@ export default ({
     SourceType: sourceType,
   } = rawData
 
-  const mappedComplianceItems = complianceItems.map(
-    ({
+  const arn = ssmManagedInstanceArn({ region, account, name: instanceId })
+
+  const mappedComplianceItems = complianceItems.map(complianceItem => {
+    const {
       ComplianceType: complianceType,
       ResourceType: complianceResourceType,
       ResourceId: resourceId,
@@ -57,8 +60,12 @@ export default ({
       Severity: severity,
       ExecutionSummary: executionSummary,
       Details: details,
-    }) => ({
-      id: cuid(),
+    } = complianceItem
+    return {
+      id: generateUniqueId({
+        arn,
+        ...complianceItem,
+      }),
       complianceItemId,
       complianceType,
       resourceType: complianceResourceType,
@@ -72,22 +79,28 @@ export default ({
         executionType: executionSummary?.ExecutionType,
       },
       details: Object.keys(details ?? {}).map(key => ({
-        id: cuid(),
+        id: generateUniqueId({
+          arn,
+          key,
+          value: details[key],
+        }),
         key,
         value: details[key],
       })),
-    })
-  )
+    }
+  })
 
   const mappedInstanceAssociationStatusAggregatedCount = Object.keys(
     instanceAssociationStatusAggregatedCount ?? {}
   ).map(key => ({
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      key,
+      value: instanceAssociationStatusAggregatedCount[key],
+    }),
     key,
     value: instanceAssociationStatusAggregatedCount[key],
   }))
-
-  const arn = ssmManagedInstanceArn({ region, account, name: instanceId })
 
   return {
     id: arn,
@@ -119,6 +132,6 @@ export default ({
     },
     complianceItems: mappedComplianceItems,
     sourceId,
-    sourceType
+    sourceType,
   }
 }

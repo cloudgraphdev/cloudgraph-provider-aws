@@ -1,5 +1,6 @@
-import cuid from 'cuid'
 import isEmpty from 'lodash/isEmpty'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import {
   formatFieldToMatch,
   formatRuleLabels,
@@ -8,7 +9,7 @@ import {
   formatRuleOverrideAction,
   formatDefaultAction,
   formatFirewallManagerRuleGroups,
-  formatVisibilityConfig
+  formatVisibilityConfig,
 } from './utils'
 import { AwsWafV2WebAcl } from '../../types/generated'
 import { RawAwsWafV2WebAcl } from './data'
@@ -44,7 +45,9 @@ export default ({
   } = rawData
 
   const mappedRules = Rules?.map(rule => ({
-    id: cuid(),
+    id: generateUniqueId({
+      ...rule,
+    }),
     name: rule.Name,
     priority: rule.Priority,
     statement: formatRuleStatement(rule.Statement),
@@ -57,35 +60,50 @@ export default ({
   const mappedCustomResponseBodies = Object.keys(
     CustomResponseBodies ?? {}
   ).map(key => ({
-    id: cuid(),
+    id: generateUniqueId({
+      key,
+      contentType: CustomResponseBodies[key]?.ContentType,
+      content: CustomResponseBodies[key]?.Content,
+    }),
     key,
     contentType: CustomResponseBodies[key]?.ContentType,
     content: CustomResponseBodies[key]?.Content,
   }))
 
-  const formattedLoggingConfig = isEmpty(loggingConfiguration ?? {}) ? {
-    resourceArn: loggingConfiguration?.ResourceArn,
-    logDestinationConfigs: loggingConfiguration?.LogDestinationConfigs,
-    redactedFields: loggingConfiguration?.RedactedFields?.map(formatFieldToMatch),
-    managedByFirewallManager: loggingConfiguration?.ManagedByFirewallManager,
-    loggingFilter: {
-      filters: loggingConfiguration?.LoggingFilter?.Filters?.map(filter => ({
-        id: cuid(),
-        behavior: filter.Behavior,
-        requirement: filter.Requirement,
-        conditions: filter.Conditions?.map(condition => ({
-          id: cuid(),
-          actionCondtion: {
-            action: condition?.ActionCondition?.Action,
-          },
-          labelNameCondition: {
-            labelName: condition?.LabelNameCondition?.LabelName,
-          },
-        })),
-      })),
-      defaultBehavior: loggingConfiguration?.LoggingFilter?.DefaultBehavior
-    },
-  } : null
+  const formattedLoggingConfig = isEmpty(loggingConfiguration ?? {})
+    ? {
+        resourceArn: loggingConfiguration?.ResourceArn,
+        logDestinationConfigs: loggingConfiguration?.LogDestinationConfigs,
+        redactedFields:
+          loggingConfiguration?.RedactedFields?.map(formatFieldToMatch),
+        managedByFirewallManager:
+          loggingConfiguration?.ManagedByFirewallManager,
+        loggingFilter: {
+          filters: loggingConfiguration?.LoggingFilter?.Filters?.map(
+            filter => ({
+              id: generateUniqueId({
+                ...loggingConfiguration,
+              }),
+              behavior: filter.Behavior,
+              requirement: filter.Requirement,
+              conditions: filter.Conditions?.map(condition => ({
+                id: generateUniqueId({
+                  action: condition?.ActionCondition?.Action,
+                  labelName: condition?.LabelNameCondition?.LabelName,
+                }),
+                actionCondtion: {
+                  action: condition?.ActionCondition?.Action,
+                },
+                labelNameCondition: {
+                  labelName: condition?.LabelNameCondition?.LabelName,
+                },
+              })),
+            })
+          ),
+          defaultBehavior: loggingConfiguration?.LoggingFilter?.DefaultBehavior,
+        },
+      }
+    : null
 
   return {
     id,

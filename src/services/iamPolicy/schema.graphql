@@ -8,6 +8,7 @@ type awsIamPolicy implements awsBaseService @key(fields: "id") {
   iamRoles: [awsIamRole] @hasInverse(field: iamAttachedPolicies)
   iamGroups: [awsIamGroup] @hasInverse(field: iamAttachedPolicies)
   iamUsers: [awsIamUser] @hasInverse(field: iamAttachedPolicies)
+  permissionBoundaryOf: [awsIamRole] @hasInverse(field: iamPermissionBoundaryPolicy)
 }
 
 type awsIamJSONPolicy
@@ -33,6 +34,9 @@ type awsIamJSONPolicyStatement
   effect: String @search(by: [hash, regexp])
   principal: [awsIamJSONPolicyPrincipal]
   resource: [String] @search(by: [hash])
+  notAction: [String] @search(by: [hash])
+  notPrincipal: [awsIamJSONPolicyPrincipal]
+  notResource: [String] @search(by: [hash])
 }
 
 type awsIamJSONPolicyCondition

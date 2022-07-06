@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
 import t from '../../properties/translations'
 
 import { AwsCloudFormationStack } from '../../types/generated'
@@ -48,7 +48,13 @@ export default ({
       ResolvedValue: resolvedValue,
     }) => {
       return {
-        id: cuid(),
+        id: generateUniqueId({
+          stackId,
+          parameterKey,
+          parameterValue,
+          usePreviousValue,
+          resolvedValue,
+        }),
         parameterKey,
         parameterValue,
         usePreviousValue: usePreviousValue ? t.yes : t.no,
@@ -60,7 +66,11 @@ export default ({
   const rollbackConfigurationRollbackTriggerList =
     rollbackConfiguration?.RollbackTriggers?.map(({ Arn: arn, Type: type }) => {
       return {
-        id: cuid(),
+        id: generateUniqueId({
+          stackId,
+          arn,
+          type,
+        }),
         arn,
         type,
       }
@@ -75,7 +85,13 @@ export default ({
         ExportName: exportName,
       }) => {
         return {
-          id: cuid(),
+          id: generateUniqueId({
+            stackId,
+            outputKey,
+            outputValue,
+            outputDescription,
+            exportName,
+          }),
           outputKey,
           outputValue,
           description: outputDescription,
@@ -92,7 +108,12 @@ export default ({
         Timestamp,
       }) => {
         return {
-          id: cuid(),
+          id: generateUniqueId({
+            stackId,
+            resourceType,
+            status,
+            Timestamp,
+          }),
           resourceType,
           status,
           timestamp: Timestamp.toISOString(),
@@ -112,7 +133,11 @@ export default ({
     deletionTime: deletionTime?.toISOString() || '',
     lastUpdatedTime: lastUpdatedTime?.toISOString() || '',
     rollbackConfiguration: {
-      id: cuid(),
+      id: generateUniqueId({
+        stackId,
+        rollbackConfigurationRollbackTriggerList,
+        rollbackConfiguration,
+      }),
       rollbackTriggers: rollbackConfigurationRollbackTriggerList,
       monitoringTimeInMinutes:
         rollbackConfiguration?.MonitoringTimeInMinutes || 0,
@@ -130,7 +155,10 @@ export default ({
     parentId: parentId || '',
     rootId: rootId || '',
     stackDriftInfo: {
-      id: cuid(),
+      id: generateUniqueId({
+        stackId,
+        driftInformation,
+      }),
       status: driftInformation?.StackDriftStatus || '',
       lastCheckTimestamp:
         driftInformation?.LastCheckTimestamp?.toISOString() || '',

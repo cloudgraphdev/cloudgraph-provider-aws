@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
 import { Organization } from 'aws-sdk/clients/organizations'
 import { AwsOrganization } from '../../types/generated'
 
@@ -20,16 +20,17 @@ export default ({
     MasterAccountId: masterAccountId,
     MasterAccountEmail: masterAccountEmail,
     FeatureSet: featureSet,
-    AvailablePolicyTypes: availablePolicyTypes = []
+    AvailablePolicyTypes: availablePolicyTypes = [],
   } = data
 
   const policyTypes = availablePolicyTypes.map(
-    ({
-      Status: status,
-      Type: type,
-    }) => {
+    ({ Status: status, Type: type }) => {
       return {
-        id: cuid(),
+        id: generateUniqueId({
+          arn,
+          status,
+          type,
+        }),
         status,
         type,
       }
@@ -44,7 +45,7 @@ export default ({
     masterAccountId,
     masterAccountEmail,
     featureSet,
-    availablePolicyTypes: policyTypes
+    availablePolicyTypes: policyTypes,
   }
 
   return organization

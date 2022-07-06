@@ -1,4 +1,5 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { AwsGlueJob } from '../../types/generated'
 import { glueJobArn } from '../../utils/generateArns'
 import { RawAwsGlueJob } from './data'
@@ -23,19 +24,15 @@ export default ({
     Role: role,
     CreatedOn: createdOn,
     LastModifiedOn: lastModifiedOn,
-    ExecutionProperty: {
-      MaxConcurrentRuns: maxConcurrentRuns
-    } = {},
+    ExecutionProperty: { MaxConcurrentRuns: maxConcurrentRuns } = {},
     Command: {
       PythonVersion: pythonVersion,
       Name: commandName,
-      ScriptLocation: scriptLocation
+      ScriptLocation: scriptLocation,
     } = {},
     DefaultArguments: defaultArguments,
     NonOverridableArguments: nonOverrideableArguments,
-    Connections: {
-      Connections: connections,
-    } = {},
+    Connections: { Connections: connections } = {},
     MaxRetries: maxRetries,
     AllocatedCapacity: allocatedCapacity,
     Timeout: timeout,
@@ -43,23 +40,34 @@ export default ({
     WorkerType: workerType,
     NumberOfWorkers: numberOfWorkers,
     SecurityConfiguration: securityConfiguration,
-    NotificationProperty: {
-      NotifyDelayAfter: notifyDelayAfter
-    } = {},
+    NotificationProperty: { NotifyDelayAfter: notifyDelayAfter } = {},
     GlueVersion: glueVersion,
   } = rawData
 
-  const mappedDefaultArguments = Object.keys(defaultArguments ?? {}).map(key => ({
-    id: cuid(),
-    key,
-    value: defaultArguments[key]
-  }))
-  const mappedNonOverrideableArguments = Object.keys(nonOverrideableArguments ?? {}).map(key => ({
-    id: cuid(),
-    key,
-    value: nonOverrideableArguments[key]
-  }))
   const arn = glueJobArn({ region, account, name })
+
+  const mappedDefaultArguments = Object.keys(defaultArguments ?? {}).map(
+    key => ({
+      id: generateUniqueId({
+        arn,
+        key,
+        value: defaultArguments[key],
+      }),
+      key,
+      value: defaultArguments[key],
+    })
+  )
+  const mappedNonOverrideableArguments = Object.keys(
+    nonOverrideableArguments ?? {}
+  ).map(key => ({
+    id: generateUniqueId({
+      arn,
+      key,
+      value: nonOverrideableArguments[key],
+    }),
+    key,
+    value: nonOverrideableArguments[key],
+  }))
 
   return {
     id: arn,
@@ -73,17 +81,17 @@ export default ({
     createdOn: createdOn?.toISOString(),
     lastModifiedOn: lastModifiedOn?.toISOString(),
     executionProperty: {
-      maxConcurrentRuns
+      maxConcurrentRuns,
     },
     command: {
       name: commandName,
       pythonVersion,
-      scriptLocation
+      scriptLocation,
     },
     defaultArguments: mappedDefaultArguments,
     nonOverrideableArguments: mappedNonOverrideableArguments,
     connections: {
-      connections
+      connections,
     },
     maxRetries,
     allocatedCapacity,
@@ -93,7 +101,7 @@ export default ({
     numberOfWorkers,
     securityConfiguration,
     notificationProperty: {
-      notifyDelayAfter
+      notifyDelayAfter,
     },
     glueVersion,
   }

@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
 import { AwsEcsCluster } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsEcsCluster } from './data'
@@ -25,27 +25,43 @@ export default ({
   } = service
 
   const statistics = service.statistics?.map(stat => ({
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      ...stat,
+    }),
     ...stat,
   }))
 
   const settings = service.settings?.map(setting => ({
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      ...setting,
+    }),
     ...setting,
   }))
 
-  const defaultCapacityProviderStrategy = service.defaultCapacityProviderStrategy?.map(strat => ({
-    id: cuid(),
-    ...strat,
-  }))
+  const defaultCapacityProviderStrategy =
+    service.defaultCapacityProviderStrategy?.map(strat => ({
+      id: generateUniqueId({
+        arn,
+        ...strat,
+      }),
+      ...strat,
+    }))
 
   const attachments = service.attachments?.map(attachment => ({
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      ...attachment,
+    }),
     ...attachment,
     details: attachment?.details?.map(detail => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...detail,
+      }),
       ...detail,
-    })), 
+    })),
   }))
 
   return {
@@ -54,12 +70,21 @@ export default ({
     accountId: account,
     clusterName,
     configuration: {
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...configuration,
+      }),
       executeCommandConfiguration: {
-        id: cuid(),
+        id: generateUniqueId({
+          arn,
+          ...configuration?.executeCommandConfiguration,
+        }),
         logConfiguration: {
-          id: cuid(),
-          ...configuration?.executeCommandConfiguration?.logConfiguration
+          id: generateUniqueId({
+            arn,
+            ...configuration?.executeCommandConfiguration?.logConfiguration,
+          }),
+          ...configuration?.executeCommandConfiguration?.logConfiguration,
         },
       },
     },

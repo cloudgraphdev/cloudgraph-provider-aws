@@ -91,7 +91,7 @@ const tagsByUsername = async (
   iam: IAM,
   { UserName }: User
 ): Promise<{ UserName: string; Tags: TagMap }> =>
-  new Promise(resolveUserPolicies => {
+  new Promise(resolve => {
     iam.listUserTags(
       { UserName },
       (err: AWSError, data: ListUserTagsResponse) => {
@@ -105,10 +105,10 @@ const tagsByUsername = async (
         if (!isEmpty(data)) {
           const { Tags: tags = [] } = data
 
-          resolveUserPolicies({ UserName, Tags: convertAwsTagsToTagMap(tags) })
+          resolve({ UserName, Tags: convertAwsTagsToTagMap(tags) })
         }
 
-        resolveUserPolicies(null)
+        resolve(null)
       }
     )
   })
@@ -117,7 +117,7 @@ const groupsByUsername = async (
   iam: IAM,
   { UserName }: User
 ): Promise<{ UserName: string; Groups: string[] }> =>
-  new Promise(resolveUserGroups => {
+  new Promise(resolve => {
     iam.listGroupsForUser(
       { UserName },
       (err: AWSError, data: ListGroupsForUserResponse) => {
@@ -133,10 +133,10 @@ const groupsByUsername = async (
 
           const userGroups = Groups.map(({ GroupId }) => GroupId)
 
-          resolveUserGroups({ UserName, Groups: userGroups })
+          resolve({ UserName, Groups: userGroups })
         }
 
-        resolveUserGroups(null)
+        resolve(null)
       }
     )
   })
@@ -145,7 +145,7 @@ const policiesByUsername = async (
   iam: IAM,
   { UserName }: User
 ): Promise<{ UserName: string; Policies: string[] }> =>
-  new Promise(resolveUserPolicies => {
+  new Promise(resolve => {
     iam.listUserPolicies(
       { UserName },
       (err: AWSError, data: ListUserPoliciesResponse) => {
@@ -159,10 +159,10 @@ const policiesByUsername = async (
         if (!isEmpty(data)) {
           const { PolicyNames = [] } = data
 
-          resolveUserPolicies({ UserName, Policies: PolicyNames })
+          resolve({ UserName, Policies: PolicyNames })
         }
 
-        resolveUserPolicies(null)
+        resolve(null)
       }
     )
   })
@@ -171,7 +171,7 @@ const managedPoliciesByUsername = async (
   iam: IAM,
   { UserName }: User
 ): Promise<{ UserName: string; ManagedPolicies: AttachedPolicy[] }> =>
-  new Promise(resolveUserPolicies => {
+  new Promise(resolve => {
     iam.listAttachedUserPolicies(
       { UserName },
       (err: AWSError, data: ListAttachedUserPoliciesResponse) => {
@@ -185,13 +185,13 @@ const managedPoliciesByUsername = async (
         if (!isEmpty(data)) {
           const { AttachedPolicies = [] } = data
 
-          resolveUserPolicies({
+          resolve({
             UserName,
             ManagedPolicies: AttachedPolicies,
           })
         }
 
-        resolveUserPolicies(null)
+        resolve(null)
       }
     )
   })

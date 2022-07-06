@@ -1,4 +1,5 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { AwsEksCluster } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsEksCluster } from './data'
@@ -6,7 +7,7 @@ import { RawAwsEksCluster } from './data'
 export default ({
   service,
   account,
-  region
+  region,
 }: {
   service: RawAwsEksCluster
   account: string
@@ -33,7 +34,7 @@ export default ({
   const formattedKubernetesNetworkConfig = {
     serviceIpv4Cidr: kubernetesNetworkConfig?.serviceIpv4Cidr,
     serviceIpv6Cidr: kubernetesNetworkConfig?.serviceIpv6Cidr,
-    ipFamily: kubernetesNetworkConfig?.ipFamily
+    ipFamily: kubernetesNetworkConfig?.ipFamily,
   }
 
   return {
@@ -49,7 +50,10 @@ export default ({
     kubernetesNetworkConfig: formattedKubernetesNetworkConfig,
     logging: {
       clusterLogging: logging?.clusterLogging?.map(logSetup => ({
-        id: cuid(),
+        id: generateUniqueId({
+          arn,
+          ...logSetup,
+        }),
         ...logSetup,
       })),
     },
@@ -59,7 +63,10 @@ export default ({
     clientRequestToken,
     platformVersion,
     encryptionConfig: encryptionConfig?.map(config => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...config,
+      }),
       ...config,
     })),
     tags: formatTagsFromMap(Tags),

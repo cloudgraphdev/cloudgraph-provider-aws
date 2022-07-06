@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
 import { AwsEcsTaskDefinition } from '../../types/generated'
 import { RawAwsEcsTaskDefinition } from './data'
 
@@ -37,87 +37,146 @@ export default ({
   } = service
 
   const containerDefinitions = service.containerDefinitions?.map(def => ({
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      ...def,
+    }),
     ...def,
     portMappings: def.portMappings?.map(mapping => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...mapping,
+      }),
       ...mapping,
     })),
     environment: def.environment?.map(env => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...env,
+      }),
       ...env,
     })),
     environmentFiles: def.environmentFiles?.map(file => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...file,
+      }),
       ...file,
     })),
     mountPoints: def.mountPoints?.map(mp => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...mp,
+      }),
       ...mp,
     })),
     volumesFrom: def.volumesFrom?.map(vol => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...vol,
+      }),
       ...vol,
     })),
     linuxParameters: {
       ...def?.linuxParameters,
       devices: def.linuxParameters?.devices?.map(device => ({
-        id: cuid(),
+        id: generateUniqueId({
+          arn,
+          ...device,
+        }),
         ...device,
       })),
       tmpfs: def.linuxParameters?.tmpfs?.map(fs => ({
-        id: cuid(),
+        id: generateUniqueId({
+          arn,
+          ...fs,
+        }),
         ...fs,
-      }))
+      })),
     },
     secrets: def.secrets?.map(secret => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...secret,
+      }),
       ...secret,
     })),
     dependsOn: def.dependsOn?.map(dep => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...dep,
+      }),
       ...dep,
     })),
     extraHosts: def.extraHosts?.map(host => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...host,
+      }),
       ...host,
     })),
     dockerLabels: Object.keys(def.dockerLabels || {}).map(key => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        key,
+        value: def.dockerLabels[key],
+      }),
       key,
       value: def.dockerLabels[key],
     })),
     ulimits: def.ulimits?.map(ulimit => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...ulimit,
+      }),
       ...ulimit,
     })),
     logConfiguration: {
       ...def.logConfiguration,
       options: Object.keys(def.logConfiguration?.options || {}).map(key => ({
-        id: cuid(),
+        id: generateUniqueId({
+          arn,
+          key,
+          value: def.logConfiguration?.options[key],
+        }),
         key,
         value: def.logConfiguration?.options[key],
       })),
       secretOptions: def.logConfiguration?.secretOptions?.map(option => ({
-        id: cuid(),
+        id: generateUniqueId({
+          arn,
+          ...option,
+        }),
         ...option,
-      }))
+      })),
     },
     systemControls: def.systemControls?.map(control => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...control,
+      }),
       ...control,
     })),
     resourceRequirements: def.resourceRequirements?.map(rr => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...rr,
+      }),
       ...rr,
     })),
     firelensConfiguration: {
       ...def.firelensConfiguration,
-      options: Object.keys(def.firelensConfiguration?.options || {}).map(key => ({
-        id: cuid(),
-        key,
-        value: def.firelensConfiguration?.options[key],
-      })),
+      options: Object.keys(def.firelensConfiguration?.options || {}).map(
+        key => ({
+          id: generateUniqueId({
+            arn,
+            key,
+            value: def.firelensConfiguration?.options[key],
+          }),
+          key,
+          value: def.firelensConfiguration?.options[key],
+        })
+      ),
     },
   }))
 
@@ -133,28 +192,49 @@ export default ({
     networkMode,
     revision,
     volumes: volumes?.map(vol => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...vol,
+      }),
       ...vol,
       dockerVolumeConfiguration: {
-        driverOpts: Object.keys(vol?.dockerVolumeConfiguration?.driverOpts).map(key => ({
-          id: cuid(),
-          key,
-          value: vol?.dockerVolumeConfiguration?.driverOpts[key],
-        })),
-        labels: Object.keys(vol?.dockerVolumeConfiguration?.labels).map(key => ({
-          id: cuid(),
-          key,
-          value: vol?.dockerVolumeConfiguration?.labels[key],
-        })),
+        driverOpts: Object.keys(vol?.dockerVolumeConfiguration?.driverOpts).map(
+          key => ({
+            id: generateUniqueId({
+              arn,
+              key,
+              value: vol?.dockerVolumeConfiguration?.driverOpts[key],
+            }),
+            key,
+            value: vol?.dockerVolumeConfiguration?.driverOpts[key],
+          })
+        ),
+        labels: Object.keys(vol?.dockerVolumeConfiguration?.labels).map(
+          key => ({
+            id: generateUniqueId({
+              arn,
+              key,
+              value: vol?.dockerVolumeConfiguration?.labels[key],
+            }),
+            key,
+            value: vol?.dockerVolumeConfiguration?.labels[key],
+          })
+        ),
       },
     })),
     status,
     requiresAttributes: requiresAttributes?.map(attr => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...attr,
+      }),
       ...attr,
     })),
     placementConstraints: placementConstraints?.map(pc => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...pc,
+      }),
       ...pc,
     })),
     compatibilities,
@@ -162,7 +242,10 @@ export default ({
     cpu,
     memory,
     inferenceAccelerators: inferenceAccelerators?.map(ia => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...ia,
+      }),
       ...ia,
     })),
     pidMode,
@@ -170,7 +253,10 @@ export default ({
     proxyConfiguration: {
       ...proxyConfiguration,
       properties: proxyConfiguration?.properties?.map(prop => ({
-        id: cuid(),
+        id: generateUniqueId({
+          arn,
+          ...prop,
+        }),
         ...prop,
       })),
     },

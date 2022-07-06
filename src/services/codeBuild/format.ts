@@ -1,4 +1,5 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { RawAwsCodeBuild } from './data'
 import { AwsCodebuild } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
@@ -40,47 +41,68 @@ export default ({
     concurrentBuildLimit,
     projectVisibility,
     publicProjectAlias,
-    resourceAccessRole
+    resourceAccessRole,
   }: RawAwsCodeBuild = service
 
   const formattedEnv = {
     ...(environment ?? {}),
     environmentVariables: environment?.environmentVariables.map(val => ({
-      id: cuid(),
-      ...val
-    }))
+      id: generateUniqueId({
+        arn,
+        ...val,
+      }),
+      ...val,
+    })),
   }
 
   const mappedSecondaryArtifacts = secondaryArtifacts.map(val => ({
-    id: cuid(),
-    ...val
+    id: generateUniqueId({
+      arn,
+      ...val,
+    }),
+    ...val,
   }))
 
   const mappedSecondarySources = secondarySources.map(val => ({
-    id: cuid(),
-    ...val
+    id: generateUniqueId({
+      arn,
+      ...val,
+    }),
+    ...val,
   }))
 
   const mappedFileSystemLocations = fileSystemLocations.map(val => ({
-    id: cuid(),
-    ...val
+    id: generateUniqueId({
+      arn,
+      ...val,
+    }),
+    ...val,
   }))
 
   const mappedSecondarySourceVersions = secondarySourceVersions.map(val => ({
-    id: cuid(),
-    ...val
+    id: generateUniqueId({
+      arn,
+      ...val,
+    }),
+    ...val,
   }))
 
   const formattedWebhook = {
     ...(webhook ?? {}),
     filterGroups: webhook?.filterGroups?.map(val => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...val,
+      }),
       data: val.map(nestedVal => ({
-        id: cuid(),
-        ...nestedVal
-      }))
+        id: generateUniqueId({
+          arn,
+          ...nestedVal,
+        }),
+        ...nestedVal,
+      })),
     })),
-    lastModifiedSecret: webhook?.lastModifiedSecret?.toISOString()
+    lastModifiedSecret: webhook?.lastModifiedSecret?.toISOString(),
   }
 
   return {
@@ -95,17 +117,27 @@ export default ({
     timeoutInMinutes,
     queuedTimeoutInMinutes,
     encryptionKey,
-    source: source ? {
-      id: cuid(),
-      ...source
-    } : null,
+    source: source
+      ? {
+          id: generateUniqueId({
+            arn,
+            ...source,
+          }),
+          ...source,
+        }
+      : null,
     badge,
     fileSystemLocations: mappedFileSystemLocations,
     secondarySources: mappedSecondarySources,
-    artifacts: artifacts ? {
-      id: cuid(),
-      ...(artifacts ?? {})
-    } : null,
+    artifacts: artifacts
+      ? {
+          id: generateUniqueId({
+            arn,
+            artifacts,
+          }),
+          ...(artifacts ?? {}),
+        }
+      : null,
     vpcConfig,
     logsConfig,
     buildBatchConfig,
@@ -120,6 +152,6 @@ export default ({
     concurrentBuildLimit,
     projectVisibility,
     publicProjectAlias,
-    resourceAccessRole
+    resourceAccessRole,
   }
 }

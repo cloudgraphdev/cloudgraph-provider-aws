@@ -1,5 +1,6 @@
+import { generateUniqueId } from '@cloudgraph/sdk'
 import { NetworkAclEntry } from 'aws-sdk/clients/ec2'
-import cuid from 'cuid'
+
 import t from '../../properties/translations'
 import { AwsNetworkAcl } from '../../types/generated'
 import { RawAwsNetworkAcl } from './data'
@@ -31,7 +32,14 @@ export default ({
     ({
       NetworkAclAssociationId: networkAclAssociationId,
       SubnetId: subnetId,
-    }) => ({ id: cuid(), networkAclAssociationId, subnetId })
+    }) => ({
+      id: generateUniqueId({
+        networkAclAssociationId,
+        subnetId,
+      }),
+      networkAclAssociationId,
+      subnetId,
+    })
   )
 
   const egress = (entries || []).filter(({ Egress: e }) => e)
@@ -62,7 +70,9 @@ export default ({
       }
 
       return {
-        id: cuid(),
+        id: generateUniqueId({
+          ...rule,
+        }),
         ruleNumber,
         protocol: protocol === '-1' ? t.all : protocol,
         portRange,

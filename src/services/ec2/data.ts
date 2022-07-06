@@ -1,7 +1,6 @@
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 import camelCase from 'lodash/camelCase'
-import cuid from 'cuid'
 
 import EC2, {
   DescribeIamInstanceProfileAssociationsResult,
@@ -23,7 +22,7 @@ import CloudWatch, {
 import { Config } from 'aws-sdk/lib/config'
 import { AWSError } from 'aws-sdk/lib/error'
 
-import CloudGraph from '@cloudgraph/sdk'
+import CloudGraph, { generateUniqueId } from '@cloudgraph/sdk'
 
 import metricsTypes, { metricStats } from './metrics'
 import { TagMap, AwsTag } from '../../types'
@@ -473,7 +472,7 @@ export default async ({
     const metricQueries: MetricDataQueries = ec2Instances
       .map(({ InstanceId }) => {
         return metricsTypes.map(metricName => ({
-          Id: `${cuid()}_${metricName}`, // Must be unique across all metrics
+          Id: `${generateUniqueId({ InstanceId, metricName })}_${metricName}`, // Must be unique across all metrics
           Label: `${metricName}:${InstanceId}`,
           MetricStat: {
             Metric: {

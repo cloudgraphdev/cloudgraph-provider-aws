@@ -1,11 +1,12 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { RawAwsIotThingAttribute } from './data'
 import { AwsIotThingAttribute } from '../../types/generated'
 
 export default ({
   service,
   account,
-  region
+  region,
 }: {
   service: RawAwsIotThingAttribute
   account: string
@@ -27,9 +28,13 @@ export default ({
     thingName,
     thingTypeName,
     attributes: Object.keys(attributes).map(key => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        key,
+        value: attributes[key],
+      }),
       key,
-      value: attributes[key]
+      value: attributes[key],
     })),
     version,
   }

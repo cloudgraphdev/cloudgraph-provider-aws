@@ -1,4 +1,5 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { AwsEcsContainer } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsEcsContainer } from './data'
@@ -26,27 +27,42 @@ export default ({
   } = service
 
   const remainingResources = service.remainingResources?.map(rr => ({
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      ...rr,
+    }),
     ...rr,
   }))
 
   const registeredResources = service.registeredResources?.map(rr => ({
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      ...rr,
+    }),
     ...rr,
   }))
 
   const attributes = service.attributes?.map(attribute => ({
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      ...attribute,
+    }),
     ...attribute,
   }))
 
   const attachments = service.attachments?.map(attachment => ({
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      ...attachment,
+    }),
     ...attachment,
     details: attachment.details?.map(detail => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...detail,
+      }),
       ...detail,
-    }))
+    })),
   }))
 
   return {
@@ -56,7 +72,10 @@ export default ({
     capacityProviderName,
     version,
     versionInfo: {
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...versionInfo,
+      }),
       ...versionInfo,
     },
     remainingResources,

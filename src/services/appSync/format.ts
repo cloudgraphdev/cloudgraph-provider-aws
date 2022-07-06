@@ -1,5 +1,6 @@
+import { generateUniqueId } from '@cloudgraph/sdk'
 import { ApiKey, DataSource, Resolver } from 'aws-sdk/clients/appsync'
-import cuid from 'cuid'
+
 import t from '../../properties/translations'
 import {
   AwsAppSyncApiKey,
@@ -197,7 +198,12 @@ export default ({
         userPoolConfig: additionalUserPoolConfig,
       }) => {
         return {
-          id: cuid(),
+          id: generateUniqueId({
+            arn,
+            additionalAuthenticationType,
+            additionalOpenIDConnectConfig,
+            additionalUserPoolConfig,
+          }),
           authenticationType: additionalAuthenticationType || '',
           openIDConnectIssuer: additionalOpenIDConnectConfig?.issuer || '',
           openIDConnectClientId: additionalOpenIDConnectConfig?.clientId || '',
@@ -214,7 +220,7 @@ export default ({
   const formatUrisData = (): AwsAppSyncGraphqlApiUris[] => {
     const result: AwsAppSyncGraphqlApiUris[] = []
     for (const [key, value] of Object.entries(uris)) {
-      result.push({ id: cuid(), key, value })
+      result.push({ id: `${key}:${value}`, key, value })
     }
     return result
   }
