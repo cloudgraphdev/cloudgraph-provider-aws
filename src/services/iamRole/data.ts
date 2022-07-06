@@ -42,7 +42,7 @@ export interface RawAwsIamRole extends Omit<Role, 'Tags'> {
   ManagedPolicies: AttachedPolicy[]
   region: string
   Tags?: TagMap
-  PermissionsBoundaryArn: string
+  PermissionsBoundaryArn?: string
   InlinePolicies: Array<{ name: string; document: string }>
 }
 
@@ -130,6 +130,10 @@ const managedPoliciesByRoleName = async (
     )
   })
 
+export interface RoleInlinePolicyMap {
+  [key: string]: Array<{ name: string; document: string }>
+}
+
 export const getAccountAuthorizationDetails = async (
   iam: IAM,
   marker?: string
@@ -160,11 +164,11 @@ export const getAccountAuthorizationDetails = async (
 export const listIamRoles = async ({
   iam,
   marker,
-  roleAuthorizationDetails,
+  roleInlinePolicyMap,
 }: {
   iam: IAM
   marker?: string
-  roleAuthorizationDetails: RoleDetail[]
+  roleInlinePolicyMap: RoleInlinePolicyMap
 }): Promise<RawAwsIamRole[]> =>
   new Promise(resolve => {
     const result: RawAwsIamRole[] = []
@@ -224,14 +228,13 @@ export const listIamRoles = async ({
                       .map(p => p.ManagedPolicies)
                       .reduce((current, acc) => [...acc, ...current], []) || [],
                   Tags: tags.find(t => t?.RoleName === RoleName)?.Tags || {},
-                  PermissionsBoundaryArn:
-                    PermissionsBoundary.PermissionsBoundaryArn,
-                  InlinePolicies: roleAuthorizationDetails
-                    .find(rAD => rAD.RoleName === RoleName)
-                    .RolePolicyList.map(rPl => ({
-                      name: rPl.PolicyName,
-                      document: rPl.PolicyDocument,
-                    })),
+                  ...(PermissionsBoundary?.PermissionsBoundaryArn
+                    ? {
+                        PermissionsBoundaryArn:
+                          PermissionsBoundary?.PermissionsBoundaryArn,
+                      }
+                    : {}),
+                  InlinePolicies: roleInlinePolicyMap[RoleName] ?? [],
                 }
               }
             )
@@ -242,7 +245,7 @@ export const listIamRoles = async ({
               ...(await listIamRoles({
                 iam,
                 marker: Marker,
-                roleAuthorizationDetails,
+                roleInlinePolicyMap,
               }))
             )
           }
@@ -280,11 +283,21 @@ export default async ({
     logger.debug(lt.lookingForIamRoles)
 
     // Fetch role authorization details first
-    const roleAuthorizationDetails = await getAccountAuthorizationDetails(
-      client
-    )
+    const roleAuthorizationDetails: RoleDetail[] =
+      await getAccountAuthorizationDetails(client)
+    // Create inlinePolicies map
+      const roleInlinePolicyMap: RoleInlinePolicyMap = {}
+    roleAuthorizationDetails.map(roleDetail => {
+      roleInlinePolicyMap[roleDetail.RoleName] = roleDetail.RolePolicyList.map(
+        ({ PolicyName, PolicyDocument }) => ({
+          name: PolicyName,
+          // PolicyDocument is URI encoded
+          document: decodeURIComponent(PolicyDocument),
+        })
+      )
+    })
     // Fetch IAM Roles
-    rolesData = await listIamRoles({ iam: client, roleAuthorizationDetails })
+    rolesData = await listIamRoles({ iam: client, roleInlinePolicyMap })
 
     errorLog.reset()
     logger.debug(lt.foundRoles(rolesData.length))
