@@ -1,3 +1,4 @@
+import { generateUniqueId } from '@cloudgraph/sdk'
 import CloudTrail, {
   EventSelector,
   GetTrailStatusResponse,
@@ -6,7 +7,6 @@ import CloudTrail, {
   TrailInfo,
 } from 'aws-sdk/clients/cloudtrail'
 import { Config } from 'aws-sdk/lib/config'
-import cuid from 'cuid'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 
@@ -179,7 +179,12 @@ export default async ({
 
           cloudTrailData.push({
             ...trail,
-            id: cuid(),
+            id: generateUniqueId({
+              ...trail,
+              trailStatus,
+              trailEvents,
+              trailTagList,
+            }),
             TrailStatus: trailStatus || {},
             EventSelectors: trailEvents,
             Tags: convertAwsTagsToTagMap(

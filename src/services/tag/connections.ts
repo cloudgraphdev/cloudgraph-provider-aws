@@ -9,8 +9,6 @@ import {
   VpnGateway,
   VpnConnection,
 } from 'aws-sdk/clients/ec2'
-import { isEmpty } from 'lodash'
-import regions, { globalRegionName } from '../../enums/regions'
 import services from '../../enums/services'
 import { RawAwsAppSync } from '../appSync/data'
 import { RawAwsCloudFormationStack } from '../cloudFormationStack/data'
@@ -73,19 +71,33 @@ import { RawAwsManagedPrefixList } from '../managedPrefixList/data'
 import { RawAwsTransitGatewayRouteTable } from '../transitGatewayRouteTable/data'
 import { RawAwsVpcPeeringConnection } from '../vpcPeeringConnection/data'
 
-const findServiceInstancesWithTag = (tag: any, service: any): any => {
-  const { id } = tag
-  return service.filter(({ Tags = {} }) => {
-    for (const [key, value] of Object.entries(Tags)) {
-      if (id === `${key}:${value}`) {
-        return true
+const generateTagsMap = (
+  data: Array<{ name: string; data: { [property: string]: any[] } }>
+): { [tagId: string]: { [serviceName: string]: any } } => {
+  const tagsMap = {}
+  // create a map of entities by TagId --> map [tagId] [serviceName] => [... entities with that tag]
+  for (const serv of data) {
+    for (const region of Object.keys(serv.data)) {
+      // globan region included
+      const regionData = serv.data[region] || []
+      for (const entity of regionData) {
+        for (const [key, value] of Object.entries(entity.Tags || {})) {
+          const tagId = `${key}:${value}`
+          if (!tagsMap[tagId]) {
+            tagsMap[tagId] = {}
+          }
+          if (!tagsMap[tagId][serv.name]) {
+            tagsMap[tagId][serv.name] = []
+          }
+          tagsMap[tagId][serv.name].push(entity)
+        }
       }
     }
-    return false
-  })
+  }
+  return tagsMap
 }
 
-export default ({
+function getConnections({
   service: tag,
   data,
 }: {
@@ -93,1801 +105,1095 @@ export default ({
   data: Array<{ name: string; data: { [property: string]: any[] } }>
 }): {
   [property: string]: ServiceConnection[]
-} => {
+} {
+  // this function is called once per tag, and we need to traverse the entire data set each time,
+  // we cache this precomputed work or it'd simply take too long (minutes) to run in big accounts
+  // @NOTE: `this` refers to the Tag Service
+
+  const tagsMap: { [tagId: string]: { [serviceName: string]: any } } =
+    this.tagsMap ?? generateTagsMap(data)
+  if (!this.tagsMap) {
+    this.tagsMap = tagsMap
+  }
+
   const connections: ServiceConnection[] = []
-  for (const region of regions) {
-    /**
-     * Find related ALBs
-     */
-    const albs: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.alb)
-    if (albs?.data?.[region]) {
-      const dataAtRegion: RawAwsAlb[] = findServiceInstancesWithTag(
-        tag,
-        albs.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const alb of dataAtRegion) {
-          const { LoadBalancerArn: id } = alb
-          connections.push({
-            id,
-            resourceType: services.alb,
-            relation: 'child',
-            field: 'alb',
-          })
-        }
-      }
-    }
 
-    /**
-     * Find related ASG
-     */
-    const asgQueues: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.asg)
-    if (asgQueues?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        asgQueues.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const asg of dataAtRegion) {
-          const { AutoScalingGroupARN: id } = asg
-          connections.push({
-            id,
-            resourceType: services.asg,
-            relation: 'child',
-            field: 'asg',
-          })
-        }
-      }
-    }
+  const dataForTag = tagsMap[tag.id] || {}
 
-    /**
-     * Find related CloudTrails
-     */
-    const cloudtrails: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.cloudtrail)
-    if (cloudtrails?.data?.[region]) {
-      const dataAtRegion: RawAwsCloudTrail[] = findServiceInstancesWithTag(
-        tag,
-        cloudtrails.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const cloudtrail of dataAtRegion) {
-          const { id } = cloudtrail
-          connections.push({
-            id,
-            resourceType: services.cloudtrail,
-            relation: 'child',
-            field: 'cloudtrail',
-          })
-        }
-      }
-    }
+  // @NOTE: we now check service by service, we could use a switch statement for better performance.
 
-    /**
-     * Find related Cloudwatch
-     */
-    const cws: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.cloudwatch)
-    if (cws?.data?.[region]) {
-      const dataAtRegion: any = findServiceInstancesWithTag(
-        tag,
-        cws.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const cw of dataAtRegion) {
-          const { AlarmArn: id }: MetricAlarm = cw
-          connections.push({
-            id,
-            resourceType: services.cloudwatch,
-            relation: 'child',
-            field: 'cloudwatch',
-          })
-        }
-      }
-    }
+  /**
+   * Find related ALBs
+   */
+  for (const alb of dataForTag[services.alb] || []) {
+    const { LoadBalancerArn: id }: RawAwsAlb = alb
+    connections.push({
+      id,
+      resourceType: services.alb,
+      relation: 'child',
+      field: 'alb',
+    })
+  }
 
-    /**
-     * Find related Codebuild
-     */
-    const codebuild: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.codebuild)
-    if (codebuild?.data?.[region]) {
-      const dataAtRegion: any = findServiceInstancesWithTag(
-        tag,
-        codebuild.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const cb of dataAtRegion) {
-          const { arn: id }: RawAwsCodeBuild = cb
-          connections.push({
-            id,
-            resourceType: services.codebuild,
-            relation: 'child',
-            field: 'codebuilds',
-          })
-        }
-      }
-    }
+  /**
+   * Find related ASG
+   */
 
-    /**
-     * Find related CognitoIdentityPools
-     */
-    const pools: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.cognitoIdentityPool)
-    if (pools?.data?.[region]) {
-      const dataAtRegion: any = findServiceInstancesWithTag(
-        tag,
-        pools.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const pool of dataAtRegion) {
-          const { IdentityPoolId: id }: RawAwsCognitoIdentityPool = pool
-          connections.push({
-            id,
-            resourceType: services.cognitoIdentityPool,
-            relation: 'child',
-            field: 'cognitoIdentityPool',
-          })
-        }
-      }
-    }
+  for (const asg of dataForTag[services.asg] || []) {
+    const { AutoScalingGroupARN: id } = asg
+    connections.push({
+      id,
+      resourceType: services.asg,
+      relation: 'child',
+      field: 'asg',
+    })
+  }
 
-    /**
-     * Find related CognitoUserPools
-     */
-    const userPools: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.cognitoUserPool)
-    if (userPools?.data?.[region]) {
-      const dataAtRegion: RawAwsCognitoUserPool[] = findServiceInstancesWithTag(
-        tag,
-        userPools.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const pool of dataAtRegion) {
-          const { Id: id } = pool
-          connections.push({
-            id,
-            resourceType: services.cognitoUserPool,
-            relation: 'child',
-            field: 'cognitoUserPool',
-          })
-        }
-      }
-    }
+  /**
+   * Find related CloudTrails
+   */
 
-    /**
-     * Find related KMS keys
-     */
-    const kmsKeys: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.kms)
-    if (kmsKeys?.data?.[region]) {
-      const dataAtRegion: any = findServiceInstancesWithTag(
-        tag,
-        kmsKeys.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const key of dataAtRegion) {
-          const { KeyId: id } = key
-          connections.push({
-            id,
-            resourceType: services.kms,
-            relation: 'child',
-            field: 'kms',
-          })
-        }
-      }
-    }
+  for (const cloudtrail of dataForTag[services.cloudtrail] || []) {
+    const { id }: RawAwsCloudTrail = cloudtrail
+    connections.push({
+      id,
+      resourceType: services.cloudtrail,
+      relation: 'child',
+      field: 'cloudtrail',
+    })
+  }
 
-    /**
-     * Find related ec2 instances
-     */
-    const ec2s: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.ec2Instance)
-    if (ec2s?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(tag, ec2s.data[region])
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { InstanceId: id } = instance
+  /**
+   * Find related Cloudwatch
+   */
+  for (const cw of dataForTag[services.cloudwatch] || []) {
+    const { AlarmArn: id }: MetricAlarm = cw
+    connections.push({
+      id,
+      resourceType: services.cloudwatch,
+      relation: 'child',
+      field: 'cloudwatch',
+    })
+  }
 
-          connections.push({
-            id,
-            resourceType: services.ec2Instance,
-            relation: 'child',
-            field: 'ec2Instance',
-          })
-        }
-      }
-    }
+  /**
+   * Find related Codebuild
+   */
+  for (const cb of dataForTag[services.codebuild] || []) {
+    const { arn: id }: RawAwsCodeBuild = cb
+    connections.push({
+      id,
+      resourceType: services.codebuild,
+      relation: 'child',
+      field: 'codebuilds',
+    })
+  }
 
-    /**
-     * Find related lambdas
-     */
-    const lambdas: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.lambda)
-    if (lambdas?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        lambdas.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { FunctionArn: id } = instance
+  /**
+   * Find related CognitoIdentityPools
+   */
+  for (const pool of dataForTag[services.cognitoIdentityPool] || []) {
+    const { IdentityPoolId: id }: RawAwsCognitoIdentityPool = pool
+    connections.push({
+      id,
+      resourceType: services.cognitoIdentityPool,
+      relation: 'child',
+      field: 'cognitoIdentityPool',
+    })
+  }
 
-          connections.push({
-            id,
-            resourceType: services.lambda,
-            relation: 'child',
-            field: 'lambda',
-          })
-        }
-      }
-    }
+  /**
+   * Find related CognitoUserPools
+   */
+  for (const pool of dataForTag[services.cognitoUserPool] || []) {
+    const { Id: id }: RawAwsCognitoUserPool = pool
+    connections.push({
+      id,
+      resourceType: services.cognitoUserPool,
+      relation: 'child',
+      field: 'cognitoUserPool',
+    })
+  }
 
-    /**
-     * Find related managedAirflows
-     */
-    const airflows: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.managedAirflow)
-    if (airflows?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        airflows.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { Arn: id } = instance
+  /**
+   * Find related KMS keys
+   */
+  for (const key of dataForTag[services.kms] || []) {
+    const { KeyId: id } = key
+    connections.push({
+      id,
+      resourceType: services.kms,
+      relation: 'child',
+      field: 'kms',
+    })
+  }
 
-          connections.push({
-            id,
-            resourceType: services.managedAirflow,
-            relation: 'child',
-            field: 'managedAirflows',
-          })
-        }
-      }
-    }
+  /**
+   * Find related ec2 instances
+   */
+  for (const instance of dataForTag[services.ec2Instance] || []) {
+    const { InstanceId: id } = instance
 
-    /**
-     * Find related guardDutyDetectors
-     */
-    const detectors: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.guardDutyDetector)
-    if (detectors?.data?.[region]) {
-      const dataAtRegion: RawAwsGuardDutyDetector[] =
-        findServiceInstancesWithTag(tag, detectors.data[region])
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { id } = instance
+    connections.push({
+      id,
+      resourceType: services.ec2Instance,
+      relation: 'child',
+      field: 'ec2Instance',
+    })
+  }
 
-          connections.push({
-            id,
-            resourceType: services.guardDutyDetector,
-            relation: 'child',
-            field: 'guardDutyDetectors',
-          })
-        }
-      }
-    }
+  /**
+   * Find related lambdas
+   */
+  for (const instance of dataForTag[services.lambda] || []) {
+    const { FunctionArn: id } = instance
 
-    /**
-     * Find related SecurityGroups
-     */
-    const securityGroups: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.sg)
-    if (securityGroups?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        securityGroups.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { GroupId: id } = instance
+    connections.push({
+      id,
+      resourceType: services.lambda,
+      relation: 'child',
+      field: 'lambda',
+    })
+  }
 
-          connections.push({
-            id,
-            resourceType: services.sg,
-            relation: 'child',
-            field: 'securityGroups',
-          })
-        }
-      }
-    }
+  /**
+   * Find related managedAirflows
+   */
+  for (const instance of dataForTag[services.managedAirflow] || []) {
+    const { Arn: id } = instance
 
-    /**
-     * Find related SQS
-     */
-    const sqsQueues: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.sqs)
-    if (sqsQueues?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        sqsQueues.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const {
-            sqsAttributes: { QueueArn: id },
-          } = instance
+    connections.push({
+      id,
+      resourceType: services.managedAirflow,
+      relation: 'child',
+      field: 'managedAirflows',
+    })
+  }
 
-          connections.push({
-            id,
-            resourceType: services.sqs,
-            relation: 'child',
-            field: 'sqs',
-          })
-        }
-      }
-    }
+  /**
+   * Find related guardDutyDetectors
+   */
+  for (const instance of dataForTag[services.guardDutyDetector] || []) {
+    const { id }: RawAwsGuardDutyDetector = instance
 
-    /**
-     * Find related EIP
-     */
-    const eips: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.eip)
-    if (eips?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(tag, eips.data[region])
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { AllocationId: id } = instance
+    connections.push({
+      id,
+      resourceType: services.guardDutyDetector,
+      relation: 'child',
+      field: 'guardDutyDetectors',
+    })
+  }
 
-          connections.push({
-            id,
-            resourceType: services.eip,
-            relation: 'child',
-            field: 'eip',
-          })
-        }
-      }
-    }
+  /**
+   * Find related SecurityGroups
+   */
 
-    /**
-     * Find related EBS
-     */
-    const ebs: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.ebs)
-    if (ebs?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(tag, ebs.data[region])
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { VolumeId: id } = instance
+  for (const instance of dataForTag[services.sg] || []) {
+    const { GroupId: id } = instance
 
-          connections.push({
-            id,
-            resourceType: services.ebs,
-            relation: 'child',
-            field: 'ebs',
-          })
-        }
-      }
-    }
+    connections.push({
+      id,
+      resourceType: services.sg,
+      relation: 'child',
+      field: 'securityGroups',
+    })
+  }
 
-    /**
-     * Find related dmsReplicationInstances
-     */
-    const replications: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.dmsReplicationInstance)
-    if (replications?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        replications.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { ReplicationInstanceArn: id } = instance
+  /**
+   * Find related SQS
+   */
 
-          connections.push({
-            id,
-            resourceType: services.dmsReplicationInstance,
-            relation: 'child',
-            field: 'dmsReplicationInstances',
-          })
-        }
-      }
-    }
+  for (const instance of dataForTag[services.sqs] || []) {
+    const {
+      sqsAttributes: { QueueArn: id },
+    } = instance
 
-    /**
-     * Find related elasticSearchDomain
-     */
-    const domains: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.elasticSearchDomain)
-    if (domains?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        domains.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { DomainId: id }: RawAwsElasticSearchDomain = instance
+    connections.push({
+      id,
+      resourceType: services.sqs,
+      relation: 'child',
+      field: 'sqs',
+    })
+  }
 
-          connections.push({
-            id,
-            resourceType: services.elasticSearchDomain,
-            relation: 'child',
-            field: 'elasticSearchDomains',
-          })
-        }
-      }
-    }
+  /**
+   * Find related EIP
+   */
+  for (const instance of dataForTag[services.eip] || []) {
+    const { AllocationId: id } = instance
 
-    /**
-     * Find related IGW
-     */
-    const igws: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.igw)
-    if (igws?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(tag, igws.data[region])
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { InternetGatewayId: id } = instance
+    connections.push({
+      id,
+      resourceType: services.eip,
+      relation: 'child',
+      field: 'eip',
+    })
+  }
 
-          connections.push({
-            id,
-            resourceType: services.igw,
-            relation: 'child',
-            field: 'igw',
-          })
-        }
-      }
-    }
+  /**
+   * Find related EBS
+   */
+  for (const instance of dataForTag[services.ebs] || []) {
+    const { VolumeId: id } = instance
 
-    /**
-     * Find related Network Interface
-     */
-    const networkInterfaces: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.networkInterface)
-    if (networkInterfaces?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        networkInterfaces.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { NetworkInterfaceId: id } = instance
+    connections.push({
+      id,
+      resourceType: services.ebs,
+      relation: 'child',
+      field: 'ebs',
+    })
+  }
 
-          connections.push({
-            id,
-            resourceType: services.networkInterface,
-            relation: 'child',
-            field: 'networkInterface',
-          })
-        }
-      }
-    }
+  /**
+   * Find related dmsReplicationInstances
+   */
+  for (const instance of dataForTag[services.dmsReplicationInstance] || []) {
+    const { ReplicationInstanceArn: id } = instance
 
-    /**
-     * Find related VPCs
-     */
-    const vpcs: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.vpc)
-    if (vpcs?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(tag, vpcs.data[region])
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { VpcId: id }: Vpc = instance
+    connections.push({
+      id,
+      resourceType: services.dmsReplicationInstance,
+      relation: 'child',
+      field: 'dmsReplicationInstances',
+    })
+  }
 
-          connections.push({
-            id,
-            resourceType: services.vpc,
-            relation: 'child',
-            field: 'vpc',
-          })
-        }
-      }
-    }
-    /**
+  /**
+   * Find related elasticSearchDomain
+   */
+  for (const instance of dataForTag[services.elasticSearchDomain] || []) {
+    const { DomainId: id }: RawAwsElasticSearchDomain = instance
+
+    connections.push({
+      id,
+      resourceType: services.elasticSearchDomain,
+      relation: 'child',
+      field: 'elasticSearchDomains',
+    })
+  }
+
+  /**
+   * Find related IGW
+   */
+  for (const instance of dataForTag[services.igw] || []) {
+    const { InternetGatewayId: id } = instance
+
+    connections.push({
+      id,
+      resourceType: services.igw,
+      relation: 'child',
+      field: 'igw',
+    })
+  }
+
+  /**
+   * Find related Network Interface
+   */
+
+  for (const instance of dataForTag[services.networkInterface] || []) {
+    const { NetworkInterfaceId: id } = instance
+
+    connections.push({
+      id,
+      resourceType: services.networkInterface,
+      relation: 'child',
+      field: 'networkInterface',
+    })
+  }
+
+  /**
+   * Find related VPCs
+   */
+  for (const instance of dataForTag[services.vpc] || []) {
+    const { VpcId: id }: Vpc = instance
+
+    connections.push({
+      id,
+      resourceType: services.vpc,
+      relation: 'child',
+      field: 'vpc',
+    })
+  }
+  /**
 
      * Find related ELB
      */
-    const elbs: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.elb)
-    if (elbs?.data?.[region]) {
-      const dataAtRegion: RawAwsElb[] = findServiceInstancesWithTag(
-        tag,
-        elbs.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const {
-            LoadBalancerName: loadBalancerName,
-            region: elbRegion,
-            account,
-          } = instance
-
-          connections.push({
-            id: elbArn({ region: elbRegion, account, name: loadBalancerName }),
-            resourceType: services.elb,
-            relation: 'child',
-            field: 'elb',
-          })
-        }
-      }
-    }
-    /**
-     * Find related NAT GWs
-     */
-    const natgws: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.nat)
-    if (natgws?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(tag, natgws.data[region])
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { NatGatewayId: id }: NatGateway = instance
-
-          connections.push({
-            id,
-            resourceType: services.nat,
-            relation: 'child',
-            field: 'natGateway',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Route Tables
-     */
-    const routeTables: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.routeTable)
-    if (routeTables?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        routeTables.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { RouteTableId: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.routeTable,
-            relation: 'child',
-            field: 'routeTable',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related S3 buckets
-     */
-    const buckets: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.s3)
-    if (buckets?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        buckets.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { Id: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.s3,
-            relation: 'child',
-            field: 's3',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Cloudfront distros
-     */
-    const distros: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.cloudfront)
-    if (distros?.data?.[globalRegionName]) {
-      const dataAtRegion: RawAwsCloudfront[] = findServiceInstancesWithTag(
-        tag,
-        distros.data[globalRegionName]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const {
-            summary: { Id: id },
-          } = instance
-
-          connections.push({
-            id,
-            resourceType: services.cloudfront,
-            relation: 'child',
-            field: 'cloudfront',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Kinesis Firehose streams
-     */
-    const KFStreams: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.kinesisFirehose)
-    if (KFStreams?.data?.[region]) {
-      const dataAtRegion: RawAwsKinesisFirehose[] = findServiceInstancesWithTag(
-        tag,
-        KFStreams.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { DeliveryStreamARN: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.kinesisFirehose,
-            relation: 'child',
-            field: 'kinesisFirehose',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related App sync
-     */
-    const appSyncs: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.appSync)
-
-    if (appSyncs?.data?.[region]) {
-      const dataAtRegion: RawAwsAppSync[] = findServiceInstancesWithTag(
-        tag,
-        appSyncs.data[region]
-      )
-
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { apiId: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.appSync,
-            relation: 'child',
-            field: 'appSync',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Cloudformation stacks
-     */
-    const CFStacks: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.cloudFormationStack)
-    if (CFStacks?.data?.[region]) {
-      const dataAtRegion: RawAwsCloudFormationStack[] =
-        findServiceInstancesWithTag(tag, CFStacks.data[region])
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { StackId: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.cloudFormationStack,
-            relation: 'child',
-            field: 'cloudFormationStack',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Cloudformation stack sets
-     */
-    const CFStacksSets: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.cloudFormationStackSet)
-    if (CFStacksSets?.data?.[region]) {
-      const dataAtRegion: RawAwsCloudFormationStackSet[] =
-        findServiceInstancesWithTag(tag, CFStacksSets.data[region])
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { StackSetId: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.cloudFormationStackSet,
-            relation: 'child',
-            field: 'cloudFormationStackSet',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related DynamoDb databases
-     */
-    const dynamoDbs: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.dynamodb)
-    if (dynamoDbs?.data?.[region]) {
-      const dataAtRegion: RawAwsDynamoDbTable[] = findServiceInstancesWithTag(
-        tag,
-        dynamoDbs.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { TableId: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.dynamodb,
-            relation: 'child',
-            field: 'dynamodb',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Network ACLs
-     */
-    const nacls: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.nacl)
-    if (nacls?.data?.[region]) {
-      const dataAtRegion: RawAwsNetworkAcl[] = findServiceInstancesWithTag(
-        tag,
-        nacls.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { NetworkAclId: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.nacl,
-            relation: 'child',
-            field: 'nacl',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related ECRs
-     */
-    const ecrs: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.ecr)
-    if (ecrs?.data?.[region]) {
-      const dataAtRegion: RawAwsEcr[] = findServiceInstancesWithTag(
-        tag,
-        ecrs.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { repositoryArn: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.ecr,
-            relation: 'child',
-            field: 'ecr',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Subnets
-     */
-    const subnets: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.subnet)
-    if (subnets?.data?.[region]) {
-      const dataAtRegion: RawAwsSubnet[] = findServiceInstancesWithTag(
-        tag,
-        subnets.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { SubnetId: id } = instance
-
-          connections.push({
-            id,
-            relation: 'child',
-            resourceType: services.subnet,
-            field: 'subnet',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related SecretsManagers
-     */
-    const secretsManagers: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.secretsManager)
-    if (secretsManagers?.data?.[region]) {
-      const dataAtRegion: RawAwsSecretsManager[] = findServiceInstancesWithTag(
-        tag,
-        secretsManagers.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { ARN: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.secretsManager,
-            relation: 'child',
-            field: 'secretsManager',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related IAM Users
-     */
-    const users: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.iamUser)
-    if (users?.data?.[globalRegionName]) {
-      const dataAtRegion: RawAwsIamUser[] = findServiceInstancesWithTag(
-        tag,
-        users.data[globalRegionName]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { Arn: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.iamUser,
-            relation: 'child',
-            field: 'iamUsers',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related IAM Roles
-     */
-    const roles: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.iamRole)
-    if (roles?.data?.[globalRegionName]) {
-      const dataAtRegion: RawAwsIamRole[] = findServiceInstancesWithTag(
-        tag,
-        roles.data[globalRegionName]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { Arn: roleId } = instance
-
-          connections.push({
-            id: roleId,
-            resourceType: services.iamRole,
-            relation: 'child',
-            field: 'iamRoles',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related IAM Policies
-     */
-    const policies: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.iamPolicy)
-    if (policies?.data?.[globalRegionName]) {
-      const dataAtRegion: RawAwsIamPolicy[] = findServiceInstancesWithTag(
-        tag,
-        policies.data[globalRegionName]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { Arn: policyId } = instance
-
-          connections.push({
-            id: policyId,
-            resourceType: services.iamPolicy,
-            relation: 'child',
-            field: 'iamPolicies',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related RDS clusters
-     */
-    const rdsClusters: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.rdsCluster)
-    if (rdsClusters?.data?.[region]) {
-      const dataAtRegion: RawAwsRdsCluster[] = findServiceInstancesWithTag(
-        tag,
-        rdsClusters.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { DBClusterArn: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.rdsCluster,
-            relation: 'child',
-            field: 'rdsCluster',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related RDS cluster Snapshots
-     */
-    const snapshots: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.rdsClusterSnapshot)
-    if (snapshots?.data?.[region]) {
-      const dataAtRegion: RawAwsRdsClusterSnapshot[] =
-        findServiceInstancesWithTag(tag, snapshots.data[region])
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { DBClusterSnapshotIdentifier } = instance
-
-          connections.push({
-            id: DBClusterSnapshotIdentifier,
-            resourceType: services.rdsClusterSnapshot,
-            relation: 'child',
-            field: 'rdsClusterSnapshot',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related RDS instances
-     */
-    const rdsDbInstances: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.rdsDbInstance)
-    if (rdsDbInstances?.data?.[region]) {
-      const dataAtRegion: RawAwsRdsDbInstance[] = findServiceInstancesWithTag(
-        tag,
-        rdsDbInstances.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { DBInstanceArn: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.rdsDbInstance,
-            relation: 'child',
-            field: 'rdsDbInstance',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related ElasticBeanstalk Apps
-     */
-    const elasticBeanstalkApps: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.elasticBeanstalkApp)
-    if (elasticBeanstalkApps?.data?.[region]) {
-      const dataAtRegion: RawAwsElasticBeanstalkApp[] =
-        findServiceInstancesWithTag(tag, elasticBeanstalkApps.data[region])
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { ApplicationArn: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.elasticBeanstalkApp,
-            relation: 'child',
-            field: 'elasticBeanstalkApp',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related ElasticBeanstalk Envs
-     */
-    const elasticBeanstalkEnvs: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.elasticBeanstalkEnv)
-    if (elasticBeanstalkEnvs?.data?.[region]) {
-      const dataAtRegion: RawAwsElasticBeanstalkEnv[] =
-        findServiceInstancesWithTag(tag, elasticBeanstalkEnvs.data[region])
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { EnvironmentId: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.elasticBeanstalkEnv,
-            relation: 'child',
-            field: 'elasticBeanstalkEnv',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Flow Logs
-     */
-    const flowLogs: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.flowLog)
-    if (flowLogs?.data?.[region]) {
-      const dataAtRegion: RawFlowLog[] = findServiceInstancesWithTag(
-        tag,
-        flowLogs.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { FlowLogId: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.flowLog,
-            relation: 'child',
-            field: 'flowLogs',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related SNS
-     */
-    const sns: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.sns)
-    if (sns?.data?.[region]) {
-      const dataAtRegion: RawAwsSns[] = findServiceInstancesWithTag(
-        tag,
-        sns.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { TopicArn: id } = instance
-
-          connections.push({
-            id,
-            relation: 'child',
-            resourceType: services.sns,
-            field: 'sns',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Redshift clusters
-     */
-    const redshift: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.redshiftCluster)
-    if (redshift?.data?.[region]) {
-      const dataAtRegion: RawAwsRedshiftCluster[] = findServiceInstancesWithTag(
-        tag,
-        redshift.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { ClusterIdentifier: id, ClusterNamespaceArn } = instance
-          // Hack to get the accountId for the cluster
-          // Namespace arn structure: arn:aws:redshift:{region}:{account}:namespace:{namespaceId}
-          const account = ClusterNamespaceArn.split(':')[4]
-          const arn = redshiftArn({ region, account, id })
-          connections.push({
-            id: arn,
-            resourceType: services.redshiftCluster,
-            relation: 'child',
-            field: 'redshiftClusters',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related EKS clusters
-     */
-    const eksClusters: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.eksCluster)
-    if (eksClusters?.data?.[region]) {
-      const dataAtRegion: RawAwsEksCluster[] = findServiceInstancesWithTag(
-        tag,
-        eksClusters.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { arn: id } = instance
-
-          connections.push({
-            id,
-            relation: 'child',
-            resourceType: services.eksCluster,
-            field: 'eksCluster',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related ECS clusters
-     */
-    const ecsClusters: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.ecsCluster)
-    if (ecsClusters?.data?.[region]) {
-      const dataAtRegion: RawAwsEcsCluster[] = findServiceInstancesWithTag(
-        tag,
-        ecsClusters.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { clusterArn: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.ecsCluster,
-            relation: 'child',
-            field: 'ecsCluster',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related EMR clusters
-     */
-    const emrClusters: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.emrCluster)
-    if (emrClusters?.data?.[region]) {
-      const dataAtRegion: RawAwsEmrCluster[] = findServiceInstancesWithTag(
-        tag,
-        emrClusters.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { ClusterArn: arn } = instance
-          connections.push({
-            id: arn,
-            resourceType: services.emrCluster,
-            relation: 'child',
-            field: 'emrCluster',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related ECS containers
-     */
-    const ecsContainers: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.ecsContainer)
-    if (ecsContainers?.data?.[region]) {
-      const dataAtRegion: RawAwsEcsContainer[] = findServiceInstancesWithTag(
-        tag,
-        ecsContainers.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { containerInstanceArn: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.ecsContainer,
-            relation: 'child',
-            field: 'ecsContainer',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related ECS services
-     */
-    const ecsServices: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.ecsService)
-    if (ecsServices?.data?.[region]) {
-      const dataAtRegion: RawAwsEcsService[] = findServiceInstancesWithTag(
-        tag,
-        ecsServices.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { serviceArn: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.ecsService,
-            relation: 'child',
-            field: 'ecsService',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related ECS tasks
-     */
-    const ecsTasks: { name: string; data: { [property: string]: any[] } } =
-      data.find(({ name }) => name === services.ecsTask)
-    if (ecsTasks?.data?.[region]) {
-      const dataAtRegion: RawAwsEcsTask[] = findServiceInstancesWithTag(
-        tag,
-        ecsTasks.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { taskArn: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.ecsTask,
-            relation: 'child',
-            field: 'ecsTask',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related API Gateway RestApi
-     */
-    const apiGatewayRestApi: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.apiGatewayRestApi)
-    if (apiGatewayRestApi?.data?.[region]) {
-      const dataAtRegion: RawAwsApiGatewayRestApi[] =
-        findServiceInstancesWithTag(tag, apiGatewayRestApi.data[region])
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.apiGatewayRestApi,
-            relation: 'child',
-            field: 'apiGatewayRestApi',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related EFS file systems
-     */
-    const efsFileSystems: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.efs)
-    if (efsFileSystems?.data?.[region]) {
-      const dataAtRegion: RawAwsEfs[] = findServiceInstancesWithTag(
-        tag,
-        efsFileSystems.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { FileSystemArn: id } = instance
-
-          connections.push({
-            id,
-            resourceType: services.efs,
-            relation: 'child',
-            field: 'efs',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related API Gateway Stage
-     */
-    const apiGatewayStage: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.apiGatewayStage)
-    if (apiGatewayStage?.data?.[region]) {
-      const dataAtRegion: RawAwsApiGatewayStage[] = findServiceInstancesWithTag(
-        tag,
-        apiGatewayStage.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { stageName: name, restApiId } = instance
-
-          connections.push({
-            id: apiGatewayStageArn({
-              restApiArn: apiGatewayRestApiArn({
-                restApiArn: apiGatewayArn({ region }),
-                id: restApiId,
-              }),
-              name,
-            }),
-            resourceType: services.apiGatewayStage,
-            relation: 'child',
-            field: 'apiGatewayStage',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related ElastiCache clusters
-     */
-    const elastiCacheCluster: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.elastiCacheCluster)
-    if (elastiCacheCluster?.data?.[region]) {
-      const dataAtRegion: RawAwsElastiCacheCluster[] =
-        findServiceInstancesWithTag(tag, elastiCacheCluster.data[region])
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { ARN: arn } = instance
-          connections.push({
-            id: arn,
-            resourceType: services.elastiCacheCluster,
-            relation: 'child',
-            field: 'elastiCacheCluster',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related ElastiCache replication groups
-     */
-    const elastiCacheReplicationGroup: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.elastiCacheReplicationGroup)
-    if (elastiCacheReplicationGroup?.data?.[region]) {
-      const dataAtRegion: RawAwsElastiCacheReplicationGroup[] =
-        findServiceInstancesWithTag(
-          tag,
-          elastiCacheReplicationGroup.data[region]
-        )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { ARN: arn } = instance
-          connections.push({
-            id: arn,
-            resourceType: services.elastiCacheReplicationGroup,
-            relation: 'child',
-            field: 'elastiCacheReplicationGroup',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Cloud9 environments
-     */
-    const cloud9Environment: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.cloud9)
-    if (cloud9Environment?.data?.[region]) {
-      const dataAtRegion: RawAwsCloud9Environment[] =
-        findServiceInstancesWithTag(tag, cloud9Environment.data[region])
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { arn } = instance
-          connections.push({
-            id: arn,
-            resourceType: services.cloud9,
-            relation: 'child',
-            field: 'cloud9Environment',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related systemsManagerDocuments
-     */
-    const ssmDocuments: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.systemsManagerDocument)
-    if (ssmDocuments?.data?.[region]) {
-      const dataAtRegion: RawAwsSystemsManagerDocument[] =
-        findServiceInstancesWithTag(tag, ssmDocuments.data[region])
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { Name, region, accountId } = instance
-          const arn = ssmDocumentArn({ region, name: Name, account: accountId })
-          connections.push({
-            id: arn,
-            resourceType: services.systemsManagerDocument,
-            relation: 'child',
-            field: 'systemsManagerDocuments',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Customer Gateways
-     */
-    const customerGateways: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.customerGateway)
-    if (customerGateways?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        customerGateways.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { CustomerGatewayId: id }: CustomerGateway = instance
-
-          connections.push({
-            id,
-            resourceType: services.customerGateway,
-            relation: 'child',
-            field: 'customerGateway',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Transit Gateways
-     */
-    const transitGateways: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.transitGateway)
-    if (transitGateways?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        transitGateways.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { TransitGatewayId: id }: TransitGateway = instance
-
-          connections.push({
-            id,
-            resourceType: services.transitGateway,
-            relation: 'child',
-            field: 'transitGateway',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Vpn Gateways
-     */
-    const vpnGateways: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.vpnGateway)
-    if (vpnGateways?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        vpnGateways.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { VpnGatewayId: id }: VpnGateway = instance
-
-          connections.push({
-            id,
-            resourceType: services.vpnGateway,
-            relation: 'child',
-            field: 'vpnGateway',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Client vpn endpoints
-     */
-    const clientVpnEndpoints: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.clientVpnEndpoint)
-    if (clientVpnEndpoints?.data?.[region]) {
-      const dataAtRegion: RawAwsClientVpnEndpoint[] =
-        findServiceInstancesWithTag(tag, clientVpnEndpoints.data[region])
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { ClientVpnEndpointId } = instance
-          connections.push({
-            id: ClientVpnEndpointId,
-            resourceType: services.clientVpnEndpoint,
-            relation: 'child',
-            field: 'clientVpnEndpoint',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Vpn Connection
-     */
-    const vpnConnections: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.vpnConnection)
-    if (vpnConnections?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        vpnConnections.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { VpnConnectionId: id }: VpnConnection = instance
-
-          connections.push({
-            id,
-            resourceType: services.vpnConnection,
-            relation: 'child',
-            field: 'vpnConnection',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Transit Gateway Attachments
-     */
-    const transitGatewayAttachments: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.transitGatewayAttachment)
-    if (transitGatewayAttachments?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        transitGatewayAttachments.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { TransitGatewayAttachmentId: id }: TransitGatewayAttachment =
-            instance
-
-          connections.push({
-            id,
-            resourceType: services.transitGatewayAttachment,
-            relation: 'child',
-            field: 'transitGatewayAttachment',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related IAM Instance Profiles
-     */
-    const iamInstanceProfiles: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.iamInstanceProfile)
-    if (iamInstanceProfiles?.data?.[globalRegionName]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        iamInstanceProfiles.data[globalRegionName]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { InstanceProfileId: id }: RawAwsInstanceProfile = instance
-
-          connections.push({
-            id,
-            resourceType: services.iamInstanceProfile,
-            relation: 'child',
-            field: 'iamInstanceProfiles',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related IAM Analyzers
-     */
-    const iamAnalyzers: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.iamAccessAnalyzer)
-    if (iamAnalyzers?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        iamAnalyzers.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { arn: id }: RawAwsAnalyzerSummary = instance
-
-          connections.push({
-            id,
-            resourceType: services.iamAccessAnalyzer,
-            relation: 'child',
-            field: 'iamAccessAnalyzers',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related API Gateway Http Apis
-     */
-    const httpApis: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.apiGatewayHttpApi)
-    if (httpApis?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        httpApis.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { ApiId: id }: RawAwsApiGatewayHttpApi = instance
-
-          connections.push({
-            id,
-            resourceType: services.apiGatewayHttpApi,
-            relation: 'child',
-            field: 'apiGatewayHttpApi',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related API Gateway Domain Names
-     */
-    const domainNames: {
-      name: string
-      data: { [property: string]: any[] }
-    } = data.find(({ name }) => name === services.apiGatewayDomainName)
-    if (domainNames?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        domainNames.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const {
-            DomainName: domainName,
-            region: domainRegion,
-            account,
-          }: RawAwsApiGatewayDomainName = instance
-          const arn = domainNameArn({
-            region: domainRegion,
-            account,
-            name: domainName,
-          })
-          connections.push({
-            id: arn,
-            resourceType: services.apiGatewayDomainName,
-            relation: 'child',
-            field: 'apiGatewayDomainName',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Vpc Endpoints
-     */
-    const vpcEndpoints: {
-      name: string
-      data: { [property: string]: RawAwsVpcEndpoint[] }
-    } = data.find(({ name }) => name === services.vpcEndpoint)
-    if (vpcEndpoints?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        vpcEndpoints.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { VpcEndpointId: id }: RawAwsVpcEndpoint = instance
-
-          connections.push({
-            id,
-            resourceType: services.vpcEndpoint,
-            relation: 'child',
-            field: 'vpcEndpoints',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Vpc Peering Connections
-     */
-     const vpcPeeringConnections: {
-      name: string
-      data: { [property: string]: RawAwsVpcPeeringConnection[] }
-    } = data.find(({ name }) => name === services.vpcPeeringConnection)
-    if (vpcPeeringConnections?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        vpcPeeringConnections.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { VpcPeeringConnectionId: id }: RawAwsVpcPeeringConnection = instance
-
-          connections.push({
-            id,
-            resourceType: services.vpcPeeringConnection,
-            relation: 'child',
-            field: 'vpcPeeringConnections',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Transit Gateway Route tables
-     */
-     const transitGatewayRouteTables: {
-      name: string
-      data: { [property: string]: RawAwsTransitGatewayRouteTable[] }
-    } = data.find(({ name }) => name === services.transitGatewayRouteTable)
-    if (transitGatewayRouteTables?.data?.[region]) {
-      const dataAtRegion = findServiceInstancesWithTag(
-        tag,
-        transitGatewayRouteTables.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { TransitGatewayRouteTableId: id }: RawAwsTransitGatewayRouteTable = instance
-
-          connections.push({
-            id,
-            resourceType: services.transitGatewayRouteTable,
-            relation: 'child',
-            field: 'transitGatewayRouteTables',
-          })
-        }
-      }
-    }
-
-    /**
-     * Find related Managed Prefix Lists
-     */
-     const managedPrefixLists: {
-      name: string
-      data: { [property: string]: RawAwsManagedPrefixList[] }
-    } = data.find(({ name }) => name === services.managedPrefixList)
-    if (managedPrefixLists?.data?.[region]) {
-      const dataAtRegion: RawAwsManagedPrefixList[] = findServiceInstancesWithTag(
-        tag,
-        managedPrefixLists.data[region]
-      )
-      if (!isEmpty(dataAtRegion)) {
-        for (const instance of dataAtRegion) {
-          const { PrefixListId: id }: RawAwsManagedPrefixList = instance
-
-          connections.push({
-            id,
-            resourceType: services.managedPrefixList,
-            relation: 'child',
-            field: 'managedPrefixLists',
-          })
-        }
-      }
-    }
+  for (const instance of dataForTag[services.elb] || []) {
+    const {
+      LoadBalancerName: loadBalancerName,
+      region: elbRegion,
+      account,
+    }: RawAwsElb = instance
+
+    connections.push({
+      id: elbArn({ region: elbRegion, account, name: loadBalancerName }),
+      resourceType: services.elb,
+      relation: 'child',
+      field: 'elb',
+    })
+  }
+
+  /**
+   * Find related NAT GWs
+   */
+  for (const instance of dataForTag[services.nat] || []) {
+    const { NatGatewayId: id }: NatGateway = instance
+
+    connections.push({
+      id,
+      resourceType: services.nat,
+      relation: 'child',
+      field: 'natGateway',
+    })
+  }
+
+  /**
+   * Find related Route Tables
+   */
+  for (const instance of dataForTag[services.routeTable] || []) {
+    const { RouteTableId: id } = instance
+
+    connections.push({
+      id,
+      resourceType: services.routeTable,
+      relation: 'child',
+      field: 'routeTable',
+    })
+  }
+
+  /**
+   * Find related S3 buckets
+   */
+  for (const instance of dataForTag[services.s3] || []) {
+    const { Id: id } = instance
+
+    connections.push({
+      id,
+      resourceType: services.s3,
+      relation: 'child',
+      field: 's3',
+    })
+  }
+
+  /**
+   * Find related Cloudfront distros
+   */
+
+  for (const instance of dataForTag[services.cloudfront] || []) {
+    const {
+      summary: { Id: id },
+    }: RawAwsCloudfront = instance
+
+    connections.push({
+      id,
+      resourceType: services.cloudfront,
+      relation: 'child',
+      field: 'cloudfront',
+    })
+  }
+
+  /**
+   * Find related Kinesis Firehose streams
+   */
+  for (const instance of dataForTag[services.kinesisFirehose] || []) {
+    const { DeliveryStreamARN: id }: RawAwsKinesisFirehose = instance
+
+    connections.push({
+      id,
+      resourceType: services.kinesisFirehose,
+      relation: 'child',
+      field: 'kinesisFirehose',
+    })
+  }
+
+  /**
+   * Find related App sync
+   */
+
+  for (const instance of dataForTag[services.appSync] || []) {
+    const { apiId: id }: RawAwsAppSync = instance
+
+    connections.push({
+      id,
+      resourceType: services.appSync,
+      relation: 'child',
+      field: 'appSync',
+    })
+  }
+
+  /**
+   * Find related Cloudformation stacks
+   */
+  for (const instance of dataForTag[services.cloudFormationStack] || []) {
+    const { StackId: id }: RawAwsCloudFormationStack = instance
+
+    connections.push({
+      id,
+      resourceType: services.cloudFormationStack,
+      relation: 'child',
+      field: 'cloudFormationStack',
+    })
+  }
+
+  /**
+   * Find related Cloudformation stack sets
+   */
+  for (const instance of dataForTag[services.cloudFormationStackSet] || []) {
+    const { StackSetId: id }: RawAwsCloudFormationStackSet = instance
+
+    connections.push({
+      id,
+      resourceType: services.cloudFormationStackSet,
+      relation: 'child',
+      field: 'cloudFormationStackSet',
+    })
+  }
+
+  /**
+   * Find related DynamoDb databases
+   */
+  for (const instance of dataForTag[services.dynamodb] || []) {
+    const { TableId: id }: RawAwsDynamoDbTable = instance
+
+    connections.push({
+      id,
+      resourceType: services.dynamodb,
+      relation: 'child',
+      field: 'dynamodb',
+    })
+  }
+
+  /**
+   * Find related Network ACLs
+   */
+  for (const instance of dataForTag[services.nacl] || []) {
+    const { NetworkAclId: id }: RawAwsNetworkAcl = instance
+
+    connections.push({
+      id,
+      resourceType: services.nacl,
+      relation: 'child',
+      field: 'nacl',
+    })
+  }
+
+  /**
+   * Find related ECRs
+   */
+  for (const instance of dataForTag[services.ecr] || []) {
+    const { repositoryArn: id }: RawAwsEcr = instance
+
+    connections.push({
+      id,
+      resourceType: services.ecr,
+      relation: 'child',
+      field: 'ecr',
+    })
+  }
+
+  /**
+   * Find related Subnets
+   */
+  for (const instance of dataForTag[services.subnet] || []) {
+    const { SubnetId: id }: RawAwsSubnet = instance
+
+    connections.push({
+      id,
+      relation: 'child',
+      resourceType: services.subnet,
+      field: 'subnet',
+    })
+  }
+
+  /**
+   * Find related SecretsManagers
+   */
+
+  for (const instance of dataForTag[services.secretsManager] || []) {
+    const { ARN: id }: RawAwsSecretsManager = instance
+
+    connections.push({
+      id,
+      resourceType: services.secretsManager,
+      relation: 'child',
+      field: 'secretsManager',
+    })
+  }
+
+  /**
+   * Find related IAM Users
+   */
+  for (const instance of dataForTag[services.iamUser] || []) {
+    const { Arn: id }: RawAwsIamUser = instance
+
+    connections.push({
+      id,
+      resourceType: services.iamUser,
+      relation: 'child',
+      field: 'iamUsers',
+    })
+  }
+
+  /**
+   * Find related IAM Roles
+   */
+  for (const instance of dataForTag[services.iamRole] || []) {
+    const { Arn: roleId }: RawAwsIamRole = instance
+
+    connections.push({
+      id: roleId,
+      resourceType: services.iamRole,
+      relation: 'child',
+      field: 'iamRoles',
+    })
+  }
+
+  /**
+   * Find related IAM Policies
+   */
+  for (const instance of dataForTag[services.iamPolicy] || []) {
+    const { Arn: policyId }: RawAwsIamPolicy = instance
+
+    connections.push({
+      id: policyId,
+      resourceType: services.iamPolicy,
+      relation: 'child',
+      field: 'iamPolicies',
+    })
+  }
+
+  /**
+   * Find related RDS clusters
+   */
+  for (const instance of dataForTag[services.rdsCluster] || []) {
+    const { DBClusterArn: id }: RawAwsRdsCluster = instance
+
+    connections.push({
+      id,
+      resourceType: services.rdsCluster,
+      relation: 'child',
+      field: 'rdsCluster',
+    })
+  }
+
+  /**
+   * Find related RDS cluster Snapshots
+   */
+  for (const instance of dataForTag[services.rdsClusterSnapshot] || []) {
+    const { DBClusterSnapshotIdentifier }: RawAwsRdsClusterSnapshot = instance
+
+    connections.push({
+      id: DBClusterSnapshotIdentifier,
+      resourceType: services.rdsClusterSnapshot,
+      relation: 'child',
+      field: 'rdsClusterSnapshot',
+    })
+  }
+
+  /**
+   * Find related RDS instances
+   */
+
+  for (const instance of dataForTag[services.rdsDbInstance] || []) {
+    const { DBInstanceArn: id }: RawAwsRdsDbInstance = instance
+
+    connections.push({
+      id,
+      resourceType: services.rdsDbInstance,
+      relation: 'child',
+      field: 'rdsDbInstance',
+    })
+  }
+
+  /**
+   * Find related ElasticBeanstalk Apps
+   */
+
+  for (const instance of dataForTag[services.elasticBeanstalkApp] || []) {
+    const { ApplicationArn: id }: RawAwsElasticBeanstalkApp = instance
+
+    connections.push({
+      id,
+      resourceType: services.elasticBeanstalkApp,
+      relation: 'child',
+      field: 'elasticBeanstalkApp',
+    })
+  }
+
+  /**
+   * Find related ElasticBeanstalk Envs
+   */
+
+  for (const instance of dataForTag[services.elasticBeanstalkEnv] || []) {
+    const { EnvironmentId: id }: RawAwsElasticBeanstalkEnv = instance
+
+    connections.push({
+      id,
+      resourceType: services.elasticBeanstalkEnv,
+      relation: 'child',
+      field: 'elasticBeanstalkEnv',
+    })
+  }
+
+  /**
+   * Find related Flow Logs
+   */
+
+  for (const instance of dataForTag[services.flowLog] || []) {
+    const { FlowLogId: id }: RawFlowLog = instance
+
+    connections.push({
+      id,
+      resourceType: services.flowLog,
+      relation: 'child',
+      field: 'flowLogs',
+    })
+  }
+
+  /**
+   * Find related SNS
+   */
+  for (const instance of dataForTag[services.sns] || []) {
+    const { TopicArn: id }: RawAwsSns = instance
+
+    connections.push({
+      id,
+      relation: 'child',
+      resourceType: services.sns,
+      field: 'sns',
+    })
+  }
+
+  /**
+   * Find related Redshift clusters
+   */
+
+  for (const instance of dataForTag[services.redshiftCluster] || []) {
+    const {
+      ClusterIdentifier: id,
+      ClusterNamespaceArn,
+      region,
+    }: RawAwsRedshiftCluster = instance
+    // Hack to get the accountId for the cluster
+    // Namespace arn structure: arn:aws:redshift:{region}:{account}:namespace:{namespaceId}
+    const account = ClusterNamespaceArn.split(':')[4]
+    const arn = redshiftArn({ region, account, id })
+    connections.push({
+      id: arn,
+      resourceType: services.redshiftCluster,
+      relation: 'child',
+      field: 'redshiftClusters',
+    })
+  }
+  /**
+   * Find related EKS clusters
+   */
+  for (const instance of dataForTag[services.eksCluster] || []) {
+    const { arn: id }: RawAwsEksCluster = instance
+
+    connections.push({
+      id,
+      relation: 'child',
+      resourceType: services.eksCluster,
+      field: 'eksCluster',
+    })
+  }
+
+  /**
+   * Find related ECS clusters
+   */
+  for (const instance of dataForTag[services.ecsCluster] || []) {
+    const { clusterArn: id }: RawAwsEcsCluster = instance
+
+    connections.push({
+      id,
+      resourceType: services.ecsCluster,
+      relation: 'child',
+      field: 'ecsCluster',
+    })
+  }
+
+  /**
+   * Find related EMR clusters
+   */
+
+  for (const instance of dataForTag[services.emrCluster] || []) {
+    const { ClusterArn: arn }: RawAwsEmrCluster = instance
+    connections.push({
+      id: arn,
+      resourceType: services.emrCluster,
+      relation: 'child',
+      field: 'emrCluster',
+    })
+  }
+
+  /**
+   * Find related ECS containers
+   */
+  for (const instance of dataForTag[services.ecsContainer] || []) {
+    const { containerInstanceArn: id }: RawAwsEcsContainer = instance
+
+    connections.push({
+      id,
+      resourceType: services.ecsContainer,
+      relation: 'child',
+      field: 'ecsContainer',
+    })
+  }
+
+  /**
+   * Find related ECS services
+   */
+  for (const instance of dataForTag[services.ecsService] || []) {
+    const { serviceArn: id }: RawAwsEcsService = instance
+
+    connections.push({
+      id,
+      resourceType: services.ecsService,
+      relation: 'child',
+      field: 'ecsService',
+    })
+  }
+
+  /**
+   * Find related ECS tasks
+   */
+  for (const instance of dataForTag[services.ecsTask] || []) {
+    const { taskArn: id }: RawAwsEcsTask = instance
+
+    connections.push({
+      id,
+      resourceType: services.ecsTask,
+      relation: 'child',
+      field: 'ecsTask',
+    })
+  }
+
+  /**
+   * Find related API Gateway RestApi
+   */
+
+  for (const instance of dataForTag[services.apiGatewayRestApi] || []) {
+    const { id }: RawAwsApiGatewayRestApi = instance
+
+    connections.push({
+      id,
+      resourceType: services.apiGatewayRestApi,
+      relation: 'child',
+      field: 'apiGatewayRestApi',
+    })
+  }
+
+  /**
+   * Find related EFS file systems
+   */
+
+  for (const instance of dataForTag[services.efs] || []) {
+    const { FileSystemArn: id }: RawAwsEfs = instance
+
+    connections.push({
+      id,
+      resourceType: services.efs,
+      relation: 'child',
+      field: 'efs',
+    })
+  }
+
+  /**
+   * Find related API Gateway Stage
+   */
+
+  for (const instance of dataForTag[services.apiGatewayStage] || []) {
+    const {
+      stageName: name,
+      restApiId,
+      region,
+    }: RawAwsApiGatewayStage = instance
+
+    connections.push({
+      id: apiGatewayStageArn({
+        restApiArn: apiGatewayRestApiArn({
+          restApiArn: apiGatewayArn({ region }),
+          id: restApiId,
+        }),
+        name,
+      }),
+      resourceType: services.apiGatewayStage,
+      relation: 'child',
+      field: 'apiGatewayStage',
+    })
+  }
+
+  /**
+   * Find related ElastiCache clusters
+   */
+
+  for (const instance of dataForTag[services.elastiCacheCluster] || []) {
+    const { ARN: arn }: RawAwsElastiCacheCluster = instance
+    connections.push({
+      id: arn,
+      resourceType: services.elastiCacheCluster,
+      relation: 'child',
+      field: 'elastiCacheCluster',
+    })
+  }
+
+  /**
+   * Find related ElastiCache replication groups
+   */
+
+  for (const instance of dataForTag[services.elastiCacheReplicationGroup] ||
+    []) {
+    const { ARN: arn }: RawAwsElastiCacheReplicationGroup = instance
+    connections.push({
+      id: arn,
+      resourceType: services.elastiCacheReplicationGroup,
+      relation: 'child',
+      field: 'elastiCacheReplicationGroup',
+    })
+  }
+
+  /**
+   * Find related Cloud9 environments
+   */
+  for (const instance of dataForTag[services.cloud9] || []) {
+    const { arn }: RawAwsCloud9Environment = instance
+    connections.push({
+      id: arn,
+      resourceType: services.cloud9,
+      relation: 'child',
+      field: 'cloud9Environment',
+    })
+  }
+
+  /**
+   * Find related systemsManagerDocuments
+   */
+
+  for (const instance of dataForTag[services.systemsManagerDocument] || []) {
+    const { Name, region, accountId }: RawAwsSystemsManagerDocument = instance
+    const arn = ssmDocumentArn({ region, name: Name, account: accountId })
+    connections.push({
+      id: arn,
+      resourceType: services.systemsManagerDocument,
+      relation: 'child',
+      field: 'systemsManagerDocuments',
+    })
+  }
+
+  /**
+   * Find related Customer Gateways
+   */
+
+  for (const instance of dataForTag[services.customerGateway] || []) {
+    const { CustomerGatewayId: id }: CustomerGateway = instance
+
+    connections.push({
+      id,
+      resourceType: services.customerGateway,
+      relation: 'child',
+      field: 'customerGateway',
+    })
+  }
+
+  /**
+   * Find related Transit Gateways
+   */
+
+  for (const instance of dataForTag[services.transitGateway] || []) {
+    const { TransitGatewayId: id }: TransitGateway = instance
+
+    connections.push({
+      id,
+      resourceType: services.transitGateway,
+      relation: 'child',
+      field: 'transitGateway',
+    })
+  }
+
+  /**
+   * Find related Vpn Gateways
+   */
+
+  for (const instance of dataForTag[services.vpnGateway] || []) {
+    const { VpnGatewayId: id }: VpnGateway = instance
+
+    connections.push({
+      id,
+      resourceType: services.vpnGateway,
+      relation: 'child',
+      field: 'vpnGateway',
+    })
+  }
+
+  /**
+   * Find related Client vpn endpoints
+   */
+
+  for (const instance of dataForTag[services.clientVpnEndpoint] || []) {
+    const { ClientVpnEndpointId }: RawAwsClientVpnEndpoint = instance
+    connections.push({
+      id: ClientVpnEndpointId,
+      resourceType: services.clientVpnEndpoint,
+      relation: 'child',
+      field: 'clientVpnEndpoint',
+    })
+  }
+
+  /**
+   * Find related Vpn Connection
+   */
+
+  for (const instance of dataForTag[services.vpnConnection] || []) {
+    const { VpnConnectionId: id }: VpnConnection = instance
+
+    connections.push({
+      id,
+      resourceType: services.vpnConnection,
+      relation: 'child',
+      field: 'vpnConnection',
+    })
+  }
+
+  /**
+   * Find related Transit Gateway Attachments
+   */
+
+  for (const instance of dataForTag[services.transitGatewayAttachment] || []) {
+    const { TransitGatewayAttachmentId: id }: TransitGatewayAttachment =
+      instance
+
+    connections.push({
+      id,
+      resourceType: services.transitGatewayAttachment,
+      relation: 'child',
+      field: 'transitGatewayAttachment',
+    })
+  }
+
+  /**
+   * Find related IAM Instance Profiles
+   */
+
+  for (const instance of dataForTag[services.iamInstanceProfile] || []) {
+    const { InstanceProfileId: id }: RawAwsInstanceProfile = instance
+
+    connections.push({
+      id,
+      resourceType: services.iamInstanceProfile,
+      relation: 'child',
+      field: 'iamInstanceProfiles',
+    })
+  }
+
+  /**
+   * Find related IAM Analyzers
+   */
+
+  for (const instance of dataForTag[services.iamAccessAnalyzer] || []) {
+    const { arn: id }: RawAwsAnalyzerSummary = instance
+
+    connections.push({
+      id,
+      resourceType: services.iamAccessAnalyzer,
+      relation: 'child',
+      field: 'iamAccessAnalyzers',
+    })
+  }
+
+  /**
+   * Find related API Gateway Http Apis
+   */
+
+  for (const instance of dataForTag[services.apiGatewayHttpApi] || []) {
+    const { ApiId: id }: RawAwsApiGatewayHttpApi = instance
+
+    connections.push({
+      id,
+      resourceType: services.apiGatewayHttpApi,
+      relation: 'child',
+      field: 'apiGatewayHttpApi',
+    })
+  }
+
+  /**
+   * Find related API Gateway Domain Names
+   */
+
+  for (const instance of dataForTag[services.apiGatewayDomainName] || []) {
+    const {
+      DomainName: domainName,
+      region: domainRegion,
+      account,
+    }: RawAwsApiGatewayDomainName = instance
+    const arn = domainNameArn({
+      region: domainRegion,
+      account,
+      name: domainName,
+    })
+    connections.push({
+      id: arn,
+      resourceType: services.apiGatewayDomainName,
+      relation: 'child',
+      field: 'apiGatewayDomainName',
+    })
+  }
+
+  /**
+   * Find related Vpc Endpoints
+   */
+  for (const instance of dataForTag[services.vpcEndpoint] || []) {
+    const { VpcEndpointId: id }: RawAwsVpcEndpoint = instance
+
+    connections.push({
+      id,
+      resourceType: services.vpcEndpoint,
+      relation: 'child',
+      field: 'vpcEndpoints',
+    })
+  }
+
+  /**
+   * Find related Vpc Peering Connections
+   */
+  for (const instance of dataForTag[services.vpcPeeringConnection] || []) {
+    const { VpcPeeringConnectionId: id }: RawAwsVpcPeeringConnection = instance
+
+    connections.push({
+      id,
+      resourceType: services.vpcPeeringConnection,
+      relation: 'child',
+      field: 'vpcPeeringConnections',
+    })
+  }
+
+  /**
+   * Find related Transit Gateway Route tables
+   */
+  for (const instance of dataForTag[services.transitGatewayRouteTable] || []) {
+    const { TransitGatewayRouteTableId: id }: RawAwsTransitGatewayRouteTable =
+      instance
+
+    connections.push({
+      id,
+      resourceType: services.transitGatewayRouteTable,
+      relation: 'child',
+      field: 'transitGatewayRouteTables',
+    })
+  }
+
+  /**
+   * Find related Managed Prefix Lists
+   */
+  for (const instance of dataForTag[services.managedPrefixList] || []) {
+    const { PrefixListId: id }: RawAwsManagedPrefixList = instance
+
+    connections.push({
+      id,
+      resourceType: services.managedPrefixList,
+      relation: 'child',
+      field: 'managedPrefixLists',
+    })
   }
 
   const tagResult = {
@@ -1895,3 +1201,4 @@ export default ({
   }
   return tagResult
 }
+export default getConnections

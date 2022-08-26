@@ -1,4 +1,5 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsTransitGatewayRouteTable } from './data'
 import { AwsTransitGatewayRouteTable } from '../../types/generated'
@@ -28,10 +29,12 @@ export default ({
     Routes: routes = [],
   } = rawData
 
+  const arn = transitGatewayRouteTableArn({ region, account, id })
+
   const transitGatewayRouteTable = {
     id,
     accountId: account,
-    arn: transitGatewayRouteTableArn({ region, account, id }),
+    arn,
     region,
     state,
     defaultAssociationRouteTable,
@@ -41,17 +44,24 @@ export default ({
     tags: formatTagsFromMap(tags),
     routes:
       routes?.map(r => ({
-        id: cuid(),
+        id: generateUniqueId({
+          arn,
+          ...r,
+        }),
         destinationCidrBlock: r.DestinationCidrBlock,
         type: r.Type,
         state: r.State,
         prefixListId: r.PrefixListId,
-        transitGatewayAttachments: r.TransitGatewayAttachments?.map(a => ({
-          id: cuid(),
-          resourceId: a.ResourceId,
-          transitGatewayAttachmentId: a.TransitGatewayAttachmentId,
-          resourceType: a.ResourceType,
-        })) || [],
+        transitGatewayAttachments:
+          r.TransitGatewayAttachments?.map(a => ({
+            id: generateUniqueId({
+              arn,
+              ...a,
+            }),
+            resourceId: a.ResourceId,
+            transitGatewayAttachmentId: a.TransitGatewayAttachmentId,
+            resourceType: a.ResourceType,
+          })) || [],
       })) || [],
   }
 

@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
 import t from '../../properties/translations'
 import { AwsCloudFormationStackSet } from '../../types/generated'
 
@@ -40,7 +40,13 @@ export default ({
       ResolvedValue: resolvedValue,
     }) => {
       return {
-        id: cuid(),
+        id: generateUniqueId({
+          stackSetARN,
+          parameterKey,
+          parameterValue,
+          usePreviousValue,
+          resolvedValue,
+        }),
         parameterKey,
         parameterValue,
         usePreviousValue: usePreviousValue ? t.yes : t.no,
@@ -63,7 +69,10 @@ export default ({
     administrationRoleARN,
     executionRoleName,
     driftDetectionDetail: {
-      id: cuid(),
+      id: generateUniqueId({
+        stackSetARN,
+        stackSetDriftDetectionDetails,
+      }),
       driftStatus: stackSetDriftDetectionDetails?.DriftStatus || '',
       driftDetectionStatus:
         stackSetDriftDetectionDetails?.DriftDetectionStatus || '',

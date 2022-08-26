@@ -1,5 +1,6 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
 import { ReplicationStatusType } from 'aws-sdk/clients/secretsmanager'
+
 import { RawAwsSecretsManager } from './data'
 import {
   AwsSecretsManager,
@@ -12,7 +13,9 @@ export const formatReplicationStatus = (
 ): AwsSecretsManagerReplicationStatus[] => {
   return (
     replicationStatus?.map(rs => ({
-      id: cuid(),
+      id: generateUniqueId({
+        ...rs,
+      }),
       region: rs.Region,
       kmsKeyId: rs.KmsKeyId,
       status: rs.Status,
@@ -65,7 +68,10 @@ export default ({
     rotationEnabled,
     rotationLambdaARN,
     rotationRules: {
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...rotationRules,
+      }),
       automaticallyAfterDays: rotationRules?.AutomaticallyAfterDays,
     },
     lastRotatedDate: lastRotatedDate?.toISOString(),

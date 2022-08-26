@@ -1,11 +1,12 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { AwsEmrStep } from '../../types/generated'
 import { RawAwsEmrStep } from './data'
 
 export default ({
   service,
   account,
-  region
+  region,
 }: {
   service: RawAwsEmrStep
   account: string
@@ -33,10 +34,7 @@ export default ({
     Timeline: timeline,
   } = status ?? {}
 
-  const { 
-    Code: code, 
-    Message: message 
-  } = stateChangeReason ?? {}
+  const { Code: code, Message: message } = stateChangeReason ?? {}
 
   const {
     CreationDateTime: creationDateTime,
@@ -52,7 +50,11 @@ export default ({
     config: {
       jar,
       properties: Object.keys(properties || {}).map(key => ({
-        id: cuid(),
+        id: generateUniqueId({
+          id,
+          key,
+          value: properties[key],
+        }),
         key,
         value: properties[key],
       })),

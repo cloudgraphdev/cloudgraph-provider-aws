@@ -1,5 +1,4 @@
-import { toCamel } from '@cloudgraph/sdk'
-import cuid from 'cuid'
+import { generateUniqueId, toCamel } from '@cloudgraph/sdk'
 
 import t from '../../properties/translations'
 import { AwsSecurityGroup } from './data'
@@ -30,6 +29,8 @@ export default ({
     Description: description,
     VpcId: vpcId,
   } = rawData
+
+  const arn = securityGroupArn({ region, account, id })
 
   const { ipPermissions: ingress, ipPermissionsEgress: egress } =
     toCamel(rawData)
@@ -70,42 +71,79 @@ export default ({
        */
 
       ;(rule.ipRanges || []).map(
-        ({ cidrIp, description: ipRangesDescription = '' }) => {
+        ({ cidrIp, description: ipRangesDescription = '' }, index) => {
           allRules.push({
-            id: cuid(),
+            id: generateUniqueId({
+              arn,
+              protocol,
+              portRange,
+              cidrIp,
+              ipRangesDescription,
+              ipRanges: `ipRanges_${index}`,
+            }),
             [direction]: cidrIp,
             description: ipRangesDescription,
           })
         }
       )
       ;(rule.ipv6Ranges || []).map(
-        ({ cidrIpv6, description: ipv6RangesDescription = '' }) => {
+        ({ cidrIpv6, description: ipv6RangesDescription = '' }, index) => {
           allRules.push({
-            id: cuid(),
+            id: generateUniqueId({
+              arn,
+              protocol,
+              portRange,
+              cidrIpv6,
+              ipv6RangesDescription,
+              ipv6Ranges: `ipv6Ranges_${index}`,
+            }),
             [direction]: cidrIpv6,
             description: ipv6RangesDescription,
           })
         }
       )
       ;(rule.prefixListIds || []).map(
-        ({ prefixListId, description: prefixListIdsDescription = '' }) => {
+        (
+          { prefixListId, description: prefixListIdsDescription = '' },
+          index
+        ) => {
           allRules.push({
-            id: cuid(),
+            id: generateUniqueId({
+              arn,
+              protocol,
+              portRange,
+              prefixListId,
+              prefixListIdsDescription,
+              prefixListIds: `prefixListIds_${index}`,
+            }),
             [direction]: prefixListId,
             description: prefixListIdsDescription,
           })
         }
       )
       ;(rule.userIdGroupPairs || []).map(
-        ({
-          groupId,
-          userId = '',
-          groupName = '',
-          peeringStatus = '',
-          description: descriptionUserIdGroupPairs = '',
-        }) => {
+        (
+          {
+            groupId,
+            userId = '',
+            groupName = '',
+            peeringStatus = '',
+            description: descriptionUserIdGroupPairs = '',
+          },
+          index
+        ) => {
           allRules.push({
-            id: cuid(),
+            id: generateUniqueId({
+              arn,
+              protocol,
+              portRange,
+              groupId,
+              descriptionUserIdGroupPairs,
+              groupName,
+              peeringStatus,
+              userId,
+              userIdGroupPairs: `userIdGroupPairs_${index}`,
+            }),
             [direction]: groupId,
             description: descriptionUserIdGroupPairs,
             groupName,
@@ -133,7 +171,7 @@ export default ({
     name,
     vpcId,
     accountId: account,
-    arn: securityGroupArn({ region, account, id }),
+    arn,
     region,
     description,
     tags: formatTagsFromMap(Tags),

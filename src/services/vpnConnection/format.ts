@@ -1,4 +1,5 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsVpnConnection } from './data'
 import { AwsVpnConnection } from '../../types/generated'
@@ -32,9 +33,13 @@ export default ({
   } = rawData
 
   const vpnConnectionTags = formatTagsFromMap(tags)
+  const arn = vpnConnectionArn({ region, account, id })
 
   const vpnOptions = {
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      ...options,
+    }),
     enableAcceleration: options?.EnableAcceleration,
     staticRoutesOnly: options?.StaticRoutesOnly,
     localIpv4NetworkCidr: options?.LocalIpv4NetworkCidr,
@@ -47,7 +52,12 @@ export default ({
         PreSharedKey: preSharedKey,
       }) => {
         return {
-          id: cuid(),
+          id: generateUniqueId({
+            arn,
+            outsideIpAddress,
+            tunnelInsideCidr,
+            preSharedKey,
+          }),
           outsideIpAddress,
           tunnelInsideCidr,
           preSharedKey,
@@ -66,7 +76,15 @@ export default ({
       StatusMessage: statusMessage,
     }) => {
       return {
-        id: cuid(),
+        id: generateUniqueId({
+          arn,
+          acceptedRouteCount,
+          lastStatusChange,
+          certificateArn,
+          outsideIpAddress,
+          status,
+          statusMessage,
+        }),
         acceptedRouteCount,
         lastStatusChange: lastStatusChange?.toISOString(),
         certificateArn,
@@ -84,10 +102,15 @@ export default ({
       State: routeState,
     }) => {
       return {
-        id: cuid(),
+        id: generateUniqueId({
+          arn,
+          destinationCidrBlock,
+          source,
+          routeState,
+        }),
         destinationCidrBlock,
         source,
-        state: routeState
+        state: routeState,
       }
     }
   )
@@ -95,7 +118,7 @@ export default ({
   const vpnConnection = {
     id,
     accountId: account,
-    arn: vpnConnectionArn({ region, account, id}),
+    arn,
     tags: vpnConnectionTags,
     category,
     customerGatewayId: cgwId,

@@ -47,7 +47,7 @@ const tagsByPolicyArn = async (
   iam: IAM,
   { Arn }: Policy
 ): Promise<{ Arn: string; Tags: TagMap }> =>
-  new Promise(resolveUserPolicies => {
+  new Promise(resolve => {
     iam.listPolicyTags(
       { PolicyArn: Arn },
       (err: AWSError, data: ListPolicyTagsResponse) => {
@@ -60,13 +60,13 @@ const tagsByPolicyArn = async (
 
         if (!isEmpty(data)) {
           const { Tags: tags = [] } = data
-          resolveUserPolicies({
+          resolve({
             Arn,
             Tags: convertAwsTagsToTagMap(tags),
           })
         }
 
-        resolveUserPolicies(null)
+        resolve(null)
       }
     )
   })
@@ -75,7 +75,7 @@ const policyVersionByPolicyArn = async (
   iam: IAM,
   { Arn, DefaultVersionId }: Policy
 ): Promise<{ Arn: string; Content: string }> =>
-  new Promise(resolveUserPolicies => {
+  new Promise(resolve => {
     iam.getPolicyVersion(
       { PolicyArn: Arn, VersionId: DefaultVersionId },
       (err: AWSError, data: GetPolicyVersionResponse) => {
@@ -88,13 +88,13 @@ const policyVersionByPolicyArn = async (
 
         if (!isEmpty(data)) {
           const { PolicyVersion = { Document: '' } } = data
-          resolveUserPolicies({
+          resolve({
             Arn,
             Content: decodeURIComponent(PolicyVersion.Document),
           })
         }
 
-        resolveUserPolicies(null)
+        resolve(null)
       }
     )
   })

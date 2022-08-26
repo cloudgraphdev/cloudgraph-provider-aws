@@ -762,6 +762,7 @@ export default class Provider extends CloudGraph.Client {
         const serviceClass = this.getService(serviceData.name)
         const entities: any[] = []
         for (const region of Object.keys(serviceData.data)) {
+          await new Promise(resolve => setTimeout(resolve, 10)) // free the main nodejs thread to process other requests
           const data = serviceData.data[region]
           if (!isEmpty(data)) {
             data.forEach((service: any) => {
@@ -786,10 +787,7 @@ export default class Provider extends CloudGraph.Client {
                     connections
                   )
                 }
-                result.connections = {
-                  ...result.connections,
-                  ...serviceConnections,
-                }
+                Object.assign(result.connections, serviceConnections)
               }
             })
           }
@@ -837,7 +835,7 @@ export default class Provider extends CloudGraph.Client {
         }
       } catch (error: any) {
         this.logger.error(
-          `There was an error formatting/connecting service ${serviceData.name}`
+          `There was an error formatting/connecting service ${serviceData.name} `
         )
         this.logger.debug(error)
       }
