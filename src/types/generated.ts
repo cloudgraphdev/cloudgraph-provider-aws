@@ -3107,6 +3107,9 @@ export type AwsIamJsonPolicyStatement = {
   condition?: Maybe<Array<Maybe<AwsIamJsonPolicyCondition>>>;
   effect?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
+  notAction?: Maybe<Array<Maybe<Scalars['String']>>>;
+  notPrincipal?: Maybe<Array<Maybe<AwsIamJsonPolicyPrincipal>>>;
+  notResource?: Maybe<Array<Maybe<Scalars['String']>>>;
   principal?: Maybe<Array<Maybe<AwsIamJsonPolicyPrincipal>>>;
   resource?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
@@ -3147,6 +3150,7 @@ export type AwsIamPolicy = AwsBaseService & {
   iamUsers?: Maybe<Array<Maybe<AwsIamUser>>>;
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
+  permissionBoundaryOf?: Maybe<Array<Maybe<AwsIamRole>>>;
   policyContent?: Maybe<AwsIamJsonPolicy>;
   rawPolicy?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
@@ -3179,9 +3183,11 @@ export type AwsIamRole = AwsBaseService & {
   guardDutyDetectors?: Maybe<Array<Maybe<AwsGuardDutyDetector>>>;
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   iamInstanceProfiles?: Maybe<Array<Maybe<AwsIamInstanceProfile>>>;
-  inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
+  iamPermissionBoundaryPolicy?: Maybe<Array<Maybe<AwsIamPolicy>>>;
+  inlinePolicies?: Maybe<Array<Maybe<AwsIamRoleInlinePolicy>>>;
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
+  lastUsedDate?: Maybe<Scalars['DateTime']>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
   maxSessionDuration?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
@@ -3193,6 +3199,12 @@ export type AwsIamRole = AwsBaseService & {
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   systemsManagerInstances?: Maybe<Array<Maybe<AwsSystemsManagerInstance>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+};
+
+export type AwsIamRoleInlinePolicy = {
+  document?: Maybe<AwsIamJsonPolicy>;
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
 };
 
 export type AwsIamSamlProvider = AwsOptionalService & {
@@ -3327,6 +3339,7 @@ export type AwsKms = AwsBaseService & {
   rdsClusterSnapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   redshiftCluster?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
+  s3?: Maybe<Array<Maybe<AwsS3>>>;
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   secretsManager?: Maybe<Array<Maybe<AwsSecretsManager>>>;
   sns?: Maybe<Array<Maybe<AwsSns>>>;
@@ -3868,9 +3881,11 @@ export type AwsS3 = AwsBaseService & {
   crossRegionReplication?: Maybe<Scalars['String']>;
   ecsCluster?: Maybe<Array<Maybe<AwsEcsCluster>>>;
   encrypted?: Maybe<Scalars['String']>;
+  encryptionRules?: Maybe<Array<Maybe<AwsS3ServerSideEncryptionConfiguration>>>;
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   ignorePublicAcls?: Maybe<Scalars['String']>;
   kinesisFirehose?: Maybe<Array<Maybe<AwsKinesisFirehose>>>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
   lambdas?: Maybe<Array<Maybe<AwsLambda>>>;
   lifecycle?: Maybe<Scalars['String']>;
   logging?: Maybe<Scalars['String']>;
@@ -3922,6 +3937,12 @@ export type AwsS3NotificationConfiguration = {
 
 export type AwsS3QueueConfiguration = AwsS3ConfigurationBase & {
   queueArn?: Maybe<Scalars['String']>;
+};
+
+export type AwsS3ServerSideEncryptionConfiguration = {
+  id: Scalars['String'];
+  kmsMasterKeyID?: Maybe<Scalars['String']>;
+  sseAlgorithm?: Maybe<Scalars['String']>;
 };
 
 export type AwsS3TopicConfiguration = AwsS3ConfigurationBase & {

@@ -1,3 +1,4 @@
+import { generateUniqueId } from '@cloudgraph/sdk'
 import { AwsIamRole } from '../../types/generated'
 import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 
@@ -21,9 +22,10 @@ export default ({
     Path: path = '',
     CreateDate: createdAt,
     Description: description = '',
+    RoleLastUsed,
     AssumeRolePolicyDocument: assumeRolePolicy = '',
     MaxSessionDuration: maxSessionDuration = 0,
-    Policies: inlinePolicies = [],
+    InlinePolicies: inlinePolicies = [],
     Tags: tags = {},
   } = rawData
 
@@ -38,10 +40,21 @@ export default ({
     path,
     createdAt: createdAt?.toISOString() || '',
     description,
+    lastUsedDate: RoleLastUsed?.LastUsedDate?.toISOString() || null,
     rawPolicy: assumeRolePolicy,
     assumeRolePolicy: formatIamJsonPolicy(assumeRolePolicy),
     maxSessionDuration,
-    inlinePolicies,
+    inlinePolicies:
+      inlinePolicies.map(
+        ({ name: inlinePolicyName, document: inlinePolicyDocument }) => ({
+          id: generateUniqueId({
+            name: inlinePolicyName,
+            document: formatIamJsonPolicy(inlinePolicyDocument),
+          }),
+          name: inlinePolicyName,
+          document: formatIamJsonPolicy(inlinePolicyDocument),
+        })
+      ) ?? [],
     tags: roleTags,
   }
   return role

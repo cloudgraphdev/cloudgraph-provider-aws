@@ -1,26 +1,12 @@
+import { generateUniqueId } from '@cloudgraph/sdk'
 import { AliasListEntry } from 'aws-sdk/clients/kms'
-import cuid from 'cuid'
+
 import { AwsKms } from './data'
 import {
   AwsKms as AwsKmsType,
   AwsKmsAliasListEntry,
 } from '../../types/generated'
 import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
-
-export const formatAliases = (
-  aliases?: AliasListEntry[]
-): AwsKmsAliasListEntry[] => {
-  return (
-    aliases?.map(a => ({
-      id: cuid(),
-      aliasName: a.AliasName,
-      aliasArn: a.AliasArn,
-      targetKeyId: a.TargetKeyId,
-      creationDate: a.CreationDate?.toISOString(),
-      lastUpdatedDate: a.LastUpdatedDate?.toISOString(),
-    })) || []
-  )
-}
 
 /**
  * KMS
@@ -53,6 +39,24 @@ export default ({
     ValidTo: validTo,
     Aliases: aliases = [],
   } = key
+
+  const formatAliases = (
+    aliases?: AliasListEntry[]
+  ): AwsKmsAliasListEntry[] => {
+    return (
+      aliases?.map(a => ({
+        id: generateUniqueId({
+          arn,
+          ...a,
+        }),
+        aliasName: a.AliasName,
+        aliasArn: a.AliasArn,
+        targetKeyId: a.TargetKeyId,
+        creationDate: a.CreationDate?.toISOString(),
+        lastUpdatedDate: a.LastUpdatedDate?.toISOString(),
+      })) || []
+    )
+  }
 
   return {
     accountId: account,

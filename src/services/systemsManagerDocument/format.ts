@@ -1,4 +1,5 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import { AwsSystemsManagerDocument } from '../../types/generated'
 import { RawAwsSystemsManagerDocument } from './data'
 import { formatTagsFromMap } from '../../utils/format'
@@ -28,18 +29,25 @@ export default ({
     DocumentFormat: documentFormat,
     TargetType: targetType,
     Tags: tags,
-    permissions
+    permissions,
   } = rawData
+
+  const arn = ssmDocumentArn({ region, account, name })
 
   const formattedPermissions = {
     accountIds: permissions?.accountIds,
-    accountSharingInfoList: permissions?.accountSharingInfoList?.map(({ AccountId, SharedDocumentVersion }) => ({
-      id: cuid(),
-      accountId: AccountId,
-      sharedDocumentVersion: SharedDocumentVersion
-    }))
+    accountSharingInfoList: permissions?.accountSharingInfoList?.map(
+      ({ AccountId, SharedDocumentVersion }) => ({
+        id: generateUniqueId({
+          arn,
+          AccountId,
+          SharedDocumentVersion,
+        }),
+        accountId: AccountId,
+        sharedDocumentVersion: SharedDocumentVersion,
+      })
+    ),
   }
-  const arn = ssmDocumentArn({ region, account, name })
   return {
     id: arn,
     arn,
@@ -55,6 +63,6 @@ export default ({
     documentFormat,
     targetType,
     tags: formatTagsFromMap(tags ?? {}),
-    permissions: formattedPermissions
+    permissions: formattedPermissions,
   }
 }

@@ -1,7 +1,7 @@
-import cuid from 'cuid'
 import { AwsElastiCacheReplicationGroup } from '../../types/generated'
 import { RawAwsElastiCacheReplicationGroup } from './data'
 import { formatTagsFromMap } from '../../utils/format'
+import { generateUniqueId } from '@cloudgraph/sdk'
 
 /**
  * ElastiCache replication group
@@ -52,8 +52,10 @@ export default ({
     replicationGroupId,
     description,
     globalReplicationGroupInfo: {
-      globalReplicationGroupId: globalReplicationGroupInfo?.GlobalReplicationGroupId,
-      globalReplicationGroupMemberRole: globalReplicationGroupInfo?.GlobalReplicationGroupMemberRole,
+      globalReplicationGroupId:
+        globalReplicationGroupInfo?.GlobalReplicationGroupId,
+      globalReplicationGroupMemberRole:
+        globalReplicationGroupInfo?.GlobalReplicationGroupMemberRole,
     },
     status,
     pendingModifiedValues: {
@@ -61,32 +63,45 @@ export default ({
       automaticFailoverStatus: pendingModifiedValues?.AutomaticFailoverStatus,
       resharding: {
         slotMigration: {
-          progressPercentage: pendingModifiedValues?.Resharding?.SlotMigration?.ProgressPercentage,
+          progressPercentage:
+            pendingModifiedValues?.Resharding?.SlotMigration
+              ?.ProgressPercentage,
         },
       },
       authTokenStatus: pendingModifiedValues?.AuthTokenStatus,
       userGroups: {
         userGroupIdsToAdd: pendingModifiedValues?.UserGroups?.UserGroupIdsToAdd,
-        userGroupIdsToRemove: pendingModifiedValues?.UserGroups?.UserGroupIdsToRemove,
+        userGroupIdsToRemove:
+          pendingModifiedValues?.UserGroups?.UserGroupIdsToRemove,
       },
-      logDeliveryConfigurations: pendingModifiedValues?.LogDeliveryConfigurations?.map(config => ({
-        id: cuid(),
-        logType: config.LogType,
-        destinationType: config.DestinationType,
-        destinationDetails: {
-          cloudWatchLogsDetails: {
-            logGroup: config.DestinationDetails?.CloudWatchLogsDetails?.LogGroup,
+      logDeliveryConfigurations:
+        pendingModifiedValues?.LogDeliveryConfigurations?.map(config => ({
+          id: generateUniqueId({
+            arn,
+            ...config,
+          }),
+          logType: config.LogType,
+          destinationType: config.DestinationType,
+          destinationDetails: {
+            cloudWatchLogsDetails: {
+              logGroup:
+                config.DestinationDetails?.CloudWatchLogsDetails?.LogGroup,
+            },
+            kinesisFirehoseDetails: {
+              deliveryStream:
+                config.DestinationDetails?.KinesisFirehoseDetails
+                  ?.DeliveryStream,
+            },
           },
-          kinesisFirehoseDetails: {
-            deliveryStream: config.DestinationDetails?.KinesisFirehoseDetails?.DeliveryStream,
-          },
-        },
-        logFormat: config.LogFormat,
-      })),
+          logFormat: config.LogFormat,
+        })),
     },
     memberClusters,
     nodeGroups: nodeGroups?.map(ng => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...ng,
+      }),
       nodeGroupId: ng.NodeGroupId,
       status: ng.Status,
       primaryEndpoint: {
@@ -99,7 +114,10 @@ export default ({
       },
       slots: ng.Slots,
       nodeGroupMembers: ng.NodeGroupMembers?.map(member => ({
-        id: cuid(),
+        id: generateUniqueId({
+          arn,
+          ...member,
+        }),
         cacheClusterId: member.CacheClusterId,
         cacheNodeId: member.CacheNodeId,
         readEndpoint: {
@@ -109,7 +127,7 @@ export default ({
         preferredAvailabilityZone: member.PreferredAvailabilityZone,
         preferredOutpostArn: member.PreferredOutpostArn,
         currentRole: member.CurrentRole,
-      }))
+      })),
     })),
     snapshottingClusterId,
     automaticFailover,
@@ -129,7 +147,10 @@ export default ({
     memberClustersOutpostArns,
     userGroupIds,
     logDeliveryConfigurations: logDeliveryConfigurations?.map(config => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...config,
+      }),
       logType: config.LogType,
       destinationType: config.DestinationType,
       destinationDetails: {
@@ -137,7 +158,8 @@ export default ({
           logGroup: config.DestinationDetails?.CloudWatchLogsDetails?.LogGroup,
         },
         kinesisFirehoseDetails: {
-          deliveryStream: config.DestinationDetails?.KinesisFirehoseDetails?.DeliveryStream,
+          deliveryStream:
+            config.DestinationDetails?.KinesisFirehoseDetails?.DeliveryStream,
         },
       },
       logFormat: config.LogFormat,

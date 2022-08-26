@@ -34,13 +34,34 @@ export default ({
   region: string
 }): { [key: string]: ServiceConnection[] } => {
   const connections: ServiceConnection[] = []
-  const { Arn: id, ManagedPolicies: managedPolicies } = role
+  const {
+    Arn: id,
+    ManagedPolicies: managedPolicies,
+    PermissionsBoundaryArn,
+  } = role
 
   const policies: RawAwsIamPolicy[] =
     flatMap(
       data.find(({ name: serviceName }) => serviceName === services.iamPolicy)
         ?.data
     ) || []
+
+  /** Find Permission Boundary Policy
+   *  related to this IAM Role
+   */
+
+  const permissionBoundaryPolicy = policies.find(
+    ({ Arn: arn }: RawAwsIamPolicy) => PermissionsBoundaryArn === arn
+  )
+
+  if (permissionBoundaryPolicy) {
+    connections.push({
+      id: PermissionsBoundaryArn,
+      resourceType: services.iamPolicy,
+      relation: 'child',
+      field: 'iamPermissionBoundaryPolicy',
+    })
+  }
 
   /**
    * Find Managed Policies

@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import { generateUniqueId } from '@cloudgraph/sdk'
 import { AwsEcsTask } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsEcsTask } from './data'
@@ -44,44 +44,74 @@ export default ({
   } = service
 
   const attachments = service.attachments?.map(attachment => ({
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      ...attachment,
+    }),
     ...attachment,
     details: attachment?.details?.map(detail => ({
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...detail,
+      }),
       ...detail,
-    })), 
+    })),
   }))
 
   const attributes = service.attributes?.map(attribute => ({
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      ...attribute,
+    }),
     ...attribute,
   }))
 
   const inferenceAccelerators = service.inferenceAccelerators?.map(ia => ({
-    id: cuid(),
+    id: generateUniqueId({
+      arn,
+      ...ia,
+    }),
     ...ia,
   }))
 
-  const containerOverrides = service?.overrides?.containerOverrides?.map(co => ({
-    id: cuid(),
-    environment: co?.environment?.map(env => ({
-      id: cuid(),
-      ...env,
-    })),
-    environmentFiles: co?.environmentFiles?.map(ef => ({
-      id: cuid(),
-      ...ef,
-    })),
-    resourceRequirements: co?.resourceRequirements?.map(rr => ({
-      id: cuid(),
-      ...rr,
+  const containerOverrides = service?.overrides?.containerOverrides?.map(
+    co => ({
+      id: generateUniqueId({
+        arn,
+        ...co,
+      }),
+      environment: co?.environment?.map(env => ({
+        id: generateUniqueId({
+          arn,
+          ...env,
+        }),
+        ...env,
+      })),
+      environmentFiles: co?.environmentFiles?.map(ef => ({
+        id: generateUniqueId({
+          arn,
+          ...ef,
+        }),
+        ...ef,
+      })),
+      resourceRequirements: co?.resourceRequirements?.map(rr => ({
+        id: generateUniqueId({
+          arn,
+          ...rr,
+        }),
+        ...rr,
+      })),
+    })
+  )
+
+  const inferenceAcceleratorOverrides =
+    service?.overrides?.inferenceAcceleratorOverrides?.map(ia => ({
+      id: generateUniqueId({
+        arn,
+        ...ia,
+      }),
+      ...ia,
     }))
-  }))
-
-  const inferenceAcceleratorOverrides = service?.overrides?.inferenceAcceleratorOverrides?.map(ia => ({
-    id: cuid(),
-    ...ia,
-  }))
 
   return {
     id: arn,
@@ -107,7 +137,13 @@ export default ({
     launchType,
     memory,
     overrides: {
-      id: cuid(),
+      id: generateUniqueId({
+        arn,
+        ...overrides,
+        containerOverrides,
+        inferenceAcceleratorOverrides,
+        ephemeralStorage,
+      }),
       ...overrides,
       containerOverrides,
       inferenceAcceleratorOverrides,
