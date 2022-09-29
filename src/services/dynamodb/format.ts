@@ -13,16 +13,16 @@ import {
   AwsDynamoDbTable,
   AwsDynamoDbTableAttributes,
   AwsDynamoDbTableBillingSummary,
-  AwsDynamoDbTableGlobalSecondaryIndexDescription,
+  AwsDynamoDbTableGlobalSecondaryIndex,
   AwsDynamoDbTableIndexKeySchema,
   AwsDynamoDbTableIndexProjection,
-  AwsDynamoDbTableLocalSecondaryIndexDescription,
-  AwsDynamoDbTableProvisionedThroughputDescription,
+  AwsDynamoDbTableLocalSecondaryIndex,
+  AwsDynamoDbTableProvisionedThroughput,
   AwsDynamoDbTableReplicaDescription,
   AwsDynamoDbTableRestoreSummary,
   AwsDynamoDbTableSseDescription,
   AwsDynamoDbTableStreamSpecification,
-  AwsDynamoDbTableAutoScalingSettingsDescription,
+  AwsDynamoDbTableAutoScalingSettings,
 } from '../../types/generated'
 
 const formatKeySchema = (
@@ -39,7 +39,7 @@ const formatKeySchema = (
 
 const formatProvisionedThroughput = (
   provisionedThroughput: ProvisionedThroughputDescription = {}
-): AwsDynamoDbTableProvisionedThroughputDescription => {
+): AwsDynamoDbTableProvisionedThroughput => {
   const {
     LastIncreaseDateTime: lastIncreaseDateTime,
     LastDecreaseDateTime: lastDecreaseDateTime,
@@ -77,7 +77,7 @@ const formatProjection = (
 
 const formatAutoScalingSettingsDescription = (
   setting: AutoScalingSettingsDescription = {}
-): AwsDynamoDbTableAutoScalingSettingsDescription => {
+): AwsDynamoDbTableAutoScalingSettings => {
   if (isEmpty(setting)) {
     return {}
   }
@@ -190,7 +190,7 @@ export default ({
       : {}),
   }
 
-  const globalIndexes: AwsDynamoDbTableGlobalSecondaryIndexDescription[] =
+  const globalIndexes: AwsDynamoDbTableGlobalSecondaryIndex[] =
     GlobalSecondaryIndexes.map(
       ({
         IndexName,
@@ -227,7 +227,7 @@ export default ({
       })
     )
 
-  const localIndexes: AwsDynamoDbTableLocalSecondaryIndexDescription[] =
+  const localIndexes: AwsDynamoDbTableLocalSecondaryIndex[] =
     LocalSecondaryIndexes.map(
       ({
         IndexName,

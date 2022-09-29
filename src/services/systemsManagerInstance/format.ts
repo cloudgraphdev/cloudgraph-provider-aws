@@ -127,7 +127,7 @@ export default ({
     computerName,
     associationOverview: {
       detailedStatus,
-      instanceAssociationStatusAggregatedCount:
+      instanceAssociationCount:
         mappedInstanceAssociationStatusAggregatedCount,
     },
     complianceItems: mappedComplianceItems,

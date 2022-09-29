@@ -16,7 +16,7 @@ type awsSystemsManagerInstance implements awsBaseService @key(fields: "arn") {
   lastSuccessfulAssociationExecutionDate: DateTime @search(by: [day])
   ipAddress: String @search(by: [hash, regexp])
   computerName: String @search(by: [hash, regexp])
-  associationOverview: systemsManagerInstanceAssociationOverview
+  associationOverview: systemsManagerInstanceAssociation
   complianceItems: [systemsManagerInstanceComplianceItem]
   sourceId: String @search(by: [hash, regexp])
   sourceType: String @search(by: [hash, regexp])
@@ -24,9 +24,9 @@ type awsSystemsManagerInstance implements awsBaseService @key(fields: "arn") {
   ec2Instance: [awsEc2] @hasInverse(field: systemsManagerInstance)
 }
 
-type systemsManagerInstanceAssociationOverview {
+type systemsManagerInstanceAssociation {
   detailedStatus: String @search(by: [hash, regexp])
-  instanceAssociationStatusAggregatedCount: [ssmAssociationOverviewAggregatedCount]
+  instanceAssociationCount: [ssmAssociationOverviewAggregatedCount]
 }
 
 type ssmAssociationOverviewAggregatedCount {

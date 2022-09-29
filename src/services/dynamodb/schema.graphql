@@ -30,7 +30,7 @@ type awsDynamoDbTableIndexKeySchema
   keyType: String @search(by: [hash, regexp])
 }
 
-type awsDynamoDbTableLocalSecondaryIndexDescription
+type awsDynamoDbTableLocalSecondaryIndex
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
@@ -45,7 +45,7 @@ type awsDynamoDbTableLocalSecondaryIndexDescription
   sizeInBytes: Int64 @search
 }
 
-type awsDynamoDbTableProvisionedThroughputDescription
+type awsDynamoDbTableProvisionedThroughput
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
@@ -58,7 +58,7 @@ type awsDynamoDbTableProvisionedThroughputDescription
   writeCapacityUnits: Int @search
 }
 
-type awsDynamoDbTableGlobalSecondaryIndexDescription
+type awsDynamoDbTableGlobalSecondaryIndex
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
@@ -73,7 +73,7 @@ type awsDynamoDbTableGlobalSecondaryIndexDescription
   sizeInBytes: Int64 @search
   status: String @search(by: [hash, regexp])
   backfilling: Boolean @search
-  provisionedThroughput: awsDynamoDbTableProvisionedThroughputDescription
+  provisionedThroughput: awsDynamoDbTableProvisionedThroughput
 }
 
 type awsDynamoDbTableStreamSpecification
@@ -96,7 +96,7 @@ type awsDynamoDbTableBillingSummary
   lastUpdateToPayPerRequestDateTime: String @search(by: [hash, regexp])
 }
 
-type awsDynamoDbTableReplicaGlobalSecondaryIndexDescription
+type awsDynamoDbTableReplicaGlobalSecondaryIndex
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
@@ -107,7 +107,7 @@ type awsDynamoDbTableReplicaGlobalSecondaryIndexDescription
   readCapacityUnits: Int @search
 }
 
-type awsDynamoDbTableAutoScalingPolicyDescription
+type awsDynamoDbTableAutoScalingPolicy
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
@@ -121,7 +121,7 @@ type awsDynamoDbTableAutoScalingPolicyDescription
   targetValue: Int @search
 }
 
-type awsDynamoDbTableAutoScalingSettingsDescription
+type awsDynamoDbTableAutoScalingSettings
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
@@ -131,7 +131,7 @@ type awsDynamoDbTableAutoScalingSettingsDescription
   maximumUnits: Int @search
   autoScalingDisabled: Boolean @search
   autoScalingRoleArn: String @search(by: [hash, regexp])
-  scalingPolicies: [awsDynamoDbTableAutoScalingPolicyDescription]
+  scalingPolicies: [awsDynamoDbTableAutoScalingPolicy]
 }
 
 type awsDynamoDbTableReplicaDescription
@@ -147,10 +147,10 @@ type awsDynamoDbTableReplicaDescription
   statusPercentProgress: String @search(by: [hash, regexp])
   kmsMasterKeyId: String @search(by: [hash, regexp])
   readCapacityUnits: Int @search
-  globalSecondaryIndexes: [awsDynamoDbTableReplicaGlobalSecondaryIndexDescription]
+  globalSecondaryIndexes: [awsDynamoDbTableReplicaGlobalSecondaryIndex]
   replicaInaccessibleDateTime: String @search(by: [hash, regexp])
-  provisionedReadCapacityAutoScalingSettings: awsDynamoDbTableAutoScalingSettingsDescription
-  provisionedWriteCapacityAutoScalingSettings: awsDynamoDbTableAutoScalingSettingsDescription
+  provisionedReadCapacityAutoScalingSettings: awsDynamoDbTableAutoScalingSettings
+  provisionedWriteCapacityAutoScalingSettings: awsDynamoDbTableAutoScalingSettings
 }
 
 type awsDynamoDbTableRestoreSummary
@@ -181,16 +181,16 @@ type awsDynamoDbTable implements awsBaseService @key(fields: "arn") {
   attributes: [awsDynamoDbTableAttributes]
   billingModeSummary: awsDynamoDbTableBillingSummary
   creationDate: String! @search(by: [hash, regexp])
-  globalIndexes: [awsDynamoDbTableGlobalSecondaryIndexDescription]
+  globalIndexes: [awsDynamoDbTableGlobalSecondaryIndex]
   globalTableVersion: String @search(by: [hash, regexp])
   itemCount: Int @search
   keySchema: [awsDynamoDbTableIndexKeySchema]
   latestStreamArn: String @search(by: [hash, regexp])
   latestStreamLabel: String @search(by: [hash, regexp])
-  localIndexes: [awsDynamoDbTableLocalSecondaryIndexDescription]
+  localIndexes: [awsDynamoDbTableLocalSecondaryIndex]
   name: String @search(by: [hash, regexp])
   pointInTimeRecoveryEnabled: Boolean
-  provisionedThroughput: awsDynamoDbTableProvisionedThroughputDescription
+  provisionedThroughput: awsDynamoDbTableProvisionedThroughput
   replicas: [awsDynamoDbTableReplicaDescription]
   restoreSummary: awsDynamoDbTableRestoreSummary
   sizeInBytes: Int64 @search

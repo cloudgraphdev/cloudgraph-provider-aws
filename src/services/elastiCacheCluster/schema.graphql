@@ -11,7 +11,7 @@ type awsElastiCacheCluster implements awsBaseService @key(fields: "arn") {
   preferredOutpostArn: String @search(by: [hash, regexp])
   cacheClusterCreateTime: String @search(by: [hash, regexp])
   preferredMaintenanceWindow: String @search(by: [hash, regexp])
-  pendingModifiedValues: awsElastiCachePendingModifiedValues
+  pendingModifiedValues: awsElastiCachePendModifiedValues
   notificationConfiguration: awsElastiCacheNotificationConfiguration
   cacheSecurityGroups: [awsElastiCacheSecurityGroupMembership]
   cacheParameterGroup: awsElastiCacheParameterGroupStatus
@@ -43,7 +43,7 @@ type awsElastiCacheEndpoint
   port: Int @search
 }
 
-type awsElastiCachePendingModifiedValues
+type awsElastiCachePendModifiedValues
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
@@ -54,7 +54,7 @@ type awsElastiCachePendingModifiedValues
   engineVersion: String @search(by: [hash, regexp])
   cacheNodeType: String @search(by: [hash, regexp])
   authTokenStatus: String @search(by: [hash, regexp])
-  logDeliveryConfigurations: [awsElastiCachePendingLogDeliveryConfiguration]
+  logDeliveryConfigurations: [awsElastiCachePendLogDeliveryConfig]
 }
 
 type awsElastiCacheNotificationConfiguration

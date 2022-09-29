@@ -1365,7 +1365,7 @@ export type AwsDynamoDbTable = AwsBaseService & {
   attributes?: Maybe<Array<Maybe<AwsDynamoDbTableAttributes>>>;
   billingModeSummary?: Maybe<AwsDynamoDbTableBillingSummary>;
   creationDate: Scalars['String'];
-  globalIndexes?: Maybe<Array<Maybe<AwsDynamoDbTableGlobalSecondaryIndexDescription>>>;
+  globalIndexes?: Maybe<Array<Maybe<AwsDynamoDbTableGlobalSecondaryIndex>>>;
   globalTableVersion?: Maybe<Scalars['String']>;
   iamRoles?: Maybe<Array<Maybe<AwsIamRole>>>;
   itemCount?: Maybe<Scalars['Int']>;
@@ -1373,10 +1373,10 @@ export type AwsDynamoDbTable = AwsBaseService & {
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   latestStreamArn?: Maybe<Scalars['String']>;
   latestStreamLabel?: Maybe<Scalars['String']>;
-  localIndexes?: Maybe<Array<Maybe<AwsDynamoDbTableLocalSecondaryIndexDescription>>>;
+  localIndexes?: Maybe<Array<Maybe<AwsDynamoDbTableLocalSecondaryIndex>>>;
   name?: Maybe<Scalars['String']>;
   pointInTimeRecoveryEnabled?: Maybe<Scalars['Boolean']>;
-  provisionedThroughput?: Maybe<AwsDynamoDbTableProvisionedThroughputDescription>;
+  provisionedThroughput?: Maybe<AwsDynamoDbTableProvisionedThroughput>;
   replicas?: Maybe<Array<Maybe<AwsDynamoDbTableReplicaDescription>>>;
   restoreSummary?: Maybe<AwsDynamoDbTableRestoreSummary>;
   sizeInBytes?: Maybe<Scalars['Int64']>;
@@ -1393,7 +1393,7 @@ export type AwsDynamoDbTableAttributes = {
   type?: Maybe<Scalars['String']>;
 };
 
-export type AwsDynamoDbTableAutoScalingPolicyDescription = {
+export type AwsDynamoDbTableAutoScalingPolicy = {
   disableScaleIn?: Maybe<Scalars['Boolean']>;
   id: Scalars['String'];
   policyName?: Maybe<Scalars['String']>;
@@ -1402,12 +1402,12 @@ export type AwsDynamoDbTableAutoScalingPolicyDescription = {
   targetValue?: Maybe<Scalars['Int']>;
 };
 
-export type AwsDynamoDbTableAutoScalingSettingsDescription = {
+export type AwsDynamoDbTableAutoScalingSettings = {
   autoScalingDisabled?: Maybe<Scalars['Boolean']>;
   autoScalingRoleArn?: Maybe<Scalars['String']>;
   maximumUnits?: Maybe<Scalars['Int']>;
   minimumUnits?: Maybe<Scalars['Int']>;
-  scalingPolicies?: Maybe<Array<Maybe<AwsDynamoDbTableAutoScalingPolicyDescription>>>;
+  scalingPolicies?: Maybe<Array<Maybe<AwsDynamoDbTableAutoScalingPolicy>>>;
 };
 
 export type AwsDynamoDbTableBillingSummary = {
@@ -1415,7 +1415,7 @@ export type AwsDynamoDbTableBillingSummary = {
   lastUpdateToPayPerRequestDateTime?: Maybe<Scalars['String']>;
 };
 
-export type AwsDynamoDbTableGlobalSecondaryIndexDescription = {
+export type AwsDynamoDbTableGlobalSecondaryIndex = {
   arn: Scalars['String'];
   backfilling?: Maybe<Scalars['Boolean']>;
   id: Scalars['String'];
@@ -1423,7 +1423,7 @@ export type AwsDynamoDbTableGlobalSecondaryIndexDescription = {
   keySchema?: Maybe<Array<Maybe<AwsDynamoDbTableIndexKeySchema>>>;
   name: Scalars['String'];
   projection?: Maybe<AwsDynamoDbTableIndexProjection>;
-  provisionedThroughput?: Maybe<AwsDynamoDbTableProvisionedThroughputDescription>;
+  provisionedThroughput?: Maybe<AwsDynamoDbTableProvisionedThroughput>;
   sizeInBytes?: Maybe<Scalars['Int64']>;
   status?: Maybe<Scalars['String']>;
 };
@@ -1439,7 +1439,7 @@ export type AwsDynamoDbTableIndexProjection = {
   type?: Maybe<Scalars['String']>;
 };
 
-export type AwsDynamoDbTableLocalSecondaryIndexDescription = {
+export type AwsDynamoDbTableLocalSecondaryIndex = {
   arn: Scalars['String'];
   id: Scalars['String'];
   itemCount?: Maybe<Scalars['Int']>;
@@ -1449,7 +1449,7 @@ export type AwsDynamoDbTableLocalSecondaryIndexDescription = {
   sizeInBytes?: Maybe<Scalars['Int64']>;
 };
 
-export type AwsDynamoDbTableProvisionedThroughputDescription = {
+export type AwsDynamoDbTableProvisionedThroughput = {
   lastDecreaseDateTime?: Maybe<Scalars['String']>;
   lastIncreaseDateTime?: Maybe<Scalars['String']>;
   numberOfDecreasesToday?: Maybe<Scalars['Int']>;
@@ -1458,11 +1458,11 @@ export type AwsDynamoDbTableProvisionedThroughputDescription = {
 };
 
 export type AwsDynamoDbTableReplicaDescription = {
-  globalSecondaryIndexes?: Maybe<Array<Maybe<AwsDynamoDbTableReplicaGlobalSecondaryIndexDescription>>>;
+  globalSecondaryIndexes?: Maybe<Array<Maybe<AwsDynamoDbTableReplicaGlobalSecondaryIndex>>>;
   id: Scalars['String'];
   kmsMasterKeyId?: Maybe<Scalars['String']>;
-  provisionedReadCapacityAutoScalingSettings?: Maybe<AwsDynamoDbTableAutoScalingSettingsDescription>;
-  provisionedWriteCapacityAutoScalingSettings?: Maybe<AwsDynamoDbTableAutoScalingSettingsDescription>;
+  provisionedReadCapacityAutoScalingSettings?: Maybe<AwsDynamoDbTableAutoScalingSettings>;
+  provisionedWriteCapacityAutoScalingSettings?: Maybe<AwsDynamoDbTableAutoScalingSettings>;
   readCapacityUnits?: Maybe<Scalars['Int']>;
   regionName?: Maybe<Scalars['String']>;
   replicaInaccessibleDateTime?: Maybe<Scalars['String']>;
@@ -1471,7 +1471,7 @@ export type AwsDynamoDbTableReplicaDescription = {
   statusPercentProgress?: Maybe<Scalars['String']>;
 };
 
-export type AwsDynamoDbTableReplicaGlobalSecondaryIndexDescription = {
+export type AwsDynamoDbTableReplicaGlobalSecondaryIndex = {
   id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   readCapacityUnits?: Maybe<Scalars['Int']>;
@@ -2407,7 +2407,7 @@ export type AwsElastiCacheCluster = AwsBaseService & {
   logDeliveryConfigurations?: Maybe<Array<Maybe<AwsElastiCacheLogDeliveryConfiguration>>>;
   notificationConfiguration?: Maybe<AwsElastiCacheNotificationConfiguration>;
   numCacheNodes?: Maybe<Scalars['Int']>;
-  pendingModifiedValues?: Maybe<AwsElastiCachePendingModifiedValues>;
+  pendingModifiedValues?: Maybe<AwsElastiCachePendModifiedValues>;
   preferredAvailabilityZone?: Maybe<Scalars['String']>;
   preferredMaintenanceWindow?: Maybe<Scalars['String']>;
   preferredOutpostArn?: Maybe<Scalars['String']>;
@@ -2494,7 +2494,7 @@ export type AwsElastiCacheParameterGroupStatus = {
   parameterApplyStatus?: Maybe<Scalars['String']>;
 };
 
-export type AwsElastiCachePendingLogDeliveryConfiguration = {
+export type AwsElastiCachePendLogDeliveryConfig = {
   destinationDetails?: Maybe<AwsElastiCacheDestinationDetails>;
   destinationType?: Maybe<Scalars['String']>;
   id: Scalars['String'];
@@ -2502,12 +2502,21 @@ export type AwsElastiCachePendingLogDeliveryConfiguration = {
   logType?: Maybe<Scalars['String']>;
 };
 
-export type AwsElastiCachePendingModifiedValues = {
+export type AwsElastiCachePendModValues = {
+  authTokenStatus?: Maybe<Scalars['String']>;
+  automaticFailoverStatus?: Maybe<Scalars['String']>;
+  logDeliveryConfigurations?: Maybe<Array<Maybe<AwsElastiCachePendLogDeliveryConfig>>>;
+  primaryClusterId?: Maybe<Scalars['String']>;
+  resharding?: Maybe<AwsElastiCacheReshardingStatus>;
+  userGroups?: Maybe<AwsElastiCacheUserGroupsUpdateStatus>;
+};
+
+export type AwsElastiCachePendModifiedValues = {
   authTokenStatus?: Maybe<Scalars['String']>;
   cacheNodeIdsToRemove?: Maybe<Array<Maybe<Scalars['String']>>>;
   cacheNodeType?: Maybe<Scalars['String']>;
   engineVersion?: Maybe<Scalars['String']>;
-  logDeliveryConfigurations?: Maybe<Array<Maybe<AwsElastiCachePendingLogDeliveryConfiguration>>>;
+  logDeliveryConfigurations?: Maybe<Array<Maybe<AwsElastiCachePendLogDeliveryConfig>>>;
   numCacheNodes?: Maybe<Scalars['Int']>;
 };
 
@@ -2527,7 +2536,7 @@ export type AwsElastiCacheReplicationGroup = AwsBaseService & {
   memberClustersOutpostArns?: Maybe<Array<Maybe<Scalars['String']>>>;
   multiAZ?: Maybe<Scalars['String']>;
   nodeGroups?: Maybe<Array<Maybe<AwsElastiCacheNodeGroup>>>;
-  pendingModifiedValues?: Maybe<AwsElastiCacheReplicationGroupPendingModifiedValues>;
+  pendingModifiedValues?: Maybe<AwsElastiCachePendModValues>;
   replicationGroupCreateTime?: Maybe<Scalars['String']>;
   replicationGroupId?: Maybe<Scalars['String']>;
   snapshotRetentionLimit?: Maybe<Scalars['Int']>;
@@ -2537,15 +2546,6 @@ export type AwsElastiCacheReplicationGroup = AwsBaseService & {
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   transitEncryptionEnabled?: Maybe<Scalars['Boolean']>;
   userGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
-};
-
-export type AwsElastiCacheReplicationGroupPendingModifiedValues = {
-  authTokenStatus?: Maybe<Scalars['String']>;
-  automaticFailoverStatus?: Maybe<Scalars['String']>;
-  logDeliveryConfigurations?: Maybe<Array<Maybe<AwsElastiCachePendingLogDeliveryConfiguration>>>;
-  primaryClusterId?: Maybe<Scalars['String']>;
-  resharding?: Maybe<AwsElastiCacheReshardingStatus>;
-  userGroups?: Maybe<AwsElastiCacheUserGroupsUpdateStatus>;
 };
 
 export type AwsElastiCacheReshardingStatus = {
@@ -4237,7 +4237,7 @@ export type AwsSystemsManagerDocumentPermissionsSharingList = {
 export type AwsSystemsManagerInstance = AwsBaseService & {
   activationId?: Maybe<Scalars['String']>;
   agentVersion?: Maybe<Scalars['String']>;
-  associationOverview?: Maybe<SystemsManagerInstanceAssociationOverview>;
+  associationOverview?: Maybe<SystemsManagerInstanceAssociation>;
   associationStatus?: Maybe<Scalars['String']>;
   complianceItems?: Maybe<Array<Maybe<SystemsManagerInstanceComplianceItem>>>;
   computerName?: Maybe<Scalars['String']>;
@@ -4719,7 +4719,7 @@ export type AwsWafV2Statement = {
   notStatement?: Maybe<AwsWafV2StatementNotStatement>;
   orStatement?: Maybe<AwsWafV2StatementOrStatement>;
   rateBasedStatement?: Maybe<AwsWafV2StatementRateBasedStatement>;
-  regexPatternSetReferenceStatement?: Maybe<AwsWafV2StatementRegrexPatternSetReferenceStatement>;
+  regexPatternSetReferenceStatement?: Maybe<AwsWafV2StatementRegrexPattern>;
   ruleGroupReferenceStatement?: Maybe<AwsWafV2StatementRuleGroupReferenceStatement>;
   sizeConstraintStatement?: Maybe<AwsWafV2StatementSzieConstraintStatement>;
   sqliMatchStatement?: Maybe<AwsWafV2StatementSqliMatchStatement>;
@@ -4775,7 +4775,7 @@ export type AwsWafV2StatementRateBasedStatement = {
   statement?: Maybe<AwsWafV2Statement>;
 };
 
-export type AwsWafV2StatementRegrexPatternSetReferenceStatement = {
+export type AwsWafV2StatementRegrexPattern = {
   arn?: Maybe<Scalars['String']>;
   fieldToMatch?: Maybe<AwsWafV2FieldToMatch>;
   textTransformations?: Maybe<Array<Maybe<AwsWafV2TextTransformation>>>;
@@ -4853,9 +4853,9 @@ export type SsmComplianceItemExecutionSummary = {
   executionType?: Maybe<Scalars['String']>;
 };
 
-export type SystemsManagerInstanceAssociationOverview = {
+export type SystemsManagerInstanceAssociation = {
   detailedStatus?: Maybe<Scalars['String']>;
-  instanceAssociationStatusAggregatedCount?: Maybe<Array<Maybe<SsmAssociationOverviewAggregatedCount>>>;
+  instanceAssociationCount?: Maybe<Array<Maybe<SsmAssociationOverviewAggregatedCount>>>;
 };
 
 export type SystemsManagerInstanceComplianceItem = {
