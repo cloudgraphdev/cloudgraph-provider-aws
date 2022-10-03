@@ -77,7 +77,7 @@ export default ({
       engineVersion: pendingModifiedValues?.EngineVersion,
       cacheNodeType: pendingModifiedValues?.CacheNodeType,
       authTokenStatus: pendingModifiedValues?.AuthTokenStatus,
-      logDeliveryConfigurations:
+      logDeliveryConfigs:
         pendingModifiedValues?.LogDeliveryConfigurations?.map(config => ({
           id: generateUniqueId({
             arn,

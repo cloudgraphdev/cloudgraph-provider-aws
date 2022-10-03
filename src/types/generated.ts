@@ -2406,7 +2406,7 @@ export type AwsElastiCacheCluster = AwsBaseService & {
   logDeliveryConfigurations?: Maybe<Array<Maybe<AwsElastiCacheLogDeliveryConfiguration>>>;
   notificationConfiguration?: Maybe<AwsElastiCacheNotificationConfiguration>;
   numCacheNodes?: Maybe<Scalars['Int']>;
-  pendingModifiedValues?: Maybe<AwsElastiCachePendModifiedValues>;
+  pendingModifiedValues?: Maybe<AwsElastiCachePendingModifiedValues>;
   preferredAvailabilityZone?: Maybe<Scalars['String']>;
   preferredMaintenanceWindow?: Maybe<Scalars['String']>;
   preferredOutpostArn?: Maybe<Scalars['String']>;
@@ -2493,7 +2493,7 @@ export type AwsElastiCacheParameterGroupStatus = {
   parameterApplyStatus?: Maybe<Scalars['String']>;
 };
 
-export type AwsElastiCachePendLogDeliveryConfig = {
+export type AwsElastiCachePendingLogDeliveryConfig = {
   destinationDetails?: Maybe<AwsElastiCacheDestinationDetails>;
   destinationType?: Maybe<Scalars['String']>;
   id: Scalars['String'];
@@ -2501,21 +2501,21 @@ export type AwsElastiCachePendLogDeliveryConfig = {
   logType?: Maybe<Scalars['String']>;
 };
 
-export type AwsElastiCachePendModValues = {
+export type AwsElastiCachePendingModValues = {
   authTokenStatus?: Maybe<Scalars['String']>;
   automaticFailoverStatus?: Maybe<Scalars['String']>;
-  logDeliveryConfigurations?: Maybe<Array<Maybe<AwsElastiCachePendLogDeliveryConfig>>>;
+  logDeliveryConfigurations?: Maybe<Array<Maybe<AwsElastiCachePendingLogDeliveryConfig>>>;
   primaryClusterId?: Maybe<Scalars['String']>;
   resharding?: Maybe<AwsElastiCacheReshardingStatus>;
   userGroups?: Maybe<AwsElastiCacheUserGroupsUpdateStatus>;
 };
 
-export type AwsElastiCachePendModifiedValues = {
+export type AwsElastiCachePendingModifiedValues = {
   authTokenStatus?: Maybe<Scalars['String']>;
   cacheNodeIdsToRemove?: Maybe<Array<Maybe<Scalars['String']>>>;
   cacheNodeType?: Maybe<Scalars['String']>;
   engineVersion?: Maybe<Scalars['String']>;
-  logDeliveryConfigurations?: Maybe<Array<Maybe<AwsElastiCachePendLogDeliveryConfig>>>;
+  logDeliveryConfigs?: Maybe<Array<Maybe<AwsElastiCachePendingLogDeliveryConfig>>>;
   numCacheNodes?: Maybe<Scalars['Int']>;
 };
 
@@ -2535,7 +2535,7 @@ export type AwsElastiCacheReplicationGroup = AwsBaseService & {
   memberClustersOutpostArns?: Maybe<Array<Maybe<Scalars['String']>>>;
   multiAZ?: Maybe<Scalars['String']>;
   nodeGroups?: Maybe<Array<Maybe<AwsElastiCacheNodeGroup>>>;
-  pendingModifiedValues?: Maybe<AwsElastiCachePendModValues>;
+  pendingModifiedValues?: Maybe<AwsElastiCachePendingModValues>;
   replicationGroupCreateTime?: Maybe<Scalars['String']>;
   replicationGroupId?: Maybe<Scalars['String']>;
   snapshotRetentionLimit?: Maybe<Scalars['Int']>;
@@ -4854,7 +4854,7 @@ export type SsmComplianceItemExecutionSummary = {
 
 export type SystemsManagerInstanceAssociation = {
   detailedStatus?: Maybe<Scalars['String']>;
-  instanceAssociationCount?: Maybe<Array<Maybe<SsmAssociationOverviewAggregatedCount>>>;
+  ssmAssociationAggCount?: Maybe<Array<Maybe<SsmAssociationOverviewAggregatedCount>>>;
 };
 
 export type SystemsManagerInstanceComplianceItem = {

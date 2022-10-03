@@ -26,7 +26,7 @@ type awsSystemsManagerInstance implements awsBaseService @key(fields: "arn") {
 
 type systemsManagerInstanceAssociation {
   detailedStatus: String @search(by: [hash, regexp])
-  instanceAssociationCount: [ssmAssociationOverviewAggregatedCount]
+  ssmAssociationAggCount: [ssmAssociationOverviewAggregatedCount]
 }
 
 type ssmAssociationOverviewAggregatedCount {
