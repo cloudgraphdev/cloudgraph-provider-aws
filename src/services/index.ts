@@ -8,7 +8,7 @@ import { loadFilesSync } from '@graphql-tools/load-files'
 import { mergeTypeDefs } from '@graphql-tools/merge'
 import AWS, { Config } from 'aws-sdk'
 import chalk from 'chalk'
-import { print } from 'graphql'
+import { DocumentNode } from 'graphql'
 import STS from 'aws-sdk/clients/sts'
 import { isEmpty, merge } from 'lodash'
 import path from 'path'
@@ -438,12 +438,12 @@ export default class Provider extends CloudGraph.Client {
    * getSchema is used to get the schema for provider
    * @returns A string of graphql sub schemas
    */
-  getSchema(): string {
+  getSchema(): DocumentNode {
     const typesArray = loadFilesSync(path.join(__dirname), {
       recursive: true,
       extensions: ['graphql'],
     })
-    return print(mergeTypeDefs(typesArray))
+    return mergeTypeDefs(typesArray)
   }
 
   /**

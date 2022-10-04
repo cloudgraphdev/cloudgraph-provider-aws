@@ -74,7 +74,7 @@ type awsWafV2Statement {
   geoMatchStatement: awsWafV2StatementGeoMatchStatement
   ruleGroupReferenceStatement: awsWafV2StatementRuleGroupReferenceStatement
   iPSetReferenceStatement: awsWafV2StatementIpSetReferenceStatement
-  regexPatternSetReferenceStatement: awsWafV2StatementRegrexPatternSetReferenceStatement
+  regexPatternSetReferenceStatement: awsWafV2StatementRegrexPattern
   rateBasedStatement: awsWafV2StatementRateBasedStatement
   andStatement: awsWafV2StatementAndStatement
   orStatement: awsWafV2StatementOrStatement
@@ -144,7 +144,7 @@ type awsWafV2StatementIpSetReferenceStatement {
   iPSetForwardedIPConfig: awsWafV2IPSetForwardedIPConfig
 }
 
-type awsWafV2StatementRegrexPatternSetReferenceStatement {
+type awsWafV2StatementRegrexPattern {
   arn: String @search(by: [hash, regexp])
   fieldToMatch: awsWafV2FieldToMatch
   textTransformations: [awsWafV2TextTransformation]

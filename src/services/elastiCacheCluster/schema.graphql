@@ -54,7 +54,7 @@ type awsElastiCachePendingModifiedValues
   engineVersion: String @search(by: [hash, regexp])
   cacheNodeType: String @search(by: [hash, regexp])
   authTokenStatus: String @search(by: [hash, regexp])
-  logDeliveryConfigurations: [awsElastiCachePendingLogDeliveryConfiguration]
+  logDeliveryConfigs: [awsElastiCachePendingLogDeliveryConfig]
 }
 
 type awsElastiCacheNotificationConfiguration
