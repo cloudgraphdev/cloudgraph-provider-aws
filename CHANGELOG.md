@@ -1,3 +1,10 @@
+## [0.83.1-beta.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0...0.83.1-beta.1) (2022-11-28)
+
+
+### Bug Fixes
+
+* cve vulnerabilities remediations ([5cbef35](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/5cbef351ca63d318e9c834028c97b02ec17a269d))
+
 ## [0.83.1-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0...0.83.1-alpha.1) (2022-11-28)
 
 
