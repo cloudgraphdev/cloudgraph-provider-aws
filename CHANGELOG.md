@@ -1,3 +1,37 @@
+## [0.83.1-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0...0.83.1-alpha.1) (2022-11-28)
+
+
+### Bug Fixes
+
+* cve vulnerabilities remediations ([5cbef35](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/5cbef351ca63d318e9c834028c97b02ec17a269d))
+
+# [0.83.0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0...0.83.0) (2022-08-26)
+
+
+### Bug Fixes
+
+* add missing statement elements needed for the policy definitions ([f09656b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/f09656bac77b65e76a5896f024be88e5d3105fbf))
+* **apiGatewayDomainName:** use ISO string in conversion ([04866de](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/04866deb8a74827b1f855cea0dab71c7e30ef5bc))
+* **deps:** update sdk dep ([bc8f98a](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/bc8f98a17f32103ed88ecf1e4e0505f30caff87e))
+* **iamRole:** added iamBoundaryPermissionPolicy relation and inline policies json documents ([3a713f6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/3a713f66327610f0ae2f3b2200b82f62a6754a08))
+* **iamRole:** iamPermissionsBoundary and inlinePolicies bug fixes ([9923ba3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/9923ba3ab2da93477a05a689b7db34fdb08b71f5))
+* **iamRole:** replace inlinePolicies id gen method from cuid to generateUniqueId ([15de961](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/15de96133012fc9a8a037f46c1b4cda2627195dc))
+* Optional chaining for last used details ([751a86b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/751a86b9911a67d916aee7b7e36ab6eb4101f5ba))
+* **performance:** improve tags processing time ([def9b1f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/def9b1ff63257508d644f562ba1f9cb24f009d66))
+* Released memory usage fix ([1674215](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/16742153c68f37c8ea47548ead3e20fec8586ca6))
+* Released memory usage fix ([b6d242b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/b6d242b20e2ece71e07874466c21277d47ca18fa))
+* **services:** Added encryption rules data to s3 service ([dde6694](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/dde6694fcb5af38f8919c291454e736620d4fe89))
+* **services:** fix for rds db instance ([5052362](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/5052362387b0ea11a6c6eb842c4b02d904b6b2d9))
+
+
+### Features
+
+* **iamRole:** Add lastUsedDate ([9c7bd36](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/9c7bd36bac04f83482f967e4ac7e990ccdd49f40))
+* Replaced cuid library for generateUniqueId util ([aca3e8f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/aca3e8f33faf445d71c951a6c327ed9095a76255))
+* Replaced cuid with unique ids for policies ([30ad96c](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/30ad96c771b18adf3084a39b0f5eb5ab8954d923))
+* **service:** Added default encryption kms connection ([a999cf7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/a999cf71b6db5ae579ef72051d58ac8e2c85d7b8))
+* Solved duplication issues ([896e813](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/896e81371780b2b57b630b112dcd2848735fb423))
+
 # [0.83.0-beta.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.82.0...0.83.0-beta.1) (2022-08-26)
 
 
