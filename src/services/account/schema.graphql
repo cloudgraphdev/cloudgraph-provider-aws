@@ -86,6 +86,7 @@ type awsAccount implements awsOptionalService @key(fields: "id") {
   sageMakerProjects: [awsSageMakerProject]
   secretsManager: [awsSecretsManager]
   securityGroups: [awsSecurityGroup]
+  securityHub: [awsSecurityHub]
   systemsManagerDocuments: [awsSystemsManagerDocument]
   systemsManagerInstances: [awsSystemsManagerInstance]
   ses: [awsSes]

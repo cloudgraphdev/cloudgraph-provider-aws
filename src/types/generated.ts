@@ -221,6 +221,7 @@ export type AwsAccount = AwsOptionalService & {
   sageMakerProjects?: Maybe<Array<Maybe<AwsSageMakerProject>>>;
   secretsManager?: Maybe<Array<Maybe<AwsSecretsManager>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  securityHub?: Maybe<Array<Maybe<AwsSecurityHub>>>;
   ses?: Maybe<Array<Maybe<AwsSes>>>;
   sns?: Maybe<Array<Maybe<AwsSns>>>;
   sqs?: Maybe<Array<Maybe<AwsSqs>>>;
@@ -4061,6 +4062,11 @@ export type AwsSecurityGroup = AwsBaseService & {
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   vpcEndpoints?: Maybe<Array<Maybe<AwsVpcEndpoint>>>;
   vpcId?: Maybe<Scalars['String']>;
+};
+
+export type AwsSecurityHub = AwsBaseService & {
+  autoEnableControls?: Maybe<Scalars['Boolean']>;
+  subscribedAt?: Maybe<Scalars['String']>;
 };
 
 export type AwsServiceBillingInfo = {

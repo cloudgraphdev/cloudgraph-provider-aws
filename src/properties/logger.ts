@@ -689,4 +689,10 @@ export default {
    * Vpc Peering Connections
    */
   fetchedVpcPeeringConnections: (num: number): string => `Found ${num} Vpc Peering Connections`,
+  /**
+   * Security Hub
+   */
+  securityHubNotFound: (region: string): string => `Security Hub not found/disabled for region: ${region}`,
+  fetchedSecurityHub: (region: string): string => `Security Hub found/enabled for region: ${region}`,
+  fetchingSecurityHub: 'Fetching Security Hub data for this AWS account via the AWS SDK...',
 }
