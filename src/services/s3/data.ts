@@ -49,6 +49,7 @@ import { initTestEndpoint } from '../../utils'
 import { gets3BucketId } from '../../utils/ids'
 import AwsErrorLog from '../../utils/errorLog'
 import { convertAwsTagsToTagMap } from '../../utils/format'
+import { s3BucketArn } from '../../utils/generateArns'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
@@ -496,6 +497,7 @@ export interface RawAwsS3 {
   Id: string
   Name: string
   region: string
+  arn: string
 }
 
 export default async ({
@@ -537,6 +539,7 @@ export default async ({
                 Name: bucket.Name,
                 region,
                 CreationDate: bucket.CreationDate,
+                arn: s3BucketArn({ name: bucket.Name }),
                 Tags: {},
               })
             }

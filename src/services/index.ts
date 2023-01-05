@@ -761,6 +761,7 @@ export default class Provider extends CloudGraph.Client {
       try {
         const serviceClass = this.getService(serviceData.name)
         const entities: any[] = []
+        const rawEntities: any[] = []
         for (const region of Object.keys(serviceData.data)) {
           await new Promise(resolve => setTimeout(resolve, 10)) // free the main nodejs thread to process other requests
           const data = serviceData.data[region]
@@ -772,6 +773,7 @@ export default class Provider extends CloudGraph.Client {
                 account: serviceData.accountId,
               })
               entities.push(formattedData)
+              rawEntities.push(service)
               if (typeof serviceClass.getConnections === 'function') {
                 // We need to loop through all configured regions here because services can be connected to things in another region
                 let serviceConnections = {}
@@ -807,16 +809,30 @@ export default class Provider extends CloudGraph.Client {
         if (existingServiceIdx > -1) {
           const existingData = result.entities[existingServiceIdx].data
           for (const currentEntity of entities) {
-            const exisingEntityIdx = existingData.findIndex(
+            const existingEntityIdx = existingData.findIndex(
               ({ id }) => id === currentEntity.id
             )
-            if (exisingEntityIdx > -1) {
-              const entityToDelete = existingData[exisingEntityIdx]
-              existingData.splice(exisingEntityIdx, 1)
+            if (existingEntityIdx > -1) {
+              const entityToDelete = existingData[existingEntityIdx]
+              existingData.splice(existingEntityIdx, 1)
               const entityToMergeIdx = entities.findIndex(
                 ({ id }) => id === currentEntity.id
               )
               entities[entityToMergeIdx] = merge(entityToDelete, currentEntity)
+            }
+          }
+          const existingRawData = result.entities[existingServiceIdx].rawData
+          for (const currentRawEntity of rawEntities) {
+            const existingEntityIdx = existingData.findIndex(
+              ({ id }) => id === currentRawEntity.id
+            )
+            if (existingEntityIdx > -1) {
+              const rawEntityToDelete = existingRawData[existingEntityIdx]
+              existingRawData.splice(existingEntityIdx, 1)
+              const entityToMergeIdx = rawEntities.findIndex(
+                ({ id }) => id === currentRawEntity.id
+              )
+              rawEntities[entityToMergeIdx] = merge(rawEntityToDelete, currentRawEntity)
             }
           }
           result.entities[existingServiceIdx] = {
@@ -824,6 +840,7 @@ export default class Provider extends CloudGraph.Client {
             name: serviceData.name,
             mutation: serviceClass.mutation,
             data: [...existingData, ...entities],
+            rawData: [...existingRawData, ...rawEntities],
           }
         } else {
           result.entities.push({
@@ -831,6 +848,7 @@ export default class Provider extends CloudGraph.Client {
             name: serviceData.name,
             mutation: serviceClass.mutation,
             data: entities,
+            rawData: rawEntities,
           })
         }
       } catch (error: any) {
