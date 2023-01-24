@@ -84,6 +84,7 @@ export default {
   sageMakerProject: 'sageMakerProject',
   s3: 's3',
   secretsManager: 'secretsManager',
+  securityHub: 'securityHub',
   ses: 'ses',
   sg: 'sg',
   sns: 'sns',

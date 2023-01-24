@@ -78,6 +78,7 @@ export default {
   [services.nat]: 'awsNatGateway',
   [services.networkInterface]: 'awsNetworkInterface',
   [services.sg]: 'awsSecurityGroup',
+  [services.securityHub]: 'awsSecurityHub',
   [services.subnet]: 'awsSubnet',
   [services.vpc]: 'awsVpc',
   [services.vpcEndpoint]: 'awsVpcEndpoint',

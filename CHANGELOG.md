@@ -1,3 +1,21 @@
+# [0.84.0-beta.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.1...0.84.0-beta.1) (2023-01-24)
+
+
+### Features
+
+* **CG-1311:** add AWS security hub ([067bf70](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/067bf70678fd48b60f97feb6c2390e6ae31ea358))
+* **CG-1311:** update README ([b36b426](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/b36b426f8c25a2ebc96934fd7236aec669080083))
+* **creds:** update credentials flow to support sso ([db29e83](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/db29e8339cd8e6f481333cdeccf83ca4568439b1))
+
+# [0.84.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.1...0.84.0-alpha.1) (2023-01-24)
+
+
+### Features
+
+* **CG-1311:** add AWS security hub ([067bf70](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/067bf70678fd48b60f97feb6c2390e6ae31ea358))
+* **CG-1311:** update README ([b36b426](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/b36b426f8c25a2ebc96934fd7236aec669080083))
+* **creds:** update credentials flow to support sso ([db29e83](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/db29e8339cd8e6f481333cdeccf83ca4568439b1))
+
 ## [0.83.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.0...0.83.1) (2022-11-28)
 
 

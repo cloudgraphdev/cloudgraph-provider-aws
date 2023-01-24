@@ -4,7 +4,8 @@ Use the CloudGraph AWS Provider to scan and normalize cloud infrastructure using
 
 <!-- toc -->
 
-- [Docs](#install)
+- [CloudGraph AWS Provider](#cloudgraph-aws-provider)
+- [Docs](#docs)
 - [Install](#install)
 - [Authentication](#authentication)
 - [Multi Account](#multi-account)
@@ -154,6 +155,7 @@ CloudGraph AWS Provider will ask you what regions you would like to crawl and wi
 | s3                          | cloudfront, cloudtrail, ecsCluster, iamRole, kinesisFirehose, kms, lambda, managedAirflow, sns, sqs                                                                                                                                                                                                                                                                                |
 | secretsManager              | kms, lambda                                                                                                                                                                                                                                                                                                                                                                   |
 | securityGroup               | alb, asg, clientVpnEndpoint, codebuild, dmsReplicationInstance, ecsService, lambda, ec2, elasticSearchDomain, elb, rdsCluster, rdsDbInstance, eksCluster, elastiCacheCluster, managedAirflow, sageMakerNotebookInstance, networkInterface, vpcEndpoint                                                                                                                                     |
+| securityHub                 |                                                                                                                                                                                                                                                                                                                                                                               |
 | ses                         |                                                                                                                                                                                                                                                                                                                                                                               |
 | sns                         | kms, cloudtrail, cloudwatch, s3                                                                                                                                                                                                                                                                                                                                               |
 | sqs                         | elasticBeanstalkEnv, s3                                                                                                                                                                                                                                                                                                                                                       |

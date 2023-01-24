@@ -1,0 +1,4 @@
+type awsSecurityHub implements awsBaseService @key(fields: "arn") {
+  subscribedAt: String @search(by: [hash, regexp])
+  autoEnableControls: Boolean @search 
+}
