@@ -53,6 +53,7 @@ import Route53HostedZone from '../services/route53HostedZone'
 import Route53Record from '../services/route53Record'
 import RouteTable from '../services/routeTable'
 import SecretsManager from '../services/secretsManager'
+import SecurityHub from '../services/securityHub'
 import S3 from '../services/s3'
 import SES from '../services/ses'
 import SQS from '../services/sqs'
@@ -182,6 +183,7 @@ export default {
   [services.sageMakerProject]: SageMakerProject,
   [services.s3]: S3,
   [services.secretsManager]: SecretsManager,
+  [services.securityHub]: SecurityHub,
   [services.ses]: SES,
   [services.iamAccessAnalyzer]: IamAccessAnalyzer,
   [services.iamUser]: IamUser,

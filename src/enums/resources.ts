@@ -44,6 +44,7 @@ export default {
   dynamoDbTable: 'aws_dynamodb_table',
   kinesisStream: 'aws_kinesis_stream',
   securityGroup: 'aws_security_group',
+  securityHub: 'aws_security_hub',
   iamRolePolicy: 'aws_iam_role_policy',
   efsMountTarget: 'aws_efs_mount_target',
   route53ZRecord: 'aws_route53_record',
