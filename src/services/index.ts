@@ -7,6 +7,8 @@ import CloudGraph, {
 import { loadFilesSync } from '@graphql-tools/load-files'
 import { mergeTypeDefs } from '@graphql-tools/merge'
 import AWS, { Config } from 'aws-sdk'
+import { loadSharedConfigFiles } from '@aws-sdk/shared-ini-file-loader'
+import { fromIni } from '@aws-sdk/credential-providers'
 import chalk from 'chalk'
 import { DocumentNode } from 'graphql'
 import STS from 'aws-sdk/clients/sts'
@@ -78,7 +80,7 @@ export default class Provider extends CloudGraph.Client {
     const result: { [key: string]: any } = { ...providerSettings }
     let profiles
     try {
-      profiles = this.getProfilesFromSharedConfig()
+      profiles = await this.getProfilesFromSharedConfig()
     } catch (error: any) {
       this.logger.warn('No AWS profiles found')
     }
@@ -304,11 +306,14 @@ export default class Provider extends CloudGraph.Client {
       switch (true) {
         case role && role !== '': {
           let sts = new AWS.STS()
-          await new Promise<void>(resolve => {
+          await new Promise<void>(async resolve => {
             if (profile && profile !== 'default') {
-              const creds = this.getSharedIniFileCredentials(profile)
+              let creds: AWS.Credentials
+              const credsFunction = fromIni({
+                profile
+              })
               if (creds) {
-                sts = new AWS.STS({ credentials: creds })
+                sts = new AWS.STS({ credentials: await credsFunction() })
               }
             }
             const options = {
@@ -316,7 +321,6 @@ export default class Provider extends CloudGraph.Client {
               RoleArn: role,
               ...(externalId && { ExternalId: externalId }),
             }
-
             sts.assumeRole(options, (err, data) => {
               if (err) {
                 this.logger.error(
@@ -478,18 +482,22 @@ export default class Provider extends CloudGraph.Client {
     return credentials
   }
 
-  private getProfilesFromSharedConfig(): string[] {
-    let profiles
+  private async getProfilesFromSharedConfig(): Promise<string[]> {
+    let profiles = []
     try {
-      profiles = Object.keys(
-        AWS['util'].getProfilesFromSharedConfig(AWS['util'].iniLoader)
-      )
+      const filesObject = await loadSharedConfigFiles()
+      const files = Object.keys(filesObject)
+      for (const file of files) {
+        const fileProfiles = Object.keys(filesObject[file])
+        if (fileProfiles && fileProfiles.length > 0) {
+          profiles.push(...fileProfiles)
+        }
+      }
     } catch (error: any) {
       this.logger.warn('Unable to read AWS shared credential file')
       this.logger.debug(error)
     }
-
-    return profiles || []
+    return profiles
   }
 
   private mergeRawData(
@@ -689,7 +697,7 @@ export default class Provider extends CloudGraph.Client {
         const { profile, roleArn: role } = account
         // verify that profile exists in the shared credential file
         if (profile) {
-          const profiles = this.getProfilesFromSharedConfig()
+          const profiles = await this.getProfilesFromSharedConfig()
           if (!profiles.includes(profile)) {
             this.logger.warn(
               `Profile: ${profile} not found in shared credentials file. Skipping...`
