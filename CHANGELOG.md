@@ -1,3 +1,10 @@
+## [0.85.1-beta.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.85.0...0.85.1-beta.1) (2023-02-11)
+
+
+### Bug Fixes
+
+* **auth:** add debug log for mfa ([d698c68](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d698c683375b7b890f4e86305307d5cb03180775))
+
 ## [0.85.1-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.85.0...0.85.1-alpha.1) (2023-02-11)
 
 
