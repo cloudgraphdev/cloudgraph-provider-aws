@@ -310,7 +310,19 @@ export default class Provider extends CloudGraph.Client {
             if (profile && profile !== 'default') {
               let creds: AWS.Credentials
               const credsFunction = fromIni({
-                profile
+                profile,
+                // MFA token support
+                mfaCodeProvider: async () => {
+                  this.logger.debug('MFA token needed, requesting...')
+                  const { mfaToken = '' }: { mfaToken: string } = await this.interface.prompt([
+                    {
+                      type: 'input',
+                      message: `Please enter the MFA token for ${profile}`,
+                      name: 'mfaToken'
+                    },
+                  ])
+                  return mfaToken
+                }
               })
               if (creds) {
                 sts = new AWS.STS({ credentials: await credsFunction() })
