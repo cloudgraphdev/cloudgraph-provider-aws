@@ -313,6 +313,7 @@ export default class Provider extends CloudGraph.Client {
                 profile,
                 // MFA token support
                 mfaCodeProvider: async () => {
+                  this.logger.debug('MFA token needed, requesting...')
                   const { mfaToken = '' }: { mfaToken: string } = await this.interface.prompt([
                     {
                       type: 'input',
