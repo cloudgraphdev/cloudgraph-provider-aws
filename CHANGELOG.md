@@ -1,3 +1,10 @@
+# [0.85.0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.84.0...0.85.0) (2023-02-11)
+
+
+### Features
+
+* **auth:** support mfa based auth ([6c81f60](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/6c81f6097a1c2eef7f0f48e7c25bcade173010e6))
+
 # [0.84.0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.83.1...0.84.0) (2023-01-24)
 
 
