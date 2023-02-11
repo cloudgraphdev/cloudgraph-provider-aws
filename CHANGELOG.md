@@ -5,6 +5,13 @@
 
 * **auth:** add debug log for mfa ([d698c68](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d698c683375b7b890f4e86305307d5cb03180775))
 
+# [0.85.0-beta.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.84.0...0.85.0-beta.1) (2023-02-11)
+
+
+### Features
+
+* **auth:** support mfa based auth ([6c81f60](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/6c81f6097a1c2eef7f0f48e7c25bcade173010e6))
+
 # [0.85.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.84.0...0.85.0-alpha.1) (2023-02-11)
 
 
