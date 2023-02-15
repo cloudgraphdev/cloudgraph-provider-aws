@@ -3871,6 +3871,10 @@ export type AwsRouteTable = AwsBaseService & {
 
 export type AwsS3 = AwsBaseService & {
   access?: Maybe<Scalars['String']>;
+  accountLevelBlockPublicAcls?: Maybe<Scalars['String']>;
+  accountLevelBlockPublicPolicy?: Maybe<Scalars['String']>;
+  accountLevelIgnorePublicAcls?: Maybe<Scalars['String']>;
+  accountLevelRestrictPublicBuckets?: Maybe<Scalars['String']>;
   aclGrants?: Maybe<Array<Maybe<AwsS3AclGrant>>>;
   blockPublicAcls?: Maybe<Scalars['String']>;
   blockPublicPolicy?: Maybe<Scalars['String']>;

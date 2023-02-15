@@ -33,6 +33,10 @@ export default ({
     Name: name,
     Contents: bucketContents = [],
     Tags: tags = {},
+    AccountLevelBlockPublicAcls: accountLevelBlockPublicAcls,
+    AccountLevelIgnorePublicAcls: accountLevelIgnorePublicAcls,
+    AccountLevelBlockPublicPolicy: accountLevelBlockPublicPolicy,
+    AccountLevelRestrictPublicBuckets: accountLevelRestrictPublicBuckets,
     AdditionalInfo: {
       AccelerationConfig: accelerationStatus,
       BucketOwnerData: { DisplayName: bucketOwnerName },
@@ -279,6 +283,10 @@ export default ({
     requesterPays: reqPaymentConfig === 'Requester' ? t.enabled : t.disabled,
     size,
     tags: s3Tags,
+    accountLevelBlockPublicAcls: accountLevelBlockPublicAcls ? t.yes : t.no,
+    accountLevelIgnorePublicAcls: accountLevelIgnorePublicAcls ? t.yes : t.no,
+    accountLevelBlockPublicPolicy: accountLevelBlockPublicPolicy ? t.yes : t.no,
+    accountLevelRestrictPublicBuckets: accountLevelRestrictPublicBuckets ? t.yes : t.no,
     totalNumberOfObjectsInBucket: greaterThanTotalLimit
       ? `${awsBucketItemsLimit}+`
       : `${total}`,
