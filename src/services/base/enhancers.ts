@@ -105,6 +105,7 @@ export const enrichInstanceWithBillingData = ({
                 name,
                 mutation,
                 data: natsWithBilling,
+                rawData: natsWithBilling,
               })
             }
           }
@@ -139,6 +140,7 @@ export const enrichInstanceWithBillingData = ({
                 name,
                 mutation,
                 data: ec2WithBilling,
+                rawData: ec2WithBilling,
               })
             }
           }
