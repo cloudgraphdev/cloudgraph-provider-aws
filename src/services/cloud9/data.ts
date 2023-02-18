@@ -28,8 +28,8 @@ const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const MAX_ITEMS = 25
 
-const listEnvironmentsForRegion = async ({ 
-  cloud9, 
+const listEnvironmentsForRegion = async ({
+  cloud9,
   resolveRegion,
 }: {
   cloud9: Cloud9
@@ -163,12 +163,12 @@ export default async ({
           cloud9,
           resolveRegion,
         })
-        cloud9Data.push(
-          ...environmentIdList.map((environmentId: EnvironmentId) => ({
+        for (const environmentId of environmentIdList) {
+          cloud9Data.push({
             id: environmentId,
             region,
-          }))
-        )
+          })
+        }
         resolveRegion()
       })
       regionPromises.push(regionPromise)
