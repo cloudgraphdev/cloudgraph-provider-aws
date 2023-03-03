@@ -25,6 +25,7 @@ export default {
   dmsReplicationInstance: 'dmsReplicationInstance',
   dynamodb: 'dynamodb',
   ebs: 'ebs',
+  ebsSnapshot: 'ebsSnapshot',
   ec2Instance: 'ec2Instance',
   ecr: 'ecr',
   ecsCluster: 'ecsCluster',
