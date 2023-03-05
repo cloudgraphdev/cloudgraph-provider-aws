@@ -1,10 +1,12 @@
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
+import AWS from 'aws-sdk'
 
 import { AWSError } from 'aws-sdk/lib/error'
 import { Config } from 'aws-sdk/lib/config'
 import S3, {
+  AccountId,
   Bucket,
   BucketAccelerateStatus,
   BucketLocationConstraint,
@@ -60,6 +62,30 @@ const endpoint = initTestEndpoint(serviceName)
 export const awsBucketItemsLimit = 1000
 export const publicBucketGrant =
   'http://acs.amazonaws.com/groups/global/AllUsers'
+
+const getAccountPublicAccessBlock = async ({
+  region,
+  accountId,
+}: {
+  region: string,
+  accountId: AccountId,
+}) =>
+  new Promise<PublicAccessBlockConfiguration | any>(resolve => {
+    const s3Control = new AWS.S3Control({
+      region: region,
+    })
+    s3Control.getPublicAccessBlock(
+      {
+        AccountId: accountId,
+      },
+      (err: AWSError, data: GetPublicAccessBlockOutput) => {
+        if (!isEmpty(data)) {
+          resolve(data.PublicAccessBlockConfiguration)
+        }
+        resolve({})
+      }
+    )
+  })
 
 const getBucketAcl = async (s3: S3, name: BucketName) =>
   new Promise<GetBucketAclOutput>(resolve => {
@@ -496,14 +522,20 @@ export interface RawAwsS3 {
   Id: string
   Name: string
   region: string
+  AccountLevelBlockPublicAcls?: boolean
+  AccountLevelIgnorePublicAcls?: boolean
+  AccountLevelBlockPublicPolicy?: boolean
+  AccountLevelRestrictPublicBuckets?: boolean
 }
 
 export default async ({
   regions,
   config,
+  account,
 }: {
   regions: string
   config: Config
+  account: string
 }): Promise<{
   [region: string]: RawAwsS3[]
 }> =>
@@ -514,7 +546,19 @@ export default async ({
     const additionalInfoPromises = []
 
     regions.split(',').map((region: BucketLocationConstraint) => {
+      // TODO: temp implementation to add account level public access block to bucket level
+      // need to find a better place/way to put the data
       const regionPromise = new Promise<void>(async resolveRegion => {
+        const {
+          BlockPublicAcls,
+          IgnorePublicAcls,
+          BlockPublicPolicy,
+          RestrictPublicBuckets,
+        } = await getAccountPublicAccessBlock({
+          region,
+          accountId: account,
+        });
+
         const s3 = new S3({
           ...config,
           region,
@@ -538,6 +582,10 @@ export default async ({
                 region,
                 CreationDate: bucket.CreationDate,
                 Tags: {},
+                AccountLevelBlockPublicAcls: BlockPublicAcls,
+                AccountLevelIgnorePublicAcls: IgnorePublicAcls,
+                AccountLevelBlockPublicPolicy: BlockPublicPolicy,
+                AccountLevelRestrictPublicBuckets: RestrictPublicBuckets,
               })
             }
           })
