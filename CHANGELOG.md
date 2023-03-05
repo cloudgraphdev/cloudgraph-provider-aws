@@ -1,3 +1,10 @@
+## [0.85.2-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.85.1...0.85.2-alpha.1) (2023-03-05)
+
+
+### Bug Fixes
+
+* **CG-1328:** add account level s3 public access block for the rule check ([0ab5f21](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/0ab5f21c2d6dfd8d4697e731bd659c8b26101114))
+
 ## [0.85.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.85.0...0.85.1) (2023-02-11)
 
 
