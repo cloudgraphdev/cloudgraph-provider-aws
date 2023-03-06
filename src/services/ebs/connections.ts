@@ -1,6 +1,6 @@
 import isEmpty from 'lodash/isEmpty'
 
-import EC2, {
+import {
   Volume,
   Snapshot,
   TagList,
@@ -9,7 +9,6 @@ import EC2, {
 import { ServiceConnection } from '@cloudgraph/sdk'
 
 import services from '../../enums/services'
-
 
 /**
  * EBS
@@ -34,7 +33,6 @@ export default ({
     const {
       VolumeId: id,
       SnapshotId: snapshotId,
-      Tags: tags,
     } = volume
 
     /**

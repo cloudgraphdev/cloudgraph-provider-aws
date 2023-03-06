@@ -17,6 +17,7 @@ type awsEbsSnapshot implements awsBaseService @key(fields: "arn") {
   storageTier: String @search(by: [hash, regexp])
   restoreExpiryTime: String @search(by: [hash, regexp])
   ebs: [awsEbs] @hasInverse(field: ebsSnapshots)
+  kms: [awsKms] @hasInverse(field: ebsSnapshots)
 }
 
 type awsEbsPermission
