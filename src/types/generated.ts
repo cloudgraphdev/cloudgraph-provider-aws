@@ -3849,9 +3849,11 @@ export type AwsRoute53Record = AwsOptionalService & {
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
   alias?: Maybe<AwsRoute53Alias>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
+  name?: Maybe<Scalars['String']>;
   records?: Maybe<Array<Maybe<Scalars['String']>>>;
   restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
   route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
+  setIdentifier?: Maybe<Scalars['String']>;
   ttl?: Maybe<Scalars['Int']>;
   type?: Maybe<Scalars['String']>;
   zoneId?: Maybe<Scalars['String']>;
@@ -4840,6 +4842,7 @@ export type AwsWafV2WebAcl = AwsBaseService & {
   postProcessFirewallManagerRuleGroups?: Maybe<Array<Maybe<AwsWafV2FirewallManagerRuleGroup>>>;
   preProcessFirewallManagerRuleGroups?: Maybe<Array<Maybe<AwsWafV2FirewallManagerRuleGroup>>>;
   rules?: Maybe<Array<Maybe<AwsWafV2Rule>>>;
+  scope?: Maybe<Scalars['String']>;
   visibilityConfig?: Maybe<AwsWafV2VisibilityConfig>;
 };
 
