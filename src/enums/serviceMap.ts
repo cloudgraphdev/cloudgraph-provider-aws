@@ -23,6 +23,7 @@ import CognitoIdentityPool from '../services/cognitoIdentityPool'
 import CognitoUserPool from '../services/cognitoUserPool'
 import DynamoDB from '../services/dynamodb'
 import EBS from '../services/ebs'
+import EBSSnapshot from '../services/ebsSnapshot'
 import EC2 from '../services/ec2'
 import EcsCluster from '../services/ecsCluster'
 import EcsContainer from '../services/ecsContainer'
@@ -133,6 +134,7 @@ export default {
   [services.cognitoUserPool]: CognitoUserPool,
   [services.configurationRecorder]: ConfigurationRecorder,
   [services.ebs]: EBS,
+  [services.ebsSnapshot]: EBSSnapshot,
   [services.ec2Instance]: EC2,
   [services.ecr]: ECR,
   [services.efs]: EFS,

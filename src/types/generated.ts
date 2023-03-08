@@ -1501,6 +1501,7 @@ export type AwsEbs = AwsBaseService & {
   attachments?: Maybe<Array<Maybe<AwsEbsAttachment>>>;
   availabilityZone?: Maybe<Scalars['String']>;
   created?: Maybe<Scalars['String']>;
+  ebsSnapshots?: Maybe<Array<Maybe<AwsEbsSnapshot>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   emrInstance?: Maybe<Array<Maybe<AwsEmrInstance>>>;
   encrypted?: Maybe<Scalars['Boolean']>;
@@ -1526,6 +1527,27 @@ export type AwsEbsPermission = {
   group?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   userId?: Maybe<Scalars['String']>;
+};
+
+export type AwsEbsSnapshot = AwsBaseService & {
+  dataEncryptionKeyId?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  ebs?: Maybe<Array<Maybe<AwsEbs>>>;
+  encrypted?: Maybe<Scalars['Boolean']>;
+  kmsKeyId?: Maybe<Scalars['String']>;
+  outpostArn?: Maybe<Scalars['String']>;
+  ownerAlias?: Maybe<Scalars['String']>;
+  ownerId?: Maybe<Scalars['String']>;
+  permissions?: Maybe<Array<Maybe<AwsEbsPermission>>>;
+  progress?: Maybe<Scalars['String']>;
+  restoreExpiryTime?: Maybe<Scalars['String']>;
+  startTime?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  stateMessage?: Maybe<Scalars['String']>;
+  storageTier?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  volumeId?: Maybe<Scalars['String']>;
+  volumeSize?: Maybe<Scalars['String']>;
 };
 
 export type AwsEc2 = AwsBaseService & {
@@ -3849,9 +3871,11 @@ export type AwsRoute53Record = AwsOptionalService & {
   alb?: Maybe<Array<Maybe<AwsAlb>>>;
   alias?: Maybe<AwsRoute53Alias>;
   elb?: Maybe<Array<Maybe<AwsElb>>>;
+  name?: Maybe<Scalars['String']>;
   records?: Maybe<Array<Maybe<Scalars['String']>>>;
   restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
   route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
+  setIdentifier?: Maybe<Scalars['String']>;
   ttl?: Maybe<Scalars['Int']>;
   type?: Maybe<Scalars['String']>;
   zoneId?: Maybe<Scalars['String']>;
@@ -3871,6 +3895,10 @@ export type AwsRouteTable = AwsBaseService & {
 
 export type AwsS3 = AwsBaseService & {
   access?: Maybe<Scalars['String']>;
+  accountLevelBlockPublicAcls?: Maybe<Scalars['String']>;
+  accountLevelBlockPublicPolicy?: Maybe<Scalars['String']>;
+  accountLevelIgnorePublicAcls?: Maybe<Scalars['String']>;
+  accountLevelRestrictPublicBuckets?: Maybe<Scalars['String']>;
   aclGrants?: Maybe<Array<Maybe<AwsS3AclGrant>>>;
   blockPublicAcls?: Maybe<Scalars['String']>;
   blockPublicPolicy?: Maybe<Scalars['String']>;
@@ -4836,6 +4864,7 @@ export type AwsWafV2WebAcl = AwsBaseService & {
   postProcessFirewallManagerRuleGroups?: Maybe<Array<Maybe<AwsWafV2FirewallManagerRuleGroup>>>;
   preProcessFirewallManagerRuleGroups?: Maybe<Array<Maybe<AwsWafV2FirewallManagerRuleGroup>>>;
   rules?: Maybe<Array<Maybe<AwsWafV2Rule>>>;
+  scope?: Maybe<Scalars['String']>;
   visibilityConfig?: Maybe<AwsWafV2VisibilityConfig>;
 };
 

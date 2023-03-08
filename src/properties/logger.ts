@@ -250,6 +250,13 @@ export default {
   fetchedEbsVolumes: (num: number): string => `Fetched ${num} EBS Volumes`,
   lookingForEbs: 'Looking for EBS volumes for EC2 instances...',
   /**
+   * EBS Snapshot
+   */
+    fetchingEbsSnapshotData: 'Fetching EBS Snapshot data for this AWS account via the AWS SDK...',
+    doneFetchingEbsSnapshotData: '✅ Done fetching EBS Snapshot Data ✅',
+    fetchedEbsSnapshots: (num: number): string => `Fetched ${num} EBS Snapshots`,
+    lookingForEbsSnapshot: 'Looking for EBS Snapshots...',
+  /**
    * EC2
    */
   lookingforEc2: 'Looking for EC2 instances to add...',

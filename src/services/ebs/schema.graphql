@@ -15,6 +15,7 @@ type awsEbs implements awsBaseService @key(fields: "arn") {
   ec2Instance: [awsEc2] @hasInverse(field: ebs)
   asg: [awsAsg] @hasInverse(field: ebs)
   emrInstance: [awsEmrInstance] @hasInverse(field: ebs)
+  ebsSnapshots: [awsEbsSnapshot] @hasInverse(field: ebs)
 }
 
 type awsEbsAttachment
