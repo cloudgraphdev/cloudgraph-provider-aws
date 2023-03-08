@@ -52,4 +52,5 @@ type awsKms implements awsBaseService @key(fields: "id") {
   rdsDbInstance: [awsRdsDbInstance] @hasInverse(field: kms)
   managedAirflows: [awsManagedAirflow] @hasInverse(field: kms)
   s3: [awsS3] @hasInverse(field: kms)
+  ebsSnapshots: [awsEbsSnapshot] @hasInverse(field: kms)
 }

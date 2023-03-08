@@ -1,0 +1,32 @@
+type awsEbsSnapshot implements awsBaseService @key(fields: "arn") {
+  dataEncryptionKeyId: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  encrypted: Boolean @search
+  kmsKeyId: String @search(by: [hash, regexp])
+  ownerId: String @search(by: [hash, regexp])
+  progress: String @search(by: [hash, regexp])
+  startTime: String @search(by: [hash, regexp])
+  state: String @search(by: [hash, regexp])
+  stateMessage: String @search(by: [hash, regexp])
+  volumeId: String @search(by: [hash, regexp])
+  volumeSize: String @search(by: [hash, regexp])
+  ownerAlias: String @search(by: [hash, regexp])
+  outpostArn: String @search(by: [hash, regexp])
+  permissions: [awsEbsPermission]
+  tags: [awsRawTag]
+  storageTier: String @search(by: [hash, regexp])
+  restoreExpiryTime: String @search(by: [hash, regexp])
+  ebs: [awsEbs] @hasInverse(field: ebsSnapshots)
+  kms: [awsKms] @hasInverse(field: ebsSnapshots)
+}
+
+type awsEbsPermission
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  group: String @search(by: [hash, regexp])
+  userId: String @search(by: [hash, regexp])
+}

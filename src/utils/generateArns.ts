@@ -112,6 +112,16 @@ export const ebsVolumeArn = ({
   id: string
 }): string => `arn:aws:ec2:${region}:${account}:volume/${id}`
 
+export const ebsSnapshotArn = ({
+  region,
+  account,
+  id,
+}: {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ec2:${region}:${account}:snapshot/${id}`
+
 export const ec2InstanceArn = ({
   region,
   account,
