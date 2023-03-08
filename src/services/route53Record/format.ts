@@ -34,6 +34,8 @@ export default ({
     id,
     accountId: account,
     zoneId: hostedZoneId,
+    name,
+    setIdentifier: identifier,
     type,
     ttl,
     alias: {

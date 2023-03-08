@@ -1,6 +1,7 @@
 type awsWafV2WebAcl implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp])
+  scope: String @search(by: [hash, regexp])
   ManagedByFirewallManager: Boolean @search
   capacity: Int @search
   labelNamespace: String @search(by: [hash, regexp])

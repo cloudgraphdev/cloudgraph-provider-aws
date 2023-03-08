@@ -22,6 +22,7 @@ const resources = [
 
 export interface RawAwsWafV2WebAcl extends WAFV2.WebACL {
   region: string
+  scope: string
   loggingConfiguration: WAFV2.LoggingConfiguration
   wafResources: { [resource: string]: string[] }
 }
@@ -107,6 +108,7 @@ export default async ({
           loggingConfiguration: wafData?.loggingConfiguration,
           wafResources: wafData?.wafResources,
           region,
+          scope
         })
       }
     }

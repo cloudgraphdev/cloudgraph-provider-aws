@@ -1,6 +1,8 @@
 type awsRoute53Record implements awsOptionalService @key(fields: "id") {
   zoneId: String @search(by: [hash])
   alias: awsRoute53Alias
+  name: String @search(by: [hash, regexp])
+  setIdentifier: String @search(by: [hash, regexp])
   type: String @search(by: [hash, regexp])
   ttl: Int @search
   records: [String] @search(by: [hash, regexp])
