@@ -17,6 +17,7 @@ export default {
   [services.codebuild]: 'codebuilds',
   [services.configurationRecorder]: 'configurationRecorders',
   [services.dmsReplicationInstance]: 'dmsReplicationInstances',
+  [services.ebsSnapshot]: 'ebsSnapshots',
   [services.ec2Instance]: 'ec2Instances',
   [services.ecsCluster]: 'ecsClusters',
   [services.ecsContainer]: 'ecsContainers',

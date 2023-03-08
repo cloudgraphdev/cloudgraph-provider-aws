@@ -31,6 +31,7 @@ export default {
   [services.dmsReplicationInstance]: 'awsDmsReplicationInstance',
   [services.dynamodb]: 'awsDynamoDbTable',
   [services.ebs]: 'awsEbs',
+  [services.ebsSnapshot]: 'awsEbsSnapshot',
   [services.ec2Instance]: 'awsEc2',
   [services.ecr]: 'awsEcr',
   [services.ecsCluster]: 'awsEcsCluster',

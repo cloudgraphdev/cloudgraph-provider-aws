@@ -23,6 +23,7 @@ export default {
   sqsQueue: 'aws_sqs_queue',
   iamGroup: 'aws_iam_group',
   snsTopic: 'aws_sns_topic',
+  ebsSnapshot: 'aws_ebs_snapshot',
   ebsVolume: 'aws_ebs_volume',
   iamPolicy: 'aws_iam_policy',
   vpnGateway: 'aws_vpn_gateway',

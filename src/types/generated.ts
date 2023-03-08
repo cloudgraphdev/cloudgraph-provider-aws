@@ -1501,6 +1501,7 @@ export type AwsEbs = AwsBaseService & {
   attachments?: Maybe<Array<Maybe<AwsEbsAttachment>>>;
   availabilityZone?: Maybe<Scalars['String']>;
   created?: Maybe<Scalars['String']>;
+  ebsSnapshots?: Maybe<Array<Maybe<AwsEbsSnapshot>>>;
   ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
   emrInstance?: Maybe<Array<Maybe<AwsEmrInstance>>>;
   encrypted?: Maybe<Scalars['Boolean']>;
@@ -1526,6 +1527,27 @@ export type AwsEbsPermission = {
   group?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   userId?: Maybe<Scalars['String']>;
+};
+
+export type AwsEbsSnapshot = AwsBaseService & {
+  dataEncryptionKeyId?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  ebs?: Maybe<Array<Maybe<AwsEbs>>>;
+  encrypted?: Maybe<Scalars['Boolean']>;
+  kmsKeyId?: Maybe<Scalars['String']>;
+  outpostArn?: Maybe<Scalars['String']>;
+  ownerAlias?: Maybe<Scalars['String']>;
+  ownerId?: Maybe<Scalars['String']>;
+  permissions?: Maybe<Array<Maybe<AwsEbsPermission>>>;
+  progress?: Maybe<Scalars['String']>;
+  restoreExpiryTime?: Maybe<Scalars['String']>;
+  startTime?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  stateMessage?: Maybe<Scalars['String']>;
+  storageTier?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  volumeId?: Maybe<Scalars['String']>;
+  volumeSize?: Maybe<Scalars['String']>;
 };
 
 export type AwsEc2 = AwsBaseService & {
