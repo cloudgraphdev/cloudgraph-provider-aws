@@ -1,3 +1,19 @@
+# [0.86.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.85.2-alpha.1...0.86.0-alpha.1) (2023-03-08)
+
+
+### Bug Fixes
+
+* **services:** expose scope on wafv2 ([82f044a](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/82f044a715795171414c87753ab5d81ffc15cbc5))
+* **services:** update format file for new schema ([2a3333f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/2a3333fb4d3384564f24206384d3b0e8ae1f131b))
+* **services:** update route53 to have setIdentifier and name in the schema ([904ba79](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/904ba7969be00078ee33bc7890bf35dc6fb7ce1c))
+
+
+### Features
+
+* **CG-1339:** add aws ebs snapshot ([376551a](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/376551ad7bdd0de51833351c24c13c99a974df93))
+* **CG-1339:** add kms connection to ebs snapshot ([beac5fd](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/beac5fd6bf78e29dac14cbbd4ae58f70dfe19cb0))
+* **CG-1339:** update README ([38a9d5e](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/38a9d5e43c75734c73505bcc074fe2c61517617a))
+
 ## [0.85.2-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.85.1...0.85.2-alpha.1) (2023-03-05)
 
 
