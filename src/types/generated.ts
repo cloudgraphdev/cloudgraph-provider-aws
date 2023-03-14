@@ -1534,6 +1534,7 @@ export type AwsEbsSnapshot = AwsBaseService & {
   description?: Maybe<Scalars['String']>;
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
   encrypted?: Maybe<Scalars['Boolean']>;
+  kms?: Maybe<Array<Maybe<AwsKms>>>;
   kmsKeyId?: Maybe<Scalars['String']>;
   outpostArn?: Maybe<Scalars['String']>;
   ownerAlias?: Maybe<Scalars['String']>;
@@ -3342,6 +3343,7 @@ export type AwsKms = AwsBaseService & {
   description?: Maybe<Scalars['String']>;
   dmsReplicationInstances?: Maybe<Array<Maybe<AwsDmsReplicationInstance>>>;
   dynamodb?: Maybe<Array<Maybe<AwsDynamoDbTable>>>;
+  ebsSnapshots?: Maybe<Array<Maybe<AwsEbsSnapshot>>>;
   ecsCluster?: Maybe<Array<Maybe<AwsEcsCluster>>>;
   efs?: Maybe<Array<Maybe<AwsEfs>>>;
   eksCluster?: Maybe<Array<Maybe<AwsEksCluster>>>;
