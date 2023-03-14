@@ -61,7 +61,7 @@ const listEbsSnapshotAttribute = async ({
           return resolve([])
         }
 
-        return resolve(data?.CreateVolumePermissions)
+        return resolve(data?.CreateVolumePermissions ?? [])
       }
     )
   )
