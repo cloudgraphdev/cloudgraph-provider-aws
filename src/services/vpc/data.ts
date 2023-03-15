@@ -94,7 +94,6 @@ export default async ({
           /**
            * No Vpcs Found
            */
-
           if (isEmpty(vpcs)) {
             return resolveRegion()
           }
@@ -102,7 +101,6 @@ export default async ({
           /**
            * Check to see if there are more
            */
-
           if (token) {
             listVpcData({ region, token, ec2, resolveRegion })
           }
