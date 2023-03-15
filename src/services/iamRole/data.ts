@@ -157,6 +157,7 @@ export const getAccountAuthorizationDetails = async (
           }
           resolve(result)
         }
+        resolve([])
       }
     )
   })
