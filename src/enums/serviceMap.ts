@@ -1,4 +1,5 @@
 import Account from '../services/account'
+import ACM from '../services/acm'
 import ALB from '../services/alb'
 import APIGatewayResource from '../services/apiGatewayResource'
 import APIGatewayRestApi from '../services/apiGatewayRestApi'
@@ -112,6 +113,7 @@ import VpcPeeringConnection from '../services/vpcPeeringConnection'
 export default {
   account: Account,
   [services.appSync]: AppSync,
+  [services.acm]: ACM,
   [services.alb]: ALB,
   [services.apiGatewayDomainName]: APIGatewayDomainName,
   [services.apiGatewayHttpApi]: APIGatewayHttpApi,

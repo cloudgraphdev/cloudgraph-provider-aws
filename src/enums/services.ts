@@ -1,4 +1,5 @@
 export default {
+  acm: 'acm',
   alb: 'alb',
   apiGatewayDomainName: 'apiGatewayDomainName',
   apiGatewayHttpApi: 'apiGatewayHttpApi',

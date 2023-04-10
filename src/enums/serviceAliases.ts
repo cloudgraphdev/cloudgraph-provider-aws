@@ -1,6 +1,7 @@
 import services from './services'
 
 export default {
+  [services.acm]: 'acms',
   [services.alb]: 'albs',
   [services.apiGatewayDomainName]: 'apiGatewayDomainNames',
   [services.apiGatewayHttpApi]: 'apiGatewayHttpApis',
