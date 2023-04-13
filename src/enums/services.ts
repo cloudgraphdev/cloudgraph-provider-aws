@@ -69,6 +69,7 @@ export default {
   lambda: 'lambda',
   managedAirflow: 'managedAirflow',
   managedPrefixList: 'managedPrefixList',
+  mskCluster: 'mskCluster',
   nacl: 'nacl',
   nat: 'nat',
   networkInterface: 'networkInterface',

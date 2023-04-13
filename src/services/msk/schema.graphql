@@ -1,0 +1,237 @@
+type awsMskClusterStateInfo
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  code: String @search(by: [hash, regexp])
+  message: String @search(by: [hash, regexp])
+}
+
+type awsMskClusterBrokerNodeGroupInfoEbsStorageInfo
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  provisionedThroughputEnabled: Boolean @search
+  provisionedThroughputVolumeThroughput: Int @search
+  volumeSize: Int @search
+}
+
+type awsMskClusterBrokerNodeGroupInfoConnectivityInfo
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  publicAccessType: String @search(by: [hash, regexp])
+}
+
+type awsMskClusterBrokerNodeGroupInfo
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  brokerAZDistribution: String @search(by: [hash, regexp])
+  clientSubnets: [String] @search(by: [hash, regexp])
+  instanceType: String @search(by: [hash, regexp])
+  securityGroups: [String] @search(by: [hash, regexp])
+  ebsStorageInfo: awsMskClusterBrokerNodeGroupInfoEbsStorageInfo
+  connectivityInfo: awsMskClusterBrokerNodeGroupInfoConnectivityInfo
+}
+
+type awsMskClusterCurrentBrokerSoftwareInfo
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  configurationArn: String @search(by: [hash, regexp])
+  configurationRevision: Int @search
+  kafkaVersion: String @search(by: [hash, regexp])
+}
+
+type awsMskClusterClientAuthenticationSasl
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  scramEnabled: Boolean @search
+  iamEnabled: Boolean @search
+}
+
+type awsMskClusterClientAuthenticationTls
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  certificateAuthorityArnList: [String] @search(by: [hash, regexp])
+  enabled: Boolean @search
+}
+
+type awsMskClusterClientAuthentication
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  sasl: awsMskClusterClientAuthenticationSasl
+  tls: awsMskClusterClientAuthenticationTls
+  unauthenticatedEnabled: Boolean @search
+}
+
+type awsMskClusterEncryptionInfoAtRest
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  dataVolumeKMSKeyId: String @search(by: [hash, regexp])
+}
+
+type awsMskClusterEncryptionInfoInTransit
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  clientBroker: String @search(by: [hash, regexp])
+  inCluster: Boolean @search
+}
+
+type awsMskClusterEncryptionInfo
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  encryptionAtRest: awsMskClusterEncryptionInfoAtRest
+  encryptionInTransit: awsMskClusterEncryptionInfoInTransit
+}
+
+type awsMskClusterOpenMonitoringPrometheus
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  jmxExporterEnabledInBroker: Boolean @search
+  nodeExporterInfoEnabledInBroker: Boolean @search
+}
+
+type awsMskClusterLoggingInfoCloudWatch
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  enabled: Boolean @search
+  logGroup: String @search(by: [hash, regexp])
+}
+
+type awsMskClusterLoggingInfoFirehose
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  deliveryStream: String @search(by: [hash, regexp])
+  enabled: Boolean @search
+}
+
+type awsMskClusterLoggingInfoS3
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  bucket: String @search(by: [hash, regexp])
+  enabled: Boolean @search
+  prefix: String @search(by: [hash, regexp])
+}
+
+type awsMskClusterLoggingInfo
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  cloudWatchLogs: awsMskClusterLoggingInfoCloudWatch
+  firehose: awsMskClusterLoggingInfoFirehose
+  s3: awsMskClusterLoggingInfoS3
+}
+
+type awsMskClusterProvisioned
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  brokerNodeGroupInfo: awsMskClusterBrokerNodeGroupInfo
+  currentBrokerSoftwareInfo: awsMskClusterCurrentBrokerSoftwareInfo
+  clientAuthentication: awsMskClusterClientAuthentication
+  encryptionInfo: awsMskClusterEncryptionInfo
+  enhancedMonitoring: String @search(by: [hash, regexp])
+  openMonitoringPrometheus: awsMskClusterOpenMonitoringPrometheus
+  loggingInfo: awsMskClusterLoggingInfo
+  numberOfBrokerNodes: Int @search
+  zookeeperConnectString: String @search(by: [hash, regexp])
+  zookeeperConnectStringTls: String @search(by: [hash, regexp])
+  storageMode: String @search(by: [hash, regexp])
+}
+
+type awsMskClusterServerlessVpcConfigs
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  subnetIds: [String] @search(by: [hash, regexp])
+  securityGroupIds: [String] @search(by: [hash, regexp])
+}
+
+type awsMskClusterServerlessSasl
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  iamEnabled: Boolean @search
+}
+
+type awsMskClusterServerlessClientAuthentication
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  sasl: awsMskClusterServerlessSasl
+}
+
+type awsMskClusterServerless
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  vpcConfigs: [awsMskClusterServerlessVpcConfigs]
+  serverlessClientAuthentication: awsMskClusterServerlessClientAuthentication
+}
+
+type awsMskCluster implements awsBaseService @key(fields: "arn") {
+  activeOperationArn: String @search(by: [hash, regexp])
+  clusterType: String @search(by: [hash, regexp])
+  clusterName: String @search(by: [hash, regexp])
+  creationTime: DateTime @search(by: [day])
+  currentVersion: String @search(by: [hash, regexp])
+  state: String @search(by: [hash, regexp])
+  stateInfo: awsMskClusterStateInfo
+  provisioned: awsMskClusterProvisioned
+  serverless: awsMskClusterServerless
+  tags: [awsRawTag]
+}
