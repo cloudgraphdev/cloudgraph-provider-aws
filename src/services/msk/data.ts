@@ -98,7 +98,7 @@ export default async ({
         ...customRetrySettings,
       })
 
-      return new Promise<void>(async resolveTransitGatewayData => {
+      return new Promise<void>(async resolveMskClusterData => {
         // Get Msk Cluster Data
         const mskClusters = await getMskClustersForRegion(kafka)
 
@@ -113,7 +113,7 @@ export default async ({
           }
         }
 
-        resolveTransitGatewayData()
+        resolveMskClusterData()
       })
     })
 
