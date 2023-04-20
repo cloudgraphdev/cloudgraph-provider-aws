@@ -140,7 +140,7 @@ export default async ({
       return new Promise<void>(async resolveAcmData => {
         // Get ACM certificate summaries
         const certificates = await getCertificatesForRegion(acm)
-        console.log('certificates.length =========> ', certificates.length);
+
         const tagsPromises = certificates.map(
           ({ CertificateArn: certificateArn }) => getTagsForCertificate(acm, certificateArn)
         )
