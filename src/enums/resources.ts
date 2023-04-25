@@ -1,4 +1,5 @@
 export default {
+  acm: 'aws_acm',
   alb: 'aws_lb',
   elb: 'aws_elb',
   vpc: 'aws_vpc',

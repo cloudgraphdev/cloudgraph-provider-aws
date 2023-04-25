@@ -244,6 +244,27 @@ export type AwsAccountRecoverySetting = {
   priority?: Maybe<Scalars['Int']>;
 };
 
+export type AwsAcm = AwsBaseService & {
+  createdAt?: Maybe<Scalars['DateTime']>;
+  domainName?: Maybe<Scalars['String']>;
+  exported?: Maybe<Scalars['Boolean']>;
+  extendedKeyUsages?: Maybe<Array<Maybe<Scalars['String']>>>;
+  hasAdditionalSubjectAlternativeNames?: Maybe<Scalars['Boolean']>;
+  importedAt?: Maybe<Scalars['DateTime']>;
+  inUse?: Maybe<Scalars['Boolean']>;
+  issuedAt?: Maybe<Scalars['DateTime']>;
+  keyAlgorithm?: Maybe<Scalars['String']>;
+  keyUsages?: Maybe<Array<Maybe<Scalars['String']>>>;
+  notAfter?: Maybe<Scalars['DateTime']>;
+  notBefore?: Maybe<Scalars['DateTime']>;
+  renewalEligibility?: Maybe<Scalars['String']>;
+  revokedAt?: Maybe<Scalars['DateTime']>;
+  status?: Maybe<Scalars['String']>;
+  subjectAlternativeNameSummaries?: Maybe<Array<Maybe<Scalars['String']>>>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  type?: Maybe<Scalars['String']>;
+};
+
 export type AwsAdditionalAuthenticationProvider = {
   authenticationType?: Maybe<Scalars['String']>;
   id: Scalars['String'];

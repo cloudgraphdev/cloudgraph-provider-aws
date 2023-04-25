@@ -11,6 +11,11 @@ export default {
     `❌ The region ${name} was not found in the list of supported AWS regions ❌`,
   globalAwsRegion: 'Found Global AWS region, adding global resources',
   /**
+   * ACM
+   */
+  fetchedAcmCertificates: (num: number): string =>
+    `Fetched ${num} ACM certificates`,
+  /**
    * IAM
    */
   fetchingIamPasswordPolicy:
