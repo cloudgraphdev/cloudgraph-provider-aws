@@ -3572,6 +3572,139 @@ export type AwsMixedInstancesPolicy = {
   launchTemplateVersion?: Maybe<Scalars['String']>;
 };
 
+export type AwsMskCluster = AwsBaseService & {
+  activeOperationArn?: Maybe<Scalars['String']>;
+  clusterName?: Maybe<Scalars['String']>;
+  clusterType?: Maybe<Scalars['String']>;
+  creationTime?: Maybe<Scalars['DateTime']>;
+  currentVersion?: Maybe<Scalars['String']>;
+  provisioned?: Maybe<AwsMskClusterProvisioned>;
+  serverless?: Maybe<AwsMskClusterServerless>;
+  state?: Maybe<Scalars['String']>;
+  stateInfo?: Maybe<AwsMskClusterStateInfo>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+};
+
+export type AwsMskClusterBrokerNodeGroupInfo = {
+  brokerAZDistribution?: Maybe<Scalars['String']>;
+  clientSubnets?: Maybe<Array<Maybe<Scalars['String']>>>;
+  connectivityInfo?: Maybe<AwsMskClusterBrokerNodeGroupInfoConnectivityInfo>;
+  ebsStorageInfo?: Maybe<AwsMskClusterBrokerNodeGroupInfoEbsStorageInfo>;
+  instanceType?: Maybe<Scalars['String']>;
+  securityGroups?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsMskClusterBrokerNodeGroupInfoConnectivityInfo = {
+  publicAccessType?: Maybe<Scalars['String']>;
+};
+
+export type AwsMskClusterBrokerNodeGroupInfoEbsStorageInfo = {
+  provisionedThroughputEnabled?: Maybe<Scalars['Boolean']>;
+  provisionedThroughputVolumeThroughput?: Maybe<Scalars['Int']>;
+  volumeSize?: Maybe<Scalars['Int']>;
+};
+
+export type AwsMskClusterClientAuthentication = {
+  sasl?: Maybe<AwsMskClusterClientAuthenticationSasl>;
+  tls?: Maybe<AwsMskClusterClientAuthenticationTls>;
+  unauthenticatedEnabled?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsMskClusterClientAuthenticationSasl = {
+  iamEnabled?: Maybe<Scalars['Boolean']>;
+  scramEnabled?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsMskClusterClientAuthenticationTls = {
+  certificateAuthorityArnList?: Maybe<Array<Maybe<Scalars['String']>>>;
+  enabled?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsMskClusterCurrentBrokerSoftwareInfo = {
+  configurationArn?: Maybe<Scalars['String']>;
+  configurationRevision?: Maybe<Scalars['Int']>;
+  kafkaVersion?: Maybe<Scalars['String']>;
+};
+
+export type AwsMskClusterEncryptionInfo = {
+  encryptionAtRest?: Maybe<AwsMskClusterEncryptionInfoAtRest>;
+  encryptionInTransit?: Maybe<AwsMskClusterEncryptionInfoInTransit>;
+};
+
+export type AwsMskClusterEncryptionInfoAtRest = {
+  dataVolumeKMSKeyId?: Maybe<Scalars['String']>;
+};
+
+export type AwsMskClusterEncryptionInfoInTransit = {
+  clientBroker?: Maybe<Scalars['String']>;
+  inCluster?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsMskClusterLoggingInfo = {
+  cloudWatchLogs?: Maybe<AwsMskClusterLoggingInfoCloudWatch>;
+  firehose?: Maybe<AwsMskClusterLoggingInfoFirehose>;
+  s3?: Maybe<AwsMskClusterLoggingInfoS3>;
+};
+
+export type AwsMskClusterLoggingInfoCloudWatch = {
+  enabled?: Maybe<Scalars['Boolean']>;
+  logGroup?: Maybe<Scalars['String']>;
+};
+
+export type AwsMskClusterLoggingInfoFirehose = {
+  deliveryStream?: Maybe<Scalars['String']>;
+  enabled?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsMskClusterLoggingInfoS3 = {
+  bucket?: Maybe<Scalars['String']>;
+  enabled?: Maybe<Scalars['Boolean']>;
+  prefix?: Maybe<Scalars['String']>;
+};
+
+export type AwsMskClusterOpenMonitoringPrometheus = {
+  jmxExporterEnabledInBroker?: Maybe<Scalars['Boolean']>;
+  nodeExporterInfoEnabledInBroker?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsMskClusterProvisioned = {
+  brokerNodeGroupInfo?: Maybe<AwsMskClusterBrokerNodeGroupInfo>;
+  clientAuthentication?: Maybe<AwsMskClusterClientAuthentication>;
+  currentBrokerSoftwareInfo?: Maybe<AwsMskClusterCurrentBrokerSoftwareInfo>;
+  encryptionInfo?: Maybe<AwsMskClusterEncryptionInfo>;
+  enhancedMonitoring?: Maybe<Scalars['String']>;
+  loggingInfo?: Maybe<AwsMskClusterLoggingInfo>;
+  numberOfBrokerNodes?: Maybe<Scalars['Int']>;
+  openMonitoringPrometheus?: Maybe<AwsMskClusterOpenMonitoringPrometheus>;
+  storageMode?: Maybe<Scalars['String']>;
+  zookeeperConnectString?: Maybe<Scalars['String']>;
+  zookeeperConnectStringTls?: Maybe<Scalars['String']>;
+};
+
+export type AwsMskClusterServerless = {
+  serverlessClientAuthentication?: Maybe<AwsMskClusterServerlessClientAuthentication>;
+  vpcConfigs?: Maybe<Array<Maybe<AwsMskClusterServerlessVpcConfigs>>>;
+};
+
+export type AwsMskClusterServerlessClientAuthentication = {
+  sasl?: Maybe<AwsMskClusterServerlessSasl>;
+};
+
+export type AwsMskClusterServerlessSasl = {
+  iamEnabled?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsMskClusterServerlessVpcConfigs = {
+  id: Scalars['String'];
+  securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  subnetIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsMskClusterStateInfo = {
+  code?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']>;
+};
+
 export type AwsNatGateway = AwsBaseService & {
   createTime?: Maybe<Scalars['String']>;
   dailyCost?: Maybe<AwsTotalBillingInfo>;

@@ -75,6 +75,7 @@ export default {
   [services.lambda]: 'awsLambda',
   [services.managedAirflow]: 'awsManagedAirflow',
   [services.managedPrefixList]: 'awsManagedPrefixList',
+  [services.mskCluster]: 'awsMskCluster',
   [services.nacl]: 'awsNetworkAcl',
   [services.nat]: 'awsNatGateway',
   [services.networkInterface]: 'awsNetworkInterface',
