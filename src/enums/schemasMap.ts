@@ -5,6 +5,7 @@ import services from './services'
  */
 export default {
   account: 'awsAccount',
+  [services.acm]: 'awsAcm',
   [services.alb]: 'awsAlb',
   [services.apiGatewayDomainName]: 'awsApiGatewayDomainName',
   [services.apiGatewayHttpApi]: 'awsApiGatewayHttpApi',
@@ -75,6 +76,7 @@ export default {
   [services.lambda]: 'awsLambda',
   [services.managedAirflow]: 'awsManagedAirflow',
   [services.managedPrefixList]: 'awsManagedPrefixList',
+  [services.mskCluster]: 'awsMskCluster',
   [services.nacl]: 'awsNetworkAcl',
   [services.nat]: 'awsNatGateway',
   [services.networkInterface]: 'awsNetworkInterface',

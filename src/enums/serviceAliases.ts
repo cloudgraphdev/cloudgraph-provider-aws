@@ -1,6 +1,7 @@
 import services from './services'
 
 export default {
+  [services.acm]: 'acms',
   [services.alb]: 'albs',
   [services.apiGatewayDomainName]: 'apiGatewayDomainNames',
   [services.apiGatewayHttpApi]: 'apiGatewayHttpApis',
@@ -53,6 +54,7 @@ export default {
   [services.lambda]: 'lambdaFunctions',
   [services.managedAirflow]: 'managedAirflows',
   [services.managedPrefixList]: 'managedPrefixLists',
+  [services.mskCluster]: 'mskCluster',
   [services.nat]: 'natGateway',
   [services.networkInterface]: 'networkInterfaces',
   [services.organization]: 'organizations',

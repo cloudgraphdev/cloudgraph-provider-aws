@@ -1,4 +1,5 @@
 export default {
+  acm: 'acm',
   alb: 'alb',
   apiGatewayDomainName: 'apiGatewayDomainName',
   apiGatewayHttpApi: 'apiGatewayHttpApi',
@@ -69,6 +70,7 @@ export default {
   lambda: 'lambda',
   managedAirflow: 'managedAirflow',
   managedPrefixList: 'managedPrefixList',
+  mskCluster: 'mskCluster',
   nacl: 'nacl',
   nat: 'nat',
   networkInterface: 'networkInterface',

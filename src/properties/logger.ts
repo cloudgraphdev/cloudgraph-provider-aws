@@ -11,6 +11,11 @@ export default {
     `❌ The region ${name} was not found in the list of supported AWS regions ❌`,
   globalAwsRegion: 'Found Global AWS region, adding global resources',
   /**
+   * ACM
+   */
+  fetchedAcmCertificates: (num: number): string =>
+    `Fetched ${num} ACM certificates`,
+  /**
    * IAM
    */
   fetchingIamPasswordPolicy:
@@ -702,4 +707,9 @@ export default {
   securityHubNotFound: (region: string): string => `Security Hub not found/disabled for region: ${region}`,
   fetchedSecurityHub: (region: string): string => `Security Hub found/enabled for region: ${region}`,
   fetchingSecurityHub: 'Fetching Security Hub data for this AWS account via the AWS SDK...',
+  /**
+   * Msk
+   */
+  fetchedMskClusters: (num: number): string =>
+    `Fetched ${num} Msk clusters`,
 }
