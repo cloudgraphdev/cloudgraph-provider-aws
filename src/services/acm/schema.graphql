@@ -1,0 +1,20 @@
+type awsAcm implements awsBaseService @key(fields: "arn") {
+  domainName: String @search(by: [hash, regexp])
+  subjectAlternativeNameSummaries: [String] @search(by: [hash, regexp])
+  hasAdditionalSubjectAlternativeNames: Boolean @search
+  status: String @search(by: [hash, regexp])
+  type: String @search(by: [hash, regexp])
+  keyAlgorithm: String @search(by: [hash, regexp])
+  keyUsages: [String] @search(by: [hash, regexp])
+  extendedKeyUsages: [String] @search(by: [hash, regexp])
+  inUse: Boolean @search
+  exported: Boolean @search
+  renewalEligibility: String @search(by: [hash, regexp])
+  notBefore: DateTime @search(by: [day])
+  notAfter: DateTime @search(by: [day])
+  createdAt: DateTime @search(by: [day])
+  issuedAt: DateTime @search(by: [day])
+  importedAt: DateTime @search(by: [day])
+  revokedAt: DateTime @search(by: [day])
+  tags: [awsRawTag]
+}

@@ -1,3 +1,19 @@
+# [0.87.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.86.1...0.87.0-alpha.1) (2023-04-25)
+
+
+### Features
+
+* **CG-1340:** support aws ACM service ([8a28932](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/8a28932544e079ad45ecb0fc071cdf5f42546fc2))
+* **CG-1341:** support aws msk cluster ([696e972](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/696e9727182328e701335ba6fbc81813f8657c66))
+
+## [0.86.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.86.0...0.86.1) (2023-03-15)
+
+
+### Bug Fixes
+
+* **services:** fix iam role data crash ([2219849](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/2219849c1a0c3bb5b6c99901e0e945520b67a4d1))
+* **services:** whitespace fixs ([d21b273](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d21b273a8d1002fe6dbb998bc2ffef1294dc44d3))
+
 ## [0.86.1-beta.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.86.0...0.86.1-beta.1) (2023-03-15)
 
 
