@@ -1,0 +1,76 @@
+type awsOpsWorksAppDataSource
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  type: String @search(by: [hash, regexp])
+  arn: String @search(by: [hash, regexp])
+  databaseName: String @search(by: [hash, regexp])
+}
+
+type awsOpsWorksAppSource
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  type: String @search(by: [hash, regexp])
+  url: String @search(by: [hash, regexp])
+  username: String @search(by: [hash, regexp])
+  password: String @search(by: [hash, regexp])
+  sshKey: String @search(by: [hash, regexp])
+  revision: String @search(by: [hash, regexp])
+}
+
+type awsOpsWorksAppSslConfiguration
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  certificate: String @search(by: [hash, regexp])
+  privateKey: String @search(by: [hash, regexp])
+  chain: String @search(by: [hash, regexp])
+}
+
+type awsOpsWorksAppAttribute
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  key: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
+}
+
+type awsOpsWorksAppEnvironment
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  key: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
+  secure: Boolean @search
+}
+
+type awsOpsWorksApp implements awsBaseService @key(fields: "arn") {
+  stackId: String @search(by: [hash, regexp])
+  shortname: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  dataSources: [awsOpsWorksAppDataSource]
+  type: String @search(by: [hash, regexp])
+  appSource: awsOpsWorksAppSource
+  domains: [String] @search(by: [hash, regexp])
+  enableSsl: Boolean @search
+  sslConfiguration: awsOpsWorksAppSslConfiguration
+  attributes: [awsOpsWorksAppAttribute]
+  createdAt: String @search(by: [hash, regexp])
+  environment: [awsOpsWorksAppEnvironment]
+  opsWorksStacks: [awsOpsWorksStack] @hasInverse(field: opsWorksApps)
+}

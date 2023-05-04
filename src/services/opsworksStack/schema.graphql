@@ -1,0 +1,69 @@
+type awsOpsWorksStackAttribute
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  key: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
+}
+
+type awsOpsWorksStackConfigurationManager
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  name: String @search(by: [hash, regexp])
+  version: String @search(by: [hash, regexp])
+}
+
+type awsOpsWorksStackChefConfiguration
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  manageBerkshelf: Boolean @search
+  berkshelfVersion: String @search(by: [hash, regexp])
+}
+
+type awsOpsWorksStackCustomCookbooksSource
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  type: String @search(by: [hash, regexp])
+  url: String @search(by: [hash, regexp])
+  username: String @search(by: [hash, regexp])
+  password: String @search(by: [hash, regexp])
+  sshKey: String @search(by: [hash, regexp])
+  revision: String @search(by: [hash, regexp])
+}
+
+type awsOpsWorksStack implements awsBaseService @key(fields: "arn") {
+  vpcId: String @search(by: [hash, regexp])
+  attributes: [awsOpsWorksStackAttribute]
+  serviceRoleArn: String @search(by: [hash, regexp])
+  defaultInstanceProfileArn: String @search(by: [hash, regexp])
+  defaultOs: String @search(by: [hash, regexp])
+  hostnameTheme: String @search(by: [hash, regexp])
+  defaultAvailabilityZone: String @search(by: [hash, regexp])
+  defaultSubnetId: String @search(by: [hash, regexp])
+  customJson: String @search(by: [hash, regexp])
+  configurationManager: awsOpsWorksStackConfigurationManager
+  chefConfiguration: awsOpsWorksStackChefConfiguration
+  useCustomCookbooks: Boolean @search
+  useOpsworksSecurityGroups: Boolean @search
+  customCookbooksSource: awsOpsWorksStackCustomCookbooksSource
+  defaultSshKeyName: String @search(by: [hash, regexp])
+  createdAt: String @search(by: [hash, regexp])
+  defaultRootDeviceType: String @search(by: [hash, regexp])
+  agentVersion: String @search(by: [hash, regexp])
+  opsWorksInstances: [awsOpsWorksInstance] @hasInverse(field: opsWorksStacks)
+  opsWorksApps: [awsOpsWorksApp] @hasInverse(field: opsWorksStacks)
+  subnets: [awsSubnet] @hasInverse(field: opsWorksStacks)
+  vpc: [awsVpc] @hasInverse(field: opsWorksStacks)
+}

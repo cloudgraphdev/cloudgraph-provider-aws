@@ -702,4 +702,13 @@ export default {
   securityHubNotFound: (region: string): string => `Security Hub not found/disabled for region: ${region}`,
   fetchedSecurityHub: (region: string): string => `Security Hub found/enabled for region: ${region}`,
   fetchingSecurityHub: 'Fetching Security Hub data for this AWS account via the AWS SDK...',
+  /**
+   * OpsWorks
+   */
+  fetchedOpsWorksStacks: (num: number): string =>
+    `Fetched ${num} OpsWorks Stacks`,
+  fetchedOpsWorksInstances: (num: number): string =>
+    `Fetched ${num} OpsWorks Instances`,
+  fetchedOpsWorksApps: (num: number): string =>
+    `Fetched ${num} OpsWorks Apps`,
 }

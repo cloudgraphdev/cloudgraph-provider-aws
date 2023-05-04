@@ -1,0 +1,83 @@
+type awsOpsWorksInstanceBlockDeviceMappingEbs
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  snapshotId: String @search(by: [hash, regexp])
+  iops: Int @search
+  volumeSize: Int @search 
+  volumeType: String @search(by: [hash, regexp])
+  deleteOnTermination: Boolean @search
+}
+
+type awsOpsWorksInstanceBlockDeviceMapping
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id @search(by: [hash])
+  deviceName: String @search(by: [hash, regexp])
+  noDevice: String @search(by: [hash, regexp])
+  virtualName: String @search(by: [hash, regexp])
+  ebs: awsOpsWorksInstanceBlockDeviceMappingEbs
+}
+
+type awsOpsWorksInstanceReportedOs
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  family: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  version: String @search(by: [hash, regexp])
+}
+
+type awsOpsWorksInstance implements awsBaseService @key(fields: "arn") {
+  agentVersion: String @search(by: [hash, regexp])
+  amiId: String @search(by: [hash, regexp])
+  architecture: String @search(by: [hash, regexp])
+  autoScalingType: String @search(by: [hash, regexp])
+  availabilityZone: String @search(by: [hash, regexp])
+  blockDeviceMappings: [awsOpsWorksInstanceBlockDeviceMapping]
+  createdAt: String @search(by: [hash, regexp])
+  ebsOptimized: Boolean @search
+  ec2InstanceId: String @search(by: [hash, regexp])
+  ecsClusterArn: String @search(by: [hash, regexp])
+  ecsContainerInstanceArn: String @search(by: [hash, regexp])
+  elasticIp: String @search(by: [hash, regexp])
+  hostname: String @search(by: [hash, regexp])
+  infrastructureClass: String @search(by: [hash, regexp])
+  installUpdatesOnBoot: Boolean @search
+  instanceId: String @search(by: [hash, regexp])
+  instanceProfileArn: String @search(by: [hash, regexp])
+  instanceType: String @search(by: [hash, regexp])
+  lastServiceErrorId: String @search(by: [hash, regexp])
+  layerIds: [String] @search(by: [hash, regexp])
+  os: String @search(by: [hash, regexp])
+  platform: String @search(by: [hash, regexp])
+  privateDns: String @search(by: [hash, regexp])
+  privateIp: String @search(by: [hash, regexp])
+  publicDns: String @search(by: [hash, regexp])
+  publicIp: String @search(by: [hash, regexp])
+  registeredBy: String @search(by: [hash, regexp])
+  reportedAgentVersion: String @search(by: [hash, regexp])
+  reportedOs: awsOpsWorksInstanceReportedOs
+  rootDeviceType: String @search(by: [hash, regexp])
+  rootDeviceVolumeId: String @search(by: [hash, regexp])
+  securityGroupIds: [String] @search(by: [hash, regexp])
+  sshHostDsaKeyFingerprint: String @search(by: [hash, regexp])
+  sshHostRsaKeyFingerprint: String @search(by: [hash, regexp])
+  sshKeyName: String @search(by: [hash, regexp])
+  stackId: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
+  subnetId: String @search(by: [hash, regexp])
+  tenancy: String @search(by: [hash, regexp])
+  virtualizationType: String @search(by: [hash, regexp])
+  opsWorksStacks: [awsOpsWorksStack] @hasInverse(field: opsWorksInstances)
+  subnets: [awsSubnet] @hasInverse(field: opsWorksInstances)
+  securityGroups: [awsSecurityGroup] @hasInverse(field: opsWorksInstances)
+  ec2Instance: [awsEc2] @hasInverse(field: opsWorksInstances)
+}

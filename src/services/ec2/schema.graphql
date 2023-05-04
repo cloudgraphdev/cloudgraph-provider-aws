@@ -116,6 +116,7 @@ type awsEc2 implements awsBaseService @key(fields: "arn") {
   iamInstanceProfile: [awsIamInstanceProfile] @hasInverse(field: ec2Instances)
   iamRole: [awsIamRole] @hasInverse(field: ec2Instances)
   networkInterfaces: [awsNetworkInterface] @hasInverse(field: ec2Instance)
+  opsWorksInstances: [awsOpsWorksInstance] @hasInverse(field: ec2Instance)
   securityGroups: [awsSecurityGroup] @hasInverse(field: ec2Instance)
   subnets: [awsSubnet] @hasInverse(field: ec2Instances)
   systemsManagerInstance: [awsSystemsManagerInstance] @hasInverse(field: ec2Instance)

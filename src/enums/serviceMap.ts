@@ -47,6 +47,9 @@ import Lambda from '../services/lambda'
 import NATGateway from '../services/natGateway'
 import NetworkAcl from '../services/nacl'
 import NetworkInterface from '../services/networkInterface'
+import OpsWorksApp from '../services/opsworksApp'
+import OpsWorksStack from '../services/opsworksStack'
+import OpsWorksInstance from '../services/opsworksInstance'
 import RDSCluster from '../services/rdsCluster'
 import RDSDbInstance from '../services/rdsDbInstance'
 import RedshiftCluster from '../services/redshift'
@@ -167,6 +170,9 @@ export default {
   [services.nacl]: NetworkAcl,
   [services.nat]: NATGateway,
   [services.networkInterface]: NetworkInterface,
+  [services.opsWorksApp]: OpsWorksApp,
+  [services.opsWorksStack]: OpsWorksStack,
+  [services.opsWorksInstance]: OpsWorksInstance,
   [services.sg]: AwsSecurityGroup,
   [services.subnet]: AwsSubnet,
   [services.vpc]: VPC,
