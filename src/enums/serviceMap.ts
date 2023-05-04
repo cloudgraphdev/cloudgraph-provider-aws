@@ -1,4 +1,5 @@
 import Account from '../services/account'
+import ACM from '../services/acm'
 import ALB from '../services/alb'
 import APIGatewayResource from '../services/apiGatewayResource'
 import APIGatewayRestApi from '../services/apiGatewayRestApi'
@@ -105,6 +106,7 @@ import VpcEndpoint from '../services/vpcEndpoint'
 import APIGatewayDomainName from '../services/apiGatewayDomainName'
 import APIGatewayHttpApi from '../services/apiGatewayHttpApi'
 import ManagedPrefixList from '../services/managedPrefixList'
+import MskCluster from '../services/msk'
 import TransitGatewayRouteTable from '../services/transitGatewayRouteTable'
 import VpcPeeringConnection from '../services/vpcPeeringConnection'
 
@@ -115,6 +117,7 @@ import VpcPeeringConnection from '../services/vpcPeeringConnection'
 export default {
   account: Account,
   [services.appSync]: AppSync,
+  [services.acm]: ACM,
   [services.alb]: ALB,
   [services.apiGatewayDomainName]: APIGatewayDomainName,
   [services.apiGatewayHttpApi]: APIGatewayHttpApi,
@@ -167,6 +170,7 @@ export default {
   [services.lambda]: Lambda,
   [services.managedAirflow]: ManagedAirflow,
   [services.managedPrefixList]: ManagedPrefixList,
+  [services.mskCluster]: MskCluster,
   [services.nacl]: NetworkAcl,
   [services.nat]: NATGateway,
   [services.networkInterface]: NetworkInterface,
