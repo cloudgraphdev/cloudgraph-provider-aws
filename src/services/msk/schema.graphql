@@ -234,4 +234,6 @@ type awsMskCluster implements awsBaseService @key(fields: "arn") {
   provisioned: awsMskClusterProvisioned
   serverless: awsMskClusterServerless
   tags: [awsRawTag]
+  subnets: [awsSubnet] @hasInverse(field: mskClusters)
+  securityGroups: [awsSecurityGroup] @hasInverse(field: mskClusters)
 }

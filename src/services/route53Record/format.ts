@@ -2,6 +2,10 @@ import { AwsRoute53Record } from '../../types/generated'
 import { RawAwsRoute53Record } from './data'
 import { getHostedZoneId, getRecordId } from '../../utils/ids'
 
+// Normalize name due special chars like '*' are replaced with '\\052'
+const normalizeName = (name: string): string =>
+  name?.replace(/\\052/g, '*').slice(0, -1)
+
 /**
  * Route53 Record
  */
@@ -24,8 +28,14 @@ export default ({
     SetIdentifier: identifier = '',
   } = rawData
 
+  const normalizedName = normalizeName(name)
   const hostedZoneId = getHostedZoneId(Id)
-  const id = getRecordId({ hostedZoneId, name, type, identifier })
+  const id = getRecordId({
+    hostedZoneId,
+    name: normalizedName,
+    type,
+    identifier,
+  })
 
   // Resource records
   const resourceRecords = records.map(({ Value }) => Value)
@@ -34,7 +44,7 @@ export default ({
     id,
     accountId: account,
     zoneId: hostedZoneId,
-    name,
+    name: normalizedName,
     setIdentifier: identifier,
     type,
     ttl,
