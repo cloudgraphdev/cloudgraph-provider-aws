@@ -1,10 +1,16 @@
+import { isEmpty } from 'lodash'
 import { AwsRoute53Record } from '../../types/generated'
-import { RawAwsRoute53Record } from './data'
 import { getHostedZoneId, getRecordId } from '../../utils/ids'
+import { RawAwsRoute53Record } from './data'
 
 // Normalize name due special chars like '*' are replaced with '\\052'
-const normalizeName = (name: string): string =>
-  name?.replace(/\\052/g, '*').slice(0, -1)
+const normalizeName = (name: string): string => {
+  if (isEmpty(name)) return ''
+  const normalizedName = name.replace(/\\052/g, '*')
+  return normalizedName.endsWith('.')
+    ? normalizedName.slice(0, -1)
+    : normalizedName
+}
 
 /**
  * Route53 Record
