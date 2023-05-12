@@ -1,3 +1,15 @@
+# [0.88.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.88.0-alpha.1...0.88.0-alpha.2) (2023-05-12)
+
+
+### Bug Fixes
+
+* **aws:** minor change to normalize name ([07a9c02](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/07a9c027d5a0946365ebe46ac18bbae72ad7d7b9))
+
+
+### Features
+
+* **aws:** Added some adjustment needed for TF ([fb8b1c5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/fb8b1c5af21999756c4c2720e9cb6fb5e60e858d))
+
 # [0.88.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.87.0...0.88.0-alpha.1) (2023-05-03)
 
 
