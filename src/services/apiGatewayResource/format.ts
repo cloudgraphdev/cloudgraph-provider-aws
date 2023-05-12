@@ -15,7 +15,7 @@ export default ({
   region: string
   account: string
 }): AwsAGResourceType => {
-  const { id, path, resourceMethods = {} } = service
+  const { id, path, restApiId, resourceMethods = {} } = service
 
   const arn = apiGatewayResourceArn({
     restApiArn: apiGatewayArn({ region: service.region }),
@@ -39,5 +39,6 @@ export default ({
     region,
     path,
     methods,
+    restApiId
   }
 }
