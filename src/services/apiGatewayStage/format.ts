@@ -22,6 +22,7 @@ export default ({
     variables: vars = {},
     tags = {},
     region,
+    restApiId
   } = service
 
   const variables = Object.entries(vars).map(([k, v]) => ({
@@ -45,5 +46,6 @@ export default ({
     xrayTracing: tracingEnabled,
     variables,
     tags: formatTagsFromMap(tags),
+    restApiId
   }
 }

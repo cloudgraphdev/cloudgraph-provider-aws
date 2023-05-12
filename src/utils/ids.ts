@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash'
 import kebabCase from 'lodash/kebabCase'
 import last from 'lodash/last'
 
@@ -18,9 +19,9 @@ export const getRecordId = ({
   type: string
   identifier: string
 }): string =>
-  `${hostedZoneId}_${name}-${type}${identifier}-${kebabCase(
-    resources.route53ZRecord
-  )}`
+  !isEmpty(identifier)
+    ? `${hostedZoneId}_${name}_${type}_${identifier}`
+    : `${hostedZoneId}_${name}_${type}`
 
 export const gets3BucketId = (id: string): string =>
   `${id}-${kebabCase(resources.s3Bucket)}`
