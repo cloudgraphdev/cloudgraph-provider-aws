@@ -202,6 +202,7 @@ export type AwsAccount = AwsOptionalService & {
   lambdaFunctions?: Maybe<Array<Maybe<AwsLambda>>>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
   managedPrefixLists?: Maybe<Array<Maybe<AwsManagedPrefixList>>>;
+  mskClusters?: Maybe<Array<Maybe<AwsMskCluster>>>;
   nacl?: Maybe<Array<Maybe<AwsNetworkAcl>>>;
   natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   networkInterfaces?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
@@ -390,6 +391,7 @@ export type AwsApiGatewayResource = AwsBaseService & {
   methods?: Maybe<Array<Maybe<AwsApiGatewayMethod>>>;
   path?: Maybe<Scalars['String']>;
   restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
+  restApiId?: Maybe<Scalars['String']>;
 };
 
 export type AwsApiGatewayRestApi = AwsBaseService & {
@@ -417,6 +419,7 @@ export type AwsApiGatewayStage = AwsBaseService & {
   documentationVersion?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   restApi?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
+  restApiId?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   variables?: Maybe<Array<Maybe<AwsApiGatewayStageVariable>>>;
   webAcl?: Maybe<Array<Maybe<AwsWafV2WebAcl>>>;
@@ -3600,9 +3603,11 @@ export type AwsMskCluster = AwsBaseService & {
   creationTime?: Maybe<Scalars['DateTime']>;
   currentVersion?: Maybe<Scalars['String']>;
   provisioned?: Maybe<AwsMskClusterProvisioned>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   serverless?: Maybe<AwsMskClusterServerless>;
   state?: Maybe<Scalars['String']>;
   stateInfo?: Maybe<AwsMskClusterStateInfo>;
+  subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
 };
 
@@ -4234,6 +4239,7 @@ export type AwsSecurityGroup = AwsBaseService & {
   inboundRules?: Maybe<Array<Maybe<AwsSgInboundRule>>>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
+  mskClusters?: Maybe<Array<Maybe<AwsMskCluster>>>;
   name?: Maybe<Scalars['String']>;
   networkInterfaces?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
   outboundRuleCount?: Maybe<Scalars['Int']>;
@@ -4374,6 +4380,7 @@ export type AwsSubnet = AwsBaseService & {
   ipV6Cidr?: Maybe<Scalars['String']>;
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
+  mskClusters?: Maybe<Array<Maybe<AwsMskCluster>>>;
   nacls?: Maybe<Array<Maybe<AwsNetworkAcl>>>;
   natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;

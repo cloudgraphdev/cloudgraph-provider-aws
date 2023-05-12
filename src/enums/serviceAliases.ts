@@ -54,7 +54,7 @@ export default {
   [services.lambda]: 'lambdaFunctions',
   [services.managedAirflow]: 'managedAirflows',
   [services.managedPrefixList]: 'managedPrefixLists',
-  [services.mskCluster]: 'mskCluster',
+  [services.mskCluster]: 'mskClusters',
   [services.nat]: 'natGateway',
   [services.networkInterface]: 'networkInterfaces',
   [services.organization]: 'organizations',

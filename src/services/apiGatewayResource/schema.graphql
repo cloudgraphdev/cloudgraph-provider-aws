@@ -7,6 +7,7 @@ type awsApiGatewayMethod @key(fields: "arn") {
 }
 
 type awsApiGatewayResource implements awsBaseService @key(fields: "arn") {
+  restApiId: String @search(by: [hash, regexp])
   restApi: [awsApiGatewayRestApi] @hasInverse(field: resources) #change to plural
   path: String @search(by: [hash, regexp])
   methods: [awsApiGatewayMethod]

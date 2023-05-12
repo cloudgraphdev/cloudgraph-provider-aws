@@ -1,3 +1,30 @@
+# [0.88.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.88.0-alpha.1...0.88.0-alpha.2) (2023-05-12)
+
+
+### Bug Fixes
+
+* **aws:** minor change to normalize name ([07a9c02](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/07a9c027d5a0946365ebe46ac18bbae72ad7d7b9))
+
+
+### Features
+
+* **aws:** Added some adjustment needed for TF ([fb8b1c5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/fb8b1c5af21999756c4c2720e9cb6fb5e60e858d))
+
+# [0.88.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.87.0...0.88.0-alpha.1) (2023-05-03)
+
+
+### Features
+
+* add new regions ([d1bd407](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d1bd40793f018fbb95202b9e319057348fadd153))
+
+# [0.87.0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.86.1...0.87.0) (2023-04-28)
+
+
+### Features
+
+* **CG-1340:** support aws ACM service ([8a28932](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/8a28932544e079ad45ecb0fc071cdf5f42546fc2))
+* **CG-1341:** support aws msk cluster ([696e972](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/696e9727182328e701335ba6fbc81813f8657c66))
+
 # [0.87.0-beta.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.86.1...0.87.0-beta.1) (2023-04-28)
 
 
