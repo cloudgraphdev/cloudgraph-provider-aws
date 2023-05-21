@@ -712,4 +712,13 @@ export default {
    */
   fetchedMskClusters: (num: number): string =>
     `Fetched ${num} Msk clusters`,
+  /**
+   * SSM
+   */
+  fetchedSsmActivations: (num: number): string =>
+    `Fetched ${num} SSM Activations`,
+  fetchedSsmAssociations: (num: number): string =>
+    `Fetched ${num} SSM Associations`,
+  fetchedSsmDocuments: (num: number): string =>
+    `Fetched ${num} SSM Documents`,
 }

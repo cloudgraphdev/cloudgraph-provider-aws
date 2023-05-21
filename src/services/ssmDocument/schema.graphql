@@ -1,0 +1,28 @@
+type awsSsmDocumentRequires
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  name: String @search(by: [hash, regexp])
+  version: String @search(by: [hash, regexp])
+}
+
+type awsSsmDocument implements awsBaseService @key(fields: "arn") {
+  name: String @search(by: [hash, regexp])
+  createdDate: DateTime @search(by: [day])
+  displayName: String @search(by: [hash, regexp])
+  owner: String @search(by: [hash, regexp])
+  versionName: String @search(by: [hash, regexp])
+  platformTypes: [String] @search(by: [hash, regexp])
+  documentVersion: String @search(by: [hash, regexp])
+  documentType: String @search(by: [hash, regexp])
+  schemaVersion: String @search(by: [hash, regexp])
+  documentFormat: String @search(by: [hash, regexp])
+  targetType: String @search(by: [hash, regexp])
+  requires: [awsSsmDocumentRequires]
+  reviewStatus: String @search(by: [hash, regexp])
+  author: String @search(by: [hash, regexp])
+  tags: [awsRawTag]
+}

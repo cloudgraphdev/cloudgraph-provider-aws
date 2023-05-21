@@ -110,5 +110,8 @@ export default {
   [services.vpnConnection]: 'awsVpnConnection',
   [services.organization]: 'awsOrganization',
   [services.wafV2WebAcl]: 'awsWafV2WebAcl',
+  [services.ssmActivation]: 'awsSsmActivation',
+  [services.ssmAssociation]: 'awsSsmAssociation',
+  [services.ssmDocument]: 'awsSsmDocument',
   tag: 'awsTag',
 }

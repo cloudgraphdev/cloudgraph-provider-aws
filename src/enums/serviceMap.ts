@@ -106,6 +106,9 @@ import ManagedPrefixList from '../services/managedPrefixList'
 import MskCluster from '../services/msk'
 import TransitGatewayRouteTable from '../services/transitGatewayRouteTable'
 import VpcPeeringConnection from '../services/vpcPeeringConnection'
+import SsmActivation from '../services/ssmActivation'
+import SsmAssociation from '../services/ssmAssociation'
+import SsmDocument from '../services/ssmDocument'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -218,5 +221,8 @@ export default {
   [services.wafV2WebAcl]: WafV2WebAcl,
   [services.systemsManagerInstance]: SystemsManagerInstance,
   [services.systemsManagerDocument]: SystemsManagerDocument,
+  [services.ssmActivation]: SsmActivation,
+  [services.ssmAssociation]: SsmAssociation,
+  [services.ssmDocument]: SsmDocument,
   tag: AwsTag,
 }

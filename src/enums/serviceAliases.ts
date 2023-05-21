@@ -80,4 +80,7 @@ export default {
   [services.vpcEndpoint]: 'vpcEndpoints',
   [services.vpnConnection]: 'vpnConnections',
   [services.vpcPeeringConnection]: 'vpcPeeringConnections',
+  [services.ssmActivation]: 'ssmActivations',
+  [services.ssmAssociation]: 'ssmAssociations',
+  [services.ssmDocument]: 'ssmDocuments',
 }

@@ -1,0 +1,58 @@
+type awsSsmAssociationTargets
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  key: String @search(by: [hash, regexp])
+  value: [String] @search(by: [hash, regexp])
+}
+
+type awsSsmAssociationOverviewStatusAggregatedCount
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  key: String @search(by: [hash, regexp])
+  value: Int @search
+}
+
+type awsSsmAssociationOverview
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  status: String @search(by: [hash, regexp])
+  detailedStatus: String @search(by: [hash, regexp])
+  associationStatusAggregatedCount: [awsSsmAssociationOverviewStatusAggregatedCount]
+}
+
+type awsSsmAssociationTargetMaps
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  key: String @search(by: [hash, regexp])
+  value: [String] @search(by: [hash, regexp])
+}
+
+type awsSsmAssociation implements awsBaseService @key(fields: "arn") {
+    documentArn: String @search(by: [hash, regexp])
+    instanceId: String @search(by: [hash, regexp])
+    associationId: String @search(by: [hash, regexp])
+    associationVersion: String @search(by: [hash, regexp])
+    documentVersion: String @search(by: [hash, regexp])
+    targets: [awsSsmAssociationTargets]
+    lastExecutionDate: DateTime @search(by: [day])
+    overview: awsSsmAssociationOverview
+    scheduleExpression: String @search(by: [hash, regexp])
+    associationName: String @search(by: [hash, regexp])
+    scheduleOffset: Int @search
+    targetMaps: [awsSsmAssociationTargetMaps]
+}

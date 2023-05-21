@@ -41,6 +41,9 @@ export default {
   ec2Instance: 'aws_instance',
   iamPolicies: 'aws_iam_polocies', // Not a real TF resource, used to organize all the policies
   route53Zone: 'aws_route53_zone',
+  ssmActivation: 'aws_ssm_activation',
+  ssmAssociation: 'aws_ssm_association',
+  ssmDocument: 'aws_ssm_document',
   organization: 'aws_organizations_organization',
   vpnConnection: 'aws_vpn_connection',
   ecrRepository: 'aws_ecr_repository',
