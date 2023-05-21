@@ -1,4 +1,4 @@
-type awsSsmAssociationTargets
+type awsSystemManagerAssociationTargets
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
@@ -9,7 +9,7 @@ type awsSsmAssociationTargets
   value: [String] @search(by: [hash, regexp])
 }
 
-type awsSsmAssociationOverviewStatusAggregatedCount
+type awsSystemManagerAssociationOverviewStatusAggregatedCount
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
@@ -20,7 +20,7 @@ type awsSsmAssociationOverviewStatusAggregatedCount
   value: Int @search
 }
 
-type awsSsmAssociationOverview
+type awsSystemManagerAssociationOverview
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
@@ -28,10 +28,10 @@ type awsSsmAssociationOverview
   ) {
   status: String @search(by: [hash, regexp])
   detailedStatus: String @search(by: [hash, regexp])
-  associationStatusAggregatedCount: [awsSsmAssociationOverviewStatusAggregatedCount]
+  associationStatusAggregatedCount: [awsSystemManagerAssociationOverviewStatusAggregatedCount]
 }
 
-type awsSsmAssociationTargetMaps
+type awsSystemManagerAssociationTargetMaps
   @generate(
     query: { get: false, query: true, aggregate: false }
     mutation: { add: false, delete: false }
@@ -42,17 +42,17 @@ type awsSsmAssociationTargetMaps
   value: [String] @search(by: [hash, regexp])
 }
 
-type awsSsmAssociation implements awsBaseService @key(fields: "arn") {
+type awsSystemManagerAssociation implements awsBaseService @key(fields: "arn") {
     documentArn: String @search(by: [hash, regexp])
     instanceId: String @search(by: [hash, regexp])
     associationId: String @search(by: [hash, regexp])
     associationVersion: String @search(by: [hash, regexp])
     documentVersion: String @search(by: [hash, regexp])
-    targets: [awsSsmAssociationTargets]
+    targets: [awsSystemManagerAssociationTargets]
     lastExecutionDate: DateTime @search(by: [day])
-    overview: awsSsmAssociationOverview
+    overview: awsSystemManagerAssociationOverview
     scheduleExpression: String @search(by: [hash, regexp])
     associationName: String @search(by: [hash, regexp])
     scheduleOffset: Int @search
-    targetMaps: [awsSsmAssociationTargetMaps]
+    targetMaps: [awsSystemManagerAssociationTargetMaps]
 }

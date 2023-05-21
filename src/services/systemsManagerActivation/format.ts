@@ -1,17 +1,17 @@
-import { RawAwsSsmActivation } from './data'
-import { AwsSsmActivation } from '../../types/generated'
+import { RawAwsSystemManagerActivation } from './data'
+import { AwsSystemManagerActivation } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
-import { ssmActivationArn } from '../../utils/generateArns'
+import { systemManagerActivationArn } from '../../utils/generateArns'
 
 export default ({
   service,
   account,
   region,
 }: {
-  service: RawAwsSsmActivation
+  service: RawAwsSystemManagerActivation
   account: string
   region: string
-}): AwsSsmActivation => {
+}): AwsSystemManagerActivation => {
   const {
     ActivationId: activationId,
     Description: description,
@@ -25,7 +25,7 @@ export default ({
     Tags: tags,
   } = service
 
-  const arn = ssmActivationArn({ region, account, id: activationId })
+  const arn = systemManagerActivationArn({ region, account, id: activationId })
 
   return {
     id: activationId,

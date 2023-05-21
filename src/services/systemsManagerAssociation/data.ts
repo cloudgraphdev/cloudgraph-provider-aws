@@ -12,7 +12,7 @@ import { API_GATEWAY_CUSTOM_DELAY } from '../../config/constants'
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const MAX_ACTIVATIONS = 50
-const serviceName = 'ssmAssociations'
+const serviceName = 'systemsManagerDocumentAssociations'
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({
@@ -20,7 +20,7 @@ const customRetrySettings = setAwsRetryOptions({
 })
 
 /**
- * SSM Association
+ * SystemsManagerAssociation
  */
 
 export const getAssociationsForRegion = async (
@@ -56,7 +56,7 @@ export const getAssociationsForRegion = async (
               return resolve([])
             }
 
-            logger.debug(lt.fetchedSsmAssociations(items.length))
+            logger.debug(lt.fetchedSystemManagersAssociations(items.length))
 
             associationList.push(...items)
 
@@ -74,7 +74,7 @@ export const getAssociationsForRegion = async (
     listAllAssociations()
   })
 
-export interface RawAwsSsmAssociation extends Association {
+export interface RawAwsSystemManagerAssociation extends Association {
   region: string
   account
 }
@@ -88,10 +88,10 @@ export default async ({
   regions: string
   config: Config
 }): Promise<{
-  [region: string]: RawAwsSsmAssociation[]
+  [region: string]: RawAwsSystemManagerAssociation[]
 }> =>
   new Promise(async resolve => {
-    const associationsResult: RawAwsSsmAssociation[] = []
+    const associationsResult: RawAwsSystemManagerAssociation[] = []
 
     const regionPromises = regions.split(',').map(region => {
       const ssm = new SSM({
@@ -101,8 +101,8 @@ export default async ({
         ...customRetrySettings,
       })
 
-      return new Promise<void>(async resolveSsmAssociationData => {
-        // Get SSM Associations
+      return new Promise<void>(async resolveSystemManagerAssociationData => {
+        // Get SystemManager Association
         const associations = await getAssociationsForRegion(ssm)
 
         if (!isEmpty(associations)) {
@@ -115,7 +115,7 @@ export default async ({
           )
         }
 
-        resolveSsmAssociationData()
+        resolveSystemManagerAssociationData()
       })
     })
 

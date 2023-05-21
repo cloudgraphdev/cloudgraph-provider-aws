@@ -1,5 +1,5 @@
 import CloudGraph from '@cloudgraph/sdk'
-import SSM, { DocumentIdentifier, ListDocumentsRequest, ListDocumentsResult } from 'aws-sdk/clients/ssm'
+import SSM, { Activation, DescribeActivationsRequest, DescribeActivationsResult } from 'aws-sdk/clients/ssm'
 import { AWSError } from 'aws-sdk/lib/error'
 import { Config } from 'aws-sdk/lib/config'
 import isEmpty from 'lodash/isEmpty'
@@ -14,7 +14,7 @@ import { convertAwsTagsToTagMap } from '../../utils/format'
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const MAX_ACTIVATIONS = 50
-const serviceName = 'ssmDocuments'
+const serviceName = 'systemsManagerDocumentActivations'
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const customRetrySettings = setAwsRetryOptions({
@@ -22,28 +22,28 @@ const customRetrySettings = setAwsRetryOptions({
 })
 
 /**
- * SSM Documents
+ * SystemsManagerActivation
  */
 
-export const getDocumentsForRegion = async (
+export const getActivationsForRegion = async (
   ssm: SSM
-): Promise<DocumentIdentifier[]> =>
+): Promise<Activation[]> =>
   new Promise(async resolve => {
-    const documentList: DocumentIdentifier[] = []
+    const activationList: Activation[] = []
 
-    const listCertificatesOpts: ListDocumentsRequest = {}
-    const listAllDocuments = (token?: string): void => {
-      listCertificatesOpts.MaxResults = MAX_ACTIVATIONS
+    const describeActivationsOpts: DescribeActivationsRequest = {}
+    const listAllActivations = (token?: string): void => {
+      describeActivationsOpts.MaxResults = MAX_ACTIVATIONS
       if (token) {
-        listCertificatesOpts.NextToken = token
+        describeActivationsOpts.NextToken = token
       }
       try {
-        ssm.listDocuments(
-          listCertificatesOpts,
-          (err: AWSError, data: ListDocumentsResult) => {
+        ssm.describeActivations(
+          describeActivationsOpts,
+          (err: AWSError, data: DescribeActivationsResult) => {
             if (err) {
               errorLog.generateAwsErrorLog({
-                functionName: 'ssm:listDocuments',
+                functionName: 'ssm:describeActivations',
                 err,
               })
             }
@@ -52,20 +52,20 @@ export const getDocumentsForRegion = async (
               return resolve([])
             }
 
-            const { NextToken: nextToken, DocumentIdentifiers: items = [] } = data || {}
+            const { NextToken: nextToken, ActivationList: items = [] } = data || {}
 
             if (isEmpty(items)) {
               return resolve([])
             }
 
-            logger.debug(lt.fetchedSsmDocuments(items.length))
+            logger.debug(lt.fetchedSystemManagersActivations(items.length))
 
-            documentList.push(...items)
+            activationList.push(...items)
 
             if (nextToken) {
-              listAllDocuments(nextToken)
+              listAllActivations(nextToken)
             } else {
-              resolve(documentList)
+              resolve(activationList)
             }
           }
         )
@@ -73,13 +73,13 @@ export const getDocumentsForRegion = async (
         resolve([])
       }
     }
-    listAllDocuments()
+    listAllActivations()
   })
 
-export interface RawAwsSsmDocument extends Omit<DocumentIdentifier, 'Tags'> {
+export interface RawAwsSystemManagerActivation extends Omit<Activation, 'Tags'> {
+  Tags: TagMap
   region: string
   account
-  Tags: TagMap
 }
 
 export default async ({
@@ -91,10 +91,10 @@ export default async ({
   regions: string
   config: Config
 }): Promise<{
-  [region: string]: RawAwsSsmDocument[]
+  [region: string]: RawAwsSystemManagerActivation[]
 }> =>
   new Promise(async resolve => {
-    const documentsResult: RawAwsSsmDocument[] = []
+    const activationResult: RawAwsSystemManagerActivation[] = []
 
     const regionPromises = regions.split(',').map(region => {
       const ssm = new SSM({
@@ -104,14 +104,14 @@ export default async ({
         ...customRetrySettings,
       })
 
-      return new Promise<void>(async resolveSsmDocumentsData => {
-        // Get SSM Documents
-        const documents = await getDocumentsForRegion(ssm)
+      return new Promise<void>(async resolveSystemManagerActivationData => {
+        // Get SystemManager Activations
+        const activations = await getActivationsForRegion(ssm)
 
-        if (!isEmpty(documents)) {
-          documentsResult.push(
-            ...documents.map(({Tags, ...document}) => ({
-              ...document,
+        if (!isEmpty(activations)) {
+          activationResult.push(
+            ...activations.map(({Tags, ...activation}) => ({
+              ...activation,
               region,
               account,
               Tags: convertAwsTagsToTagMap(Tags as AwsTag[]),
@@ -119,12 +119,12 @@ export default async ({
           )
         }
 
-        resolveSsmDocumentsData()
+        resolveSystemManagerActivationData()
       })
     })
 
     await Promise.all(regionPromises)
     errorLog.reset()
 
-    resolve(groupBy(documentsResult, 'region'))
+    resolve(groupBy(activationResult, 'region'))
   })

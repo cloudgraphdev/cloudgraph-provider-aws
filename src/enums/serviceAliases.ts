@@ -72,6 +72,8 @@ export default {
   [services.sg]: 'securityGroups',
   [services.securityHub]: 'securityHubs',
   [services.subnet]: 'subnets',
+  [services.systemsManagerActivation]: 'systemsManagerActivations',
+  [services.systemsManagerAssociation]: 'systemsManagerAssociations',
   [services.systemsManagerDocument]: 'systemsManagerDocuments',
   [services.systemsManagerInstance]: 'systemsManagerInstances',
   [services.transitGateway]: 'transitGateways',
@@ -80,7 +82,4 @@ export default {
   [services.vpcEndpoint]: 'vpcEndpoints',
   [services.vpnConnection]: 'vpnConnections',
   [services.vpcPeeringConnection]: 'vpcPeeringConnections',
-  [services.ssmActivation]: 'ssmActivations',
-  [services.ssmAssociation]: 'ssmAssociations',
-  [services.ssmDocument]: 'ssmDocuments',
 }

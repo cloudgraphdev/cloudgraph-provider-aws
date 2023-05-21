@@ -715,10 +715,8 @@ export default {
   /**
    * SSM
    */
-  fetchedSsmActivations: (num: number): string =>
+  fetchedSystemManagersActivations: (num: number): string =>
     `Fetched ${num} SSM Activations`,
-  fetchedSsmAssociations: (num: number): string =>
+  fetchedSystemManagersAssociations: (num: number): string =>
     `Fetched ${num} SSM Associations`,
-  fetchedSsmDocuments: (num: number): string =>
-    `Fetched ${num} SSM Documents`,
 }

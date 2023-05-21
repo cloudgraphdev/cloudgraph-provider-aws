@@ -1,4 +1,4 @@
-type awsSsmActivation implements awsBaseService @key(fields: "arn") {
+type awsSystemManagerActivation implements awsBaseService @key(fields: "arn") {
   activationId: String @search(by: [hash, regexp])
   description: String @search(by: [hash, regexp])
   defaultInstanceName: String @search(by: [hash, regexp])

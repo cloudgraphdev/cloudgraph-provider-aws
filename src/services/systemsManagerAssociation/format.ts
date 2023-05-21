@@ -1,17 +1,17 @@
-import { RawAwsSsmAssociation } from './data'
-import { AwsSsmAssociation } from '../../types/generated'
-import { ssmAssociationArn } from '../../utils/generateArns'
-import { AssociationStatusAggregatedCount, TargetMap, TargetMaps } from 'aws-sdk/clients/ssm'
+import { RawAwsSystemManagerAssociation } from './data'
+import { AwsSystemManagerAssociation } from '../../types/generated'
+import { systemManagerAssociationArn } from '../../utils/generateArns'
+import { AssociationStatusAggregatedCount, TargetMaps } from 'aws-sdk/clients/ssm'
 
 export default ({
   service,
   account,
   region,
 }: {
-  service: RawAwsSsmAssociation
+  service: RawAwsSystemManagerAssociation
   account: string
   region: string
-}): AwsSsmAssociation => {
+}): AwsSystemManagerAssociation => {
   const {
     Name: documentArn,
     InstanceId: instanceId,
@@ -27,7 +27,7 @@ export default ({
     TargetMaps: targetMaps,
   } = service
 
-  const arn = ssmAssociationArn({ region, account, id: associationId })
+  const arn = systemManagerAssociationArn({ region, account, id: associationId })
 
   const formatStatusAggregatedCount = (aggregatedCount: AssociationStatusAggregatedCount): {id: string, key: string, count: number}[] => {
     const result: {id: string, key: string, count: number}[] = []

@@ -346,7 +346,7 @@ export const transitGatewayRouteTableArn = ({
   id: string
 }): string => `arn:aws:ec2:${region}:${account}:transit-gateway-routetable/${id}`
 
-export const ssmActivationArn = ({
+export const systemManagerActivationArn = ({
   region,
   account,
   id,
@@ -356,7 +356,7 @@ export const ssmActivationArn = ({
   id: string
 }): string => `arn:aws:ssm:${region}:${account}:activation/${id}`
 
-export const ssmAssociationArn = ({
+export const systemManagerAssociationArn = ({
   region,
   account,
   id,
