@@ -55,4 +55,5 @@ type awsSystemManagerAssociation implements awsBaseService @key(fields: "arn") {
     associationName: String @search(by: [hash, regexp])
     scheduleOffset: Int @search
     targetMaps: [awsSystemManagerAssociationTargetMaps]
+    systemsManagerInstances: [awsSystemsManagerInstance] @hasInverse(field: systemManagerAssociations)
 }

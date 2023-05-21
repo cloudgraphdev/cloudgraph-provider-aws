@@ -4422,6 +4422,7 @@ export type AwsSystemManagerAssociation = AwsBaseService & {
   overview?: Maybe<AwsSystemManagerAssociationOverview>;
   scheduleExpression?: Maybe<Scalars['String']>;
   scheduleOffset?: Maybe<Scalars['Int']>;
+  systemsManagerInstances?: Maybe<Array<Maybe<AwsSystemsManagerInstance>>>;
   targetMaps?: Maybe<Array<Maybe<AwsSystemManagerAssociationTargetMaps>>>;
   targets?: Maybe<Array<Maybe<AwsSystemManagerAssociationTargets>>>;
 };
@@ -4499,6 +4500,7 @@ export type AwsSystemsManagerInstance = AwsBaseService & {
   resourceType?: Maybe<Scalars['String']>;
   sourceId?: Maybe<Scalars['String']>;
   sourceType?: Maybe<Scalars['String']>;
+  systemManagerAssociations?: Maybe<Array<Maybe<AwsSystemManagerAssociation>>>;
 };
 
 export type AwsTag = {
