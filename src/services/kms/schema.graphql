@@ -1,3 +1,20 @@
+type awsKmsGrantListEntry
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  grantId: String @search(by: [hash, regexp])
+  keyId: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  creationDate: DateTime @search(by: [day])
+  granteePrincipal: String @search(by: [hash, regexp])
+  retiringPrincipal: String @search(by: [hash, regexp])
+  issuingAccount: String @search(by: [hash, regexp])
+  operations: [String] @search(by: [hash, regexp])
+}
+
 type awsKmsAliasListEntry
   @generate(
     query: { get: false, query: true, aggregate: false }
@@ -28,6 +45,7 @@ type awsKms implements awsBaseService @key(fields: "id") {
   deletionDate: DateTime @search(by: [day])
   validTo: DateTime @search(by: [day])
   aliases: [awsKmsAliasListEntry]
+  grants: [awsKmsGrantListEntry]
   lambda: [awsLambda] @hasInverse(field: kms) #change to plural
   cloudtrail: [awsCloudtrail] @hasInverse(field: kms) #change to plural
   redshiftCluster: [awsRedshiftCluster] @hasInverse(field: kms) #change to plural
