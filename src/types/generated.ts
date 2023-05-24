@@ -3410,6 +3410,7 @@ export type AwsLambda = AwsBaseService & {
   cognitoUserPools?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   description?: Maybe<Scalars['String']>;
   environmentVariables?: Maybe<Array<Maybe<AwsLambdaEnvironmentVariable>>>;
+  eventSourceMappings?: Maybe<Array<Maybe<AwsLambdaEventSourceMappings>>>;
   handler?: Maybe<Scalars['String']>;
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
@@ -3434,10 +3435,55 @@ export type AwsLambda = AwsBaseService & {
   vpcConfig?: Maybe<AwsLambdaVpcConfig>;
 };
 
+export type AwsLambdaDestinationConfig = {
+  OnFailure?: Maybe<Scalars['String']>;
+  OnSuccess?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+};
+
 export type AwsLambdaEnvironmentVariable = {
   id: Scalars['String'];
   key: Scalars['String'];
   value?: Maybe<Scalars['String']>;
+};
+
+export type AwsLambdaEventSourceConfig = {
+  consumerGroupId?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+};
+
+export type AwsLambdaEventSourceMappings = {
+  amazonManagedKafkaEventSourceConfig?: Maybe<AwsLambdaEventSourceConfig>;
+  batchSize?: Maybe<Scalars['Int']>;
+  bisectBatchOnFunctionError?: Maybe<Scalars['Boolean']>;
+  destinationConfig?: Maybe<AwsLambdaDestinationConfig>;
+  eventSourceArn?: Maybe<Scalars['String']>;
+  filterCriteria?: Maybe<Array<Maybe<Scalars['String']>>>;
+  functionArn?: Maybe<Scalars['String']>;
+  functionResponseTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  id: Scalars['String'];
+  lastModified?: Maybe<Scalars['DateTime']>;
+  lastProcessingResult?: Maybe<Scalars['String']>;
+  maximumBatchingWindowInSeconds?: Maybe<Scalars['Int']>;
+  maximumRecordAgeInSeconds?: Maybe<Scalars['Int']>;
+  maximumRetryAttempts?: Maybe<Scalars['Int']>;
+  parallelizationFactor?: Maybe<Scalars['Int']>;
+  queues?: Maybe<Array<Maybe<Scalars['String']>>>;
+  selfManagedEventSource?: Maybe<Array<Maybe<Scalars['String']>>>;
+  selfManagedKafkaEventSourceConfig?: Maybe<AwsLambdaEventSourceConfig>;
+  sourceAccessConfigurations?: Maybe<Array<Maybe<AwsLambdaSourceAccessConfiguration>>>;
+  startingPosition?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  stateTransitionReason?: Maybe<Scalars['String']>;
+  topics?: Maybe<Array<Maybe<Scalars['String']>>>;
+  tumblingWindowInSeconds?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['String']>;
+};
+
+export type AwsLambdaSourceAccessConfiguration = {
+  id: Scalars['String'];
+  type?: Maybe<Scalars['String']>;
+  uri?: Maybe<Scalars['String']>;
 };
 
 export type AwsLambdaVpcConfig = {

@@ -1,8 +1,10 @@
+import { generateUniqueId } from '@cloudgraph/sdk'
 import isEmpty from 'lodash/isEmpty'
 import t from '../../properties/translations'
-import { AwsLambda } from '../../types/generated'
+import { AwsLambda, AwsLambdaEventSourceMappings } from '../../types/generated'
 import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 import { RawAwsLambdaFunction } from './data'
+import { EventSourceMappingConfiguration } from 'aws-sdk/clients/lambda'
 
 /**
  * Lambda
@@ -33,6 +35,7 @@ export default ({
     reservedConcurrentExecutions: rawReservedConcurrentExecutions,
     VpcConfig: vpcConfig,
     PolicyData: { Policy: policy = '', RevisionId: policyRevisionId = '' },
+    EventSourceMappings: eventSourceMappings = []
   } = rawData
   const environmentVariables = []
   const secretNames = [t.pass, t.secret, t.private, t.cert]
@@ -68,6 +71,62 @@ export default ({
     securityGroupIds: vpcConfig?.SecurityGroupIds,
   }
 
+  const formatEventSourceMappings = (
+    eventSourceMappings?: EventSourceMappingConfiguration[]
+  ): AwsLambdaEventSourceMappings[] => {
+    return (
+      eventSourceMappings?.map(e => ({
+        id: generateUniqueId({
+          arn,
+          ...e,
+        }),
+        uuid: e.UUID,
+        startingPosition: e.StartingPosition,
+        batchSize: e.BatchSize,
+        maximumBatchingWindowInSeconds: e.MaximumBatchingWindowInSeconds,
+        parallelizationFactor: e.ParallelizationFactor,
+        eventSourceArn: e.EventSourceArn,
+        filterCriteria: e.FilterCriteria?.Filters?.map(f => f.Pattern) || [],
+        functionArn: e.FunctionArn,
+        lastModified: e.LastModified?.toISOString(),
+        lastProcessingResult: e.LastProcessingResult,
+        state: e.State,
+        stateTransitionReason: e.StateTransitionReason,
+        destinationConfig: {
+          id: generateUniqueId({
+            arn,
+            ...e.DestinationConfig,
+
+          }),
+          OnSuccess: e.DestinationConfig?.OnSuccess?.Destination,
+          OnFailure: e.DestinationConfig?.OnFailure?.Destination
+
+        },
+        topics: e.Topics,
+        queues: e.Queues,
+        maximumRecordAgeInSeconds: e.MaximumRecordAgeInSeconds,
+        bisectBatchOnFunctionError: e.BisectBatchOnFunctionError,
+        maximumRetryAttempts: e.MaximumRetryAttempts,
+        tumblingWindowInSeconds: e.TumblingWindowInSeconds,
+        functionResponseTypes: e.FunctionResponseTypes,
+        amazonManagedKafkaEventSourceConfig: {
+          id: generateUniqueId({
+            arn,
+            ...e.AmazonManagedKafkaEventSourceConfig
+          }),
+          consumerGroupId: e.AmazonManagedKafkaEventSourceConfig?.ConsumerGroupId
+        },
+        selfManagedKafkaEventSourceConfig: {
+          id: generateUniqueId({
+            arn,
+            ...e.SelfManagedKafkaEventSourceConfig
+          }),
+          consumerGroupId: e.SelfManagedKafkaEventSourceConfig?.ConsumerGroupId
+        }
+      })) || []
+    )
+  }
+
   return {
     accountId: account,
     arn,
@@ -90,5 +149,6 @@ export default ({
     rawPolicy: policy,
     policy: formatIamJsonPolicy(policy),
     tags: formatTagsFromMap(Tags),
+    eventSourceMappings: formatEventSourceMappings(eventSourceMappings)
   }
 }
