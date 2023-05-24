@@ -849,6 +849,7 @@ export type AwsCloudfront = AwsBaseService & {
 
 export type AwsCloudfrontCacheBehavior = {
   allowedMethods?: Maybe<Array<Maybe<Scalars['String']>>>;
+  cachePolicyId?: Maybe<Scalars['String']>;
   cachedMethods?: Maybe<Array<Maybe<Scalars['String']>>>;
   compress?: Maybe<Scalars['String']>;
   defaultTtl?: Maybe<Scalars['String']>;
@@ -2376,6 +2377,7 @@ export type AwsEksCluster = AwsBaseService & {
   kubernetesNetworkConfig?: Maybe<AwsEksKubernetesNetworkConfigResponse>;
   logging?: Maybe<AwsEksLogging>;
   name?: Maybe<Scalars['String']>;
+  nodeGroups?: Maybe<Array<Maybe<Scalars['String']>>>;
   platformVersion?: Maybe<Scalars['String']>;
   resourcesVpcConfig?: Maybe<AwsEksVpcConfigResponse>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
