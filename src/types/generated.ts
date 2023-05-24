@@ -3375,6 +3375,7 @@ export type AwsKms = AwsBaseService & {
   elasticSearchDomains?: Maybe<Array<Maybe<AwsElasticSearchDomain>>>;
   emrCluster?: Maybe<Array<Maybe<AwsEmrCluster>>>;
   enabled?: Maybe<Scalars['Boolean']>;
+  grants?: Maybe<Array<Maybe<AwsKmsGrantListEntry>>>;
   keyManager?: Maybe<Scalars['String']>;
   keyRotationEnabled?: Maybe<Scalars['Boolean']>;
   keyState?: Maybe<Scalars['String']>;
@@ -3403,6 +3404,18 @@ export type AwsKmsAliasListEntry = {
   id: Scalars['String'];
   lastUpdatedDate?: Maybe<Scalars['DateTime']>;
   targetKeyId?: Maybe<Scalars['String']>;
+};
+
+export type AwsKmsGrantListEntry = {
+  creationDate?: Maybe<Scalars['DateTime']>;
+  grantId?: Maybe<Scalars['String']>;
+  granteePrincipal?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  issuingAccount?: Maybe<Scalars['String']>;
+  keyId?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  operations?: Maybe<Array<Maybe<Scalars['String']>>>;
+  retiringPrincipal?: Maybe<Scalars['String']>;
 };
 
 export type AwsLambda = AwsBaseService & {

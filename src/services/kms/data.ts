@@ -11,6 +11,7 @@ import KMS, {
   KeyMetadata,
   ListKeysRequest,
   ListKeysResponse,
+  GrantListEntry
 } from 'aws-sdk/clients/kms'
 
 import { TagMap } from '../../types'
@@ -35,6 +36,7 @@ export type AwsKms = KeyListEntry &
     Tags: TagMap
     keyRotationEnabled: boolean
     Aliases?: AliasListEntry[]
+    Grants?: GrantListEntry[]
   }
 
 export default async ({
@@ -53,6 +55,7 @@ export default async ({
     const policyPromises = []
     const tagPromises = []
     const aliasesPromises = []
+    const grantsPromises = []
 
     /**
      * Step 1) for all regions, list the kms keys
@@ -373,11 +376,43 @@ export default async ({
           resolveAliases()
         })
       )
-
       aliasesPromises.push(aliasesPromise)
+
+      const grantsPromise = new Promise<void>(resolveGrants =>
+        kms.listGrants({ KeyId }, (err, data) => {
+          if (err) {
+            errorLog.generateAwsErrorLog({
+              functionName: 'kms:listGrants',
+              err,
+            })
+            resolveGrants()
+          }
+
+          /**
+           * No grants data
+           */
+
+          if (isEmpty(data)) {
+            return resolveGrants()
+          }
+
+          /**
+           * Add the grants to the key
+           */
+
+          const { Grants: grants } = data || {}
+
+          kmsData[idx].Grants = grants
+
+          resolveGrants()
+        })
+      )
+
+      grantsPromises.push(grantsPromise)
     })
 
     await Promise.all(aliasesPromises)
+    await Promise.all(grantsPromises)
     errorLog.reset()
 
     resolve(groupBy(kmsData, 'region'))

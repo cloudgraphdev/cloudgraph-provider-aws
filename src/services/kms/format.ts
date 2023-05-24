@@ -1,10 +1,11 @@
 import { generateUniqueId } from '@cloudgraph/sdk'
-import { AliasListEntry } from 'aws-sdk/clients/kms'
+import { AliasListEntry, GrantListEntry } from 'aws-sdk/clients/kms'
 
 import { AwsKms } from './data'
 import {
   AwsKms as AwsKmsType,
   AwsKmsAliasListEntry,
+  AwsKmsGrantListEntry,
 } from '../../types/generated'
 import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 
@@ -38,6 +39,7 @@ export default ({
     DeletionDate: deletionDate,
     ValidTo: validTo,
     Aliases: aliases = [],
+    Grants: grants = []
   } = key
 
   const formatAliases = (
@@ -54,6 +56,27 @@ export default ({
         targetKeyId: a.TargetKeyId,
         creationDate: a.CreationDate?.toISOString(),
         lastUpdatedDate: a.LastUpdatedDate?.toISOString(),
+      })) || []
+    )
+  }
+
+  const formatGrants = (
+    grants?: GrantListEntry[]
+  ): AwsKmsGrantListEntry[] => {
+    return (
+      grants?.map(a => ({
+        id: generateUniqueId({
+          arn,
+          ...a,
+        }),
+        grantId: a.GrantId,
+        name: a.Name,
+        creationDate: a.CreationDate?.toISOString(),
+        granteePrincipal: a.GranteePrincipal,
+        retiringPrincipal: a.RetiringPrincipal,
+        issuingAccount: a.IssuingAccount,
+        keyId: a.KeyId,
+        operations: a.Operations
       })) || []
     )
   }
@@ -78,5 +101,6 @@ export default ({
     deletionDate: deletionDate?.toISOString(),
     validTo: validTo?.toISOString(),
     aliases: formatAliases(aliases),
+    grants: formatGrants(grants),
   }
 }
