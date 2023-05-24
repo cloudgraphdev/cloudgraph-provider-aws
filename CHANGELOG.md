@@ -1,3 +1,11 @@
+# [0.89.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.88.0...0.89.0-alpha.1) (2023-05-24)
+
+
+### Features
+
+* **aws:** Update cloudfront and eksCluster ([d7377ba](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d7377bac18e9757cf416918e6c6a9e0015078790))
+* Fetched extra grant information for kms service ([c99417b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/c99417baf1c52b521695e8f460c835cb35635c28))
+
 # [0.88.0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.87.0...0.88.0) (2023-05-12)
 
 
