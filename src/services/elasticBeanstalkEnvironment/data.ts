@@ -1,28 +1,30 @@
+import {
+  DescribeConfigurationSettingsCommand,
+  DescribeConfigurationSettingsMessage,
+  DescribeEnvironmentResourcesCommand,
+  DescribeEnvironmentResourcesMessage,
+  DescribeEnvironmentsCommand,
+  ElasticBeanstalkClient,
+} from '@aws-sdk/client-elastic-beanstalk'
 import CloudGraph from '@cloudgraph/sdk'
-import { AWSError } from 'aws-sdk'
-import ElasticBeanstalk, {
+import { Config } from 'aws-sdk'
+import {
   ConfigurationSettingsDescription,
-  ConfigurationSettingsDescriptions,
   DescribeEnvironmentsMessage,
   EnvironmentDescription,
-  EnvironmentDescriptionsMessage,
   EnvironmentResourceDescription,
-  EnvironmentResourceDescriptionsMessage,
 } from 'aws-sdk/clients/elasticbeanstalk'
 import isEmpty from 'lodash/isEmpty'
-
-import { Credentials, TagMap } from '../../types'
-import { settleAllPromises } from '../../utils/index'
 import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint } from '../../utils'
+import { TagMap } from '../../types'
 import AwsErrorLog from '../../utils/errorLog'
+import { settleAllPromises } from '../../utils/index'
 import { getResourceTags } from '../elasticBeanstalkApplication/data'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'ElasticBeanstalkEnv'
 const errorLog = new AwsErrorLog(serviceName)
-const endpoint = initTestEndpoint(serviceName)
 const MAX_ITEMS = 1000
 
 export interface RawAwsElasticBeanstalkEnv extends EnvironmentDescription {
@@ -32,95 +34,106 @@ export interface RawAwsElasticBeanstalkEnv extends EnvironmentDescription {
 }
 
 const listEnvironments = async (
-  eb: ElasticBeanstalk
+  eb: ElasticBeanstalkClient
 ): Promise<EnvironmentDescription[]> =>
   new Promise(async resolve => {
     const environments: EnvironmentDescription[] = []
 
-    const listAllEnvironmentsOpts: DescribeEnvironmentsMessage = {
+    const input: DescribeEnvironmentsMessage = {
       MaxRecords: MAX_ITEMS,
     }
+
     const listAllEnvironments = (token?: string): void => {
       if (token) {
-        listAllEnvironmentsOpts.NextToken = token
+        input.NextToken = token
       }
-      try {
-        eb.describeEnvironments(
-          listAllEnvironmentsOpts,
-          (err: AWSError, data: EnvironmentDescriptionsMessage) => {
-            const { Environments = [], NextToken: nextToken } = data || {}
-            if (err) {
-              errorLog.generateAwsErrorLog({
-                functionName: 'elasticBeanstalk:describeEnvironments',
-                err,
-              })
-            }
-
-            environments.push(...Environments)
-
-            if (nextToken) {
-              logger.debug(lt.foundAnotherThousand)
-              listAllEnvironments(nextToken)
-            } else {
-              resolve(environments)
-            }
+      const command = new DescribeEnvironmentsCommand(input)
+      eb.send(command)
+        .then(data => {
+          if (isEmpty(data)) {
+            return resolve([])
           }
-        )
-      } catch (error) {
-        resolve([])
-      }
+
+          const { Environments = [], NextToken: nextToken } = data || {}
+
+          environments.push(...Environments)
+
+          if (nextToken) {
+            logger.debug(lt.foundAnotherThousand)
+            listAllEnvironments(nextToken)
+          } else {
+            resolve(environments)
+          }
+        })
+        .catch(err => {
+          errorLog.generateAwsErrorLog({
+            functionName: 'elasticBeanstalk:describeEnvironments',
+            err,
+          })
+          resolve([])
+        })
     }
     listAllEnvironments()
   })
 
 const getConfigSettingsForEnv = async (
-  eb: ElasticBeanstalk,
+  eb: ElasticBeanstalkClient,
   ApplicationName: string,
   EnvironmentName: string
 ): Promise<ConfigurationSettingsDescription[]> =>
   new Promise(resolve => {
-    eb.describeConfigurationSettings(
-      {
-        ApplicationName,
-        EnvironmentName,
-      },
-      (err: AWSError, data: ConfigurationSettingsDescriptions) => {
-        if (err) {
-          errorLog.generateAwsErrorLog({
-            functionName: 'elasticBeanstalk:describeConfigurationSettings',
-            err,
-          })
+    const input: DescribeConfigurationSettingsMessage = {
+      ApplicationName,
+      EnvironmentName,
+    }
+    const command = new DescribeConfigurationSettingsCommand(input)
+    eb.send(command)
+      .then(data => {
+        if (isEmpty(data)) {
+          return resolve([])
         }
+
         const { ConfigurationSettings: settings = [] } = data || {}
         resolve(settings)
-      }
-    )
+      })
+      .catch(err => {
+        errorLog.generateAwsErrorLog({
+          functionName: 'elasticBeanstalk:describeConfigurationSettings',
+          err,
+        })
+        resolve([])
+      })
   })
 
 const getResourcesForEnv = async (
-  eb: ElasticBeanstalk,
+  eb: ElasticBeanstalkClient,
   EnvironmentName: string
 ): Promise<EnvironmentResourceDescription> =>
   new Promise(resolve => {
-    eb.describeEnvironmentResources(
-      {
-        EnvironmentName,
-      },
-      (err: AWSError, data: EnvironmentResourceDescriptionsMessage) => {
-        if (err) {
-          errorLog.generateAwsErrorLog({
-            functionName: 'elasticBeanstalk:describeEnvironmentResources',
-            err,
-          })
+    const input: DescribeEnvironmentResourcesMessage = {
+      EnvironmentName,
+    }
+    const command = new DescribeEnvironmentResourcesCommand(input)
+    eb.send(command)
+      .then(data => {
+        if (isEmpty(data)) {
+          return resolve({})
         }
+
         const { EnvironmentResources: resources = {} } = data || {}
         resolve(resources)
-      }
-    )
+      })
+      .catch(err => {
+        errorLog.generateAwsErrorLog({
+          functionName: 'elasticBeanstalk:describeEnvironmentResources',
+          err,
+        })
+        resolve({})
+      })
   })
 
 const getEnvironments = async (
-  eb: ElasticBeanstalk
+  eb: ElasticBeanstalkClient
 ): Promise<RawAwsElasticBeanstalkEnv[]> => {
   const envs = await listEnvironments(eb)
   if (!isEmpty(envs)) {
@@ -152,14 +165,15 @@ const getEnvironments = async (
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{
   [property: string]: RawAwsElasticBeanstalkEnv[]
 }> =>
   new Promise(async resolve => {
+    const { credentials } = config
     let numberOfEnvs = 0
     const output: {
       [property: string]: RawAwsElasticBeanstalkEnv[]
@@ -168,7 +182,10 @@ export default async ({
     // First we get all applications for all regions
     await Promise.all(
       regions.split(',').map(region => {
-        const eb = new ElasticBeanstalk({ region, credentials, endpoint })
+        const eb = new ElasticBeanstalkClient({
+          credentials,
+          region,
+        })
         output[region] = []
         return new Promise<void>(async resolveRegion => {
           const envs = (await getEnvironments(eb)) || []
