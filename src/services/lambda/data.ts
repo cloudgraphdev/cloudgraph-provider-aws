@@ -11,7 +11,9 @@ import Lambda, {
   ReservedConcurrentExecutions,
   GetPolicyResponse,
   ListEventSourceMappingsResponse,
-  EventSourceMappingConfiguration
+  EventSourceMappingConfiguration,
+  ListFunctionEventInvokeConfigsResponse,
+  FunctionEventInvokeConfig
 } from 'aws-sdk/clients/lambda'
 import { AWSError } from 'aws-sdk/lib/error'
 import { Config } from 'aws-sdk/lib/config'
@@ -38,6 +40,7 @@ export interface RawAwsLambdaFunction extends FunctionConfiguration {
     RevisionId?: string
   }
   EventSourceMappings?: EventSourceMappingConfiguration[]
+  EventInvokeConfigs?: FunctionEventInvokeConfig[]
 }
 
 const listFunctionsForRegion = async ({
@@ -185,6 +188,29 @@ const getEventSourceMappings = async (lambda: Lambda, arn: string): Promise<Even
     }
   })
 
+const getEventInvokeConfigs = async (lambda: Lambda, name: string): Promise<FunctionEventInvokeConfig[]> =>
+  new Promise(resolve => {
+    try {
+      lambda.listFunctionEventInvokeConfigs(
+        { FunctionName: name },
+        (err: AWSError, data: ListFunctionEventInvokeConfigsResponse) => {
+          if (err) {
+            errorLog.generateAwsErrorLog({
+              functionName: 'lambda:listFunctionEventInvokeConfigs',
+              err,
+            })
+            resolve([])
+          }
+          const { FunctionEventInvokeConfigs = [] } = data || {}
+
+          resolve(FunctionEventInvokeConfigs)
+        }
+      )
+    } catch (error) {
+      resolve([])
+    }
+  })
+
 export default async ({
   regions,
   config,
@@ -225,7 +251,7 @@ export default async ({
     logger.debug(lt.fetchedLambdas(lambdaData.length))
 
     // get all tags and policy for each Lambda
-    lambdaData.map(({ FunctionArn: arn, region }, idx) => {
+    lambdaData.map(({ FunctionArn: arn, region, FunctionName: name }, idx) => {
       const lambda = new Lambda({ ...config, region, endpoint })
       const additionalMetadataPromise = new Promise<void>(async resolveData => {
         const envTags: TagMap = await getResourceTags(lambda, arn)
@@ -234,6 +260,8 @@ export default async ({
         lambdaData[idx].PolicyData = policy
         const eventSourceMappings = await getEventSourceMappings(lambda, arn)
         lambdaData[idx].EventSourceMappings = eventSourceMappings
+        const eventInvokeConfigs = await getEventInvokeConfigs(lambda, name)
+        lambdaData[idx].EventInvokeConfigs = eventInvokeConfigs
         resolveData()
       })
       tagsPromises.push(additionalMetadataPromise)

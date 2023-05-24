@@ -3410,6 +3410,7 @@ export type AwsLambda = AwsBaseService & {
   cognitoUserPools?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   description?: Maybe<Scalars['String']>;
   environmentVariables?: Maybe<Array<Maybe<AwsLambdaEnvironmentVariable>>>;
+  eventInvokeConfigs?: Maybe<Array<Maybe<AwsLambdaEventInvokeConfig>>>;
   eventSourceMappings?: Maybe<Array<Maybe<AwsLambdaEventSourceMappings>>>;
   handler?: Maybe<Scalars['String']>;
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
@@ -3447,6 +3448,15 @@ export type AwsLambdaEnvironmentVariable = {
   value?: Maybe<Scalars['String']>;
 };
 
+export type AwsLambdaEventInvokeConfig = {
+  destinationConfig?: Maybe<AwsLambdaDestinationConfig>;
+  functionArn?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  lastModified?: Maybe<Scalars['DateTime']>;
+  maximumEventAgeInSeconds?: Maybe<Scalars['Int']>;
+  maximumRetryAttempts?: Maybe<Scalars['Int']>;
+};
+
 export type AwsLambdaEventSourceConfig = {
   consumerGroupId?: Maybe<Scalars['String']>;
   id: Scalars['String'];
@@ -3469,9 +3479,7 @@ export type AwsLambdaEventSourceMappings = {
   maximumRetryAttempts?: Maybe<Scalars['Int']>;
   parallelizationFactor?: Maybe<Scalars['Int']>;
   queues?: Maybe<Array<Maybe<Scalars['String']>>>;
-  selfManagedEventSource?: Maybe<Array<Maybe<Scalars['String']>>>;
   selfManagedKafkaEventSourceConfig?: Maybe<AwsLambdaEventSourceConfig>;
-  sourceAccessConfigurations?: Maybe<Array<Maybe<AwsLambdaSourceAccessConfiguration>>>;
   startingPosition?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
   stateTransitionReason?: Maybe<Scalars['String']>;

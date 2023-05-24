@@ -1,10 +1,10 @@
 import { generateUniqueId } from '@cloudgraph/sdk'
 import isEmpty from 'lodash/isEmpty'
 import t from '../../properties/translations'
-import { AwsLambda, AwsLambdaEventSourceMappings } from '../../types/generated'
+import { AwsLambda, AwsLambdaEventInvokeConfig, AwsLambdaEventSourceMappings } from '../../types/generated'
 import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 import { RawAwsLambdaFunction } from './data'
-import { EventSourceMappingConfiguration } from 'aws-sdk/clients/lambda'
+import { EventSourceMappingConfiguration, FunctionEventInvokeConfig } from 'aws-sdk/clients/lambda'
 
 /**
  * Lambda
@@ -35,7 +35,8 @@ export default ({
     reservedConcurrentExecutions: rawReservedConcurrentExecutions,
     VpcConfig: vpcConfig,
     PolicyData: { Policy: policy = '', RevisionId: policyRevisionId = '' },
-    EventSourceMappings: eventSourceMappings = []
+    EventSourceMappings: eventSourceMappings = [],
+    EventInvokeConfigs: eventInvokeConfigs = []
   } = rawData
   const environmentVariables = []
   const secretNames = [t.pass, t.secret, t.private, t.cert]
@@ -127,6 +128,32 @@ export default ({
     )
   }
 
+  const formatEventInvokeConfigs = (
+    eventInvokeConfigs?: FunctionEventInvokeConfig[]
+  ): AwsLambdaEventInvokeConfig[] => {
+    return (
+      eventInvokeConfigs?.map(e => ({
+        id: generateUniqueId({
+          arn,
+          ...e,
+        }),
+        lastModified: e.LastModified?.toISOString(),
+        functionArn: e.FunctionArn,
+        maximumRetryAttempts: e.MaximumRetryAttempts,
+        maximumEventAgeInSeconds: e.MaximumEventAgeInSeconds,
+        destinationConfig: {
+          id: generateUniqueId({
+            arn,
+            ...e.DestinationConfig,
+
+          }),
+          OnSuccess: e.DestinationConfig?.OnSuccess?.Destination,
+          OnFailure: e.DestinationConfig?.OnFailure?.Destination
+        }
+      })) || []
+    )
+  }
+
   return {
     accountId: account,
     arn,
@@ -149,6 +176,7 @@ export default ({
     rawPolicy: policy,
     policy: formatIamJsonPolicy(policy),
     tags: formatTagsFromMap(Tags),
-    eventSourceMappings: formatEventSourceMappings(eventSourceMappings)
+    eventSourceMappings: formatEventSourceMappings(eventSourceMappings),
+    eventInvokeConfigs: formatEventInvokeConfigs(eventInvokeConfigs)
   }
 }

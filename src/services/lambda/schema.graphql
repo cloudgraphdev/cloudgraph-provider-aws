@@ -30,6 +30,20 @@ type awsLambdaDestinationConfig
   OnFailure: String @search(by: [hash, regexp])
 }
 
+type awsLambdaEventInvokeConfig
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  lastModified: DateTime @search(by: [day])
+  functionArn: String @search(by: [hash, regexp])
+  maximumRetryAttempts: Int
+  maximumEventAgeInSeconds: Int
+  destinationConfig: awsLambdaDestinationConfig
+}
+
 type awsLambdaEventSourceMappings
   @generate(
     query: { get: false, query: true, aggregate: false }
@@ -80,6 +94,7 @@ type awsLambda implements awsBaseService @key(fields: "arn") {
   rawPolicy: String @search(by: [hash, regexp])
   policy: awsIamJSONPolicy
   eventSourceMappings: [awsLambdaEventSourceMappings]
+  eventInvokeConfigs: [awsLambdaEventInvokeConfig]
   tags: [awsRawTag]
   kms: [awsKms] @hasInverse(field: lambda)
   securityGroups: [awsSecurityGroup] @hasInverse(field: lambda)
