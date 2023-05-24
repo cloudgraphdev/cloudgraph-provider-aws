@@ -79,6 +79,7 @@ type awsCloudfrontCacheBehavior {
   smoothStreaming: String @search(by: [hash])
   targetOriginId: String @search(by: [hash])
   viewerProtocolPolicy: String @search(by: [hash])
+  cachePolicyId: String @search(by: [hash])
 }
 
 type awsCloudfrontCustomErrorResponse {
