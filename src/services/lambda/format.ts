@@ -1,10 +1,10 @@
 import { generateUniqueId } from '@cloudgraph/sdk'
 import isEmpty from 'lodash/isEmpty'
 import t from '../../properties/translations'
-import { AwsLambda, AwsLambdaEventInvokeConfig, AwsLambdaEventSourceMappings } from '../../types/generated'
+import { AwsLambda, AwsLambdaEventInvokeConfig, AwsLambdaEventSourceMappings, AwsLambdaLayerVersion } from '../../types/generated'
 import { formatTagsFromMap, formatIamJsonPolicy } from '../../utils/format'
 import { RawAwsLambdaFunction } from './data'
-import { EventSourceMappingConfiguration, FunctionEventInvokeConfig } from 'aws-sdk/clients/lambda'
+import { EventSourceMappingConfiguration, FunctionEventInvokeConfig, Layer } from 'aws-sdk/clients/lambda'
 
 /**
  * Lambda
@@ -36,7 +36,8 @@ export default ({
     VpcConfig: vpcConfig,
     PolicyData: { Policy: policy = '', RevisionId: policyRevisionId = '' },
     EventSourceMappings: eventSourceMappings = [],
-    EventInvokeConfigs: eventInvokeConfigs = []
+    EventInvokeConfigs: eventInvokeConfigs = [],
+    Layers: layers = []
   } = rawData
   const environmentVariables = []
   const secretNames = [t.pass, t.secret, t.private, t.cert]
@@ -154,6 +155,29 @@ export default ({
     )
   }
 
+  const formatLayers = (
+    layers?: Layer[]
+  ): AwsLambdaLayerVersion[] => {
+    return (
+      layers?.map(l => {
+        const arnParts = l.Arn?.split(':')
+        // get layer name from arn:aws:lambda:_REGION_:_ACCOUNT_ID_:layer:_LAYER_NAME_:_LAYER_VERSION_
+        const layerName = arnParts[arnParts.length - 2]
+        return ({
+          id: generateUniqueId({
+            arn,
+            ...l,
+          }),
+          arn: l.Arn,
+          name: layerName,
+          codeSize: l.CodeSize,
+          signingProfileVersionArn: l.SigningProfileVersionArn,
+          signingJobArn: l.SigningJobArn,
+        })
+      }) || []
+    )
+  }
+
   const functionName = arn.split(':').pop()
   const functionPolicy = formatIamJsonPolicy(policy)
   const policyStatementIds = functionPolicy?.statement?.map(s => s.sid) ?? []
@@ -183,6 +207,7 @@ export default ({
     policyStatementIds,
     tags: formatTagsFromMap(Tags),
     eventSourceMappings: formatEventSourceMappings(eventSourceMappings),
-    eventInvokeConfigs: formatEventInvokeConfigs(eventInvokeConfigs)
+    eventInvokeConfigs: formatEventInvokeConfigs(eventInvokeConfigs),
+    layers: formatLayers(layers)
   }
 }

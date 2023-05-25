@@ -3418,6 +3418,7 @@ export type AwsLambda = AwsBaseService & {
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   kmsKeyArn?: Maybe<Scalars['String']>;
   lastModified?: Maybe<Scalars['String']>;
+  layers?: Maybe<Array<Maybe<AwsLambdaLayerVersion>>>;
   memorySize?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
   policy?: Maybe<AwsIamJsonPolicy>;
@@ -3489,6 +3490,15 @@ export type AwsLambdaEventSourceMappings = {
   topics?: Maybe<Array<Maybe<Scalars['String']>>>;
   tumblingWindowInSeconds?: Maybe<Scalars['Int']>;
   uuid?: Maybe<Scalars['String']>;
+};
+
+export type AwsLambdaLayerVersion = {
+  arn?: Maybe<Scalars['String']>;
+  codeSize?: Maybe<Scalars['Float']>;
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  signingJobArn?: Maybe<Scalars['String']>;
+  signingProfileVersionArn?: Maybe<Scalars['String']>;
 };
 
 export type AwsLambdaSourceAccessConfiguration = {

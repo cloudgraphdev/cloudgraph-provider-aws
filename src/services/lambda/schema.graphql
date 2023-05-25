@@ -75,6 +75,19 @@ type awsLambdaEventSourceMappings
   selfManagedKafkaEventSourceConfig: awsLambdaEventSourceConfig
 }
 
+type awsLambdaLayerVersion
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  arn: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  codeSize: Float
+  signingProfileVersionArn: String @search(by: [hash, regexp])
+  signingJobArn: String @search(by: [hash, regexp])
+}
 
 type awsLambda implements awsBaseService @key(fields: "arn") {
   description: String @search(by: [hash, regexp, fulltext])
@@ -97,6 +110,7 @@ type awsLambda implements awsBaseService @key(fields: "arn") {
   policyStatementIds: [String] @search(by: [hash, regexp])
   eventSourceMappings: [awsLambdaEventSourceMappings]
   eventInvokeConfigs: [awsLambdaEventInvokeConfig]
+  layers: [awsLambdaLayerVersion]
   tags: [awsRawTag]
   kms: [awsKms] @hasInverse(field: lambda)
   securityGroups: [awsSecurityGroup] @hasInverse(field: lambda)
