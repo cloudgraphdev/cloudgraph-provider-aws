@@ -1,3 +1,10 @@
+# [0.89.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.1...0.89.0-alpha.2) (2023-05-25)
+
+
+### Features
+
+* **aws:** updated elastic beanstalk client to aws-sdk-v3 to fix empty crawl data issue ([3f3e6b0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/3f3e6b0c23a522dd9e43b4f3a774e735e11a8029))
+
 # [0.89.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.88.0...0.89.0-alpha.1) (2023-05-24)
 
 
