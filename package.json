@@ -31,6 +31,7 @@
     "terraform:cleanup": "rimraf ./tests/terraform/{.terraform,.terraform.lock.hcl,tfplan} ./tests/terraform/*.{tfstate,tfplan,backup}"
   },
   "dependencies": {
+    "@aws-sdk/client-elastic-beanstalk": "^3.338.0",
     "@aws-sdk/credential-providers": "^3.256.0",
     "@aws-sdk/shared-ini-file-loader": "^3.254.0",
     "@cloudgraph/sdk": "^0.22.1",

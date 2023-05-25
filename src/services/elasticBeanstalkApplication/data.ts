@@ -1,45 +1,34 @@
+import {
+  DescribeApplicationsCommand,
+  ElasticBeanstalkClient,
+  ListTagsForResourceCommand,
+} from '@aws-sdk/client-elastic-beanstalk'
 import CloudGraph from '@cloudgraph/sdk'
-import { AWSError } from 'aws-sdk'
-import ElasticBeanstalk, {
-  ApplicationDescription,
-  ApplicationDescriptionsMessage,
-  ResourceTagsDescriptionMessage,
-} from 'aws-sdk/clients/elasticbeanstalk'
+import { Config } from 'aws-sdk'
+import { ApplicationDescription } from 'aws-sdk/clients/elasticbeanstalk'
 import isEmpty from 'lodash/isEmpty'
-
-import { AwsTag, Credentials, TagMap } from '../../types'
+import awsLoggerText from '../../properties/logger'
+import { AwsTag, TagMap } from '../../types'
+import AwsErrorLog from '../../utils/errorLog'
 import { convertAwsTagsToTagMap } from '../../utils/format'
 import { settleAllPromises } from '../../utils/index'
-import awsLoggerText from '../../properties/logger'
-import { initTestEndpoint } from '../../utils'
-import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'ElasticBeanstalkApp'
 const errorLog = new AwsErrorLog(serviceName)
-const endpoint = initTestEndpoint(serviceName)
 
 export interface RawAwsElasticBeanstalkApp extends ApplicationDescription {
   Tags?: TagMap
 }
 
 const listApplications = async (
-  eb: ElasticBeanstalk
+  eb: ElasticBeanstalkClient
 ): Promise<ApplicationDescription[]> =>
   new Promise(async resolve => {
-    eb.describeApplications(
-      {},
-      (err: AWSError, data: ApplicationDescriptionsMessage) => {
-        if (err) {
-          errorLog.generateAwsErrorLog({
-            functionName: 'elasticBeanstalk:describeApplications',
-            err,
-          })
-        }
-        /**
-         * No EB Applications for this region
-         */
+    const command = new DescribeApplicationsCommand({})
+    eb.send(command)
+      .then(data => {
         if (isEmpty(data)) {
           return resolve([])
         }
@@ -48,29 +37,24 @@ const listApplications = async (
           return resolve([])
         }
         resolve(Applications)
-      }
-    )
+      })
+      .catch(err => {
+        errorLog.generateAwsErrorLog({
+          functionName: 'elasticBeanstalk:describeApplications',
+          err,
+        })
+        resolve([])
+      })
   })
 
 export const getResourceTags = async (
-  eb: ElasticBeanstalk,
+  eb: ElasticBeanstalkClient,
   resourceArn: string
 ): Promise<TagMap> =>
   new Promise(resolveTags => {
-    eb.listTagsForResource(
-      {
-        ResourceArn: resourceArn,
-      },
-      (err: AWSError, data: ResourceTagsDescriptionMessage) => {
-        if (err) {
-          errorLog.generateAwsErrorLog({
-            functionName: 'elasticBeanstalk:listTagsForResource',
-            err,
-          })
-        }
-        /**
-         * No EB Applications for this region
-         */
+    const command = new ListTagsForResourceCommand({ ResourceArn: resourceArn })
+    eb.send(command)
+      .then(data => {
         if (isEmpty(data)) {
           return resolveTags({})
         }
@@ -79,12 +63,17 @@ export const getResourceTags = async (
           return resolveTags({})
         }
         resolveTags(convertAwsTagsToTagMap(tags as AwsTag[]))
-      }
-    )
+      })
+      .catch(err =>
+        errorLog.generateAwsErrorLog({
+          functionName: 'elasticBeanstalk:listTagsForResource',
+          err,
+        })
+      )
   })
 
 const getApplications = async (
-  eb: ElasticBeanstalk
+  eb: ElasticBeanstalkClient
 ): Promise<RawAwsElasticBeanstalkApp[]> => {
   const apps = await listApplications(eb)
   if (!isEmpty(apps)) {
@@ -100,19 +89,23 @@ const getApplications = async (
 
 export default async ({
   regions,
-  credentials,
+  config,
 }: {
   regions: string
-  credentials: Credentials
+  config: Config
 }): Promise<{ [property: string]: RawAwsElasticBeanstalkApp[] }> =>
   new Promise(async resolve => {
+    const { credentials } = config
     let numberOfApps = 0
     const output: { [property: string]: RawAwsElasticBeanstalkApp[] } = {}
 
     // First we get all applications for all regions
     await Promise.all(
       regions.split(',').map(region => {
-        const eb = new ElasticBeanstalk({ region, credentials, endpoint })
+        const eb = new ElasticBeanstalkClient({
+          credentials,
+          region,
+        })
         output[region] = []
         return new Promise<void>(async resolveRegion => {
           const apps = (await getApplications(eb)) || []
