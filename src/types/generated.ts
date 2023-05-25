@@ -3159,6 +3159,7 @@ export type AwsIamJsonPolicyStatement = {
   notResource?: Maybe<Array<Maybe<Scalars['String']>>>;
   principal?: Maybe<Array<Maybe<AwsIamJsonPolicyPrincipal>>>;
   resource?: Maybe<Array<Maybe<Scalars['String']>>>;
+  sid?: Maybe<Scalars['String']>;
 };
 
 export type AwsIamMfaDevice = {
@@ -3418,8 +3419,10 @@ export type AwsLambda = AwsBaseService & {
   kmsKeyArn?: Maybe<Scalars['String']>;
   lastModified?: Maybe<Scalars['String']>;
   memorySize?: Maybe<Scalars['Int']>;
+  name?: Maybe<Scalars['String']>;
   policy?: Maybe<AwsIamJsonPolicy>;
   policyRevisionId?: Maybe<Scalars['String']>;
+  policyStatementIds?: Maybe<Array<Maybe<Scalars['String']>>>;
   rawPolicy?: Maybe<Scalars['String']>;
   reservedConcurrentExecutions?: Maybe<Scalars['Int']>;
   runtime?: Maybe<Scalars['String']>;

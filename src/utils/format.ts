@@ -124,6 +124,7 @@ export const formatIamJsonPolicy = (json: string): AwsIamJsonPolicy => {
         notAction: isArray(el.NotAction)
           ? el.NotAction
           : [toString(el.NotAction)],
+        sid: el.Sid,
         condition: formatCondition(el.Condition),
         effect: el.Effect,
         principal: formatPrincipal(el.Principal),

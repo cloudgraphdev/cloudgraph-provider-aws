@@ -78,6 +78,7 @@ type awsLambdaEventSourceMappings
 
 type awsLambda implements awsBaseService @key(fields: "arn") {
   description: String @search(by: [hash, regexp, fulltext])
+  name: String @search(by: [hash, regexp])
   handler: String @search(by: [hash, regexp])
   kmsKeyArn: String @search(by: [hash, regexp])
   lastModified: String @search(by: [hash, regexp])
@@ -93,6 +94,7 @@ type awsLambda implements awsBaseService @key(fields: "arn") {
   policyRevisionId: String @search(by: [hash, regexp])
   rawPolicy: String @search(by: [hash, regexp])
   policy: awsIamJSONPolicy
+  policyStatementIds: [String] @search(by: [hash, regexp])
   eventSourceMappings: [awsLambdaEventSourceMappings]
   eventInvokeConfigs: [awsLambdaEventInvokeConfig]
   tags: [awsRawTag]

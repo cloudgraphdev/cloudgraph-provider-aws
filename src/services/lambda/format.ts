@@ -154,10 +154,15 @@ export default ({
     )
   }
 
+  const functionName = arn.split(':').pop()
+  const functionPolicy = formatIamJsonPolicy(policy)
+  const policyStatementIds = functionPolicy?.statement?.map(s => s.sid) ?? []
+
   return {
     accountId: account,
     arn,
     region,
+    name: functionName,
     description,
     handler,
     id: arn,
@@ -174,7 +179,8 @@ export default ({
     vpcConfig: formattedVpcConfig,
     policyRevisionId,
     rawPolicy: policy,
-    policy: formatIamJsonPolicy(policy),
+    policy: functionPolicy,
+    policyStatementIds,
     tags: formatTagsFromMap(Tags),
     eventSourceMappings: formatEventSourceMappings(eventSourceMappings),
     eventInvokeConfigs: formatEventInvokeConfigs(eventInvokeConfigs)
