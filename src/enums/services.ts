@@ -17,6 +17,8 @@ export default {
   cloudfront: 'cloudfront',
   cloudtrail: 'cloudtrail',
   cloudwatch: 'cloudwatch',
+  cloudwatchDashboard: 'cloudwatchDashboard',
+  cloudwatchEventRule: 'cloudwatchEventRule',
   cloudwatchLog: 'cloudwatchLog',
   codebuild: 'codebuild',
   cognitoIdentityPool: 'cognitoIdentityPool',

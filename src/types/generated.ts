@@ -126,6 +126,11 @@ export type AwsStringMap = {
   value?: Maybe<Scalars['String']>;
 };
 
+export type Target = {
+  arn?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+};
+
 export type AwsAccessLogSettings = {
   destinationArn?: Maybe<Scalars['String']>;
   format?: Maybe<Scalars['String']>;
@@ -996,10 +1001,17 @@ export type AwsCloudwatch = AwsBaseService & {
   threshold?: Maybe<Scalars['String']>;
 };
 
+export type AwsCloudwatchDashboard = AwsBaseService;
+
 export type AwsCloudwatchDimensions = {
   id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
+};
+
+export type AwsCloudwatchEventRule = AwsBaseService & {
+  eventBusName?: Maybe<Scalars['String']>;
+  targets?: Maybe<Array<Maybe<Target>>>;
 };
 
 export type AwsCloudwatchLog = {
