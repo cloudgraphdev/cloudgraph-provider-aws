@@ -3161,6 +3161,7 @@ export type AwsIamJsonPolicyStatement = {
   notResource?: Maybe<Array<Maybe<Scalars['String']>>>;
   principal?: Maybe<Array<Maybe<AwsIamJsonPolicyPrincipal>>>;
   resource?: Maybe<Array<Maybe<Scalars['String']>>>;
+  sid?: Maybe<Scalars['String']>;
 };
 
 export type AwsIamMfaDevice = {
@@ -3425,14 +3426,19 @@ export type AwsLambda = AwsBaseService & {
   cognitoUserPools?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   description?: Maybe<Scalars['String']>;
   environmentVariables?: Maybe<Array<Maybe<AwsLambdaEnvironmentVariable>>>;
+  eventInvokeConfigs?: Maybe<Array<Maybe<AwsLambdaEventInvokeConfig>>>;
+  eventSourceMappings?: Maybe<Array<Maybe<AwsLambdaEventSourceMappings>>>;
   handler?: Maybe<Scalars['String']>;
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   kms?: Maybe<Array<Maybe<AwsKms>>>;
   kmsKeyArn?: Maybe<Scalars['String']>;
   lastModified?: Maybe<Scalars['String']>;
+  layers?: Maybe<Array<Maybe<AwsLambdaLayerVersion>>>;
   memorySize?: Maybe<Scalars['Int']>;
+  name?: Maybe<Scalars['String']>;
   policy?: Maybe<AwsIamJsonPolicy>;
   policyRevisionId?: Maybe<Scalars['String']>;
+  policyStatementIds?: Maybe<Array<Maybe<Scalars['String']>>>;
   rawPolicy?: Maybe<Scalars['String']>;
   reservedConcurrentExecutions?: Maybe<Scalars['Int']>;
   runtime?: Maybe<Scalars['String']>;
@@ -3449,10 +3455,71 @@ export type AwsLambda = AwsBaseService & {
   vpcConfig?: Maybe<AwsLambdaVpcConfig>;
 };
 
+export type AwsLambdaDestinationConfig = {
+  OnFailure?: Maybe<Scalars['String']>;
+  OnSuccess?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+};
+
 export type AwsLambdaEnvironmentVariable = {
   id: Scalars['String'];
   key: Scalars['String'];
   value?: Maybe<Scalars['String']>;
+};
+
+export type AwsLambdaEventInvokeConfig = {
+  destinationConfig?: Maybe<AwsLambdaDestinationConfig>;
+  functionArn?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  lastModified?: Maybe<Scalars['DateTime']>;
+  maximumEventAgeInSeconds?: Maybe<Scalars['Int']>;
+  maximumRetryAttempts?: Maybe<Scalars['Int']>;
+};
+
+export type AwsLambdaEventSourceConfig = {
+  consumerGroupId?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+};
+
+export type AwsLambdaEventSourceMappings = {
+  amazonManagedKafkaEventSourceConfig?: Maybe<AwsLambdaEventSourceConfig>;
+  batchSize?: Maybe<Scalars['Int']>;
+  bisectBatchOnFunctionError?: Maybe<Scalars['Boolean']>;
+  destinationConfig?: Maybe<AwsLambdaDestinationConfig>;
+  eventSourceArn?: Maybe<Scalars['String']>;
+  filterCriteria?: Maybe<Array<Maybe<Scalars['String']>>>;
+  functionArn?: Maybe<Scalars['String']>;
+  functionResponseTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  id: Scalars['String'];
+  lastModified?: Maybe<Scalars['DateTime']>;
+  lastProcessingResult?: Maybe<Scalars['String']>;
+  maximumBatchingWindowInSeconds?: Maybe<Scalars['Int']>;
+  maximumRecordAgeInSeconds?: Maybe<Scalars['Int']>;
+  maximumRetryAttempts?: Maybe<Scalars['Int']>;
+  parallelizationFactor?: Maybe<Scalars['Int']>;
+  queues?: Maybe<Array<Maybe<Scalars['String']>>>;
+  selfManagedKafkaEventSourceConfig?: Maybe<AwsLambdaEventSourceConfig>;
+  startingPosition?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  stateTransitionReason?: Maybe<Scalars['String']>;
+  topics?: Maybe<Array<Maybe<Scalars['String']>>>;
+  tumblingWindowInSeconds?: Maybe<Scalars['Int']>;
+  uuid?: Maybe<Scalars['String']>;
+};
+
+export type AwsLambdaLayerVersion = {
+  arn?: Maybe<Scalars['String']>;
+  codeSize?: Maybe<Scalars['Float']>;
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  signingJobArn?: Maybe<Scalars['String']>;
+  signingProfileVersionArn?: Maybe<Scalars['String']>;
+};
+
+export type AwsLambdaSourceAccessConfiguration = {
+  id: Scalars['String'];
+  type?: Maybe<Scalars['String']>;
+  uri?: Maybe<Scalars['String']>;
 };
 
 export type AwsLambdaVpcConfig = {
