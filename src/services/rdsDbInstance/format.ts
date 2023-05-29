@@ -1,7 +1,9 @@
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import upperFirst from 'lodash/upperFirst'
 import { RawAwsRdsDbInstance } from './data'
-import { 
-  AwsRdsDbInstance, 
+import {
+  AwsRdsDbInstance,
 } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
 
@@ -9,12 +11,12 @@ export default ({
   service,
   account,
   region
-}: 
-{
-  service: RawAwsRdsDbInstance
-  account: string
-  region: string
-}): AwsRdsDbInstance => {
+}:
+  {
+    service: RawAwsRdsDbInstance
+    account: string
+    region: string
+  }): AwsRdsDbInstance => {
   const {
     DBInstanceArn: arn,
     DBInstanceIdentifier: dBInstanceIdentifier,
@@ -46,15 +48,36 @@ export default ({
 
   const subnetGroup = service.DBSubnetGroup?.DBSubnetGroupName || ''
 
-  const parameterGroup = service.DBParameterGroups.map(
-    ({ DBParameterGroupName, ParameterApplyStatus }) =>
-      `${DBParameterGroupName} (${ParameterApplyStatus})`
-  ).join(' | ')
+  const parameterGroups = service.DBParameterGroups.map(
+    (parameter) => {
+      const { DBParameterGroupName, ParameterApplyStatus } = parameter
+      return ({
+        id: generateUniqueId({
+          arn,
+          ...parameter
+        }),
+        description: `${DBParameterGroupName} (${ParameterApplyStatus})`,
+        name: DBParameterGroupName,
+        status: ParameterApplyStatus
+      })
+    }
+  )
 
   const optionsGroups = service.OptionGroupMemberships.map(
-    ({ OptionGroupName, Status }) =>
-      `${OptionGroupName} (${upperFirst(Status)})`
-  ).join(' | ')
+    (option) => {
+      const { OptionGroupName, Status } = option
+      return ({
+        id: generateUniqueId({
+          arn,
+          ...option
+        }),
+        description: `${OptionGroupName} (${upperFirst(Status)})`,
+        groupName: OptionGroupName,
+        status: Status
+      })
+    }
+
+  )
 
   return {
     id: arn,
@@ -77,7 +100,7 @@ export default ({
     autoMinorVersionUpgrade,
     iamDbAuthenticationEnabled,
     optionsGroups,
-    parameterGroup,
+    parameterGroups,
     storageType,
     instanceClass,
     allocatedStorage,

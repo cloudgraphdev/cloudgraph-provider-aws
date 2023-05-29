@@ -4036,8 +4036,8 @@ export type AwsRdsDbInstance = AwsBaseService & {
   licenseModel?: Maybe<Scalars['String']>;
   multiAZ?: Maybe<Scalars['Boolean']>;
   name?: Maybe<Scalars['String']>;
-  optionsGroups?: Maybe<Scalars['String']>;
-  parameterGroup?: Maybe<Scalars['String']>;
+  optionsGroups?: Maybe<Array<Maybe<AwsRdsDbInstanceGroupOption>>>;
+  parameterGroups?: Maybe<Array<Maybe<AwsRdsDbInstanceParameterGroup>>>;
   performanceInsightsEnabled?: Maybe<Scalars['Boolean']>;
   port?: Maybe<Scalars['Int']>;
   publiclyAccessible?: Maybe<Scalars['Boolean']>;
@@ -4051,6 +4051,20 @@ export type AwsRdsDbInstance = AwsBaseService & {
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   username?: Maybe<Scalars['String']>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+};
+
+export type AwsRdsDbInstanceGroupOption = {
+  description?: Maybe<Scalars['String']>;
+  groupName?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  status?: Maybe<Scalars['String']>;
+};
+
+export type AwsRdsDbInstanceParameterGroup = {
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
 };
 
 export type AwsRecorderStatus = {

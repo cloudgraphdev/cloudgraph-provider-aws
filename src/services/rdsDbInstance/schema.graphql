@@ -1,3 +1,18 @@
+type awsRdsDbInstanceParameterGroup {
+  id: String! @id
+  name: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+}
+
+type awsRdsDbInstanceGroupOption {
+  id: String! @id
+  groupName: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+}
+
+
 type awsRdsDbInstance implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
   port: Int @search
@@ -14,8 +29,8 @@ type awsRdsDbInstance implements awsBaseService @key(fields: "arn") {
   performanceInsightsEnabled: Boolean @search
   autoMinorVersionUpgrade: Boolean @search
   iamDbAuthenticationEnabled: Boolean @search
-  optionsGroups: String
-  parameterGroup: String
+  optionsGroups: [awsRdsDbInstanceGroupOption]
+  parameterGroups: [awsRdsDbInstanceParameterGroup]
   storageType: String @search(by: [hash, regexp])
   instanceClass: String @search(by: [hash, regexp])
   allocatedStorage: Int @search
