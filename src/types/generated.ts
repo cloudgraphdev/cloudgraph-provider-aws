@@ -4067,6 +4067,18 @@ export type AwsRdsDbInstanceParameterGroup = {
   status?: Maybe<Scalars['String']>;
 };
 
+export type AwsRdsEventSubscription = AwsBaseService & {
+  custSubscriptionId?: Maybe<Scalars['String']>;
+  customerAwsId?: Maybe<Scalars['String']>;
+  enabled?: Maybe<Scalars['Boolean']>;
+  eventCategoriesList?: Maybe<Array<Maybe<Scalars['String']>>>;
+  snsTopicArn?: Maybe<Scalars['String']>;
+  sourceIdsList?: Maybe<Array<Maybe<Scalars['String']>>>;
+  sourceType?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  subscriptionCreationTime?: Maybe<Scalars['String']>;
+};
+
 export type AwsRecorderStatus = {
   lastStartTime?: Maybe<Scalars['String']>;
   lastStatus?: Maybe<Scalars['String']>;

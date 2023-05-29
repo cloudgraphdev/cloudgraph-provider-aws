@@ -264,6 +264,7 @@ export default {
    */
   fetchingEbsSnapshotData:
     'Fetching EBS Snapshot data for this AWS account via the AWS SDK...',
+  fetchingEbsSnapshotData: 'Fetching EBS Snapshot data for this AWS account via the AWS SDK...',
   doneFetchingEbsSnapshotData: '✅ Done fetching EBS Snapshot Data ✅',
   fetchedEbsSnapshots: (num: number): string => `Fetched ${num} EBS Snapshots`,
   lookingForEbsSnapshot: 'Looking for EBS Snapshots...',
@@ -293,6 +294,8 @@ export default {
   fetchedRdsClusters: (num: number): string => `Fetched ${num} RDS Clusters`,
   fetchedRdsInstances: (num: number): string =>
     `Fetched ${num} RDS DB Instances`,
+  fetchedRdsEventSubscriptions: (num: number): string =>
+    `Fetched ${num} RDS DB Event Subscriptions`,
   noClusterFound: '❎ DB Instance is not part of a cluster ❎ ',
   foundCluster: 'Found the cluster the instance belongs to',
   addingRdsInstances: (num: number): string =>

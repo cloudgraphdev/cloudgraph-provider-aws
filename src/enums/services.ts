@@ -80,6 +80,7 @@ export default {
   rdsCluster: 'rdsCluster',
   rdsClusterSnapshot: 'rdsClusterSnapshot',
   rdsDbInstance: 'rdsDbInstance',
+  rdsEventSubscription: 'rdsEventSubscription',
   redshiftCluster: 'redshiftCluster',
   route53HostedZone: 'route53HostedZone',
   route53Record: 'route53Record',
