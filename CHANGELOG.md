@@ -1,3 +1,13 @@
+# [0.89.0-alpha.3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.2...0.89.0-alpha.3) (2023-05-29)
+
+
+### Features
+
+* Added aws_lambda_event_invoke_config for RT ([48ee1f0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/48ee1f03a04287aa28fa901c895c01071e3319bc))
+* Included event source mappings for lambda service ([9afbfb0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/9afbfb09c52dbeb1cb88b6ce1b2058b334c5c22e))
+* Included layers for aws_lambda_layers ([624f9c2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/624f9c2523aec53deed8b40a716fbd1dbc488503))
+* Included name and statements id for aws_lambda_permissions ([8496b43](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/8496b432014bf11617b2074aff4cb3019a73e3de))
+
 # [0.89.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.1...0.89.0-alpha.2) (2023-05-25)
 
 
