@@ -94,6 +94,9 @@ export default {
     `Found ${num} CloudWatch metric alarms to add for ${namespace}`,
   gettingCloudwatchAlarms: 'Fetching CloudWatch alarms...',
   gettingCloudwatchAlarmTags: 'Fetching tags for each CloudWatch alarm...',
+  gettingCloudwatchDashboards: 'Fetching CloudWatch dashboards...',
+  gettingCloudwatchRules: 'Fetching CloudWatch events rules...',
+  gettingCloudwatchRuleTargets: 'Fetching CloudWatch events rule targets...',
   /**
    * Kinesis Data Streams
    */
@@ -257,10 +260,11 @@ export default {
   /**
    * EBS Snapshot
    */
-    fetchingEbsSnapshotData: 'Fetching EBS Snapshot data for this AWS account via the AWS SDK...',
-    doneFetchingEbsSnapshotData: '✅ Done fetching EBS Snapshot Data ✅',
-    fetchedEbsSnapshots: (num: number): string => `Fetched ${num} EBS Snapshots`,
-    lookingForEbsSnapshot: 'Looking for EBS Snapshots...',
+  fetchingEbsSnapshotData:
+    'Fetching EBS Snapshot data for this AWS account via the AWS SDK...',
+  doneFetchingEbsSnapshotData: '✅ Done fetching EBS Snapshot Data ✅',
+  fetchedEbsSnapshots: (num: number): string => `Fetched ${num} EBS Snapshots`,
+  lookingForEbsSnapshot: 'Looking for EBS Snapshots...',
   /**
    * EC2
    */
@@ -274,8 +278,7 @@ export default {
   fetchedNetworkInterfaces: (num: number): string =>
     `Fetched ${num} Network Interfaces`,
   lookingForNetworkInterfaces: 'Gathering Network Interfaces to add...',
-  foundKeyPair: (id: string): string =>
-    `Found Key Pair ${id} for instance`,
+  foundKeyPair: (id: string): string => `Found Key Pair ${id} for instance`,
   doneFetchingEc2Data: '✅ Done fetching EC2 Instance Data ✅',
   /**
    * RDS
@@ -486,23 +489,25 @@ export default {
     `Adding Transit Gateway ${name} to the VPC`,
   addingTransitGatewayToRegion: ({ name }): string =>
     `Transit Gateway not attached to a VPC, adding Transit Gateway ${name} to the region level`,
-  fetchedTransitGateways: (num: number): string => `Found ${num} Transit Gateways`,
+  fetchedTransitGateways: (num: number): string =>
+    `Found ${num} Transit Gateways`,
   /**
    * Transit Gateway Attachment
    */
-   fetchedTransitGatewayAttachments: (num: number): string => `Found ${num} Transit Gateway Attachments`,
-   /**
+  fetchedTransitGatewayAttachments: (num: number): string =>
+    `Found ${num} Transit Gateway Attachments`,
+  /**
    * Transit Gateway Route Tables
    */
-    fetchedTransitGatewayRouteTables: (num: number): string => `Found ${num} Transit Gateway Route Tables`,
+  fetchedTransitGatewayRouteTables: (num: number): string =>
+    `Found ${num} Transit Gateway Route Tables`,
   /**
    * VPN Gateway
    */
   lookingForVpnGateway: 'Looking for Vpn Gateways to add...',
   addingVpnGatewayToVpc: (num: number): string =>
     `Adding ${num} Vpn Gateways to the VPC`,
-  fetchedVpnGateways: (num: number): string =>
-    `Fetched ${num} Vpn Gateways`,
+  fetchedVpnGateways: (num: number): string => `Fetched ${num} Vpn Gateways`,
   /**
    * Customer Gateway
    */
@@ -659,57 +664,67 @@ export default {
    * NACL
    */
   fetchedNacls: (num: number): string => `Fetched ${num} NACLs`,
-   /**
+  /**
    * Customer Gateway
    */
-  fetchedCustomerGateways: (num: number): string => `Fetched ${num} Customer Gateways`,
+  fetchedCustomerGateways: (num: number): string =>
+    `Fetched ${num} Customer Gateways`,
   /**
    * CloudWatch Logs
    */
-   lookingForCloudwatchLogGroups: 'Looking for CloudWatch Log groups to add to Region...',
-   fetchingCloudwatchLogGroupsData:
-     'Fetching CloudWatch Log groups for this AWS account via the AWS SDK...',
-   doneFetchingCloudwatchLogGroupsData: (num: number): string =>
-     `🕒 Done fetching CloudWatch Log groups in ${num} 🕘`,
-   foundMoreCloudwatchLogGroups: (num: number): string =>
-     `Found another ${num} CloudWatch Log groups in this region...`,
-   gettingCloudwatchLogGroups: 'Fetching CloudWatch Log groups...',
-   foundMoreCloudwatchMetricFilters: (num: number): string =>
-   `Found another ${num} CloudWatch Metric filters in this region...`,
+  lookingForCloudwatchLogGroups:
+    'Looking for CloudWatch Log groups to add to Region...',
+  fetchingCloudwatchLogGroupsData:
+    'Fetching CloudWatch Log groups for this AWS account via the AWS SDK...',
+  doneFetchingCloudwatchLogGroupsData: (num: number): string =>
+    `🕒 Done fetching CloudWatch Log groups in ${num} 🕘`,
+  foundMoreCloudwatchLogGroups: (num: number): string =>
+    `Found another ${num} CloudWatch Log groups in this region...`,
+  gettingCloudwatchLogGroups: 'Fetching CloudWatch Log groups...',
+  foundMoreCloudwatchMetricFilters: (num: number): string =>
+    `Found another ${num} CloudWatch Metric filters in this region...`,
   /**
    * Configuration Recorders
    */
-  fetchedConfigurationRecorders: (num: number): string => `Fetched ${num} Configuration Recorders`,
+  fetchedConfigurationRecorders: (num: number): string =>
+    `Fetched ${num} Configuration Recorders`,
   /**
    * Configuration Recorder Status
    */
-   fetchedConfigurationRecorderStatus: (num: number): string => `Fetched ${num} Configuration Recorder Status`,
-   /**
+  fetchedConfigurationRecorderStatus: (num: number): string =>
+    `Fetched ${num} Configuration Recorder Status`,
+  /**
    * Vpc Endpoints
    */
-   fetchedVpcEndpoints: (num: number): string => `Fetched ${num} Vpc Endpoints`,
+  fetchedVpcEndpoints: (num: number): string => `Fetched ${num} Vpc Endpoints`,
   /**
    * Access Analyzers
    */
-  fetchedaccessAnalyzers: (num: number): string => `Found ${num} Access Analyzers`,
+  fetchedaccessAnalyzers: (num: number): string =>
+    `Found ${num} Access Analyzers`,
   /**
    * Managed Prefix Lists
    */
-  fetchedManagedPrefixLists: (num: number): string => `Found ${num} Managed Prefix Lists`,
-  fetchedManagedPrefixListEntries: (num: number): string => `Found ${num} Managed Prefix List Entries`,
+  fetchedManagedPrefixLists: (num: number): string =>
+    `Found ${num} Managed Prefix Lists`,
+  fetchedManagedPrefixListEntries: (num: number): string =>
+    `Found ${num} Managed Prefix List Entries`,
   /**
    * Vpc Peering Connections
    */
-  fetchedVpcPeeringConnections: (num: number): string => `Found ${num} Vpc Peering Connections`,
+  fetchedVpcPeeringConnections: (num: number): string =>
+    `Found ${num} Vpc Peering Connections`,
   /**
    * Security Hub
    */
-  securityHubNotFound: (region: string): string => `Security Hub not found/disabled for region: ${region}`,
-  fetchedSecurityHub: (region: string): string => `Security Hub found/enabled for region: ${region}`,
-  fetchingSecurityHub: 'Fetching Security Hub data for this AWS account via the AWS SDK...',
+  securityHubNotFound: (region: string): string =>
+    `Security Hub not found/disabled for region: ${region}`,
+  fetchedSecurityHub: (region: string): string =>
+    `Security Hub found/enabled for region: ${region}`,
+  fetchingSecurityHub:
+    'Fetching Security Hub data for this AWS account via the AWS SDK...',
   /**
    * Msk
    */
-  fetchedMskClusters: (num: number): string =>
-    `Fetched ${num} Msk clusters`,
+  fetchedMskClusters: (num: number): string => `Fetched ${num} Msk clusters`,
 }

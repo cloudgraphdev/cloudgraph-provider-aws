@@ -20,6 +20,8 @@ import CloudTrail from '../services/cloudtrail'
 import CloudFormationStack from '../services/cloudFormationStack'
 import CloudFormationStackSet from '../services/cloudFormationStackSet'
 import CloudWatch from '../services/cloudwatch'
+import CloudWatchDashboard from '../services/cloudwatchDashboards'
+import CloudWatchEventRule from '../services/cloudwatchEventRules'
 import CognitoIdentityPool from '../services/cognitoIdentityPool'
 import CognitoUserPool from '../services/cognitoUserPool'
 import DynamoDB from '../services/dynamodb'
@@ -131,6 +133,8 @@ export default {
   [services.cloudFormationStack]: CloudFormationStack,
   [services.cloudFormationStackSet]: CloudFormationStackSet,
   [services.cloudwatch]: CloudWatch,
+  [services.cloudwatchDashboard]: CloudWatchDashboard,
+  [services.cloudwatchEventRule]: CloudWatchEventRule,
   [services.cloudwatchLog]: CloudWatchLog,
   [services.codebuild]: CodeBuild,
   [services.cognitoIdentityPool]: CognitoIdentityPool,

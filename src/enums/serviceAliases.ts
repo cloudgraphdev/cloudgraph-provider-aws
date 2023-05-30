@@ -15,6 +15,8 @@ export default {
   [services.cloudFormationStackSet]: 'cloudFormationStackSets',
   [services.cloudfront]: 'cloudfrontDistributions',
   [services.cloudwatchLog]: 'cloudwatchLogs',
+  [services.cloudwatchDashboard]: 'cloudwatchDashboards',
+  [services.cloudwatchEventRule]: 'cloudwatchEventRules',
   [services.codebuild]: 'codebuilds',
   [services.configurationRecorder]: 'configurationRecorders',
   [services.dmsReplicationInstance]: 'dmsReplicationInstances',
