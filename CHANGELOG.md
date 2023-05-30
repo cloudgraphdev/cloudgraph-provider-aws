@@ -1,3 +1,11 @@
+# [0.89.0-alpha.6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.5...0.89.0-alpha.6) (2023-05-30)
+
+
+### Features
+
+* **aws:** Add ssm parameter service and update redshift ([0d808e6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/0d808e68aceafb1f75c4a3cbf4fb22478ba1dfb6))
+* **aws:** update readme file ([6c39235](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/6c392359828a2ac5445936ba6376e79a615f9f91))
+
 # [0.89.0-alpha.5](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.4...0.89.0-alpha.5) (2023-05-30)
 
 
