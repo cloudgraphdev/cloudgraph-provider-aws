@@ -4044,6 +4044,7 @@ export type AwsRdsDbInstance = AwsBaseService & {
   resourceId?: Maybe<Scalars['String']>;
   route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  snapshots?: Maybe<Array<Maybe<AwsRdsDbInstanceSnapshot>>>;
   status?: Maybe<Scalars['String']>;
   storageType?: Maybe<Scalars['String']>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
@@ -4065,6 +4066,51 @@ export type AwsRdsDbInstanceParameterGroup = {
   id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
+};
+
+export type AwsRdsDbInstanceProcessorFeature = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+export type AwsRdsDbInstanceSnapshot = {
+  allocatedStorage?: Maybe<Scalars['Int']>;
+  availabilityZone?: Maybe<Scalars['String']>;
+  dBInstanceIdentifier?: Maybe<Scalars['String']>;
+  dBSnapshotArn?: Maybe<Scalars['String']>;
+  dBSnapshotIdentifier?: Maybe<Scalars['String']>;
+  dbiResourceId?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  encrypted?: Maybe<Scalars['Boolean']>;
+  engine?: Maybe<Scalars['String']>;
+  engineVersion?: Maybe<Scalars['String']>;
+  groupName?: Maybe<Scalars['String']>;
+  iAMDatabaseAuthenticationEnabled?: Maybe<Scalars['Boolean']>;
+  id: Scalars['String'];
+  instanceCreateTime?: Maybe<Scalars['DateTime']>;
+  iops?: Maybe<Scalars['Int']>;
+  kmsKeyId?: Maybe<Scalars['String']>;
+  licenseModel?: Maybe<Scalars['String']>;
+  masterUsername?: Maybe<Scalars['String']>;
+  optionGroupName?: Maybe<Scalars['String']>;
+  originalSnapshotCreateTime?: Maybe<Scalars['DateTime']>;
+  percentProgress?: Maybe<Scalars['Int']>;
+  port?: Maybe<Scalars['Int']>;
+  processorFeatures?: Maybe<Array<Maybe<AwsRdsDbInstanceProcessorFeature>>>;
+  snapshotCreateTime?: Maybe<Scalars['DateTime']>;
+  snapshotDatabaseTime?: Maybe<Scalars['DateTime']>;
+  snapshotTarget?: Maybe<Scalars['String']>;
+  snapshotType?: Maybe<Scalars['String']>;
+  sourceDBSnapshotIdentifier?: Maybe<Scalars['String']>;
+  sourceRegion?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  storageThroughput?: Maybe<Scalars['Int']>;
+  storageType?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  tdeCredentialArn?: Maybe<Scalars['String']>;
+  timezone?: Maybe<Scalars['String']>;
+  vpcId?: Maybe<Scalars['String']>;
 };
 
 export type AwsRdsDbProxies = AwsBaseService & {

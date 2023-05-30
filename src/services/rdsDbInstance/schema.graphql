@@ -12,6 +12,57 @@ type awsRdsDbInstanceGroupOption {
   description: String @search(by: [hash, regexp])
 }
 
+type awsRdsDbInstanceSnapshot {
+  id: String! @id
+  groupName: String @search(by: [hash, regexp])
+  status: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+}
+
+
+type awsRdsDbInstanceProcessorFeature {
+  id: String! @id
+  name: String @search(by: [hash, regexp])
+  value: String @search(by: [hash, regexp])
+}
+
+type awsRdsDbInstanceSnapshot {
+  id: String! @id
+  dBSnapshotIdentifier: String @search(by: [hash, regexp])
+  dBInstanceIdentifier: String @search(by: [hash, regexp])
+  snapshotCreateTime: DateTime @search(by: [day])
+  engine: String @search(by: [hash, regexp])
+  allocatedStorage: Int @search
+  status: String @search(by: [hash, regexp])
+  port: Int @search
+  availabilityZone: String @search(by: [hash, regexp])
+  vpcId: String @search(by: [hash, regexp])
+  instanceCreateTime: DateTime @search(by: [day])
+  masterUsername: String @search(by: [hash, regexp])
+  engineVersion: String @search(by: [hash, regexp])
+  licenseModel: String @search(by: [hash, regexp])
+  snapshotType: String @search(by: [hash, regexp])
+  iops: Int @search
+  optionGroupName: String @search(by: [hash, regexp])
+  percentProgress: Int @search
+  sourceRegion: String @search(by: [hash, regexp])
+  sourceDBSnapshotIdentifier: String @search(by: [hash, regexp])
+  storageType: String @search(by: [hash, regexp])
+  tdeCredentialArn: String @search(by: [hash, regexp])
+  encrypted: Boolean @search
+  kmsKeyId: String @search(by: [hash, regexp])
+  dBSnapshotArn: String @search(by: [hash, regexp])
+  timezone: String @search(by: [hash, regexp])
+  iAMDatabaseAuthenticationEnabled: Boolean @search
+  processorFeatures: [awsRdsDbInstanceProcessorFeature]
+  dbiResourceId: String @search(by: [hash, regexp])
+  tags: [awsRawTag]
+  originalSnapshotCreateTime: DateTime @search(by: [day])
+  snapshotDatabaseTime: DateTime @search(by: [day])
+  snapshotTarget: String @search(by: [hash, regexp])
+  storageThroughput: Int @search
+}
+
 
 type awsRdsDbInstance implements awsBaseService @key(fields: "arn") {
   name: String @search(by: [hash, regexp])
@@ -45,6 +96,7 @@ type awsRdsDbInstance implements awsBaseService @key(fields: "arn") {
   encrypted: Boolean @search
   licenseModel: String @search(by: [hash, regexp])
   tags: [awsRawTag]
+  snapshots: [awsRdsDbInstanceSnapshot]
   cluster: [awsRdsCluster] @hasInverse(field: instances)
   kms: [awsKms] @hasInverse(field: rdsDbInstance)
   securityGroups: [awsSecurityGroup] @hasInverse(field: rdsDbInstance)
