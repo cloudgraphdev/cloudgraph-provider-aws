@@ -51,6 +51,7 @@ import NATGateway from '../services/natGateway'
 import NetworkAcl from '../services/nacl'
 import NetworkInterface from '../services/networkInterface'
 import RDSCluster from '../services/rdsCluster'
+import RDSGlobalCluster from '../services/rdsGlobalCluster '
 import RDSDbInstance from '../services/rdsDbInstance'
 import RDSEventSubscription from '../services/rdsEventSubscription'
 import RdsDbProxies from '../services/rdsDbProxies'
@@ -185,6 +186,7 @@ export default {
   [services.vpcPeeringConnection]: VpcPeeringConnection,
   [services.sqs]: SQS,
   [services.rdsCluster]: RDSCluster,
+  [services.rdsGlobalCluster]: RDSGlobalCluster,
   [services.rdsClusterSnapshot]: RdsClusterSnapshot,
   [services.rdsDbInstance]: RDSDbInstance,
   [services.rdsEventSubscription]: RDSEventSubscription,

@@ -4152,6 +4152,34 @@ export type AwsRdsEventSubscription = AwsBaseService & {
   subscriptionCreationTime?: Maybe<Scalars['String']>;
 };
 
+export type AwsRdsGlobalCluster = AwsBaseService & {
+  databaseName?: Maybe<Scalars['String']>;
+  deletionProtection?: Maybe<Scalars['Boolean']>;
+  engine?: Maybe<Scalars['String']>;
+  engineVersion?: Maybe<Scalars['String']>;
+  failoverState?: Maybe<AwsRdsGlobalClusterFailoverState>;
+  globalClusterArn?: Maybe<Scalars['String']>;
+  globalClusterIdentifier?: Maybe<Scalars['String']>;
+  globalClusterMembers?: Maybe<Array<Maybe<AwsRdsGlobalClusterMembers>>>;
+  globalClusterResourceId?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  storageEncrypted?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsRdsGlobalClusterFailoverState = {
+  fromDbClusterArn?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  toDbClusterArn?: Maybe<Scalars['String']>;
+};
+
+export type AwsRdsGlobalClusterMembers = {
+  dBClusterArn?: Maybe<Scalars['String']>;
+  globalWriteForwardingStatus?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  isWriter?: Maybe<Scalars['Boolean']>;
+  readers?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
 export type AwsRecorderStatus = {
   lastStartTime?: Maybe<Scalars['String']>;
   lastStatus?: Maybe<Scalars['String']>;

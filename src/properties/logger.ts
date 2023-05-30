@@ -292,6 +292,7 @@ export default {
   lookingforRdsClusters: 'Looking for RDS Clusters...',
   creatingRdsInstance: (num: number): string => `Creating RDS Instance #${num}`,
   fetchedRdsClusters: (num: number): string => `Fetched ${num} RDS Clusters`,
+  fetchedRdsGlobalClusters: (num: number): string => `Fetched ${num} RDS Global Clusters`,
   fetchedRdsInstances: (num: number): string =>
     `Fetched ${num} RDS DB Instances`,
   fetchedRdsEventSubscriptions: (num: number): string =>

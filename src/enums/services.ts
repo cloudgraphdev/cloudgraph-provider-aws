@@ -78,6 +78,7 @@ export default {
   networkInterface: 'networkInterface',
   organization: 'organization',
   rdsCluster: 'rdsCluster',
+  rdsGlobalCluster: 'rdsGlobalCluster',
   rdsClusterSnapshot: 'rdsClusterSnapshot',
   rdsDbInstance: 'rdsDbInstance',
   rdsEventSubscription: 'rdsEventSubscription',
