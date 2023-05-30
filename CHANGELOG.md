@@ -1,3 +1,10 @@
+# [0.89.0-alpha.4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.3...0.89.0-alpha.4) (2023-05-30)
+
+
+### Features
+
+* add missing cloudwatch services ([c835307](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/c835307f304c1b76802c61f12ea545e0914b1bcc))
+
 # [0.89.0-alpha.3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.2...0.89.0-alpha.3) (2023-05-29)
 
 
