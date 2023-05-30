@@ -4067,6 +4067,33 @@ export type AwsRdsDbInstanceParameterGroup = {
   status?: Maybe<Scalars['String']>;
 };
 
+export type AwsRdsDbProxies = AwsBaseService & {
+  auth?: Maybe<Array<Maybe<AwsRdsDbProxiesUserAuthConfigInfo>>>;
+  createdDate?: Maybe<Scalars['DateTime']>;
+  dBProxyName?: Maybe<Scalars['String']>;
+  debugLogging?: Maybe<Scalars['Boolean']>;
+  endpoint?: Maybe<Scalars['String']>;
+  engineFamily?: Maybe<Scalars['String']>;
+  idleClientTimeout?: Maybe<Scalars['Int']>;
+  requireTLS?: Maybe<Scalars['Boolean']>;
+  roleArn?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  updatedDate?: Maybe<Scalars['DateTime']>;
+  vpcId?: Maybe<Scalars['String']>;
+  vpcSecurityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  vpcSubnetIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsRdsDbProxiesUserAuthConfigInfo = {
+  AuthScheme?: Maybe<Scalars['String']>;
+  ClientPasswordAuthType?: Maybe<Scalars['String']>;
+  Description?: Maybe<Scalars['String']>;
+  IAMAuth?: Maybe<Scalars['String']>;
+  SecretArn?: Maybe<Scalars['String']>;
+  UserName?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+};
+
 export type AwsRdsEventSubscription = AwsBaseService & {
   custSubscriptionId?: Maybe<Scalars['String']>;
   customerAwsId?: Maybe<Scalars['String']>;

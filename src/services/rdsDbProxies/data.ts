@@ -1,8 +1,8 @@
 import CloudGraph from '@cloudgraph/sdk'
 import RDS, {
-  EventSubscription,
-  EventSubscriptionsMessage,
-  DescribeEventSubscriptionsMessage
+  DescribeDBProxiesResponse,
+  DBProxy,
+  DescribeDBProxiesRequest
 } from 'aws-sdk/clients/rds'
 import { AWSError } from 'aws-sdk/lib/error'
 import groupBy from 'lodash/groupBy'
@@ -15,36 +15,36 @@ import awsLoggerText from '../../properties/logger'
 
 const { logger } = CloudGraph
 const lt = { ...awsLoggerText }
-const serviceName = 'RDS Event Subscriptions'
+const serviceName = 'RDS DB Proxies'
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
-const listDBEventSubscriptionsForRegion = async (rds: RDS): Promise<EventSubscription[]> =>
-  new Promise<EventSubscription[]>(resolve => {
-    const eventSubscriptions: EventSubscription[] = []
-    const descDBInstancesOpts: DescribeEventSubscriptionsMessage = {}
-    const listEventSubscriptions = (token?: string): void => {
+const listDBProxiesForRegion = async (rds: RDS): Promise<DBProxy[]> =>
+  new Promise<DBProxy[]>(resolve => {
+    const proxies: DBProxy[] = []
+    const descDBProxiesOpts: DescribeDBProxiesRequest = {}
+    const listProxies = (token?: string): void => {
       if (token) {
-        descDBInstancesOpts.Marker = token
+        descDBProxiesOpts.Marker = token
       }
       try {
-        rds.describeEventSubscriptions(
-          descDBInstancesOpts,
-          (err: AWSError, data: EventSubscriptionsMessage) => {
-            const { Marker, EventSubscriptionsList = [] } = data || {}
+        rds.describeDBProxies(
+          descDBProxiesOpts,
+          (err: AWSError, data: DescribeDBProxiesResponse) => {
+            const { Marker, DBProxies = [] } = data || {}
             if (err) {
               errorLog.generateAwsErrorLog({
-                functionName: 'rds:describeEventSubscriptions',
+                functionName: 'rds:describeDBProxies',
                 err,
               })
             }
 
-            eventSubscriptions.push(...EventSubscriptionsList)
+            proxies.push(...DBProxies)
 
             if (Marker) {
-              listEventSubscriptions(Marker)
+              listProxies(Marker)
             } else {
-              resolve(eventSubscriptions)
+              resolve(proxies)
             }
           }
         )
@@ -52,10 +52,10 @@ const listDBEventSubscriptionsForRegion = async (rds: RDS): Promise<EventSubscri
         resolve([])
       }
     }
-    listEventSubscriptions()
+    listProxies()
   })
 
-export interface RawAwsRdsEventSubscription extends EventSubscription {
+export interface RawAwsRdsDbProxies extends DBProxy {
   region: string
 }
 
@@ -65,16 +65,16 @@ export default async ({
 }: {
   regions: string
   config: Config
-}): Promise<{ [property: string]: RawAwsRdsEventSubscription[] }> =>
+}): Promise<{ [property: string]: RawAwsRdsDbProxies[] }> =>
   new Promise(async resolve => {
-    const rdsData: RawAwsRdsEventSubscription[] = []
+    const rdsData: RawAwsRdsDbProxies[] = []
     const regionPromises = []
 
-    // Get all the events subscriptions for the region
+    // Get all the proxies for the region
     regions.split(',').map(region => {
       const regionPromise = new Promise<void>(async resolveRegion => {
         const rds = new RDS({ ...config, region, endpoint })
-        const subscriptions = await listDBEventSubscriptionsForRegion(rds)
+        const subscriptions = await listDBProxiesForRegion(rds)
 
         if (!isEmpty(subscriptions)) {
           rdsData.push(
@@ -90,7 +90,7 @@ export default async ({
     })
 
     await Promise.all(regionPromises)
-    logger.debug(lt.fetchedRdsEventSubscriptions(rdsData.length))
+    logger.debug(lt.fetchedRdsDbProxies(rdsData.length))
 
     errorLog.reset()
     resolve(groupBy(rdsData, 'region'))
