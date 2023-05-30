@@ -98,6 +98,7 @@ import DmsReplicationInstance from '../services/dmsReplicationInstance'
 import SageMakerNotebookInstance from '../services/sageMakerNotebookInstance'
 import SystemsManagerInstance from '../services/systemsManagerInstance'
 import SystemsManagerDocument from '../services/systemsManagerDocument'
+import SystemsManagerParameter from '../services/systemsManagerParameter'
 import RdsClusterSnapshot from '../services/rdsClusterSnapshot'
 import VpcEndpoint from '../services/vpcEndpoint'
 import APIGatewayDomainName from '../services/apiGatewayDomainName'
@@ -218,5 +219,6 @@ export default {
   [services.wafV2WebAcl]: WafV2WebAcl,
   [services.systemsManagerInstance]: SystemsManagerInstance,
   [services.systemsManagerDocument]: SystemsManagerDocument,
+  [services.systemsManagerParameter]: SystemsManagerParameter,
   tag: AwsTag,
 }
