@@ -264,7 +264,6 @@ export default {
    */
   fetchingEbsSnapshotData:
     'Fetching EBS Snapshot data for this AWS account via the AWS SDK...',
-  fetchingEbsSnapshotData: 'Fetching EBS Snapshot data for this AWS account via the AWS SDK...',
   doneFetchingEbsSnapshotData: '✅ Done fetching EBS Snapshot Data ✅',
   fetchedEbsSnapshots: (num: number): string => `Fetched ${num} EBS Snapshots`,
   lookingForEbsSnapshot: 'Looking for EBS Snapshots...',

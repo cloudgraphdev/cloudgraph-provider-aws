@@ -215,6 +215,9 @@ export type AwsAccount = AwsOptionalService & {
   rdsClusterSnapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
   rdsClusters?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsDbInstances?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
+  rdsDbProxies?: Maybe<Array<Maybe<AwsRdsDbProxies>>>;
+  rdsEventSubscription?: Maybe<Array<Maybe<AwsRdsEventSubscription>>>;
+  rdsGlobalCluster?: Maybe<Array<Maybe<AwsRdsGlobalCluster>>>;
   redshiftClusters?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
   regions?: Maybe<Array<Maybe<Scalars['String']>>>;
   route53HostedZones?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
