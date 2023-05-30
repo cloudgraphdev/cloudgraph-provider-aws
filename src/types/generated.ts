@@ -4085,6 +4085,7 @@ export type AwsRedshiftCluster = AwsBaseService & {
   manualSnapshotRetentionPeriod?: Maybe<Scalars['Int']>;
   masterUsername?: Maybe<Scalars['String']>;
   modifyStatus?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
   nodeType?: Maybe<Scalars['String']>;
   numberOfNodes?: Maybe<Scalars['Int']>;
   preferredMaintenanceWindow?: Maybe<Scalars['String']>;
@@ -4548,6 +4549,10 @@ export type AwsSystemsManagerInstance = AwsBaseService & {
   resourceType?: Maybe<Scalars['String']>;
   sourceId?: Maybe<Scalars['String']>;
   sourceType?: Maybe<Scalars['String']>;
+};
+
+export type AwsSystemsManagerParameter = AwsBaseService & {
+  name?: Maybe<Scalars['String']>;
 };
 
 export type AwsTag = {

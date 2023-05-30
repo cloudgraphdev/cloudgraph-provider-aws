@@ -104,6 +104,7 @@ export default {
   [services.sns]: 'awsSns',
   [services.systemsManagerInstance]: 'awsSystemsManagerInstance',
   [services.systemsManagerDocument]: 'awsSystemsManagerDocument',
+  [services.systemsManagerParameter]: 'awsSystemsManagerParameter',
   [services.transitGateway]: 'awsTransitGateway',
   [services.transitGatewayAttachment]: 'awsTransitGatewayAttachment',
   [services.transitGatewayRouteTable]: 'awsTransitGatewayRouteTable',

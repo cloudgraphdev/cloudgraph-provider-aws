@@ -97,6 +97,7 @@ export default {
   subnet: 'subnet',
   systemsManagerInstance: 'systemsManagerInstance',
   systemsManagerDocument: 'systemsManagerDocument',
+  systemsManagerParameter: 'systemsManagerParameter',
   transitGateway: 'transitGateway',
   transitGatewayAttachment: 'transitGatewayAttachment',
   transitGatewayRouteTable: 'transitGatewayRouteTable',

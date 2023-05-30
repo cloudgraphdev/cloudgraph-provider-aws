@@ -274,6 +274,16 @@ export const ssmDocumentArn = ({
   name: string
 }): string => `arn:aws:ssm:${region}:${account}:document/${name}`
 
+export const ssmParameterArn = ({
+  region,
+  account,
+  name,
+}: {
+  region: string
+  account: string
+  name: string
+}): string => `arn:aws:ssm:${region}:${account}:parameter/${name.replace('/', '')}`
+
 export const cognitoIdentityPoolArn = ({
   region,
   account,

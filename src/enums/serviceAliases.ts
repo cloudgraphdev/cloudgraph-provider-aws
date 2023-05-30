@@ -76,6 +76,7 @@ export default {
   [services.subnet]: 'subnets',
   [services.systemsManagerDocument]: 'systemsManagerDocuments',
   [services.systemsManagerInstance]: 'systemsManagerInstances',
+  [services.systemsManagerParameter]: 'systemsManagerParameters',
   [services.transitGateway]: 'transitGateways',
   [services.transitGatewayAttachment]: 'transitGatewayAttachments',
   [services.transitGatewayRouteTable]: 'transitGatewayRouteTables',
