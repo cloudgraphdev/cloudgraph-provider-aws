@@ -209,6 +209,8 @@ export default {
     `Fetched ${num} Attributes for ${albArn}`,
   fetchedAlbListeners: (num: number, albArn: string): string =>
     `Fetched ${num} ALB Listeners for ${albArn}`,
+  fetchedAlbListenerCertificates: (num: number, listenerArn: string): string =>
+    `Fetched ${num} ALB Listener Certificates for ${listenerArn}`,
   fetchedAlbTargetGroups: (num: number, albArn: string): string =>
     `Fetched ${num} ALB Target Groups for ${albArn}`,
   fetchedAlbTargetIds: (num: number, albArn: string): string =>
