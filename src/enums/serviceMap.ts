@@ -92,7 +92,9 @@ import ClientVpnEndpoint from '../services/clientVpnEndpoint'
 import VpnConnection from '../services/vpnConnection'
 import Organization from '../services/organization'
 import CloudWatchLog from '../services/cloudwatchLogs'
+import ConfigurationDeliveryChannel from '../services/configurationDeliveryChannel'
 import ConfigurationRecorder from '../services/configurationRecorder'
+import ConfigurationRule from '../services/configurationRule'
 import CodeBuild from '../services/codeBuild'
 import GlueJob from '../services/glueJob'
 import GlueRegistry from '../services/glueRegistry'
@@ -149,7 +151,9 @@ export default {
   [services.codebuild]: CodeBuild,
   [services.cognitoIdentityPool]: CognitoIdentityPool,
   [services.cognitoUserPool]: CognitoUserPool,
+  [services.configurationDeliveryChannel]: ConfigurationDeliveryChannel,
   [services.configurationRecorder]: ConfigurationRecorder,
+  [services.configurationRule]: ConfigurationRule,
   [services.ebs]: EBS,
   [services.ebsSnapshot]: EBSSnapshot,
   [services.ec2Instance]: EC2,

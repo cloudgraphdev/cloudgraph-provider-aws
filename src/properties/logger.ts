@@ -305,13 +305,13 @@ export default {
   lookingforRdsClusters: 'Looking for RDS Clusters...',
   creatingRdsInstance: (num: number): string => `Creating RDS Instance #${num}`,
   fetchedRdsClusters: (num: number): string => `Fetched ${num} RDS Clusters`,
-  fetchedRdsGlobalClusters: (num: number): string => `Fetched ${num} RDS Global Clusters`,
+  fetchedRdsGlobalClusters: (num: number): string =>
+    `Fetched ${num} RDS Global Clusters`,
   fetchedRdsInstances: (num: number): string =>
     `Fetched ${num} RDS DB Instances`,
   fetchedRdsEventSubscriptions: (num: number): string =>
     `Fetched ${num} RDS DB Event Subscriptions`,
-  fetchedRdsDbProxies: (num: number): string =>
-    `Fetched ${num} RDS DB Proxies`,
+  fetchedRdsDbProxies: (num: number): string => `Fetched ${num} RDS DB Proxies`,
   noClusterFound: '❎ DB Instance is not part of a cluster ❎ ',
   foundCluster: 'Found the cluster the instance belongs to',
   addingRdsInstances: (num: number): string =>
@@ -706,6 +706,11 @@ export default {
   foundMoreCloudwatchMetricFilters: (num: number): string =>
     `Found another ${num} CloudWatch Metric filters in this region...`,
   /**
+   * Configuration Delivery Channel
+   */
+  fetchedCOnfigurationDeliveryChannels: (num: number): string =>
+    `Fetched ${num} Configuration Delivery Channels`,
+  /**
    * Configuration Recorders
    */
   fetchedConfigurationRecorders: (num: number): string =>
@@ -715,6 +720,11 @@ export default {
    */
   fetchedConfigurationRecorderStatus: (num: number): string =>
     `Fetched ${num} Configuration Recorder Status`,
+  /**
+   * Configuration Rules
+   */
+  fetchedConfigurationRules: (num: number): string =>
+    `Fetched ${num} Configuration Rules`,
   /**
    * Vpc Endpoints
    */
