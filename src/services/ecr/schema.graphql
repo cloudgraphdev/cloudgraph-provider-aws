@@ -8,6 +8,8 @@ type awsEcr implements awsBaseService @key(fields: "arn") {
   repositoryUri: String @search(by: [hash, regexp])
   scanOnPush: Boolean @search
   tags: [awsRawTag]
+  lifecyclePolicy: awsEcrLifecyclePolicy
+  repositoryPolicy: awsEcrRepositoryPolicy
 }
 
 type awsEcrEncryptionConfiguration
@@ -18,4 +20,16 @@ type awsEcrEncryptionConfiguration
   ) {
   type: String @search(by: [hash, regexp])
   kmsKey: String @search(by: [hash, regexp])
+}
+
+type awsEcrLifecyclePolicy {
+  registryId: String
+  repositoryName: String
+  lifecyclePolicyText: String
+}
+
+type awsEcrRepositoryPolicy {
+  registryId: String
+  repositoryName: String
+  policyText: String
 }

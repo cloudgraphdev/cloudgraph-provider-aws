@@ -305,13 +305,13 @@ export default {
   lookingforRdsClusters: 'Looking for RDS Clusters...',
   creatingRdsInstance: (num: number): string => `Creating RDS Instance #${num}`,
   fetchedRdsClusters: (num: number): string => `Fetched ${num} RDS Clusters`,
-  fetchedRdsGlobalClusters: (num: number): string => `Fetched ${num} RDS Global Clusters`,
+  fetchedRdsGlobalClusters: (num: number): string =>
+    `Fetched ${num} RDS Global Clusters`,
   fetchedRdsInstances: (num: number): string =>
     `Fetched ${num} RDS DB Instances`,
   fetchedRdsEventSubscriptions: (num: number): string =>
     `Fetched ${num} RDS DB Event Subscriptions`,
-  fetchedRdsDbProxies: (num: number): string =>
-    `Fetched ${num} RDS DB Proxies`,
+  fetchedRdsDbProxies: (num: number): string => `Fetched ${num} RDS DB Proxies`,
   noClusterFound: '❎ DB Instance is not part of a cluster ❎ ',
   foundCluster: 'Found the cluster the instance belongs to',
   addingRdsInstances: (num: number): string =>
@@ -501,6 +501,10 @@ export default {
     `Found another ${num} ECR repos in this region...`,
   gettingECRRepos: 'Fetching ECR repos...',
   gettingECRRepoTags: 'Fetching tags for each ECR repo...',
+  gettingECRRepoLifecyclePolicy:
+    'Fetching lifecycle policy for each ECR repo...',
+  gettingECRRepoRepositoryPolicy:
+    'Fetching repository policy for each ECR repo...',
   /**
    * Transit Gateway
    */
