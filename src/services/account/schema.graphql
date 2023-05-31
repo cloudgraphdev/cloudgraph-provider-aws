@@ -1,11 +1,14 @@
 type awsAccount implements awsOptionalService @key(fields: "id") {
   regions: [String] @search(by: [hash])
   albs: [awsAlb]
+  apiGatewayApiKeys: [awsApiGatewayApiKey]
   apiGatewayDomainNames: [awsApiGatewayDomainName]
   apiGatewayHttpApis: [awsApiGatewayHttpApi]
   apiGatewayResources: [awsApiGatewayResource]
   apiGatewayRestApis: [awsApiGatewayRestApi]
   apiGatewayStages: [awsApiGatewayStage]
+  apiGatewayUsagePlans: [awsApiGatewayUsagePlan]
+  apiGatewayVpcLinks: [awsApiGatewayVpcLink]
   appSync: [awsAppSync]
   asgs: [awsAsg]
   athenaDataCatalogs: [awsAthenaDataCatalog]

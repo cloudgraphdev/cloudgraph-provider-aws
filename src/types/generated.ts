@@ -139,11 +139,14 @@ export type AwsAccessLogSettings = {
 
 export type AwsAccount = AwsOptionalService & {
   albs?: Maybe<Array<Maybe<AwsAlb>>>;
+  apiGatewayApiKeys?: Maybe<Array<Maybe<AwsApiGatewayApiKey>>>;
   apiGatewayDomainNames?: Maybe<Array<Maybe<AwsApiGatewayDomainName>>>;
   apiGatewayHttpApis?: Maybe<Array<Maybe<AwsApiGatewayHttpApi>>>;
   apiGatewayResources?: Maybe<Array<Maybe<AwsApiGatewayResource>>>;
   apiGatewayRestApis?: Maybe<Array<Maybe<AwsApiGatewayRestApi>>>;
   apiGatewayStages?: Maybe<Array<Maybe<AwsApiGatewayStage>>>;
+  apiGatewayUsagePlans?: Maybe<Array<Maybe<AwsApiGatewayUsagePlan>>>;
+  apiGatewayVpcLinks?: Maybe<Array<Maybe<AwsApiGatewayVpcLink>>>;
   appSync?: Maybe<Array<Maybe<AwsAppSync>>>;
   asgs?: Maybe<Array<Maybe<AwsAsg>>>;
   athenaDataCatalogs?: Maybe<Array<Maybe<AwsAthenaDataCatalog>>>;
@@ -331,6 +334,11 @@ export type AwsAlbListenerSettings = {
   sslPolicy?: Maybe<Scalars['String']>;
 };
 
+export type AwsApiGatewayApiKey = AwsBaseService & {
+  name?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
 export type AwsApiGatewayCors = {
   allowCredentials?: Maybe<Scalars['Boolean']>;
   allowHeaders?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -404,18 +412,46 @@ export type AwsApiGatewayResource = AwsBaseService & {
 
 export type AwsApiGatewayRestApi = AwsBaseService & {
   apiKeySource?: Maybe<Scalars['String']>;
+  authorizers?: Maybe<Array<Maybe<AwsApiGatewayRestApiAuthorizer>>>;
   binaryMediaTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
   createdDate?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  documentationParts?: Maybe<Array<Maybe<AwsApiGatewayRestApiDocumentationPart>>>;
   domainNames?: Maybe<Array<Maybe<AwsApiGatewayDomainName>>>;
   endpointConfiguration?: Maybe<AwsApiGatewayEndpointConfiguration>;
+  gatewayResponses?: Maybe<Array<Maybe<AwsApiGatewayRestApiGatewayResponse>>>;
   minimumCompressionSize?: Maybe<Scalars['Int']>;
+  models?: Maybe<Array<Maybe<AwsApiGatewayRestModel>>>;
   policy?: Maybe<AwsIamJsonPolicy>;
   rawPolicy?: Maybe<Scalars['String']>;
   resources?: Maybe<Array<Maybe<AwsApiGatewayResource>>>;
   route53Record?: Maybe<Array<Maybe<AwsRoute53Record>>>;
   stages?: Maybe<Array<Maybe<AwsApiGatewayStage>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+};
+
+export type AwsApiGatewayRestApiAuthorizer = {
+  authorizerUri?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+};
+
+export type AwsApiGatewayRestApiDocumentationPart = {
+  id?: Maybe<Scalars['String']>;
+  location?: Maybe<AwsApiGatewayRestApiDocumentationPartLocation>;
+  properties?: Maybe<Scalars['String']>;
+};
+
+export type AwsApiGatewayRestApiDocumentationPartLocation = {
+  type?: Maybe<Scalars['String']>;
+};
+
+export type AwsApiGatewayRestApiGatewayResponse = {
+  responseType?: Maybe<Scalars['String']>;
+};
+
+export type AwsApiGatewayRestModel = {
+  name?: Maybe<Scalars['String']>;
 };
 
 export type AwsApiGatewayStage = AwsBaseService & {
@@ -438,6 +474,15 @@ export type AwsApiGatewayStageVariable = {
   id: Scalars['String'];
   key: Scalars['String'];
   value?: Maybe<Scalars['String']>;
+};
+
+export type AwsApiGatewayUsagePlan = AwsBaseService & {
+  name?: Maybe<Scalars['String']>;
+};
+
+export type AwsApiGatewayVpcLink = AwsBaseService & {
+  name?: Maybe<Scalars['String']>;
+  targetArns?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type AwsAppSync = AwsBaseService & {
