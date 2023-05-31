@@ -1,3 +1,10 @@
+# [0.89.0-alpha.8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.7...0.89.0-alpha.8) (2023-05-31)
+
+
+### Features
+
+* add apigateway missing services ([afd255f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/afd255ff59f3ea7238bfdbcba992dc3154b31236))
+
 # [0.89.0-alpha.7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.6...0.89.0-alpha.7) (2023-05-31)
 
 
