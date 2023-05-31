@@ -1,32 +1,32 @@
-import { RawAwsSes } from './data'
-import { AwsSes } from '../../types/generated'
+import { RawAwsSesDomain } from './data'
+import { AwsSesDomain } from '../../types/generated'
 import { sesArn } from '../../utils/generateArns'
 
 /**
- * SES
+ * SES Domain
  */
 
-export default ({ 
+export default ({
   service,
   account,
   region,
-}:{
-  service: RawAwsSes
+}: {
+  service: RawAwsSesDomain
   account: string
   region: string
-}): AwsSes => {
+}): AwsSesDomain => {
   const {
-    Identity: email,
+    Identity: domain,
     VerificationStatus: verificationStatus,
   } = service
-  const arn = sesArn({region, account, email})
+  const arn = sesArn({ region, account, identity: domain })
 
   return {
     id: arn,
     accountId: account,
     arn,
     region,
-    email,
+    domain,
     verificationStatus,
   }
 }

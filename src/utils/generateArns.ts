@@ -45,12 +45,12 @@ export const networkAclArn = ({
 export const sesArn = ({
   region,
   account,
-  email,
+  identity,
 }: {
   region: string
   account: string
-  email: string
-}): string => `arn:aws:ses:${region}:${account}:identity/${email}`
+  identity: string
+}): string => `arn:aws:ses:${region}:${account}:identity/${identity}`
 
 export const redshiftArn = ({
   region,

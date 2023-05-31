@@ -238,7 +238,8 @@ export type AwsAccount = AwsOptionalService & {
   secretsManager?: Maybe<Array<Maybe<AwsSecretsManager>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   securityHub?: Maybe<Array<Maybe<AwsSecurityHub>>>;
-  ses?: Maybe<Array<Maybe<AwsSes>>>;
+  sesDomain?: Maybe<Array<Maybe<AwsSesDomain>>>;
+  sesEmail?: Maybe<Array<Maybe<AwsSesEmail>>>;
   sns?: Maybe<Array<Maybe<AwsSns>>>;
   sqs?: Maybe<Array<Maybe<AwsSqs>>>;
   subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
@@ -1334,7 +1335,7 @@ export type AwsCognitoUserPool = AwsBaseService & {
   name?: Maybe<Scalars['String']>;
   policies?: Maybe<AwsCognitoUserPoolPasswordPolicy>;
   schemaAttributes?: Maybe<Array<Maybe<AwsCognitoUserPoolSchemaAttribute>>>;
-  ses?: Maybe<Array<Maybe<AwsSes>>>;
+  sesEmail?: Maybe<Array<Maybe<AwsSesEmail>>>;
   smsAuthenticationMessage?: Maybe<Scalars['String']>;
   smsConfigurationExternalId?: Maybe<Scalars['String']>;
   smsConfigurationFailure?: Maybe<Scalars['String']>;
@@ -4581,7 +4582,12 @@ export type AwsServiceBillingInfo = {
   name: Scalars['String'];
 };
 
-export type AwsSes = AwsBaseService & {
+export type AwsSesDomain = AwsBaseService & {
+  domain?: Maybe<Scalars['String']>;
+  verificationStatus?: Maybe<Scalars['String']>;
+};
+
+export type AwsSesEmail = AwsBaseService & {
   cognitoUserPools?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   email?: Maybe<Scalars['String']>;
   verificationStatus?: Maybe<Scalars['String']>;

@@ -16,14 +16,15 @@ import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const serviceName = 'SES'
+const serviceName = 'SES Domain'
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
+
 /**
- * SES
+ * SES Domains
  */
-export interface RawAwsSes extends IdentityVerificationAttributes {
+export interface RawAwsSesDomain extends IdentityVerificationAttributes {
   Identity: string
   region: string
 }
@@ -34,9 +35,9 @@ export default async ({
 }: {
   regions: string
   config: Config
-}): Promise<{ [property: string]: RawAwsSes[] }> =>
+}): Promise<{ [property: string]: RawAwsSesDomain[] }> =>
   new Promise(async resolve => {
-    const sesData: RawAwsSes[] = []
+    const sesData: RawAwsSesDomain[] = []
     const regionPromises = []
     const identityVerificationPromises = []
 
@@ -45,7 +46,7 @@ export default async ({
         const ses = new SES({ ...config, region, endpoint })
 
         ses.listIdentities(
-          {},
+          { IdentityType: 'Domain' },
           (err: AWSError, data: ListIdentitiesResponse) => {
             /**
              * No Data for the region
@@ -56,7 +57,7 @@ export default async ({
 
             if (err) {
               errorLog.generateAwsErrorLog({
-                functionName: 'ses:listIdentities',
+                functionName: 'sesDomain:listIdentities',
                 err,
               })
             }
@@ -75,6 +76,7 @@ export default async ({
 
             const identityVerificationPromise = new Promise<void>(
               resolveIdVer => {
+                ses.getTemplate()
                 ses.getIdentityVerificationAttributes(
                   { Identities },
                   (
@@ -85,7 +87,7 @@ export default async ({
                   ) => {
                     if (err) {
                       errorLog.generateAwsErrorLog({
-                        functionName: 'ses:getIdentityVerificationAttributes',
+                        functionName: 'sesDomain:getIdentityVerificationAttributes',
                         err,
                       })
                     }
@@ -93,6 +95,7 @@ export default async ({
                     if (!isEmpty(identities)) {
                       sesData.push(
                         ...Identities.map(Identity => ({
+
                           Identity,
                           ...identities[Identity],
                           region,
@@ -104,6 +107,7 @@ export default async ({
                     resolveRegion()
                   }
                 )
+                ses.listConfigurationSets()
               }
             )
             identityVerificationPromises.push(identityVerificationPromise)
