@@ -291,8 +291,13 @@ export default {
   lookingforRdsClusters: 'Looking for RDS Clusters...',
   creatingRdsInstance: (num: number): string => `Creating RDS Instance #${num}`,
   fetchedRdsClusters: (num: number): string => `Fetched ${num} RDS Clusters`,
+  fetchedRdsGlobalClusters: (num: number): string => `Fetched ${num} RDS Global Clusters`,
   fetchedRdsInstances: (num: number): string =>
     `Fetched ${num} RDS DB Instances`,
+  fetchedRdsEventSubscriptions: (num: number): string =>
+    `Fetched ${num} RDS DB Event Subscriptions`,
+  fetchedRdsDbProxies: (num: number): string =>
+    `Fetched ${num} RDS DB Proxies`,
   noClusterFound: '❎ DB Instance is not part of a cluster ❎ ',
   foundCluster: 'Found the cluster the instance belongs to',
   addingRdsInstances: (num: number): string =>

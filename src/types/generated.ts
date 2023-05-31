@@ -215,6 +215,9 @@ export type AwsAccount = AwsOptionalService & {
   rdsClusterSnapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
   rdsClusters?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsDbInstances?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
+  rdsDbProxies?: Maybe<Array<Maybe<AwsRdsDbProxies>>>;
+  rdsEventSubscription?: Maybe<Array<Maybe<AwsRdsEventSubscription>>>;
+  rdsGlobalCluster?: Maybe<Array<Maybe<AwsRdsGlobalCluster>>>;
   redshiftClusters?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;
   regions?: Maybe<Array<Maybe<Scalars['String']>>>;
   route53HostedZones?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
@@ -4036,14 +4039,15 @@ export type AwsRdsDbInstance = AwsBaseService & {
   licenseModel?: Maybe<Scalars['String']>;
   multiAZ?: Maybe<Scalars['Boolean']>;
   name?: Maybe<Scalars['String']>;
-  optionsGroups?: Maybe<Scalars['String']>;
-  parameterGroup?: Maybe<Scalars['String']>;
+  optionsGroups?: Maybe<Array<Maybe<AwsRdsDbInstanceGroupOption>>>;
+  parameterGroups?: Maybe<Array<Maybe<AwsRdsDbInstanceParameterGroup>>>;
   performanceInsightsEnabled?: Maybe<Scalars['Boolean']>;
   port?: Maybe<Scalars['Int']>;
   publiclyAccessible?: Maybe<Scalars['Boolean']>;
   resourceId?: Maybe<Scalars['String']>;
   route53HostedZone?: Maybe<Array<Maybe<AwsRoute53HostedZone>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  snapshots?: Maybe<Array<Maybe<AwsRdsDbInstanceSnapshot>>>;
   status?: Maybe<Scalars['String']>;
   storageType?: Maybe<Scalars['String']>;
   subnet?: Maybe<Array<Maybe<AwsSubnet>>>;
@@ -4051,6 +4055,132 @@ export type AwsRdsDbInstance = AwsBaseService & {
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   username?: Maybe<Scalars['String']>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+};
+
+export type AwsRdsDbInstanceGroupOption = {
+  description?: Maybe<Scalars['String']>;
+  groupName?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  status?: Maybe<Scalars['String']>;
+};
+
+export type AwsRdsDbInstanceParameterGroup = {
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+};
+
+export type AwsRdsDbInstanceProcessorFeature = {
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+export type AwsRdsDbInstanceSnapshot = {
+  allocatedStorage?: Maybe<Scalars['Int']>;
+  availabilityZone?: Maybe<Scalars['String']>;
+  dBInstanceIdentifier?: Maybe<Scalars['String']>;
+  dBSnapshotArn?: Maybe<Scalars['String']>;
+  dBSnapshotIdentifier?: Maybe<Scalars['String']>;
+  dbiResourceId?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  encrypted?: Maybe<Scalars['Boolean']>;
+  engine?: Maybe<Scalars['String']>;
+  engineVersion?: Maybe<Scalars['String']>;
+  groupName?: Maybe<Scalars['String']>;
+  iAMDatabaseAuthenticationEnabled?: Maybe<Scalars['Boolean']>;
+  id: Scalars['String'];
+  instanceCreateTime?: Maybe<Scalars['DateTime']>;
+  iops?: Maybe<Scalars['Int']>;
+  kmsKeyId?: Maybe<Scalars['String']>;
+  licenseModel?: Maybe<Scalars['String']>;
+  masterUsername?: Maybe<Scalars['String']>;
+  optionGroupName?: Maybe<Scalars['String']>;
+  originalSnapshotCreateTime?: Maybe<Scalars['DateTime']>;
+  percentProgress?: Maybe<Scalars['Int']>;
+  port?: Maybe<Scalars['Int']>;
+  processorFeatures?: Maybe<Array<Maybe<AwsRdsDbInstanceProcessorFeature>>>;
+  snapshotCreateTime?: Maybe<Scalars['DateTime']>;
+  snapshotDatabaseTime?: Maybe<Scalars['DateTime']>;
+  snapshotTarget?: Maybe<Scalars['String']>;
+  snapshotType?: Maybe<Scalars['String']>;
+  sourceDBSnapshotIdentifier?: Maybe<Scalars['String']>;
+  sourceRegion?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  storageThroughput?: Maybe<Scalars['Int']>;
+  storageType?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  tdeCredentialArn?: Maybe<Scalars['String']>;
+  timezone?: Maybe<Scalars['String']>;
+  vpcId?: Maybe<Scalars['String']>;
+};
+
+export type AwsRdsDbProxies = AwsBaseService & {
+  auth?: Maybe<Array<Maybe<AwsRdsDbProxiesUserAuthConfigInfo>>>;
+  createdDate?: Maybe<Scalars['DateTime']>;
+  dBProxyName?: Maybe<Scalars['String']>;
+  debugLogging?: Maybe<Scalars['Boolean']>;
+  endpoint?: Maybe<Scalars['String']>;
+  engineFamily?: Maybe<Scalars['String']>;
+  idleClientTimeout?: Maybe<Scalars['Int']>;
+  requireTLS?: Maybe<Scalars['Boolean']>;
+  roleArn?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  updatedDate?: Maybe<Scalars['DateTime']>;
+  vpcId?: Maybe<Scalars['String']>;
+  vpcSecurityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  vpcSubnetIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsRdsDbProxiesUserAuthConfigInfo = {
+  AuthScheme?: Maybe<Scalars['String']>;
+  ClientPasswordAuthType?: Maybe<Scalars['String']>;
+  Description?: Maybe<Scalars['String']>;
+  IAMAuth?: Maybe<Scalars['String']>;
+  SecretArn?: Maybe<Scalars['String']>;
+  UserName?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+};
+
+export type AwsRdsEventSubscription = AwsBaseService & {
+  custSubscriptionId?: Maybe<Scalars['String']>;
+  customerAwsId?: Maybe<Scalars['String']>;
+  enabled?: Maybe<Scalars['Boolean']>;
+  eventCategoriesList?: Maybe<Array<Maybe<Scalars['String']>>>;
+  snsTopicArn?: Maybe<Scalars['String']>;
+  sourceIdsList?: Maybe<Array<Maybe<Scalars['String']>>>;
+  sourceType?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  subscriptionCreationTime?: Maybe<Scalars['String']>;
+};
+
+export type AwsRdsGlobalCluster = AwsBaseService & {
+  databaseName?: Maybe<Scalars['String']>;
+  deletionProtection?: Maybe<Scalars['Boolean']>;
+  engine?: Maybe<Scalars['String']>;
+  engineVersion?: Maybe<Scalars['String']>;
+  failoverState?: Maybe<AwsRdsGlobalClusterFailoverState>;
+  globalClusterArn?: Maybe<Scalars['String']>;
+  globalClusterIdentifier?: Maybe<Scalars['String']>;
+  globalClusterMembers?: Maybe<Array<Maybe<AwsRdsGlobalClusterMembers>>>;
+  globalClusterResourceId?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  storageEncrypted?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsRdsGlobalClusterFailoverState = {
+  fromDbClusterArn?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  toDbClusterArn?: Maybe<Scalars['String']>;
+};
+
+export type AwsRdsGlobalClusterMembers = {
+  dBClusterArn?: Maybe<Scalars['String']>;
+  globalWriteForwardingStatus?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  isWriter?: Maybe<Scalars['Boolean']>;
+  readers?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type AwsRecorderStatus = {
