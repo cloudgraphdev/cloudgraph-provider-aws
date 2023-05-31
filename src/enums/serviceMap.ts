@@ -3,6 +3,9 @@ import ACM from '../services/acm'
 import ALB from '../services/alb'
 import APIGatewayResource from '../services/apiGatewayResource'
 import APIGatewayRestApi from '../services/apiGatewayRestApi'
+import APIGatewayApiKey from '../services/apiGatewayApiKey'
+import APIGatewayVpcLink from '../services/apiGatewayVpcLink'
+import APIGatewayUsagePlan from '../services/apiGatewayUsagePlan'
 import APIGatewayStage from '../services/apiGatewayStage'
 import ASG from '../services/asg'
 import AppSync from '../services/appSync'
@@ -126,6 +129,9 @@ export default {
   [services.apiGatewayHttpApi]: APIGatewayHttpApi,
   [services.apiGatewayResource]: APIGatewayResource,
   [services.apiGatewayRestApi]: APIGatewayRestApi,
+  [services.apiGatewayApiKey]: APIGatewayApiKey,
+  [services.apiGatewayVpcLink]: APIGatewayVpcLink,
+  [services.apiGatewayUsagePlan]: APIGatewayUsagePlan,
   [services.apiGatewayStage]: APIGatewayStage,
   [services.athenaDataCatalog]: AthenaDataCatalog,
   [services.asg]: ASG,

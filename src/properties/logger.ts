@@ -59,7 +59,7 @@ export default {
    */
   fetchingCloudFrontData:
     'Fetching CloudFront Distros for this AWS account via the AWS SDK...',
-  fetchedCloudFrontDistros: (num: number) =>
+  fetchedCloudFrontDistros: (num: number): string =>
     `Fetched ${num} CloudFront Distros`,
   fetchingCloudFrontDistrosConfigAndTags:
     'Fetching CloudFront Distros Config Data and Tags...',
@@ -117,7 +117,7 @@ export default {
   lookingForIotThing: 'Looking for IoT Things to add to Region...',
   addingIotThing: (num: number): string =>
     `Created and added ${num} IoT Things to this region`,
-  foundMoreIoTThings: (num: number) =>
+  foundMoreIoTThings: (num: number): string =>
     `Found another ${num} IoT things in this region...`,
   gettingIoTThings: 'Fetching IoT things...',
   /**
@@ -134,10 +134,24 @@ export default {
     `Fetched ${num} Api Gateway Stages`,
   fetchedApiGwDomainNames: (num: number): string =>
     `Fetched ${num} API Gateway Domain Names`,
+  fetchedApiGatewayApiKeys: (num: number): string =>
+    `Fetched ${num} Api Gateway Api Keys`,
+  fetchedApiGatewayVpcLinks: (num: number): string =>
+    `Fetched ${num} Api Gateway Vpc Links`,
+  fetchedApiGatewayUsagePlans: (num: number): string =>
+    `Fetched ${num} Api Gateway Usage Plans`,
   fetchingApiGatewayData:
     'Fetching API Gateway data for this AWS account via the AWS SDK...',
   doneFetchingApiGatewayData: '✅ Done fetching API Gateway Data ✅',
   gettingApiGatewayTags: 'Fetching tags for each Api Gateway Rest Api...',
+  gettingApiGatewayAuthorizers:
+    'Fetching authorizers for each Api Gateway Rest Api...',
+  gettingApiGatewayDocumentationParts:
+    'Fetching authorizers for each Api Gateway Documentation Parts...',
+  gettingApiGatewayGatewayResponses:
+    'Fetching authorizers for each Api Gateway Gateway Responses...',
+  gettingApiGatewayModels:
+    'Fetching authorizers for each Api Gateway Models...',
   gettingApiGatewayStageTags: 'Fetching tags for each Api Gateway Stage...',
   /**
    * Vpc
@@ -318,13 +332,14 @@ export default {
   fetchedEmrClusters: (num: number): string => `Fetched ${num} EMR Clusters`,
   fetchedEmrClusterInstances: (num: number): string =>
     `Fetched ${num} EMR Clusters Instances`,
-  foundAnotherFiftyClusters: (region: string) =>
+  foundAnotherFiftyClusters: (region: string): string =>
     `Found another 50 EMR clusters for the ${region} region...`,
-  foundAnotherTwoThousandInstances: (cluster: string) =>
+  foundAnotherTwoThousandInstances: (cluster: string): string =>
     `Found another 2000 EMR instances for the ${cluster} cluster...`,
-  foundAnotherFiftySteps: (cluster: string) =>
+  foundAnotherFiftySteps: (cluster: string): string =>
     `Found another 50 EMR steps for the ${cluster} cluster...`,
-  fetchedEmrClusterSteps: (num: number) => `Fetched ${num} EMR Cluster Steps`,
+  fetchedEmrClusterSteps: (num: number): string =>
+    `Fetched ${num} EMR Cluster Steps`,
   addingEmrEc2Connection: (
     clusterName: string,
     ec2InstanceName: string
@@ -377,11 +392,11 @@ export default {
   lookingForDynamoDb: 'Looking for DynamoDb Tables to add...',
   fetchingDynamoDbData:
     'Fetching DynamoDB data for this AWS account via the AWS SDK...',
-  doneFetchingDynamoDbData: (num: number) =>
+  doneFetchingDynamoDbData: (num: number): string =>
     `🕒 Done fetching DynamoDb Data in ${num} 🕘`,
-  fetchedDynamoDbTableNames: (num: number) =>
+  fetchedDynamoDbTableNames: (num: number): string =>
     `Fetched ${num} DynamoDB table names`,
-  addingDynamoDbTables: (num: number) =>
+  addingDynamoDbTables: (num: number): string =>
     `Found ${num} Dynamo DB tables, adding them to the Region`,
   gettingTableDetails: 'Fetching details for each table...',
   gettingTableTags: 'Fetching tags for each table...',
@@ -391,10 +406,10 @@ export default {
   /**
    * SNS
    */
-  fetchedSNSTopics: (num: number) => `Fetched ${num} SNS Topics`,
-  gettingSNSTopicAttributes: `Fetching attributes for each topic...`,
-  gettingSNSTopicTags: `Fetching tags for each topic...`,
-  gettingSNSTopicSubscriptions: `Fetching subscriptions for each topic...`,
+  fetchedSNSTopics: (num: number): string => `Fetched ${num} SNS Topics`,
+  gettingSNSTopicAttributes: 'Fetching attributes for each topic...',
+  gettingSNSTopicTags: 'Fetching tags for each topic...',
+  gettingSNSTopicSubscriptions: 'Fetching subscriptions for each topic...',
   lookingForSns: 'Looking for SNS topics and subscriptions to add...',
   addingSns: (num: number): string =>
     `Found ${num} SNS topics, adding them to the Region`,
@@ -459,7 +474,7 @@ export default {
     `Found ${num} EKS Clusters, adding them to the VPC`,
   canNotFindClusterForAsg:
     'ERROR: Can not find ECS/EKS cluster for ASG - it should have been added already',
-  foundMoreEKSClusters: (num: number) =>
+  foundMoreEKSClusters: (num: number): string =>
     `Found another ${num} EKS clusters in this region...`,
   /**
    * Elastic Beanstalk
@@ -476,13 +491,13 @@ export default {
     `Found ${num} ElastiCache Clusters, adding them to the VPC`,
   missingReplicationGroup: (is: string): string =>
     `Missing replication group for ${is} ElastiCache Cluster! Not adding ElastiCache Data`,
-  fetchedElasticacheClusters: (num: number) =>
+  fetchedElasticacheClusters: (num: number): string =>
     `Fetched ${num} Elasticache clusters...`,
   /**
    * ECR
    */
   fetchedECRRepos: (num: number): string => `Found ${num} ECR repos...`,
-  foundMoreECRRepos: (num: number) =>
+  foundMoreECRRepos: (num: number): string =>
     `Found another ${num} ECR repos in this region...`,
   gettingECRRepos: 'Fetching ECR repos...',
   gettingECRRepoTags: 'Fetching tags for each ECR repo...',
@@ -625,7 +640,7 @@ export default {
   lookingForCloud9: 'Looking for Cloud9 to add to Region...',
   addingCloud9: (num: number): string =>
     `Created and added ${num} Cloud9 to this region`,
-  foundMoreCloud9Environments: (num: number) =>
+  foundMoreCloud9Environments: (num: number): string =>
     `Found another ${num} Cloud9 environments in this region...`,
   gettingCloud9Environments: 'Fetching Cloud9 environments...',
   gettingCloud9EnvironmentTags: 'Fetching tags for each Cloud9 environment...',

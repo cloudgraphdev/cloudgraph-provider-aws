@@ -18,4 +18,32 @@ type awsApiGatewayRestApi implements awsBaseService @key(fields: "arn") {
   resources: [awsApiGatewayResource] @hasInverse(field: restApi)
   route53Record: [awsRoute53Record] @hasInverse(field: restApi) #change to plural
   domainNames: [awsApiGatewayDomainName] @hasInverse(field: restApis)
+  authorizers: [awsApiGatewayRestApiAuthorizer]
+  documentationParts: [awsApiGatewayRestApiDocumentationPart]
+  gatewayResponses: [awsApiGatewayRestApiGatewayResponse]
+  models: [awsApiGatewayRestModel]
+}
+
+type awsApiGatewayRestApiAuthorizer {
+  id: String
+  name: String
+  authorizerUri: String
+}
+
+type awsApiGatewayRestApiDocumentationPart {
+  id: String
+  location: awsApiGatewayRestApiDocumentationPartLocation
+  properties: String
+}
+
+type awsApiGatewayRestApiDocumentationPartLocation {
+  type: String
+}
+
+type awsApiGatewayRestApiGatewayResponse {
+  responseType: String
+}
+
+type awsApiGatewayRestModel {
+  name: String
 }
