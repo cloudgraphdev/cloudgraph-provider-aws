@@ -1,3 +1,15 @@
+# [0.89.0-alpha.7](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.6...0.89.0-alpha.7) (2023-05-31)
+
+
+### Features
+
+* Added rdsDBProxies ([7c3e5c0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/7c3e5c05c176149ec12c802bbd929834cd02e433))
+* Added rdsEventSubscription ([76c4438](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/76c44380596efa087e1c5c0d57d4c047a85a993b))
+* Added rdsGlobalClusters ([fdc1342](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/fdc1342e455a50b2ea7357f5a67ce9c4ee5aae69))
+* Added snapshots for dbinstances ([1377e9a](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/1377e9aa4526ff35fb5f08cc281f7e5b01edd220))
+* Included groupOption and parameterGroup for dbInstance ([88d5c14](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/88d5c1413011d86aa547f5321da33eebecf17619))
+* Linked new rds services to awsAccount schema ([d18a849](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d18a8497d07d9598c761d205f1a1ada828d4260e))
+
 # [0.89.0-alpha.6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.5...0.89.0-alpha.6) (2023-05-30)
 
 
