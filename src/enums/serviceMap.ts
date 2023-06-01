@@ -26,7 +26,9 @@ import CloudWatchLog from '../services/cloudwatchLogs'
 import CodeBuild from '../services/codeBuild'
 import CognitoIdentityPool from '../services/cognitoIdentityPool'
 import CognitoUserPool from '../services/cognitoUserPool'
+import ConfigurationDeliveryChannel from '../services/configurationDeliveryChannel'
 import ConfigurationRecorder from '../services/configurationRecorder'
+import ConfigurationRule from '../services/configurationRule'
 import CustomerGateway from '../services/customerGateway'
 import DmsReplicationInstance from '../services/dmsReplicationInstance'
 import DynamoDB from '../services/dynamodb'
@@ -152,7 +154,9 @@ export default {
   [services.codebuild]: CodeBuild,
   [services.cognitoIdentityPool]: CognitoIdentityPool,
   [services.cognitoUserPool]: CognitoUserPool,
+  [services.configurationDeliveryChannel]: ConfigurationDeliveryChannel,
   [services.configurationRecorder]: ConfigurationRecorder,
+  [services.configurationRule]: ConfigurationRule,
   [services.ebs]: EBS,
   [services.ebsSnapshot]: EBSSnapshot,
   [services.ec2Instance]: EC2,

@@ -162,7 +162,9 @@ export type AwsAccount = AwsOptionalService & {
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
   cognitoIdentityPool?: Maybe<Array<Maybe<AwsCognitoIdentityPool>>>;
   cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
+  configurationDeliveryChannels?: Maybe<Array<Maybe<AwsConfigurationDeliveryChannel>>>;
   configurationRecorders?: Maybe<Array<Maybe<AwsConfigurationRecorder>>>;
+  configurationRules?: Maybe<Array<Maybe<AwsConfigurationRule>>>;
   customerGateway?: Maybe<Array<Maybe<AwsCustomerGateway>>>;
   dmsReplicationInstances?: Maybe<Array<Maybe<AwsDmsReplicationInstance>>>;
   dynamodb?: Maybe<Array<Maybe<AwsDynamoDbTable>>>;
@@ -1393,12 +1395,20 @@ export type AwsCognitoUserPoolSchemaAttribute = {
   stringAttributeConstraintsMinValue?: Maybe<Scalars['String']>;
 };
 
+export type AwsConfigurationDeliveryChannel = AwsBaseService & {
+  name?: Maybe<Scalars['String']>;
+};
+
 export type AwsConfigurationRecorder = AwsBaseService & {
   iamRole?: Maybe<Array<Maybe<AwsIamRole>>>;
   name?: Maybe<Scalars['String']>;
   recordingGroup?: Maybe<AwsRecordingGroup>;
   roleARN?: Maybe<Scalars['String']>;
   status?: Maybe<AwsRecorderStatus>;
+};
+
+export type AwsConfigurationRule = AwsBaseService & {
+  name?: Maybe<Scalars['String']>;
 };
 
 export type AwsConnectionLogResponseOptions = {
