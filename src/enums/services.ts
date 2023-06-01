@@ -101,6 +101,8 @@ export default {
   s3: 's3',
   secretsManager: 'secretsManager',
   securityHub: 'securityHub',
+  ses: 'ses',
+  sesReceiptRuleSet: 'sesReceiptRuleSet',
   sesEmail: 'sesEmail',
   sesDomain: 'sesDomain',
   sg: 'sg',

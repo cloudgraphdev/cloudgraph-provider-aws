@@ -102,6 +102,8 @@ import SageMakerProject from '../services/sageMakerProject'
 import SecretsManager from '../services/secretsManager'
 import AwsSecurityGroup from '../services/securityGroup'
 import SecurityHub from '../services/securityHub'
+import SES from '../services/ses'
+import SESReceiptRuleSet from '../services/sesReceiptRuleSet'
 import SESEmail from '../services/sesEmail'
 import SESDomain from '../services/sesDomain'
 import SNS from '../services/sns'
@@ -218,6 +220,8 @@ export default {
   [services.s3]: S3,
   [services.secretsManager]: SecretsManager,
   [services.securityHub]: SecurityHub,
+  [services.ses]: SES,
+  [services.sesReceiptRuleSet]: SESReceiptRuleSet,
   [services.sesEmail]: SESEmail,
   [services.sesDomain]: SESDomain,
   [services.iamAccessAnalyzer]: IamAccessAnalyzer,

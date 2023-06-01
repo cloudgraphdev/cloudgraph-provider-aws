@@ -102,6 +102,8 @@ type awsAccount implements awsOptionalService @key(fields: "id") {
   systemsManagerDocuments: [awsSystemsManagerDocument]
   systemsManagerInstances: [awsSystemsManagerInstance]
   systemsManagerParameters: [awsSystemsManagerParameter]
+  ses: [awsSes]
+  sesReceiptRuleSet: [awsSesReceiptRuleSet]
   sesEmail: [awsSesEmail]
   sesDomain: [awsSesDomain]
   sns: [awsSns]
