@@ -1,3 +1,13 @@
+type awsIamRoleAttachedPolicy
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  policyArn: String! @id @search(by: [hash, regexp])
+  policyName: String @search(by: [hash, regexp])
+}
+
 type awsIamRoleInlinePolicy
   @generate(
     query: { get: false, query: true, aggregate: false }
@@ -20,6 +30,7 @@ type awsIamRole implements awsBaseService @key(fields: "id") {
   maxSessionDuration: Int @search
   tags: [awsRawTag]
   inlinePolicies: [awsIamRoleInlinePolicy]
+  managedPolicies: [awsIamRoleAttachedPolicy]
   cloudFormationStack: [awsCloudFormationStack] @hasInverse(field: iamRole)
   codebuilds: [awsCodebuild] @hasInverse(field: iamRoles)
   configurationRecorder: [awsConfigurationRecorder] @hasInverse(field: iamRole)

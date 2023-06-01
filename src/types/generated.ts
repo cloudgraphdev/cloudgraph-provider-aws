@@ -3175,12 +3175,23 @@ export type AwsIamAccessKey = {
   status?: Maybe<Scalars['String']>;
 };
 
+export type AwsIamAttachedPolicy = {
+  policyArn: Scalars['String'];
+  policyName?: Maybe<Scalars['String']>;
+};
+
 export type AwsIamGroup = AwsBaseService & {
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   iamUsers?: Maybe<Array<Maybe<AwsIamUser>>>;
   inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
+  managedPolicies?: Maybe<Array<Maybe<AwsIamGroupAttachedPolicy>>>;
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
+};
+
+export type AwsIamGroupAttachedPolicy = {
+  policyArn: Scalars['String'];
+  policyName?: Maybe<Scalars['String']>;
 };
 
 export type AwsIamInstanceProfile = AwsBaseService & {
@@ -3299,6 +3310,7 @@ export type AwsIamRole = AwsBaseService & {
   lambda?: Maybe<Array<Maybe<AwsLambda>>>;
   lastUsedDate?: Maybe<Scalars['DateTime']>;
   managedAirflows?: Maybe<Array<Maybe<AwsManagedAirflow>>>;
+  managedPolicies?: Maybe<Array<Maybe<AwsIamRoleAttachedPolicy>>>;
   maxSessionDuration?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
@@ -3309,6 +3321,11 @@ export type AwsIamRole = AwsBaseService & {
   sageMakerNotebookInstances?: Maybe<Array<Maybe<AwsSageMakerNotebookInstance>>>;
   systemsManagerInstances?: Maybe<Array<Maybe<AwsSystemsManagerInstance>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+};
+
+export type AwsIamRoleAttachedPolicy = {
+  policyArn: Scalars['String'];
+  policyName?: Maybe<Scalars['String']>;
 };
 
 export type AwsIamRoleInlinePolicy = {
@@ -3339,6 +3356,7 @@ export type AwsIamUser = AwsOptionalService & {
   iamAttachedPolicies?: Maybe<Array<Maybe<AwsIamPolicy>>>;
   iamGroups?: Maybe<Array<Maybe<AwsIamGroup>>>;
   inlinePolicies?: Maybe<Array<Maybe<Scalars['String']>>>;
+  managedPolicies?: Maybe<Array<Maybe<AwsIamAttachedPolicy>>>;
   mfaActive?: Maybe<Scalars['Boolean']>;
   mfaDevices?: Maybe<Array<Maybe<AwsIamMfaDevice>>>;
   name?: Maybe<Scalars['String']>;

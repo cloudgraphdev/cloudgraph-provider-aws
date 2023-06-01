@@ -131,7 +131,7 @@ const groupsByUsername = async (
         if (!isEmpty(data)) {
           const { Groups = [] } = data
 
-          const userGroups = Groups.map(({ GroupId }) => GroupId)
+          const userGroups = Groups.map(({ GroupName }) => GroupName)
 
           resolve({ UserName, Groups: userGroups })
         }
