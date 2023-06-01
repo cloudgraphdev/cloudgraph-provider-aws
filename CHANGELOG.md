@@ -1,3 +1,10 @@
+# [0.89.0-alpha.10](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.9...0.89.0-alpha.10) (2023-06-01)
+
+
+### Features
+
+* add config missing services ([ad4f1a1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/ad4f1a1e2f58caa21838cc1966621e863bc648e8))
+
 # [0.89.0-alpha.9](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.8...0.89.0-alpha.9) (2023-06-01)
 
 
