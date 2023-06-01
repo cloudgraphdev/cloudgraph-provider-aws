@@ -1,3 +1,10 @@
+# [0.89.0-alpha.11](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.10...0.89.0-alpha.11) (2023-06-01)
+
+
+### Features
+
+* **aws:** support missing glue services ([be11f33](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/be11f33b3611b123f0167560adf894671248cb30))
+
 # [0.89.0-alpha.10](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.9...0.89.0-alpha.10) (2023-06-01)
 
 
