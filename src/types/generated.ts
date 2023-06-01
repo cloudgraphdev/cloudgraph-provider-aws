@@ -189,8 +189,11 @@ export type AwsAccount = AwsOptionalService & {
   emrInstances?: Maybe<Array<Maybe<AwsEmrInstance>>>;
   emrSteps?: Maybe<Array<Maybe<AwsEmrStep>>>;
   flowLogs?: Maybe<Array<Maybe<AwsFlowLog>>>;
+  glueCrawlers?: Maybe<Array<Maybe<AwsGlueCrawler>>>;
+  glueDatabases?: Maybe<Array<Maybe<AwsGlueDatabase>>>;
   glueJobs?: Maybe<Array<Maybe<AwsGlueJob>>>;
   glueRegistries?: Maybe<Array<Maybe<AwsGlueRegistry>>>;
+  glueTriggers?: Maybe<Array<Maybe<AwsGlueTrigger>>>;
   guardDutyDetectors?: Maybe<Array<Maybe<AwsGuardDutyDetector>>>;
   iamAccessAnalyzers?: Maybe<Array<Maybe<AwsIamAccessAnalyzer>>>;
   iamGroups?: Maybe<Array<Maybe<AwsIamGroup>>>;
@@ -239,6 +242,7 @@ export type AwsAccount = AwsOptionalService & {
   subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
   systemsManagerDocuments?: Maybe<Array<Maybe<AwsSystemsManagerDocument>>>;
   systemsManagerInstances?: Maybe<Array<Maybe<AwsSystemsManagerInstance>>>;
+  systemsManagerParameters?: Maybe<Array<Maybe<AwsSystemsManagerParameter>>>;
   transitGatewayAttachments?: Maybe<Array<Maybe<AwsTransitGatewayAttachment>>>;
   transitGatewayRouteTables?: Maybe<Array<Maybe<AwsTransitGatewayRouteTable>>>;
   transitGateways?: Maybe<Array<Maybe<AwsTransitGateway>>>;
@@ -3058,6 +3062,16 @@ export type AwsFlowLog = AwsBaseService & {
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
 };
 
+export type AwsGlueCrawler = AwsBaseService & {
+  name?: Maybe<Scalars['String']>;
+};
+
+export type AwsGlueDatabase = AwsBaseService & {
+  catalogId?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  tables?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
 export type AwsGlueJob = AwsBaseService & {
   allocatedCapacity?: Maybe<Scalars['Int']>;
   command?: Maybe<AwsGlueJobCommand>;
@@ -3118,6 +3132,10 @@ export type AwsGlueRegistrySchema = {
   registryName?: Maybe<Scalars['String']>;
   schemaName?: Maybe<Scalars['String']>;
   schemaStatus?: Maybe<Scalars['String']>;
+};
+
+export type AwsGlueTrigger = AwsBaseService & {
+  name?: Maybe<Scalars['String']>;
 };
 
 export type AwsGuardDutyDataSource = {
