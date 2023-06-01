@@ -24,6 +24,7 @@ export default {
   cloudwatchEventRule: 'cloudwatchEventRule',
   cloudwatchLog: 'cloudwatchLog',
   codebuild: 'codebuild',
+  codeCommitRepository: 'codeCommitRepository',
   cognitoIdentityPool: 'cognitoIdentityPool',
   cognitoUserPool: 'cognitoUserPool',
   configurationRecorder: 'configurationRecorder',

@@ -21,6 +21,7 @@ export default {
   [services.cloudwatchDashboard]: 'cloudwatchDashboards',
   [services.cloudwatchEventRule]: 'cloudwatchEventRules',
   [services.codebuild]: 'codebuilds',
+  [services.codeCommitRepository]: 'codeCommitRepositories',
   [services.configurationRecorder]: 'configurationRecorders',
   [services.dmsReplicationInstance]: 'dmsReplicationInstances',
   [services.ebsSnapshot]: 'ebsSnapshots',

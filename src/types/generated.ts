@@ -159,6 +159,7 @@ export type AwsAccount = AwsOptionalService & {
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
   cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
   cloudwatchLogs?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
+  codeCommitRepository?: Maybe<Array<Maybe<AwsCodeCommitRepository>>>;
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
   cognitoIdentityPool?: Maybe<Array<Maybe<AwsCognitoIdentityPool>>>;
   cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
@@ -1088,6 +1089,10 @@ export type AwsCodeBuildFilterGroup = {
   id: Scalars['String'];
   pattern?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
+};
+
+export type AwsCodeCommitRepository = AwsBaseService & {
+  name?: Maybe<Scalars['String']>;
 };
 
 export type AwsCodebuild = AwsBaseService & {

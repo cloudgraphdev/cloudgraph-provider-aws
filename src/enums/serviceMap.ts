@@ -115,6 +115,7 @@ import ManagedPrefixList from '../services/managedPrefixList'
 import MskCluster from '../services/msk'
 import TransitGatewayRouteTable from '../services/transitGatewayRouteTable'
 import VpcPeeringConnection from '../services/vpcPeeringConnection'
+import CodeCommitRepository from '../services/codeCommitRepository'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -147,6 +148,7 @@ export default {
   [services.cloudwatchEventRule]: CloudWatchEventRule,
   [services.cloudwatchLog]: CloudWatchLog,
   [services.codebuild]: CodeBuild,
+  [services.codeCommitRepository]: CodeCommitRepository,
   [services.cognitoIdentityPool]: CognitoIdentityPool,
   [services.cognitoUserPool]: CognitoUserPool,
   [services.configurationRecorder]: ConfigurationRecorder,
