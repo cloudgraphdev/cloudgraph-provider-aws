@@ -254,6 +254,36 @@ export const glueJobArn = ({
   name: string
 }): string => `arn:aws:glue:${region}:${account}:job/${name}`
 
+export const glueDatabaseArn = ({
+  region,
+  account,
+  name,
+}: {
+  region: string
+  account: string
+  name: string
+}): string => `arn:aws:glue:${region}:${account}:database/${name}`
+
+export const glueCrawlerArn = ({
+  region,
+  account,
+  name,
+}: {
+  region: string
+  account: string
+  name: string
+}): string => `arn:aws:glue:${region}:${account}:crawler/${name}`
+
+export const glueTriggerArn = ({
+  region,
+  account,
+  name,
+}: {
+  region: string
+  account: string
+  name: string
+}): string => `arn:aws:glue:${region}:${account}:trigger/${name}`
+
 export const ssmManagedInstanceArn = ({
   region,
   account,
