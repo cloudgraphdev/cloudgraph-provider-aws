@@ -1,0 +1,4 @@
+type awsSes implements awsOptionalService @key(fields: "id") {
+  configurationSets: [String] @search(by: [hash])
+  emailTemplates: [String] @search(by: [hash])
+}
