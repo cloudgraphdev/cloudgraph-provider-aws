@@ -1,3 +1,10 @@
+# [0.89.0-alpha.9](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.8...0.89.0-alpha.9) (2023-06-01)
+
+
+### Features
+
+* **aws:** support missing iam services ([d576b40](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d576b40d8368a10c92119a95aeabf5c8bc0cafdc))
+
 # [0.89.0-alpha.8](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.7...0.89.0-alpha.8) (2023-05-31)
 
 
