@@ -1,3 +1,18 @@
+# [0.89.0-alpha.12](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.11...0.89.0-alpha.12) (2023-06-02)
+
+
+### Bug Fixes
+
+* Fixed error with VPC connections and elasticSearchDomain ([80af943](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/80af94379b3d1b6e46ccd15d4c887d5cfc53ed55))
+
+
+### Features
+
+* Added ses service configurations ([a1d550b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/a1d550b19e93e15a33b328856f73f27843edd4a3))
+* Added sesReceiptRuleSet service configurations ([7e3ca02](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/7e3ca0222bdfee63e419930460770f477b7f2237))
+* Linked new services ([9eee1b3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/9eee1b32ce18807dde113ff39d4f8f7ff35f358e))
+* Split up ses service depending on identity type ([214287f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/214287fd993cf3424d61de42ae613cc98c7d2d94))
+
 # [0.89.0-alpha.11](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.10...0.89.0-alpha.11) (2023-06-01)
 
 
