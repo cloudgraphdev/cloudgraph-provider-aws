@@ -1,3 +1,10 @@
+# [0.89.0-alpha.13](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.12...0.89.0-alpha.13) (2023-06-02)
+
+
+### Features
+
+* add ecr missing services ([9b41282](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/9b4128203fd397aba9a8435482c3fe797c34ddcd))
+
 # [0.89.0-alpha.12](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.11...0.89.0-alpha.12) (2023-06-02)
 
 
