@@ -159,9 +159,9 @@ export type AwsAccount = AwsOptionalService & {
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
   cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
   cloudwatchLogs?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
+  codeCommitRepository?: Maybe<Array<Maybe<AwsCodeCommitRepository>>>;
   codePipelineWebhooks?: Maybe<Array<Maybe<AwsCodePipelineWebhook>>>;
   codePipelines?: Maybe<Array<Maybe<AwsCodePipeline>>>;
-  codeCommitRepository?: Maybe<Array<Maybe<AwsCodeCommitRepository>>>;
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
   cognitoIdentityPool?: Maybe<Array<Maybe<AwsCognitoIdentityPool>>>;
   cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
@@ -170,6 +170,7 @@ export type AwsAccount = AwsOptionalService & {
   configurationRules?: Maybe<Array<Maybe<AwsConfigurationRule>>>;
   customerGateway?: Maybe<Array<Maybe<AwsCustomerGateway>>>;
   dmsReplicationInstances?: Maybe<Array<Maybe<AwsDmsReplicationInstance>>>;
+  docdbCluster?: Maybe<Array<Maybe<AwsDocdbCluster>>>;
   dynamodb?: Maybe<Array<Maybe<AwsDynamoDbTable>>>;
   ebs?: Maybe<Array<Maybe<AwsEbs>>>;
   ec2Instances?: Maybe<Array<Maybe<AwsEc2>>>;
@@ -1476,6 +1477,40 @@ export type AwsDmsReplicationInstance = AwsBaseService & {
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
   vpcSecurityGroups?: Maybe<Array<Maybe<AwsDmsReplicationInstanceVpcSecurityGroups>>>;
+};
+
+export type AwsDocdbCluster = AwsBaseService & {
+  availabilityZones?: Maybe<Array<Maybe<Scalars['String']>>>;
+  backupRetentionPeriod?: Maybe<Scalars['Int']>;
+  cloneGroupId?: Maybe<Scalars['String']>;
+  clusterCreateTime?: Maybe<Scalars['DateTime']>;
+  dBClusterArn?: Maybe<Scalars['String']>;
+  dBClusterIdentifier?: Maybe<Scalars['String']>;
+  dBClusterMembers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  dBClusterParameterGroup?: Maybe<Scalars['String']>;
+  dBSubnetGroup?: Maybe<Scalars['String']>;
+  dbClusterResourceId?: Maybe<Scalars['String']>;
+  deletionProtection?: Maybe<Scalars['Boolean']>;
+  earliestRestorableTime?: Maybe<Scalars['DateTime']>;
+  endpoint?: Maybe<Scalars['String']>;
+  engine?: Maybe<Scalars['String']>;
+  engineVersion?: Maybe<Scalars['String']>;
+  hostedZoneId?: Maybe<Scalars['String']>;
+  kmsKeyId?: Maybe<Scalars['String']>;
+  latestRestorableTime?: Maybe<Scalars['DateTime']>;
+  masterUsername?: Maybe<Scalars['String']>;
+  multiAZ?: Maybe<Scalars['Boolean']>;
+  nabledCloudwatchLogsExports?: Maybe<Array<Maybe<Scalars['String']>>>;
+  percentProgress?: Maybe<Scalars['String']>;
+  port?: Maybe<Scalars['Int']>;
+  preferredBackupWindow?: Maybe<Scalars['String']>;
+  preferredMaintenanceWindow?: Maybe<Scalars['String']>;
+  readReplicaIdentifiers?: Maybe<Array<Maybe<Scalars['String']>>>;
+  readerEndpoint?: Maybe<Scalars['String']>;
+  replicationSourceIdentifier?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  storageEncrypted?: Maybe<Scalars['Boolean']>;
+  vpcSecurityGroups?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type AwsDynamoDbTable = AwsBaseService & {

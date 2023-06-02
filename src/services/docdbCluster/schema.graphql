@@ -1,0 +1,37 @@
+type awsDocdbCluster implements awsBaseService @key(fields: "arn") {
+    availabilityZones: [String] @search(by: [hash, regexp])
+    backupRetentionPeriod: Int @search
+    dBClusterIdentifier: String @search(by: [hash, regexp])
+    dBClusterParameterGroup: String @search(by: [hash, regexp])
+    dBSubnetGroup: String @search(by: [hash, regexp])
+    status: String @search(by: [hash, regexp])
+    percentProgress: String @search(by: [hash, regexp])
+    earliestRestorableTime: DateTime @search(by: [day])
+    endpoint: String @search(by: [hash, regexp])
+    readerEndpoint: String @search(by: [hash, regexp])
+    multiAZ: Boolean @search
+    engine: String @search(by: [hash, regexp])
+    engineVersion: String @search(by: [hash, regexp])
+    latestRestorableTime: DateTime @search(by: [day])
+    port: Int @search
+    masterUsername: String @search(by: [hash, regexp])
+    preferredBackupWindow: String @search(by: [hash, regexp])
+    preferredMaintenanceWindow: String @search(by: [hash, regexp])
+    replicationSourceIdentifier: String @search(by: [hash, regexp])
+    readReplicaIdentifiers: [String] @search(by: [hash, regexp])
+    dBClusterMembers: [String] @search(by: [hash, regexp])
+    vpcSecurityGroups: [String] @search(by: [hash, regexp])
+    hostedZoneId: String @search(by: [hash, regexp])
+    storageEncrypted: Boolean @search
+    kmsKeyId: String @search(by: [hash, regexp])
+    dbClusterResourceId: String @search(by: [hash, regexp])
+    dBClusterArn: String @search(by: [hash, regexp])
+    cloneGroupId: String @search(by: [hash, regexp])
+    clusterCreateTime: DateTime @search(by: [day])
+    nabledCloudwatchLogsExports: [String] @search(by: [hash, regexp])
+    deletionProtection: Boolean @search
+}
+
+
+
+
