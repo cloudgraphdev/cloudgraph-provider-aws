@@ -501,6 +501,10 @@ export default {
     `Found another ${num} ECR repos in this region...`,
   gettingECRRepos: 'Fetching ECR repos...',
   gettingECRRepoTags: 'Fetching tags for each ECR repo...',
+  gettingECRRepoLifecyclePolicy:
+    'Fetching lifecycle policy for each ECR repo...',
+  gettingECRRepoRepositoryPolicy:
+    'Fetching repository policy for each ECR repo...',
   /**
    * Transit Gateway
    */

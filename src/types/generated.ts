@@ -1749,8 +1749,10 @@ export type AwsEcr = AwsBaseService & {
   encryptionConfig?: Maybe<AwsEcrEncryptionConfiguration>;
   imageScanOnPush?: Maybe<Scalars['Boolean']>;
   imageTagMutability?: Maybe<Scalars['String']>;
+  lifecyclePolicy?: Maybe<AwsEcrLifecyclePolicy>;
   name?: Maybe<Scalars['String']>;
   registryAccountId?: Maybe<Scalars['String']>;
+  repositoryPolicy?: Maybe<AwsEcrRepositoryPolicy>;
   repositoryUri?: Maybe<Scalars['String']>;
   scanOnPush?: Maybe<Scalars['Boolean']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
@@ -1759,6 +1761,18 @@ export type AwsEcr = AwsBaseService & {
 export type AwsEcrEncryptionConfiguration = {
   kmsKey?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcrLifecyclePolicy = {
+  lifecyclePolicyText?: Maybe<Scalars['String']>;
+  registryId?: Maybe<Scalars['String']>;
+  repositoryName?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcrRepositoryPolicy = {
+  policyText?: Maybe<Scalars['String']>;
+  registryId?: Maybe<Scalars['String']>;
+  repositoryName?: Maybe<Scalars['String']>;
 };
 
 export type AwsEcsAttachment = {

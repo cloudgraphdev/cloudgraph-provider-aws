@@ -3,6 +3,8 @@ import { AWSError } from 'aws-sdk/lib/error'
 import ECR, {
   DescribeRepositoriesRequest,
   DescribeRepositoriesResponse,
+  GetLifecyclePolicyResponse,
+  GetRepositoryPolicyResponse,
   ListTagsForResourceResponse,
   Repository,
   RepositoryList,
@@ -27,6 +29,8 @@ const MAX_ITEMS = 1000
 export interface RawAwsEcr extends Repository {
   region: string
   Tags?: TagMap
+  lifecyclePolicy: GetLifecyclePolicyResponse
+  repositoryPolicy: GetRepositoryPolicyResponse
 }
 
 const listReposForRegion = async ({
@@ -99,6 +103,56 @@ const getResourceTags = async (ecr: ECR, arn: string): Promise<TagMap> =>
     }
   })
 
+const getLifecyclePolicy = async (
+  ecr: ECR,
+  registryId: string,
+  repositoryName: string
+): Promise<GetLifecyclePolicyResponse> =>
+  new Promise(resolve => {
+    try {
+      ecr.getLifecyclePolicy(
+        { registryId, repositoryName },
+        (err: AWSError, data: GetLifecyclePolicyResponse) => {
+          if (err) {
+            errorLog.generateAwsErrorLog({
+              functionName: 'ecr:getLifecyclePolicy',
+              err,
+            })
+            return resolve({})
+          }
+          resolve(data)
+        }
+      )
+    } catch (error) {
+      resolve({})
+    }
+  })
+
+const getRepositoryPolicy = async (
+  ecr: ECR,
+  registryId: string,
+  repositoryName: string
+): Promise<GetRepositoryPolicyResponse> =>
+  new Promise(resolve => {
+    try {
+      ecr.getRepositoryPolicy(
+        { registryId, repositoryName },
+        (err: AWSError, data: GetRepositoryPolicyResponse) => {
+          if (err) {
+            errorLog.generateAwsErrorLog({
+              functionName: 'ecr:getRepositoryPolicy',
+              err,
+            })
+            return resolve({})
+          }
+          resolve(data)
+        }
+      )
+    } catch (error) {
+      resolve({})
+    }
+  })
+
 export default async ({
   regions,
   config,
@@ -112,9 +166,11 @@ export default async ({
     const ecrData: RawAwsEcr[] = []
     const regionPromises = []
     const tagsPromises = []
+    const lifecyclePoliciesPromises = []
+    const repositoryPoliciesPromises = []
 
     // get all repositories for all regions
-    regions.split(',').map(region => {
+    regions.split(',').forEach(region => {
       const ecr = new ECR({ ...config, region, endpoint })
       const regionPromise = new Promise<void>(async resolveRegion => {
         const repositoryList = await listReposForRegion({
@@ -126,6 +182,8 @@ export default async ({
             ...repositoryList.map(repo => ({
               ...repo,
               region,
+              lifecyclePolicy: {},
+              repositoryPolicy: {},
             }))
           )
         }
@@ -138,7 +196,7 @@ export default async ({
     await Promise.all(regionPromises)
 
     // get all tags for each repository
-    ecrData.map(({ repositoryArn, region }, idx) => {
+    ecrData.forEach(({ repositoryArn, region }, idx) => {
       const ecr = new ECR({ ...config, region, endpoint })
       const tagsPromise = new Promise<void>(async resolveTags => {
         const envTags: TagMap = await getResourceTags(ecr, repositoryArn)
@@ -150,6 +208,47 @@ export default async ({
 
     logger.debug(lt.gettingECRRepoTags)
     await Promise.all(tagsPromises)
+
+    // get lifecycle policy for each repository
+    ecrData.forEach(({ registryId, repositoryName, region }, idx) => {
+      const ecr = new ECR({ ...config, region, endpoint })
+      const lifecyclePolicyPromise = new Promise<void>(
+        async resolveLifecyclePolicy => {
+          const lifecyclePolicy = await getLifecyclePolicy(
+            ecr,
+            registryId,
+            repositoryName
+          )
+          ecrData[idx].lifecyclePolicy = lifecyclePolicy
+          resolveLifecyclePolicy()
+        }
+      )
+      lifecyclePoliciesPromises.push(lifecyclePolicyPromise)
+    })
+
+    logger.debug(lt.gettingECRRepoLifecyclePolicy)
+    await Promise.all(lifecyclePoliciesPromises)
+
+    // get repository policy for each repository
+    ecrData.forEach(({ registryId, repositoryName, region }, idx) => {
+      const ecr = new ECR({ ...config, region, endpoint })
+      const repositoryPolicyPromise = new Promise<void>(
+        async resolveRepositoryPolicy => {
+          const repositoryPolicy = await getRepositoryPolicy(
+            ecr,
+            registryId,
+            repositoryName
+          )
+          ecrData[idx].repositoryPolicy = repositoryPolicy
+          resolveRepositoryPolicy()
+        }
+      )
+      repositoryPoliciesPromises.push(repositoryPolicyPromise)
+    })
+
+    logger.debug(lt.gettingECRRepoRepositoryPolicy)
+    await Promise.all(repositoryPoliciesPromises)
+
     errorLog.reset()
 
     resolve(groupBy(ecrData, 'region'))

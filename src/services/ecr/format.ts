@@ -5,7 +5,7 @@ import { RawAwsEcr } from './data'
 export default ({
   service: rawData,
   account,
-  region
+  region,
 }: {
   service: RawAwsEcr
   account: string
@@ -19,8 +19,13 @@ export default ({
     createdAt,
     imageTagMutability,
     imageScanningConfiguration: { scanOnPush: imageScanOnPush = false } = {},
-    encryptionConfiguration: { encryptionType: type = 'none', kmsKey = '' } = {},
+    encryptionConfiguration: {
+      encryptionType: type = 'none',
+      kmsKey = '',
+    } = {},
     Tags,
+    lifecyclePolicy,
+    repositoryPolicy,
   } = rawData
 
   return {
@@ -36,5 +41,7 @@ export default ({
     registryAccountId,
     repositoryUri,
     tags: formatTagsFromMap(Tags),
+    lifecyclePolicy,
+    repositoryPolicy,
   }
 }
