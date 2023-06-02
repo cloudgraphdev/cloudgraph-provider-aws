@@ -159,6 +159,8 @@ export type AwsAccount = AwsOptionalService & {
   cloudtrail?: Maybe<Array<Maybe<AwsCloudtrail>>>;
   cloudwatch?: Maybe<Array<Maybe<AwsCloudwatch>>>;
   cloudwatchLogs?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
+  codePipelineWebhooks?: Maybe<Array<Maybe<AwsCodePipelineWebhook>>>;
+  codePipelines?: Maybe<Array<Maybe<AwsCodePipeline>>>;
   codeCommitRepository?: Maybe<Array<Maybe<AwsCodeCommitRepository>>>;
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
   cognitoIdentityPool?: Maybe<Array<Maybe<AwsCognitoIdentityPool>>>;
@@ -1102,6 +1104,14 @@ export type AwsCodeBuildFilterGroup = {
 };
 
 export type AwsCodeCommitRepository = AwsBaseService & {
+  name?: Maybe<Scalars['String']>;
+};
+
+export type AwsCodePipeline = AwsBaseService & {
+  name?: Maybe<Scalars['String']>;
+};
+
+export type AwsCodePipelineWebhook = AwsBaseService & {
   name?: Maybe<Scalars['String']>;
 };
 

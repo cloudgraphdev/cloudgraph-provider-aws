@@ -395,3 +395,13 @@ export const codeCommitRepositoryArn = ({
   account: string
   name: string
 }): string => `arn:aws:codecommit:${region}:${account}:repository/${name.replace('/', '')}`
+
+export const codePipelineArn = ({
+  region,
+  account,
+  name,
+}: {
+  region: string
+  account: string
+  name: string
+}): string => `arn:aws:codepipeline:${region}:${account}:pipeline/${name}`

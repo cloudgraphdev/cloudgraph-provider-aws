@@ -21,6 +21,8 @@ export default {
   [services.cloudwatchDashboard]: 'cloudwatchDashboards',
   [services.cloudwatchEventRule]: 'cloudwatchEventRules',
   [services.codebuild]: 'codebuilds',
+  [services.codePipeline]: 'codePipelines',
+  [services.codePipelineWebhook]: 'codePipelineWebhooks',
   [services.codeCommitRepository]: 'codeCommitRepositories',
   [services.configurationDeliveryChannel]: 'configurationDeliveryChannels',
   [services.configurationRecorder]: 'configurationRecorders',
