@@ -24,6 +24,8 @@ export default {
   cloudwatchEventRule: 'cloudwatchEventRule',
   cloudwatchLog: 'cloudwatchLog',
   codebuild: 'codebuild',
+  codePipeline: 'codePipeline',
+  codePipelineWebhook: 'codePipelineWebhook',
   cognitoIdentityPool: 'cognitoIdentityPool',
   cognitoUserPool: 'cognitoUserPool',
   configurationDeliveryChannel: 'configurationDeliveryChannel',

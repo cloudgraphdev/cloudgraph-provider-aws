@@ -120,6 +120,8 @@ import VpnConnection from '../services/vpnConnection'
 import VpnGateway from '../services/vpnGateway'
 import WafV2WebAcl from '../services/wafV2WebAcl'
 import services from './services'
+import CodePipeline from '../services/codePipeline'
+import CodePipelineWebhook from '../services/codePipelineWebhook'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -152,6 +154,8 @@ export default {
   [services.cloudwatchEventRule]: CloudWatchEventRule,
   [services.cloudwatchLog]: CloudWatchLog,
   [services.codebuild]: CodeBuild,
+  [services.codePipeline]: CodePipeline,
+  [services.codePipelineWebhook]: CodePipelineWebhook,
   [services.cognitoIdentityPool]: CognitoIdentityPool,
   [services.cognitoUserPool]: CognitoUserPool,
   [services.configurationDeliveryChannel]: ConfigurationDeliveryChannel,

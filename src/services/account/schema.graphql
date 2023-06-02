@@ -22,6 +22,8 @@ type awsAccount implements awsOptionalService @key(fields: "id") {
   cloudwatch: [awsCloudwatch]
   cloudwatchLogs: [awsCloudwatchLog]
   codebuilds: [awsCodebuild]
+  codePipelines: [awsCodePipeline]
+  codePipelineWebhooks: [awsCodePipelineWebhook]
   cognitoIdentityPool: [awsCognitoIdentityPool]
   cognitoUserPool: [awsCognitoUserPool]
   configurationDeliveryChannels: [awsConfigurationDeliveryChannel]

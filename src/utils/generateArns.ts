@@ -385,3 +385,13 @@ export const transitGatewayRouteTableArn = ({
   account: string
   id: string
 }): string => `arn:aws:ec2:${region}:${account}:transit-gateway-routetable/${id}`
+
+export const codePipelineArn = ({
+  region,
+  account,
+  name,
+}: {
+  region: string
+  account: string
+  name: string
+}): string => `arn:aws:codepipeline:${region}:${account}:pipeline/${name}`

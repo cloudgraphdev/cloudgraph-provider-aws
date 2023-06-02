@@ -25,6 +25,8 @@ export default {
   [services.cloudwatch]: 'awsCloudwatch',
   [services.cloudwatchLog]: 'awsCloudwatchLog',
   [services.codebuild]: 'awsCodebuild',
+  [services.codePipeline]: 'awsCodePipeline',
+  [services.codePipelineWebhook]: 'awsCodePipelineWebhook',
   [services.cognitoIdentityPool]: 'awsCognitoIdentityPool',
   [services.cognitoUserPool]: 'awsCognitoUserPool',
   [services.configurationRecorder]: 'awsConfigurationRecorder',
