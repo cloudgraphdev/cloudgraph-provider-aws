@@ -1,3 +1,11 @@
+# [0.89.0-alpha.17](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.16...0.89.0-alpha.17) (2023-06-02)
+
+
+### Features
+
+* Added new DocumentDBCluster service ([5ea6932](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/5ea6932f029a428790ef6a702d2a57573dbe9cba))
+* linked new service ([44e7659](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/44e765965e3ebddc3be2f5529f6327ce4c394118))
+
 # [0.89.0-alpha.16](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.15...0.89.0-alpha.16) (2023-06-02)
 
 
