@@ -16,6 +16,7 @@ type awsEfs implements awsBaseService @key(fields: "arn") {
   tags: [awsRawTag]
   efsMountTarget: [awsEfsMountTarget] @hasInverse(field: efs) #change to plural
   kms: [awsKms] @hasInverse(field: efs)
+  policy: String
 }
 
 type awsEfsFileSystemSize

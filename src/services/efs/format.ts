@@ -27,6 +27,7 @@ export default ({
     ProvisionedThroughputInMibps: provisionedThroughputInMibps,
     AvailabilityZoneName: availabilityZoneName,
     AvailabilityZoneId: availabilityZoneId,
+    policy,
     Tags,
   } = service
 
@@ -46,7 +47,7 @@ export default ({
       value: sizeInBytes?.Value,
       timestamp: sizeInBytes?.Timestamp?.toISOString(),
       valueInIA: sizeInBytes?.ValueInIA,
-      valueInStandard: sizeInBytes?.ValueInStandard
+      valueInStandard: sizeInBytes?.ValueInStandard,
     },
     performanceMode,
     encrypted,
@@ -54,6 +55,7 @@ export default ({
     provisionedThroughputInMibps,
     availabilityZoneName,
     availabilityZoneId,
+    policy,
     tags: formatTagsFromMap(Tags),
   }
 }

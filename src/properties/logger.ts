@@ -360,6 +360,8 @@ export default {
     `Found ${num} EFS Mount Targets, adding them to the subnet`,
   doneFetchingEfsData: '✅ Done fetching EFS Data ✅',
   fetchedEfs: (num: number): string => `Fetched ${num} EFS`,
+  fetchedEfsAccessPoints: (num: number): string =>
+    `Fetched ${num} EFS Access Points`,
   fetchedEfsMountTargets: (num: number): string =>
     `Fetched ${num} EFS Mount Targets`,
   fetchedEfsMountTargetSecurityGroups: (num: number): string =>

@@ -40,6 +40,7 @@ type awsAccount implements awsOptionalService @key(fields: "id") {
   ecsTaskDefinitions: [awsEcsTaskDefinition]
   ecsTaskSets: [awsEcsTaskSet]
   efs: [awsEfs]
+  efsAccessPoint: [awsEfsAccessPoint]
   efsMountTarget: [awsEfsMountTarget]
   eip: [awsEip]
   eksClusters: [awsEksCluster]

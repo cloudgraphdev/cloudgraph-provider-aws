@@ -178,6 +178,7 @@ export type AwsAccount = AwsOptionalService & {
   ecsTaskSets?: Maybe<Array<Maybe<AwsEcsTaskSet>>>;
   ecsTasks?: Maybe<Array<Maybe<AwsEcsTask>>>;
   efs?: Maybe<Array<Maybe<AwsEfs>>>;
+  efsAccessPoint?: Maybe<Array<Maybe<AwsEfsAccessPoint>>>;
   efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
   eip?: Maybe<Array<Maybe<AwsEip>>>;
   eksClusters?: Maybe<Array<Maybe<AwsEksCluster>>>;
@@ -2384,10 +2385,15 @@ export type AwsEfs = AwsBaseService & {
   numberOfMountTargets?: Maybe<Scalars['Int']>;
   ownerId?: Maybe<Scalars['String']>;
   performanceMode?: Maybe<Scalars['String']>;
+  policy?: Maybe<Scalars['String']>;
   provisionedThroughputInMibps?: Maybe<Scalars['Int']>;
   sizeInBytes?: Maybe<AwsEfsFileSystemSize>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   throughputMode?: Maybe<Scalars['String']>;
+};
+
+export type AwsEfsAccessPoint = AwsBaseService & {
+  name?: Maybe<Scalars['String']>;
 };
 
 export type AwsEfsEfsAuthorizationConfig = {

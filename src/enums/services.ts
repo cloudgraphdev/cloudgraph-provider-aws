@@ -43,6 +43,7 @@ export default {
   ecsTaskDefinition: 'ecsTaskDefinition',
   ecsTaskSet: 'ecsTaskSet',
   efs: 'efs',
+  efsAccessPoint: 'efsAccessPoint',
   efsMountTarget: 'efsMountTarget',
   eip: 'eip',
   eksCluster: 'eksCluster',
