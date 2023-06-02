@@ -1,3 +1,10 @@
+# [0.89.0-alpha.16](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.15...0.89.0-alpha.16) (2023-06-02)
+
+
+### Features
+
+* **aws:** Add codepipeline services ([8043378](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/80433780dac8bc0e257c043726bbced4158811a4))
+
 # [0.89.0-alpha.15](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.14...0.89.0-alpha.15) (2023-06-02)
 
 
