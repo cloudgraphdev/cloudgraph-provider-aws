@@ -1,3 +1,10 @@
+# [0.89.0-alpha.15](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.14...0.89.0-alpha.15) (2023-06-02)
+
+
+### Features
+
+* **aws:** Add codeCommitRepository service ([10f8d86](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/10f8d86ec298e8031c421998e2bdb01b3967b349))
+
 # [0.89.0-alpha.14](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.13...0.89.0-alpha.14) (2023-06-02)
 
 
