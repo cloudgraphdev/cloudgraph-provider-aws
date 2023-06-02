@@ -122,7 +122,7 @@ type awsCognitoUserPool implements awsBaseService @key(fields: "id") {
   lambdas: [awsLambda] @hasInverse(field: cognitoUserPools)
   appSync: [awsAppSync] @hasInverse(field: cognitoUserPool)
   kms: [awsKms] @hasInverse(field: cognitoUserPools)
-  ses: [awsSes] @hasInverse(field: cognitoUserPools)
+  sesEmail: [awsSesEmail] @hasInverse(field: cognitoUserPools)
   iamRole: [awsIamRole] @hasInverse(field: cognitoUserPools)
   elasticSearchDomains: [awsElasticSearchDomain] @hasInverse(field: cognitoUserPool)
 }

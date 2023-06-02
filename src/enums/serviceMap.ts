@@ -103,6 +103,9 @@ import SecretsManager from '../services/secretsManager'
 import AwsSecurityGroup from '../services/securityGroup'
 import SecurityHub from '../services/securityHub'
 import SES from '../services/ses'
+import SESReceiptRuleSet from '../services/sesReceiptRuleSet'
+import SESEmail from '../services/sesEmail'
+import SESDomain from '../services/sesDomain'
 import SNS from '../services/sns'
 import SQS from '../services/sqs'
 import AwsSubnet from '../services/subnet'
@@ -218,6 +221,9 @@ export default {
   [services.secretsManager]: SecretsManager,
   [services.securityHub]: SecurityHub,
   [services.ses]: SES,
+  [services.sesReceiptRuleSet]: SESReceiptRuleSet,
+  [services.sesEmail]: SESEmail,
+  [services.sesDomain]: SESDomain,
   [services.iamAccessAnalyzer]: IamAccessAnalyzer,
   [services.iamUser]: IamUser,
   [services.iamGroup]: IamGroup,

@@ -239,6 +239,9 @@ export type AwsAccount = AwsOptionalService & {
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   securityHub?: Maybe<Array<Maybe<AwsSecurityHub>>>;
   ses?: Maybe<Array<Maybe<AwsSes>>>;
+  sesDomain?: Maybe<Array<Maybe<AwsSesDomain>>>;
+  sesEmail?: Maybe<Array<Maybe<AwsSesEmail>>>;
+  sesReceiptRuleSet?: Maybe<Array<Maybe<AwsSesReceiptRuleSet>>>;
   sns?: Maybe<Array<Maybe<AwsSns>>>;
   sqs?: Maybe<Array<Maybe<AwsSqs>>>;
   subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
@@ -1334,7 +1337,7 @@ export type AwsCognitoUserPool = AwsBaseService & {
   name?: Maybe<Scalars['String']>;
   policies?: Maybe<AwsCognitoUserPoolPasswordPolicy>;
   schemaAttributes?: Maybe<Array<Maybe<AwsCognitoUserPoolSchemaAttribute>>>;
-  ses?: Maybe<Array<Maybe<AwsSes>>>;
+  sesEmail?: Maybe<Array<Maybe<AwsSesEmail>>>;
   smsAuthenticationMessage?: Maybe<Scalars['String']>;
   smsConfigurationExternalId?: Maybe<Scalars['String']>;
   smsConfigurationFailure?: Maybe<Scalars['String']>;
@@ -4581,10 +4584,34 @@ export type AwsServiceBillingInfo = {
   name: Scalars['String'];
 };
 
-export type AwsSes = AwsBaseService & {
+export type AwsSes = AwsOptionalService & {
+  configurationSets?: Maybe<Array<Maybe<Scalars['String']>>>;
+  emailTemplates?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsSesDomain = AwsBaseService & {
+  domain?: Maybe<Scalars['String']>;
+  verificationStatus?: Maybe<Scalars['String']>;
+};
+
+export type AwsSesEmail = AwsBaseService & {
   cognitoUserPools?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   email?: Maybe<Scalars['String']>;
   verificationStatus?: Maybe<Scalars['String']>;
+};
+
+export type AwsSesReceiptRuleSet = AwsOptionalService & {
+  accountId?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  rules?: Maybe<Array<Maybe<AwsSesReceiptRuleSetRule>>>;
+};
+
+export type AwsSesReceiptRuleSetRule = {
+  enabled?: Maybe<Scalars['Boolean']>;
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  scanEnabled?: Maybe<Scalars['Boolean']>;
+  tlsPolicy?: Maybe<Scalars['String']>;
 };
 
 export type AwsSgInboundRule = {

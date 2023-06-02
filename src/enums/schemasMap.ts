@@ -104,6 +104,8 @@ export default {
   [services.s3]: 'awsS3',
   [services.secretsManager]: 'awsSecretsManager',
   [services.ses]: 'awsSes',
+  [services.sesEmail]: 'awsSesEmail',
+  [services.sesDomain]: 'awsSesDomain',
   [services.sns]: 'awsSns',
   [services.systemsManagerInstance]: 'awsSystemsManagerInstance',
   [services.systemsManagerDocument]: 'awsSystemsManagerDocument',
