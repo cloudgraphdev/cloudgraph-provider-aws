@@ -305,6 +305,7 @@ export default {
   lookingforRdsClusters: 'Looking for RDS Clusters...',
   creatingRdsInstance: (num: number): string => `Creating RDS Instance #${num}`,
   fetchedRdsClusters: (num: number): string => `Fetched ${num} RDS Clusters`,
+  fetchedDocdbClusters: (num: number): string => `Fetched ${num} DocDB Clusters`,
   fetchedRdsGlobalClusters: (num: number): string =>
     `Fetched ${num} RDS Global Clusters`,
   fetchedRdsInstances: (num: number): string =>

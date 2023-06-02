@@ -33,6 +33,7 @@ type awsAccount implements awsOptionalService @key(fields: "id") {
   customerGateway: [awsCustomerGateway]
   dmsReplicationInstances: [awsDmsReplicationInstance]
   dynamodb: [awsDynamoDbTable]
+  docdbCluster: [awsDocdbCluster]
   ebs: [awsEbs]
   ec2Instances: [awsEc2]
   ecr: [awsEcr]

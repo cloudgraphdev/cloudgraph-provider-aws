@@ -32,6 +32,7 @@ import ConfigurationRule from '../services/configurationRule'
 import CustomerGateway from '../services/customerGateway'
 import DmsReplicationInstance from '../services/dmsReplicationInstance'
 import DynamoDB from '../services/dynamodb'
+import DocDBCluster from '../services/docdbCluster'
 import EBS from '../services/ebs'
 import EBSSnapshot from '../services/ebsSnapshot'
 import EC2 from '../services/ec2'
@@ -194,6 +195,7 @@ export default {
   [services.emrStep]: EmrStep,
   [services.dmsReplicationInstance]: DmsReplicationInstance,
   [services.dynamodb]: DynamoDB,
+  [services.docdbCluster]: DocDBCluster,
   [services.igw]: AwsInternetGateway,
   [services.iot]: IotThingAttribute,
   [services.kinesisFirehose]: AwsKinesisFirehose,
