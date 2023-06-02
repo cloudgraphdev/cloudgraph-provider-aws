@@ -120,6 +120,7 @@ import TransitGatewayRouteTable from '../services/transitGatewayRouteTable'
 import VPC from '../services/vpc'
 import VpcEndpoint from '../services/vpcEndpoint'
 import VpcPeeringConnection from '../services/vpcPeeringConnection'
+import CodeCommitRepository from '../services/codeCommitRepository'
 import VpnConnection from '../services/vpnConnection'
 import VpnGateway from '../services/vpnGateway'
 import WafV2WebAcl from '../services/wafV2WebAcl'
@@ -156,6 +157,7 @@ export default {
   [services.cloudwatchEventRule]: CloudWatchEventRule,
   [services.cloudwatchLog]: CloudWatchLog,
   [services.codebuild]: CodeBuild,
+  [services.codeCommitRepository]: CodeCommitRepository,
   [services.cognitoIdentityPool]: CognitoIdentityPool,
   [services.cognitoUserPool]: CognitoUserPool,
   [services.configurationDeliveryChannel]: ConfigurationDeliveryChannel,

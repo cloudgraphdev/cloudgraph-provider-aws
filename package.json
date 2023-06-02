@@ -31,6 +31,7 @@
     "terraform:cleanup": "rimraf ./tests/terraform/{.terraform,.terraform.lock.hcl,tfplan} ./tests/terraform/*.{tfstate,tfplan,backup}"
   },
   "dependencies": {
+    "@aws-sdk/client-codecommit": "^3.342.0",
     "@aws-sdk/client-elastic-beanstalk": "^3.338.0",
     "@aws-sdk/client-glue": "^3.342.0",
     "@aws-sdk/client-ssm": "^3.341.0",
