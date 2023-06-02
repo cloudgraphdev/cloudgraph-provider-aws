@@ -149,7 +149,7 @@ export default ({
   if (domains?.data?.[region]) {
     const dataAtRegion: RawAwsElasticSearchDomain[] = domains.data[
       region
-    ].filter(({ VPCOptions }) => VPCOptions.VPCId === id)
+    ].filter(({ VPCOptions }) => VPCOptions?.VPCId === id)
 
     for (const domain of dataAtRegion) {
       connections.push({

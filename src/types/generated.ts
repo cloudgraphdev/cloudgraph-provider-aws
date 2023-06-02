@@ -161,6 +161,7 @@ export type AwsAccount = AwsOptionalService & {
   cloudwatchLogs?: Maybe<Array<Maybe<AwsCloudwatchLog>>>;
   codePipelineWebhooks?: Maybe<Array<Maybe<AwsCodePipelineWebhook>>>;
   codePipelines?: Maybe<Array<Maybe<AwsCodePipeline>>>;
+  codeCommitRepository?: Maybe<Array<Maybe<AwsCodeCommitRepository>>>;
   codebuilds?: Maybe<Array<Maybe<AwsCodebuild>>>;
   cognitoIdentityPool?: Maybe<Array<Maybe<AwsCognitoIdentityPool>>>;
   cognitoUserPool?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
@@ -180,6 +181,7 @@ export type AwsAccount = AwsOptionalService & {
   ecsTaskSets?: Maybe<Array<Maybe<AwsEcsTaskSet>>>;
   ecsTasks?: Maybe<Array<Maybe<AwsEcsTask>>>;
   efs?: Maybe<Array<Maybe<AwsEfs>>>;
+  efsAccessPoint?: Maybe<Array<Maybe<AwsEfsAccessPoint>>>;
   efsMountTarget?: Maybe<Array<Maybe<AwsEfsMountTarget>>>;
   eip?: Maybe<Array<Maybe<AwsEip>>>;
   eksClusters?: Maybe<Array<Maybe<AwsEksCluster>>>;
@@ -241,6 +243,9 @@ export type AwsAccount = AwsOptionalService & {
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   securityHub?: Maybe<Array<Maybe<AwsSecurityHub>>>;
   ses?: Maybe<Array<Maybe<AwsSes>>>;
+  sesDomain?: Maybe<Array<Maybe<AwsSesDomain>>>;
+  sesEmail?: Maybe<Array<Maybe<AwsSesEmail>>>;
+  sesReceiptRuleSet?: Maybe<Array<Maybe<AwsSesReceiptRuleSet>>>;
   sns?: Maybe<Array<Maybe<AwsSns>>>;
   sqs?: Maybe<Array<Maybe<AwsSqs>>>;
   subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
@@ -1098,6 +1103,10 @@ export type AwsCodeBuildFilterGroup = {
   type?: Maybe<Scalars['String']>;
 };
 
+export type AwsCodeCommitRepository = AwsBaseService & {
+  name?: Maybe<Scalars['String']>;
+};
+
 export type AwsCodePipeline = AwsBaseService & {
   name?: Maybe<Scalars['String']>;
 };
@@ -1344,7 +1353,7 @@ export type AwsCognitoUserPool = AwsBaseService & {
   name?: Maybe<Scalars['String']>;
   policies?: Maybe<AwsCognitoUserPoolPasswordPolicy>;
   schemaAttributes?: Maybe<Array<Maybe<AwsCognitoUserPoolSchemaAttribute>>>;
-  ses?: Maybe<Array<Maybe<AwsSes>>>;
+  sesEmail?: Maybe<Array<Maybe<AwsSesEmail>>>;
   smsAuthenticationMessage?: Maybe<Scalars['String']>;
   smsConfigurationExternalId?: Maybe<Scalars['String']>;
   smsConfigurationFailure?: Maybe<Scalars['String']>;
@@ -1756,8 +1765,10 @@ export type AwsEcr = AwsBaseService & {
   encryptionConfig?: Maybe<AwsEcrEncryptionConfiguration>;
   imageScanOnPush?: Maybe<Scalars['Boolean']>;
   imageTagMutability?: Maybe<Scalars['String']>;
+  lifecyclePolicy?: Maybe<AwsEcrLifecyclePolicy>;
   name?: Maybe<Scalars['String']>;
   registryAccountId?: Maybe<Scalars['String']>;
+  repositoryPolicy?: Maybe<AwsEcrRepositoryPolicy>;
   repositoryUri?: Maybe<Scalars['String']>;
   scanOnPush?: Maybe<Scalars['Boolean']>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
@@ -1766,6 +1777,18 @@ export type AwsEcr = AwsBaseService & {
 export type AwsEcrEncryptionConfiguration = {
   kmsKey?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcrLifecyclePolicy = {
+  lifecyclePolicyText?: Maybe<Scalars['String']>;
+  registryId?: Maybe<Scalars['String']>;
+  repositoryName?: Maybe<Scalars['String']>;
+};
+
+export type AwsEcrRepositoryPolicy = {
+  policyText?: Maybe<Scalars['String']>;
+  registryId?: Maybe<Scalars['String']>;
+  repositoryName?: Maybe<Scalars['String']>;
 };
 
 export type AwsEcsAttachment = {
@@ -2394,10 +2417,15 @@ export type AwsEfs = AwsBaseService & {
   numberOfMountTargets?: Maybe<Scalars['Int']>;
   ownerId?: Maybe<Scalars['String']>;
   performanceMode?: Maybe<Scalars['String']>;
+  policy?: Maybe<Scalars['String']>;
   provisionedThroughputInMibps?: Maybe<Scalars['Int']>;
   sizeInBytes?: Maybe<AwsEfsFileSystemSize>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   throughputMode?: Maybe<Scalars['String']>;
+};
+
+export type AwsEfsAccessPoint = AwsBaseService & {
+  name?: Maybe<Scalars['String']>;
 };
 
 export type AwsEfsEfsAuthorizationConfig = {
@@ -4591,10 +4619,34 @@ export type AwsServiceBillingInfo = {
   name: Scalars['String'];
 };
 
-export type AwsSes = AwsBaseService & {
+export type AwsSes = AwsOptionalService & {
+  configurationSets?: Maybe<Array<Maybe<Scalars['String']>>>;
+  emailTemplates?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsSesDomain = AwsBaseService & {
+  domain?: Maybe<Scalars['String']>;
+  verificationStatus?: Maybe<Scalars['String']>;
+};
+
+export type AwsSesEmail = AwsBaseService & {
   cognitoUserPools?: Maybe<Array<Maybe<AwsCognitoUserPool>>>;
   email?: Maybe<Scalars['String']>;
   verificationStatus?: Maybe<Scalars['String']>;
+};
+
+export type AwsSesReceiptRuleSet = AwsOptionalService & {
+  accountId?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  rules?: Maybe<Array<Maybe<AwsSesReceiptRuleSetRule>>>;
+};
+
+export type AwsSesReceiptRuleSetRule = {
+  enabled?: Maybe<Scalars['Boolean']>;
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  scanEnabled?: Maybe<Scalars['Boolean']>;
+  tlsPolicy?: Maybe<Scalars['String']>;
 };
 
 export type AwsSgInboundRule = {

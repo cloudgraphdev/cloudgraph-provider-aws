@@ -43,6 +43,7 @@ import EcsTask from '../services/ecsTask'
 import EcsTaskDefinition from '../services/ecsTaskDefinition'
 import EcsTaskSet from '../services/ecsTaskSet'
 import EFS from '../services/efs'
+import EfsAccessPoint from '../services/efsAccessPoint'
 import EfsMountTarget from '../services/efsMountTarget'
 import EIP from '../services/eip'
 import EKSCluster from '../services/eksCluster'
@@ -103,6 +104,9 @@ import SecretsManager from '../services/secretsManager'
 import AwsSecurityGroup from '../services/securityGroup'
 import SecurityHub from '../services/securityHub'
 import SES from '../services/ses'
+import SESReceiptRuleSet from '../services/sesReceiptRuleSet'
+import SESEmail from '../services/sesEmail'
+import SESDomain from '../services/sesDomain'
 import SNS from '../services/sns'
 import SQS from '../services/sqs'
 import AwsSubnet from '../services/subnet'
@@ -116,6 +120,7 @@ import TransitGatewayRouteTable from '../services/transitGatewayRouteTable'
 import VPC from '../services/vpc'
 import VpcEndpoint from '../services/vpcEndpoint'
 import VpcPeeringConnection from '../services/vpcPeeringConnection'
+import CodeCommitRepository from '../services/codeCommitRepository'
 import VpnConnection from '../services/vpnConnection'
 import VpnGateway from '../services/vpnGateway'
 import WafV2WebAcl from '../services/wafV2WebAcl'
@@ -156,6 +161,7 @@ export default {
   [services.codebuild]: CodeBuild,
   [services.codePipeline]: CodePipeline,
   [services.codePipelineWebhook]: CodePipelineWebhook,
+  [services.codeCommitRepository]: CodeCommitRepository,
   [services.cognitoIdentityPool]: CognitoIdentityPool,
   [services.cognitoUserPool]: CognitoUserPool,
   [services.configurationDeliveryChannel]: ConfigurationDeliveryChannel,
@@ -166,6 +172,7 @@ export default {
   [services.ec2Instance]: EC2,
   [services.ecr]: ECR,
   [services.efs]: EFS,
+  [services.efsAccessPoint]: EfsAccessPoint,
   [services.efsMountTarget]: EfsMountTarget,
   [services.eip]: EIP,
   [services.eksCluster]: EKSCluster,
@@ -222,6 +229,9 @@ export default {
   [services.secretsManager]: SecretsManager,
   [services.securityHub]: SecurityHub,
   [services.ses]: SES,
+  [services.sesReceiptRuleSet]: SESReceiptRuleSet,
+  [services.sesEmail]: SESEmail,
+  [services.sesDomain]: SESDomain,
   [services.iamAccessAnalyzer]: IamAccessAnalyzer,
   [services.iamUser]: IamUser,
   [services.iamGroup]: IamGroup,

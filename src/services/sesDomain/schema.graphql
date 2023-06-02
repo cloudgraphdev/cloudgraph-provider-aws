@@ -1,0 +1,4 @@
+type awsSesDomain implements awsBaseService @key(fields: "arn") {
+  domain: String @search(by: [hash, regexp])
+  verificationStatus: String @search(by: [hash, regexp])
+}
