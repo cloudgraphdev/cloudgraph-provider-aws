@@ -1,3 +1,10 @@
+# [0.89.0-alpha.14](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.13...0.89.0-alpha.14) (2023-06-02)
+
+
+### Features
+
+* add efs missing services ([ef37753](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/ef37753c09f67f6f40ae745fb3ecfa9101144793))
+
 # [0.89.0-alpha.13](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.12...0.89.0-alpha.13) (2023-06-02)
 
 
