@@ -43,6 +43,7 @@ import EcsTask from '../services/ecsTask'
 import EcsTaskDefinition from '../services/ecsTaskDefinition'
 import EcsTaskSet from '../services/ecsTaskSet'
 import EFS from '../services/efs'
+import EfsAccessPoint from '../services/efsAccessPoint'
 import EfsMountTarget from '../services/efsMountTarget'
 import EIP from '../services/eip'
 import EKSCluster from '../services/eksCluster'
@@ -165,6 +166,7 @@ export default {
   [services.ec2Instance]: EC2,
   [services.ecr]: ECR,
   [services.efs]: EFS,
+  [services.efsAccessPoint]: EfsAccessPoint,
   [services.efsMountTarget]: EfsMountTarget,
   [services.eip]: EIP,
   [services.eksCluster]: EKSCluster,

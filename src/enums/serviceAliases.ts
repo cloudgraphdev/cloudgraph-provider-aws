@@ -33,6 +33,7 @@ export default {
   [services.ecsTask]: 'ecsTasks',
   [services.ecsTaskDefinition]: 'ecsTaskDefinitions',
   [services.ecsTaskSet]: 'ecsTaskSets',
+  [services.efsAccessPoint]: 'efsAccessPoints',
   [services.eksCluster]: 'eksClusters',
   [services.elastiCacheCluster]: 'elastiCacheClusters',
   [services.elastiCacheReplicationGroup]: 'elastiCacheReplicationGroups',
