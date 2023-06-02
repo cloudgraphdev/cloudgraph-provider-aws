@@ -34,6 +34,7 @@ export default {
   [services.customerGateway]: 'awsCustomerGateway',
   [services.dmsReplicationInstance]: 'awsDmsReplicationInstance',
   [services.dynamodb]: 'awsDynamoDbTable',
+  [services.docdbCluster]: 'awsDocdbCluster',
   [services.ebs]: 'awsEbs',
   [services.ebsSnapshot]: 'awsEbsSnapshot',
   [services.ec2Instance]: 'awsEc2',

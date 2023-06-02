@@ -35,6 +35,7 @@ export default {
   customerGateway: 'customerGateway',
   dmsReplicationInstance: 'dmsReplicationInstance',
   dynamodb: 'dynamodb',
+  docdbCluster: 'docdbCluster',
   ebs: 'ebs',
   ebsSnapshot: 'ebsSnapshot',
   ec2Instance: 'ec2Instance',
