@@ -762,6 +762,10 @@ export default {
     `Security Hub found/enabled for region: ${region}`,
   fetchingSecurityHub:
     'Fetching Security Hub data for this AWS account via the AWS SDK...',
+  fetchedSecurityHubMembers: (num: number): string =>
+    `Found ${num} Security Hub Members`,
+  fetchedSecurityHubStandardSubscriptions: (num: number): string =>
+    `Found ${num} Security Hub Standard Subscription`,
   /**
    * Msk
    */

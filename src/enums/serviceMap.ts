@@ -104,6 +104,8 @@ import SageMakerProject from '../services/sageMakerProject'
 import SecretsManager from '../services/secretsManager'
 import AwsSecurityGroup from '../services/securityGroup'
 import SecurityHub from '../services/securityHub'
+import SecurityHubMember from '../services/securityHubMember'
+import SecurityHubStandardSubscription from '../services/securityHubStandardSubscription'
 import SES from '../services/ses'
 import SESReceiptRuleSet from '../services/sesReceiptRuleSet'
 import SESEmail from '../services/sesEmail'
@@ -230,6 +232,8 @@ export default {
   [services.s3]: S3,
   [services.secretsManager]: SecretsManager,
   [services.securityHub]: SecurityHub,
+  [services.securityHubMember]: SecurityHubMember,
+  [services.securityHubStandardSubscription]: SecurityHubStandardSubscription,
   [services.ses]: SES,
   [services.sesReceiptRuleSet]: SESReceiptRuleSet,
   [services.sesEmail]: SESEmail,

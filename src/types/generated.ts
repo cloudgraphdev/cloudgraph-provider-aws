@@ -243,6 +243,8 @@ export type AwsAccount = AwsOptionalService & {
   secretsManager?: Maybe<Array<Maybe<AwsSecretsManager>>>;
   securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
   securityHub?: Maybe<Array<Maybe<AwsSecurityHub>>>;
+  securityHubMember?: Maybe<Array<Maybe<AwsSecurityHubMember>>>;
+  securityHubStandardSubscription?: Maybe<Array<Maybe<AwsSecurityHubStandardSubscription>>>;
   ses?: Maybe<Array<Maybe<AwsSes>>>;
   sesDomain?: Maybe<Array<Maybe<AwsSesDomain>>>;
   sesEmail?: Maybe<Array<Maybe<AwsSesEmail>>>;
@@ -4646,6 +4648,10 @@ export type AwsSecurityHub = AwsBaseService & {
   autoEnableControls?: Maybe<Scalars['Boolean']>;
   subscribedAt?: Maybe<Scalars['String']>;
 };
+
+export type AwsSecurityHubMember = AwsBaseService;
+
+export type AwsSecurityHubStandardSubscription = AwsBaseService;
 
 export type AwsServiceBillingInfo = {
   cost?: Maybe<Scalars['Float']>;

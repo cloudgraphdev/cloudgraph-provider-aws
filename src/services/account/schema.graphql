@@ -104,6 +104,8 @@ type awsAccount implements awsOptionalService @key(fields: "id") {
   secretsManager: [awsSecretsManager]
   securityGroups: [awsSecurityGroup]
   securityHub: [awsSecurityHub]
+  securityHubMember: [awsSecurityHubMember]
+  securityHubStandardSubscription: [awsSecurityHubStandardSubscription]
   systemsManagerDocuments: [awsSystemsManagerDocument]
   systemsManagerInstances: [awsSystemsManagerInstance]
   systemsManagerParameters: [awsSystemsManagerParameter]
