@@ -2228,6 +2228,8 @@ export type AwsEcsSecret = {
 
 export type AwsEcsService = AwsBaseService & {
   capacityProviderStrategy?: Maybe<Array<Maybe<AwsEcsCapacityProviderStrategyItem>>>;
+  clusterArn?: Maybe<Scalars['String']>;
+  clusterName?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['String']>;
   createdBy?: Maybe<Scalars['String']>;
   deploymentConfiguration?: Maybe<AwsEcsDeploymentConfiguration>;
