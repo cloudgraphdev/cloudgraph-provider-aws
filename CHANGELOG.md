@@ -1,3 +1,10 @@
+# [0.89.0-alpha.19](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.18...0.89.0-alpha.19) (2023-06-05)
+
+
+### Features
+
+* **aws:** support missing ecs services ([87865d2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/87865d2d9bf2c77466059594d98e9fdc88333b3e))
+
 # [0.89.0-alpha.18](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.17...0.89.0-alpha.18) (2023-06-05)
 
 
