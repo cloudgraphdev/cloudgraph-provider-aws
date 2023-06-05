@@ -85,6 +85,9 @@ export default {
   [services.secretsManager]: 'secretsManager',
   [services.sg]: 'securityGroups',
   [services.securityHub]: 'securityHubs',
+  [services.securityHubMember]: 'securityHubMembers',
+  [services.securityHubStandardSubscription]:
+    'securityHubStandardSubscriptions',
   [services.subnet]: 'subnets',
   [services.systemsManagerDocument]: 'systemsManagerDocuments',
   [services.systemsManagerInstance]: 'systemsManagerInstances',
