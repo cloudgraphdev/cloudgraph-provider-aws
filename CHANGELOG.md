@@ -1,3 +1,10 @@
+# [0.89.0-alpha.18](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.17...0.89.0-alpha.18) (2023-06-05)
+
+
+### Features
+
+* add securityHub missing services ([734d0c1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/734d0c138eec88d27d37aee2f8c1cc70f50516c4))
+
 # [0.89.0-alpha.17](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.16...0.89.0-alpha.17) (2023-06-02)
 
 
