@@ -10,7 +10,6 @@ import ELBV2, {
   DescribeTargetGroupsOutput,
   DescribeTargetHealthOutput,
   DescribeListenerCertificatesInput,
-  DescribeListenerCertificatesOutput,
   Listeners,
   LoadBalancer,
   LoadBalancerAttributeValue,
@@ -55,90 +54,64 @@ export type RawAwsAlb = LoadBalancer & {
 }
 
 const describeListenerCertificatesForAlb = async ({
-  alb,
   elbv2,
-  marker: Marker = '',
   ListenerArn,
-  resolveListenerCertificates,
 }: {
-  alb: RawAwsAlb
   elbv2: ELBV2
-  marker?: string
   ListenerArn: string
-  resolveListenerCertificates: () => void
-}): Promise<Request<DescribeListenerCertificatesOutput, AWSError>> => {
-  let args: DescribeListenerCertificatesInput = { ListenerArn }
+}): Promise<Certificate[]> =>
+  new Promise(resolve => {
+    const certificateList: Certificate[] = []
+    const listAllCertificates = (token?: string): void => {
+      const args: DescribeListenerCertificatesInput = { ListenerArn }
+      if (token) {
+        args.Marker = token
+      }
 
-  if (Marker) {
-    args = {
-      ...args,
-      Marker,
+      try {
+        elbv2.describeListenerCertificates(args, (err, data) => {
+          if (err) {
+            errorLog.generateAwsErrorLog({
+              functionName: 'elbv2:describeListenerCertificates',
+              err,
+            })
+            resolve(certificateList)
+            return
+          }
+
+          const { Certificates: certificates = [], NextMarker: marker } =
+            data || {}
+
+          logger.debug(
+            lt.fetchedAlbListenerCertificates(certificates.length, ListenerArn)
+          )
+
+          if (isEmpty(certificates)) {
+            resolve(certificateList)
+            return
+          }
+
+          certificateList.push(...certificates)
+
+          /**
+           * Check to see if there are more
+           */
+          if (marker) {
+            listAllCertificates(marker)
+          } else {
+            resolve(certificateList)
+          }
+        })
+      } catch (err) {
+        errorLog.generateAwsErrorLog({
+          functionName: 'elbv2:describeListenerCertificates',
+          err,
+        })
+        resolve([])
+      }
     }
-  }
-
-  return elbv2.describeListenerCertificates(args, async (err, data) => {
-    if (err) {
-      errorLog.generateAwsErrorLog({
-        functionName: 'elbv2:describeListenerCertificates',
-        err,
-      })
-    }
-
-    /**
-     * No certificates
-     */
-
-    if (isEmpty(data)) {
-      return resolveListenerCertificates()
-    }
-
-    const { Certificates: certificates = [], NextMarker: marker } = data || {}
-
-    logger.debug(
-      lt.fetchedAlbListenerCertificates(certificates.length, ListenerArn)
-    )
-
-    /**
-     * No certificates found
-     */
-
-    if (isEmpty(certificates)) {
-      return resolveListenerCertificates()
-    }
-
-    /**
-     * Check to see if there are more
-     */
-
-    if (marker) {
-      describeListenerCertificatesForAlb({
-        alb,
-        elbv2,
-        marker,
-        ListenerArn,
-        resolveListenerCertificates,
-      })
-    }
-
-    /**
-     * If there are not, then add the targetGroups to the alb's targetGroups
-     */
-    alb.listenerCertificates.push(
-      ...certificates.map(certificate => ({
-        listenerArn: ListenerArn,
-        ...certificate,
-      }))
-    )
-
-    /**
-     * If this is the last page of data then return
-     */
-
-    if (!marker) {
-      resolveListenerCertificates()
-    }
+    listAllCertificates()
   })
-}
 
 export default async ({
   regions,
@@ -735,22 +708,29 @@ export default async ({
         endpoint,
         ...customRetrySettings,
       })
-      const listenerCertificatesPromise = new Promise<void>(
-        resolveListenerCertificates => {
-          listeners.forEach(({ ListenerArn }) => {
-            describeListenerCertificatesForAlb({
-              alb,
-              elbv2,
-              ListenerArn,
-              resolveListenerCertificates,
-            })
+      listeners.forEach(({ ListenerArn }) => {
+        const certificatePromise = new Promise<void>(async resolveListener => {
+          const certificates = await describeListenerCertificatesForAlb({
+            elbv2,
+            ListenerArn,
           })
-        }
-      )
-      listenerCertificatesPromises.push(listenerCertificatesPromise)
+          if (!isEmpty(certificates)) {
+            alb.listenerCertificates.push(
+              ...certificates.map(cerficate => ({
+                ...cerficate,
+                listenerArn: ListenerArn,
+              }))
+            )
+          }
+          resolveListener()
+        })
+        listenerCertificatesPromises.push(certificatePromise)
+      })
     })
 
-    await Promise.all(listenerCertificatesPromises)
+    if (!isEmpty(listenerCertificatesPromises)) {
+      await Promise.all(listenerCertificatesPromises)
+    }
     errorLog.reset()
 
     resolve(groupBy(albData, 'region'))
