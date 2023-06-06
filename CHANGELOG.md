@@ -1,3 +1,10 @@
+# [0.89.0-alpha.20](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.19...0.89.0-alpha.20) (2023-06-06)
+
+
+### Bug Fixes
+
+* refactor listenerCertificates method ([aab3b84](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/aab3b8474ba23ef6b7b16e55d0569432ed903ff1))
+
 # [0.89.0-alpha.19](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.18...0.89.0-alpha.19) (2023-06-05)
 
 
