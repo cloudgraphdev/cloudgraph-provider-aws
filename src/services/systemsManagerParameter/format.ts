@@ -1,6 +1,6 @@
-import { ParameterMetadata } from '@aws-sdk/client-ssm'
 import { AwsSystemsManagerParameter } from '../../types/generated'
 import { ssmParameterArn } from '../../utils/generateArns'
+import { RawAwsParameterMetadata } from './data'
 
 /**
  * Systems Manager Parameter
@@ -12,7 +12,7 @@ export default ({
 }: {
   account: string
   region: string
-  service: ParameterMetadata
+  service: RawAwsParameterMetadata
 }): AwsSystemsManagerParameter => {
   const { Name: name } = parameter
 
