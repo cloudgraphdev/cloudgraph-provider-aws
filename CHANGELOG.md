@@ -1,3 +1,10 @@
+# [0.89.0-alpha.21](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.20...0.89.0-alpha.21) (2023-06-07)
+
+
+### Bug Fixes
+
+* **aws:** fixes for beta release review ([d6dc132](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d6dc132b1945f9532151f79b0c05efe7bc10b636))
+
 # [0.89.0-alpha.20](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.19...0.89.0-alpha.20) (2023-06-06)
 
 
