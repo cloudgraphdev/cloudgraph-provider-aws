@@ -66,7 +66,6 @@ const listClustersForRegion = async ({
             } else {
               resolve(clusterList)
             }
-
           }
         )
       } catch (error) {
@@ -164,9 +163,9 @@ const listNodegroups = async ({
 
             if (nextToken) {
               listAllNodeGroups(nextToken)
+            } else {
+              resolve(nodeGroupsList)
             }
-
-            resolve(nodeGroupsList)
           }
         )
       } catch (error) {

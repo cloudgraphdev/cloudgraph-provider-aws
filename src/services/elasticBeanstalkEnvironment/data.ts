@@ -14,6 +14,7 @@ import {
   EnvironmentDescription,
   EnvironmentResourceDescription,
 } from 'aws-sdk/clients/elasticbeanstalk'
+import { groupBy } from 'lodash'
 import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
 import { TagMap } from '../../types'
@@ -31,6 +32,7 @@ export interface RawAwsElasticBeanstalkEnv extends EnvironmentDescription {
   resources?: EnvironmentResourceDescription
   settings?: ConfigurationSettingsDescription[]
   Tags?: TagMap
+  region: string
 }
 
 const listEnvironments = async (
@@ -175,27 +177,25 @@ export default async ({
   new Promise(async resolve => {
     const { credentials } = config
     let numberOfEnvs = 0
-    const output: {
-      [property: string]: RawAwsElasticBeanstalkEnv[]
-    } = {}
+    const envsData: RawAwsElasticBeanstalkEnv[] = []
 
-    // First we get all applications for all regions
-    await Promise.all(
-      regions.split(',').map(region => {
-        const eb = new ElasticBeanstalkClient({
-          credentials,
-          region,
-        })
-        output[region] = []
-        return new Promise<void>(async resolveRegion => {
-          const envs = (await getEnvironments(eb)) || []
-          output[region] = envs
-          numberOfEnvs += envs.length
-          resolveRegion()
-        })
+    const regionPromises = regions.split(',').map(region => {
+      const eb = new ElasticBeanstalkClient({
+        credentials,
+        region,
       })
-    )
+      return new Promise<void>(async resolveRegion => {
+        const envs = (await getEnvironments(eb)) || []
+        if (!isEmpty(envs)) {
+          envsData.push(...envs.map(val => ({ ...val, region })))
+          numberOfEnvs += envs.length
+        }
+        resolveRegion()
+      })
+    })
+
+    await Promise.all(regionPromises)
     errorLog.reset()
     logger.debug(lt.fetchedElasticBeanstalkEnvs(numberOfEnvs))
-    resolve(output)
+    resolve(groupBy(envsData, 'region'))
   })

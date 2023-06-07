@@ -6,6 +6,7 @@ import {
 import CloudGraph from '@cloudgraph/sdk'
 import { Config } from 'aws-sdk'
 import { ApplicationDescription } from 'aws-sdk/clients/elasticbeanstalk'
+import { groupBy } from 'lodash'
 import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
@@ -19,6 +20,7 @@ const serviceName = 'ElasticBeanstalkApp'
 const errorLog = new AwsErrorLog(serviceName)
 
 export interface RawAwsElasticBeanstalkApp extends ApplicationDescription {
+  region: string
   Tags?: TagMap
 }
 
@@ -64,12 +66,13 @@ export const getResourceTags = async (
         }
         resolveTags(convertAwsTagsToTagMap(tags as AwsTag[]))
       })
-      .catch(err =>
+      .catch(err => {
         errorLog.generateAwsErrorLog({
           functionName: 'elasticBeanstalk:listTagsForResource',
           err,
         })
-      )
+        resolveTags({})
+      })
   })
 
 const getApplications = async (
@@ -97,25 +100,25 @@ export default async ({
   new Promise(async resolve => {
     const { credentials } = config
     let numberOfApps = 0
-    const output: { [property: string]: RawAwsElasticBeanstalkApp[] } = {}
+    const appsData: RawAwsElasticBeanstalkApp[] = []
 
-    // First we get all applications for all regions
-    await Promise.all(
-      regions.split(',').map(region => {
-        const eb = new ElasticBeanstalkClient({
-          credentials,
-          region,
-        })
-        output[region] = []
-        return new Promise<void>(async resolveRegion => {
-          const apps = (await getApplications(eb)) || []
-          output[region] = apps
-          numberOfApps += apps.length
-          resolveRegion()
-        })
+    const regionPromises = regions.split(',').map(region => {
+      const eb = new ElasticBeanstalkClient({
+        credentials,
+        region,
       })
-    )
+      return new Promise<void>(async resolveRegion => {
+        const apps = (await getApplications(eb)) || []
+        if (!isEmpty(apps)) {
+          appsData.push(...apps.map(val => ({ ...val, region })))
+          numberOfApps += apps.length
+        }
+        resolveRegion()
+      })
+    })
+
+    await Promise.all(regionPromises)
     errorLog.reset()
     logger.debug(lt.fetchedElasticBeanstalkApps(numberOfApps))
-    resolve(output)
+    resolve(groupBy(appsData, 'region'))
   })

@@ -6,6 +6,7 @@ import {
 } from '@aws-sdk/client-ssm'
 import CloudGraph from '@cloudgraph/sdk'
 import { Config } from 'aws-sdk'
+import { groupBy } from 'lodash'
 import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
 import AwsErrorLog from '../../utils/errorLog'
@@ -15,6 +16,10 @@ const { logger } = CloudGraph
 const serviceName = 'SystemsManagerParameter'
 const errorLog = new AwsErrorLog(serviceName)
 const MAX_ITEMS = 50
+
+export interface RawAwsParameterMetadata extends ParameterMetadata {
+  region: string
+}
 
 const listParameters = async (ssm: SSMClient): Promise<ParameterMetadata[]> =>
   new Promise(async resolve => {
@@ -64,26 +69,24 @@ export default async ({
 }: {
   regions: string
   config: Config
-}): Promise<{ [property: string]: ParameterMetadata[] }> =>
+}): Promise<{ [property: string]: RawAwsParameterMetadata[] }> =>
   new Promise(async resolve => {
     const { credentials } = config
-    const output: { [property: string]: ParameterMetadata[] } = {}
+    const paramsData: RawAwsParameterMetadata[] = []
 
-    await Promise.all(
-      regions.split(',').map(region => {
-        const ssm = new SSMClient({
-          credentials,
-          region,
-        })
-        output[region] = []
-        return new Promise<void>(async resolveRegion => {
-          const params = (await listParameters(ssm)) || []
-          output[region] = params
-          resolveRegion()
-        })
+    const regionPromises = regions.split(',').map(async region => {
+      const ssm = new SSMClient({
+        credentials,
+        region,
       })
-    )
+      const params = (await listParameters(ssm)) || []
+      if (!isEmpty(params)) {
+        paramsData.push(...params.map(val => ({ ...val, region })))
+      }
+    })
+
+    await Promise.all(regionPromises)
     errorLog.reset()
 
-    resolve(output)
+    resolve(groupBy(paramsData, 'region'))
   })

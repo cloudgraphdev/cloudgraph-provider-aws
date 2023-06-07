@@ -1,21 +1,19 @@
 import CloudGraph from '@cloudgraph/sdk'
 import DOCDB, {
   DBCluster,
-  TagListMessage,
-  DescribeDBClustersMessage,
   DBClusterMessage,
   DBSubnetGroup,
   DBSubnetGroupMessage,
+  DescribeDBClustersMessage,
 } from 'aws-sdk/clients/docdb'
+import { Config } from 'aws-sdk/lib/config'
 import { AWSError } from 'aws-sdk/lib/error'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
-import { Config } from 'aws-sdk/lib/config'
 import awsLoggerText from '../../properties/logger'
-import { TagMap, AwsTag } from '../../types'
-import { convertAwsTagsToTagMap } from '../../utils/format'
-import AwsErrorLog from '../../utils/errorLog'
+import { TagMap } from '../../types'
 import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
@@ -75,9 +73,14 @@ const describeDBSubnetGroups = async (
             })
             return resolve([])
           }
-          if (!isEmpty(data)) {
-            resolve(data.DBSubnetGroups)
+          if (isEmpty(data)) {
+            return resolve([])
           }
+          const { DBSubnetGroups = [] } = data || {}
+          if (isEmpty(DBSubnetGroups)) {
+            return resolve([])
+          }
+          resolve(DBSubnetGroups)
         }
       )
     } catch (error) {

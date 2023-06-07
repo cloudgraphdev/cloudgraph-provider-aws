@@ -47,18 +47,18 @@ export default async ({
         ses.listIdentities(
           { IdentityType: 'EmailAddress' },
           (err: AWSError, data: ListIdentitiesResponse) => {
-            /**
-             * No Data for the region
-             */
-            if (isEmpty(data)) {
-              return resolveRegion()
-            }
-
             if (err) {
               errorLog.generateAwsErrorLog({
                 functionName: 'sesEmail:listIdentities',
                 err,
               })
+            }
+
+            /**
+             * No Data for the region
+             */
+            if (isEmpty(data)) {
+              return resolveRegion()
             }
 
             const { Identities }: { Identities: string[] } = data
@@ -86,7 +86,8 @@ export default async ({
                   ) => {
                     if (err) {
                       errorLog.generateAwsErrorLog({
-                        functionName: 'sesEmail:getIdentityVerificationAttributes',
+                        functionName:
+                          'sesEmail:getIdentityVerificationAttributes',
                         err,
                       })
                     }
@@ -94,7 +95,6 @@ export default async ({
                     if (!isEmpty(identities)) {
                       sesData.push(
                         ...Identities.map(Identity => ({
-
                           Identity,
                           ...identities[Identity],
                           region,

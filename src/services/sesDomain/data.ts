@@ -20,7 +20,6 @@ const serviceName = 'SES Domain'
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
-
 /**
  * SES Domains
  */
@@ -48,18 +47,18 @@ export default async ({
         ses.listIdentities(
           { IdentityType: 'Domain' },
           (err: AWSError, data: ListIdentitiesResponse) => {
-            /**
-             * No Data for the region
-             */
-            if (isEmpty(data)) {
-              return resolveRegion()
-            }
-
             if (err) {
               errorLog.generateAwsErrorLog({
                 functionName: 'sesDomain:listIdentities',
                 err,
               })
+            }
+
+            /**
+             * No Data for the region
+             */
+            if (isEmpty(data)) {
+              return resolveRegion()
             }
 
             const { Identities }: { Identities: string[] } = data
@@ -87,7 +86,8 @@ export default async ({
                   ) => {
                     if (err) {
                       errorLog.generateAwsErrorLog({
-                        functionName: 'sesDomain:getIdentityVerificationAttributes',
+                        functionName:
+                          'sesDomain:getIdentityVerificationAttributes',
                         err,
                       })
                     }
@@ -95,7 +95,6 @@ export default async ({
                     if (!isEmpty(identities)) {
                       sesData.push(
                         ...Identities.map(Identity => ({
-
                           Identity,
                           ...identities[Identity],
                           region,
