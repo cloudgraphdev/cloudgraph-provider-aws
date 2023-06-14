@@ -30,7 +30,7 @@ export default ({
     Environment: environment,
   } = service
 
-  const arn = opsworksAppArn({ region, account: accountId, name: name })
+  const arn = opsworksAppArn({ region, account: accountId, appId: appId })
 
   return {
     id: appId,

@@ -349,10 +349,10 @@ export const transitGatewayRouteTableArn = ({
 export const opsworksAppArn = ({
   region,
   account,
-  name,
+  appId,
 }: {
   region: string
   account: string
-  name: string
+  appId: string
 }): string =>
-  `arn:aws:opsworks:${region}:${account}:app/${name}`
+  `arn:aws:opsworks:${region}:${account}:app/${appId}`
