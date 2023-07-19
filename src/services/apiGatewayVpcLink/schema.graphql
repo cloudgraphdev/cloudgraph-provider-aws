@@ -1,0 +1,4 @@
+type awsApiGatewayVpcLink implements awsBaseService @key(fields: "id") {
+  name: String
+  targetArns: [String]
+}

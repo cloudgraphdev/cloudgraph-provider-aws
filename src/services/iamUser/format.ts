@@ -27,6 +27,7 @@ export default ({
     VirtualMFADevices: virtualMfaDevices = [],
     Groups: groups = [],
     Policies: inlinePolicies = [],
+    ManagedPolicies: managedPolicies = [],
     ReportData: {
       AccessKey1LastRotated: accessKey1LastRotated,
       AccessKey2LastRotated: accessKey2LastRotated,
@@ -130,6 +131,10 @@ export default ({
     mfaActive: mfaActive === 'true',
     groups,
     inlinePolicies,
+    managedPolicies: managedPolicies.map(({ PolicyArn, PolicyName }) => ({
+      policyArn: PolicyArn,
+      policyName: PolicyName,
+    })),
     tags: userTags,
   }
   return user

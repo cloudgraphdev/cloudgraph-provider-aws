@@ -1,5 +1,97 @@
+type awsLambdaEventSourceConfig
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  consumerGroupId: String @search(by: [hash, regexp])
+}
+
+type awsLambdaSourceAccessConfiguration
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  type: String @search(by: [hash, regexp])
+  uri: String @search(by: [hash, regexp])
+}
+
+type awsLambdaDestinationConfig
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  OnSuccess: String @search(by: [hash, regexp])
+  OnFailure: String @search(by: [hash, regexp])
+}
+
+type awsLambdaEventInvokeConfig
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  lastModified: DateTime @search(by: [day])
+  functionArn: String @search(by: [hash, regexp])
+  maximumRetryAttempts: Int
+  maximumEventAgeInSeconds: Int
+  destinationConfig: awsLambdaDestinationConfig
+}
+
+type awsLambdaEventSourceMappings
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  uuid: String @search(by: [hash, regexp])
+  startingPosition: String @search(by: [hash, regexp])
+  batchSize: Int
+  maximumBatchingWindowInSeconds: Int
+  parallelizationFactor: Int
+  eventSourceArn: String @search(by: [hash, regexp])
+  filterCriteria: [String] @search(by: [hash, regexp])
+  functionArn: String @search(by: [hash, regexp])
+  lastModified: DateTime @search(by: [day])
+  lastProcessingResult: String @search(by: [hash, regexp])
+  state: String @search(by: [hash, regexp])
+  stateTransitionReason: String @search(by: [hash, regexp])
+  destinationConfig: awsLambdaDestinationConfig
+  topics: [String] @search(by: [hash, regexp])
+  queues: [String] @search(by: [hash, regexp])
+  maximumRecordAgeInSeconds: Int
+  bisectBatchOnFunctionError: Boolean
+  maximumRetryAttempts: Int
+  tumblingWindowInSeconds: Int
+  functionResponseTypes: [String] @search(by: [hash, regexp])
+  amazonManagedKafkaEventSourceConfig: awsLambdaEventSourceConfig
+  selfManagedKafkaEventSourceConfig: awsLambdaEventSourceConfig
+}
+
+type awsLambdaLayerVersion
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  arn: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  codeSize: Float
+  signingProfileVersionArn: String @search(by: [hash, regexp])
+  signingJobArn: String @search(by: [hash, regexp])
+}
+
 type awsLambda implements awsBaseService @key(fields: "arn") {
   description: String @search(by: [hash, regexp, fulltext])
+  name: String @search(by: [hash, regexp])
   handler: String @search(by: [hash, regexp])
   kmsKeyArn: String @search(by: [hash, regexp])
   lastModified: String @search(by: [hash, regexp])
@@ -15,6 +107,10 @@ type awsLambda implements awsBaseService @key(fields: "arn") {
   policyRevisionId: String @search(by: [hash, regexp])
   rawPolicy: String @search(by: [hash, regexp])
   policy: awsIamJSONPolicy
+  policyStatementIds: [String] @search(by: [hash, regexp])
+  eventSourceMappings: [awsLambdaEventSourceMappings]
+  eventInvokeConfigs: [awsLambdaEventInvokeConfig]
+  layers: [awsLambdaLayerVersion]
   tags: [awsRawTag]
   kms: [awsKms] @hasInverse(field: lambda)
   securityGroups: [awsSecurityGroup] @hasInverse(field: lambda)

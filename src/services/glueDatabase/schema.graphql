@@ -1,0 +1,5 @@
+type awsGlueDatabase implements awsBaseService @key(fields: "arn") {
+  name: String @search(by: [hash, regexp])
+  catalogId: String @search(by: [hash, regexp])
+  tables: [String] @search(by: [hash, regexp])
+}

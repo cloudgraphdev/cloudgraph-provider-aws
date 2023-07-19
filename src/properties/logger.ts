@@ -59,7 +59,7 @@ export default {
    */
   fetchingCloudFrontData:
     'Fetching CloudFront Distros for this AWS account via the AWS SDK...',
-  fetchedCloudFrontDistros: (num: number) =>
+  fetchedCloudFrontDistros: (num: number): string =>
     `Fetched ${num} CloudFront Distros`,
   fetchingCloudFrontDistrosConfigAndTags:
     'Fetching CloudFront Distros Config Data and Tags...',
@@ -94,6 +94,9 @@ export default {
     `Found ${num} CloudWatch metric alarms to add for ${namespace}`,
   gettingCloudwatchAlarms: 'Fetching CloudWatch alarms...',
   gettingCloudwatchAlarmTags: 'Fetching tags for each CloudWatch alarm...',
+  gettingCloudwatchDashboards: 'Fetching CloudWatch dashboards...',
+  gettingCloudwatchRules: 'Fetching CloudWatch events rules...',
+  gettingCloudwatchRuleTargets: 'Fetching CloudWatch events rule targets...',
   /**
    * Kinesis Data Streams
    */
@@ -114,7 +117,7 @@ export default {
   lookingForIotThing: 'Looking for IoT Things to add to Region...',
   addingIotThing: (num: number): string =>
     `Created and added ${num} IoT Things to this region`,
-  foundMoreIoTThings: (num: number) =>
+  foundMoreIoTThings: (num: number): string =>
     `Found another ${num} IoT things in this region...`,
   gettingIoTThings: 'Fetching IoT things...',
   /**
@@ -131,10 +134,24 @@ export default {
     `Fetched ${num} Api Gateway Stages`,
   fetchedApiGwDomainNames: (num: number): string =>
     `Fetched ${num} API Gateway Domain Names`,
+  fetchedApiGatewayApiKeys: (num: number): string =>
+    `Fetched ${num} Api Gateway Api Keys`,
+  fetchedApiGatewayVpcLinks: (num: number): string =>
+    `Fetched ${num} Api Gateway Vpc Links`,
+  fetchedApiGatewayUsagePlans: (num: number): string =>
+    `Fetched ${num} Api Gateway Usage Plans`,
   fetchingApiGatewayData:
     'Fetching API Gateway data for this AWS account via the AWS SDK...',
   doneFetchingApiGatewayData: '✅ Done fetching API Gateway Data ✅',
   gettingApiGatewayTags: 'Fetching tags for each Api Gateway Rest Api...',
+  gettingApiGatewayAuthorizers:
+    'Fetching authorizers for each Api Gateway Rest Api...',
+  gettingApiGatewayDocumentationParts:
+    'Fetching authorizers for each Api Gateway Documentation Parts...',
+  gettingApiGatewayGatewayResponses:
+    'Fetching authorizers for each Api Gateway Gateway Responses...',
+  gettingApiGatewayModels:
+    'Fetching authorizers for each Api Gateway Models...',
   gettingApiGatewayStageTags: 'Fetching tags for each Api Gateway Stage...',
   /**
    * Vpc
@@ -206,6 +223,8 @@ export default {
     `Fetched ${num} Attributes for ${albArn}`,
   fetchedAlbListeners: (num: number, albArn: string): string =>
     `Fetched ${num} ALB Listeners for ${albArn}`,
+  fetchedAlbListenerCertificates: (num: number, listenerArn: string): string =>
+    `Fetched ${num} ALB Listener Certificates for ${listenerArn}`,
   fetchedAlbTargetGroups: (num: number, albArn: string): string =>
     `Fetched ${num} ALB Target Groups for ${albArn}`,
   fetchedAlbTargetIds: (num: number, albArn: string): string =>
@@ -257,10 +276,11 @@ export default {
   /**
    * EBS Snapshot
    */
-    fetchingEbsSnapshotData: 'Fetching EBS Snapshot data for this AWS account via the AWS SDK...',
-    doneFetchingEbsSnapshotData: '✅ Done fetching EBS Snapshot Data ✅',
-    fetchedEbsSnapshots: (num: number): string => `Fetched ${num} EBS Snapshots`,
-    lookingForEbsSnapshot: 'Looking for EBS Snapshots...',
+  fetchingEbsSnapshotData:
+    'Fetching EBS Snapshot data for this AWS account via the AWS SDK...',
+  doneFetchingEbsSnapshotData: '✅ Done fetching EBS Snapshot Data ✅',
+  fetchedEbsSnapshots: (num: number): string => `Fetched ${num} EBS Snapshots`,
+  lookingForEbsSnapshot: 'Looking for EBS Snapshots...',
   /**
    * EC2
    */
@@ -274,8 +294,7 @@ export default {
   fetchedNetworkInterfaces: (num: number): string =>
     `Fetched ${num} Network Interfaces`,
   lookingForNetworkInterfaces: 'Gathering Network Interfaces to add...',
-  foundKeyPair: (id: string): string =>
-    `Found Key Pair ${id} for instance`,
+  foundKeyPair: (id: string): string => `Found Key Pair ${id} for instance`,
   doneFetchingEc2Data: '✅ Done fetching EC2 Instance Data ✅',
   /**
    * RDS
@@ -286,8 +305,14 @@ export default {
   lookingforRdsClusters: 'Looking for RDS Clusters...',
   creatingRdsInstance: (num: number): string => `Creating RDS Instance #${num}`,
   fetchedRdsClusters: (num: number): string => `Fetched ${num} RDS Clusters`,
+  fetchedDocdbClusters: (num: number): string => `Fetched ${num} DocDB Clusters`,
+  fetchedRdsGlobalClusters: (num: number): string =>
+    `Fetched ${num} RDS Global Clusters`,
   fetchedRdsInstances: (num: number): string =>
     `Fetched ${num} RDS DB Instances`,
+  fetchedRdsEventSubscriptions: (num: number): string =>
+    `Fetched ${num} RDS DB Event Subscriptions`,
+  fetchedRdsDbProxies: (num: number): string => `Fetched ${num} RDS DB Proxies`,
   noClusterFound: '❎ DB Instance is not part of a cluster ❎ ',
   foundCluster: 'Found the cluster the instance belongs to',
   addingRdsInstances: (num: number): string =>
@@ -308,13 +333,14 @@ export default {
   fetchedEmrClusters: (num: number): string => `Fetched ${num} EMR Clusters`,
   fetchedEmrClusterInstances: (num: number): string =>
     `Fetched ${num} EMR Clusters Instances`,
-  foundAnotherFiftyClusters: (region: string) =>
+  foundAnotherFiftyClusters: (region: string): string =>
     `Found another 50 EMR clusters for the ${region} region...`,
-  foundAnotherTwoThousandInstances: (cluster: string) =>
+  foundAnotherTwoThousandInstances: (cluster: string): string =>
     `Found another 2000 EMR instances for the ${cluster} cluster...`,
-  foundAnotherFiftySteps: (cluster: string) =>
+  foundAnotherFiftySteps: (cluster: string): string =>
     `Found another 50 EMR steps for the ${cluster} cluster...`,
-  fetchedEmrClusterSteps: (num: number) => `Fetched ${num} EMR Cluster Steps`,
+  fetchedEmrClusterSteps: (num: number): string =>
+    `Fetched ${num} EMR Cluster Steps`,
   addingEmrEc2Connection: (
     clusterName: string,
     ec2InstanceName: string
@@ -335,6 +361,8 @@ export default {
     `Found ${num} EFS Mount Targets, adding them to the subnet`,
   doneFetchingEfsData: '✅ Done fetching EFS Data ✅',
   fetchedEfs: (num: number): string => `Fetched ${num} EFS`,
+  fetchedEfsAccessPoints: (num: number): string =>
+    `Fetched ${num} EFS Access Points`,
   fetchedEfsMountTargets: (num: number): string =>
     `Fetched ${num} EFS Mount Targets`,
   fetchedEfsMountTargetSecurityGroups: (num: number): string =>
@@ -367,11 +395,11 @@ export default {
   lookingForDynamoDb: 'Looking for DynamoDb Tables to add...',
   fetchingDynamoDbData:
     'Fetching DynamoDB data for this AWS account via the AWS SDK...',
-  doneFetchingDynamoDbData: (num: number) =>
+  doneFetchingDynamoDbData: (num: number): string =>
     `🕒 Done fetching DynamoDb Data in ${num} 🕘`,
-  fetchedDynamoDbTableNames: (num: number) =>
+  fetchedDynamoDbTableNames: (num: number): string =>
     `Fetched ${num} DynamoDB table names`,
-  addingDynamoDbTables: (num: number) =>
+  addingDynamoDbTables: (num: number): string =>
     `Found ${num} Dynamo DB tables, adding them to the Region`,
   gettingTableDetails: 'Fetching details for each table...',
   gettingTableTags: 'Fetching tags for each table...',
@@ -381,10 +409,10 @@ export default {
   /**
    * SNS
    */
-  fetchedSNSTopics: (num: number) => `Fetched ${num} SNS Topics`,
-  gettingSNSTopicAttributes: `Fetching attributes for each topic...`,
-  gettingSNSTopicTags: `Fetching tags for each topic...`,
-  gettingSNSTopicSubscriptions: `Fetching subscriptions for each topic...`,
+  fetchedSNSTopics: (num: number): string => `Fetched ${num} SNS Topics`,
+  gettingSNSTopicAttributes: 'Fetching attributes for each topic...',
+  gettingSNSTopicTags: 'Fetching tags for each topic...',
+  gettingSNSTopicSubscriptions: 'Fetching subscriptions for each topic...',
   lookingForSns: 'Looking for SNS topics and subscriptions to add...',
   addingSns: (num: number): string =>
     `Found ${num} SNS topics, adding them to the Region`,
@@ -449,7 +477,7 @@ export default {
     `Found ${num} EKS Clusters, adding them to the VPC`,
   canNotFindClusterForAsg:
     'ERROR: Can not find ECS/EKS cluster for ASG - it should have been added already',
-  foundMoreEKSClusters: (num: number) =>
+  foundMoreEKSClusters: (num: number): string =>
     `Found another ${num} EKS clusters in this region...`,
   /**
    * Elastic Beanstalk
@@ -466,16 +494,20 @@ export default {
     `Found ${num} ElastiCache Clusters, adding them to the VPC`,
   missingReplicationGroup: (is: string): string =>
     `Missing replication group for ${is} ElastiCache Cluster! Not adding ElastiCache Data`,
-  fetchedElasticacheClusters: (num: number) =>
+  fetchedElasticacheClusters: (num: number): string =>
     `Fetched ${num} Elasticache clusters...`,
   /**
    * ECR
    */
   fetchedECRRepos: (num: number): string => `Found ${num} ECR repos...`,
-  foundMoreECRRepos: (num: number) =>
+  foundMoreECRRepos: (num: number): string =>
     `Found another ${num} ECR repos in this region...`,
   gettingECRRepos: 'Fetching ECR repos...',
   gettingECRRepoTags: 'Fetching tags for each ECR repo...',
+  gettingECRRepoLifecyclePolicy:
+    'Fetching lifecycle policy for each ECR repo...',
+  gettingECRRepoRepositoryPolicy:
+    'Fetching repository policy for each ECR repo...',
   /**
    * Transit Gateway
    */
@@ -486,23 +518,25 @@ export default {
     `Adding Transit Gateway ${name} to the VPC`,
   addingTransitGatewayToRegion: ({ name }): string =>
     `Transit Gateway not attached to a VPC, adding Transit Gateway ${name} to the region level`,
-  fetchedTransitGateways: (num: number): string => `Found ${num} Transit Gateways`,
+  fetchedTransitGateways: (num: number): string =>
+    `Found ${num} Transit Gateways`,
   /**
    * Transit Gateway Attachment
    */
-   fetchedTransitGatewayAttachments: (num: number): string => `Found ${num} Transit Gateway Attachments`,
-   /**
+  fetchedTransitGatewayAttachments: (num: number): string =>
+    `Found ${num} Transit Gateway Attachments`,
+  /**
    * Transit Gateway Route Tables
    */
-    fetchedTransitGatewayRouteTables: (num: number): string => `Found ${num} Transit Gateway Route Tables`,
+  fetchedTransitGatewayRouteTables: (num: number): string =>
+    `Found ${num} Transit Gateway Route Tables`,
   /**
    * VPN Gateway
    */
   lookingForVpnGateway: 'Looking for Vpn Gateways to add...',
   addingVpnGatewayToVpc: (num: number): string =>
     `Adding ${num} Vpn Gateways to the VPC`,
-  fetchedVpnGateways: (num: number): string =>
-    `Fetched ${num} Vpn Gateways`,
+  fetchedVpnGateways: (num: number): string => `Fetched ${num} Vpn Gateways`,
   /**
    * Customer Gateway
    */
@@ -613,7 +647,7 @@ export default {
   lookingForCloud9: 'Looking for Cloud9 to add to Region...',
   addingCloud9: (num: number): string =>
     `Created and added ${num} Cloud9 to this region`,
-  foundMoreCloud9Environments: (num: number) =>
+  foundMoreCloud9Environments: (num: number): string =>
     `Found another ${num} Cloud9 environments in this region...`,
   gettingCloud9Environments: 'Fetching Cloud9 environments...',
   gettingCloud9EnvironmentTags: 'Fetching tags for each Cloud9 environment...',
@@ -659,57 +693,81 @@ export default {
    * NACL
    */
   fetchedNacls: (num: number): string => `Fetched ${num} NACLs`,
-   /**
+  /**
    * Customer Gateway
    */
-  fetchedCustomerGateways: (num: number): string => `Fetched ${num} Customer Gateways`,
+  fetchedCustomerGateways: (num: number): string =>
+    `Fetched ${num} Customer Gateways`,
   /**
    * CloudWatch Logs
    */
-   lookingForCloudwatchLogGroups: 'Looking for CloudWatch Log groups to add to Region...',
-   fetchingCloudwatchLogGroupsData:
-     'Fetching CloudWatch Log groups for this AWS account via the AWS SDK...',
-   doneFetchingCloudwatchLogGroupsData: (num: number): string =>
-     `🕒 Done fetching CloudWatch Log groups in ${num} 🕘`,
-   foundMoreCloudwatchLogGroups: (num: number): string =>
-     `Found another ${num} CloudWatch Log groups in this region...`,
-   gettingCloudwatchLogGroups: 'Fetching CloudWatch Log groups...',
-   foundMoreCloudwatchMetricFilters: (num: number): string =>
-   `Found another ${num} CloudWatch Metric filters in this region...`,
+  lookingForCloudwatchLogGroups:
+    'Looking for CloudWatch Log groups to add to Region...',
+  fetchingCloudwatchLogGroupsData:
+    'Fetching CloudWatch Log groups for this AWS account via the AWS SDK...',
+  doneFetchingCloudwatchLogGroupsData: (num: number): string =>
+    `🕒 Done fetching CloudWatch Log groups in ${num} 🕘`,
+  foundMoreCloudwatchLogGroups: (num: number): string =>
+    `Found another ${num} CloudWatch Log groups in this region...`,
+  gettingCloudwatchLogGroups: 'Fetching CloudWatch Log groups...',
+  foundMoreCloudwatchMetricFilters: (num: number): string =>
+    `Found another ${num} CloudWatch Metric filters in this region...`,
+  /**
+   * Configuration Delivery Channel
+   */
+  fetchedCOnfigurationDeliveryChannels: (num: number): string =>
+    `Fetched ${num} Configuration Delivery Channels`,
   /**
    * Configuration Recorders
    */
-  fetchedConfigurationRecorders: (num: number): string => `Fetched ${num} Configuration Recorders`,
+  fetchedConfigurationRecorders: (num: number): string =>
+    `Fetched ${num} Configuration Recorders`,
   /**
    * Configuration Recorder Status
    */
-   fetchedConfigurationRecorderStatus: (num: number): string => `Fetched ${num} Configuration Recorder Status`,
-   /**
+  fetchedConfigurationRecorderStatus: (num: number): string =>
+    `Fetched ${num} Configuration Recorder Status`,
+  /**
+   * Configuration Rules
+   */
+  fetchedConfigurationRules: (num: number): string =>
+    `Fetched ${num} Configuration Rules`,
+  /**
    * Vpc Endpoints
    */
-   fetchedVpcEndpoints: (num: number): string => `Fetched ${num} Vpc Endpoints`,
+  fetchedVpcEndpoints: (num: number): string => `Fetched ${num} Vpc Endpoints`,
   /**
    * Access Analyzers
    */
-  fetchedaccessAnalyzers: (num: number): string => `Found ${num} Access Analyzers`,
+  fetchedaccessAnalyzers: (num: number): string =>
+    `Found ${num} Access Analyzers`,
   /**
    * Managed Prefix Lists
    */
-  fetchedManagedPrefixLists: (num: number): string => `Found ${num} Managed Prefix Lists`,
-  fetchedManagedPrefixListEntries: (num: number): string => `Found ${num} Managed Prefix List Entries`,
+  fetchedManagedPrefixLists: (num: number): string =>
+    `Found ${num} Managed Prefix Lists`,
+  fetchedManagedPrefixListEntries: (num: number): string =>
+    `Found ${num} Managed Prefix List Entries`,
   /**
    * Vpc Peering Connections
    */
-  fetchedVpcPeeringConnections: (num: number): string => `Found ${num} Vpc Peering Connections`,
+  fetchedVpcPeeringConnections: (num: number): string =>
+    `Found ${num} Vpc Peering Connections`,
   /**
    * Security Hub
    */
-  securityHubNotFound: (region: string): string => `Security Hub not found/disabled for region: ${region}`,
-  fetchedSecurityHub: (region: string): string => `Security Hub found/enabled for region: ${region}`,
-  fetchingSecurityHub: 'Fetching Security Hub data for this AWS account via the AWS SDK...',
+  securityHubNotFound: (region: string): string =>
+    `Security Hub not found/disabled for region: ${region}`,
+  fetchedSecurityHub: (region: string): string =>
+    `Security Hub found/enabled for region: ${region}`,
+  fetchingSecurityHub:
+    'Fetching Security Hub data for this AWS account via the AWS SDK...',
+  fetchedSecurityHubMembers: (num: number): string =>
+    `Found ${num} Security Hub Members`,
+  fetchedSecurityHubStandardSubscriptions: (num: number): string =>
+    `Found ${num} Security Hub Standard Subscription`,
   /**
    * Msk
    */
-  fetchedMskClusters: (num: number): string =>
-    `Fetched ${num} Msk clusters`,
+  fetchedMskClusters: (num: number): string => `Fetched ${num} Msk clusters`,
 }

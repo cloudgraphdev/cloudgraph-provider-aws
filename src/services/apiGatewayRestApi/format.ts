@@ -22,6 +22,10 @@ export default ({
     minimumCompressionSize,
     binaryMediaTypes,
     tags = {},
+    authorizers = [],
+    documentationParts = [],
+    gatewayResponses = [],
+    models = [],
   } = service
   const arn = apiGatewayRestApiArn({
     restApiArn: apiGatewayArn({ region: service.region }),
@@ -42,5 +46,9 @@ export default ({
     minimumCompressionSize,
     binaryMediaTypes,
     tags: formatTagsFromMap(tags),
+    authorizers,
+    documentationParts,
+    gatewayResponses,
+    models,
   }
 }

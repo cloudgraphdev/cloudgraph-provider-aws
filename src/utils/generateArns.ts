@@ -45,12 +45,12 @@ export const networkAclArn = ({
 export const sesArn = ({
   region,
   account,
-  email,
+  identity,
 }: {
   region: string
   account: string
-  email: string
-}): string => `arn:aws:ses:${region}:${account}:identity/${email}`
+  identity: string
+}): string => `arn:aws:ses:${region}:${account}:identity/${identity}`
 
 export const redshiftArn = ({
   region,
@@ -254,6 +254,36 @@ export const glueJobArn = ({
   name: string
 }): string => `arn:aws:glue:${region}:${account}:job/${name}`
 
+export const glueDatabaseArn = ({
+  region,
+  account,
+  name,
+}: {
+  region: string
+  account: string
+  name: string
+}): string => `arn:aws:glue:${region}:${account}:database/${name}`
+
+export const glueCrawlerArn = ({
+  region,
+  account,
+  name,
+}: {
+  region: string
+  account: string
+  name: string
+}): string => `arn:aws:glue:${region}:${account}:crawler/${name}`
+
+export const glueTriggerArn = ({
+  region,
+  account,
+  name,
+}: {
+  region: string
+  account: string
+  name: string
+}): string => `arn:aws:glue:${region}:${account}:trigger/${name}`
+
 export const ssmManagedInstanceArn = ({
   region,
   account,
@@ -273,6 +303,16 @@ export const ssmDocumentArn = ({
   account: string
   name: string
 }): string => `arn:aws:ssm:${region}:${account}:document/${name}`
+
+export const ssmParameterArn = ({
+  region,
+  account,
+  name,
+}: {
+  region: string
+  account: string
+  name: string
+}): string => `arn:aws:ssm:${region}:${account}:parameter/${name.replace('/', '')}`
 
 export const cognitoIdentityPoolArn = ({
   region,
@@ -345,3 +385,23 @@ export const transitGatewayRouteTableArn = ({
   account: string
   id: string
 }): string => `arn:aws:ec2:${region}:${account}:transit-gateway-routetable/${id}`
+
+export const codeCommitRepositoryArn = ({
+  region,
+  account,
+  name,
+}: {
+  region: string
+  account: string
+  name: string
+}): string => `arn:aws:codecommit:${region}:${account}:repository/${name.replace('/', '')}`
+
+export const codePipelineArn = ({
+  region,
+  account,
+  name,
+}: {
+  region: string
+  account: string
+  name: string
+}): string => `arn:aws:codepipeline:${region}:${account}:pipeline/${name}`

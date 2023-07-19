@@ -4,6 +4,8 @@ import RDS, {
   DBInstance,
   DescribeDBInstancesMessage,
   DBInstanceMessage,
+  DBSnapshotMessage,
+  DBSnapshot,
 } from 'aws-sdk/clients/rds'
 import { AWSError } from 'aws-sdk/lib/error'
 import groupBy from 'lodash/groupBy'
@@ -57,6 +59,28 @@ const listDBInstancesForRegion = async (rds: RDS): Promise<DBInstance[]> =>
     listAllDBInstances()
   })
 
+const getInstanceSnapshots = async (rds: RDS, arn: string): Promise<DBSnapshot[]> =>
+  new Promise(resolve => {
+    try {
+      rds.describeDBSnapshots(
+        { DBInstanceIdentifier: arn },
+        (err: AWSError, data: DBSnapshotMessage) => {
+          if (err) {
+            errorLog.generateAwsErrorLog({
+              functionName: 'rds:describeDBSnapshots',
+              err,
+            })
+            return resolve([])
+          }
+          const { DBSnapshots: snapshots = [] } = data || {}
+          resolve(snapshots)
+        }
+      )
+    } catch (error) {
+      resolve([])
+    }
+  })
+
 const getResourceTags = async (rds: RDS, arn: string): Promise<TagMap> =>
   new Promise(resolve => {
     try {
@@ -81,6 +105,7 @@ const getResourceTags = async (rds: RDS, arn: string): Promise<TagMap> =>
 
 export interface RawAwsRdsDbInstance extends DBInstance {
   Tags?: TagMap
+  Snapshots?: DBSnapshot[]
   region: string
 }
 
@@ -123,6 +148,7 @@ export default async ({
       const rds = new RDS({ ...config, region, endpoint })
       const tagsPromise = new Promise<void>(async resolveTags => {
         rdsData[idx].Tags = await getResourceTags(rds, DBInstanceArn)
+        rdsData[idx].Snapshots = await getInstanceSnapshots(rds, DBInstanceArn)
         resolveTags()
       })
       tagsPromises.push(tagsPromise)

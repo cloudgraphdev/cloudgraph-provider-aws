@@ -9,7 +9,12 @@ import Lambda, {
   GetFunctionConcurrencyRequest,
   GetFunctionConcurrencyResponse,
   ReservedConcurrentExecutions,
-  GetPolicyResponse
+  GetPolicyResponse,
+  ListEventSourceMappingsResponse,
+  EventSourceMappingConfiguration,
+  ListFunctionEventInvokeConfigsResponse,
+  FunctionEventInvokeConfig,
+  Layer
 } from 'aws-sdk/clients/lambda'
 import { AWSError } from 'aws-sdk/lib/error'
 import { Config } from 'aws-sdk/lib/config'
@@ -35,6 +40,9 @@ export interface RawAwsLambdaFunction extends FunctionConfiguration {
     Policy?: string
     RevisionId?: string
   }
+  EventSourceMappings?: EventSourceMappingConfiguration[]
+  EventInvokeConfigs?: FunctionEventInvokeConfig[]
+  Layers?: Layer[]
 }
 
 const listFunctionsForRegion = async ({
@@ -137,7 +145,7 @@ const getResourceTags = async (lambda: Lambda, arn: string): Promise<TagMap> =>
     }
   })
 
-  const getLambdaPolicy = async (lambda: Lambda, arn: string): Promise<{ Policy?: string; RevisionId?: string }> =>
+const getLambdaPolicy = async (lambda: Lambda, arn: string): Promise<{ Policy?: string; RevisionId?: string }> =>
   new Promise(resolve => {
     try {
       lambda.getPolicy(
@@ -156,6 +164,52 @@ const getResourceTags = async (lambda: Lambda, arn: string): Promise<TagMap> =>
       )
     } catch (error) {
       resolve({})
+    }
+  })
+
+const getEventSourceMappings = async (lambda: Lambda, arn: string): Promise<EventSourceMappingConfiguration[]> =>
+  new Promise(resolve => {
+    try {
+      lambda.listEventSourceMappings(
+        { FunctionName: arn },
+        (err: AWSError, data: ListEventSourceMappingsResponse) => {
+          if (err) {
+            errorLog.generateAwsErrorLog({
+              functionName: 'lambda:listEventSourceMappings',
+              err,
+            })
+            resolve([])
+          }
+          const { EventSourceMappings = [] } = data || {}
+
+          resolve(EventSourceMappings)
+        }
+      )
+    } catch (error) {
+      resolve([])
+    }
+  })
+
+const getEventInvokeConfigs = async (lambda: Lambda, name: string): Promise<FunctionEventInvokeConfig[]> =>
+  new Promise(resolve => {
+    try {
+      lambda.listFunctionEventInvokeConfigs(
+        { FunctionName: name },
+        (err: AWSError, data: ListFunctionEventInvokeConfigsResponse) => {
+          if (err) {
+            errorLog.generateAwsErrorLog({
+              functionName: 'lambda:listFunctionEventInvokeConfigs',
+              err,
+            })
+            resolve([])
+          }
+          const { FunctionEventInvokeConfigs = [] } = data || {}
+
+          resolve(FunctionEventInvokeConfigs)
+        }
+      )
+    } catch (error) {
+      resolve([])
     }
   })
 
@@ -199,16 +253,22 @@ export default async ({
     logger.debug(lt.fetchedLambdas(lambdaData.length))
 
     // get all tags and policy for each Lambda
-    lambdaData.map(({ FunctionArn: arn, region }, idx) => {
+    lambdaData.map(({ FunctionArn: arn, region, FunctionName: name, Layers }, idx) => {
       const lambda = new Lambda({ ...config, region, endpoint })
-      const tagsAndPolicyPromise = new Promise<void>(async resolveData => {
+
+      const additionalMetadataPromise = new Promise<void>(async resolveData => {
         const envTags: TagMap = await getResourceTags(lambda, arn)
         lambdaData[idx].Tags = envTags
         const policy = await getLambdaPolicy(lambda, arn)
         lambdaData[idx].PolicyData = policy
+        const eventSourceMappings = await getEventSourceMappings(lambda, arn)
+        lambdaData[idx].EventSourceMappings = eventSourceMappings
+        const eventInvokeConfigs = await getEventInvokeConfigs(lambda, name)
+        lambdaData[idx].EventInvokeConfigs = eventInvokeConfigs
+        lambdaData[idx].Layers = Layers
         resolveData()
       })
-      tagsPromises.push(tagsAndPolicyPromise)
+      tagsPromises.push(additionalMetadataPromise)
     })
 
     logger.debug(lt.gettingLambdaTags)
