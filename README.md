@@ -60,7 +60,6 @@ CloudGraph will generate this configuration file when you run `cg init aws`. You
     ], // Optional, defaults to the default profile
     "regions": "us-east-1,us-east-2,us-west-2",
     "resources": "alb,apiGatewayResource,apiGatewayRestApi,apiGatewayStage,appSync,asg,billing,cognitoIdentityPool,cognitoUserPool,cloudFormationStack,cloudFormationStackSet,cloudfront,cloudwatch,ebs,ec2Instance,eip,elb,igw,kinesisFirehose,kinesisStream,kms,lambda,nat,networkInterface,route53HostedZone,route53Record,routeTable,sg,vpc,sqs,s3"
-  }
 }
 ```
 

@@ -3474,10 +3474,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cloudgraph/sdk@^0.22.1":
-  version "0.22.1"
-  resolved "https://registry.yarnpkg.com/@cloudgraph/sdk/-/sdk-0.22.1.tgz#bf5c2f263df17b085147a3ca234ac5b0a8806545"
-  integrity sha512-aMrnoTRRIODAVvgtmqGZPB7Z8x1kMgKjFtLjpiHa121o0GCEZCjbxDmU8T3DwmRwI1u4QD5iKbXf9dB0573mJA==
+"@cloudgraph/sdk@^0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@cloudgraph/sdk/-/sdk-0.23.0.tgz#3f6012c0e3573f527da27ebcccb8841bbeffd21b"
+  integrity sha512-c+Ozu8yLK3RlAcKy4d0fdTQc9JkdUJ2ESmrcW7oC5XdIARrDWQ5+Kr8AGPABOK1/UYtFyVR2JmUHnoSJdGAv6Q==
   dependencies:
     "@graphql-tools/load-files" "^6.5.3"
     "@graphql-tools/merge" "^8.2.1"
