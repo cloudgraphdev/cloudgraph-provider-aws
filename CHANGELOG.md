@@ -1,3 +1,10 @@
+# [0.89.0-alpha.22](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.21...0.89.0-alpha.22) (2023-07-19)
+
+
+### Features
+
+* collect provider errors ([cccc04d](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/cccc04d1749271f705c272c6923fe875ddb20f07))
+
 # [0.89.0-alpha.21](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0-alpha.20...0.89.0-alpha.21) (2023-06-07)
 
 
