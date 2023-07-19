@@ -1,6 +1,6 @@
 {
   "name": "@cloudgraph/cg-provider-aws",
-  "version": "0.88.0-beta.1",
+  "version": "0.89.0-alpha.22",
   "description": "cloud-graph provider plugin for AWS used to fetch AWS cloud data.",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
@@ -31,9 +31,14 @@
     "terraform:cleanup": "rimraf ./tests/terraform/{.terraform,.terraform.lock.hcl,tfplan} ./tests/terraform/*.{tfstate,tfplan,backup}"
   },
   "dependencies": {
+    "@aws-sdk/client-codecommit": "^3.344.0",
+    "@aws-sdk/client-codepipeline": "^3.344.0",
+    "@aws-sdk/client-elastic-beanstalk": "^3.338.0",
+    "@aws-sdk/client-glue": "^3.342.0",
+    "@aws-sdk/client-ssm": "^3.341.0",
     "@aws-sdk/credential-providers": "^3.256.0",
     "@aws-sdk/shared-ini-file-loader": "^3.254.0",
-    "@cloudgraph/sdk": "^0.22.1",
+    "@cloudgraph/sdk": "^0.23.0",
     "@fast-csv/parse": "^4.3.6",
     "@graphql-tools/load-files": "^6.5.3",
     "@graphql-tools/merge": "^8.2.1",

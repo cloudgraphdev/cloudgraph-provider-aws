@@ -26,6 +26,7 @@ import { obfuscateSensitiveString } from '../utils/format'
 import { checkAndMergeConnections } from '../utils'
 import { Account, rawDataInterface } from './base'
 import enhancers, { EnhancerConfig } from './base/enhancers'
+import AwsErrorLog from '../utils/errorLog'
 
 const DEFAULT_REGION = 'us-east-1'
 const DEFAULT_RESOURCES = Object.values(services).join(',')
@@ -314,15 +315,16 @@ export default class Provider extends CloudGraph.Client {
                 // MFA token support
                 mfaCodeProvider: async () => {
                   this.logger.debug('MFA token needed, requesting...')
-                  const { mfaToken = '' }: { mfaToken: string } = await this.interface.prompt([
-                    {
-                      type: 'input',
-                      message: `Please enter the MFA token for ${profile}`,
-                      name: 'mfaToken'
-                    },
-                  ])
+                  const { mfaToken = '' }: { mfaToken: string } =
+                    await this.interface.prompt([
+                      {
+                        type: 'input',
+                        message: `Please enter the MFA token for ${profile}`,
+                        name: 'mfaToken',
+                      },
+                    ])
                   return mfaToken
-                }
+                },
               })
               if (creds) {
                 sts = new AWS.STS({ credentials: await credsFunction() })
@@ -454,7 +456,7 @@ export default class Provider extends CloudGraph.Client {
    * getSchema is used to get the schema for provider
    * @returns A string of graphql sub schemas
    */
-   getSchema(): DocumentNode {
+  getSchema(): DocumentNode {
     const typesArray = loadFilesSync(path.join(__dirname), {
       recursive: true,
       extensions: ['graphql'],
@@ -495,7 +497,7 @@ export default class Provider extends CloudGraph.Client {
   }
 
   private async getProfilesFromSharedConfig(): Promise<string[]> {
-    let profiles = []
+    const profiles = []
     try {
       const filesObject = await loadSharedConfigFiles()
       const files = Object.keys(filesObject)
@@ -861,11 +863,12 @@ export default class Provider extends CloudGraph.Client {
       }
     }
 
-    return this.enhanceData({
+    const enhancedData = this.enhanceData({
       accounts: accounts.data[globalRegion],
       configuredRegions,
       rawData: mergedRawData,
       data: result,
     })
+    return { ...enhancedData, errors: AwsErrorLog.errorsHistory }
   }
 }

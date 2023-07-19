@@ -1,7 +1,18 @@
+type awsIamGroupAttachedPolicy
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  policyArn: String! @id @search(by: [hash, regexp])
+  policyName: String @search(by: [hash, regexp])
+}
+
 type awsIamGroup implements awsBaseService @key(fields: "id") {
   path: String @search(by: [hash, regexp])
   name: String @search(by: [hash, regexp])
   inlinePolicies: [String]
+  managedPolicies: [awsIamGroupAttachedPolicy]
   iamAttachedPolicies: [awsIamPolicy] @hasInverse(field: iamGroups)
   iamUsers: [awsIamUser] @hasInverse(field: iamGroups)
 }

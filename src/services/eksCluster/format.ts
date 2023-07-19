@@ -29,6 +29,7 @@ export default ({
     platformVersion,
     encryptionConfig,
     Tags = {},
+    NodeGroups: nodeGroups = []
   } = service
 
   const formattedKubernetesNetworkConfig = {
@@ -70,5 +71,6 @@ export default ({
       ...config,
     })),
     tags: formatTagsFromMap(Tags),
+    nodeGroups
   }
 }

@@ -42,8 +42,9 @@ export default async ({
     if (isEmpty(existingData)) {
       const ecsServiceClass = new EcsServiceClass({ logger: CloudGraph.logger })
       const serviceResult = await ecsServiceClass.getData({
-        ...config,
         regions,
+        config,
+        rawData,
       })
       ecsServices = flatMap(serviceResult)
     } else {

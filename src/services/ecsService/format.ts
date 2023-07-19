@@ -4,6 +4,8 @@ import { AwsEcsService } from '../../types/generated'
 import { formatTagsFromMap } from '../../utils/format'
 import { RawAwsEcsService } from './data'
 
+const formatName = (arn: string): string => arn?.split('/').pop() || ''
+
 export default ({
   service,
   account,
@@ -33,6 +35,7 @@ export default ({
     propagateTags,
     enableExecuteCommand,
     Tags,
+    ClusterArn: clusterArn,
   } = service
 
   const loadBalancers = service.loadBalancers?.map(lb => ({
@@ -176,6 +179,8 @@ export default ({
     enableECSManagedTags,
     propagateTags,
     enableExecuteCommand,
+    clusterArn,
+    clusterName: formatName(clusterArn),
     tags: formatTagsFromMap(Tags),
   }
 }

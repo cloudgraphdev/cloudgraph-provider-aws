@@ -1,0 +1,9 @@
+type awsCloudwatchEventRule implements awsBaseService @key(fields: "arn") {
+  eventBusName: String @search(by: [hash, regexp])
+  targets: [Target]
+}
+
+type Target {
+  id: String! @id
+  arn: String @search
+}

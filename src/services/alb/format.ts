@@ -71,6 +71,9 @@ export default ({
     },
     CreatedTime: createdAt,
     listeners = [],
+    targetGroups,
+    listenerCertificates,
+    targetHealth,
   }: // attributes = {},
   // SecurityGroups: securityGroups = [],
   // AvailabilityZones: azs = [],
@@ -102,6 +105,9 @@ export default ({
     createdAt: createdAt.toISOString(),
     status,
     listeners: listeners.map(awsAlbListernerGraphFormat),
+    targetGroups,
+    listenerCertificates,
+    targetGroupAttachment: targetHealth,
   }
   return albResult
 }

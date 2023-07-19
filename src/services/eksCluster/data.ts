@@ -7,6 +7,8 @@ import EKS, {
   DescribeClusterRequest,
   DescribeClusterResponse,
   ListTagsForResourceResponse,
+  ListNodegroupsRequest,
+  ListNodegroupsResponse,
 } from 'aws-sdk/clients/eks'
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
@@ -23,8 +25,8 @@ const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const MAX_ITEMS = 100
 
-const listClustersForRegion = async ({ 
-  eks, 
+const listClustersForRegion = async ({
+  eks,
   resolveRegion,
 }: {
   eks: EKS
@@ -64,7 +66,6 @@ const listClustersForRegion = async ({
             } else {
               resolve(clusterList)
             }
-
           }
         )
       } catch (error) {
@@ -123,9 +124,61 @@ const getResourceTags = async (eks: EKS, arn: string): Promise<TagMap> =>
     }
   })
 
+const listNodegroups = async ({
+  eks,
+  clusterName,
+}: {
+  eks: EKS
+  clusterName: string
+}): Promise<string[]> =>
+  new Promise<string[]>(resolve => {
+    const nodeGroupsList: string[] = []
+    let args: ListNodegroupsRequest = { clusterName }
+    const listAllNodeGroups = (token?: string): void => {
+      if (token) {
+        args = { ...args, nextToken: token }
+      }
+
+      try {
+        eks.listNodegroups(
+          args,
+          (err: AWSError, data: ListNodegroupsResponse) => {
+            if (err) {
+              errorLog.generateAwsErrorLog({
+                functionName: 'eks:listNodegroups',
+                err,
+              })
+            }
+
+            /**
+             * No node groups for this region
+             */
+            if (isEmpty(data)) {
+              return resolve(nodeGroupsList)
+            }
+
+            const { nextToken, nodegroups } = data || {}
+
+            nodeGroupsList.push(...nodegroups)
+
+            if (nextToken) {
+              listAllNodeGroups(nextToken)
+            } else {
+              resolve(nodeGroupsList)
+            }
+          }
+        )
+      } catch (error) {
+        resolve([])
+      }
+    }
+    listAllNodeGroups()
+  })
+
 export interface RawAwsEksCluster extends Omit<Cluster, 'Tags'> {
   region: string
   Tags?: TagMap
+  NodeGroups?: string[]
 }
 
 export default async ({
@@ -140,6 +193,7 @@ export default async ({
     const regionPromises = []
     const clusterPromises = []
     const tagsPromises = []
+    const nodeGroupsPromises = []
 
     // get all clusters for all regions
     regions.split(',').map(region => {
@@ -192,6 +246,22 @@ export default async ({
     })
 
     await Promise.all(tagsPromises)
+
+    // get all node groups for each cluster
+    eksData.map(({ name, region }, idx) => {
+      const eks = new EKS({ ...config, region, endpoint })
+      const nodeGroupsPromise = new Promise<void>(async resolveNodeGroups => {
+        const nodeGroups: string[] = await listNodegroups({
+          eks,
+          clusterName: name,
+        })
+        eksData[idx].NodeGroups = nodeGroups
+        resolveNodeGroups()
+      })
+      nodeGroupsPromises.push(nodeGroupsPromise)
+    })
+
+    await Promise.all(nodeGroupsPromises)
     errorLog.reset()
 
     resolve(groupBy(eksData, 'region'))

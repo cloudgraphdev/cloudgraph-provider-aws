@@ -13,6 +13,7 @@ type awsEksCluster implements awsBaseService @key(fields: "arn") {
   platformVersion: String @search(by: [hash, regexp])
   encryptionConfig: [awsEksEncryptionConfig]
   tags: [awsRawTag]
+  nodeGroups: [String] @search(by: [hash])
   iamRoles: [awsIamRole] @hasInverse(field: eksClusters)
   kms: [awsKms] @hasInverse(field: eksCluster)
   securityGroups: [awsSecurityGroup] @hasInverse(field: eksCluster)

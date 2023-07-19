@@ -1,0 +1,4 @@
+type awsApiGatewayApiKey implements awsBaseService @key(fields: "id") {
+  value: String
+  name: String
+}

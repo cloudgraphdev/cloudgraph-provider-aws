@@ -1,4 +1,5 @@
 type awsRedshiftCluster implements awsBaseService @key(fields: "arn") {
+  name: String @search(by: [hash, regexp])
   allowVersionUpgrade: Boolean @search
   automatedSnapshotRetentionPeriod: Int @search
   availabilityZone: String @search(by: [hash, regexp])

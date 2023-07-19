@@ -1,0 +1,12 @@
+type awsRdsEventSubscription implements awsBaseService @key(fields: "arn") {
+   customerAwsId: String @search(by: [hash, regexp])
+   custSubscriptionId: String @search(by: [hash, regexp])
+   snsTopicArn: String @search(by: [hash, regexp])
+   status: String @search(by: [hash, regexp])
+   subscriptionCreationTime: String @search(by: [hash, regexp])
+   sourceType: String @search(by: [hash, regexp])
+   sourceIdsList: [String] @search(by: [hash])
+   eventCategoriesList: [String] @search(by: [hash])
+   enabled: Boolean @search
+}
+

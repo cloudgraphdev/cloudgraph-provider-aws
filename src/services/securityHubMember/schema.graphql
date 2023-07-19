@@ -1,0 +1,1 @@
+type awsSecurityHubMember implements awsBaseService @key(fields: "arn")

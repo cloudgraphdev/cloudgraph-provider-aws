@@ -1,14 +1,14 @@
 import SES, {
-  ListIdentitiesResponse,
-  IdentityVerificationAttributes,
-  GetIdentityVerificationAttributesResponse,
+  ListConfigurationSetsResponse,
+  ConfigurationSet,
+  ListTemplatesResponse,
+  TemplateMetadata,
 } from 'aws-sdk/clients/ses'
 import { AWSError } from 'aws-sdk/lib/error'
 import { Config } from 'aws-sdk/lib/config'
 
 import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
-import isEmpty from 'lodash/isEmpty'
 
 import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint } from '../../utils'
@@ -16,17 +16,61 @@ import AwsErrorLog from '../../utils/errorLog'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
-const serviceName = 'SES'
+const serviceName = 'SES '
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 /**
- * SES
+ * SES 
  */
-export interface RawAwsSes extends IdentityVerificationAttributes {
-  Identity: string
+export interface RawAwsSes {
+  ConfigurationSets: ConfigurationSet[]
+  EmailTemplates: TemplateMetadata[]
   region: string
 }
+
+
+const getEmailTemplates = async (ses: SES): Promise<TemplateMetadata[]> =>
+  new Promise(resolve => {
+    try {
+      ses.listTemplates(
+        (err: AWSError, data: ListTemplatesResponse) => {
+          if (err) {
+            errorLog.generateAwsErrorLog({
+              functionName: 'ses:listTemplates',
+              err,
+            })
+            return resolve([])
+          }
+          const { TemplatesMetadata = [] } = data || {}
+          resolve(TemplatesMetadata)
+        }
+      )
+    } catch (error) {
+      resolve([])
+    }
+  })
+
+const getConfigurationSets = async (ses: SES): Promise<ConfigurationSet[]> =>
+  new Promise(resolve => {
+    try {
+      ses.listConfigurationSets(
+        (err: AWSError, data: ListConfigurationSetsResponse) => {
+          if (err) {
+            errorLog.generateAwsErrorLog({
+              functionName: 'ses:listConfigurationSets',
+              err,
+            })
+            return resolve([])
+          }
+          const { ConfigurationSets = [] } = data || {}
+          resolve(ConfigurationSets)
+        }
+      )
+    } catch (error) {
+      resolve([])
+    }
+  })
 
 export default async ({
   regions,
@@ -38,84 +82,28 @@ export default async ({
   new Promise(async resolve => {
     const sesData: RawAwsSes[] = []
     const regionPromises = []
-    const identityVerificationPromises = []
 
     regions.split(',').map(region => {
-      const regionPromise = new Promise<void>(resolveRegion => {
+      const regionPromise = new Promise<void>(async resolveRegion => {
         const ses = new SES({ ...config, region, endpoint })
 
-        ses.listIdentities(
-          {},
-          (err: AWSError, data: ListIdentitiesResponse) => {
-            /**
-             * No Data for the region
-             */
-            if (isEmpty(data)) {
-              return resolveRegion()
-            }
+        const configurationSets = await getConfigurationSets(ses)
+        const emailTemplates = await getEmailTemplates(ses)
 
-            if (err) {
-              errorLog.generateAwsErrorLog({
-                functionName: 'ses:listIdentities',
-                err,
-              })
-            }
+        sesData.push({
+          ConfigurationSets: configurationSets,
+          EmailTemplates: emailTemplates,
+          region
+        })
+        resolveRegion()
 
-            const { Identities }: { Identities: string[] } = data
 
-            /**
-             * No Identities Found
-             */
-
-            if (isEmpty(Identities)) {
-              return resolveRegion()
-            }
-
-            logger.debug(lt.fetchedSesIdentities(Identities.length))
-
-            const identityVerificationPromise = new Promise<void>(
-              resolveIdVer => {
-                ses.getIdentityVerificationAttributes(
-                  { Identities },
-                  (
-                    err: AWSError,
-                    {
-                      VerificationAttributes: identities,
-                    }: GetIdentityVerificationAttributesResponse
-                  ) => {
-                    if (err) {
-                      errorLog.generateAwsErrorLog({
-                        functionName: 'ses:getIdentityVerificationAttributes',
-                        err,
-                      })
-                    }
-
-                    if (!isEmpty(identities)) {
-                      sesData.push(
-                        ...Identities.map(Identity => ({
-                          Identity,
-                          ...identities[Identity],
-                          region,
-                        }))
-                      )
-                    }
-
-                    resolveIdVer()
-                    resolveRegion()
-                  }
-                )
-              }
-            )
-            identityVerificationPromises.push(identityVerificationPromise)
-          }
-        )
       })
       regionPromises.push(regionPromise)
     })
 
-    await Promise.all(regionPromises)
 
-    await Promise.all(identityVerificationPromises)
+    await Promise.all(regionPromises)
     errorLog.reset()
 
     resolve(groupBy(sesData, 'region'))

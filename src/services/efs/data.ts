@@ -3,6 +3,9 @@ import EFS, {
   FileSystemDescription,
   DescribeFileSystemsRequest,
   DescribeFileSystemsResponse,
+  DescribeFileSystemPolicyRequest,
+  FileSystemPolicyDescription,
+  Policy,
 } from 'aws-sdk/clients/efs'
 import { AWSError } from 'aws-sdk/lib/error'
 import CloudGraph from '@cloudgraph/sdk'
@@ -20,6 +23,42 @@ const serviceName = 'EFS'
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
+const getFileSystemPolicy = async ({
+  efs,
+  FileSystemId,
+}: {
+  efs: EFS
+  FileSystemId: string
+}): Promise<Policy> =>
+  new Promise<Policy>(resolve => {
+    const args: DescribeFileSystemPolicyRequest = { FileSystemId }
+    try {
+      efs.describeFileSystemPolicy(
+        args,
+        (err: AWSError, data: FileSystemPolicyDescription) => {
+          if (err) {
+            errorLog.generateAwsErrorLog({
+              functionName: 'efs:describeFileSystemPolicy',
+              err,
+            })
+          }
+
+          /**
+           * No policy for this file system
+           */
+          if (isEmpty(data)) {
+            return resolve('')
+          }
+
+          const { Policy: policy } = data
+          resolve(policy)
+        }
+      )
+    } catch (error) {
+      resolve('')
+    }
+  })
+
 const listFileSystems = async ({
   efs,
   region,
@@ -29,7 +68,7 @@ const listFileSystems = async ({
   efs: EFS
   region: string
   token?: string
-  resolveRegion: Function
+  resolveRegion: () => void
 }): Promise<FileSystemDescription[]> =>
   new Promise<FileSystemDescription[]>(resolve => {
     const efsList: FileSystemDescription[] = []
@@ -57,10 +96,7 @@ const listFileSystems = async ({
             return resolveRegion()
           }
 
-          const {
-            FileSystems: fileSystems = [],
-            NextMarker: token,
-          }: { FileSystems?: any; NextMarker?: any } = data
+          const { FileSystems: fileSystems = [], NextMarker: token } = data
 
           efsList.push(...fileSystems)
 
@@ -100,6 +136,7 @@ const listFileSystems = async ({
 
 export interface RawAwsEfs extends Omit<FileSystemDescription, 'Tags'> {
   region: string
+  policy: Policy
   Tags?: TagMap
 }
 
@@ -115,21 +152,23 @@ export default async ({
   new Promise(async resolve => {
     const efsFileSystems: RawAwsEfs[] = []
     const regionPromises = []
+    const policyPromises = []
 
     /**
      * Get all the EFS File Systems
      */
 
-    regions.split(',').map(region => {
+    regions.split(',').forEach(region => {
       const efs = new EFS({ ...config, region, endpoint })
       const regionPromise = new Promise<void>(async resolveRegion => {
         const efsList = await listFileSystems({ efs, region, resolveRegion })
         if (!isEmpty(efsList)) {
           efsFileSystems.push(
-            ...efsList.map(efs => ({
-              ...efs,
+            ...efsList.map(efsItem => ({
+              ...efsItem,
               region,
-              Tags: convertAwsTagsToTagMap(efs.Tags),
+              policy: '',
+              Tags: convertAwsTagsToTagMap(efsItem.Tags),
             }))
           )
         }
@@ -139,6 +178,21 @@ export default async ({
     })
 
     await Promise.all(regionPromises)
+
+    // get policy for each rest api
+    efsFileSystems.forEach(({ FileSystemId: id, region }, idx) => {
+      const efs = new EFS({ ...config, region, endpoint })
+      const modelPromise = new Promise<void>(async resolvePolicy => {
+        efsFileSystems[idx].policy = await getFileSystemPolicy({
+          efs,
+          FileSystemId: id,
+        })
+        resolvePolicy()
+      })
+      policyPromises.push(modelPromise)
+    })
+    await Promise.all(policyPromises)
+
     errorLog.reset()
 
     resolve(groupBy(efsFileSystems, 'region'))
