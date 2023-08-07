@@ -1,3 +1,10 @@
+## [0.89.1-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0...0.89.1-alpha.1) (2023-08-07)
+
+
+### Bug Fixes
+
+* **ecsTaskDefinition:** fix keys of null error ([c9195bd](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/c9195bdadbdf1e5a25bd796a97fa7be0f009b91f))
+
 # [0.89.0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.88.0...0.89.0) (2023-07-19)
 
 
