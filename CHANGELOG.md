@@ -1,3 +1,11 @@
+## [0.89.1-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.1-alpha.1...0.89.1-alpha.2) (2023-08-10)
+
+
+### Bug Fixes
+
+* **cloud9:** filter out invalid elements ([2004c17](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/2004c178b9b4181b82c45dc485c7a1cc2a8226f2))
+* **dynamoDB:** PointInTimeRecovery is optional ([6b9395c](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/6b9395c549a69eebab9be54f04fdb7d0bc88418d))
+
 ## [0.89.1-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0...0.89.1-alpha.1) (2023-08-07)
 
 
