@@ -430,6 +430,16 @@ export default class Provider extends CloudGraph.Client {
       }
       if (usingEnvCreds) {
         this.logger.success('Using credentials set by ENV variables')
+        if(role) {
+          this.logger.success(`roleARN: ${chalk.underline.green(
+            obfuscateSensitiveString(role)
+          )}`)
+        }
+        if(externalId) {
+          this.logger.success(`externalId: ${chalk.underline.green(
+            obfuscateSensitiveString(externalId)
+          )}`)
+        }
       } else {
         this.logger.success('Found and using the following AWS credentials')
         this.logger.success(
@@ -702,7 +712,7 @@ export default class Provider extends CloudGraph.Client {
     // If the user has passed aws creds as env variables, dont use profile list
     if (usingEnvCreds) {
       rawData = await this.getRawData(
-        { profile: 'default', roleArn: undefined, externalId: undefined },
+        { profile: 'default', roleArn: process.env.AWS_ROLE_ARN, externalId: process.env.AWS_ROLE_EXTERNAL_ID },
         opts
       )
     } else {
