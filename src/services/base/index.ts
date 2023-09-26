@@ -14,6 +14,12 @@ export interface rawDataInterface {
   accountId?: string
   data: any
 }
+
+export interface rawDataResponseInterface {
+  rawData: rawDataInterface[]
+  regions: string[]
+}
+
 export default class BaseService {
   constructor(config: any) {
     this.logger = config.logger
