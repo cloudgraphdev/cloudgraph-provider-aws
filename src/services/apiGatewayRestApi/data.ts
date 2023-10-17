@@ -33,7 +33,7 @@ import services from '../../enums/services'
 import {
   RawAwsApiGatewayDomainName,
   getDomainNamesForRegion,
-} from '../apiGatewayDomainName/data'
+} from '../apiGateway2DomainName/data'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph

@@ -17,6 +17,7 @@ export default ({
   const {
     DomainName: domainName,
     ApiMappingSelectionExpression: apiMappingSelectionExpression,
+    ApiMappings: apiMappings,
     DomainNameConfigurations: domainNameConfigurations = [],
     Tags: tags = {},
   } = service
@@ -30,6 +31,12 @@ export default ({
     region,
     domainName,
     apiMappingSelectionExpression,
+    apiMappings: apiMappings?.map(am => ({
+      apiId: am.ApiId,
+      apiMappingId: am.ApiMappingId,
+      apiMappingKey: am.ApiMappingKey,
+      stage: am.Stage,
+    })),
     configurations:
       domainNameConfigurations?.map(dn => ({
         id: generateUniqueId({

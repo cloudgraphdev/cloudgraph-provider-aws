@@ -16,8 +16,21 @@ type awsApiGatewayDomainNameConfiguration
   ownershipVerificationCertificateArn: String @search(by: [hash, regexp])
 }
 
+type awsApiGatewayMapping
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+    apiId: String! @id @search(by: [hash])
+    apiMappingId: String @search(by: [hash, regexp])
+    apiMappingKey: String @search(by: [hash, regexp])
+    stage: String @search(by: [hash, regexp])
+}
+
 type awsApiGatewayDomainName implements awsBaseService @key(fields: "arn") {
   domainName: String @search(by: [hash, regexp])
+  apiMappings: [awsApiGatewayMapping]
   apiMappingSelectionExpression: String @search(by: [hash, regexp])
   configurations: [awsApiGatewayDomainNameConfiguration]
   tags: [awsRawTag]
