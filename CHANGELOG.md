@@ -1,3 +1,10 @@
+# [0.90.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.1-alpha.2...0.90.0-alpha.1) (2023-10-18)
+
+
+### Features
+
+* adding api gateway v2 services ([62eb02f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/62eb02f7d06f978f60fa631930038057a3e87d42))
+
 ## [0.89.1-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.1-alpha.1...0.89.1-alpha.2) (2023-08-10)
 
 
