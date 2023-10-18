@@ -128,6 +128,8 @@ export default {
     `Created and added ${num} Api Gateways to this region`,
   fetchedApiGatewayRestApis: (num: number): string =>
     `Fetched ${num} Api Gateway Rest Apis`,
+  fetchedApiGatewayV2HttpApis: (num: number): string =>
+    `Fetched ${num} Api Gateway V2 HTTP Apis`,
   fetchedApiGatewayResources: (num: number): string =>
     `Fetched ${num} Api Gateway Resources`,
   fetchedApiGatewayStages: (num: number): string =>
@@ -140,6 +142,7 @@ export default {
     `Fetched ${num} Api Gateway Vpc Links`,
   fetchedApiGatewayUsagePlans: (num: number): string =>
     `Fetched ${num} Api Gateway Usage Plans`,
+  fetchedVpcLinks: (num: number): string => `Fetched ${num} VPC links`,
   fetchingApiGatewayData:
     'Fetching API Gateway data for this AWS account via the AWS SDK...',
   doneFetchingApiGatewayData: '✅ Done fetching API Gateway Data ✅',
@@ -153,6 +156,22 @@ export default {
   gettingApiGatewayModels:
     'Fetching authorizers for each Api Gateway Models...',
   gettingApiGatewayStageTags: 'Fetching tags for each Api Gateway Stage...',
+  gettingApiGatewayV2Models:
+    'Fetching models for each Api Gateway V2 Http Api...',
+  gettingApiGatewayV2Authorizers:
+    'Fetching authorizers for each Api Gateway V2 Http Api...',
+  gettingApiGatewayV2Deployments:
+    'Fetching deployments for each Api Gateway V2 Http Api...',
+  gettingApiGatewayV2Stages:
+    'Fetching stages for each Api Gateway V2 Http Api...',
+  gettingApiGatewayV2Integrations:
+    'Fetching integrations for each Api Gateway V2 Http Api...',
+  gettingApiGatewayV2IntegrationsResponses:
+    'Fetching integrations responses for each Api Gateway V2 Http Api...',
+  gettingApiGatewayV2Routes:
+    'Fetching routes for each Api Gateway V2 Http Api...',
+  gettingApiGatewayV2RoutesResponses:
+    'Fetching routes responses for each Api Gateway V2 Http Api...',
   /**
    * Vpc
    */
@@ -305,7 +324,8 @@ export default {
   lookingforRdsClusters: 'Looking for RDS Clusters...',
   creatingRdsInstance: (num: number): string => `Creating RDS Instance #${num}`,
   fetchedRdsClusters: (num: number): string => `Fetched ${num} RDS Clusters`,
-  fetchedDocdbClusters: (num: number): string => `Fetched ${num} DocDB Clusters`,
+  fetchedDocdbClusters: (num: number): string =>
+    `Fetched ${num} DocDB Clusters`,
   fetchedRdsGlobalClusters: (num: number): string =>
     `Fetched ${num} RDS Global Clusters`,
   fetchedRdsInstances: (num: number): string =>

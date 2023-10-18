@@ -2,13 +2,14 @@ import Account from '../services/account'
 import ACM from '../services/acm'
 import ALB from '../services/alb'
 import APIGatewayApiKey from '../services/apiGatewayApiKey'
-import APIGatewayDomainName from '../services/apiGatewayDomainName'
-import APIGatewayHttpApi from '../services/apiGatewayHttpApi'
+import APIGatewayDomainName from '../services/apiGateway2DomainName'
+import APIGatewayV2HttpApi from '../services/apiGateway2HttpApi'
 import APIGatewayResource from '../services/apiGatewayResource'
 import APIGatewayRestApi from '../services/apiGatewayRestApi'
 import APIGatewayStage from '../services/apiGatewayStage'
 import APIGatewayUsagePlan from '../services/apiGatewayUsagePlan'
 import APIGatewayVpcLink from '../services/apiGatewayVpcLink'
+import APIGatewayV2VpcLink from '../services/apiGateway2VpcLink'
 import AppSync from '../services/appSync'
 import ASG from '../services/asg'
 import AthenaDataCatalog from '../services/athenaDataCatalog'
@@ -141,13 +142,14 @@ export default {
   [services.acm]: ACM,
   [services.alb]: ALB,
   [services.apiGatewayDomainName]: APIGatewayDomainName,
-  [services.apiGatewayHttpApi]: APIGatewayHttpApi,
+  [services.apiGatewayHttpApi]: APIGatewayV2HttpApi,
   [services.apiGatewayResource]: APIGatewayResource,
   [services.apiGatewayRestApi]: APIGatewayRestApi,
   [services.apiGatewayApiKey]: APIGatewayApiKey,
   [services.apiGatewayVpcLink]: APIGatewayVpcLink,
   [services.apiGatewayUsagePlan]: APIGatewayUsagePlan,
   [services.apiGatewayStage]: APIGatewayStage,
+  [services.apiGatewayV2VpcLink]: APIGatewayV2VpcLink,
   [services.athenaDataCatalog]: AthenaDataCatalog,
   [services.asg]: ASG,
   [services.billing]: Billing,

@@ -9,6 +9,7 @@ export default {
   apiGatewayVpcLink: 'apiGatewayVpcLink',
   apiGatewayUsagePlan: 'apiGatewayUsagePlan',
   apiGatewayStage: 'apiGatewayStage',
+  apiGatewayV2VpcLink: 'apiGatewayV2VpcLink',
   appSync: 'appSync',
   asg: 'asg',
   athenaDataCatalog: 'athenaDataCatalog',
