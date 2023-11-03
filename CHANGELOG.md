@@ -1,3 +1,10 @@
+# [0.90.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.90.0-alpha.1...0.90.0-alpha.2) (2023-11-03)
+
+
+### Bug Fixes
+
+* **secretsManager:** get all data pages ([0f2cff4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/0f2cff400c44d183e613aa72df362be826a19aa5))
+
 # [0.90.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.1-alpha.2...0.90.0-alpha.1) (2023-10-18)
 
 
