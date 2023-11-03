@@ -1,3 +1,79 @@
+# [0.90.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.90.0-alpha.1...0.90.0-alpha.2) (2023-11-03)
+
+
+### Bug Fixes
+
+* **secretsManager:** get all data pages ([0f2cff4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/0f2cff400c44d183e613aa72df362be826a19aa5))
+
+# [0.90.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.1-alpha.2...0.90.0-alpha.1) (2023-10-18)
+
+
+### Features
+
+* adding api gateway v2 services ([62eb02f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/62eb02f7d06f978f60fa631930038057a3e87d42))
+
+## [0.89.1-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.1-alpha.1...0.89.1-alpha.2) (2023-08-10)
+
+
+### Bug Fixes
+
+* **cloud9:** filter out invalid elements ([2004c17](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/2004c178b9b4181b82c45dc485c7a1cc2a8226f2))
+* **dynamoDB:** PointInTimeRecovery is optional ([6b9395c](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/6b9395c549a69eebab9be54f04fdb7d0bc88418d))
+
+## [0.89.1-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0...0.89.1-alpha.1) (2023-08-07)
+
+
+### Bug Fixes
+
+* **ecsTaskDefinition:** fix keys of null error ([c9195bd](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/c9195bdadbdf1e5a25bd796a97fa7be0f009b91f))
+
+# [0.89.0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.88.0...0.89.0) (2023-07-19)
+
+
+### Bug Fixes
+
+* **aws:** fixes for beta release review ([d6dc132](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d6dc132b1945f9532151f79b0c05efe7bc10b636))
+* Fixed error with VPC connections and elasticSearchDomain ([80af943](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/80af94379b3d1b6e46ccd15d4c887d5cfc53ed55))
+* refactor listenerCertificates method ([aab3b84](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/aab3b8474ba23ef6b7b16e55d0569432ed903ff1))
+
+
+### Features
+
+* add apigateway missing services ([afd255f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/afd255ff59f3ea7238bfdbcba992dc3154b31236))
+* add config missing services ([ad4f1a1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/ad4f1a1e2f58caa21838cc1966621e863bc648e8))
+* add ecr missing services ([9b41282](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/9b4128203fd397aba9a8435482c3fe797c34ddcd))
+* add efs missing services ([ef37753](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/ef37753c09f67f6f40ae745fb3ecfa9101144793))
+* add missing cloudwatch services ([c835307](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/c835307f304c1b76802c61f12ea545e0914b1bcc))
+* add securityHub missing services ([734d0c1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/734d0c138eec88d27d37aee2f8c1cc70f50516c4))
+* Added aws_lambda_event_invoke_config for RT ([48ee1f0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/48ee1f03a04287aa28fa901c895c01071e3319bc))
+* Added new DocumentDBCluster service ([5ea6932](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/5ea6932f029a428790ef6a702d2a57573dbe9cba))
+* Added rdsDBProxies ([7c3e5c0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/7c3e5c05c176149ec12c802bbd929834cd02e433))
+* Added rdsEventSubscription ([76c4438](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/76c44380596efa087e1c5c0d57d4c047a85a993b))
+* Added rdsGlobalClusters ([fdc1342](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/fdc1342e455a50b2ea7357f5a67ce9c4ee5aae69))
+* Added ses service configurations ([a1d550b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/a1d550b19e93e15a33b328856f73f27843edd4a3))
+* Added sesReceiptRuleSet service configurations ([7e3ca02](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/7e3ca0222bdfee63e419930460770f477b7f2237))
+* Added snapshots for dbinstances ([1377e9a](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/1377e9aa4526ff35fb5f08cc281f7e5b01edd220))
+* **aws:** Add codeCommitRepository service ([10f8d86](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/10f8d86ec298e8031c421998e2bdb01b3967b349))
+* **aws:** Add codepipeline services ([8043378](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/80433780dac8bc0e257c043726bbced4158811a4))
+* **aws:** Add ssm parameter service and update redshift ([0d808e6](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/0d808e68aceafb1f75c4a3cbf4fb22478ba1dfb6))
+* **aws:** support missing ecs services ([87865d2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/87865d2d9bf2c77466059594d98e9fdc88333b3e))
+* **aws:** support missing glue services ([be11f33](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/be11f33b3611b123f0167560adf894671248cb30))
+* **aws:** support missing iam services ([d576b40](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d576b40d8368a10c92119a95aeabf5c8bc0cafdc))
+* **aws:** Update cloudfront and eksCluster ([d7377ba](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d7377bac18e9757cf416918e6c6a9e0015078790))
+* **aws:** update readme file ([6c39235](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/6c392359828a2ac5445936ba6376e79a615f9f91))
+* **aws:** updated elastic beanstalk client to aws-sdk-v3 to fix empty crawl data issue ([3f3e6b0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/3f3e6b0c23a522dd9e43b4f3a774e735e11a8029))
+* collect provider errors ([cccc04d](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/cccc04d1749271f705c272c6923fe875ddb20f07))
+* Fetched extra grant information for kms service ([c99417b](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/c99417baf1c52b521695e8f460c835cb35635c28))
+* Included event source mappings for lambda service ([9afbfb0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/9afbfb09c52dbeb1cb88b6ce1b2058b334c5c22e))
+* Included groupOption and parameterGroup for dbInstance ([88d5c14](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/88d5c1413011d86aa547f5321da33eebecf17619))
+* Included layers for aws_lambda_layers ([624f9c2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/624f9c2523aec53deed8b40a716fbd1dbc488503))
+* Included name and statements id for aws_lambda_permissions ([8496b43](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/8496b432014bf11617b2074aff4cb3019a73e3de))
+* Linked new rds services to awsAccount schema ([d18a849](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/d18a8497d07d9598c761d205f1a1ada828d4260e))
+* linked new service ([44e7659](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/44e765965e3ebddc3be2f5529f6327ce4c394118))
+* Linked new services ([9eee1b3](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/9eee1b32ce18807dde113ff39d4f8f7ff35f358e))
+* Split up ses service depending on identity type ([214287f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/214287fd993cf3424d61de42ae613cc98c7d2d94))
+* support some alb services ([5f36758](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/5f36758ee234fa1846384ed52b075d501899e1a5))
+
 # [0.89.0-beta.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.88.0...0.89.0-beta.1) (2023-07-19)
 
 

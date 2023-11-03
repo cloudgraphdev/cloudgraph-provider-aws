@@ -67,40 +67,39 @@ export default async ({
 
     regions.split(',').map(region => {
       const regionPromise = new Promise<void>(resolveSecretsManagerData => {
-        new SM({ ...config, region, endpoint }).listSecrets(
-          {},
-          (err: AWSError, data) => {
-            if (err) {
-              errorLog.generateAwsErrorLog({
-                functionName: 'sm:listSecrets',
-                err,
-              })
-            }
+        const sm = new SM({ ...config, region, endpoint })
 
-            if (isEmpty(data)) {
+        const listAllSecrets = async ({ nextToken }): Promise<void> => {
+          try {
+            const { SecretList, NextToken: nt } = await sm
+              .listSecrets({ NextToken: nextToken })
+              .promise()
+
+            if (isEmpty(SecretList)) {
               return resolveSecretsManagerData()
             }
-
-            const { SecretList: secrets = [] } = data
-
-            if (isEmpty(secrets)) {
-              return resolveSecretsManagerData()
-            }
-
-            logger.debug(lt.fetchedSecretsManager(secrets.length))
-
+            logger.debug(lt.fetchedSecretsManager(SecretList.length))
             smData.push(
-              ...secrets.map(({ Tags, ...secret }) => ({
+              ...SecretList.map(({ Tags, ...secret }) => ({
                 ...secret,
                 region,
                 Tags: convertAwsTagsToTagMap(Tags as AwsTag[]),
               }))
             )
-
-            resolveSecretsManagerData()
+            if (nt) {
+              await listAllSecrets({ nextToken: nt })
+            }
+          } catch (err) {
+            errorLog.generateAwsErrorLog({
+              functionName: 'sm:listSecrets',
+              err,
+            })
           }
-        )
+        }
+
+        listAllSecrets({ nextToken: null }).then(resolveSecretsManagerData)
       })
+
       regionPromises.push(regionPromise)
     })
     await Promise.all(regionPromises)

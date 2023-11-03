@@ -9,6 +9,13 @@ export const apiGatewayMethodArn = ({ resourceArn, httpMethod }) =>
   `${resourceArn}/methods/${httpMethod}`
 export const route53HostedZoneArn = ({ id }: { id: string }): string =>
   `arn:aws:route53:::hostedzone/${id}`
+export const apiVpcLinkArn = ({
+  region,
+  vpcLinkId,
+}: {
+  region: string
+  vpcLinkId: string
+}): string => `arn:aws:vpclink:${region}::${vpcLinkId}`
 
 export const routeTableArn = ({
   region,
@@ -312,7 +319,8 @@ export const ssmParameterArn = ({
   region: string
   account: string
   name: string
-}): string => `arn:aws:ssm:${region}:${account}:parameter/${name.replace('/', '')}`
+}): string =>
+  `arn:aws:ssm:${region}:${account}:parameter/${name.replace('/', '')}`
 
 export const cognitoIdentityPoolArn = ({
   region,
@@ -363,8 +371,7 @@ export const domainNameArn = ({
   region: string
   account: string
   name: string
-}): string =>
-  `arn:aws:apigategay:${region}:${account}:domainname/${name}`
+}): string => `arn:aws:apigategay:${region}:${account}:domainname/${name}`
 
 export const vpcPeeringConnectionArn = ({
   region,
@@ -384,7 +391,8 @@ export const transitGatewayRouteTableArn = ({
   region: string
   account: string
   id: string
-}): string => `arn:aws:ec2:${region}:${account}:transit-gateway-routetable/${id}`
+}): string =>
+  `arn:aws:ec2:${region}:${account}:transit-gateway-routetable/${id}`
 
 export const codeCommitRepositoryArn = ({
   region,
@@ -394,7 +402,8 @@ export const codeCommitRepositoryArn = ({
   region: string
   account: string
   name: string
-}): string => `arn:aws:codecommit:${region}:${account}:repository/${name.replace('/', '')}`
+}): string =>
+  `arn:aws:codecommit:${region}:${account}:repository/${name.replace('/', '')}`
 
 export const codePipelineArn = ({
   region,

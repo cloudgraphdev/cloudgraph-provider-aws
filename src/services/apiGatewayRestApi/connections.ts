@@ -10,7 +10,7 @@ import {
   apiGatewayArn,
   domainNameArn,
 } from '../../utils/generateArns'
-import { RawAwsApiGatewayDomainName } from '../apiGatewayDomainName/data'
+import { RawAwsApiGatewayDomainName } from '../apiGateway2DomainName/data'
 import services from '../../enums/services'
 
 export default ({
@@ -86,7 +86,7 @@ export default ({
   /**
    * Find Domain Names
    */
-   const domainNames: {
+  const domainNames: {
     name: string
     data: { [property: string]: RawAwsApiGatewayDomainName[] }
   } = data.find(({ name }) => name === services.apiGatewayDomainName)

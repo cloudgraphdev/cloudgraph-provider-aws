@@ -1,0 +1,11 @@
+type awsVpcLink implements awsBaseService @key(fields: "arn") {
+  createdDate: DateTime @search(by: [day])
+  name: String @search(by: [hash])
+  securityGroupIds: [String] @search(by: [hash, regexp])
+  subnetIds: [String] @search(by: [hash, regexp])
+  vpcLinkId: String @search(by: [hash])
+  vpcLinkStatus: String @search(by: [hash])
+  vpcLinkStatusMessage: String @search(by: [hash])
+  vpcLinkVersion: String @search(by: [hash])
+  tags: [awsRawTag]
+}
