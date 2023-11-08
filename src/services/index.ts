@@ -24,7 +24,7 @@ import relations from '../enums/relations'
 import { Credentials } from '../types'
 import { obfuscateSensitiveString } from '../utils/format'
 import { checkAndMergeConnections } from '../utils'
-import { Account, rawDataInterface } from './base'
+import { Account, rawDataInterface, rawDataResponseInterface } from './base'
 import enhancers, { EnhancerConfig } from './base/enhancers'
 import AwsErrorLog from '../utils/errorLog'
 
@@ -53,14 +53,12 @@ export default class Provider extends CloudGraph.Client {
 
   private properties: {
     services: { [key: string]: string }
-    regions: string[]
     resources: { [key: string]: string }
   }
 
-  logSelectedAccessRegionsAndResources(
+  logSelectedAccessResources(
     profilesOrRolesToLog: string[],
-    regionsToLog: string,
-    resourcesToLog: string
+    resourcesToLog: string,
   ): void {
     this.logger.info(
       `Profiles and role ARNs configured: ${chalk.green(
@@ -68,11 +66,20 @@ export default class Provider extends CloudGraph.Client {
       )}`
     )
     this.logger.info(
-      `Regions configured: ${chalk.green(regionsToLog.replace(/,/g, ', '))}`
-    )
-    this.logger.info(
       `Resources configured: ${chalk.green(resourcesToLog.replace(/,/g, ', '))}`
     )
+  }
+
+  logSelectedRegions(regions: string | undefined): void {
+    if(regions) {
+      this.logger.info(
+        `Regions configured: ${chalk.green(regions.replace(/,/g, ', '))}`
+      )
+    } else {
+      this.logger.info(
+        'Active regions will be detected automatically during the scan.'
+      )
+    }
   }
 
   // TODO: update to also support ignorePrompts config
@@ -178,12 +185,10 @@ export default class Provider extends CloudGraph.Client {
     ])
     this.logger.debug(`Regions selected: ${regionsAnswer}`)
     if (!regionsAnswer.length) {
+      result.regions = undefined
       this.logger.info(
-        `No Regions selected, using default region: ${chalk.green(
-          DEFAULT_REGION
-        )}`
+        `No Regions selected, active regions will be detected automatically.`
       )
-      result.regions = DEFAULT_REGION
     } else {
       result.regions = regionsAnswer.join(',')
     }
@@ -218,11 +223,11 @@ export default class Provider extends CloudGraph.Client {
         'AWS'
       )} configuration successfully completed ${confettiBall}`
     )
-    this.logSelectedAccessRegionsAndResources(
+    this.logSelectedAccessResources(
       result.accounts.map(acct => acct.roleArn ?? acct.profile),
-      result.regions,
       result.resources
     )
+    this.logSelectedRegions(result.regions)
 
     return result
   }
@@ -573,15 +578,9 @@ export default class Provider extends CloudGraph.Client {
   private async getRawData(
     account: Account,
     opts?: Opts
-  ): Promise<rawDataInterface[]> {
-    let { regions: configuredRegions, resources: configuredResources } =
-      this.config
+  ): Promise<rawDataResponseInterface> {
+    let { resources: configuredResources } = this.config
     const result: rawDataInterface[] = []
-    if (!configuredRegions) {
-      configuredRegions = this.properties.regions.join(',')
-    } else {
-      configuredRegions = [...new Set(configuredRegions.split(','))].join(',')
-    }
     if (!configuredResources) {
       configuredResources = Object.values(this.properties.services).join(',')
     }
@@ -591,6 +590,7 @@ export default class Provider extends CloudGraph.Client {
 
     const config = await this.getAwsConfig(account)
     const { accountId } = await this.getIdentity(account)
+    const configuredRegions = await this.getRegions(account)
     for (const resource of resourceNames) {
       const serviceClass = this.getService(resource)
       if (serviceClass && serviceClass.getData) {
@@ -622,7 +622,7 @@ export default class Provider extends CloudGraph.Client {
       }
     }
     this.logger.success(`Account: ${accountId} scan completed`)
-    return result
+    return {rawData: result, regions: configuredRegions.split(',')}
   }
 
   private enhanceData({ data, ...config }: EnhancerConfig): ProviderData {
@@ -655,7 +655,7 @@ export default class Provider extends CloudGraph.Client {
       entities: [],
       connections: {},
     }
-    let { regions: configuredRegions, resources: configuredResources } =
+    let { resources: configuredResources } =
       this.config
     const {
       accounts: configuredAccounts,
@@ -664,25 +664,18 @@ export default class Provider extends CloudGraph.Client {
       accounts: Account[]
       cloudGraphConfig: { ignoreEnvVariables: boolean }
     } = this.config
-    if (!configuredRegions) {
-      configuredRegions = this.properties.regions.join(',')
-    } else {
-      configuredRegions = [...new Set(configuredRegions.split(','))].join(',')
-    }
     if (!configuredResources) {
       configuredResources = Object.values(this.properties.services).join(',')
     }
-
     const usingEnvCreds = !!process.env.AWS_ACCESS_KEY_ID && !ignoreEnvVariables
 
-    this.logSelectedAccessRegionsAndResources(
+    this.logSelectedAccessResources(
       usingEnvCreds
         ? [ENV_VAR_CREDS_LOG]
         : configuredAccounts.map(acct => {
             return acct.roleArn || acct.profile
           }),
-      configuredRegions,
-      configuredResources
+      configuredResources,
     )
 
     // Leaving this here in case we need to test another service or to inject a logging function
@@ -692,6 +685,7 @@ export default class Provider extends CloudGraph.Client {
     // data so we can pass along accountId
     // TODO: find a better way to handle this
     let mergedRawData: rawDataInterface[] = []
+    let relevantRegions = new Set<string>()
     const globalRegion = 'aws-global'
     const tags = { className: 'Tag', name: 'tag', data: { [globalRegion]: [] } }
     const accounts = {
@@ -701,10 +695,13 @@ export default class Provider extends CloudGraph.Client {
     }
     // If the user has passed aws creds as env variables, dont use profile list
     if (usingEnvCreds) {
-      rawData = await this.getRawData(
+      let {rawData: results, regions: activeRegions} = await this.getRawData(
         { profile: 'default', roleArn: undefined, externalId: undefined },
         opts
       )
+
+      rawData = results
+      relevantRegions = new Set([...relevantRegions, ...activeRegions])
     } else {
       const crawledAccounts = []
       for (const account of configuredAccounts) {
@@ -721,13 +718,14 @@ export default class Provider extends CloudGraph.Client {
           }
         }
         const { accountId } = await this.getIdentity(account)
-        accounts.data[globalRegion].push({
-          id: accountId,
-          regions: configuredRegions.split(','),
-        })
         if (!crawledAccounts.find(val => val === accountId)) {
           crawledAccounts.push(accountId)
-          const newRawData = await this.getRawData(account, opts)
+          const {rawData: newRawData, regions} = await this.getRawData(account, opts)
+          relevantRegions = new Set([...relevantRegions, ...regions])
+          accounts.data[globalRegion].push({
+            id: accountId,
+            regions: regions,
+          })
           mergedRawData = this.mergeRawData(mergedRawData, newRawData)
           rawData = [...rawData, ...newRawData]
         } else {
@@ -797,7 +795,7 @@ export default class Provider extends CloudGraph.Client {
               if (typeof serviceClass.getConnections === 'function') {
                 // We need to loop through all configured regions here because services can be connected to things in another region
                 let serviceConnections = {}
-                for (const connectionRegion of configuredRegions.split(',')) {
+                for (const connectionRegion of relevantRegions) {
                   const connections = serviceClass.getConnections({
                     service,
                     region: connectionRegion,
@@ -865,10 +863,43 @@ export default class Provider extends CloudGraph.Client {
 
     const enhancedData = this.enhanceData({
       accounts: accounts.data[globalRegion],
-      configuredRegions,
+      configuredRegions: [...relevantRegions].join(','),
       rawData: mergedRawData,
       data: result,
     })
     return { ...enhancedData, errors: AwsErrorLog.errorsHistory }
+  }
+
+  /* Determine the list of regions to scan */
+  private async getRegions(account: Account): Promise<string> {
+    let { regions: configuredRegions } = this.config
+    if (configuredRegions) {
+      configuredRegions = [...new Set(configuredRegions.split(','))].join(',')
+    } else {
+      configuredRegions = (await this.getActiveRegions(account)).join(',')
+    }
+
+    this.logger.info(
+      `Regions configured for profile ${account.profile}: ${chalk.green(configuredRegions.replace(/,/g, ', '))}`
+    )
+
+    return configuredRegions
+  }
+
+  /* Fetch the list of regions that are active for the account */
+  private async getActiveRegions(account: Account): Promise<string[]> {
+    const config = await this.getAwsConfig(account)
+    // Assume a default region in order to get the list of enabled regions
+    config.region = DEFAULT_REGION
+    const ec2 = new AWS.EC2(config)
+    const regions = await ec2
+      .describeRegions({
+        AllRegions: false,
+      })
+      .promise()
+
+    const activeRegions = await regions.Regions.map(({ RegionName }) => RegionName)
+
+    return activeRegions
   }
 }
