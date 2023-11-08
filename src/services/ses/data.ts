@@ -7,21 +7,18 @@ import SES, {
 import { AWSError } from 'aws-sdk/lib/error'
 import { Config } from 'aws-sdk/lib/config'
 
-import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 
-import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint } from '../../utils'
 import AwsErrorLog from '../../utils/errorLog'
+import { isEmpty } from 'lodash'
 
-const lt = { ...awsLoggerText }
-const { logger } = CloudGraph
 const serviceName = 'SES '
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 
 /**
- * SES 
+ * SES
  */
 export interface RawAwsSes {
   ConfigurationSets: ConfigurationSet[]
@@ -29,47 +26,68 @@ export interface RawAwsSes {
   region: string
 }
 
-
 const getEmailTemplates = async (ses: SES): Promise<TemplateMetadata[]> =>
   new Promise(resolve => {
-    try {
-      ses.listTemplates(
-        (err: AWSError, data: ListTemplatesResponse) => {
-          if (err) {
-            errorLog.generateAwsErrorLog({
-              functionName: 'ses:listTemplates',
-              err,
-            })
-            return resolve([])
+    const templates: TemplateMetadata[] = []
+    const listTemplates = (nextToken?: string): void => {
+      try {
+        ses.listTemplates(
+          { NextToken: nextToken },
+          (err: AWSError, data: ListTemplatesResponse) => {
+            if (err) {
+              errorLog.generateAwsErrorLog({
+                functionName: 'ses:listTemplates',
+                err,
+              })
+              return resolve([])
+            }
+            const { TemplatesMetadata = [] } = data || {}
+            templates.push(...TemplatesMetadata)
+            if (data.NextToken) {
+              listTemplates(data.NextToken)
+            } else {
+              resolve(templates)
+            }
           }
-          const { TemplatesMetadata = [] } = data || {}
-          resolve(TemplatesMetadata)
-        }
-      )
-    } catch (error) {
-      resolve([])
+        )
+      } catch (error) {
+        resolve([])
+      }
     }
+    listTemplates()
   })
 
 const getConfigurationSets = async (ses: SES): Promise<ConfigurationSet[]> =>
   new Promise(resolve => {
-    try {
-      ses.listConfigurationSets(
-        (err: AWSError, data: ListConfigurationSetsResponse) => {
-          if (err) {
-            errorLog.generateAwsErrorLog({
-              functionName: 'ses:listConfigurationSets',
-              err,
-            })
-            return resolve([])
+    const configurationSets: ConfigurationSet[] = []
+    const listConfigurationSets = (nextToken?: string): void => {
+      try {
+        ses.listConfigurationSets(
+          { NextToken: nextToken },
+          (err: AWSError, data: ListConfigurationSetsResponse) => {
+            if (err) {
+              errorLog.generateAwsErrorLog({
+                functionName: 'ses:listConfigurationSets',
+                err,
+              })
+              return resolve([])
+            }
+            if (isEmpty(data?.ConfigurationSets)) {
+              return resolve([])
+            }
+            configurationSets.push(...data.ConfigurationSets)
+            if (data.NextToken) {
+              listConfigurationSets(data.NextToken)
+            } else {
+              resolve(configurationSets)
+            }
           }
-          const { ConfigurationSets = [] } = data || {}
-          resolve(ConfigurationSets)
-        }
-      )
-    } catch (error) {
-      resolve([])
+        )
+      } catch (error) {
+        resolve([])
+      }
     }
+    listConfigurationSets()
   })
 
 export default async ({
@@ -93,15 +111,12 @@ export default async ({
         sesData.push({
           ConfigurationSets: configurationSets,
           EmailTemplates: emailTemplates,
-          region
+          region,
         })
         resolveRegion()
-
-
       })
       regionPromises.push(regionPromise)
     })
-
 
     await Promise.all(regionPromises)
     errorLog.reset()
