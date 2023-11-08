@@ -1,3 +1,10 @@
+## [0.90.1-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.90.0...0.90.1-alpha.1) (2023-11-08)
+
+
+### Bug Fixes
+
+* get all pages from ecs,efs,elb,redshift,ses ([e63f664](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/e63f6649330752bbd04ed94efab2bc86e0934dd7))
+
 # [0.90.0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0...0.90.0) (2023-11-03)
 
 
