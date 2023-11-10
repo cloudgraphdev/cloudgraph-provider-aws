@@ -1,3 +1,10 @@
+## [0.90.1-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.90.1-alpha.1...0.90.1-alpha.2) (2023-11-10)
+
+
+### Bug Fixes
+
+* add some defensive code ([256ca8a](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/256ca8a3d40ab3db19d1f3e301d5dd5ffd20f6ee))
+
 ## [0.90.1-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.90.0...0.90.1-alpha.1) (2023-11-08)
 
 
