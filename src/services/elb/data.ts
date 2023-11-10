@@ -77,7 +77,7 @@ const listElbData = async (elb: ELB): Promise<LoadBalancerDescription[]> => {
               }))
             )
           }
-          if (data.NextMarker) {
+          if (data?.NextMarker) {
             listAllData(data.NextMarker)
           } else {
             resolve(loadBalancerData)

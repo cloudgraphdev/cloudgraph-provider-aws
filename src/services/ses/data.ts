@@ -43,7 +43,7 @@ const getEmailTemplates = async (ses: SES): Promise<TemplateMetadata[]> =>
             }
             const { TemplatesMetadata = [] } = data || {}
             templates.push(...TemplatesMetadata)
-            if (data.NextToken) {
+            if (data?.NextToken) {
               listTemplates(data.NextToken)
             } else {
               resolve(templates)
@@ -76,7 +76,7 @@ const getConfigurationSets = async (ses: SES): Promise<ConfigurationSet[]> =>
               return resolve([])
             }
             configurationSets.push(...data.ConfigurationSets)
-            if (data.NextToken) {
+            if (data?.NextToken) {
               listConfigurationSets(data.NextToken)
             } else {
               resolve(configurationSets)

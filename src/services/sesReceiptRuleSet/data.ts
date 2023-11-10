@@ -44,7 +44,7 @@ const getReceiptRuleSets = async (
             }
             const { RuleSets = [] } = data || {}
             ruleSets.push(...RuleSets)
-            if (data.NextToken) {
+            if (data?.NextToken) {
               listReceiptRuleSets(data.NextToken)
             } else {
               resolve(RuleSets)
