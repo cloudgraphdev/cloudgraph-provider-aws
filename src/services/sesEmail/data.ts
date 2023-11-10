@@ -98,7 +98,7 @@ export default async ({
                 }
               )
               identityVerificationPromise.then(() => {
-                if (data.NextToken) {
+                if (data?.NextToken) {
                   listIdentities(data.NextToken)
                 } else {
                   resolveRegion()

@@ -65,7 +65,7 @@ export default async ({
                   }
                   resources.push(...data.containerInstanceArns)
 
-                  if (data.nextToken) {
+                  if (data?.nextToken) {
                     listContainerInstances(data.nextToken)
                   } else {
                     resolveEcsData({
