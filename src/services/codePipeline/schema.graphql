@@ -1,0 +1,3 @@
+type awsCodePipeline implements awsBaseService @key(fields: "arn") {
+  name: String @search(by: [hash, regexp])
+}

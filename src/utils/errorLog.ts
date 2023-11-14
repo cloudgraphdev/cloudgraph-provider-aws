@@ -1,4 +1,5 @@
 import CloudGraph from '@cloudgraph/sdk'
+import { ProviderError } from '@cloudgraph/sdk/dist/src/types'
 import { AWSError } from 'aws-sdk'
 
 const notAuthorized = 'not authorized' // part of the error string aws passes back for permissions errors
@@ -7,6 +8,9 @@ const throttling = 'Throttling'
 const { logger } = CloudGraph
 
 export default class AwsErrorLog {
+  // store errors for futher analysis
+  static errorsHistory: ProviderError[] = []
+
   constructor(serviceName: string) {
     this.serviceName = serviceName
   }
@@ -35,6 +39,13 @@ export default class AwsErrorLog {
           logger.warn(
             `There was a problem getting data for service ${this.serviceName}, CG encountered an error calling ${functionName}`
           )
+
+        AwsErrorLog.errorsHistory.push({
+          service: this.serviceName,
+          function: functionName,
+          message: err?.message,
+        })
+
         if (
           err?.message?.includes(notAuthorized) ||
           err?.code === accessDenied

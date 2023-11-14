@@ -1,0 +1,32 @@
+
+type awsRdsDbProxiesUserAuthConfigInfo
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+   id: String! @id
+   Description: String @search(by: [hash, regexp])
+   UserName: String @search(by: [hash, regexp])
+   AuthScheme: String @search(by: [hash, regexp])
+   SecretArn: String @search(by: [hash, regexp])
+   IAMAuth: String @search(by: [hash, regexp])
+   ClientPasswordAuthType: String @search(by: [hash, regexp])
+}
+
+type awsRdsDbProxies implements awsBaseService @key(fields: "arn") {
+   dBProxyName: String @search(by: [hash, regexp])
+   status: String @search(by: [hash, regexp])
+   engineFamily: String @search(by: [hash, regexp])
+   vpcId: String @search(by: [hash, regexp])
+   vpcSecurityGroupIds: [String] @search(by: [hash])
+   vpcSubnetIds: [String] @search(by: [hash])
+   auth: [awsRdsDbProxiesUserAuthConfigInfo]
+   roleArn: String @search(by: [hash, regexp])
+   endpoint: String @search(by: [hash, regexp])
+   requireTLS: Boolean @search
+   idleClientTimeout: Int @search
+   debugLogging: Boolean @search
+   createdDate: DateTime @search(by: [day])
+   updatedDate: DateTime @search(by: [day])
+}

@@ -46,41 +46,50 @@ export default async ({
 
     regions.split(',').map(region => {
       efsFileSystems.map(efs => {
-        const regionPromise = new Promise<void>(resolveMountTargets =>
-          new EFS({
+        const regionPromise = new Promise<void>(resolveMountTargets => {
+          const efsClient = new EFS({
             ...config,
             region: efs.region,
             endpoint,
-          }).describeMountTargets(
-            { FileSystemId: efs.FileSystemId },
-            async (err: AWSError, data: DescribeMountTargetsResponse) => {
-              if (err) {
-                errorLog.generateAwsErrorLog({
-                  functionName: 'efs:describeMountTargets',
-                  err,
-                })
+          })
+          const describeMountTargets = (nextToken?: string): void => {
+            efsClient.describeMountTargets(
+              { FileSystemId: efs.FileSystemId, Marker: nextToken },
+              async (err: AWSError, data: DescribeMountTargetsResponse) => {
+                if (err) {
+                  errorLog.generateAwsErrorLog({
+                    functionName: 'efs:describeMountTargets',
+                    err,
+                  })
+                }
+
+                if (isEmpty(data)) {
+                  return resolveMountTargets()
+                }
+
+                const { MountTargets: mountTargets = [] } = data || {}
+
+                logger.debug(lt.fetchedEfsMountTargets(mountTargets.length))
+
+                if (!isEmpty(mountTargets)) {
+                  efsMountTargets.push(
+                    ...mountTargets.map(target => ({
+                      region,
+                      ...target,
+                    }))
+                  )
+                }
+                if (data.NextMarker) {
+                  describeMountTargets(data.NextMarker)
+                } else {
+                  resolveMountTargets()
+                }
               }
+            )
+          }
 
-              if (isEmpty(data)) {
-                return resolveMountTargets()
-              }
-
-              const { MountTargets: mountTargets = [] } = data || {}
-
-              logger.debug(lt.fetchedEfsMountTargets(mountTargets.length))
-
-              if (!isEmpty(mountTargets)) {
-                efsMountTargets.push(
-                  ...mountTargets.map(target => ({
-                    region,
-                    ...target,
-                  }))
-                )
-              }
-              resolveMountTargets()
-            }
-          )
-        )
+          describeMountTargets()
+        })
         regionPromises.push(regionPromise)
       })
     })

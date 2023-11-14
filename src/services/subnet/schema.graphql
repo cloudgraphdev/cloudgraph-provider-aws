@@ -36,4 +36,5 @@ type awsSubnet implements awsBaseService @key(fields: "id") {
   vpcEndpoints: [awsVpcEndpoint] @hasInverse(field: subnets)
   opsWorksStacks: [awsOpsWorksStack] @hasInverse(field: subnets)
   opsWorksInstances: [awsOpsWorksInstance] @hasInverse(field: subnets)
+  mskClusters: [awsMskCluster] @hasInverse(field: subnets)
 }

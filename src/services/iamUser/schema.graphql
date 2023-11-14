@@ -14,6 +14,7 @@ type awsIamUser implements awsOptionalService @key(fields: "id") {
   groups: [String]
   tags: [awsRawTag]
   inlinePolicies: [String]
+  managedPolicies: [awsIamAttachedPolicy]
   iamAttachedPolicies: [awsIamPolicy] @hasInverse(field: iamUsers)
   iamGroups: [awsIamGroup] @hasInverse(field: iamUsers)
 }
@@ -41,4 +42,14 @@ type awsIamMfaDevice
   ) {
   serialNumber: String! @id @search(by: [hash, regexp])
   enableDate: String @search(by: [hash, regexp])
+}
+
+type awsIamAttachedPolicy
+  @generate(
+    query: { get: false, query: false, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  policyArn: String! @id @search(by: [hash, regexp])
+  policyName: String @search(by: [hash, regexp])
 }

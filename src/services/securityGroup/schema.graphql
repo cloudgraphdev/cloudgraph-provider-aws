@@ -31,6 +31,7 @@ type awsSecurityGroup implements awsBaseService @key(fields: "id") {
     @hasInverse(field: securityGroups)
   vpcEndpoints: [awsVpcEndpoint] @hasInverse(field: securityGroups)
   opsWorksInstances: [awsOpsWorksInstance] @hasInverse(field: securityGroups)
+  mskClusters: [awsMskCluster] @hasInverse(field: securityGroups)
 }
 
 type awsSgOutboundRule

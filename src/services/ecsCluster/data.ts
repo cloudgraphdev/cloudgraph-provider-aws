@@ -1,29 +1,68 @@
+import CloudGraph from '@cloudgraph/sdk'
 import { Config } from 'aws-sdk'
-import { AWSError } from 'aws-sdk/lib/error'
 import ECS, {
   Cluster,
   ListClustersRequest,
   ListClustersResponse,
 } from 'aws-sdk/clients/ecs'
-import CloudGraph from '@cloudgraph/sdk'
+import { AWSError } from 'aws-sdk/lib/error'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 import awsLoggerText from '../../properties/logger'
 import { AwsTag, TagMap } from '../../types'
-import { convertAwsTagsToTagMap } from '../../utils/format'
-import AwsErrorLog from '../../utils/errorLog'
 import { initTestEndpoint } from '../../utils'
+import AwsErrorLog from '../../utils/errorLog'
+import { convertAwsTagsToTagMap } from '../../utils/format'
 
 const lt = { ...awsLoggerText }
 const { logger } = CloudGraph
 const serviceName = 'ECS cluster'
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
-
+const MAX_ITEMS = 100
 export interface RawAwsEcsCluster extends Omit<Cluster, 'Tags'> {
   region: string
   Tags?: TagMap
 }
+
+export const listClusterArnsForRegion = async (ecs: ECS): Promise<string[]> =>
+  new Promise<string[]>(resolve => {
+    const clusterArnList: string[] = []
+    const args: ListClustersRequest = {}
+    const listAllClusterArns = (token?: string): void => {
+      args.maxResults = MAX_ITEMS
+      if (token) {
+        args.nextToken = token
+      }
+      try {
+        ecs.listClusters(args, (err: AWSError, data: ListClustersResponse) => {
+          if (err) {
+            errorLog.generateAwsErrorLog({
+              functionName: 'ecs:listClusters',
+              err,
+            })
+          }
+
+          if (isEmpty(data)) {
+            return resolve([])
+          }
+
+          const { clusterArns = [], nextToken } = data || {}
+
+          clusterArnList.push(...clusterArns)
+
+          if (nextToken) {
+            listAllClusterArns(nextToken)
+          } else {
+            resolve(clusterArnList)
+          }
+        })
+      } catch (error) {
+        resolve([])
+      }
+    }
+    listAllClusterArns()
+  })
 
 export default async ({
   regions,
@@ -34,88 +73,25 @@ export default async ({
 }): Promise<{ [region: string]: RawAwsEcsCluster[] }> =>
   new Promise(async resolve => {
     /**
-     * Get the arns of all the ECS Clusters
+     * Get all ECS Clusters Arns
      */
     const ecsClusterData: RawAwsEcsCluster[] = []
     const ecsClusterArns: Array<{ region: string; clusterArns: string[] }> = []
     const regionPromises = []
 
-    const listClusterArns = async ({
-      ecs,
-      region,
-      token: nextToken = '',
-      resolveRegion,
-    }: {
-      ecs: ECS
-      region: string
-      token?: string
-      resolveRegion: Function
-    }) => {
-      let args: ListClustersRequest = {}
-
-      if (nextToken) {
-        args = { ...args, nextToken }
-      }
-
-      return ecs.listClusters(
-        args,
-        (err: AWSError, data: ListClustersResponse) => {
-          if (err) {
-            errorLog.generateAwsErrorLog({
-              functionName: 'ecs:listClusters',
-              err,
-            })
-          }
-
-          /**
-           * No Cluster data for this region
-           */
-          if (isEmpty(data)) {
-            return resolveRegion()
-          }
-
-          const { clusterArns, nextToken: token } = data
-
-          logger.debug(lt.fetchedEcsClusters(clusterArns.length))
-
-          /**
-           * No Clusters Found
-           */
-
-          if (isEmpty(clusterArns)) {
-            return resolveRegion()
-          }
-
-          /**
-           * Check to see if there are more
-           */
-
-          if (token) {
-            listClusterArns({ region, token, ecs, resolveRegion })
-          }
-
-          /**
-           * Add the found Clusters to the ecsClusterArns
-           */
-
-          ecsClusterArns.push({ region, clusterArns })
-
-          /**
-           * If this is the last page of data then return
-           */
-
-          if (!token) {
-            resolveRegion()
-          }
-        }
-      )
-    }
-
-    regions.split(',').map(region => {
+    regions.split(',').forEach(region => {
       const ecs = new ECS({ ...config, region, endpoint })
-      const regionPromise = new Promise<void>(resolveRegion =>
-        listClusterArns({ ecs, region, resolveRegion })
-      )
+      const regionPromise = new Promise<void>(async resolveRegion => {
+        const clusterArnsList = await listClusterArnsForRegion(ecs)
+        if (!isEmpty(clusterArnsList)) {
+          ecsClusterArns.push({
+            clusterArns: clusterArnsList,
+            region,
+          })
+        }
+        resolveRegion()
+      })
+
       regionPromises.push(regionPromise)
     })
 
@@ -126,10 +102,10 @@ export default async ({
      */
 
     const clusterPromises = ecsClusterArns.map(
-      async ({ region, clusterArns: clusters }) =>
+      async ({ region, clusterArns }) =>
         new Promise<void>(resolveEcsData =>
           new ECS({ ...config, region, endpoint }).describeClusters(
-            { clusters },
+            { clusters: clusterArns },
             (err, data) => {
               if (err) {
                 errorLog.generateAwsErrorLog({

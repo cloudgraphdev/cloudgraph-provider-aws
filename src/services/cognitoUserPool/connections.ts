@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash'
 import services from '../../enums/services'
 import { sesArn } from '../../utils/generateArns'
 import { RawAwsLambdaFunction } from '../lambda/data'
-import { RawAwsSes } from '../ses/data'
+import { RawAwsSesEmail } from '../sesEmail/data'
 import { RawAwsIamRole } from '../iamRole/data'
 import { AwsKms } from '../kms/data'
 
@@ -121,20 +121,20 @@ export default ({
    * related to this cognito user pool
    */
   const emailConfigSourceArn = emailConfiguration?.SourceArn
-  const emails = data.find(({ name }) => name === services.ses)
+  const emails = data.find(({ name }) => name === services.sesEmail)
 
   if (emailConfigSourceArn && emails?.data?.[region]) {
-    const emailInRegion: RawAwsSes = emails.data[region].find(
-      ({ Identity }: RawAwsSes) =>
-        emailConfigSourceArn === sesArn({ region, account, email: Identity })
+    const emailInRegion: RawAwsSesEmail = emails.data[region].find(
+      ({ Identity }: RawAwsSesEmail) =>
+        emailConfigSourceArn === sesArn({ region, account, identity: Identity })
     )
 
     if (emailInRegion) {
       connections.push({
-        id: sesArn({ region, account, email: emailInRegion.Identity }),
-        resourceType: services.ses,
+        id: sesArn({ region, account, identity: emailInRegion.Identity }),
+        resourceType: services.sesEmail,
         relation: 'child',
-        field: 'ses',
+        field: 'sesEmail',
       })
     }
   }

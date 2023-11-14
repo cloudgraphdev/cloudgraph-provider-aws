@@ -28,8 +28,8 @@ const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
 const MAX_ITEMS = 25
 
-const listEnvironmentsForRegion = async ({ 
-  cloud9, 
+const listEnvironmentsForRegion = async ({
+  cloud9,
   resolveRegion,
 }: {
   cloud9: Cloud9
@@ -150,7 +150,7 @@ export default async ({
   [region: string]: RawAwsCloud9Environment[]
 }> =>
   new Promise(async resolve => {
-    const cloud9Data: RawAwsCloud9Environment[] = []
+    let cloud9Data: RawAwsCloud9Environment[] = []
     const environmentPromises = []
     const regionPromises = []
     const tagsPromises = []
@@ -208,6 +208,8 @@ export default async ({
     logger.debug(lt.gettingCloud9Environments)
     await Promise.all(environmentPromises)
 
+    // remove environments that don't have an arn (failed to get attributes)
+    cloud9Data = cloud9Data.filter(({ arn }) => !!arn)
     // get all tags for each environment
     cloud9Data.map(({ arn, region }, idx) => {
       const cloud9 = new Cloud9({ ...config, region, endpoint })

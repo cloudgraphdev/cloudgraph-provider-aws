@@ -9,10 +9,13 @@ import ELBV2, {
   DescribeTargetGroupsInput,
   DescribeTargetGroupsOutput,
   DescribeTargetHealthOutput,
+  DescribeListenerCertificatesInput,
   Listeners,
   LoadBalancer,
   LoadBalancerAttributeValue,
   TargetGroups,
+  Certificate,
+  TargetHealthDescription,
 } from 'aws-sdk/clients/elbv2'
 import CloudGraph, { Opts } from '@cloudgraph/sdk'
 
@@ -41,12 +44,74 @@ const customRetrySettings = setAwsRetryOptions({ baseDelay: ALB_CUSTOM_DELAY })
 
 export type RawAwsAlb = LoadBalancer & {
   listeners: Listeners
+  listenerCertificates: Array<Certificate & { listenerArn: string }>
   targetIds: Array<string>
+  targetHealth: Array<TargetHealthDescription & { targetGroupArn: string }>
   attributes: { [property: string]: LoadBalancerAttributeValue }
   targetGroups: TargetGroups
   region: string
   Tags: TagMap
 }
+
+const describeListenerCertificatesForAlb = async ({
+  elbv2,
+  ListenerArn,
+}: {
+  elbv2: ELBV2
+  ListenerArn: string
+}): Promise<Certificate[]> =>
+  new Promise(resolve => {
+    const certificateList: Certificate[] = []
+    const listAllCertificates = (token?: string): void => {
+      const args: DescribeListenerCertificatesInput = { ListenerArn }
+      if (token) {
+        args.Marker = token
+      }
+
+      try {
+        elbv2.describeListenerCertificates(args, (err, data) => {
+          if (err) {
+            errorLog.generateAwsErrorLog({
+              functionName: 'elbv2:describeListenerCertificates',
+              err,
+            })
+            resolve(certificateList)
+            return
+          }
+
+          const { Certificates: certificates = [], NextMarker: marker } =
+            data || {}
+
+          logger.debug(
+            lt.fetchedAlbListenerCertificates(certificates.length, ListenerArn)
+          )
+
+          if (isEmpty(certificates)) {
+            resolve(certificateList)
+            return
+          }
+
+          certificateList.push(...certificates)
+
+          /**
+           * Check to see if there are more
+           */
+          if (marker) {
+            listAllCertificates(marker)
+          } else {
+            resolve(certificateList)
+          }
+        })
+      } catch (err) {
+        errorLog.generateAwsErrorLog({
+          functionName: 'elbv2:describeListenerCertificates',
+          err,
+        })
+        resolve([])
+      }
+    }
+    listAllCertificates()
+  })
 
 export default async ({
   regions,
@@ -64,6 +129,7 @@ export default async ({
     const listenerPromises = []
     const targetGroupPromises = []
     const targetHealthPromises = []
+    const listenerCertificatesPromises = []
 
     /**
      * Step 1) for all regions, list all the albs
@@ -131,7 +197,9 @@ export default async ({
             region,
             Tags: {},
             listeners: [],
+            listenerCertificates: [],
             targetIds: [],
+            targetHealth: [],
             attributes: {},
             targetGroups: [],
           }))
@@ -147,7 +215,7 @@ export default async ({
       })
     }
 
-    regions.split(',').map(region =>
+    regions.split(',').forEach(region =>
       regionPromises.push(
         new Promise<void>(resolveRegion =>
           describeAlbs({
@@ -217,7 +285,7 @@ export default async ({
 
         const result = {}
 
-        tags.map(({ Key, Value }) => {
+        tags.forEach(({ Key, Value }) => {
           result[Key] = Value
         })
 
@@ -226,7 +294,7 @@ export default async ({
         resolveTags()
       })
 
-    albData.map(alb => {
+    albData.forEach(alb => {
       const { LoadBalancerArn: arn, region } = alb
       const elbv2 = new ELBV2({
         ...config,
@@ -302,7 +370,7 @@ export default async ({
 
           const result = {}
 
-          attributes.map(({ Key, Value }) => {
+          attributes.forEach(({ Key, Value }) => {
             result[Key] = Value
           })
 
@@ -311,7 +379,7 @@ export default async ({
         }
       )
 
-    albData.map(alb => {
+    albData.forEach(alb => {
       const { LoadBalancerArn, region } = alb
       const elbv2 = new ELBV2({
         ...config,
@@ -416,7 +484,7 @@ export default async ({
       })
     }
 
-    albData.map(alb => {
+    albData.forEach(alb => {
       const { LoadBalancerArn, region } = alb
       const elbv2 = new ELBV2({
         ...config,
@@ -523,7 +591,7 @@ export default async ({
       })
     }
 
-    albData.map(alb => {
+    albData.forEach(alb => {
       const { LoadBalancerArn, region } = alb
       const elbv2 = new ELBV2({
         ...config,
@@ -592,15 +660,20 @@ export default async ({
         /**
          * Add the ids to the alb's targetIds
          */
-
         alb.targetIds.push(
           ...targetHealth.map(({ Target: { Id = '' } = {} }) => Id)
+        )
+        alb.targetHealth.push(
+          ...targetHealth.map(({ Target }) => ({
+            targetGroupArn: TargetGroupArn,
+            id: Target.Id,
+          }))
         )
 
         resolveTargetHealth()
       })
 
-    albData.map(alb => {
+    albData.forEach(alb => {
       const { region, targetGroups = [] } = alb
       const elbv2 = new ELBV2({
         ...config,
@@ -608,7 +681,7 @@ export default async ({
         endpoint,
         ...customRetrySettings,
       })
-      targetGroups.map(({ TargetGroupArn }) => {
+      targetGroups.forEach(({ TargetGroupArn }) => {
         targetHealthPromises.push(
           new Promise<void>(resolveTargetHealth => {
             describeTargetHealth({
@@ -623,6 +696,41 @@ export default async ({
     })
 
     await Promise.all(targetHealthPromises)
+
+    /**
+     * Step 7, use the describeListenerCertificates method to get the certificates IDs
+     */
+    albData.forEach(alb => {
+      const { listeners = [], region } = alb
+      const elbv2 = new ELBV2({
+        ...config,
+        region,
+        endpoint,
+        ...customRetrySettings,
+      })
+      listeners.forEach(({ ListenerArn }) => {
+        const certificatePromise = new Promise<void>(async resolveListener => {
+          const certificates = await describeListenerCertificatesForAlb({
+            elbv2,
+            ListenerArn,
+          })
+          if (!isEmpty(certificates)) {
+            alb.listenerCertificates.push(
+              ...certificates.map(cerficate => ({
+                ...cerficate,
+                listenerArn: ListenerArn,
+              }))
+            )
+          }
+          resolveListener()
+        })
+        listenerCertificatesPromises.push(certificatePromise)
+      })
+    })
+
+    if (!isEmpty(listenerCertificatesPromises)) {
+      await Promise.all(listenerCertificatesPromises)
+    }
     errorLog.reset()
 
     resolve(groupBy(albData, 'region'))

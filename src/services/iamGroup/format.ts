@@ -18,6 +18,7 @@ export default ({
     Arn: arn = '',
     Path: path = '',
     Policies: inlinePolicies = [],
+    ManagedPolicies: managedPolicies = [],
   } = rawData
 
   const record = {
@@ -27,6 +28,10 @@ export default ({
     path,
     name,
     inlinePolicies,
+    managedPolicies: managedPolicies.map(({ PolicyArn, PolicyName }) => ({
+      policyArn: PolicyArn,
+      policyName: PolicyName,
+    })),
   }
   return record
 }
