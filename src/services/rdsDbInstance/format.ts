@@ -1,20 +1,23 @@
+import { generateUniqueId } from '@cloudgraph/sdk'
+
 import upperFirst from 'lodash/upperFirst'
 import { RawAwsRdsDbInstance } from './data'
-import { 
-  AwsRdsDbInstance, 
+import {
+  AwsRdsDbInstance, AwsRdsDbInstanceGroupOption, AwsRdsDbInstanceParameterGroup, AwsRdsDbInstanceSnapshot,
 } from '../../types/generated'
-import { formatTagsFromMap } from '../../utils/format'
+import { convertAwsTagsToTagMap, formatTagsFromMap } from '../../utils/format'
+import { AwsTag } from '../../types'
 
 export default ({
   service,
   account,
   region
-}: 
-{
-  service: RawAwsRdsDbInstance
-  account: string
-  region: string
-}): AwsRdsDbInstance => {
+}:
+  {
+    service: RawAwsRdsDbInstance
+    account: string
+    region: string
+  }): AwsRdsDbInstance => {
   const {
     DBInstanceArn: arn,
     DBInstanceIdentifier: dBInstanceIdentifier,
@@ -42,19 +45,96 @@ export default ({
     Endpoint: endpoint,
     LicenseModel: licenseModel,
     Tags = {},
+    Snapshots = []
   } = service
 
   const subnetGroup = service.DBSubnetGroup?.DBSubnetGroupName || ''
 
-  const parameterGroup = service.DBParameterGroups.map(
-    ({ DBParameterGroupName, ParameterApplyStatus }) =>
-      `${DBParameterGroupName} (${ParameterApplyStatus})`
-  ).join(' | ')
+  const parameterGroups: AwsRdsDbInstanceParameterGroup[] = service.DBParameterGroups.map(
+    (parameter) => {
+      const { DBParameterGroupName, ParameterApplyStatus } = parameter
+      return ({
+        id: generateUniqueId({
+          arn,
+          ...parameter
+        }),
+        description: `${DBParameterGroupName} (${ParameterApplyStatus})`,
+        name: DBParameterGroupName,
+        status: ParameterApplyStatus
+      })
+    }
+  )
 
-  const optionsGroups = service.OptionGroupMemberships.map(
-    ({ OptionGroupName, Status }) =>
-      `${OptionGroupName} (${upperFirst(Status)})`
-  ).join(' | ')
+  const optionsGroups: AwsRdsDbInstanceGroupOption[] = service.OptionGroupMemberships.map(
+    (option) => {
+      const { OptionGroupName, Status } = option
+      return ({
+        id: generateUniqueId({
+          arn,
+          ...option
+        }),
+        description: `${OptionGroupName} (${upperFirst(Status)})`,
+        groupName: OptionGroupName,
+        status: Status
+      })
+    }
+
+  )
+
+  const snapshots: AwsRdsDbInstanceSnapshot[] = Snapshots.map(
+    (snapshot) => {
+      const tags = convertAwsTagsToTagMap(snapshot.TagList as AwsTag[])
+      return ({
+        id: generateUniqueId({
+          arn,
+          ...snapshot
+        }),
+        dBSnapshotIdentifier: snapshot.DBSnapshotIdentifier,
+        dBInstanceIdentifier: snapshot.DBInstanceIdentifier,
+        snapshotCreateTime: snapshot.SnapshotCreateTime?.toISOString(),
+        engine: snapshot.Engine,
+        allocatedStorage: snapshot.AllocatedStorage,
+        status: snapshot.Status,
+        port: snapshot.Port,
+        availabilityZone: snapshot.AvailabilityZone,
+        vpcId: snapshot.VpcId,
+        instanceCreateTime: snapshot.InstanceCreateTime?.toISOString(),
+        masterUsername: snapshot.MasterUsername,
+        engineVersion: snapshot.EngineVersion,
+        licenseModel: snapshot.LicenseModel,
+        snapshotType: snapshot.SnapshotType,
+        iops: snapshot.Iops,
+        optionGroupName: snapshot.OptionGroupName,
+        percentProgress: snapshot.PercentProgress,
+        sourceRegion: snapshot.SourceRegion,
+        sourceDBSnapshotIdentifier: snapshot.SourceDBSnapshotIdentifier,
+        storageType: snapshot.StorageType,
+        tdeCredentialArn: snapshot.TdeCredentialArn,
+        encrypted: snapshot.Encrypted,
+        kmsKeyId: snapshot.KmsKeyId,
+        dBSnapshotArn: snapshot.DBSnapshotArn,
+        timezone: snapshot.Timezone,
+        iAMDatabaseAuthenticationEnabled: snapshot.IAMDatabaseAuthenticationEnabled,
+        processorFeatures: snapshot.ProcessorFeatures?.map(p => ({
+          id: generateUniqueId({
+            arn,
+            ...p
+          }),
+          name: p.Name,
+          value: p.Value
+        })),
+        dbiResourceId: snapshot.DbiResourceId,
+        tagList: snapshot.TagList,
+        originalSnapshotCreateTime: snapshot.OriginalSnapshotCreateTime?.toISOString(),
+        snapshotDatabaseTime: snapshot.SnapshotDatabaseTime?.toISOString(),
+        snapshotTarget: snapshot.SnapshotTarget,
+        storageThroughput: snapshot.StorageThroughput,
+        tags: formatTagsFromMap(tags)
+      })
+    }
+  )
+
+
 
   return {
     id: arn,
@@ -77,7 +157,7 @@ export default ({
     autoMinorVersionUpgrade,
     iamDbAuthenticationEnabled,
     optionsGroups,
-    parameterGroup,
+    parameterGroups,
     storageType,
     instanceClass,
     allocatedStorage,
@@ -91,6 +171,7 @@ export default ({
     kmsKey,
     encrypted,
     licenseModel,
+    snapshots,
     tags: formatTagsFromMap(Tags),
   }
 }

@@ -137,10 +137,10 @@ export default ({
         id: generateUniqueId({
           arn,
           key,
-          value: def.logConfiguration?.options[key],
+          value: def.logConfiguration.options[key],
         }),
         key,
-        value: def.logConfiguration?.options[key],
+        value: def.logConfiguration.options[key],
       })),
       secretOptions: def.logConfiguration?.secretOptions?.map(option => ({
         id: generateUniqueId({
@@ -171,10 +171,10 @@ export default ({
           id: generateUniqueId({
             arn,
             key,
-            value: def.firelensConfiguration?.options[key],
+            value: def.firelensConfiguration.options[key],
           }),
           key,
-          value: def.firelensConfiguration?.options[key],
+          value: def.firelensConfiguration.options[key],
         })
       ),
     },
@@ -198,26 +198,26 @@ export default ({
       }),
       ...vol,
       dockerVolumeConfiguration: {
-        driverOpts: Object.keys(vol?.dockerVolumeConfiguration?.driverOpts).map(
+        driverOpts: Object.keys(
+          vol?.dockerVolumeConfiguration?.driverOpts || {}
+        ).map(key => ({
+          id: generateUniqueId({
+            arn,
+            key,
+            value: vol.dockerVolumeConfiguration.driverOpts[key],
+          }),
+          key,
+          value: vol.dockerVolumeConfiguration.driverOpts[key],
+        })),
+        labels: Object.keys(vol?.dockerVolumeConfiguration?.labels || {}).map(
           key => ({
             id: generateUniqueId({
               arn,
               key,
-              value: vol?.dockerVolumeConfiguration?.driverOpts[key],
+              value: vol.dockerVolumeConfiguration.labels[key],
             }),
             key,
-            value: vol?.dockerVolumeConfiguration?.driverOpts[key],
-          })
-        ),
-        labels: Object.keys(vol?.dockerVolumeConfiguration?.labels).map(
-          key => ({
-            id: generateUniqueId({
-              arn,
-              key,
-              value: vol?.dockerVolumeConfiguration?.labels[key],
-            }),
-            key,
-            value: vol?.dockerVolumeConfiguration?.labels[key],
+            value: vol.dockerVolumeConfiguration.labels[key],
           })
         ),
       },

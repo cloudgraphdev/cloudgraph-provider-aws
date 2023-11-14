@@ -29,6 +29,7 @@ type awsApiGatewayStage implements awsBaseService @key(fields: "arn") {
   documentationVersion: String @search(by: [hash, regexp])
   clientCertificateId: String @search(by: [hash])
   xrayTracing: Boolean @search
+  restApiId: String @search(by: [hash, regexp])
   variables: [awsApiGatewayStageVariable]
   tags: [awsRawTag]
   restApi: [awsApiGatewayRestApi] @hasInverse(field: stages)

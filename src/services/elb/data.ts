@@ -54,33 +54,40 @@ const getElbTags = async (
     )
   })
 
-const listElbData = async (
-  elb: ELB
-): Promise<LoadBalancerDescription[]> =>
-  new Promise<LoadBalancerDescription[]>(resolve => {
-    let loadBalancerData: LoadBalancerDescription[] = []
-    elb.describeLoadBalancers(
-      (err: AWSError, data: DescribeAccessPointsOutput) => {
-        if (err) {
-          errorLog.generateAwsErrorLog({
-            functionName: 'elb:describeLoadBalancers',
-            err,
-          })
+const listElbData = async (elb: ELB): Promise<LoadBalancerDescription[]> => {
+  const loadBalancerData: LoadBalancerDescription[] = []
+  return new Promise<LoadBalancerDescription[]>(resolve => {
+    const listAllData = (nextToken?: string): void => {
+      elb.describeLoadBalancers(
+        { Marker: nextToken },
+        (err: AWSError, data: DescribeAccessPointsOutput) => {
+          if (err) {
+            errorLog.generateAwsErrorLog({
+              functionName: 'elb:describeLoadBalancers',
+              err,
+            })
+          }
+          if (!isEmpty(data)) {
+            const { LoadBalancerDescriptions: loadBalancerDescriptions = [] } =
+              data
+            logger.debug(lt.fetchedElbs(loadBalancerDescriptions.length))
+            loadBalancerData.push(
+              ...loadBalancerDescriptions.map(lbDescription => ({
+                ...lbDescription,
+              }))
+            )
+          }
+          if (data?.NextMarker) {
+            listAllData(data.NextMarker)
+          } else {
+            resolve(loadBalancerData)
+          }
         }
-        if (!isEmpty(data)) {
-          const { LoadBalancerDescriptions: loadBalancerDescriptions = [] } =
-            data
-          logger.debug(lt.fetchedElbs(loadBalancerDescriptions.length))
-          loadBalancerData = loadBalancerDescriptions.map(lbDescription => ({
-            ...lbDescription,
-          }))
-          resolve(loadBalancerData)
-        }
-
-        resolve(loadBalancerData)
-      }
-    )
+      )
+    }
+    listAllData()
   })
+}
 
 const listElbAttributes = async (
   elb: ELB,
@@ -127,7 +134,7 @@ export interface RawAwsElb extends LoadBalancerDescription {
 export default async ({
   regions,
   config,
-  account
+  account,
 }: {
   regions: string
   account: string
@@ -143,7 +150,9 @@ export default async ({
       return new Promise<void>(async resolveElbData => {
         // Get Load Balancer Data
         const elbDescriptionData = await listElbData(elbInstance)
-        const elbNames: string[] = elbDescriptionData.map(elb => elb.LoadBalancerName)
+        const elbNames: string[] = elbDescriptionData.map(
+          elb => elb.LoadBalancerName
+        )
 
         if (!isEmpty(elbNames)) {
           // Get Tags

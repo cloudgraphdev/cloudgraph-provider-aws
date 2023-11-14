@@ -1,32 +1,37 @@
 import { RawAwsSes } from './data'
 import { AwsSes } from '../../types/generated'
-import { sesArn } from '../../utils/generateArns'
+import { generateUniqueId } from '@cloudgraph/sdk'
 
 /**
- * SES
+ * SES 
  */
 
-export default ({ 
+export default ({
   service,
   account,
   region,
-}:{
+}: {
   service: RawAwsSes
   account: string
   region: string
 }): AwsSes => {
   const {
-    Identity: email,
-    VerificationStatus: verificationStatus,
+    ConfigurationSets = [],
+    EmailTemplates = [],
   } = service
-  const arn = sesArn({region, account, email})
+
+  const configurationSets = ConfigurationSets.map(cs => cs.Name)
+  const emailTemplates = EmailTemplates.map(e => e.Name)
 
   return {
-    id: arn,
+    id: generateUniqueId({
+      ...service,
+      account,
+      region
+    }),
     accountId: account,
-    arn,
     region,
-    email,
-    verificationStatus,
+    configurationSets,
+    emailTemplates,
   }
 }

@@ -1,0 +1,33 @@
+type awsRdsGlobalClusterFailoverState {
+    status: String @search(by: [hash, regexp])
+    fromDbClusterArn: String @search(by: [hash, regexp])
+    toDbClusterArn: String @search(by: [hash, regexp])
+}
+
+type awsRdsGlobalClusterMembers
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  dBClusterArn: String @search(by: [hash, regexp])
+  readers: [String] @search(by: [hash])
+  isWriter: Boolean @search
+  globalWriteForwardingStatus: String @search(by: [hash, regexp])
+}
+
+
+type awsRdsGlobalCluster implements awsBaseService @key(fields: "arn") {
+    globalClusterIdentifier: String @search(by: [hash, regexp])
+    globalClusterResourceId: String @search(by: [hash, regexp])
+    globalClusterArn: String @search(by: [hash, regexp])
+    status: String @search(by: [hash, regexp])
+    engine: String @search(by: [hash, regexp])
+    engineVersion: String @search(by: [hash, regexp])
+    databaseName: String @search(by: [hash, regexp])
+    storageEncrypted: Boolean @search
+    deletionProtection: Boolean @search
+    globalClusterMembers: [awsRdsGlobalClusterMembers]
+    failoverState: awsRdsGlobalClusterFailoverState
+}

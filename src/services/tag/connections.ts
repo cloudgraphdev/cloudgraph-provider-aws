@@ -64,12 +64,13 @@ import { RawAwsSystemsManagerDocument } from '../systemsManagerDocument/data'
 import { RawAwsRdsClusterSnapshot } from '../rdsClusterSnapshot/data'
 import { RawAwsInstanceProfile } from '../iamInstanceProfile/data'
 import { RawAwsVpcEndpoint } from '../vpcEndpoint/data'
-import { RawAwsApiGatewayHttpApi } from '../apiGatewayHttpApi/data'
-import { RawAwsApiGatewayDomainName } from '../apiGatewayDomainName/data'
+import { RawAwsApiGatewayV2HttpApi } from '../apiGateway2HttpApi/data'
+import { RawAwsApiGatewayDomainName } from '../apiGateway2DomainName/data'
 import { RawAwsAnalyzerSummary } from '../iamAccessAnalyzer/data'
 import { RawAwsManagedPrefixList } from '../managedPrefixList/data'
 import { RawAwsTransitGatewayRouteTable } from '../transitGatewayRouteTable/data'
 import { RawAwsVpcPeeringConnection } from '../vpcPeeringConnection/data'
+import { RawAwsMskCluster } from '../msk/data'
 
 const generateTagsMap = (
   data: Array<{ name: string; data: { [property: string]: any[] } }>
@@ -1106,7 +1107,7 @@ function getConnections({
    */
 
   for (const instance of dataForTag[services.apiGatewayHttpApi] || []) {
-    const { ApiId: id }: RawAwsApiGatewayHttpApi = instance
+    const { ApiId: id }: RawAwsApiGatewayV2HttpApi = instance
 
     connections.push({
       id,
@@ -1193,6 +1194,20 @@ function getConnections({
       resourceType: services.managedPrefixList,
       relation: 'child',
       field: 'managedPrefixLists',
+    })
+  }
+
+  /**
+   * Find related Msk Clusters
+   */
+  for (const instance of dataForTag[services.mskCluster] || []) {
+    const { ClusterArn: arn }: RawAwsMskCluster = instance
+
+    connections.push({
+      id: arn,
+      resourceType: services.mskCluster,
+      relation: 'child',
+      field: 'mskClusters',
     })
   }
 

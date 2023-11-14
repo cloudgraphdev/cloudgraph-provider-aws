@@ -1,0 +1,2 @@
+type awsSecurityHubStandardSubscription implements awsBaseService
+  @key(fields: "arn")

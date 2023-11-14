@@ -1,0 +1,19 @@
+type awsSesReceiptRuleSetRule
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  name: String @search(by: [hash, regexp])
+  enabled: Boolean @search
+  tlsPolicy: String @search(by: [hash, regexp])
+  scanEnabled: Boolean @search
+}
+
+
+type awsSesReceiptRuleSet implements awsOptionalService @key(fields: "id") {
+  accountId: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  rules: [awsSesReceiptRuleSetRule]
+}

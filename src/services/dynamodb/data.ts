@@ -49,7 +49,7 @@ export interface RawAwsDynamoDbTable
 }
 
 const checkIfEnabled = (status: string): boolean =>
-  status && !['DISABLED', 'DISABLING'].includes(status)
+  !!status && !['DISABLED', 'DISABLING'].includes(status)
 
 const ttlInfoFormatter = (ttlInfo: TimeToLiveDescription): boolean => {
   const { TimeToLiveStatus } = ttlInfo
@@ -59,10 +59,9 @@ const ttlInfoFormatter = (ttlInfo: TimeToLiveDescription): boolean => {
 const backupInfoFormatter = (
   backupInfo: ContinuousBackupsDescription
 ): boolean => {
-  const {
-    PointInTimeRecoveryDescription: { PointInTimeRecoveryStatus },
-  } = backupInfo
-  return checkIfEnabled(PointInTimeRecoveryStatus)
+  const status =
+    backupInfo?.PointInTimeRecoveryDescription?.PointInTimeRecoveryStatus
+  return checkIfEnabled(status)
 }
 
 /**
@@ -345,8 +344,7 @@ export default async ({
     tableData.map(({ TableName, region }, idx) => {
       const dynamoDb = new DynamoDB({ ...config, region, endpoint })
       const backupInfoPromise = new Promise<void>(async resolveBackupInfo => {
-        const backupInfo: ContinuousBackupsDescription =
-          await getTableBackupsDescription(dynamoDb, TableName)
+        const backupInfo = await getTableBackupsDescription(dynamoDb, TableName)
         tableData[idx].pointInTimeRecoveryEnabled =
           backupInfoFormatter(backupInfo)
         resolveBackupInfo()

@@ -24,6 +24,8 @@ type awsEcsService implements awsBaseService @key(fields: "arn") {
   enableECSManagedTags: Boolean @search
   propagateTags: String @search(by: [hash, regexp])
   enableExecuteCommand: Boolean @search
+  clusterArn: String @search(by: [hash, regexp])
+  clusterName: String @search(by: [hash, regexp])
   tags: [awsRawTag]
   ecsCluster: [awsEcsCluster] @hasInverse(field: ecsService)
   ecsTaskDefinition: [awsEcsTaskDefinition] @hasInverse(field: ecsService)

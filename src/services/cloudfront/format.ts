@@ -134,6 +134,7 @@ export default ({
       SmoothStreaming: smoothStreaming,
       TargetOriginId: targetOriginId,
       ViewerProtocolPolicy: viewerProtocolPolicy,
+      CachePolicyId: cachePolicyId,
     } = cache
 
     const forwardedValues = {
@@ -156,6 +157,7 @@ export default ({
       smoothStreaming: smoothStreaming ? t.yes : t.no,
       targetOriginId,
       viewerProtocolPolicy,
+      cachePolicyId
     }
   }
 

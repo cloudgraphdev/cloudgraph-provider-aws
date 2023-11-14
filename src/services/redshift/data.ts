@@ -35,41 +35,48 @@ export default async ({
     const rsData: RawAwsRedshiftCluster[] = []
     const regionPromises = []
 
-    regions.split(',').map(region => {
-      const regionPromise = new Promise<void>(resolveRegion =>
-        new RS({ ...config, region, endpoint }).describeClusters(
-          {},
-          (err: AWSError, data: ClustersMessage) => {
-            if (err) {
-              errorLog.generateAwsErrorLog({
-                functionName: 'redshift:describeClusters',
-                err,
-              })
+    regions.split(',').forEach(region => {
+      const regionPromise = new Promise<void>(resolveRegion => {
+        const rs = new RS({ ...config, region, endpoint })
+        const listClusters = (nextToken?: string): void => {
+          rs.describeClusters(
+            { Marker: nextToken },
+            (err: AWSError, data: ClustersMessage) => {
+              if (err) {
+                errorLog.generateAwsErrorLog({
+                  functionName: 'redshift:describeClusters',
+                  err,
+                })
+              }
+
+              if (isEmpty(data)) {
+                return resolveRegion()
+              }
+
+              const { Clusters: clusters = [] } = data
+
+              if (isEmpty(clusters)) {
+                return resolveRegion()
+              }
+
+              logger.debug(lt.fetchedRedshiftClusters(clusters.length))
+              rsData.push(
+                ...clusters.map(({ ...cluster }) => ({
+                  ...cluster,
+                  region,
+                  Tags: convertAwsTagsToTagMap(cluster.Tags as AwsTag[]),
+                }))
+              )
+              if (data.Marker) {
+                listClusters(data.Marker)
+              } else {
+                resolveRegion()
+              }
             }
-
-            if (isEmpty(data)) {
-              return resolveRegion()
-            }
-
-            const { Clusters: clusters = [] } = data
-
-            if (isEmpty(clusters)) {
-              return resolveRegion()
-            }
-
-            logger.debug(lt.fetchedRedshiftClusters(clusters.length))
-            rsData.push(
-              ...clusters.map(({ ...cluster }) => ({
-                ...cluster,
-                region,
-                Tags: convertAwsTagsToTagMap(cluster.Tags as AwsTag[]),
-              }))
-            )
-
-            resolveRegion()
-          }
-        )
-      )
+          )
+        }
+        listClusters()
+      })
       regionPromises.push(regionPromise)
     })
 
