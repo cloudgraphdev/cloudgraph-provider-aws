@@ -414,3 +414,23 @@ export const codePipelineArn = ({
   account: string
   name: string
 }): string => `arn:aws:codepipeline:${region}:${account}:pipeline/${name}`
+
+export const systemManagerActivationArn = ({
+  region,
+  account,
+  id,
+}: {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ssm:${region}:${account}:activation/${id}`
+
+export const systemManagerAssociationArn = ({
+  region,
+  account,
+  id,
+}: {
+  region: string
+  account: string
+  id: string
+}): string => `arn:aws:ssm:${region}:${account}:association/${id}`

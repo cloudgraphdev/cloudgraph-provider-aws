@@ -1,0 +1,59 @@
+type awsSystemManagerAssociationTargets
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  key: String @search(by: [hash, regexp])
+  value: [String] @search(by: [hash, regexp])
+}
+
+type awsSystemManagerAssociationOverviewStatusAggregatedCount
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  key: String @search(by: [hash, regexp])
+  value: Int @search
+}
+
+type awsSystemManagerAssociationOverview
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  status: String @search(by: [hash, regexp])
+  detailedStatus: String @search(by: [hash, regexp])
+  associationStatusAggregatedCount: [awsSystemManagerAssociationOverviewStatusAggregatedCount]
+}
+
+type awsSystemManagerAssociationTargetMaps
+  @generate(
+    query: { get: false, query: true, aggregate: false }
+    mutation: { add: false, delete: false }
+    subscription: false
+  ) {
+  id: String! @id
+  key: String @search(by: [hash, regexp])
+  value: [String] @search(by: [hash, regexp])
+}
+
+type awsSystemManagerAssociation implements awsBaseService @key(fields: "arn") {
+    documentArn: String @search(by: [hash, regexp])
+    instanceId: String @search(by: [hash, regexp])
+    associationId: String @search(by: [hash, regexp])
+    associationVersion: String @search(by: [hash, regexp])
+    documentVersion: String @search(by: [hash, regexp])
+    targets: [awsSystemManagerAssociationTargets]
+    lastExecutionDate: DateTime @search(by: [day])
+    overview: awsSystemManagerAssociationOverview
+    scheduleExpression: String @search(by: [hash, regexp])
+    associationName: String @search(by: [hash, regexp])
+    scheduleOffset: Int @search
+    targetMaps: [awsSystemManagerAssociationTargetMaps]
+    systemsManagerInstances: [awsSystemsManagerInstance] @hasInverse(field: systemManagerAssociations)
+}

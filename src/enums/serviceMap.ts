@@ -1,15 +1,15 @@
 import Account from '../services/account'
 import ACM from '../services/acm'
 import ALB from '../services/alb'
-import APIGatewayApiKey from '../services/apiGatewayApiKey'
 import APIGatewayDomainName from '../services/apiGateway2DomainName'
 import APIGatewayV2HttpApi from '../services/apiGateway2HttpApi'
+import APIGatewayV2VpcLink from '../services/apiGateway2VpcLink'
+import APIGatewayApiKey from '../services/apiGatewayApiKey'
 import APIGatewayResource from '../services/apiGatewayResource'
 import APIGatewayRestApi from '../services/apiGatewayRestApi'
 import APIGatewayStage from '../services/apiGatewayStage'
 import APIGatewayUsagePlan from '../services/apiGatewayUsagePlan'
 import APIGatewayVpcLink from '../services/apiGatewayVpcLink'
-import APIGatewayV2VpcLink from '../services/apiGateway2VpcLink'
 import AppSync from '../services/appSync'
 import ASG from '../services/asg'
 import AthenaDataCatalog from '../services/athenaDataCatalog'
@@ -25,6 +25,9 @@ import CloudWatchDashboard from '../services/cloudwatchDashboards'
 import CloudWatchEventRule from '../services/cloudwatchEventRules'
 import CloudWatchLog from '../services/cloudwatchLogs'
 import CodeBuild from '../services/codeBuild'
+import CodeCommitRepository from '../services/codeCommitRepository'
+import CodePipeline from '../services/codePipeline'
+import CodePipelineWebhook from '../services/codePipelineWebhook'
 import CognitoIdentityPool from '../services/cognitoIdentityPool'
 import CognitoUserPool from '../services/cognitoUserPool'
 import ConfigurationDeliveryChannel from '../services/configurationDeliveryChannel'
@@ -32,8 +35,8 @@ import ConfigurationRecorder from '../services/configurationRecorder'
 import ConfigurationRule from '../services/configurationRule'
 import CustomerGateway from '../services/customerGateway'
 import DmsReplicationInstance from '../services/dmsReplicationInstance'
-import DynamoDB from '../services/dynamodb'
 import DocDBCluster from '../services/docdbCluster'
+import DynamoDB from '../services/dynamodb'
 import EBS from '../services/ebs'
 import EBSSnapshot from '../services/ebsSnapshot'
 import EC2 from '../services/ec2'
@@ -108,12 +111,14 @@ import SecurityHub from '../services/securityHub'
 import SecurityHubMember from '../services/securityHubMember'
 import SecurityHubStandardSubscription from '../services/securityHubStandardSubscription'
 import SES from '../services/ses'
-import SESReceiptRuleSet from '../services/sesReceiptRuleSet'
-import SESEmail from '../services/sesEmail'
 import SESDomain from '../services/sesDomain'
+import SESEmail from '../services/sesEmail'
+import SESReceiptRuleSet from '../services/sesReceiptRuleSet'
 import SNS from '../services/sns'
 import SQS from '../services/sqs'
 import AwsSubnet from '../services/subnet'
+import SystemsManagerActivation from '../services/systemsManagerActivation'
+import SystemsManagerAssociation from '../services/systemsManagerAssociation'
 import SystemsManagerDocument from '../services/systemsManagerDocument'
 import SystemsManagerInstance from '../services/systemsManagerInstance'
 import SystemsManagerParameter from '../services/systemsManagerParameter'
@@ -124,13 +129,10 @@ import TransitGatewayRouteTable from '../services/transitGatewayRouteTable'
 import VPC from '../services/vpc'
 import VpcEndpoint from '../services/vpcEndpoint'
 import VpcPeeringConnection from '../services/vpcPeeringConnection'
-import CodeCommitRepository from '../services/codeCommitRepository'
 import VpnConnection from '../services/vpnConnection'
 import VpnGateway from '../services/vpnGateway'
 import WafV2WebAcl from '../services/wafV2WebAcl'
 import services from './services'
-import CodePipeline from '../services/codePipeline'
-import CodePipelineWebhook from '../services/codePipelineWebhook'
 
 /**
  * serviceMap is an object that contains all currently supported services for AWS
@@ -265,8 +267,10 @@ export default {
   [services.vpnConnection]: VpnConnection,
   [services.organization]: Organization,
   [services.wafV2WebAcl]: WafV2WebAcl,
-  [services.systemsManagerInstance]: SystemsManagerInstance,
+  [services.systemsManagerActivation]: SystemsManagerActivation,
+  [services.systemsManagerAssociation]: SystemsManagerAssociation,
   [services.systemsManagerDocument]: SystemsManagerDocument,
+  [services.systemsManagerInstance]: SystemsManagerInstance,
   [services.systemsManagerParameter]: SystemsManagerParameter,
   tag: AwsTag,
 }

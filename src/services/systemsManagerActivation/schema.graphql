@@ -1,0 +1,12 @@
+type awsSystemManagerActivation implements awsBaseService @key(fields: "arn") {
+  activationId: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  defaultInstanceName: String @search(by: [hash, regexp])
+  iamRole: String @search(by: [hash, regexp])
+  registrationLimit: Int @search
+  registrationsCount: Int @search
+  expirationDate: DateTime @search(by: [day])
+  expired: Boolean@search
+  createdDate: DateTime @search(by: [day])
+  tags: [awsRawTag]
+}

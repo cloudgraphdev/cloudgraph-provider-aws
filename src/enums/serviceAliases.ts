@@ -89,6 +89,8 @@ export default {
   [services.securityHubStandardSubscription]:
     'securityHubStandardSubscriptions',
   [services.subnet]: 'subnets',
+  [services.systemsManagerActivation]: 'systemsManagerActivations',
+  [services.systemsManagerAssociation]: 'systemsManagerAssociations',
   [services.systemsManagerDocument]: 'systemsManagerDocuments',
   [services.systemsManagerInstance]: 'systemsManagerInstances',
   [services.systemsManagerParameter]: 'systemsManagerParameters',

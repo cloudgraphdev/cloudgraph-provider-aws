@@ -22,6 +22,7 @@ type awsSystemsManagerInstance implements awsBaseService @key(fields: "arn") {
   sourceType: String @search(by: [hash, regexp])
   iamRole: [awsIamRole] @hasInverse(field: systemsManagerInstances)
   ec2Instance: [awsEc2] @hasInverse(field: systemsManagerInstance)
+  systemManagerAssociations: [awsSystemManagerAssociation] @hasInverse(field: systemsManagerInstances)
 }
 
 type systemsManagerInstanceAssociationOverview {

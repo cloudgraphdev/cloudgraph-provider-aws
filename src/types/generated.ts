@@ -4930,6 +4930,59 @@ export type AwsSuspendedProcess = {
   suspensionReason?: Maybe<Scalars['String']>;
 };
 
+export type AwsSystemManagerActivation = AwsBaseService & {
+  activationId?: Maybe<Scalars['String']>;
+  createdDate?: Maybe<Scalars['DateTime']>;
+  defaultInstanceName?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  expirationDate?: Maybe<Scalars['DateTime']>;
+  expired?: Maybe<Scalars['Boolean']>;
+  iamRole?: Maybe<Scalars['String']>;
+  registrationLimit?: Maybe<Scalars['Int']>;
+  registrationsCount?: Maybe<Scalars['Int']>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+};
+
+export type AwsSystemManagerAssociation = AwsBaseService & {
+  associationId?: Maybe<Scalars['String']>;
+  associationName?: Maybe<Scalars['String']>;
+  associationVersion?: Maybe<Scalars['String']>;
+  documentArn?: Maybe<Scalars['String']>;
+  documentVersion?: Maybe<Scalars['String']>;
+  instanceId?: Maybe<Scalars['String']>;
+  lastExecutionDate?: Maybe<Scalars['DateTime']>;
+  overview?: Maybe<AwsSystemManagerAssociationOverview>;
+  scheduleExpression?: Maybe<Scalars['String']>;
+  scheduleOffset?: Maybe<Scalars['Int']>;
+  systemsManagerInstances?: Maybe<Array<Maybe<AwsSystemsManagerInstance>>>;
+  targetMaps?: Maybe<Array<Maybe<AwsSystemManagerAssociationTargetMaps>>>;
+  targets?: Maybe<Array<Maybe<AwsSystemManagerAssociationTargets>>>;
+};
+
+export type AwsSystemManagerAssociationOverview = {
+  associationStatusAggregatedCount?: Maybe<Array<Maybe<AwsSystemManagerAssociationOverviewStatusAggregatedCount>>>;
+  detailedStatus?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+};
+
+export type AwsSystemManagerAssociationOverviewStatusAggregatedCount = {
+  id: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['Int']>;
+};
+
+export type AwsSystemManagerAssociationTargetMaps = {
+  id: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  value?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsSystemManagerAssociationTargets = {
+  id: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  value?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
 export type AwsSystemsManagerDocument = AwsBaseService & {
   createdDate?: Maybe<Scalars['DateTime']>;
   documentFormat?: Maybe<Scalars['String']>;
@@ -4979,6 +5032,7 @@ export type AwsSystemsManagerInstance = AwsBaseService & {
   resourceType?: Maybe<Scalars['String']>;
   sourceId?: Maybe<Scalars['String']>;
   sourceType?: Maybe<Scalars['String']>;
+  systemManagerAssociations?: Maybe<Array<Maybe<AwsSystemManagerAssociation>>>;
 };
 
 export type AwsSystemsManagerParameter = AwsBaseService & {

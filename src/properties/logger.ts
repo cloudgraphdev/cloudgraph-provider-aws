@@ -789,5 +789,13 @@ export default {
   /**
    * Msk
    */
-  fetchedMskClusters: (num: number): string => `Fetched ${num} Msk clusters`,
+  fetchedMskClusters: (num: number): string =>
+    `Fetched ${num} Msk clusters`,
+  /**
+   * SSM
+   */
+  fetchedSystemManagersActivations: (num: number): string =>
+    `Fetched ${num} SSM Activations`,
+  fetchedSystemManagersAssociations: (num: number): string =>
+    `Fetched ${num} SSM Associations`,
 }
