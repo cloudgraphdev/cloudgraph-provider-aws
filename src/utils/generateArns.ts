@@ -414,3 +414,14 @@ export const codePipelineArn = ({
   account: string
   name: string
 }): string => `arn:aws:codepipeline:${region}:${account}:pipeline/${name}`
+
+export const opsworksAppArn = ({
+  region,
+  account,
+  appId,
+}: {
+  region: string
+  account: string
+  appId: string
+}): string =>
+  `arn:aws:opsworks:${region}:${account}:app/${appId}`

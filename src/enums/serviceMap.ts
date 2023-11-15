@@ -87,6 +87,9 @@ import MskCluster from '../services/msk'
 import NetworkAcl from '../services/nacl'
 import NATGateway from '../services/natGateway'
 import NetworkInterface from '../services/networkInterface'
+import OpsWorksApp from '../services/opsworksApp'
+import OpsWorksStack from '../services/opsworksStack'
+import OpsWorksInstance from '../services/opsworksInstance'
 import Organization from '../services/organization'
 import RDSCluster from '../services/rdsCluster'
 import RdsClusterSnapshot from '../services/rdsClusterSnapshot'
@@ -212,6 +215,9 @@ export default {
   [services.nacl]: NetworkAcl,
   [services.nat]: NATGateway,
   [services.networkInterface]: NetworkInterface,
+  [services.opsWorksApp]: OpsWorksApp,
+  [services.opsWorksStack]: OpsWorksStack,
+  [services.opsWorksInstance]: OpsWorksInstance,
   [services.sg]: AwsSecurityGroup,
   [services.subnet]: AwsSubnet,
   [services.vpc]: VPC,

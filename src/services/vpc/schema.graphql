@@ -34,4 +34,5 @@ type awsVpc implements awsBaseService @key(fields: "id") {
   rdsClusterSnapshots: [awsRdsClusterSnapshot] @hasInverse(field: vpc)
   vpcPeeringConnection: [awsVpcPeeringConnection] @hasInverse(field: vpc)
   vpcEndpoints: [awsVpcEndpoint] @hasInverse(field: vpc)
+  opsWorksStacks: [awsOpsWorksStack] @hasInverse(field: vpc)
 }

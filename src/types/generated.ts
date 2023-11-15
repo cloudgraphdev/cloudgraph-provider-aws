@@ -1843,6 +1843,7 @@ export type AwsEc2 = AwsBaseService & {
   metadatasecurityGroupIdsOptions?: Maybe<Array<Maybe<Scalars['String']>>>;
   monitoring?: Maybe<Scalars['String']>;
   networkInterfaces?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  opsWorksInstances?: Maybe<Array<Maybe<AwsOpsWorksInstance>>>;
   placementGroup?: Maybe<Scalars['String']>;
   platformDetails?: Maybe<Scalars['String']>;
   primaryNetworkInterface?: Maybe<Scalars['String']>;
@@ -4180,6 +4181,177 @@ export type AwsNetworkInterfaceAttachment = {
   status?: Maybe<Scalars['String']>;
 };
 
+export type AwsOpsWorksApp = AwsBaseService & {
+  appSource?: Maybe<AwsOpsWorksAppSource>;
+  attributes?: Maybe<Array<Maybe<AwsOpsWorksAppAttribute>>>;
+  createdAt?: Maybe<Scalars['String']>;
+  dataSources?: Maybe<Array<Maybe<AwsOpsWorksAppDataSource>>>;
+  description?: Maybe<Scalars['String']>;
+  domains?: Maybe<Array<Maybe<Scalars['String']>>>;
+  enableSsl?: Maybe<Scalars['Boolean']>;
+  environment?: Maybe<Array<Maybe<AwsOpsWorksAppEnvironment>>>;
+  name?: Maybe<Scalars['String']>;
+  opsWorksStacks?: Maybe<Array<Maybe<AwsOpsWorksStack>>>;
+  shortname?: Maybe<Scalars['String']>;
+  sslConfiguration?: Maybe<AwsOpsWorksAppSslConfiguration>;
+  stackId?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
+export type AwsOpsWorksAppAttribute = {
+  id: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+export type AwsOpsWorksAppDataSource = {
+  arn?: Maybe<Scalars['String']>;
+  databaseName?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  type?: Maybe<Scalars['String']>;
+};
+
+export type AwsOpsWorksAppEnvironment = {
+  id: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  secure?: Maybe<Scalars['Boolean']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+export type AwsOpsWorksAppSource = {
+  password?: Maybe<Scalars['String']>;
+  revision?: Maybe<Scalars['String']>;
+  sshKey?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+};
+
+export type AwsOpsWorksAppSslConfiguration = {
+  certificate?: Maybe<Scalars['String']>;
+  chain?: Maybe<Scalars['String']>;
+  privateKey?: Maybe<Scalars['String']>;
+};
+
+export type AwsOpsWorksInstance = AwsBaseService & {
+  agentVersion?: Maybe<Scalars['String']>;
+  amiId?: Maybe<Scalars['String']>;
+  architecture?: Maybe<Scalars['String']>;
+  autoScalingType?: Maybe<Scalars['String']>;
+  availabilityZone?: Maybe<Scalars['String']>;
+  blockDeviceMappings?: Maybe<Array<Maybe<AwsOpsWorksInstanceBlockDeviceMapping>>>;
+  createdAt?: Maybe<Scalars['String']>;
+  ebsOptimized?: Maybe<Scalars['Boolean']>;
+  ec2Instance?: Maybe<Array<Maybe<AwsEc2>>>;
+  ec2InstanceId?: Maybe<Scalars['String']>;
+  ecsClusterArn?: Maybe<Scalars['String']>;
+  ecsContainerInstanceArn?: Maybe<Scalars['String']>;
+  elasticIp?: Maybe<Scalars['String']>;
+  hostname?: Maybe<Scalars['String']>;
+  infrastructureClass?: Maybe<Scalars['String']>;
+  installUpdatesOnBoot?: Maybe<Scalars['Boolean']>;
+  instanceId?: Maybe<Scalars['String']>;
+  instanceProfileArn?: Maybe<Scalars['String']>;
+  instanceType?: Maybe<Scalars['String']>;
+  lastServiceErrorId?: Maybe<Scalars['String']>;
+  layerIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  opsWorksStacks?: Maybe<Array<Maybe<AwsOpsWorksStack>>>;
+  os?: Maybe<Scalars['String']>;
+  platform?: Maybe<Scalars['String']>;
+  privateDns?: Maybe<Scalars['String']>;
+  privateIp?: Maybe<Scalars['String']>;
+  publicDns?: Maybe<Scalars['String']>;
+  publicIp?: Maybe<Scalars['String']>;
+  registeredBy?: Maybe<Scalars['String']>;
+  reportedAgentVersion?: Maybe<Scalars['String']>;
+  reportedOs?: Maybe<AwsOpsWorksInstanceReportedOs>;
+  rootDeviceType?: Maybe<Scalars['String']>;
+  rootDeviceVolumeId?: Maybe<Scalars['String']>;
+  securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  securityGroups?: Maybe<Array<Maybe<AwsSecurityGroup>>>;
+  sshHostDsaKeyFingerprint?: Maybe<Scalars['String']>;
+  sshHostRsaKeyFingerprint?: Maybe<Scalars['String']>;
+  sshKeyName?: Maybe<Scalars['String']>;
+  stackId?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  subnetId?: Maybe<Scalars['String']>;
+  subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
+  tenancy?: Maybe<Scalars['String']>;
+  virtualizationType?: Maybe<Scalars['String']>;
+};
+
+export type AwsOpsWorksInstanceBlockDeviceMapping = {
+  deviceName?: Maybe<Scalars['String']>;
+  ebs?: Maybe<AwsOpsWorksInstanceBlockDeviceMappingEbs>;
+  id: Scalars['String'];
+  noDevice?: Maybe<Scalars['String']>;
+  virtualName?: Maybe<Scalars['String']>;
+};
+
+export type AwsOpsWorksInstanceBlockDeviceMappingEbs = {
+  deleteOnTermination?: Maybe<Scalars['Boolean']>;
+  iops?: Maybe<Scalars['Int']>;
+  snapshotId?: Maybe<Scalars['String']>;
+  volumeSize?: Maybe<Scalars['Int']>;
+  volumeType?: Maybe<Scalars['String']>;
+};
+
+export type AwsOpsWorksInstanceReportedOs = {
+  family?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  version?: Maybe<Scalars['String']>;
+};
+
+export type AwsOpsWorksStack = AwsBaseService & {
+  agentVersion?: Maybe<Scalars['String']>;
+  attributes?: Maybe<Array<Maybe<AwsOpsWorksStackAttribute>>>;
+  chefConfiguration?: Maybe<AwsOpsWorksStackChefConfiguration>;
+  configurationManager?: Maybe<AwsOpsWorksStackConfigurationManager>;
+  createdAt?: Maybe<Scalars['String']>;
+  customCookbooksSource?: Maybe<AwsOpsWorksStackCustomCookbooksSource>;
+  customJson?: Maybe<Scalars['String']>;
+  defaultAvailabilityZone?: Maybe<Scalars['String']>;
+  defaultInstanceProfileArn?: Maybe<Scalars['String']>;
+  defaultOs?: Maybe<Scalars['String']>;
+  defaultRootDeviceType?: Maybe<Scalars['String']>;
+  defaultSshKeyName?: Maybe<Scalars['String']>;
+  defaultSubnetId?: Maybe<Scalars['String']>;
+  hostnameTheme?: Maybe<Scalars['String']>;
+  opsWorksApps?: Maybe<Array<Maybe<AwsOpsWorksApp>>>;
+  opsWorksInstances?: Maybe<Array<Maybe<AwsOpsWorksInstance>>>;
+  serviceRoleArn?: Maybe<Scalars['String']>;
+  subnets?: Maybe<Array<Maybe<AwsSubnet>>>;
+  useCustomCookbooks?: Maybe<Scalars['Boolean']>;
+  useOpsworksSecurityGroups?: Maybe<Scalars['Boolean']>;
+  vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+  vpcId?: Maybe<Scalars['String']>;
+};
+
+export type AwsOpsWorksStackAttribute = {
+  id: Scalars['String'];
+  key?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+export type AwsOpsWorksStackChefConfiguration = {
+  berkshelfVersion?: Maybe<Scalars['String']>;
+  manageBerkshelf?: Maybe<Scalars['Boolean']>;
+};
+
+export type AwsOpsWorksStackConfigurationManager = {
+  name?: Maybe<Scalars['String']>;
+  version?: Maybe<Scalars['String']>;
+};
+
+export type AwsOpsWorksStackCustomCookbooksSource = {
+  password?: Maybe<Scalars['String']>;
+  revision?: Maybe<Scalars['String']>;
+  sshKey?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+};
+
 export type AwsOptionalService = {
   accountId?: Maybe<Scalars['String']>;
   arn?: Maybe<Scalars['String']>;
@@ -4739,6 +4911,7 @@ export type AwsSecurityGroup = AwsBaseService & {
   mskClusters?: Maybe<Array<Maybe<AwsMskCluster>>>;
   name?: Maybe<Scalars['String']>;
   networkInterfaces?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  opsWorksInstances?: Maybe<Array<Maybe<AwsOpsWorksInstance>>>;
   outboundRuleCount?: Maybe<Scalars['Int']>;
   outboundRules?: Maybe<Array<Maybe<AwsSgOutboundRule>>>;
   owner?: Maybe<Scalars['String']>;
@@ -4909,6 +5082,8 @@ export type AwsSubnet = AwsBaseService & {
   nacls?: Maybe<Array<Maybe<AwsNetworkAcl>>>;
   natGateway?: Maybe<Array<Maybe<AwsNatGateway>>>;
   networkInterface?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  opsWorksInstances?: Maybe<Array<Maybe<AwsOpsWorksInstance>>>;
+  opsWorksStacks?: Maybe<Array<Maybe<AwsOpsWorksStack>>>;
   rdsCluster?: Maybe<Array<Maybe<AwsRdsCluster>>>;
   rdsDbInstance?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   routeTable?: Maybe<Array<Maybe<AwsRouteTable>>>;
@@ -5176,6 +5351,7 @@ export type AwsVpc = AwsBaseService & {
   nacls?: Maybe<Array<Maybe<AwsNetworkAcl>>>;
   natGateways?: Maybe<Array<Maybe<AwsNatGateway>>>;
   networkInterfaces?: Maybe<Array<Maybe<AwsNetworkInterface>>>;
+  opsWorksStacks?: Maybe<Array<Maybe<AwsOpsWorksStack>>>;
   rdsClusterSnapshots?: Maybe<Array<Maybe<AwsRdsClusterSnapshot>>>;
   rdsDbInstances?: Maybe<Array<Maybe<AwsRdsDbInstance>>>;
   redshiftClusters?: Maybe<Array<Maybe<AwsRedshiftCluster>>>;

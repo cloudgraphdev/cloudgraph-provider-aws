@@ -787,6 +787,15 @@ export default {
   fetchedSecurityHubStandardSubscriptions: (num: number): string =>
     `Found ${num} Security Hub Standard Subscription`,
   /**
+   * OpsWorks
+   */
+  fetchedOpsWorksStacks: (num: number): string =>
+    `Fetched ${num} OpsWorks Stacks`,
+  fetchedOpsWorksInstances: (num: number): string =>
+    `Fetched ${num} OpsWorks Instances`,
+  fetchedOpsWorksApps: (num: number): string =>
+    `Fetched ${num} OpsWorks Apps`,
+  /**
    * Msk
    */
   fetchedMskClusters: (num: number): string => `Fetched ${num} Msk clusters`,
