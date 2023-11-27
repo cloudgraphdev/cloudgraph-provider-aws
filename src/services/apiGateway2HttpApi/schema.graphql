@@ -1,0 +1,139 @@
+type awsApiGatewayCors {
+  allowCredentials: Boolean @search
+  allowHeaders: [String] @search(by: [hash, regexp])
+  allowMethods: [String] @search(by: [hash, regexp])
+  allowOrigins: [String] @search(by: [hash, regexp])
+  exposeHeaders: [String] @search(by: [hash, regexp])
+  maxAge: Int @search
+}
+
+type awsApiGatewayV2Authorizer {
+  authorizerId: String @search(by: [hash, regexp])
+  authorizerCredentialsArn: String @search(by: [hash, regexp])
+  authorizerPayloadFormatVersion: String @search(by: [hash, regexp])
+  authorizerResultTtlInSeconds: Int
+  authorizerType: String @search(by: [hash, regexp])
+  authorizerUri: String @search(by: [hash, regexp])
+  enableSimpleResponses: Boolean @search
+  identitySources: [String] 
+  identityValidationExpression: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  # jwtConfiguration: JWTConfiguration
+}
+
+type awsApiGatewayV2Deployment {
+  autoDeployed: Boolean @search
+  createdDate: DateTime @search(by: [day])
+  deploymentId: String @search(by: [hash, regexp])
+  deploymentStatus: String @search(by: [hash, regexp])
+  deploymentStatusMessage: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+}
+
+type awsApiGatewayV2Model {
+  modelId: String @search(by: [hash, regexp])
+  contentType: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  schema: String @search(by: [hash, regexp])
+}
+
+type awsApiGatewayV2Stage {
+  # accessLogSettings: AccessLogSettings
+  apiGatewayManaged: Boolean @search
+  autoDeploy: Boolean @search
+  clientCertificateId: String @search(by: [hash, regexp])
+  createdDate: DateTime @search(by: [day])
+  # defaultRouteSettings: RouteSettings
+  deploymentId: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  lastDeploymentStatusMessage: String @search(by: [hash, regexp])
+  lastUpdatedDate: DateTime @search(by: [day])
+  # routeSettings: RouteSettingsMap
+  stageName: String @search(by: [hash, regexp])
+  # stageVariables: StageVariablesMap
+  # tags: Tags
+}
+
+type awsApiGatewayV2IntegrationResponse {
+  contentHandlingStrategy: String @search(by: [hash, regexp])
+  integrationResponseId: String @search(by: [hash, regexp])
+  integrationResponseKey: String @search(by: [hash, regexp])
+  # responseParameters: IntegrationParameters;
+  # responseTemplates: TemplateMap;
+  templateSelectionExpression: String @search(by: [hash, regexp])
+}
+
+type awsApiGatewayV2Integration {
+  apiGatewayManaged: Boolean @search
+  connectionId: String @search(by: [hash, regexp])
+  connectionType: String @search(by: [hash, regexp])
+  contentHandlingStrategy: String @search(by: [hash, regexp])
+  credentialsArn: String @search(by: [hash, regexp])
+  description: String @search(by: [hash, regexp])
+  integrationId: String @search(by: [hash, regexp])
+  integrationMethod: String @search(by: [hash, regexp])
+  integrationResponseSelectionExpression: String @search(by: [hash, regexp])
+  integrationSubtype: String @search(by: [hash, regexp])
+  integrationType: String @search(by: [hash, regexp])
+  integrationUri: String @search(by: [hash, regexp])
+  passthroughBehavior: String @search(by: [hash, regexp])
+  payloadFormatVersion: String @search(by: [hash, regexp])
+  # requestParameters: IntegrationParameters;
+  # requestTemplates: TemplateMap;
+  # responseParameters: ResponseParameters;
+  templateSelectionExpression: String @search(by: [hash, regexp])
+  timeoutInMillis: Int @search
+  # tlsConfig: TlsConfig;
+  responses: [awsApiGatewayV2IntegrationResponse]
+}
+
+type awsApiGatewayV2RouteResponse {
+  modelSelectionExpression: String @search(by: [hash, regexp])
+  # responseModels: RouteModels;
+  # responseParameters: RouteParameters;
+  routeResponseId: String @search(by: [hash, regexp])
+  routeResponseKey: String @search(by: [hash, regexp])
+}
+
+type awsApiGatewayV2Route {
+  apiGatewayManaged: Boolean @search
+  apiKeyRequired: Boolean @search
+  authorizationScopes: [String]
+  authorizationType: String @search(by: [hash, regexp])
+  authorizerId: String @search(by: [hash, regexp])
+  modelSelectionExpression: String @search(by: [hash, regexp])
+  operationName: String @search(by: [hash, regexp])
+  # requestModels: RouteModels;
+  # requestParameters: RouteParameters;
+  routeId: String @search(by: [hash, regexp])
+  routeKey: String @search(by: [hash, regexp])
+  routeResponseSelectionExpression: String @search(by: [hash, regexp])
+  target: String @search(by: [hash, regexp])
+  responses: [awsApiGatewayV2RouteResponse]
+}
+
+type awsApiGatewayHttpApi implements awsBaseService @key(fields: "arn") {
+  apiEndpoint: String @search(by: [hash, regexp])
+  apiGatewayManaged: Boolean @search
+  apiKeySelectionExpression: String @search(by: [hash, regexp])
+  corsConfiguration: awsApiGatewayCors
+  createdDate: DateTime @search(by: [day])
+  description: String @search(by: [hash, regexp])
+  disableSchemaValidation: Boolean @search
+  disableExecuteApiEndpoint: Boolean @search
+  importInfo: [String] @search(by: [hash, regexp])
+  name: String @search(by: [hash, regexp])
+  protocolType: String @search(by: [hash, regexp])
+  routeSelectionExpression: String @search(by: [hash, regexp])
+  version: String @search(by: [hash, regexp])
+  warnings: [String] @search(by: [hash, regexp])
+  tags: [awsRawTag]
+  domainNames: [awsApiGatewayDomainName] @hasInverse(field: httpApis)
+  authorizers: [awsApiGatewayV2Authorizer]
+  deployments: [awsApiGatewayV2Deployment]
+  models: [awsApiGatewayV2Model]
+  stages: [awsApiGatewayV2Stage]
+  integrations: [awsApiGatewayV2Integration]
+  routes: [awsApiGatewayV2Route]
+}

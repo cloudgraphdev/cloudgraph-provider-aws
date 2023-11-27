@@ -48,10 +48,11 @@ export default async ({
     let ecsTaskArns: any = await Promise.all(
       ecsClusters.map(
         async ({ clusterName: cluster, region }) =>
-          new Promise(resolveEcsData =>
-            new ECS({ ...config, region, endpoint }).listTasks(
-              { cluster },
-              (err, data) => {
+          new Promise(resolveEcsData => {
+            const ecs = new ECS({ ...config, region, endpoint })
+            const resources: ECS.StringList = []
+            const listTasks = (nextToken?: string): void => {
+              ecs.listTasks({ cluster, nextToken }, (err, data) => {
                 if (err) {
                   errorLog.generateAwsErrorLog({
                     functionName: 'ecs:listTasks',
@@ -59,16 +60,20 @@ export default async ({
                   })
                 }
 
-                if (isEmpty(data)) {
+                if (isEmpty(data?.taskArns)) {
                   return resolveEcsData([])
                 }
 
-                const { taskArns = [] } = data
-
-                resolveEcsData({ region, cluster, taskArns })
-              }
-            )
-          )
+                resources.push(...data.taskArns)
+                if (data.nextToken) {
+                  listTasks(data.nextToken)
+                } else {
+                  resolveEcsData({ region, cluster, taskArns: resources })
+                }
+              })
+            }
+            listTasks()
+          })
       )
     )
 

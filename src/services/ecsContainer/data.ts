@@ -43,30 +43,42 @@ export default async ({
     /**
      * Get the instance arns of all the containers in each cluster
      */
-    let containerInstanceArns: any = await Promise.all(
+    const containerInstanceArns: any = await Promise.all(
       ecsClusters.map(
         async ({ clusterName: cluster, region }) =>
-          new Promise(resolveEcsData =>
-            new ECS({ ...config, region, endpoint }).listContainerInstances(
-              { cluster },
-              (err, data) => {
-                if (err) {
-                  errorLog.generateAwsErrorLog({
-                    functionName: 'ecs:listContainerInstances',
-                    err,
-                  })
+          new Promise(resolveEcsData => {
+            const ecs = new ECS({ ...config, region, endpoint })
+            const resources: ECS.StringList = []
+            const listContainerInstances = (nextToken?: string): void => {
+              ecs.listContainerInstances(
+                { cluster, nextToken },
+                (err, data) => {
+                  if (err) {
+                    errorLog.generateAwsErrorLog({
+                      functionName: 'ecs:listContainerInstances',
+                      err,
+                    })
+                  }
+
+                  if (isEmpty(data?.containerInstanceArns)) {
+                    return resolveEcsData([])
+                  }
+                  resources.push(...data.containerInstanceArns)
+
+                  if (data?.nextToken) {
+                    listContainerInstances(data.nextToken)
+                  } else {
+                    resolveEcsData({
+                      cluster,
+                      containerInstances: resources,
+                      region,
+                    })
+                  }
                 }
-
-                if (isEmpty(data)) {
-                  return resolveEcsData([])
-                }
-
-                const { containerInstanceArns: containerInstances = [] } = data
-
-                resolveEcsData({ cluster, containerInstances, region })
-              }
-            )
-          )
+              )
+            }
+            return listContainerInstances()
+          })
       )
     )
     /**

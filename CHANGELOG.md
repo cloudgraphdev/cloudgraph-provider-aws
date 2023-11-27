@@ -1,3 +1,61 @@
+## [0.90.1-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.90.1-alpha.1...0.90.1-alpha.2) (2023-11-10)
+
+
+### Bug Fixes
+
+* add some defensive code ([256ca8a](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/256ca8a3d40ab3db19d1f3e301d5dd5ffd20f6ee))
+
+## [0.90.1-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.90.0...0.90.1-alpha.1) (2023-11-08)
+
+
+### Bug Fixes
+
+* get all pages from ecs,efs,elb,redshift,ses ([e63f664](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/e63f6649330752bbd04ed94efab2bc86e0934dd7))
+
+# [0.90.0](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0...0.90.0) (2023-11-03)
+
+
+### Bug Fixes
+
+* **cloud9:** filter out invalid elements ([2004c17](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/2004c178b9b4181b82c45dc485c7a1cc2a8226f2))
+* **dynamoDB:** PointInTimeRecovery is optional ([6b9395c](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/6b9395c549a69eebab9be54f04fdb7d0bc88418d))
+* **ecsTaskDefinition:** fix keys of null error ([c9195bd](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/c9195bdadbdf1e5a25bd796a97fa7be0f009b91f))
+* **secretsManager:** get all data pages ([0f2cff4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/0f2cff400c44d183e613aa72df362be826a19aa5))
+
+
+### Features
+
+* adding api gateway v2 services ([62eb02f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/62eb02f7d06f978f60fa631930038057a3e87d42))
+
+# [0.90.0-beta.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.0...0.90.0-beta.1) (2023-11-03)
+
+
+### Bug Fixes
+
+* **cloud9:** filter out invalid elements ([2004c17](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/2004c178b9b4181b82c45dc485c7a1cc2a8226f2))
+* **dynamoDB:** PointInTimeRecovery is optional ([6b9395c](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/6b9395c549a69eebab9be54f04fdb7d0bc88418d))
+* **ecsTaskDefinition:** fix keys of null error ([c9195bd](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/c9195bdadbdf1e5a25bd796a97fa7be0f009b91f))
+* **secretsManager:** get all data pages ([0f2cff4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/0f2cff400c44d183e613aa72df362be826a19aa5))
+
+
+### Features
+
+* adding api gateway v2 services ([62eb02f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/62eb02f7d06f978f60fa631930038057a3e87d42))
+
+# [0.90.0-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.90.0-alpha.1...0.90.0-alpha.2) (2023-11-03)
+
+
+### Bug Fixes
+
+* **secretsManager:** get all data pages ([0f2cff4](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/0f2cff400c44d183e613aa72df362be826a19aa5))
+
+# [0.90.0-alpha.1](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.1-alpha.2...0.90.0-alpha.1) (2023-10-18)
+
+
+### Features
+
+* adding api gateway v2 services ([62eb02f](https://github.com/cloudgraphdev/cloudgraph-provider-aws/commit/62eb02f7d06f978f60fa631930038057a3e87d42))
+
 ## [0.89.1-alpha.2](https://github.com/cloudgraphdev/cloudgraph-provider-aws/compare/0.89.1-alpha.1...0.89.1-alpha.2) (2023-08-10)
 
 

@@ -1,10 +1,10 @@
 import { ServiceConnection } from '@cloudgraph/sdk'
 import { isEmpty } from 'lodash'
 
-import { RawAwsApiGatewayHttpApi } from './data'
+import { RawAwsApiGatewayV2HttpApi } from './data'
 
 import { domainNameArn } from '../../utils/generateArns'
-import { RawAwsApiGatewayDomainName } from '../apiGatewayDomainName/data'
+import { RawAwsApiGatewayDomainName } from '../apiGateway2DomainName/data'
 import services from '../../enums/services'
 
 export default ({
@@ -14,7 +14,7 @@ export default ({
   account,
 }: {
   account: string
-  service: RawAwsApiGatewayHttpApi
+  service: RawAwsApiGatewayV2HttpApi
   data: Array<{ name: string; data: { [property: string]: any[] } }>
   region: string
 }): {

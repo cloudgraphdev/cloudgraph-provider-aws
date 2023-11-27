@@ -38,87 +38,82 @@ export default async ({
   new Promise(async resolve => {
     const sesData: RawAwsSesEmail[] = []
     const regionPromises = []
-    const identityVerificationPromises = []
 
     regions.split(',').map(region => {
       const regionPromise = new Promise<void>(resolveRegion => {
         const ses = new SES({ ...config, region, endpoint })
+        const listIdentities = (nextToken?: string): void => {
+          ses.listIdentities(
+            { IdentityType: 'EmailAddress', NextToken: nextToken },
+            (err: AWSError, data: ListIdentitiesResponse) => {
+              if (err) {
+                errorLog.generateAwsErrorLog({
+                  functionName: 'sesEmail:listIdentities',
+                  err,
+                })
+              }
 
-        ses.listIdentities(
-          { IdentityType: 'EmailAddress' },
-          (err: AWSError, data: ListIdentitiesResponse) => {
-            if (err) {
-              errorLog.generateAwsErrorLog({
-                functionName: 'sesEmail:listIdentities',
-                err,
+              /**
+               * No Data for the region
+               */
+              if (isEmpty(data?.Identities)) {
+                return resolveRegion()
+              }
+
+              const { Identities }: { Identities: string[] } = data
+
+              logger.debug(lt.fetchedSesIdentities(Identities.length))
+
+              const identityVerificationPromise = new Promise<void>(
+                resolveIdVer => {
+                  ses.getIdentityVerificationAttributes(
+                    { Identities },
+                    (
+                      err: AWSError,
+                      {
+                        VerificationAttributes: identities,
+                      }: GetIdentityVerificationAttributesResponse
+                    ) => {
+                      if (err) {
+                        errorLog.generateAwsErrorLog({
+                          functionName:
+                            'sesEmail:getIdentityVerificationAttributes',
+                          err,
+                        })
+                      }
+
+                      if (!isEmpty(identities)) {
+                        sesData.push(
+                          ...Identities.map(Identity => ({
+                            Identity,
+                            ...identities[Identity],
+                            region,
+                          }))
+                        )
+                      }
+
+                      resolveIdVer()
+                    }
+                  )
+                }
+              )
+              identityVerificationPromise.then(() => {
+                if (data?.NextToken) {
+                  listIdentities(data.NextToken)
+                } else {
+                  resolveRegion()
+                }
               })
             }
-
-            /**
-             * No Data for the region
-             */
-            if (isEmpty(data)) {
-              return resolveRegion()
-            }
-
-            const { Identities }: { Identities: string[] } = data
-
-            /**
-             * No Identities Found
-             */
-
-            if (isEmpty(Identities)) {
-              return resolveRegion()
-            }
-
-            logger.debug(lt.fetchedSesIdentities(Identities.length))
-
-            const identityVerificationPromise = new Promise<void>(
-              resolveIdVer => {
-                ses.getTemplate()
-                ses.getIdentityVerificationAttributes(
-                  { Identities },
-                  (
-                    err: AWSError,
-                    {
-                      VerificationAttributes: identities,
-                    }: GetIdentityVerificationAttributesResponse
-                  ) => {
-                    if (err) {
-                      errorLog.generateAwsErrorLog({
-                        functionName:
-                          'sesEmail:getIdentityVerificationAttributes',
-                        err,
-                      })
-                    }
-
-                    if (!isEmpty(identities)) {
-                      sesData.push(
-                        ...Identities.map(Identity => ({
-                          Identity,
-                          ...identities[Identity],
-                          region,
-                        }))
-                      )
-                    }
-
-                    resolveIdVer()
-                    resolveRegion()
-                  }
-                )
-                ses.listConfigurationSets()
-              }
-            )
-            identityVerificationPromises.push(identityVerificationPromise)
-          }
-        )
+          )
+        }
+        listIdentities()
       })
       regionPromises.push(regionPromise)
     })
 
     await Promise.all(regionPromises)
 
-    await Promise.all(identityVerificationPromises)
     errorLog.reset()
 
     resolve(groupBy(sesData, 'region'))

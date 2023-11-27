@@ -6,15 +6,11 @@ import SES, {
 import { AWSError } from 'aws-sdk/lib/error'
 import { Config } from 'aws-sdk/lib/config'
 
-import CloudGraph from '@cloudgraph/sdk'
 import groupBy from 'lodash/groupBy'
 
-import awsLoggerText from '../../properties/logger'
 import { initTestEndpoint } from '../../utils'
 import AwsErrorLog from '../../utils/errorLog'
 
-const lt = { ...awsLoggerText }
-const { logger } = CloudGraph
 const serviceName = 'SES Receipt Rule Set'
 const errorLog = new AwsErrorLog(serviceName)
 const endpoint = initTestEndpoint(serviceName)
@@ -29,40 +25,59 @@ export interface RawAwsSesReceiptRuleSet {
   region: string
 }
 
-
-const getReceiptRuleSets = async (ses: SES): Promise<ReceiptRuleSetMetadata[]> =>
+const getReceiptRuleSets = async (
+  ses: SES
+): Promise<ReceiptRuleSetMetadata[]> =>
   new Promise(resolve => {
-    try {
-      ses.listReceiptRuleSets(
-        (err: AWSError, data: ListReceiptRuleSetsResponse) => {
-          if (err) {
-            errorLog.generateAwsErrorLog({
-              functionName: 'sesReceiptRuleSet:listReceiptRuleSets',
-              err,
-            })
-            return resolve([])
+    const ruleSets: ReceiptRuleSetMetadata[] = []
+    const listReceiptRuleSets = (nextToken?: string): void => {
+      try {
+        ses.listReceiptRuleSets(
+          { NextToken: nextToken },
+          (err: AWSError, data: ListReceiptRuleSetsResponse) => {
+            if (err) {
+              errorLog.generateAwsErrorLog({
+                functionName: 'sesReceiptRuleSet:listReceiptRuleSets',
+                err,
+              })
+              return resolve([])
+            }
+            const { RuleSets = [] } = data || {}
+            ruleSets.push(...RuleSets)
+            if (data?.NextToken) {
+              listReceiptRuleSets(data.NextToken)
+            } else {
+              resolve(RuleSets)
+            }
           }
-          const { RuleSets = [] } = data || {}
-          resolve(RuleSets)
-        }
-      )
-    } catch (error) {
-      resolve([])
+        )
+      } catch (error) {
+        resolve([])
+      }
     }
+    listReceiptRuleSets()
   })
 
-const getReceiptRules = async (ses: SES, ruleSets: ReceiptRuleSetMetadata[]): Promise<{ ruleSet: ReceiptRuleSetMetadata, rules: ReceiptRule[] }[]> => {
-  const receiptRules: { ruleSet: ReceiptRuleSetMetadata, rules: ReceiptRule[] }[] = []
+const getReceiptRules = async (
+  ses: SES,
+  ruleSets: ReceiptRuleSetMetadata[]
+): Promise<{ ruleSet: ReceiptRuleSetMetadata; rules: ReceiptRule[] }[]> => {
+  const receiptRules: {
+    ruleSet: ReceiptRuleSetMetadata
+    rules: ReceiptRule[]
+  }[] = []
   for (const ruleSet of ruleSets) {
     try {
-      const response = await ses.describeReceiptRuleSet({
-        RuleSetName: ruleSet.Name,
-      }).promise()
+      const response = await ses
+        .describeReceiptRuleSet({
+          RuleSetName: ruleSet.Name,
+        })
+        .promise()
       const { Metadata, Rules = [] } = response
 
       receiptRules.push({
         ruleSet: Metadata,
-        rules: Rules
+        rules: Rules,
       })
     } catch (error) {
       errorLog.generateAwsErrorLog({
@@ -73,7 +88,6 @@ const getReceiptRules = async (ses: SES, ruleSets: ReceiptRuleSetMetadata[]): Pr
   }
   return receiptRules
 }
-
 
 export default async ({
   regions,
@@ -97,17 +111,14 @@ export default async ({
           sesData.push({
             ReceiptRuleSet: ruleSet,
             Rules: rules,
-            region
+            region,
           })
         }
 
         resolveRegion()
-
-
       })
       regionPromises.push(regionPromise)
     })
-
 
     await Promise.all(regionPromises)
     errorLog.reset()

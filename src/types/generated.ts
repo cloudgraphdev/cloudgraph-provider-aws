@@ -366,6 +366,7 @@ export type AwsApiGatewayCors = {
 
 export type AwsApiGatewayDomainName = AwsBaseService & {
   apiMappingSelectionExpression?: Maybe<Scalars['String']>;
+  apiMappings?: Maybe<Array<Maybe<AwsApiGatewayMapping>>>;
   configurations?: Maybe<Array<Maybe<AwsApiGatewayDomainNameConfiguration>>>;
   domainName?: Maybe<Scalars['String']>;
   httpApis?: Maybe<Array<Maybe<AwsApiGatewayHttpApi>>>;
@@ -396,19 +397,32 @@ export type AwsApiGatewayHttpApi = AwsBaseService & {
   apiEndpoint?: Maybe<Scalars['String']>;
   apiGatewayManaged?: Maybe<Scalars['Boolean']>;
   apiKeySelectionExpression?: Maybe<Scalars['String']>;
+  authorizers?: Maybe<Array<Maybe<AwsApiGatewayV2Authorizer>>>;
   corsConfiguration?: Maybe<AwsApiGatewayCors>;
   createdDate?: Maybe<Scalars['DateTime']>;
+  deployments?: Maybe<Array<Maybe<AwsApiGatewayV2Deployment>>>;
   description?: Maybe<Scalars['String']>;
   disableExecuteApiEndpoint?: Maybe<Scalars['Boolean']>;
   disableSchemaValidation?: Maybe<Scalars['Boolean']>;
   domainNames?: Maybe<Array<Maybe<AwsApiGatewayDomainName>>>;
   importInfo?: Maybe<Array<Maybe<Scalars['String']>>>;
+  integrations?: Maybe<Array<Maybe<AwsApiGatewayV2Integration>>>;
+  models?: Maybe<Array<Maybe<AwsApiGatewayV2Model>>>;
   name?: Maybe<Scalars['String']>;
   protocolType?: Maybe<Scalars['String']>;
   routeSelectionExpression?: Maybe<Scalars['String']>;
+  routes?: Maybe<Array<Maybe<AwsApiGatewayV2Route>>>;
+  stages?: Maybe<Array<Maybe<AwsApiGatewayV2Stage>>>;
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   version?: Maybe<Scalars['String']>;
   warnings?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type AwsApiGatewayMapping = {
+  apiId: Scalars['String'];
+  apiMappingId?: Maybe<Scalars['String']>;
+  apiMappingKey?: Maybe<Scalars['String']>;
+  stage?: Maybe<Scalars['String']>;
 };
 
 export type AwsApiGatewayMethod = {
@@ -494,6 +508,96 @@ export type AwsApiGatewayStageVariable = {
 
 export type AwsApiGatewayUsagePlan = AwsBaseService & {
   name?: Maybe<Scalars['String']>;
+};
+
+export type AwsApiGatewayV2Authorizer = {
+  authorizerCredentialsArn?: Maybe<Scalars['String']>;
+  authorizerId?: Maybe<Scalars['String']>;
+  authorizerPayloadFormatVersion?: Maybe<Scalars['String']>;
+  authorizerResultTtlInSeconds?: Maybe<Scalars['Int']>;
+  authorizerType?: Maybe<Scalars['String']>;
+  authorizerUri?: Maybe<Scalars['String']>;
+  enableSimpleResponses?: Maybe<Scalars['Boolean']>;
+  identitySources?: Maybe<Array<Maybe<Scalars['String']>>>;
+  identityValidationExpression?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+};
+
+export type AwsApiGatewayV2Deployment = {
+  autoDeployed?: Maybe<Scalars['Boolean']>;
+  createdDate?: Maybe<Scalars['DateTime']>;
+  deploymentId?: Maybe<Scalars['String']>;
+  deploymentStatus?: Maybe<Scalars['String']>;
+  deploymentStatusMessage?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+};
+
+export type AwsApiGatewayV2Integration = {
+  apiGatewayManaged?: Maybe<Scalars['Boolean']>;
+  connectionId?: Maybe<Scalars['String']>;
+  connectionType?: Maybe<Scalars['String']>;
+  contentHandlingStrategy?: Maybe<Scalars['String']>;
+  credentialsArn?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  integrationId?: Maybe<Scalars['String']>;
+  integrationMethod?: Maybe<Scalars['String']>;
+  integrationResponseSelectionExpression?: Maybe<Scalars['String']>;
+  integrationSubtype?: Maybe<Scalars['String']>;
+  integrationType?: Maybe<Scalars['String']>;
+  integrationUri?: Maybe<Scalars['String']>;
+  passthroughBehavior?: Maybe<Scalars['String']>;
+  payloadFormatVersion?: Maybe<Scalars['String']>;
+  responses?: Maybe<Array<Maybe<AwsApiGatewayV2IntegrationResponse>>>;
+  templateSelectionExpression?: Maybe<Scalars['String']>;
+  timeoutInMillis?: Maybe<Scalars['Int']>;
+};
+
+export type AwsApiGatewayV2IntegrationResponse = {
+  contentHandlingStrategy?: Maybe<Scalars['String']>;
+  integrationResponseId?: Maybe<Scalars['String']>;
+  integrationResponseKey?: Maybe<Scalars['String']>;
+  templateSelectionExpression?: Maybe<Scalars['String']>;
+};
+
+export type AwsApiGatewayV2Model = {
+  contentType?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  modelId?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  schema?: Maybe<Scalars['String']>;
+};
+
+export type AwsApiGatewayV2Route = {
+  apiGatewayManaged?: Maybe<Scalars['Boolean']>;
+  apiKeyRequired?: Maybe<Scalars['Boolean']>;
+  authorizationScopes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  authorizationType?: Maybe<Scalars['String']>;
+  authorizerId?: Maybe<Scalars['String']>;
+  modelSelectionExpression?: Maybe<Scalars['String']>;
+  operationName?: Maybe<Scalars['String']>;
+  responses?: Maybe<Array<Maybe<AwsApiGatewayV2RouteResponse>>>;
+  routeId?: Maybe<Scalars['String']>;
+  routeKey?: Maybe<Scalars['String']>;
+  routeResponseSelectionExpression?: Maybe<Scalars['String']>;
+  target?: Maybe<Scalars['String']>;
+};
+
+export type AwsApiGatewayV2RouteResponse = {
+  modelSelectionExpression?: Maybe<Scalars['String']>;
+  routeResponseId?: Maybe<Scalars['String']>;
+  routeResponseKey?: Maybe<Scalars['String']>;
+};
+
+export type AwsApiGatewayV2Stage = {
+  apiGatewayManaged?: Maybe<Scalars['Boolean']>;
+  autoDeploy?: Maybe<Scalars['Boolean']>;
+  clientCertificateId?: Maybe<Scalars['String']>;
+  createdDate?: Maybe<Scalars['DateTime']>;
+  deploymentId?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  lastDeploymentStatusMessage?: Maybe<Scalars['String']>;
+  lastUpdatedDate?: Maybe<Scalars['DateTime']>;
+  stageName?: Maybe<Scalars['String']>;
 };
 
 export type AwsApiGatewayVpcLink = AwsBaseService & {
@@ -5102,6 +5206,18 @@ export type AwsVpcEndpoint = AwsBaseService & {
   tags?: Maybe<Array<Maybe<AwsRawTag>>>;
   type?: Maybe<Scalars['String']>;
   vpc?: Maybe<Array<Maybe<AwsVpc>>>;
+};
+
+export type AwsVpcLink = AwsBaseService & {
+  createdDate?: Maybe<Scalars['DateTime']>;
+  name?: Maybe<Scalars['String']>;
+  securityGroupIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  subnetIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  tags?: Maybe<Array<Maybe<AwsRawTag>>>;
+  vpcLinkId?: Maybe<Scalars['String']>;
+  vpcLinkStatus?: Maybe<Scalars['String']>;
+  vpcLinkStatusMessage?: Maybe<Scalars['String']>;
+  vpcLinkVersion?: Maybe<Scalars['String']>;
 };
 
 export type AwsVpcPeeringConnection = AwsBaseService & {
